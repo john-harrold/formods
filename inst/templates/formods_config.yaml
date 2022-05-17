@@ -1,0 +1,74 @@
+#General formods (FM) configuration across modules
+FM: 
+  #General code options for the modules
+  code: 
+    theme:           "solarized_light"    
+    showLineNumbers: TRUE
+# Upload Data  (UD) configuration
+UD:
+  labels:
+    upload_button: Select file
+  # dimensions of the table preview in pixels
+  preview:    
+    width:  400
+    height: 400
+  dw_elements:    
+    width:  400
+    height: 400
+  # The app supports csv, tsv, xls and xlsx. You can remove those you don't
+  # want to use
+  allowed_extensions: 
+    - csv
+    - tsv
+    - xls
+    - xlsx
+  code: # module specific code options
+    readOnly: TRUE
+    mode:     r    
+# Data Wrangling (DW) configuration
+DW: 
+  labels: 
+    add_element:          "Add Operation/Action"
+    fds_filter_column:    "Filter by Column"
+    fds_filter_operator:  "Condition"
+    fds_filter_rhs:       "Matching"
+    fds_mutate_column:    "Column to Mutate"
+    fds_mutate_rhs:       "New Value"
+    fds_rename_column:    "Curret Column"   
+    fds_rename_rhs:       "New Name"
+    fds_group_column:     "Columns to Group"
+  errors:
+    fds_filter_column:    "Filter column not specified."
+    fds_filter_operator:  "Filter codition not specified."
+    fds_filter_rhs:       "Filter RHS not specified."
+    fds_mutate_column:    "Mutate column not specified."
+    fds_mutate_rhs:       "Mutate RHS not specified."
+    fds_rename_column:    "Column to rename not specified."   
+    fds_rename_rhs:       "New column name not specified."
+    fds_group_column:     "No columns to group specified."
+    unknown_action:       "The selection action is not supported."
+    element_not_added:    "Unable to add the data wrangling element:"
+  operators:  
+    # Do not change the type or rop. Only modify the text element
+    - type: "factor"
+      text: "is one of"
+      rop:  "%in%"
+    - type: "factor"
+      text: "is not"
+      rop:  "!%in%"
+    - type: "not_factor"
+      text: "is within the range"
+      rop:  "within"
+    - type: "not_factor"
+      text: "is equal to"
+      rop:  "=="
+    - type: "not_factor"
+      text: "is not equal to"
+      rop:  "!="
+  # dimensions of the table preview in pixels
+  preview:    
+    width:  400
+    height: 200
+  code: # module specific code options
+    readOnly: TRUE
+    mode:     r    
