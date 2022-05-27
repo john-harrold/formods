@@ -23,7 +23,7 @@
 #'@return return
 DW_Server <- function(id,
                 yaml_section = "DW",
-                yaml_file    = system.file(package = "formods", "templates", "formods_config.yaml"),
+                yaml_file    = system.file(package = "formods", "templates", "config.yaml"),
                 id_UD        = "UD",
                 react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
@@ -32,10 +32,8 @@ DW_Server <- function(id,
     # Current DW elements
     output$hot_dw_elements = rhandsontable::renderRHandsontable({
       req(input$select_dw_element)
-
       # Force update on button click
       input$button_dw_add_element
-
       # Force update on deletion clicks
       input$hot_dw_elements
 
@@ -47,62 +45,61 @@ DW_Server <- function(id,
                              yaml_section = yaml_section,
                              id_UD        = id_UD,
                              react_state  = react_state)
-      uiele = paste(isolate(input$select_dw_element), ":",
-                    isolate(input$button_dw_add_element), ":", date())
+      uiele = NULL
 
-      if(is.null(state[["DW"]][["elements_table"]])){
-        df = data.frame("No_Data"="# No data wragling elements defined yet!")
+      if(state[["DW"]][["DS"]][["isgood"]]){
+        if(is.null(state[["DW"]][["elements_table"]])){
+          df = data.frame("No_Data"="# No data wragling elements defined yet!")
 
+          hot= rhandsontable::rhandsontable(df,
+            width  = state[["MC"]][["dw_elements"]][["width"]],
+            height = state[["MC"]][["dw_elements"]][["height"]],
+            rowHeaders = NULL)
 
+          uiele =  hot
 
-        hot= rhandsontable::rhandsontable(df,
-          width  = state[["MC"]][["dw_elements"]][["width"]],
-          height = state[["MC"]][["dw_elements"]][["height"]],
-          rowHeaders = NULL)
+        } else {
+          df = state[["DW"]][["elements_table"]]
+          df[["cmd"]] = NULL
 
-        uiele =  hot
+          hot = rhandsontable::rhandsontable(df,
+            width  = state[["MC"]][["dw_elements"]][["width"]],
+            height = state[["MC"]][["dw_elements"]][["height"]],
+            rowHeaders = NULL) %>%
+            hot_cols(renderer = "
+                 function (instance, td, row, col, prop, value, cellProperties) {
+                 Handsontable.renderers.TextRenderer.apply(this, arguments);
 
-      } else {
-        df = state[["DW"]][["elements_table"]]
-        df[["cmd"]] = NULL
+                 if(value == 'Success') {
+                 td.style.background = 'lightgreen';
+                 } else if(value == 'Failure' ) {
+                 td.style.background = 'lightpink';
+                 } else if(value == 'Not Run') {
+                 td.style.background = 'lightorange'}
 
-        hot = rhandsontable::rhandsontable(df,
-          width  = state[["MC"]][["dw_elements"]][["width"]],
-          height = state[["MC"]][["dw_elements"]][["height"]],
-          rowHeaders = NULL) %>%
-          hot_cols(renderer = "
-               function (instance, td, row, col, prop, value, cellProperties) {
-               Handsontable.renderers.TextRenderer.apply(this, arguments);
+                return td;
+                 }") %>%
+            hot_col(col = "Delete",
+                 renderer = "
+                 function(instance, td, row, col, prop, value, cellProperties) {
+                   Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
+                   return td;
+                 }") %>%
+            hot_col("Action" ,      readOnly = TRUE) %>%
+            hot_col("Description" , readOnly = TRUE) %>%
+            hot_col("Status" ,      readOnly = TRUE)
 
-               if(value == 'Success') {
-               td.style.background = 'lightgreen';
-               } else if(value == 'Failure' ) {
-               td.style.background = 'lightpink';
-               } else if(value == 'Not Run') {
-               td.style.background = 'lightorange'}
-
-              return td;
-               }") %>%
-          hot_col(col = "Delete",
-               renderer = "
-               function(instance, td, row, col, prop, value, cellProperties) {
-                 Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
-                 return td;
-               }") %>%
-          hot_col("Action" ,      readOnly = TRUE) %>%
-          hot_col("Description" , readOnly = TRUE) %>%
-          hot_col("Status" ,      readOnly = TRUE)
-
-        uiele = hot
+          uiele = hot
+        }
       }
-
 
       uiele})
     #------------------------------------
     # Generated data wrangling code
     observe({
     #output$ui_dw_code  =  renderText({
-      #req(input$select_dw_element)
+      # Forcing a reaction to changes from the upload data module
+      react_state[[id_UD]]
       # Force update on button click
       input$button_dw_add_element
       # Force update on deletion clicks
@@ -116,20 +113,24 @@ DW_Server <- function(id,
                              id_UD        = id_UD,
                              react_state  = react_state)
 
-      if(is.null(state[["DW"]][["elements_table"]])){
-        uiele = "# No data wragling elements defined yet!"
-      } else {
-        uiele = paste(state[["DW"]][["elements_table"]][["cmd"]], collapse="\n")
-      }
+      uiele = NULL
 
-      shinyAce::updateAceEditor(
-        session         = session,
-        editorId        = "ui_dw_code",
-        theme           = state[["yaml"]][["FM"]][["code"]][["theme"]],
-        showLineNumbers = state[["yaml"]][["FM"]][["code"]][["showLineNumbers"]],
-        readOnly        = state[["MC"]][["code"]][["readOnly"]],
-        mode            = state[["MC"]][["code"]][["mode"]],
-        value           = uiele)
+      if(state[["DW"]][["DS"]][["isgood"]]){
+        if(is.null(state[["DW"]][["elements_table"]])){
+          uiele = "# No data wragling elements defined yet!"
+        } else {
+          uiele = paste(state[["DW"]][["elements_table"]][["cmd"]], collapse="\n")
+        }
+
+        shinyAce::updateAceEditor(
+          session         = session,
+          editorId        = "ui_dw_code",
+          theme           = state[["yaml"]][["FM"]][["code"]][["theme"]],
+          showLineNumbers = state[["yaml"]][["FM"]][["code"]][["showLineNumbers"]],
+          readOnly        = state[["MC"]][["code"]][["readOnly"]],
+          mode            = state[["MC"]][["code"]][["mode"]],
+          value           = uiele)
+      }
 
       })
    #output$ui_dw_code  =  renderText({
@@ -157,6 +158,7 @@ DW_Server <- function(id,
 
     #------------------------------------
     output$ui_dw_new_element_msg = renderText({
+      # Force update on button click
       input$button_dw_add_element
       #req(input$select_dw_element)
       state = DW_fetch_state(id           = id,
@@ -168,11 +170,13 @@ DW_Server <- function(id,
                              react_state  = react_state)
 
       uiele = NULL
-
-      # If the add element message isn't NULL we return that.
-      if(!is.null(state[["DW"]][["add_element_msg"]])){
-        uiele = state[["DW"]][["add_element_msg"]]
+      if(state[["DW"]][["DS"]][["isgood"]]){
+        # If the add element message isn't NULL we return that.
+        if(!is.null(state[["DW"]][["add_element_msg"]])){
+          uiele = state[["DW"]][["add_element_msg"]]
+        }
       }
+
       uiele})
     #------------------------------------
     # Row for new DW elements
@@ -187,43 +191,45 @@ DW_Server <- function(id,
                              id_UD        = id_UD,
                              react_state  = react_state)
 
-      uiele = NULL
+      if(state[["DW"]][["DS"]][["isgood"]]){
+        if(state[["DW"]][["isgood"]]){
+          # Current final dataset
+          WDS = state[["DW"]][["WDS"]]
+          # Columns in that dataset
+          dscols = names(WDS)
+          #browser()
 
-      if(state[["DW"]][["isgood"]]){
-        # Current final dataset
-        WDS = state[["DW"]][["WDS"]]
-        # Columns in that dataset
-        dscols = names(WDS)
-        #browser()
-
-        # Constructing the uiele based on the users selection
-        if(state[["DW"]][["ui"]][["select_dw_element"]] == "filter"){
-          uiele = tagList(
-                    div(style = "display: flex;",
-                      htmlOutput(NS(id, "ui_dw_fds_filter_column_select"  )),
-                      htmlOutput(NS(id, "ui_dw_fds_filter_operator_select")),
-                      htmlOutput(NS(id, "ui_dw_fds_filter_rhs"))))
+          # Constructing the uiele based on the users selection
+          if(state[["DW"]][["ui"]][["select_dw_element"]] == "filter"){
+            uiele = tagList(
+                      div(style = "display: flex;",
+                        htmlOutput(NS(id, "ui_dw_fds_filter_column_select"  )),
+                        htmlOutput(NS(id, "ui_dw_fds_filter_operator_select")),
+                        htmlOutput(NS(id, "ui_dw_fds_filter_rhs"))))
 
 
-        }
-        if(state[["DW"]][["ui"]][["select_dw_element"]] == "mutate"){
-          uiele = tagList(htmlOutput(NS(id, "ui_dw_fds_mutate_row")))
-        }
-        if(state[["DW"]][["ui"]][["select_dw_element"]] == "rename"){
-          uiele = tagList(
-                     htmlOutput(NS(id, "ui_dw_fds_rename"  )))
-        }
-        if(state[["DW"]][["ui"]][["select_dw_element"]] == "group" ){
-          uiele = tagList(
-                     htmlOutput(NS(id, "ui_dw_fds_group_column_select"  )))
-        }
-        if(state[["DW"]][["ui"]][["select_dw_element"]] == "ungroup" ){
-          uiele = tagList(
-                     htmlOutput(NS(id, "ui_dw_fds_ungroup"  )))
-        }
+          }
+          if(state[["DW"]][["ui"]][["select_dw_element"]] == "mutate"){
+            uiele = tagList(htmlOutput(NS(id, "ui_dw_fds_mutate_row")))
+          }
+          if(state[["DW"]][["ui"]][["select_dw_element"]] == "rename"){
+            uiele = tagList(
+                       htmlOutput(NS(id, "ui_dw_fds_rename"  )))
+          }
+          if(state[["DW"]][["ui"]][["select_dw_element"]] == "group" ){
+            uiele = tagList(
+                       htmlOutput(NS(id, "ui_dw_fds_group_column_select"  )))
+          }
+          if(state[["DW"]][["ui"]][["select_dw_element"]] == "ungroup" ){
+            uiele = tagList(
+                       htmlOutput(NS(id, "ui_dw_fds_ungroup"  )))
+          }
 
-        # this makes the inputs into a line
-        #uiele =   div(style = "display: flex;", uiele)
+          # this makes the inputs into a line
+          #uiele =   div(style = "display: flex;", uiele)
+        }
+      } else {
+        uiele = NULL
       }
 
       uiele})
@@ -471,7 +477,7 @@ DW_Server <- function(id,
              c("within")){
             selected =  c(min(choices), max(choices))
           } else {
-            selected =  choices[ceiling(length(choices))/2]
+            selected =  choices[ceiling(length(choices)/2)]
           }
           uiele    = sliderTextInput(
                inputId  = NS(id, "fds_filter_rhs"),
@@ -494,38 +500,57 @@ DW_Server <- function(id,
                              yaml_section = yaml_section,
                              id_UD        = id_UD,
                              react_state  = react_state)
-      uiele = tagList()
-      choicesOpt = list(
-        subtext = c(
-                    "Filter data",
-                    "Alter or create new columns",
-                    "Rename column",
-                    "Group subsequent operations by columns",
-                    "Removing groping"
-                    ),
-        icon    = c(
-                    "glyphicon-filter" ,
-                    "glyphicon-wrench",
-                    "glyphicon-edit",
-                    "glyphicon-resize-small",
-                    "glyphicon-resize-full"
-                    ))
 
-      choices   = c(
-                    "Filter"   = "filter",
-                    "Mutate"   = "mutate",
-                    "Rename"   = "rename",
-                    "Group"    = "group",
-                    "Ungroup"  = "ungroup"
-                   )
+      if(state[["DW"]][["DS"]][["isgood"]]){
+        uiele = tagList()
+        choicesOpt = list(
+          subtext = c(
+                      state[["MC"]][["actions"]][["filter"]] [["subtext"]],
+                      state[["MC"]][["actions"]][["mutate"]] [["subtext"]],
+                      state[["MC"]][["actions"]][["rename"]] [["subtext"]],
+                      state[["MC"]][["actions"]][["group"]]  [["subtext"]],
+                      state[["MC"]][["actions"]][["ungroup"]][["subtext"]]
+                      ),
+          icon    = c(
+                      "glyphicon-filter" ,
+                      "glyphicon-wrench",
+                      "glyphicon-edit",
+                      "glyphicon-resize-small",
+                      "glyphicon-resize-full"
+                      ))
 
-      uiele = tagList(uiele,
-        shinyWidgets::pickerInput(
-          inputId = NS(id, "select_dw_element"),
-          choices    = choices,
-           width = "fit",
-           inline = TRUE,
-          choicesOpt = choicesOpt))
+        cnames = c( state[["MC"]][["actions"]][["filter"]] [["choice"]] ,
+                    state[["MC"]][["actions"]][["mutate"]] [["choice"]] ,
+                    state[["MC"]][["actions"]][["rename"]] [["choice"]] ,
+                    state[["MC"]][["actions"]][["group"]]  [["choice"]] ,
+                    state[["MC"]][["actions"]][["ungroup"]][["choice"]]
+                  )
+        choices   = c(
+                      "filter",
+                      "mutate",
+                      "rename",
+                      "group",
+                      "ungroup"
+                     )
+        names(choices) = cnames
+       #choices   = c(
+       #              "Filter"   = "filter",
+       #              "Mutate"   = "mutate",
+       #              "Rename"   = "rename",
+       #              "Group"    = "group",
+       #              "Ungroup"  = "ungroup"
+       #             )
+
+        uiele = tagList(uiele,
+          shinyWidgets::pickerInput(
+            inputId = NS(id, "select_dw_element"),
+            choices    = choices,
+             width = "fit",
+             inline = TRUE,
+            choicesOpt = choicesOpt))
+      } else {
+        uiele = NULL
+      }
 
       uiele})
 
@@ -534,6 +559,8 @@ DW_Server <- function(id,
     output$ui_dw_add_element_button = renderUI({
      # req(input$fds_filter_rhs)
       input$select_dw_element
+      # Forcing a reaction to changes from the upload data module
+      react_state[[id_UD]]
       state = DW_fetch_state(id           = id,
                              input        = input,
                              session      = session,
@@ -541,19 +568,26 @@ DW_Server <- function(id,
                              yaml_section = yaml_section,
                              id_UD        = id_UD,
                              react_state  = react_state)
-      uiele = tagList(
-        actionBttn(
-          inputId = NS(id, "button_dw_add_element"),
-           label = state[["MC"]][["labels"]][["add_element"]],
-           icon  = icon("glyphicon-plus-sign"),
-           color = "primary",
-           style = "stretch"
-           ))
+
+      if(state[["DW"]][["DS"]][["isgood"]]){
+        uiele = tagList(
+          actionBttn(
+            inputId = NS(id, "button_dw_add_element"),
+             label = state[["MC"]][["labels"]][["add_element"]],
+             icon  = icon("glyphicon-plus-sign"),
+             color = "primary",
+             style = "stretch"
+             ))
+      } else {
+        uiele = NULL
+      }
 
        uiele})
     #------------------------------------
     # table preview of the data
     output$hot_data_preview =  rhandsontable::renderRHandsontable({
+      # Forcing a reaction to changes from the upload data module
+      react_state[[id_UD]]
       # Triggering rebuilding of the table
       input$button_dw_add_element
       # Force update on deletion clicks
@@ -568,17 +602,61 @@ DW_Server <- function(id,
       #ds = isolate(react_state[[id_UD]])
       #df = ds$DS$contents
 
-      df = state[["DW"]][["WDS"]]
-      ds = state[["DW"]][["DS"]]
-      if(ds[["isgood"]]){
-        uiele = rhandsontable::rhandsontable(df,
-          width  = state[["MC"]][["preview"]][["width"]],
-          height = state[["MC"]][["preview"]][["height"]],
-          rowHeaders = NULL)
+      if(state[["DW"]][["DS"]][["isgood"]]){
+        df = state[["DW"]][["WDS"]]
+        ds = state[["DW"]][["DS"]]
+        if(ds[["isgood"]]){
+          uiele = rhandsontable::rhandsontable(df,
+            width  = state[["MC"]][["preview"]][["width"]],
+            height = state[["MC"]][["preview"]][["height"]],
+            rowHeaders = NULL)
+        } else {
+          uiele = NULL
+        }
       } else {
         uiele = NULL
       }
       uiele})
+    #------------------------------------
+    # Creates the ui for the compact view of the module
+    output$DW_ui_compact  =  renderUI({
+      state = DW_fetch_state(id           = id,
+                             input        = input,
+                             session      = session,
+                             yaml_file    = yaml_file,
+                             yaml_section = yaml_section,
+                             id_UD        = id_UD,
+                             react_state  = react_state)
+
+      uiele = NULL
+
+      uiele_main = tagList(
+        div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_select"))),
+        div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_add_element_button"))),
+         htmlOutput(NS(id, "ui_dw_new_element_row")),
+         verbatimTextOutput(NS(id, "ui_dw_new_element_msg")),
+         rhandsontable::rHandsontableOutput(NS(id, "hot_dw_elements")))
+      if( state$MC$compact$preview){
+        uiele_main = tagList(uiele_main, tags$br(),
+          rhandsontable::rHandsontableOutput(NS(id, "hot_data_preview")))
+      }
+
+      if( state$MC$compact$code){
+      # uiele_preview = tagList(htmlOutput(NS(id, "UD_ui_data_preview")))
+        uiele_code = tagList(shinyAce::aceEditor(NS(id, "ui_dw_code")))
+
+        uiele_str ="tabPanel(state$MC$labels$tab_main,   uiele_main)"
+        if(state$MC$compact$code){
+          uiele_str = paste0(uiele_str, ",tabPanel(state$MC$labels$tab_code, uiele_code)") }
+
+        uiele_str = paste0("tabsetPanel(",uiele_str, ")")
+
+        uiele = eval(parse(text=uiele_str))
+      } else {
+        uiele = uiele_main
+      }
+
+    uiele})
     #------------------------------------
     # Creating reaction if a variable has been specified
     if(!is.null(react_state)){
@@ -634,6 +712,36 @@ DW_fetch_state = function(id,           input,           session,
     state = session$userData[[FM_DW_ID]]
   }
 
+
+  # detecting changes in the datasets
+  if("checksum" %in% names(react_state[["UD"]][["DS"]])){
+    # Checksum of the uploaded dataset from the UD module
+    UD_checksum = isolate(react_state[["UD"]][["DS"]][["checksum"]])
+    # Checksum of the copy in the DW module:
+    DW_checksum = isolate(state[["DW"]][["DS"]][["checksum"]])
+
+    UPDATE_DS = FALSE
+    if(is.null(DW_checksum)){
+      #cli::cli_alert_info("DW_checksum is NULL")
+      # If this is NULL then we've never processed the dataset and need to
+      # update it:
+      UPDATE_DS = TRUE
+    } else {
+      if(UD_checksum != DW_checksum){
+      #cli::cli_alert_info("DW_checksum is different")
+      UPDATE_DS = TRUE
+      }
+    }
+    # If the dataset has been updated we need to reset the DW app state:
+    if(UPDATE_DS){
+      #cli::cli_alert_info("Data set switch detected:")
+      #cli::cli_alert_info(paste0("id_UD: ", id_UD))
+      #cli::cli_alert_info(paste0("id_DW: ", id))
+
+      state = DW_init_state(yaml_file, yaml_section)
+    }
+  }
+
   #---------------------------------------------
   # Here we update the state based on user input
   # Dataset changes
@@ -645,7 +753,6 @@ DW_fetch_state = function(id,           input,           session,
       # This contains the output dataset which when initialized will
       # be just the input above:
       state = set_wds(state, state[["DW"]][["DS"]][["contents"]])
-
     } else {
       state[["DW"]][["DS"]][["isgood"]] = FALSE
       state[["DW"]][["isgood"]]         = FALSE
@@ -829,9 +936,9 @@ DW_init_state = function(yaml_file, yaml_section){
                  as.data.frame(state[["MC"]][["operators"]][[op_idx]]))
   }
 
-  tmpdf = dplyr::filter(opdf, .data[["type"]] == "factor")
+  tmpdf = dplyr::filter(opdf, rlang::.data[["type"]] == "factor")
   state[["MC"]][["op_choices"]][["factor"]] = stats::setNames(tmpdf$rop, c(tmpdf$text))
-  tmpdf = dplyr::filter(opdf, .data[["type"]] == "not_factor")
+  tmpdf = dplyr::filter(opdf, rlang::.data[["type"]] == "not_factor")
   state[["MC"]][["op_choices"]][["not_factor"]] = stats::setNames(tmpdf$rop, c(tmpdf$text))
 
 

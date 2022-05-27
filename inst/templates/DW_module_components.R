@@ -1,7 +1,3 @@
-library(shiny)
-library(shinydashboard)
-library(shinyWidgets)
-library(magrittr)
 #library(formods)
 
 library(devtools)
@@ -10,10 +6,10 @@ load_all()
 #https://fontawesome.com/icons?from=io
 ui <- dashboardPage(
   skin="red",
-  dashboardHeader(title="App Name"),
+  dashboardHeader(title="Wrangle Data"),
   dashboardSidebar(
      sidebarMenu(
-       menuItem("Wrangle Data",     tabName="DW",  icon=icon("chart-area")),
+       menuItem("Wrangle Data",     tabName="DW",  icon=icon("hat-cowboy")),
        menuItem("Other",  tabName="other", icon=icon("archive"))
      )
   ),
@@ -41,7 +37,7 @@ ui <- dashboardPage(
              fluidRow(box(title="Wrangled Data",
                  rhandsontable::rHandsontableOutput(NS("DW", "hot_data_preview")), width=12)),
              fluidRow(
-               box(title="Current Module State", 
+               box(title="Current Module State",
                  verbatimTextOutput("ui_state"),width=12))
        ),
        tabItem(tabName="other", "Here you can put other elements of your App")

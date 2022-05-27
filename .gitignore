@@ -2,3 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+formods.Rproj
+tmp/
+vignettes/*.R
+vignettes/*.html
+inst/doc

@@ -7,7 +7,7 @@
 UD_Server(
   id,
   yaml_section = "UD",
-  yaml_file = system.file(package = "formods", "templates", "formods_config.yaml"),
+  yaml_file = system.file(package = "formods", "templates", "config.yaml"),
   react_state = NULL
 )
 }

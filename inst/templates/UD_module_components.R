@@ -1,9 +1,4 @@
-library(utils)
-library(shiny)
-library(shinydashboard)
-library(shinyWidgets)
-library(magrittr)
-#library(formods)    
+#library(formods)
 
 library(devtools)
 load_all()
@@ -12,38 +7,38 @@ load_all()
 
 ui <- dashboardPage(
   skin="red",
-  dashboardHeader(title="App Name"),
+  dashboardHeader(title="Upload Data"),
   dashboardSidebar(
      sidebarMenu(
-       menuItem("Upload Data",    tabName="dupload",  icon=icon("chart-area")) ,
+       menuItem("Upload Data",    tabName="dupload",  icon=icon("table")) ,
        menuItem("Other",  tabName="other", icon=icon("archive"))
      )
   ),
   dashboardBody(
     tabItems(
-       tabItem(tabName="dupload", 
+       tabItem(tabName="dupload",
        fluidRow(
-         box(title="Example", 
-             "This app demonstrates how to use the data upload 
-             module with each ui component isolated to make 
+         box(title="Example",
+             "This app demonstrates how to use the data upload
+             module with each ui component isolated to make
              it easy to see the behavior.",
            width=12)),
        fluidRow(
-         box(title="Upload", 
+         box(title="Upload",
            htmlOutput(NS("UD", "UD_ui_load_data"))),
-         box(title="Select Sheet for Excel Files", 
+         box(title="Select Sheet for Excel Files",
            htmlOutput(NS("UD", "UD_ui_select_sheets")))),
        fluidRow(
-         box(title="Load Results",       
+         box(title="Load Results",
            htmlOutput(NS("UD", "UD_ui_text_load_result"))),
-         box(title="Data Preview", 
+         box(title="Data Preview",
            htmlOutput(NS("UD", "UD_ui_data_preview")))),
        fluidRow(
          box(title="Generated Code",
-         #  verbatimTextOutput(NS("UD", "ui_ud_code")), width=12)),
-           shinyAce::aceEditor(NS("UD", "ui_ud_code")), width=12)),
+           #htmlOutput(NS("UD", "UD_ui_code")), width=12)),
+           shinyAce::aceEditor(NS("UD", "UD_ui_ace_code")), width=12)),
        fluidRow(
-         box(title="Current Module State", 
+         box(title="Current Module State",
            verbatimTextOutput("ui_state"),width=12))
        ),
        tabItem(tabName="other", "Here you can put other elements of your App")
@@ -54,7 +49,7 @@ ui <- dashboardPage(
 
 # Main app server
 server <- function(input, output, session) {
-  # Empty reactive object to track and react to 
+  # Empty reactive object to track and react to
   # changes in the module state outside of the module
   react_FM = reactiveValues()
 

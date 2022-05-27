@@ -23,6 +23,7 @@ Imports:
   shinyAce,
   shinyWidgets,
   stats,
+  stringr,
   tools,
   yaml
 Suggests:
@@ -31,3 +32,4 @@ Suggests:
   rmarkdown,
   utils
 RoxygenNote: 7.1.2
+VignetteBuilder: knitr

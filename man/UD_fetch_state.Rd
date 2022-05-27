@@ -19,7 +19,28 @@ UD_fetch_state(id, input, session, yaml_file, yaml_section)
 }
 \value{
 list containing the current state of the app including default
-values from the yaml file as well as any changes made by the user
+values from the yaml file as well as any changes made by the user. The list
+has the following structure:
+\itemize{
+\item{yaml:} Full contents of the supplied yaml file.
+\item{MC:} Module components of the yaml file.
+\item{DS:} Loaded dataset with the following elements
+\itemize{
+  \item{isgood:} Boolean indicating the success of the file being loaded.
+  \item{load_msg:} Text message indicated the success or any problems
+  encountered when uploading the file.
+  \item{data_file_local:} Full path to the data file on the server.
+  \item{data_file:} Dataset file name without the path. 
+  \item{data_file_ext:} File extension of the uploaded file.
+  \item{sheet:} If the uploaded file is an excel file, this is the
+  currently selected sheet.
+  \item{sheets:} If the uploaded file is an excel file, this is a character
+  vector of the sheets present in that file.
+  \item{contents:} Data frame containting the contents of the data file.
+  \item{checksum:} This is an MD5 sum of the contents element and can be
+  used to detect changes in the loaded file.
+}
+}
 }
 \description{
 Merges default app options with the changes made in the UI

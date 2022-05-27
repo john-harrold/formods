@@ -6,12 +6,27 @@ FM:
     showLineNumbers: TRUE
 # Upload Data  (UD) configuration
 UD:
+  # Controls what is shown in the compact ui mode: UD_ui_compact
+  compact:
+    code:    TRUE 
+    preview: TRUE 
   labels:
-    upload_button: Select file
-  # dimensions of the table preview in pixels
+    upload_button: "Select file"
+    tab_main:      "Upload File"
+    tab_code:      "Code"
+    tab_preview:   "Data Preview"
+    # In the following you can use placeholder for the follwing:
+    # ===EXT===        Uploaded file extension
+    # ===FILE===       Loaded file name
+    # ===ALLOWEDEXT=== Allowed file extensions
+    msg_bad_extension: |- 
+      Incorrect file extension (===EXT===). Unable to load file  ===FILE===.
+      Only the following extesions are allowed: ===ALLOWEDEXT===.
+  # Dimensions of the table preview in pixels
   preview:    
     width:  400
     height: 400
+  # Dimensions of the table with the data wrangling elements
   dw_elements:    
     width:  400
     height: 400
@@ -27,7 +42,13 @@ UD:
     mode:     r    
 # Data Wrangling (DW) configuration
 DW: 
+  # Controls what is shown in the compact ui mode: DW_ui_compact
+  compact:
+    code:    TRUE 
+    preview: TRUE 
   labels: 
+    tab_main:             "Wrangle"
+    tab_code:             "Code"
     add_element:          "Add Operation/Action"
     fds_filter_column:    "Filter by Column"
     fds_filter_operator:  "Condition"
@@ -66,6 +87,22 @@ DW:
       text: "is not equal to"
       rop:  "!="
   # dimensions of the table preview in pixels
+  actions:
+    filter:
+      choice:  "Filter"   
+      subtext: "Filter data"
+    mutate:
+      choice:  "Alter"  
+      subtext: "Change the contents of a column"
+    rename:
+      choice:  "Rename"  
+      subtext: "Rename column"
+    group:  
+      choice:  "Group"   
+      subtext: "Group subsequent operations by columns"
+    ungroup:
+      choice:  "Ungroup" 
+      subtext: "Removing groping"                        
   preview:    
     width:  400
     height: 200

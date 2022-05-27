@@ -6,6 +6,7 @@
 #'@importFrom readr read_csv
 #'@importFrom shinyAce aceEditor updateAceEditor
 #'@importFrom stats setNames
+#'@importFrom stringr str_replace_all
 #'@importFrom tools file_ext
 #'@importFrom yaml read_yaml
 
@@ -20,7 +21,7 @@
 #'@return return
 UD_Server <- function(id,
                 yaml_section = "UD",
-                yaml_file    = system.file(package = "formods", "templates", "formods_config.yaml"),
+                yaml_file    = system.file(package = "formods", "templates", "config.yaml"),
                 react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
 
@@ -75,7 +76,6 @@ UD_Server <- function(id,
         uiele = NULL
       }
     uiele})
-
     #------------------------------------
     # A simple preview of the data:
     output$UD_ui_data_preview  =  renderUI({
@@ -96,7 +96,6 @@ UD_Server <- function(id,
       # Reacting to file changes
       input$input_data_file
       input$input_select_sheet
-
       state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
 
       if(is.null(state[["DS"]][["code"]])){
@@ -108,29 +107,14 @@ UD_Server <- function(id,
 
       shinyAce::updateAceEditor(
         session         = session, 
-        editorId        = "ui_ud_code", 
+        editorId        = "UD_ui_ace_code", 
         theme           = state[["yaml"]][["FM"]][["code"]][["theme"]],
         showLineNumbers = state[["yaml"]][["FM"]][["code"]][["showLineNumbers"]],
         readOnly        = state[["MC"]][["code"]][["readOnly"]],
         mode            = state[["MC"]][["code"]][["mode"]],
         value           = uiele)
 
-      })
-
-   #output$ui_ud_code  =  renderText({
-   #  # Reacting to file changes
-   #  input$input_data_file
-   #  input$input_select_sheet
-   #
-   #  state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
-   #
-   #  if(is.null(state[["DS"]][["code"]])){
-   #    uiele = "# No file loaded"
-   #  } else {
-   #    uiele = state[["DS"]][["code"]]
-   #  }
-   #
-   #  uiele})
+      }) 
     #------------------------------------
     # A simple preview of the data:
     output$hot_data_preview  =  rhandsontable::renderRHandsontable({
@@ -145,6 +129,36 @@ UD_Server <- function(id,
       } else {uiele=NULL}
     uiele})
     #------------------------------------
+    # Creates the ui for the compact view of the module
+    output$UD_ui_compact  =  renderUI({
+      state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
+
+      uiele = NULL
+
+      uiele_main   = tagList(htmlOutput(NS(id, "UD_ui_load_data")),
+                             htmlOutput(NS(id, "UD_ui_select_sheets")),
+                             htmlOutput(NS(id, "UD_ui_text_load_result")))
+      
+      if( state$MC$compact$code | state$MC$compact$preview){
+         uiele_preview = tagList(htmlOutput(NS(id, "UD_ui_data_preview")))
+         uiele_code    = tagList(shinyAce::aceEditor(NS(id, "UD_ui_ace_code")))
+
+        uiele_str ="tabPanel(state$MC$labels$tab_main,  uiele_main  )"
+        if(state$MC$compact$preview){
+          uiele_str = paste0(uiele_str, ",tabPanel(state$MC$labels$tab_preview, uiele_preview)") }
+        if(state$MC$compact$code){
+          uiele_str = paste0(uiele_str, ",tabPanel(state$MC$labels$tab_code, uiele_code)") }
+
+        uiele_str = paste0("tabsetPanel(",uiele_str, ")")
+
+        uiele = eval(parse(text=uiele_str))
+      } else {
+        uiele = uiele_main  
+      }
+
+    uiele})
+    #outputOptions(output, "UD_ui_compact", priority = -1)
+    #------------------------------------
     # Creating reaction if a variable has been specified
     if(!is.null(react_state)){
       # Here we list the ui inputs that will result in a state change:
@@ -156,6 +170,8 @@ UD_Server <- function(id,
         react_state[[id]] = UD_fetch_state(id, input, session, yaml_file, yaml_section)
       })
     }
+
+
   })
 }
 
@@ -168,7 +184,28 @@ UD_Server <- function(id,
 #'@param yaml_file cofiguration file
 #'@param yaml_section  Section of the yaml file with the module configuration
 #'@return list containing the current state of the app including default
-#'values from the yaml file as well as any changes made by the user
+#'values from the yaml file as well as any changes made by the user. The list
+#'has the following structure:
+#' \itemize{
+#' \item{yaml:} Full contents of the supplied yaml file.
+#' \item{MC:} Module components of the yaml file.
+#' \item{DS:} Loaded dataset with the following elements
+#' \itemize{
+#'   \item{isgood:} Boolean indicating the success of the file being loaded.
+#'   \item{load_msg:} Text message indicated the success or any problems
+#'   encountered when uploading the file.
+#'   \item{data_file_local:} Full path to the data file on the server.
+#'   \item{data_file:} Dataset file name without the path. 
+#'   \item{data_file_ext:} File extension of the uploaded file.
+#'   \item{sheet:} If the uploaded file is an excel file, this is the
+#'   currently selected sheet.
+#'   \item{sheets:} If the uploaded file is an excel file, this is a character
+#'   vector of the sheets present in that file.
+#'   \item{contents:} Data frame containting the contents of the data file.
+#'   \item{checksum:} This is an MD5 sum of the contents element and can be
+#'   used to detect changes in the loaded file.
+#' }
+#'}
 UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
 
   # After the app has loaded the state must be initialized
@@ -230,14 +267,15 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
         }
       }
     } else {
-      load_msg = tagList(tags$em(paste0(
-        "Incorrect file extension (",
-        data_file_ext,
-        "). Unable to load file ",
-        data_file,
-        ". Only the following extesions are allowed: ",
-        paste(allowed_extensions, collapse=", "))))
+      # pulling out the template:
+      load_msg = state[["MC"]][["labels"]][["msg_bad_extension"]]
 
+      load_msg = stringr::str_replace_all(load_msg, "===EXT===",        data_file_ext)
+      load_msg = stringr::str_replace_all(load_msg, "===FILE===",       data_file)
+      load_msg = stringr::str_replace_all(load_msg, "===ALLOWEDEXT===", paste(allowed_extensions, collapse=", "))
+      load_msg = tagList(tags$em(load_msg))
+
+      # This will force a reset of the DS field in the state
       clear_data = TRUE
     }
 
@@ -286,13 +324,7 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
     # We clear the data and set the dataset to bad to prevent showing the old
     # dataset that is no longer relevant.
     if(clear_data){
-      state[["DS"]][["data_file_local"]] = NULL
-      state[["DS"]][["data_file_ext"]]   = NULL
-      state[["DS"]][["data_file"]]       = NULL
-      state[["DS"]][["sheet"]]           = NULL
-      state[["DS"]][["sheets"]]          = NULL
-      state[["DS"]][["contents"]]        = NULL
-      state[["DS"]][["isgood"]]          = FALSE
+      state[["DS"]] = fetch_DS_NULL()
     }
 
     # Picking up any loading messages that were defined
@@ -318,6 +350,16 @@ UD_init_state = function(yaml_file){
     # Reading in default information from the yaml file
     state[["yaml"]] = yaml::read_yaml(yaml_file)
 
+    state[["DS"]] = fetch_DS_NULL()
+
+state}
+
+#'@export
+#'@title Empty Data Set Object
+#'@description Creates a list with default elements for a dataset
+#'@return Null dataset list
+fetch_DS_NULL = function(){
+
     DS_NULL =
       list(isgood          = FALSE,
            load_msg        = NULL,
@@ -326,8 +368,8 @@ UD_init_state = function(yaml_file){
            data_file       = NULL,
            sheet           = NULL,
            sheets          = NULL,
+           checksum        = digest::digest(NULL, algo=c("md5")),
            contents        = NULL)
 
-    state[["DS"]] = DS_NULL
+DS_NULL}
 
-state}

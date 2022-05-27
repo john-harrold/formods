@@ -7,7 +7,7 @@
 DW_Server(
   id,
   yaml_section = "DW",
-  yaml_file = system.file(package = "formods", "templates", "formods_config.yaml"),
+  yaml_file = system.file(package = "formods", "templates", "config.yaml"),
   id_UD = "UD",
   react_state = NULL
 )
