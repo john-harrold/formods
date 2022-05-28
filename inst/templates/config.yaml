@@ -109,3 +109,10 @@ DW:
   code: # module specific code options
     readOnly: TRUE
     mode:     r    
+# Figure Generation (FG) configuration
+FG:
+  # Controls what is shown in the compact ui mode: FG_ui_compact
+  compact:
+    code:    TRUE 
+    preview: TRUE 
+  labels:

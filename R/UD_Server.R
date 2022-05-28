@@ -340,8 +340,8 @@ state}
 
 
 #'@export
-#'@title Initialize App State
-#'@description Creates a list of the initialized app state
+#'@title Initialize UD Module State
+#'@description Creates a list of the initialized module state
 #'@param yaml_file App cofiguration file
 #'@return list containing an empty app state object
 UD_init_state = function(yaml_file){

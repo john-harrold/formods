@@ -13,13 +13,12 @@
 
 #'@export
 #'@title Data Wrangling Server
-#'@description Server function for the Data Wrangling Module
+#'@description Server function for the data wrangling module
 #'@param id An ID string that corresponds with the ID used to call the module's UI function
 #'@param yaml_section  Section of the yaml file with the module configuration (`"DW"`)
 #'@param yaml_file Upload Data cofiguration file
 #'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
 #'@param react_state Variable passed to server to allow reaction outside of module (`NULL`)
-#'for the data frame in the session$UserData$my_data)
 #'@return return
 DW_Server <- function(id,
                 yaml_section = "DW",
@@ -97,7 +96,6 @@ DW_Server <- function(id,
     #------------------------------------
     # Generated data wrangling code
     observe({
-    #output$ui_dw_code  =  renderText({
       # Forcing a reaction to changes from the upload data module
       react_state[[id_UD]]
       # Force update on button click
@@ -459,6 +457,7 @@ DW_Server <- function(id,
 
         choices  = sort(unique(unfactor((WDS[[filter_col]]))))
 
+        # We process factors different than 
         if(is.factor(WDS[[filter_col]])){
           uiele = pickerInput(
                inputId  = NS(id, "fds_filter_rhs"),
@@ -471,8 +470,6 @@ DW_Server <- function(id,
               )
 
         } else {
-
-
           if(state[["DW"]][["ui"]][["select_fds_filter_operator"]] %in%
              c("within")){
             selected =  c(min(choices), max(choices))
@@ -533,13 +530,6 @@ DW_Server <- function(id,
                       "ungroup"
                      )
         names(choices) = cnames
-       #choices   = c(
-       #              "Filter"   = "filter",
-       #              "Mutate"   = "mutate",
-       #              "Rename"   = "rename",
-       #              "Group"    = "group",
-       #              "Ungroup"  = "ungroup"
-       #             )
 
         uiele = tagList(uiele,
           shinyWidgets::pickerInput(
@@ -681,7 +671,7 @@ DW_Server <- function(id,
 
 
 #'@export
-#'@title Fetch Upload Data State
+#'@title Fetch Data Wrangling State 
 #'@description Merges default app options with the changes made in the UI
 #'@param id Shiny module ID
 #'@param input Shiny input variable
@@ -699,8 +689,6 @@ DW_fetch_state = function(id,           input,           session,
   # After the app has loaded the state must be initialized
   FM_DW_ID = paste0("FM_DW_", id)
 
-
-  # Template for an empty dataset
   #---------------------------------------------
   # Getting the current state
   if(is.null(session$userData[[FM_DW_ID]])){
@@ -713,6 +701,7 @@ DW_fetch_state = function(id,           input,           session,
   }
 
 
+  #---------------------------------------------
   # detecting changes in the datasets
   if("checksum" %in% names(react_state[["UD"]][["DS"]])){
     # Checksum of the uploaded dataset from the UD module
@@ -722,22 +711,17 @@ DW_fetch_state = function(id,           input,           session,
 
     UPDATE_DS = FALSE
     if(is.null(DW_checksum)){
-      #cli::cli_alert_info("DW_checksum is NULL")
       # If this is NULL then we've never processed the dataset and need to
       # update it:
       UPDATE_DS = TRUE
     } else {
+      # If these are different then the dataset has changed
       if(UD_checksum != DW_checksum){
-      #cli::cli_alert_info("DW_checksum is different")
       UPDATE_DS = TRUE
       }
     }
     # If the dataset has been updated we need to reset the DW app state:
     if(UPDATE_DS){
-      #cli::cli_alert_info("Data set switch detected:")
-      #cli::cli_alert_info(paste0("id_UD: ", id_UD))
-      #cli::cli_alert_info(paste0("id_DW: ", id))
-
       state = DW_init_state(yaml_file, yaml_section)
     }
   }
@@ -909,6 +893,8 @@ DW_fetch_state = function(id,           input,           session,
       state[["DW"]][["add_counter"]] = button_ui
     }
   }
+
+  # Saving the state
   session$userData[[FM_DW_ID]] = state
 
   # Returning the state
@@ -916,8 +902,8 @@ DW_fetch_state = function(id,           input,           session,
 state}
 
 #'@export
-#'@title Initialize App State
-#'@description Creates a list of the initialized app state
+#'@title Initialize DW Module State
+#'@description Creates a list of the initialized module state
 #'@param yaml_file App cofiguration file
 #'@param yaml_section  Section of the yaml file with the module configuration
 #'@return list containing an empty app state object
@@ -936,9 +922,9 @@ DW_init_state = function(yaml_file, yaml_section){
                  as.data.frame(state[["MC"]][["operators"]][[op_idx]]))
   }
 
-  tmpdf = dplyr::filter(opdf, rlang::.data[["type"]] == "factor")
+  tmpdf = dplyr::filter(opdf, .data[["type"]] == "factor")
   state[["MC"]][["op_choices"]][["factor"]] = stats::setNames(tmpdf$rop, c(tmpdf$text))
-  tmpdf = dplyr::filter(opdf, rlang::.data[["type"]] == "not_factor")
+  tmpdf = dplyr::filter(opdf, .data[["type"]] == "not_factor")
   state[["MC"]][["op_choices"]][["not_factor"]] = stats::setNames(tmpdf$rop, c(tmpdf$text))
 
 

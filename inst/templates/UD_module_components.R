@@ -1,5 +1,6 @@
 #library(formods)
 
+library(shinydashboard)
 library(devtools)
 load_all()
 
