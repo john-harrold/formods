@@ -4,6 +4,12 @@ FM:
   code: 
     theme:           "solarized_light"    
     showLineNumbers: TRUE
+  ui:
+    # See ?actionBttn for styles
+    button_style: "fill"
+    color_green: "#00BB8A"
+    color_red:   "#FF475E"
+    color_blue:  "#0088FF"
 # Upload Data  (UD) configuration
 UD:
   # Controls what is shown in the compact ui mode: UD_ui_compact
@@ -22,14 +28,11 @@ UD:
     msg_bad_extension: |- 
       Incorrect file extension (===EXT===). Unable to load file  ===FILE===.
       Only the following extesions are allowed: ===ALLOWEDEXT===.
-  # Dimensions of the table preview in pixels
-  preview:    
-    width:  400
-    height: 400
-  # Dimensions of the table with the data wrangling elements
-  dw_elements:    
-    width:  400
-    height: 400
+  dimensions:
+    # Dimensions of the table preview in pixels
+    preview:    
+      width:  400
+      height: 400
   # The app supports csv, tsv, xls and xlsx. You can remove those you don't
   # want to use
   allowed_extensions: 
@@ -68,6 +71,7 @@ DW:
     fds_rename_rhs:       "New column name not specified."
     fds_group_column:     "No columns to group specified."
     unknown_action:       "The selection action is not supported."
+    no_rows:              "There are no rows in the dataset."
     element_not_added:    "Unable to add the data wrangling element:"
   operators:  
     # Do not change the type or rop. Only modify the text element
@@ -103,9 +107,14 @@ DW:
     ungroup:
       choice:  "Ungroup" 
       subtext: "Removing groping"                        
-  preview:    
-    width:  400
-    height: 200
+  dimensions:
+    preview:    
+      width:  400
+      height: 200
+    # Dimensions of the table with the data wrangling elements
+    dw_elements:    
+      width:  400
+      height: 100
   code: # module specific code options
     readOnly: TRUE
     mode:     r    
@@ -116,3 +125,74 @@ FG:
     code:    TRUE 
     preview: TRUE 
   labels:
+    elements:
+      x:            "x-axis"
+      "y":          "y-axis"
+      color:        "color"
+      linetype:     "line type"
+      shape:        "shape"     
+      size:         "size"     
+      alpha:        "alpha"     
+      group:        "group"     
+      xintercept:   "x-line"
+      yintercept:   "y-line"
+    ph:
+      xlab:         "x-axis label"
+      ylab:         "y-axis label"
+      ggtitle:      "plot title"
+      caption:      "caption (opt)"
+      fig_key:      "figure key (opt)"
+      manual:       "Manual"
+    manual:         "Manual"
+    not_used:       "Not Used"
+    curr_figs_none: "No figures yet created"
+    new_fig:        "New"
+    save_fig:       "Save"
+    del_fig:        "Delete"
+    add_ele:        "Add Figure Element"
+  elements:
+    # For each element below you should only modify the choice and subtext
+    # elements
+    line:
+      choice:  "Line"     
+      subtext: "Continuous line"
+      ui_aes:  ["x", "y", "color", "group", "linetype", "size", "alpha"]
+      aes_req: ["x", "y"]
+    point:
+      choice:  "Point"  
+      subtext: "Scatter plot"
+      ui_aes:  ["x", "y", "color", "shape", "size", "alpha"]
+      aes_req: ["x", "y"]
+    hguide:
+      choice:  "H-Guide"  
+      subtext: "Horizontal guide"
+      ui_aes:  ["yintercept", "linetype"]
+      aes_req: ["yintercept"]
+    vguide:
+      choice:  "V-Guide"  
+      subtext: "Vertical guide"
+      ui_aes:  ["xintercept", "linetype"]
+      aes_req: ["xintercept"]
+    facet:
+      choice:  "Facet"  
+      subtext: "Facet by one or two variables"
+    label:
+      choice:  "Label"  
+      subtext: "Label axes or plot title"
+      ui_text: ["xlab", "ylab", "ggtitle"]
+  dimensions:
+    # Dimensions of the figure preview
+    preview:    
+      width:  600
+      height: 200
+    # Dimensions of the caption text area
+    caption:    
+      width:  "100%"
+      height: 400
+    components:
+      aes:
+        width: 100
+      facet:
+        width: 200
+      label:
+        width: 150

@@ -51,8 +51,8 @@ DW_Server <- function(id,
           df = data.frame("No_Data"="# No data wragling elements defined yet!")
 
           hot= rhandsontable::rhandsontable(df,
-            width  = state[["MC"]][["dw_elements"]][["width"]],
-            height = state[["MC"]][["dw_elements"]][["height"]],
+            width  = state[["MC"]][["dimensions"]][["dw_elements"]][["width"]],
+            height = state[["MC"]][["dimensions"]][["dw_elements"]][["height"]],
             rowHeaders = NULL)
 
           uiele =  hot
@@ -158,6 +158,8 @@ DW_Server <- function(id,
     output$ui_dw_new_element_msg = renderText({
       # Force update on button click
       input$button_dw_add_element
+      # Update when they delete elements as well
+      input$hot_dw_elements       
       #req(input$select_dw_element)
       state = DW_fetch_state(id           = id,
                              input        = input,
@@ -170,11 +172,8 @@ DW_Server <- function(id,
       uiele = NULL
       if(state[["DW"]][["DS"]][["isgood"]]){
         # If the add element message isn't NULL we return that.
-        if(!is.null(state[["DW"]][["add_element_msg"]])){
-          uiele = state[["DW"]][["add_element_msg"]]
-        }
+        uiele = state[["DW"]][["add_element_msg"]]
       }
-
       uiele})
     #------------------------------------
     # Row for new DW elements
@@ -450,40 +449,47 @@ DW_Server <- function(id,
       if(state[["DW"]][["isgood"]]){
         # Current final dataset
         WDS = state[["DW"]][["WDS"]]
-        # Columns in that dataset
-        dscols = names(WDS)
 
-        filter_col = state[["DW"]][["ui"]][["select_fds_filter_column"]]
+        # If the user filters down to zero rows
+        if(nrow(WDS) > 0){
+          # Columns in that dataset
+          dscols = names(WDS)
 
-        choices  = sort(unique(unfactor((WDS[[filter_col]]))))
+          filter_col = state[["DW"]][["ui"]][["select_fds_filter_column"]]
 
-        # We process factors different than 
-        if(is.factor(WDS[[filter_col]])){
-          uiele = pickerInput(
-               inputId  = NS(id, "fds_filter_rhs"),
-               label    = NULL,
-               width    = 200,
-               choices  = choices,
-               multiple = TRUE,
-               options  = list(
-                  title = state[["MC"]][["labels"]][["fds_filter_rhs"]])
-              )
+          choices  = sort(unique(unfactor((WDS[[filter_col]]))))
 
-        } else {
-          if(state[["DW"]][["ui"]][["select_fds_filter_operator"]] %in%
-             c("within")){
-            selected =  c(min(choices), max(choices))
+          # We process factors different than
+          if(is.factor(WDS[[filter_col]])){
+            uiele = pickerInput(
+                 inputId  = NS(id, "fds_filter_rhs"),
+                 label    = NULL,
+                 width    = 200,
+                 choices  = choices,
+                 multiple = TRUE,
+                 options  = list(
+                    title = state[["MC"]][["labels"]][["fds_filter_rhs"]])
+                )
+
           } else {
-            selected =  choices[ceiling(length(choices)/2)]
+            if(state[["DW"]][["ui"]][["select_fds_filter_operator"]] %in%
+               c("within")){
+              selected =  c(min(choices), max(choices))
+            } else {
+              selected =  choices[ceiling(length(choices)/2)]
+            }
+            uiele    = sliderTextInput(
+                 inputId  = NS(id, "fds_filter_rhs"),
+                 label    = NULL,
+                 choices  = choices,
+                 selected = selected,
+                 width    = 200,
+                 dragRange = TRUE
+               )
           }
-          uiele    = sliderTextInput(
-               inputId  = NS(id, "fds_filter_rhs"),
-               label    = NULL,
-               choices  = choices,
-               selected = selected,
-               width    = 200,
-               dragRange = TRUE
-             )
+        } else {
+          # Return an error
+          uiele = tags$em(state[["MC"]][["errors"]][["no_rows"]])
         }
       }
       uiele})
@@ -566,7 +572,7 @@ DW_Server <- function(id,
              label = state[["MC"]][["labels"]][["add_element"]],
              icon  = icon("glyphicon-plus-sign"),
              color = "primary",
-             style = "stretch"
+             style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]]
              ))
       } else {
         uiele = NULL
@@ -597,8 +603,8 @@ DW_Server <- function(id,
         ds = state[["DW"]][["DS"]]
         if(ds[["isgood"]]){
           uiele = rhandsontable::rhandsontable(df,
-            width  = state[["MC"]][["preview"]][["width"]],
-            height = state[["MC"]][["preview"]][["height"]],
+            width  = state[["MC"]][["dimensions"]][["preview"]][["width"]],
+            height = state[["MC"]][["dimensions"]][["preview"]][["height"]],
             rowHeaders = NULL)
         } else {
           uiele = NULL
@@ -671,7 +677,7 @@ DW_Server <- function(id,
 
 
 #'@export
-#'@title Fetch Data Wrangling State 
+#'@title Fetch Data Wrangling State
 #'@description Merges default app options with the changes made in the UI
 #'@param id Shiny module ID
 #'@param input Shiny input variable
@@ -703,9 +709,9 @@ DW_fetch_state = function(id,           input,           session,
 
   #---------------------------------------------
   # detecting changes in the datasets
-  if("checksum" %in% names(react_state[["UD"]][["DS"]])){
+  if("checksum" %in% names(react_state[[id_UD]][["DS"]])){
     # Checksum of the uploaded dataset from the UD module
-    UD_checksum = isolate(react_state[["UD"]][["DS"]][["checksum"]])
+    UD_checksum = isolate(react_state[[id_UD]][["DS"]][["checksum"]])
     # Checksum of the copy in the DW module:
     DW_checksum = isolate(state[["DW"]][["DS"]][["checksum"]])
 
@@ -808,10 +814,15 @@ DW_fetch_state = function(id,           input,           session,
           if(!is.null(NEW_ET)){
             # Walking through each element
             error_found = FALSE
+            msgs = c()
             for(eridx in 1:nrow(NEW_ET)){
               # Running the current element
               if(!error_found){
                 dwee_res = eval_element(state,NEW_ET[eridx,][["cmd"]])
+
+                # Appending any messages
+                msgs = c(msgs, dwee_res[["msgs"]])
+
                 if(dwee_res[["isgood"]]){
                   # We set the status to success here:
                   NEW_ET[eridx,][["Status"]] = "Success"
@@ -830,6 +841,14 @@ DW_fetch_state = function(id,           input,           session,
                 NEW_ET[eridx,][["Status"]] = "Not Run"
               }
             }
+
+            # Passing any messages ack to the user
+            if(is.null(msgs)){
+              state[["DW"]][["add_element_msg"]] = NULL
+            } else {
+              state[["DW"]][["add_element_msg"]] = paste(msgs, collapse = "\n")
+            }
+
           }
           # Saving the NEW_ET over the elements_table in the state
           state[["DW"]][["elements_table"]]  = NEW_ET
@@ -882,6 +901,7 @@ DW_fetch_state = function(id,           input,           session,
           }
         }
 
+        # Passing any messages ack to the user
         if(is.null(msgs)){
           state[["DW"]][["add_element_msg"]] = NULL
         } else {

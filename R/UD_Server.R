@@ -124,8 +124,8 @@ UD_Server <- function(id,
       state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
       if(is.data.frame(state[["DS"]][["contents"]])){
         uiele = rhandsontable::rhandsontable(state[["DS"]][["contents"]],
-          width  = state[["MC"]][["preview"]][["width"]],
-          height = state[["MC"]][["preview"]][["height"]])
+          width  = state[["MC"]][["dimensions"]][["preview"]][["width"]],
+          height = state[["MC"]][["dimensions"]][["preview"]][["height"]])
       } else {uiele=NULL}
     uiele})
     #------------------------------------

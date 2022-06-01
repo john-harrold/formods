@@ -1,40 +1,58 @@
 #library(formods)
 library(shinydashboard)
+
 library(devtools)
 load_all()
 
 #https://fontawesome.com/icons?from=io
 ui <- dashboardPage(
   skin="red",
-  dashboardHeader(title="Generate Figures"),
+  dashboardHeader(title="Figure Generation"),
   dashboardSidebar(
      sidebarMenu(
-       menuItem("Generate Figures",     tabName="FG",  icon=icon("chart-line")),
+       menuItem("Figure Generation", tabName="FG",  icon=icon("chart-line")),
        menuItem("Other",  tabName="other", icon=icon("archive"))
      )
   ),
   dashboardBody(
     tabItems(
      tabItem(tabName="FG",
-            #fluidRow(
-            #  box(title="Add Data Wrangling Element Button",
-            #    htmlOutput(NS("FG", "ui_dw_add_element_button"), width=6)),
-            #  box(title="Add Data Wrangling Select",
-            #    htmlOutput(NS("FG", "ui_dw_select")), width=6)),
-            #fluidRow(
-            #  box(title="New Element Row",
-            #    htmlOutput(NS("FG", "ui_dw_new_element_row")), width=12)),
-            #fluidRow(
-            #  box(title="Element Add Message",
-            #    verbatimTextOutput(NS("FG", "ui_dw_new_element_msg")), width=12)),
-            #fluidRow(
-            #  box(title="Current Elements",
-            #   rhandsontable::rHandsontableOutput(NS("FG", "hot_dw_elements")), width=12)),
+             fluidRow(
+               box(title="Current Figures",
+                 htmlOutput(NS("FG", "ui_fg_curr_figs")), width=4)),
+             fluidRow(
+               box(title="Figure ID",
+                 htmlOutput(NS("FG", "ui_fg_fig_name")), width=3),
+               box(title="New Figure",
+                 htmlOutput(NS("FG", "ui_fg_new_fig")), width=3),
+               box(title="Save Figure",
+                 htmlOutput(NS("FG", "ui_fg_save_fig")), width=3),
+               box(title="Delete Figure",
+                 htmlOutput(NS("FG", "ui_fg_del_fig")), width=3)
+               ),
+             fluidRow(
+               box(title="Figure Caption",
+                 htmlOutput(NS("FG", "ui_fg_fig_cap")), width=12)),
+             fluidRow(
+               box(title="Add Plot Element Button",
+                 htmlOutput(NS("FG", "ui_fg_add_element_button")), width=4),
+               box(title="Plot Element Select",
+                 htmlOutput(NS("FG", "ui_fg_select")), width=4)),
+             fluidRow(
+               box(title="New Element Row",
+                 htmlOutput(NS("FG", "ui_fg_new_element_row")), width=12)),
+             fluidRow(
+               box(title="Element Add Message",
+                 verbatimTextOutput(NS("FG", "ui_fg_new_element_msg")), width=12)),
+             fluidRow(
+               box(title="Plot Preview",
+                 plotOutput(NS("FG", "ui_fg_preview")), width=12)),
+             fluidRow(
+               box(title="Current Elements",
+                rhandsontable::rHandsontableOutput(NS("FG", "hot_fg_elements")), width=12)),
              fluidRow(
                box(title="Generated Code",
                  shinyAce::aceEditor(NS("FG", "ui_fg_code")), width=12)),
-           # fluidRow(box(title="Wrangled Data",
-           #     rhandsontable::rHandsontableOutput(NS("FG", "hot_data_preview")), width=12)),
              fluidRow(
                box(title="Current Module State",
                  verbatimTextOutput("ui_state"),width=12))
