@@ -1,4 +1,4 @@
-
+#'@import ggplot2
 #'@import rhandsontable
 #'@import shiny
 #'@import shinyWidgets
@@ -519,7 +519,7 @@ FG_Server <- function(id,
         list(input$button_element_add,
              input$button_fig_new,
              input$button_fig_save,
-             input$button_fig_fig)
+             input$button_fig_del)
       })
       # This updates the reaction state:
       observeEvent(toListen(), {
@@ -605,6 +605,66 @@ FG_fetch_state = function(id,
       state[["FG"]][["ui"]][[ui_name]] = ""
     }
   }
+
+  # Detecting add_element clicks
+  if(!is.null(state[["FG"]][["ui"]][["button_element_add"]])){
+    # Current value of the button in the UI
+    button_ui = state[["FG"]][["ui"]][["button_element_add"]]
+  
+    # If the button in the UI has a value different than the current state
+    # Then we trigger addition of the FG element currently there
+    if(state[["FG"]][["add_counter"]] != button_ui){
+  
+      if(button_ui != 0 & button_ui != ""){
+  
+        msgs = c()
+
+        # Building the plot element command
+        fers_res = fers_builder(state)
+
+        browser()
+      
+        # saving the messages
+        msgs = c(msgs, fers_res[["msgs"]])
+      
+     #  # If the dwlyr command was successfully built we evaluate
+     #  #the chain to make sure the new element runs correctly:
+     #  if(dwb_res[["isgood"]]){
+     #    # Pulling out the current wrangled dataset
+     #    dwee_res = eval_element(state, dwb_res[["cmd"]])
+     #    # Appending any messages
+     #    msgs = c(msgs, dwee_res[["msgs"]])
+     #
+     #    # If that was successful we
+     #    if(dwee_res[["isgood"]]){
+     #      # - save the new DS as the wrangled dataset (WDS)
+     #      state = set_wds(state, dwee_res[["DS"]])
+     #
+     #      # - append the cmd and description to the FG table
+     #      ET = state[["FG"]][["elements_table"]]
+     #      ET = rbind(ET,
+     #         data.frame(Action        = dwb_res[["action"]],
+     #                    Description   = dwb_res[["desc"]],
+     #                    cmd           = dwb_res[["cmd"]],
+     #                    Status        = "Success",
+     #                    Delete        = FALSE))
+     #      state[["FG"]][["elements_table"]]  = ET
+     #    }
+     #  }
+     #
+     #  # Passing any messages ack to the user
+     #  if(is.null(msgs)){
+     #    state[["FG"]][["add_element_msg"]] = NULL
+     #  } else {
+     #    state[["FG"]][["add_element_msg"]] = paste(msgs, collapse = "\n")
+     #  }
+      }
+  
+      # Lastly we save the button value from the UI to the state:
+      state[["FG"]][["add_counter"]] = button_ui
+    }
+  }
+
   # Saving the state
   session$userData[[FM_FG_ID]] = state
 
@@ -631,71 +691,88 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
   state[["MC"]] = state[["yaml"]][[yaml_section]]
 
   isgood = TRUE
+
+  # Plot elements defined by aesthetics
+  aes_elements = c("line", "point", "hguide", "vguide")
+  # ggplot initialization code assumes the dataset object is named DS
+  code_init = "p = ggplot2::ggplot(data=DS)"
+  # This will hold the ids of the UI elements that need to be collected 
+  # when module fetch_state function is called. Some of them will be 
+  # specified explicitly and others will be generated on the fly from the
+  # configuration file.
+  ui_ids = c()
+
   #---------------------------------------------
   # Finding the dataset
   DS = FM_find_DS(id_UD       = id_UD,
-                  id_DW       = id_DW,
-                  react_state = react_state)
+                 id_DW       = id_DW,
+                 react_state = react_state)
   # If the dataset isn't good then we need to
   # flag the whole module as not being good
   if(!DS[["isgood"]]){
     isgood = FALSE
   }
 
-  #---------------------------------------------
-  # Creating UI ids for each aesthetic in each element
-  ui_ids = c()
-  for(element in names(state[["MC"]][["elements"]])){
-    if("ui_aes" %in% names(state[["MC"]][["elements"]][[element]])){
-      select_id = paste0("select_component_", state[["MC"]][["elements"]][[element]][["ui_aes"]])
-      manual_id = paste0("text_component_", state[["MC"]][["elements"]][[element]][["ui_aes"]], "_manual")
-
-      # Appending the IDs to the full list
-      ui_ids = c(ui_ids, select_id, manual_id)
-      # Saving the ids corresponding to the elements here:
-      state[["MC"]][["elements"]][[element]][["ui_aes_select_id"]] = select_id
-      state[["MC"]][["elements"]][[element]][["ui_aes_manual_id"]] = manual_id
+  # We only do the rest if 
+  if(isgood){
+    #---------------------------------------------
+    # Creating UI ids for each aesthetic in each element
+    for(element in names(state[["MC"]][["elements"]])){
+      if("ui_aes" %in% names(state[["MC"]][["elements"]][[element]])){
+        select_id = paste0("select_component_", state[["MC"]][["elements"]][[element]][["ui_aes"]])
+        manual_id = paste0("text_component_", state[["MC"]][["elements"]][[element]][["ui_aes"]], "_manual")
+    
+        # Appending the IDs to the full list
+        ui_ids = c(ui_ids, select_id, manual_id)
+        # Saving the ids corresponding to the elements here:
+        state[["MC"]][["elements"]][[element]][["ui_aes_select_id"]] = select_id
+        state[["MC"]][["elements"]][[element]][["ui_aes_manual_id"]] = manual_id
+      }
     }
+    
+    # Adding other ui_ids here
+    ui_ids = c(ui_ids,
+      "button_fig_new",
+      "button_fig_save",
+      "button_fig_del",
+      "button_element_add",
+      "text_fig_key",
+      "text_fig_cap",
+      "text_component_xlab",
+      "text_component_ylab",
+      "text_component_ggtitle",
+      "select_component_facet",
+      "select_fg_element")
+    
+    
+    # Since some IDs can be reused in the elements above we do this to
+    # remove any extras:
+    ui_ids = unique(ui_ids)
   }
-
-  # Adding other ui_ids here
-  ui_ids = c(ui_ids,
-    "button_fig_new",
-    "button_fig_save",
-    "button_fig_del",
-    "button_element_add",
-    "text_fig_key",
-    "text_fig_cap",
-    "text_component_xlab",
-    "text_component_ylab",
-    "text_component_ggtitle",
-    "select_component_facet",
-    "select_fg_element")
-
-  # Plot elements defined by aesthetics
-  aes_elements = c("line", "point", "hguide", "vguide")
-
-  # Since some IDs can be reused in the elements above we do this to
-  # remove any extras:
-  ui_ids = unique(ui_ids)
-
+  
   # Defaults for the module
   FG_NULL =
     list(isgood           = isgood,
          DS               = DS,            # Dataset
-        #add_counter      = 0,             # Counter tracking the ds_add_element button
-        #fig_id           = 0,             # Current figure ID
+         add_counter      = 0,             # Counter tracking button_element_add
+         save_counter     = 0,             # Counter tracking button_fig_save
+         new_counter      = 0,             # Counter tracking button_fig_new
+         new_counter      = 0,             # Counter tracking button_fig_del
+         code_init        = code_init,     # Code needed to initialize the plot
          aes_elements     = aes_elements,  # Plot elements defined by aesthetics
          figs             = NULL,          # Placeholder for the figures
          fig_cntr         = 0,             # Internal counter for creating unique figure ids
          current_fig      = NULL,          # currently active fig id
          ui_ids           = ui_ids         # List of the possible ui_ids in the model
          )
-
+  
   state[["FG"]] = FG_NULL
 
-  # Initializing an empty figure
-  state = FG_new_fig(state)
+
+  if(isgood){
+    # Initializing an empty figure
+    state = FG_new_fig(state)
+  }
 
 state}
 
@@ -713,9 +790,19 @@ FG_new_fig    = function(state){
   # Creating a default figure ID
   fig_id = paste0("Fig_", state[["FG"]][["fig_cntr"]])
 
+  # Initialzing the ggplot object
+  DS        = state[["DS"]][["contents"]]
+  code_init = state[["FG"]][["code_init"]] 
+  if(!is.null(code_init)){
+    eval(parse(text=code_init))
+  } else {
+    p = NULL
+  }
+
   # This is the object that contains the different components of the figure:
   fig_def =
     list(key            = fig_id,
+         p              = p,
          caption        = NULL,
          elements_table = NULL)
 
@@ -741,3 +828,163 @@ FG_fetch_current_fig    = function(state){
   fig = state[["FG"]][["figs"]][[fig_id]]
 
 fig}
+
+#'@export
+#'@title Builds a Figure Element R Statement From UI Elements:
+#'@description Takes the current ui elements and constructs the appropriate
+#'ggplot commands forom the user input. The plot commands assume the existance
+#'of a ggplot object `p`.
+#'@param state module state with all of the current ui elements populated
+#'@return list containing the following elements
+#'\itemize{
+#'  \item{isgood:} Return status of the function.
+#'  \item{cmd:}    ggplot R command as a character string
+#'  \item{element:} The type of element being added
+#'  \item{desc:}   Verbose description of the element
+#'  \item{msgs:}   Messages to be passed back to the user
+#'}
+fers_builder = function(state){
+
+  isgood = TRUE
+  msgs   = c()
+  cmd    = ""
+  desc   = ""
+  descs  = c()
+  element= ""
+
+  element      = state[["FG"]][["ui"]][["select_fg_element"]]
+  ui           = state[["FG"]][["ui"]]
+  aes_elements = state[["FG"]][["aes_elements"]]
+
+  # Pulling out the element configuration from the yaml file:
+  element_cfg = state[["MC"]][["elements"]][[element]]
+
+  if(element%in% aes_elements){
+
+    # The geom function name:
+    fcn = element_cfg[["fcn"]]
+
+    # Now we walk through each component and constrcut the aesthetic and
+    # manual portions of the geom
+    man_comp = c()
+    aes_comp = c()
+    aes_req  = element_cfg[["aes_req"]]
+    for(aes_idx in 1:length(element_cfg[["ui_aes"]])){
+
+      comp_idx     = element_cfg[["ui_aes"]][aes_idx]
+      sel_idx      = element_cfg[["ui_aes_select_id"]][aes_idx]
+      man_idx      = element_cfg[["ui_aes_manual_id"]][aes_idx]
+
+      # First we check to make sure that the selection is not "not_used"
+      # this means it's either an aesthetic or manual specification
+      if(ui[[sel_idx]] != "not_used"){
+
+        if(ui[[sel_idx]] == "manual"){
+          # We need to make sure that the actually input a manual value
+          if(ui[[man_idx]] == ""){
+            # This is the default value when reading in the ui, so we need to 
+            # fail the element and return an error message:
+            man_msg = state[["MC"]][["labels"]][["msg_bad_manual_comp"]]
+            man_msg = stringr::str_replace_all(man_msg, "===COMP===",  comp_idx)
+          
+            isgood = FALSE
+            msgs = c(msgs, man_msg)
+          } else {
+            # If the selection is "manual" then we add it to
+            # the list of manual components
+            man_rhs = autocast(ui[[man_idx]], quote_char=TRUE)
+            man_comp = c(man_comp, paste0(comp_idx, "=", man_rhs))
+
+            # updating description
+            descs = c(descs, paste0(comp_idx,":", man_rhs))
+          }
+        } else {
+          aes_comp = c(aes_comp, paste0(comp_idx, "=", ui[[sel_idx]]))
+          # updating description
+          descs = c(descs, paste0(comp_idx,":", ui[[sel_idx]]))
+        }
+      }
+    }
+
+    aes_chunk = NULL
+    man_chunk = NULL
+    # Constructing the geom_X function call
+    if(length(aes_comp) > 0){
+      aes_chunk = paste0("aes(", paste0(aes_comp, collapse=", "),")")
+    }
+    if(length(man_comp) > 0){
+      man_chunk = paste0(man_comp, collapse=", ")
+    }
+
+    cmd = paste0("p = p + ", fcn,"(", 
+                paste0(c(aes_chunk, man_chunk), collapse=", "),
+                ")")
+
+    # creating the description
+    desc = paste(descs, collapse = ", ")
+  } else if(element == "facet"){
+
+    # We want to make sure at least one column has been selected
+    if(ui[["select_component_facet"]][1] == ""){
+      isgood = FALSE
+      msgs = c(msgs, state[["MC"]][["labels"]][["msg_bad_facet"]])
+
+    } else {
+      # The faceting command will depend on the number of columns selected
+      if(length(ui[["select_component_facet"]]) == 2){
+        cmd = paste0("facet_grid(", 
+                     ui[["select_component_facet"]][1],
+                     "~",
+                     ui[["select_component_facet"]][2], ")")
+      } else{
+        cmd = paste0("facet_wrap(vars(", 
+                     paste0(ui[["select_component_facet"]], collapse=", ")
+                     , "))")
+      }
+
+      desc = paste0(ui[["select_component_facet"]], collapse= ", ")
+
+    }
+  } else if(element == "label"){
+
+    # We'll construct the indiviudal commands xlab(), ylab(), etc, and
+    # Combine them in the end
+    cmds = c()
+
+    for(comp_cmd in element_cfg[["ui_text"]]){
+      # This is the ui_id for the current component
+      comp_ui_id = paste0("text_component_", comp_cmd)
+      # If the ui for this component isn't empty we construct 
+      # the command for that component
+      if(ui[[comp_ui_id]] != ""){
+        cmds = c(cmds, paste0(comp_cmd, '("', ui[[comp_ui_id]], '")'))
+        descs = c(descs, paste0(comp_cmd, ": ", ui[[comp_ui_id]]))
+      }
+    }
+
+    # If this is null then someone tried to add labels but didn't specify any
+    if(is.null(cmds)){
+      isgood = FALSE
+      msgs = c(msgs, state[["MC"]][["labels"]][["msg_bad_label"]])
+    } else {
+      cmd  = paste0("p = p + ", paste0(cmds, collapse = " + "))
+      desc = paste0(descs, collapse= ", ")
+    }
+  }else{
+    isgood = FALSE
+    err_msg = 
+    err_msg = state[["MC"]][["labels"]][["msg_bad_element"]]
+    err_msg = stringr::str_replace_all(err_msg, "===ELEMENT===",  element)
+    msgs = c(msgs, err_msg)
+  }
+
+
+  res = list(isgood   = isgood,
+             cmd      = cmd,
+             element  = element, 
+             desc     = desc,
+             msgs     = msgs)
+
+res}
+
+

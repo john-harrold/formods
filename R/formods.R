@@ -68,3 +68,25 @@ FM_find_DS = function(id_UD, id_DW, react_state){
      isgood    =  isgood  )  
 
 res}
+
+#'@export
+#'@title Automatically Cast UI Input Variable
+#'@description Takes UI input and tries to figure out if it's numeric or text
+#'@param ui_input UI input from a shiny form
+#'@param quote_char TRUE will include double quotes in the character string
+#'@return best guess at type casting a variable
+autocast = function(ui_input, quote_char=TRUE){
+
+
+  ui_input_num = as.numeric(as.character(ui_input))
+
+  if(any(is.na(ui_input_num))){
+    res = as.character(ui_input)
+    if(quote_char){
+      res = paste0('"', res, '"')
+    }
+  } else {
+    res = ui_input_num
+  }
+
+}

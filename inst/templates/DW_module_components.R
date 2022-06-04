@@ -48,7 +48,11 @@ ui <- dashboardPage(
 
 # Main app server
 server <- function(input, output, session) {
-  session$userData$pkdata = Theoph
+
+  # Test dataset in the package
+  DATA = readxl::read_excel(
+           path  = system.file(package="formods", "data", "PK_DATA.xlsx"),
+           sheet = "DATA")
 
   # Module server
   react_FM    = reactiveValues()
@@ -62,8 +66,8 @@ server <- function(input, output, session) {
           sheet           = NULL,
           sheets          = NULL,
           code            = "# NULL",
-          contents        = Theoph,
-          checksum        = digest::digest(Theoph, algo=c("md5")),
+          contents        = DATA,
+          checksum        = digest::digest(DATA, algo=c("md5")),
           isgood          = TRUE
         )
     )

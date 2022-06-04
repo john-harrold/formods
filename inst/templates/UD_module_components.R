@@ -47,7 +47,6 @@ ui <- dashboardPage(
     )
   )
 
-
 # Main app server
 server <- function(input, output, session) {
   # Empty reactive object to track and react to

@@ -126,30 +126,35 @@ FG:
     preview: TRUE 
   labels:
     elements:
-      x:            "x-axis"
-      "y":          "y-axis"
-      color:        "color"
-      linetype:     "line type"
-      shape:        "shape"     
-      size:         "size"     
-      alpha:        "alpha"     
-      group:        "group"     
-      xintercept:   "x-line"
-      yintercept:   "y-line"
-    ph:
-      xlab:         "x-axis label"
-      ylab:         "y-axis label"
-      ggtitle:      "plot title"
-      caption:      "caption (opt)"
-      fig_key:      "figure key (opt)"
-      manual:       "Manual"
-    manual:         "Manual"
-    not_used:       "Not Used"
-    curr_figs_none: "No figures yet created"
-    new_fig:        "New"
-    save_fig:       "Save"
-    del_fig:        "Delete"
-    add_ele:        "Add Figure Element"
+      x:             "x-axis"
+      "y":           "y-axis"
+      color:         "color"
+      linetype:      "line type"
+      shape:         "shape"     
+      size:          "size"     
+      alpha:         "alpha"     
+      group:         "group"     
+      xintercept:    "x intercept"
+      yintercept:    "y intercept"
+    ph:              
+      xlab:          "x-axis label"
+      ylab:          "y-axis label"
+      ggtitle:       "plot title"
+      caption:       "caption (opt)"
+      fig_key:       "figure key (opt)"
+      manual:        "Manual"
+    manual:          "Manual"
+    not_used:        "Not Used"
+    curr_figs_none:  "No figures yet created"
+    new_fig:         "New"
+    save_fig:        "Save"
+    del_fig:         "Delete"
+    add_ele:         "Add Figure Element"
+    msg_bad_label:   "No labels were specified, unable to add element."
+    msg_bad_facet:   "At least one column must be selected to add a faceting element."
+    msg_bad_element: "Unable to add the specified element: ===ELEMENT==="
+    msg_bad_manual_comp: |- 
+      The plot element component ===COMP=== was specified manually but no manual value was provided.
   elements:
     # For each element below you should only modify the choice and subtext
     # elements
@@ -158,21 +163,25 @@ FG:
       subtext: "Continuous line"
       ui_aes:  ["x", "y", "color", "group", "linetype", "size", "alpha"]
       aes_req: ["x", "y"]
+      fcn:     "geom_line"
     point:
       choice:  "Point"  
       subtext: "Scatter plot"
       ui_aes:  ["x", "y", "color", "shape", "size", "alpha"]
       aes_req: ["x", "y"]
+      fcn:     "geom_point"
     hguide:
       choice:  "H-Guide"  
       subtext: "Horizontal guide"
-      ui_aes:  ["yintercept", "linetype"]
+      ui_aes:  ["yintercept", "linetype", "color", "size"]
       aes_req: ["yintercept"]
+      fcn:     "geom_hline"
     vguide:
       choice:  "V-Guide"  
       subtext: "Vertical guide"
-      ui_aes:  ["xintercept", "linetype"]
+      ui_aes:  ["xintercept", "linetype", "color", "size"]
       aes_req: ["xintercept"]
+      fcn:     "geom_vline"
     facet:
       choice:  "Facet"  
       subtext: "Facet by one or two variables"
@@ -196,3 +205,8 @@ FG:
         width: 200
       label:
         width: 150
+  # You can put any post_processing you want to apply to all figures.
+  # The ggplot object will be avialble as p
+  post_processing: |-
+    p = p + theme_light()
+    
