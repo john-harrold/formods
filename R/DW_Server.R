@@ -479,11 +479,11 @@ DW_Server <- function(id,
               selected =  choices[ceiling(length(choices)/2)]
             }
             uiele    = sliderTextInput(
-                 inputId  = NS(id, "fds_filter_rhs"),
-                 label    = NULL,
-                 choices  = choices,
-                 selected = selected,
-                 width    = 200,
+                 inputId   = NS(id, "fds_filter_rhs"),
+                 label     = NULL,
+                 choices   = choices,
+                 selected  = selected,
+                 width     = 200,
                  dragRange = TRUE
                )
           }
@@ -539,11 +539,11 @@ DW_Server <- function(id,
 
         uiele = tagList(uiele,
           shinyWidgets::pickerInput(
-            inputId = NS(id, "select_dw_element"),
-            choices    = choices,
-             width = "fit",
-             inline = TRUE,
-            choicesOpt = choicesOpt))
+             inputId    = NS(id, "select_dw_element"),
+             choices    = choices,
+             width      = "fit",
+             inline     = TRUE,
+             choicesOpt = choicesOpt))
       } else {
         uiele = NULL
       }
@@ -570,7 +570,7 @@ DW_Server <- function(id,
           actionBttn(
             inputId = NS(id, "button_dw_add_element"),
              label = state[["MC"]][["labels"]][["add_element"]],
-             icon  = icon("glyphicon-plus-sign"),
+             icon  = icon("plus-sign", lib="glyphicon"),
              color = "primary",
              style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]]
              ))
