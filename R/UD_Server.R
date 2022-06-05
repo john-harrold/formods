@@ -16,29 +16,31 @@
 #'@description Server function for the Data Uplaod Shiny Module
 #'@param id An ID string that corresponds with the ID used to call the module's UI function
 #'@param yaml_section  Section of the yaml file with the module configuration (`"UD"`)
-#'@param yaml_file Upload Data cofiguration file
+#'@param yaml_file Upload Data configuration file
 #'@param react_state Variable passed to server to allow reaction outside of module (`NULL`)
 #'@return return
 UD_Server <- function(id,
-                yaml_section = "UD",
-                yaml_file    = system.file(package = "formods", "templates", "config.yaml"),
-                react_state  = NULL) {
+                      yaml_section = "UD",
+                      yaml_file    = system.file(package = "formods", 
+                                                 "templates", 
+                                                 "config.yaml"),
+                      react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
-
-
+    
+    
     #------------------------------------
     # Creates the file upload elements
     output$UD_ui_load_data = renderUI({
       state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
       accept = state[["MC"]][["allowed_extensions"]]
       label  = paste0( state[["MC"]][["labels"]][["upload_button"]],
-                      " (", paste(accept, collapse=", "), ")")
+                       " (", paste(accept, collapse=", "), ")")
       uiele =
-      tagList(
-        fileInput(NS(id, "input_data_file"),
-                  label = label,
-                 multiple = FALSE,
-                 accept = state[["MC"]][["allowed_extensions"]]))
+        tagList(
+          fileInput(NS(id, "input_data_file"),
+                    label = label,
+                    multiple = FALSE,
+                    accept = state[["MC"]][["allowed_extensions"]]))
       uiele})
     #------------------------------------
     # If the user has uploaded an excel file this will
@@ -47,22 +49,22 @@ UD_Server <- function(id,
       # Reacting to data file changes
       input$input_data_file
       state = UD_fetch_state(id, input, session, yaml_file)
-
+      
       if(!is.null(state[["DS"]][["data_file_ext"]]) &
          !is.null(state[["DS"]][["sheet"]]) &
          !is.null(state[["DS"]][["sheets"]])){
-         uiele =
-           selectInput(
-               NS(id, "input_select_sheet"),
-               "Select Sheet",
-               choices  = state[["DS"]][["sheets"]],
-               selected = state[["DS"]][["sheet"]],
-               multiple = FALSE)
-
+        uiele =
+          selectInput(
+            NS(id, "input_select_sheet"),
+            "Select Sheet",
+            choices  = state[["DS"]][["sheets"]],
+            selected = state[["DS"]][["sheet"]],
+            multiple = FALSE)
+        
       } else {
         uiele = NULL
       }
-    uiele})
+      uiele})
     #------------------------------------
     # Data loading messages go here
     output$UD_ui_text_load_result  =  renderUI({
@@ -75,7 +77,7 @@ UD_Server <- function(id,
       } else {
         uiele = NULL
       }
-    uiele})
+      uiele})
     #------------------------------------
     # A simple preview of the data:
     output$UD_ui_data_preview  =  renderUI({
@@ -83,13 +85,13 @@ UD_Server <- function(id,
       input$input_data_file
       input$input_select_sheet
       state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
-
+      
       if(is.data.frame(state[["DS"]][["contents"]])){
         uiele = tagList(tags$b("Dataset Preveiw"),
                         rhandsontable::rHandsontableOutput(NS(id, "hot_data_preview")))
       } else {uiele = NULL}
-    uiele})
-
+      uiele})
+    
     #------------------------------------
     # Generated data reading code
     observe({
@@ -97,14 +99,14 @@ UD_Server <- function(id,
       input$input_data_file
       input$input_select_sheet
       state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
-
+      
       if(is.null(state[["DS"]][["code"]])){
         uiele = "# No file loaded"
       } else {
         uiele = state[["DS"]][["code"]]
       }
-
-
+      
+      
       shinyAce::updateAceEditor(
         session         = session, 
         editorId        = "UD_ui_ace_code", 
@@ -113,8 +115,8 @@ UD_Server <- function(id,
         readOnly        = state[["MC"]][["code"]][["readOnly"]],
         mode            = state[["MC"]][["code"]][["mode"]],
         value           = uiele)
-
-      }) 
+      
+    }) 
     #------------------------------------
     # A simple preview of the data:
     output$hot_data_preview  =  rhandsontable::renderRHandsontable({
@@ -124,39 +126,39 @@ UD_Server <- function(id,
       state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
       if(is.data.frame(state[["DS"]][["contents"]])){
         uiele = rhandsontable::rhandsontable(state[["DS"]][["contents"]],
-          width  = state[["MC"]][["dimensions"]][["preview"]][["width"]],
-          height = state[["MC"]][["dimensions"]][["preview"]][["height"]])
+                                             width  = state[["MC"]][["dimensions"]][["preview"]][["width"]],
+                                             height = state[["MC"]][["dimensions"]][["preview"]][["height"]])
       } else {uiele=NULL}
-    uiele})
+      uiele})
     #------------------------------------
     # Creates the ui for the compact view of the module
     output$UD_ui_compact  =  renderUI({
       state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
-
+      
       uiele = NULL
-
+      
       uiele_main   = tagList(htmlOutput(NS(id, "UD_ui_load_data")),
                              htmlOutput(NS(id, "UD_ui_select_sheets")),
                              htmlOutput(NS(id, "UD_ui_text_load_result")))
       
       if( state$MC$compact$code | state$MC$compact$preview){
-         uiele_preview = tagList(htmlOutput(NS(id, "UD_ui_data_preview")))
-         uiele_code    = tagList(shinyAce::aceEditor(NS(id, "UD_ui_ace_code")))
-
+        uiele_preview = tagList(htmlOutput(NS(id, "UD_ui_data_preview")))
+        uiele_code    = tagList(shinyAce::aceEditor(NS(id, "UD_ui_ace_code")))
+        
         uiele_str ="tabPanel(state$MC$labels$tab_main,  uiele_main  )"
         if(state$MC$compact$preview){
           uiele_str = paste0(uiele_str, ",tabPanel(state$MC$labels$tab_preview, uiele_preview)") }
         if(state$MC$compact$code){
           uiele_str = paste0(uiele_str, ",tabPanel(state$MC$labels$tab_code, uiele_code)") }
-
+        
         uiele_str = paste0("tabsetPanel(",uiele_str, ")")
-
+        
         uiele = eval(parse(text=uiele_str))
       } else {
         uiele = uiele_main  
       }
-
-    uiele})
+      
+      uiele})
     #outputOptions(output, "UD_ui_compact", priority = -1)
     #------------------------------------
     # Creating reaction if a variable has been specified
@@ -170,8 +172,8 @@ UD_Server <- function(id,
         react_state[[id]] = UD_fetch_state(id, input, session, yaml_file, yaml_section)
       })
     }
-
-
+    
+    
   })
 }
 
@@ -207,17 +209,17 @@ UD_Server <- function(id,
 #' }
 #'}
 UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
-
+  
   # After the app has loaded the state must be initialized
   FM_UD_ID = paste0("FM_UD_", id)
-
+  
   # Template for an empty dataset
   #---------------------------------------------
   # Getting the current state
   if(is.null(session$userData[[FM_UD_ID]])){
     # General state information
     state = UD_init_state(yaml_file)
-
+    
     # This assigns the module config "MC" element to the correct yaml_section.
     state[["MC"]] = state[["yaml"]][[yaml_section]]
   } else {
@@ -225,7 +227,7 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
     # from the session variable
     state = session$userData[[FM_UD_ID]]
   }
-
+  
   #---------------------------------------------
   # Here we update the state based on user input
   # Loadinng the data file
@@ -238,7 +240,7 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
     contents        = NULL
     data_file_ext   = tools::file_ext(data_file)
     load_msg        = NULL
-
+    
     allowed_extensions = state[["MC"]][["allowed_extensions"]]
     # determining if we need to load data
     load_data  = FALSE
@@ -269,16 +271,16 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
     } else {
       # pulling out the template:
       load_msg = state[["MC"]][["labels"]][["msg_bad_extension"]]
-
+      
       load_msg = stringr::str_replace_all(load_msg, "===EXT===",        data_file_ext)
       load_msg = stringr::str_replace_all(load_msg, "===FILE===",       data_file)
       load_msg = stringr::str_replace_all(load_msg, "===ALLOWEDEXT===", paste(allowed_extensions, collapse=", "))
       load_msg = tagList(tags$em(load_msg))
-
+      
       # This will force a reset of the DS field in the state
       clear_data = TRUE
     }
-
+    
     # If load data is true then we store all that in the state variable
     if(load_data){
       code = NULL
@@ -305,7 +307,7 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
           sheet = sheets[1] }
         contents = readxl::read_excel(path=data_file_local, sheet=sheet)
         code = paste0('DS = readxl::read_excel(path=(path="',data_file,'", sheet="',sheet,'")\n')
-
+        
       }
       load_msg = tagList(tags$em(paste0("File loaded.")))
       # Storing all the elements in the state
@@ -319,57 +321,57 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
       state[["DS"]][["checksum"]]        = digest::digest(contents, algo=c("md5"))
       state[["DS"]][["isgood"]]          = TRUE
     }
-
+    
     # If someone loads a good file then a bad one (e.g. bad file extension)
     # We clear the data and set the dataset to bad to prevent showing the old
     # dataset that is no longer relevant.
     if(clear_data){
       state[["DS"]] = fetch_DS_NULL()
     }
-
+    
     # Picking up any loading messages that were defined
     state[["DS"]][["load_msg"]]        = load_msg
   }
-
+  
   #---------------------------------------------
   # Saving the state
   session$userData[[FM_UD_ID]] = state
-
+  
   # Returning the state
-state}
+  state}
 
 
 #'@export
 #'@title Initialize UD Module State
 #'@description Creates a list of the initialized module state
-#'@param yaml_file App cofiguration file
+#'@param yaml_file App configuration file
 #'@return list containing an empty app state object
 UD_init_state = function(yaml_file){
-
-    state = list()
-    # Reading in default information from the yaml file
-    state[["yaml"]] = yaml::read_yaml(yaml_file)
-
-    state[["DS"]] = fetch_DS_NULL()
-
-state}
+  
+  state = list()
+  # Reading in default information from the yaml file
+  state[["yaml"]] = yaml::read_yaml(yaml_file)
+  
+  state[["DS"]] = fetch_DS_NULL()
+  
+  state}
 
 #'@export
 #'@title Empty Data Set Object
 #'@description Creates a list with default elements for a dataset
 #'@return Null dataset list
 fetch_DS_NULL = function(){
-
-    DS_NULL =
-      list(isgood          = FALSE,
-           load_msg        = NULL,
-           data_file_local = NULL,
-           data_file_ext   = NULL,
-           data_file       = NULL,
-           sheet           = NULL,
-           sheets          = NULL,
-           checksum        = digest::digest(NULL, algo=c("md5")),
-           contents        = NULL)
-
-DS_NULL}
+  
+  DS_NULL =
+    list(isgood          = FALSE,
+         load_msg        = NULL,
+         data_file_local = NULL,
+         data_file_ext   = NULL,
+         data_file       = NULL,
+         sheet           = NULL,
+         sheets          = NULL,
+         checksum        = digest::digest(NULL, algo=c("md5")),
+         contents        = NULL)
+  
+  DS_NULL}
 
