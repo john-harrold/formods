@@ -354,13 +354,26 @@ FG_Server <- function(id,
             # to the value returned by the by the UI to the server:
             names(sel_choices) = sel_names
 
+            # Defining the tool tip for the manual text elements
+            if(is.null(state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]])){
+              manual_tool_tip = NULL
+            } else{
+            # manual_tool_tip =shinyBS::bsTooltip(NS(id,id_manual), 
+            #                                     state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]],
+            #                                     "bottom", options = list(container = "body") )
+              manual_tool_tip =shinyBS::bsPopover(NS(id,id_manual), 
+                                                  title=NULL,
+                                                  state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]],
+                                                  "bottom")
+            }
+
             aes_list    = tagList(aes_list,
               div(style="display:inline-block",
                 div(
                   # Picker on top
                   pickerInput(
                     inputId    = NS(id, id_select),
-                    label      = state[["MC"]][["labels"]][["elements"]][[ui_aes]],
+                    label      = state[["MC"]][["labels"]][["components"]][[ui_aes]],
                     choices    = sel_choices,
                     width      = state[["MC"]][["dimensions"]][["components"]][["aes"]][["width"]],
                     choicesOpt = list( style = sel_style)),
@@ -369,11 +382,15 @@ FG_Server <- function(id,
                      inputId     = NS(id, id_manual),
                      label       = NULL,
                      placeholder = state[["MC"]][["labels"]][["ph"]][["manual"]],
-                     width       = state[["MC"]][["dimensions"]][["components"]][["aes"]][["width"]])
+                     width       = state[["MC"]][["dimensions"]][["components"]][["aes"]][["width"]]),
+                    manual_tool_tip
                 )
               )
             )
           }
+
+
+
           uiele = aes_list
         } else if(curr_element == "facet") {
 

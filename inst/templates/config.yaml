@@ -124,15 +124,28 @@ FG:
   compact:
     code:    TRUE 
     preview: TRUE 
+  tooltips: 
+    components:
+      manual:
+        x:             "Numeric location on the x-axis"
+        "y":           "Numeric location on the y-axis"
+        color:         "A named color red, blue, green"
+        linetype:      "Specify either solid, dashed, dotted, dotdash, longdash or twodash"
+        shape:         "Open shapes: square (0), circle (1), triangle (2); Filled shapes:  square (15), circle (16), triangle (17)"
+        size:          "Numeric value"
+        alpha:         "Numeric value between 0 (completely transparent) and 1 (solid)"
+        group:         NULL
+        xintercept:    NULL
+        yintercept:    NULL
   labels:
-    elements:
+    components:
       x:             "x-axis"
       "y":           "y-axis"
       color:         "color"
       linetype:      "line type"
       shape:         "shape"     
       size:          "size"     
-      alpha:         "alpha"     
+      alpha:         "transparency"
       group:         "group"     
       xintercept:    "x intercept"
       yintercept:    "y intercept"

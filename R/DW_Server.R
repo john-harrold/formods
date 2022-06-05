@@ -435,7 +435,7 @@ DW_Server <- function(id,
         
         filter_col = state[["DW"]][["ui"]][["select_fds_filter_column"]]
         
-        if(is.factor(WDS[[filter_col]])){
+        if(!is.numeric(WDS[[filter_col]])){
           choices  = state[["MC"]][["op_choices"]][["factor"]]
         } else {
           choices  = state[["MC"]][["op_choices"]][["not_factor"]]
@@ -478,7 +478,7 @@ DW_Server <- function(id,
           choices  = sort(unique(unfactor((WDS[[filter_col]]))))
           
           # We process factors different than
-          if(is.factor(WDS[[filter_col]])){
+          if(!is.numeric(WDS[[filter_col]])){
             uiele = pickerInput(
               inputId  = NS(id, "fds_filter_rhs"),
               label    = NULL,
