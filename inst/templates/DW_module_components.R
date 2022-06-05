@@ -55,27 +55,30 @@ ui <- dashboardPage(
 
 # Main app server
 server <- function(input, output, session) {
-  
-  session$userData$pkdata = Theoph
-  
+
+  # Test dataset in the package
+  DATA = readxl::read_excel(
+           path  = system.file(package="formods", "data", "PK_DATA.xlsx"),
+           sheet = "DATA")
+
   # Module server
   react_FM    = reactiveValues()
   
   # Format of ds is described in JMH
   ds = list(
-    DS = list(
-      data_file_local = NULL,
-      data_file_ext   = NULL,
-      data_file       = NULL,
-      sheet           = NULL,
-      sheets          = NULL,
-      code            = "# NULL",
-      contents        = Theoph,
-      checksum        = digest::digest(Theoph, algo=c("md5")),
-      isgood          = TRUE
+     DS = list(
+          data_file_local = NULL,
+          data_file_ext   = NULL,
+          data_file       = NULL,
+          sheet           = NULL,
+          sheets          = NULL,
+          code            = "# NULL",
+          contents        = DATA,
+          checksum        = digest::digest(DATA, algo=c("md5")),
+          isgood          = TRUE
+        )
     )
-  )
-  
+
   react_FM$UD = ds
   
   DW_Server(id="DW", id_UD = "UD", react_state=react_FM)
