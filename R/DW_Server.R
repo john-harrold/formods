@@ -14,25 +14,25 @@
 #'@export
 #'@title Data Wrangling Server
 #'@description Server function for the data wrangling module
-#'@param id An ID string that corresponds with the ID used to call the module's 
+#'@param id An ID string that corresponds with the ID used to call the module's
 #'UI function
-#'@param yaml_section  Section of the yaml file with the module 
+#'@param yaml_section  Section of the yaml file with the module
 #'configuration (`"DW"`)
 #'@param yaml_file Upload Data cofiguration file
-#'@param id_UD  ID string for the upload data module used to handle uploads or 
+#'@param id_UD  ID string for the upload data module used to handle uploads or
 #'the name of the list element in react_state where the data set is stored.
-#'@param react_state Variable passed to server to allow reaction outside of 
+#'@param react_state Variable passed to server to allow reaction outside of
 #'module (`NULL`)
 #'@return return
 DW_Server <- function(id,
                       yaml_section = "DW",
-                      yaml_file    = system.file(package = "formods", 
-                                                 "templates", 
+                      yaml_file    = system.file(package = "formods",
+                                                 "templates",
                                                  "config.yaml"),
                       id_UD        = "UD",
                       react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
-    
+
     #------------------------------------
     # Current DW elements
     output$hot_dw_elements = rhandsontable::renderRHandsontable({
@@ -41,8 +41,8 @@ DW_Server <- function(id,
       input$button_dw_add_element
       # Force update on deletion clicks
       input$hot_dw_elements
-      
-      
+
+
       state = DW_fetch_state(id           = id,
                              input        = input,
                              session      = session,
@@ -51,24 +51,24 @@ DW_Server <- function(id,
                              id_UD        = id_UD,
                              react_state  = react_state)
       uiele = NULL
-      
+
       if(state[["DW"]][["DS"]][["isgood"]]){
         if(is.null(state[["DW"]][["elements_table"]])){
           df = data.frame("No_Data"="# No data wragling elements defined yet!")
-          
+
           hot= rhandsontable::rhandsontable(
             df,
             width  = state[["MC"]][["dimensions"]][["dw_elements"]][["width"]],
             height = state[["MC"]][["dimensions"]][["dw_elements"]][["height"]],
             rowHeaders = NULL
           )
-          
+
           uiele =  hot
-          
+
         } else {
           df = state[["DW"]][["elements_table"]]
           df[["cmd"]] = NULL
-          
+
           hot = rhandsontable::rhandsontable(
             df,
             width  = state[["MC"]][["dw_elements"]][["width"]],
@@ -97,13 +97,13 @@ DW_Server <- function(id,
             hot_col("Action" ,      readOnly = TRUE) %>%
             hot_col("Description" , readOnly = TRUE) %>%
             hot_col("Status" ,      readOnly = TRUE)
-          
+
           uiele = hot
         }
       }
-      
+
       uiele
-      
+
     })
     #------------------------------------
     # Generated data wrangling code
@@ -114,7 +114,7 @@ DW_Server <- function(id,
       input$button_dw_add_element
       # Force update on deletion clicks
       input$hot_dw_elements
-      
+
       state = DW_fetch_state(id           = id,
                              input        = input,
                              session      = session,
@@ -122,16 +122,17 @@ DW_Server <- function(id,
                              yaml_section = yaml_section,
                              id_UD        = id_UD,
                              react_state  = react_state)
-      
+
       uiele = NULL
-      
+
       if(state[["DW"]][["DS"]][["isgood"]]){
         if(is.null(state[["DW"]][["elements_table"]])){
           uiele = "# No data wragling elements defined yet!"
         } else {
-          uiele = paste(state[["DW"]][["elements_table"]][["cmd"]], collapse="\n")
+          #uiele = paste(state[["DW"]][["elements_table"]][["cmd"]], collapse="\n")
+          uiele = state[["DW"]][["code"]]
         }
-        
+
         shinyAce::updateAceEditor(
           session         = session,
           editorId        = "ui_dw_code",
@@ -141,7 +142,7 @@ DW_Server <- function(id,
           mode            = state[["MC"]][["code"]][["mode"]],
           value           = uiele)
       }
-      
+
     })
     #output$ui_dw_code  =  renderText({
     #  #req(input$select_dw_element)
@@ -165,13 +166,13 @@ DW_Server <- function(id,
     #  }
     #
     #  uiele})
-    
+
     #------------------------------------
     output$ui_dw_new_element_msg = renderText({
       # Force update on button click
       input$button_dw_add_element
       # Update when they delete elements as well
-      input$hot_dw_elements       
+      input$hot_dw_elements
       #req(input$select_dw_element)
       state = DW_fetch_state(id           = id,
                              input        = input,
@@ -180,7 +181,7 @@ DW_Server <- function(id,
                              yaml_section = yaml_section,
                              id_UD        = id_UD,
                              react_state  = react_state)
-      
+
       uiele = NULL
       if(state[["DW"]][["DS"]][["isgood"]]){
         # If the add element message isn't NULL we return that.
@@ -199,7 +200,7 @@ DW_Server <- function(id,
                              yaml_section = yaml_section,
                              id_UD        = id_UD,
                              react_state  = react_state)
-      
+
       if(state[["DW"]][["DS"]][["isgood"]]){
         if(state[["DW"]][["isgood"]]){
           # Current final dataset
@@ -207,7 +208,7 @@ DW_Server <- function(id,
           # Columns in that dataset
           dscols = names(WDS)
           #browser()
-          
+
           # Constructing the uiele based on the users selection
           if(state[["DW"]][["ui"]][["select_dw_element"]] == "filter"){
             uiele = tagList(
@@ -215,8 +216,8 @@ DW_Server <- function(id,
                   htmlOutput(NS(id, "ui_dw_fds_filter_column_select"  )),
                   htmlOutput(NS(id, "ui_dw_fds_filter_operator_select")),
                   htmlOutput(NS(id, "ui_dw_fds_filter_rhs"))))
-            
-            
+
+
           }
           if(state[["DW"]][["ui"]][["select_dw_element"]] == "mutate"){
             uiele = tagList(htmlOutput(NS(id, "ui_dw_fds_mutate_row")))
@@ -233,14 +234,14 @@ DW_Server <- function(id,
             uiele = tagList(
               htmlOutput(NS(id, "ui_dw_fds_ungroup"  )))
           }
-          
+
           # this makes the inputs into a line
           #uiele =   div(style = "display: flex;", uiele)
         }
       } else {
         uiele = NULL
       }
-      
+
       uiele})
     #------------------------------------
     # mutate chunks
@@ -287,7 +288,7 @@ DW_Server <- function(id,
               )
           )
         )
-        
+
       }
       uiele
     })
@@ -357,7 +358,7 @@ DW_Server <- function(id,
                   title = state[["MC"]][["labels"]][["uknown_action"]])
               )
           ))
-        
+
       }
       uiele
     })
@@ -402,7 +403,7 @@ DW_Server <- function(id,
         WDS = state[["DW"]][["WDS"]]
         # Columns in that dataset
         dscols = names(WDS)
-        
+
         uiele = pickerInput(
           inputId  = NS(id, "select_fds_filter_column"),
           label    = NULL,
@@ -411,11 +412,11 @@ DW_Server <- function(id,
           options  = list(
             title = state[["MC"]][["labels"]][["fds_filter_column"]])
         )
-        
+
       }
       uiele
     })
-    
+
     #------------------------------------
     output$ui_dw_fds_filter_operator_select = renderUI({
       state = DW_fetch_state(id           = id,
@@ -432,9 +433,9 @@ DW_Server <- function(id,
         WDS = state[["DW"]][["WDS"]]
         # Columns in that dataset
         dscols = names(WDS)
-        
+
         filter_col = state[["DW"]][["ui"]][["select_fds_filter_column"]]
-        
+
         if(!is.numeric(WDS[[filter_col]])){
           choices  = state[["MC"]][["op_choices"]][["factor"]]
         } else {
@@ -448,7 +449,7 @@ DW_Server <- function(id,
           options  = list(
             title = state[["MC"]][["labels"]][["fds_filter_operator"]])
         )
-        
+
       }
       uiele
     })
@@ -467,16 +468,16 @@ DW_Server <- function(id,
       if(state[["DW"]][["isgood"]]){
         # Current final dataset
         WDS = state[["DW"]][["WDS"]]
-        
+
         # If the user filters down to zero rows
         if(nrow(WDS) > 0){
           # Columns in that dataset
           dscols = names(WDS)
-          
+
           filter_col = state[["DW"]][["ui"]][["select_fds_filter_column"]]
-          
+
           choices  = sort(unique(unfactor((WDS[[filter_col]]))))
-          
+
           # We process factors different than
           if(!is.numeric(WDS[[filter_col]])){
             uiele = pickerInput(
@@ -488,7 +489,7 @@ DW_Server <- function(id,
               options  = list(
                 title = state[["MC"]][["labels"]][["fds_filter_rhs"]])
             )
-            
+
           } else {
             if(state[["DW"]][["ui"]][["select_fds_filter_operator"]] %in%
                c("within")){
@@ -522,7 +523,7 @@ DW_Server <- function(id,
                              yaml_section = yaml_section,
                              id_UD        = id_UD,
                              react_state  = react_state)
-      
+
       if(state[["DW"]][["DS"]][["isgood"]]){
         uiele = tagList()
         choicesOpt = list(
@@ -548,8 +549,8 @@ DW_Server <- function(id,
             "resize-full"
           ),
           lib = rep("glyphicon", length(icon)))
-          
-        
+
+
         cnames = c( state[["MC"]][["actions"]][["filter"]] [["choice"]] ,
                     state[["MC"]][["actions"]][["mutate"]] [["choice"]] ,
                     state[["MC"]][["actions"]][["rename"]] [["choice"]] ,
@@ -564,7 +565,7 @@ DW_Server <- function(id,
           "ungroup"
         )
         names(choices) = cnames
-        
+
         uiele = tagList(uiele,
           shinyWidgets::pickerInput(
              inputId    = NS(id, "select_dw_element"),
@@ -575,10 +576,10 @@ DW_Server <- function(id,
       } else {
         uiele = NULL
       }
-      
+
       uiele
     })
-    
+
     #------------------------------------
     # Current DW elements
     output$ui_dw_add_element_button = renderUI({
@@ -593,7 +594,7 @@ DW_Server <- function(id,
                              yaml_section = yaml_section,
                              id_UD        = id_UD,
                              react_state  = react_state)
-      
+
       if(state[["DW"]][["DS"]][["isgood"]]){
         uiele = tagList(
           actionBttn(
@@ -606,7 +607,7 @@ DW_Server <- function(id,
       } else {
         uiele = NULL
       }
-      
+
       uiele
     })
     #------------------------------------
@@ -627,7 +628,7 @@ DW_Server <- function(id,
                              react_state  = react_state)
       #ds = isolate(react_state[[id_UD]])
       #df = ds$DS$contents
-      
+
       if(state[["DW"]][["DS"]][["isgood"]]){
         df = state[["DW"]][["WDS"]]
         ds = state[["DW"]][["DS"]]
@@ -656,39 +657,39 @@ DW_Server <- function(id,
                              yaml_section = yaml_section,
                              id_UD        = id_UD,
                              react_state  = react_state)
-      
+
       uiele = NULL
-      
+
       uiele_main = tagList(
-        div(style="display:inline-block", 
+        div(style="display:inline-block",
             htmlOutput(NS(id, "ui_dw_select"))),
-        div(style="display:inline-block", 
+        div(style="display:inline-block",
             htmlOutput(NS(id, "ui_dw_add_element_button"))),
         htmlOutput(NS(id, "ui_dw_new_element_row")),
         verbatimTextOutput(NS(id, "ui_dw_new_element_msg")),
         rhandsontable::rHandsontableOutput(NS(id, "hot_dw_elements")))
       if( state$MC$compact$preview){
         uiele_main = tagList(
-          uiele_main, 
+          uiele_main,
           tags$br(),
           rhandsontable::rHandsontableOutput(NS(id, "hot_data_preview")))
       }
-      
+
       if( state$MC$compact$code){
         # uiele_preview = tagList(htmlOutput(NS(id, "UD_ui_data_preview")))
         uiele_code = tagList(shinyAce::aceEditor(NS(id, "ui_dw_code")))
-        
+
         uiele_str ="tabPanel(state$MC$labels$tab_main,   uiele_main)"
         if(state$MC$compact$code){
           uiele_str = paste0(uiele_str, ",tabPanel(state$MC$labels$tab_code, uiele_code)") }
-        
+
         uiele_str = paste0("tabsetPanel(",uiele_str, ")")
-        
+
         uiele = eval(parse(text=uiele_str))
       } else {
         uiele = uiele_main
       }
-      
+
       uiele
     })
     #------------------------------------
@@ -722,19 +723,19 @@ DW_Server <- function(id,
 #'@param session Shiny session variable
 #'@param yaml_file cofiguration file
 #'@param yaml_section  Section of the yaml file with the module configuration
-#'@param id_UD  ID string for the upload data module used to handle uploads or 
+#'@param id_UD  ID string for the upload data module used to handle uploads or
 #'the name of the list element in react_state where the data set is stored.
-#'@param react_state Variable passed to server to allow reaction outside of 
+#'@param react_state Variable passed to server to allow reaction outside of
 #'module (`NULL`)
 #'@return list containing the current state of the app including default
 #'values from the yaml file as well as any changes made by the user
 DW_fetch_state = function(id,           input,           session,
                           yaml_file,    yaml_section,    id_UD,
                           react_state){
-  
+
   # After the app has loaded the state must be initialized
   FM_DW_ID = paste0("FM_DW_", id)
-  
+
   #---------------------------------------------
   # Getting the current state
   if(is.null(session$userData[[FM_DW_ID]])){
@@ -745,8 +746,8 @@ DW_fetch_state = function(id,           input,           session,
     # from the session variable
     state = session$userData[[FM_DW_ID]]
   }
-  
-  
+
+
   #---------------------------------------------
   # detecting changes in the datasets
   if("checksum" %in% names(react_state[[id_UD]][["DS"]])){
@@ -754,7 +755,7 @@ DW_fetch_state = function(id,           input,           session,
     UD_checksum = isolate(react_state[[id_UD]][["DS"]][["checksum"]])
     # Checksum of the copy in the DW module:
     DW_checksum = isolate(state[["DW"]][["DS"]][["checksum"]])
-    
+
     UPDATE_DS = FALSE
     if(is.null(DW_checksum)){
       # If this is NULL then we've never processed the dataset and need to
@@ -771,7 +772,7 @@ DW_fetch_state = function(id,           input,           session,
       state = DW_init_state(yaml_file, yaml_section)
     }
   }
-  
+
   #---------------------------------------------
   # Here we update the state based on user input
   # Dataset changes
@@ -779,7 +780,10 @@ DW_fetch_state = function(id,           input,           session,
     if(!is.null(react_state)){
       # This contains the input dataset:
       state[["DW"]][["DS"]] = isolate(react_state[[id_UD]][["DS"]])
-      
+
+      # This contains the code to generate the input dataset
+      state[["DW"]][["code_previous"]] = state[["DW"]][["DS"]][["code"]]
+
       # This contains the output dataset which when initialized will
       # be just the input above:
       state = set_wds(state, state[["DW"]][["DS"]][["contents"]])
@@ -788,8 +792,8 @@ DW_fetch_state = function(id,           input,           session,
       state[["DW"]][["isgood"]]         = FALSE
     }
   }
-  
-  
+
+
   #---------------------------------------------
   # Getting the current ui elements into the state
   ui_elements = list(
@@ -812,8 +816,8 @@ DW_fetch_state = function(id,           input,           session,
       state[["DW"]][["ui"]][[ui_name]] = ""
     }
   }
-  
-  
+
+
   # Here we're processing any element delete requests
   # - first we only do this if the hot_dw_elements has been defined
   if(is.list(state[["DW"]][["ui"]][["hot_dw_elements"]])){
@@ -824,7 +828,7 @@ DW_fetch_state = function(id,           input,           session,
     if("Delete" %in% names(hot_df)){
       # - lastly we check to see if any have been selected for deletion:
       if(any(hot_df$Delete == TRUE)){
-        
+
         # We walk through the current elements table and keep only the
         # rows where Delete is FALSE
         NEW_ET = NULL
@@ -843,11 +847,13 @@ DW_fetch_state = function(id,           input,           session,
                                OLD_ET[eridx,])
               }
             }
-            
-            # This starts by resetting the working data set (WDS) to the default
+
+            # First we set the elements table to NULL
+            state[["DW"]][["elements_table"]]  = NULL
+            # Then reset the working data set (WDS) to the default
             # one:
             state = set_wds(state, state[["DW"]][["DS"]][["contents"]])
-            
+
             # If NEW_ET is NULL then we don't have any wrangling elements left
             # (ie we deleted the last one). If it's not null then we need to apply
             # the filters that are left:
@@ -858,14 +864,17 @@ DW_fetch_state = function(id,           input,           session,
               for(eridx in 1:nrow(NEW_ET)){
                 # Running the current element
                 if(!error_found){
-                  dwee_res = eval_element(state,NEW_ET[eridx,][["cmd"]])
-                  
+                  dwee_res = dw_eval_element(state,NEW_ET[eridx,][["cmd"]])
+
                   # Appending any messages
                   msgs = c(msgs, dwee_res[["msgs"]])
-                  
+
                   if(dwee_res[["isgood"]]){
                     # We set the status to success here:
                     NEW_ET[eridx,][["Status"]] = "Success"
+                    # We have to assinge this to the elements table so it will
+                    # update the code as well.
+                    state[["DW"]][["elements_table"]]  = NEW_ET
                     # Then we reset the WDS to the current value
                     state = set_wds(state, dwee_res[["DS"]])
                   } else {
@@ -881,14 +890,14 @@ DW_fetch_state = function(id,           input,           session,
                   NEW_ET[eridx,][["Status"]] = "Not Run"
                 }
               }
-              
+
               # Passing any messages ack to the user
               if(is.null(msgs)){
                 state[["DW"]][["add_element_msg"]] = NULL
               } else {
                 state[["DW"]][["add_element_msg"]] = paste(msgs, collapse = "\n")
               }
-              
+
             }
             # Saving the NEW_ET over the elements_table in the state
             state[["DW"]][["elements_table"]]  = NEW_ET
@@ -897,50 +906,63 @@ DW_fetch_state = function(id,           input,           session,
       }
     }
   }
-  
+
   # Detecting add_element clicks
   if(!is.null(state[["DW"]][["ui"]][["button_dw_add_element"]])){
     # Current value of the button in the UI
     button_ui = state[["DW"]][["ui"]][["button_dw_add_element"]]
-    
+
     # If the button in the UI has a value different than the current state
     # Then we trigger addition of the DW element currently there
     if(state[["DW"]][["add_counter"]] != button_ui){
-      
+
       if(button_ui != 0 & button_ui != ""){
-        
+
+        # Empty messages:
         msgs = c()
-        # Building the data wranglig command
-        dwb_res = dwrs_builder(state)
-        
-        # saving the messages
-        msgs = c(msgs, dwb_res[["msgs"]])
-        
-        # If the dwlyr command was successfully built we evaluate
-        #the chain to make sure the new element runs correctly:
-        if(dwb_res[["isgood"]]){
-          # Pulling out the current wrangled dataset
-          dwee_res = eval_element(state, dwb_res[["cmd"]])
-          # Appending any messages
-          msgs = c(msgs, dwee_res[["msgs"]])
-          
-          # If that was successful we
-          if(dwee_res[["isgood"]]){
-            # - save the new DS as the wrangled dataset (WDS)
-            state = set_wds(state, dwee_res[["DS"]])
-            
-            # - append the cmd and description to the DW table
-            ET = state[["DW"]][["elements_table"]]
-            ET = rbind(ET,
-                       data.frame(Action        = dwb_res[["action"]],
-                                  Description   = dwb_res[["desc"]],
-                                  cmd           = dwb_res[["cmd"]],
-                                  Status        = "Success",
-                                  Delete        = FALSE))
-            state[["DW"]][["elements_table"]]  = ET
+        # Current elements table
+        cet        = state[["DW"]][["elements_table"]]
+        cet_isgood = TRUE
+        if(!is.null(cet)){
+          if(any(cet[["Status"]] == "Failure")){
+            cet_isgood = FALSE
+            msgs = c(msgs, state[["MC"]][["errors"]][["fix_bad_element"]])
           }
         }
-        
+
+        if(cet_isgood){
+          # Building the data wranglig command
+          dwb_res = dwrs_builder(state)
+
+          # saving the messages
+          msgs = c(msgs, dwb_res[["msgs"]])
+
+          # If the data wrangling command was successfully built we evaluate
+          # the chain to make sure the new element runs correctly:
+          if(dwb_res[["isgood"]]){
+            # Evaluating the element
+            dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+            # Appending any messages
+            msgs = c(msgs, dwee_res[["msgs"]])
+
+            # If that was successful we append the element to the elements
+            # table
+            if(dwee_res[["isgood"]]){
+              # - append the cmd and description to the DW table
+              ET = state[["DW"]][["elements_table"]]
+              ET = rbind(ET,
+                         data.frame(Action        = dwb_res[["action"]],
+                                    Description   = dwb_res[["desc"]],
+                                    cmd           = dwb_res[["cmd"]],
+                                    Status        = "Success",
+                                    Delete        = FALSE))
+              state[["DW"]][["elements_table"]]  = ET
+
+              # - save the new DS as the wrangled dataset (WDS)
+              state = set_wds(state, dwee_res[["DS"]])
+            }
+          }
+        }
         # Passing any messages ack to the user
         if(is.null(msgs)){
           state[["DW"]][["add_element_msg"]] = NULL
@@ -948,19 +970,17 @@ DW_fetch_state = function(id,           input,           session,
           state[["DW"]][["add_element_msg"]] = paste(msgs, collapse = "\n")
         }
       }
-      
+
       # Lastly we save the button value from the UI to the state:
       state[["DW"]][["add_counter"]] = button_ui
     }
   }
-  
+
   # Saving the state
   session$userData[[FM_DW_ID]] = state
-  
+
   # Returning the state
-  
-  state
-}
+state }
 
 #'@export
 #'@title Initialize DW Module State
@@ -972,32 +992,35 @@ DW_init_state = function(yaml_file, yaml_section){
   state = list()
   # Reading in default information from the yaml file
   state[["yaml"]] = yaml::read_yaml(yaml_file)
-  
+
   # This assigns the module config "MC" element to the correct yaml_section.
   state[["MC"]] = state[["yaml"]][[yaml_section]]
-  
+
   # Creating operator table
   opdf = NULL
   for(op_idx in c(1:length(state[["MC"]][["operators"]]))){
     opdf = rbind(opdf,
                  as.data.frame(state[["MC"]][["operators"]][[op_idx]]))
   }
-  
+
   tmpdf = dplyr::filter(opdf, .data[["type"]] == "factor")
   state[["MC"]][["op_choices"]][["factor"]] = stats::setNames(tmpdf$rop, c(tmpdf$text))
   tmpdf = dplyr::filter(opdf, .data[["type"]] == "not_factor")
   state[["MC"]][["op_choices"]][["not_factor"]] = stats::setNames(tmpdf$rop, c(tmpdf$text))
-  
-  
+
+
   # Defaults for the module
   DW_NULL =
     list(isgood           = TRUE,
          add_counter      = 0,         # counter tracking the ds_add_element button
+         code_previous    = NULL,
+         code_dw_only     = NULL,
+         code             = NULL,
          add_element_msg  = NULL,
          elements_table   = NULL)
-  
+
   state[["DW"]] = DW_NULL
-  
+
   state
 }
 
@@ -1010,22 +1033,23 @@ DW_init_state = function(yaml_file, yaml_section){
 #'@return list containing the following elements
 #'\itemize{
 #'  \item{isgood:} Return status of the function
-#'  \item{cmd:}    Data wrangling R command 
-#'  \item{action:} The action being performed 
+#'  \item{cmd:}    Data wrangling R command
+#'  \item{action:} The action being performed
 #'  \item{desc:}   Verbose description of the action
 #'  \item{msgs:}   Messages to be passed back to the user
 #'}
 dwrs_builder = function(state){
-  
+
   isgood = TRUE
   msgs   = c()
   cmd    = ""
   desc   = ""
   action = ""
-  
-  action = state[["DW"]][["ui"]][["select_dw_element"]]
-  ui     = state[["DW"]][["ui"]]
-  
+
+  action         = state[["DW"]][["ui"]][["select_dw_element"]]
+  ui             = state[["DW"]][["ui"]]
+  ds_object_name = state[["DW"]][["DS"]][["object_name"]]
+
   # Checking to make sure the elements are preset for the given action to be
   # added to the chain:
   if(action == "filter"){
@@ -1035,34 +1059,34 @@ dwrs_builder = function(state){
     }
     if(paste(ui[["select_fds_filter_operator"]], collapse=", ") == ""){
       isgood = FALSE
-      msgs = c(msgs, state[["MC"]][["errors"]][["fds_filter_operator"]]) 
+      msgs = c(msgs, state[["MC"]][["errors"]][["fds_filter_operator"]])
     }
     if(paste(ui[["fds_filter_rhs"]], collapse=", ") == ""){
       isgood = FALSE
-      msgs = c(msgs, state[["MC"]][["errors"]][["fds_filter_rhs"]]) 
+      msgs = c(msgs, state[["MC"]][["errors"]][["fds_filter_rhs"]])
     }
   } else if(action == "mutate"){
     if(paste(ui[["select_fds_mutate_column"]], collapse=", ") == ""){
       isgood = FALSE
-      msgs = c(msgs, state[["MC"]][["errors"]][["fds_mutate_column"]]) 
+      msgs = c(msgs, state[["MC"]][["errors"]][["fds_mutate_column"]])
     }
     if(paste(ui[["select_fds_mutate_rhs"]], collapse=", ") == ""){
       isgood = FALSE
-      msgs = c(msgs, state[["MC"]][["errors"]][["fds_mutate_rhs"]]) 
+      msgs = c(msgs, state[["MC"]][["errors"]][["fds_mutate_rhs"]])
     }
   } else if(action == "rename"){
     if(paste(ui[["select_fds_rename_column"]], collapse=", ") == ""){
       isgood = FALSE
-      msgs = c(msgs, state[["MC"]][["errors"]][["fds_rename_column"]]) 
+      msgs = c(msgs, state[["MC"]][["errors"]][["fds_rename_column"]])
     }
     if(paste(ui[["fds_rename_rhs"]], collapse=", ") == ""){
       isgood = FALSE
-      msgs = c(msgs, state[["MC"]][["errors"]][["fds_rename_rhs"]]) 
+      msgs = c(msgs, state[["MC"]][["errors"]][["fds_rename_rhs"]])
     }
   } else if(action == "group"){
     if(paste(ui[["select_fds_group_column"]], collapse=", ") == ""){
       isgood = FALSE
-      msgs = c(msgs, state[["MC"]][["errors"]][["fds_group_column"]]) 
+      msgs = c(msgs, state[["MC"]][["errors"]][["fds_group_column"]])
     }
   } else if(action == "ungroup"){
     # Nothing needs to be done here
@@ -1070,10 +1094,10 @@ dwrs_builder = function(state){
     isgood = FALSE
     msgs = c(msgs, state[["MC"]][["errors"]][["fds_group_column"]])
   }
-  
+
   # if we made it this far then everything is good and we build the command:)
   if(isgood){
-    if(       action == "filter"){
+    if(action == "filter"){
       cond_str = ""
       # The statement will depend on the operator
       if(ui[["select_fds_filter_operator"]] == "within"){
@@ -1105,10 +1129,10 @@ dwrs_builder = function(state){
                       op_desc, " ",
                       paste(ui[["fds_filter_rhs"]], collapse=','))
       }
-      cmd = paste("DS = dplyr::filter(DS,", cond_str, ")")
+      cmd = paste0(ds_object_name,  " = dplyr::filter(", ds_object_name, ",", cond_str, ")")
     } else if(action == "mutate"){
       rhs_str = ui[["select_fds_mutate_rhs"]]
-      cmd = paste("DS = dplyr::mutate(DS,",
+      cmd = paste0(ds_object_name, " = dplyr::mutate(", ds_object_name,",",
                   ui[["select_fds_mutate_column"]],
                   " = ",
                   rhs_str, ")")
@@ -1116,53 +1140,65 @@ dwrs_builder = function(state){
                     "=", rhs_str)
     } else if(action == "rename"){
       new_name =  ui[["fds_rename_rhs"]]
-      cmd = paste("DS = dplyr::rename(DS,",
+      cmd = paste0(ds_object_name, " = dplyr::rename(", ds_object_name,",",
                   new_name,
                   " = ",
                   ui[["select_fds_rename_column"]],
                   ")")
       desc = paste(ui[["select_fds_rename_column"]], " to ", new_name)
-      
+
     } else if(action == "group"){
       group_cols_str   = paste(ui[["select_fds_group_column"]], collapse=', ')
-      cmd = paste("DS = dplyr::group_by(DS,",
+      cmd = paste0(ds_object_name, " = dplyr::group_by(", ds_object_name,",",
                   group_cols_str,
                   ")")
       desc = paste(group_cols_str)
     } else if(action == "ungroup"){
-      cmd = "DS = dplyr::ungroup(DS)"
+      cmd = paste0(ds_object_name, " = dplyr::ungroup(",ds_object_name,")")
       desc = "grouping removed"
     } else {
       isgood = FALSE
       msgs = c(msgs, paste("Action not found:", action))
     }
   }
-  
+
   res = list(isgood = isgood,
              cmd    = cmd,
              action = action,
              desc   = desc,
              msgs   = msgs)
-  
+
   res
 }
 
 
 #'@export
 #'@title Evaluates Data Wrangling Generated Code
-#'@description Creates a list of the initialized app state
+#'@description Takes the current state and a string containing a data
+#'wranlging command and evaluates it.
 #'@param state data wrangling module state
 #'@param cmd string containing the data wrangling command
-#'@return list containing an empty app state object
-eval_element = function(state, cmd){
-  
+#'@return list with the following elements
+#'\itemize{
+#'  \item{isgood:} Return status of the function.
+#'  \item{msgs:}   Messages to be passed back to the user.
+#'  \item{DS:}     Wrangled dataset.
+#'}
+dw_eval_element = function(state, cmd){
+
   msgs = c()
-  DS = state[["DW"]][["WDS"]]
-  ET = NULL
+  DS   = state[["DW"]][["WDS"]]
+
+  # Creating the name fo the dataset with the correct
+  # object name
+  assign(state[["DW"]][["DS"]][["object_name"]],
+         state[["DW"]][["WDS"]])
+
   # Trying to evaluate the generated command against DS
   # to see if any errors are generated:
   tcres = tryCatch({
     eval(parse(text=cmd))
+    DS = get(state[["DW"]][["DS"]][["object_name"]])
     list(DS = DS, isgood=TRUE)},
     error = function(e) {
       list(error=e, isgood=FALSE)}
@@ -1173,31 +1209,15 @@ eval_element = function(state, cmd){
       msgs = c(msgs, paste0("message: ", tcres[["error"]][["message"]])) }
     if(!is.null(tcres[["error"]][["call"]])){
       msgs = c(msgs, paste0("call:    ", tcres[["error"]][["call"]])) }
+  } else {
+    DS = tcres[["DS"]]
   }
-  
+
   res = list(isgood = tcres[["isgood"]],
              msgs   = msgs,
              DS     = DS)
-  
-  res
-}
 
-
-#'@export
-#'@title Remove Factor From Object
-#'@description Takes an object that is a factor and returns an unfactored
-#'vector with the same type by the value removed
-#'@param fctobj Factorized object
-#'@return object with factors removed
-unfactor = function(fctobj){
-  res = fctobj
-  if(is.factor(fctobj)){
-    objtype = typeof(fctobj)
-    cmd = paste0("res = as.", objtype,"(as.character(fctobj))");
-    eval(parse(text=cmd))
-  }
-  res
-}
+res}
 
 #'@export
 #'@title Sets/Updates Wrangled Dataset Field (WDS)
@@ -1207,12 +1227,32 @@ unfactor = function(fctobj){
 #'@param WDS new wrangled data set
 #'@return object with factors removed
 set_wds = function(state, WDS){
-  
+
   # Saving WDS
   state[["DW"]][["WDS"]]       = WDS
-  
+
   # Saving the checksum
   state[["DW"]][["checksum"]]  = digest::digest(WDS, algo=c("md5"))
-  
-  state
-}
+
+  # We only want the rows where the status was sucessful because
+  # that is the only code we want to save
+  good_elements = state[["DW"]][["elements_table"]]
+  if(!is.null(good_elements)){
+    good_elements = dplyr::filter(good_elements,
+                                  .data[["Status"]] == "Success")
+  }
+
+
+  # updating only the data wrangling code:
+  state[["DW"]][["code_dw_only"]] =
+    paste(good_elements[["cmd"]], collapse="\n")
+
+
+  # updating the all of the code:
+  codeall = c(state[["DW"]][["code_previous"]],
+              "# Data wrangling",
+              good_elements[["cmd"]])
+
+  state[["DW"]][["code"]]             = paste(codeall, collapse="\n")
+
+state}

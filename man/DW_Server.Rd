@@ -13,20 +13,23 @@ DW_Server(
 )
 }
 \arguments{
-\item{id}{An ID string that corresponds with the ID used to call the module's UI function}
+\item{id}{An ID string that corresponds with the ID used to call the module's
+UI function}
 
-\item{yaml_section}{Section of the yaml file with the module configuration (`"DW"`)}
+\item{yaml_section}{Section of the yaml file with the module
+configuration (`"DW"`)}
 
 \item{yaml_file}{Upload Data cofiguration file}
 
-\item{id_UD}{ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.}
+\item{id_UD}{ID string for the upload data module used to handle uploads or
+the name of the list element in react_state where the data set is stored.}
 
-\item{react_state}{Variable passed to server to allow reaction outside of module (`NULL`)
-for the data frame in the session$UserData$my_data)}
+\item{react_state}{Variable passed to server to allow reaction outside of
+module (`NULL`)}
 }
 \value{
 return
 }
 \description{
-Server function for the Data Wrangling Module
+Server function for the data wrangling module
 }

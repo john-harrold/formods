@@ -2,7 +2,7 @@
 % Please edit documentation in R/DW_Server.R
 \name{DW_fetch_state}
 \alias{DW_fetch_state}
-\title{Fetch Upload Data State}
+\title{Fetch Data Wrangling State}
 \usage{
 DW_fetch_state(id, input, session, yaml_file, yaml_section, id_UD, react_state)
 }
@@ -17,9 +17,11 @@ DW_fetch_state(id, input, session, yaml_file, yaml_section, id_UD, react_state)
 
 \item{yaml_section}{Section of the yaml file with the module configuration}
 
-\item{id_UD}{ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.}
+\item{id_UD}{ID string for the upload data module used to handle uploads or
+the name of the list element in react_state where the data set is stored.}
 
-\item{react_state}{Variable passed to server to allow reaction outside of module (`NULL`)}
+\item{react_state}{Variable passed to server to allow reaction outside of
+module (`NULL`)}
 }
 \value{
 list containing the current state of the app including default

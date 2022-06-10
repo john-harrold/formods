@@ -2,12 +2,12 @@
 % Please edit documentation in R/DW_Server.R
 \name{DW_init_state}
 \alias{DW_init_state}
-\title{Initialize App State}
+\title{Initialize DW Module State}
 \usage{
 DW_init_state(yaml_file, yaml_section)
 }
 \arguments{
-\item{yaml_file}{App cofiguration file}
+\item{yaml_file}{App configuration file}
 
 \item{yaml_section}{Section of the yaml file with the module configuration}
 }
@@ -15,5 +15,5 @@ DW_init_state(yaml_file, yaml_section)
 list containing an empty app state object
 }
 \description{
-Creates a list of the initialized app state
+Creates a list of the initialized module state
 }

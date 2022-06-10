@@ -1,0 +1,30 @@
+url: ~
+template:
+  bootstrap: 5
+  bootswatch: materia
+  #bootswatch: flatly
+reference:
+  - title: "formods general"
+  - contents:
+    - autocast
+    - FM_find_DS
+    - unfactor
+  - title: "Upload Data (UD)"
+  - contents:
+    - starts_with("UD_")
+  - title: "Data Wrangling (DW)"
+  - contents:
+    - starts_with("DW_")
+    - dwrs_builder
+    - eval_element
+    - set_wds
+  - title: "Figure Generation (FG)"
+  - contents:
+    - starts_with("FG_")
+
+
+
+
+
+
+

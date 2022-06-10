@@ -73,6 +73,7 @@ server <- function(input, output, session) {
           sheet           = NULL,
           sheets          = NULL,
           code            = "# NULL",
+          object_name     = "TMPDS",
           contents        = DATA,
           checksum        = digest::digest(DATA, algo=c("md5")),
           isgood          = TRUE

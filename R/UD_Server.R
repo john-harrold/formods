@@ -283,15 +283,23 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
     
     # If load data is true then we store all that in the state variable
     if(load_data){
+      # getting the object name:
+      if(is.null(state[["MC"]][["ds_object_name"]])){
+        object_name  = "DS"
+        warning(paste0("Unable to find ds_object_name in yaml file. Using default: ", object_name))
+      } else {
+        object_name = state[["MC"]][["ds_object_name"]]
+      }
+
       code = NULL
       # Reading in the file contents:
       if(data_file_ext %in% c("csv")){
         contents = readr::read_csv(file=data_file_local)
-        code = paste0('DS = readr::read_csv(file="',data_file,'")\n')
+        code = paste0(object_name, ' = readr::read_csv(file="',data_file,'")\n')
       }
       if(data_file_ext %in% c("tsv")){
         contents = readr::read_tsv(file=data_file_local)
-        code = paste0('DS = readr::read_tsv(file="',data_file,'")\n')
+        code = paste0(object_name, ' = readr::read_tsv(file="',data_file,'")\n')
       }
       if(data_file_ext %in% c("xls", "xlsx")){
         # If you load one excel sheet and then switch to another
@@ -306,14 +314,20 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
         if(is.null(sheet)){
           sheet = sheets[1] }
         contents = readxl::read_excel(path=data_file_local, sheet=sheet)
-        code = paste0('DS = readxl::read_excel(path=(path="',data_file,'", sheet="',sheet,'")\n')
+        code = paste0(object_name, ' = readxl::read_excel(path="',data_file,'", sheet="',sheet,'")\n')
         
       }
       load_msg = tagList(tags$em(paste0("File loaded.")))
+
+      if(!is.null(code)){
+        code = paste0("# Loading dataset\n", code)
+      }
+
       # Storing all the elements in the state
       state[["DS"]][["data_file_local"]] = data_file_local
       state[["DS"]][["data_file_ext"]]   = data_file_ext
       state[["DS"]][["data_file"]]       = data_file
+      state[["DS"]][["object_name"]]     = object_name
       state[["DS"]][["sheet"]]           = sheet
       state[["DS"]][["sheets"]]          = sheets
       state[["DS"]][["code"]]            = code
@@ -370,6 +384,8 @@ fetch_DS_NULL = function(){
          data_file       = NULL,
          sheet           = NULL,
          sheets          = NULL,
+         code            = NULL,
+         code_previous   = NULL,
          checksum        = digest::digest(NULL, algo=c("md5")),
          contents        = NULL)
   

@@ -218,6 +218,48 @@ FG_Server <- function(id,
       }
       uiele})
     #------------------------------------
+    output$ui_fg_upds_fig   = renderUI({
+      #req(input$X)
+      state = FG_fetch_state(id           = id,
+                             input        = input,
+                             session      = session,
+                             yaml_file    = yaml_file,
+                             yaml_section = yaml_section,
+                             id_UD        = id_UD,
+                             id_DW        = id_DW,
+                             react_state  = react_state)
+      uiele = NULL
+      if(state[["FG"]][["isgood"]]){
+        uiele = actionBttn(
+                  inputId = NS(id, "button_fig_upds"),
+                  label   = state[["MC"]][["labels"]][["upds_fig"]],
+                  style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                  color   = "warning",
+                  icon    = icon("sync"))
+      }
+      uiele})
+    #------------------------------------
+    output$ui_fg_copy_fig   = renderUI({
+      #req(input$X)
+      state = FG_fetch_state(id           = id,
+                             input        = input,
+                             session      = session,
+                             yaml_file    = yaml_file,
+                             yaml_section = yaml_section,
+                             id_UD        = id_UD,
+                             id_DW        = id_DW,
+                             react_state  = react_state)
+      uiele = NULL
+      if(state[["FG"]][["isgood"]]){
+        uiele = actionBttn(
+                  inputId = NS(id, "button_fig_copy"),
+                  label   = state[["MC"]][["labels"]][["copy_fig"]],
+                  style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                  color   = "royal",
+                  icon    = icon("copy"))
+      }
+      uiele})
+    #------------------------------------
     output$ui_fg_fig_cap   = renderUI({
       #req(input$X)
       state = FG_fetch_state(id           = id,
@@ -241,7 +283,15 @@ FG_Server <- function(id,
                              label        = NULL,
                              value        = value,
                              placeholder  = state[["MC"]][["labels"]][["ph"]][["caption"]])
-
+        if(state[["MC"]][["tooltips"]][["include"]]){
+          if(!is.null(state[["MC"]][["tooltips"]][["caption"]])){
+            uiele = tagList(uiele, 
+              shinyBS::bsPopover(NS(id,"text_fig_cap"), 
+                                 title=NULL,
+                                 state[["MC"]][["tooltips"]][["caption"]],
+                                 "bottom"))
+          }
+        }
       }
 
       uiele})
@@ -308,6 +358,9 @@ FG_Server <- function(id,
       # These are the elements that are governed by aesthetics
       aes_elements = state[["FG"]][["aes_elements"]]
 
+      # Getting the current figure
+      current_fig = FG_fetch_current_fig(state)
+
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
 
@@ -337,9 +390,9 @@ FG_Server <- function(id,
             }
 
             # Adding the columns
-            sel_names   = c(sel_names  , state[["FG"]][["DS"]][["columns"]])
-            sel_choices = c(sel_choices, state[["FG"]][["DS"]][["columns"]])
-            sel_style   = c(sel_style  , rep("", length(state[["FG"]][["DS"]][["columns"]])))
+            sel_names   = c(sel_names  , current_fig[["DS"]][["columns"]])
+            sel_choices = c(sel_choices, current_fig[["DS"]][["columns"]])
+            sel_style   = c(sel_style  , rep("", length(current_fig[["DS"]][["columns"]])))
 
             # Adding manual option
             sel_names      = c(sel_names  , state[["MC"]][["labels"]][["manual"]])
@@ -355,16 +408,14 @@ FG_Server <- function(id,
             names(sel_choices) = sel_names
 
             # Defining the tool tip for the manual text elements
-            if(is.null(state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]])){
-              manual_tool_tip = NULL
-            } else{
-            # manual_tool_tip =shinyBS::bsTooltip(NS(id,id_manual), 
-            #                                     state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]],
-            #                                     "bottom", options = list(container = "body") )
-              manual_tool_tip =shinyBS::bsPopover(NS(id,id_manual), 
-                                                  title=NULL,
-                                                  state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]],
-                                                  "bottom")
+            manual_tool_tip = NULL
+            if(state[["MC"]][["tooltips"]][["include"]]){
+              if(!is.null(state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]])){
+                manual_tool_tip =shinyBS::bsPopover(NS(id,id_manual), 
+                                                    title=NULL,
+                                                    state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]],
+                                                    "bottom")
+              }
             }
 
             aes_list    = tagList(aes_list,
@@ -394,7 +445,7 @@ FG_Server <- function(id,
           uiele = aes_list
         } else if(curr_element == "facet") {
 
-          sel_choices = state[["FG"]][["DS"]][["columns"]]
+          sel_choices = current_fig[["DS"]][["columns"]]
 
           uiele =
             pickerInput(
@@ -441,8 +492,42 @@ FG_Server <- function(id,
                              id_DW        = id_DW,
                              react_state  = react_state)
 
+      if(is.null(names(state[["FG"]][["figs"]]))){
+        uiele  = tags$em(state[["MC"]][["labels"]][["curr_figs_none"]])
+      } else {
 
-      uiele  = tags$em(state[["MC"]][["labels"]][["curr_figs_none"]])
+        # This is the current fig ID
+        current_fig_id = state[["FG"]][["current_fig"]]
+
+        choices = c()
+        cnames   = c()
+        subtext     = c()
+
+        for(fig_id in names(state[["FG"]][["figs"]])){
+           tmp_fig = state[["FG"]][["figs"]][[fig_id]]
+           # Creating the select subtext from the caption
+           if(is.null(tmp_fig[["caption"]])){
+             subtext = c(subtext, "")
+           } else {
+             subtext = c(subtext, strtrim(tmp_fig[["caption"]], 20))
+           }
+
+           choices = c(choices, fig_id)
+           cnames  = c(cnames,  tmp_fig[["key"]])
+        }
+
+        choicesOpt = list( subtext = subtext)
+        names(choices) = cnames
+
+        uiele = 
+        shinyWidgets::pickerInput(
+          selected   = current_fig_id,
+          inputId    = NS(id, "select_current_fig"),
+          label      = state[["MC"]][["labels"]][["select_current_fig"]],
+          choices    = choices,
+          width      = state[["MC"]][["dimensions"]][["select_current_fig"]][["width"]],
+          choicesOpt = choicesOpt)
+      }
 
       uiele})
     #------------------------------------
@@ -536,6 +621,8 @@ FG_Server <- function(id,
         list(input$button_element_add,
              input$button_fig_new,
              input$button_fig_save,
+             input$button_fig_upds,
+             input$button_fig_copy,
              input$button_fig_del)
       })
       # This updates the reaction state:
@@ -623,63 +710,93 @@ FG_fetch_state = function(id,
     }
   }
 
-  # Detecting add_element clicks
-  if(!is.null(state[["FG"]][["ui"]][["button_element_add"]])){
-    # Current value of the button in the UI
-    button_ui = state[["FG"]][["ui"]][["button_element_add"]]
-  
-    # If the button in the UI has a value different than the current state
-    # Then we trigger addition of the FG element currently there
-    if(state[["FG"]][["add_counter"]] != button_ui){
-  
-      if(button_ui != 0 & button_ui != ""){
-  
-        msgs = c()
+  #---------------------------------------------
+  # Reacting to button clicks
+  # Adding a new element
+  if( was_clicked(ui_value = state[["FG"]][["ui"]][["button_element_add"]],
+                  counter  = state[["FG"]][["button_counters"]][["add"]])){
 
-        # Building the plot element command
-        fers_res = fers_builder(state)
+    warning("add clicked")
+    msgs = c()
 
+    # Building the plot element command
+    fgb_res = fers_builder(state)
+    
+    # saving the messages
+    msgs = c(msgs,  fgb_res[["msgs"]])
+
+
+    # If figure generation command was successfully built we
+    # evaluate this element to make sure it works correctly
+    if( fgb_res[["isgood"]]){
+      # Evaluating the element
+      fbee_res = fg_eval_element(state,  fgb_res[["cmd"]])
+      # Appending any messages
+      msgs = c(msgs, fbee_res[["msgs"]])
+
+      if(fbee_res[["isgood"]]){
         browser()
-      
-        # saving the messages
-        msgs = c(msgs, fers_res[["msgs"]])
-      
-     #  # If the dwlyr command was successfully built we evaluate
-     #  #the chain to make sure the new element runs correctly:
-     #  if(dwb_res[["isgood"]]){
-     #    # Pulling out the current wrangled dataset
-     #    dwee_res = eval_element(state, dwb_res[["cmd"]])
-     #    # Appending any messages
-     #    msgs = c(msgs, dwee_res[["msgs"]])
-     #
-     #    # If that was successful we
-     #    if(dwee_res[["isgood"]]){
-     #      # - save the new DS as the wrangled dataset (WDS)
-     #      state = set_wds(state, dwee_res[["DS"]])
-     #
-     #      # - append the cmd and description to the FG table
-     #      ET = state[["FG"]][["elements_table"]]
-     #      ET = rbind(ET,
-     #         data.frame(Action        = dwb_res[["action"]],
-     #                    Description   = dwb_res[["desc"]],
-     #                    cmd           = dwb_res[["cmd"]],
-     #                    Status        = "Success",
-     #                    Delete        = FALSE))
-     #      state[["FG"]][["elements_table"]]  = ET
-     #    }
-     #  }
-     #
-     #  # Passing any messages ack to the user
-     #  if(is.null(msgs)){
-     #    state[["FG"]][["add_element_msg"]] = NULL
-     #  } else {
-     #    state[["FG"]][["add_element_msg"]] = paste(msgs, collapse = "\n")
-     #  }
       }
-  
-      # Lastly we save the button value from the UI to the state:
-      state[["FG"]][["add_counter"]] = button_ui
+
     }
+    
+
+
+
+    # Saving the button state to the counter
+    state[["FG"]][["button_counters"]][["add"]] = 
+      state[["FG"]][["ui"]][["button_element_add"]]
+  }
+  # New figure
+  if( was_clicked(ui_value = state[["FG"]][["ui"]][["button_fig_new"]],
+                  counter  = state[["FG"]][["button_counters"]][["new"]])){
+
+    warning("new clicked")
+    msgs = c()
+   
+    # Saving the button state to the counter
+    state[["FG"]][["button_counters"]][["new"]] = 
+      state[["FG"]][["ui"]][["button_fig_new"]]
+  }
+  # Delete figure
+  if( was_clicked(ui_value = state[["FG"]][["ui"]][["button_fig_del"]],
+                  counter  = state[["FG"]][["button_counters"]][["del"]])){
+
+    warning("del clicked")
+    msgs = c()
+    # Saving the button state to the counter
+    state[["FG"]][["button_counters"]][["del"]] = 
+      state[["FG"]][["ui"]][["button_fig_del"]]
+  }
+  # Save figure
+  if( was_clicked(ui_value = state[["FG"]][["ui"]][["button_fig_save"]],
+                  counter  = state[["FG"]][["button_counters"]][["save"]])){
+
+    warning("save clicked")
+    msgs = c()
+    # Saving the button state to the counter
+    state[["FG"]][["button_counters"]][["save"]] = 
+      state[["FG"]][["ui"]][["button_fig_save"]]
+  }
+  # Copy figure
+  if( was_clicked(ui_value = state[["FG"]][["ui"]][["button_fig_copy"]],
+                  counter  = state[["FG"]][["button_counters"]][["copy"]])){
+
+    warning("copy clicked")
+    msgs = c()
+    # Saving the button state to the counter
+    state[["FG"]][["button_counters"]][["copy"]] = 
+      state[["FG"]][["ui"]][["button_fig_copy"]]
+  }
+  # Update dataset for figure
+  if( was_clicked(ui_value = state[["FG"]][["ui"]][["button_fig_upds"]],
+                  counter  = state[["FG"]][["button_counters"]][["upds"]])){
+
+    warning("upds clicked")
+    msgs = c()
+    # Saving the button state to the counter
+    state[["FG"]][["button_counters"]][["upds"]] = 
+      state[["FG"]][["ui"]][["button_fig_upds"]]
   }
 
   # Saving the state
@@ -709,21 +826,28 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
 
   isgood = TRUE
 
-  # Plot elements defined by aesthetics
-  aes_elements = c("line", "point", "hguide", "vguide")
-  # ggplot initialization code assumes the dataset object is named DS
-  code_init = "p = ggplot2::ggplot(data=DS)"
-  # This will hold the ids of the UI elements that need to be collected 
-  # when module fetch_state function is called. Some of them will be 
-  # specified explicitly and others will be generated on the fly from the
-  # configuration file.
-  ui_ids = c()
 
   #---------------------------------------------
   # Finding the dataset
   DS = FM_find_DS(id_UD       = id_UD,
                  id_DW       = id_DW,
                  react_state = react_state)
+
+
+  # Plot elements defined by aesthetics
+  aes_elements = c("line", "point", "hguide", "vguide")
+
+  # ggplot initialization code:
+  ds_object_name = DS[["object_name"]]
+  fg_object_name = state[["MC"]][["fg_object_name"]]
+  code_init = paste0(fg_object_name, " = ggplot2::ggplot(data=", ds_object_name,")")
+
+  # This will hold the ids of the UI elements that need to be collected 
+  # when module fetch_state function is called. Some of them will be 
+  # specified explicitly and others will be generated on the fly from the
+  # configuration file.
+  ui_ids = c()
+
   # If the dataset isn't good then we need to
   # flag the whole module as not being good
   if(!DS[["isgood"]]){
@@ -752,15 +876,17 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
       "button_fig_new",
       "button_fig_save",
       "button_fig_del",
+      "button_fig_copy",
+      "button_fig_upds",
       "button_element_add",
       "text_fig_key",
       "text_fig_cap",
       "text_component_xlab",
       "text_component_ylab",
       "text_component_ggtitle",
+      "select_current_fig",     
       "select_component_facet",
       "select_fg_element")
-    
     
     # Since some IDs can be reused in the elements above we do this to
     # remove any extras:
@@ -770,11 +896,14 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
   # Defaults for the module
   FG_NULL =
     list(isgood           = isgood,
-         DS               = DS,            # Dataset
-         add_counter      = 0,             # Counter tracking button_element_add
-         save_counter     = 0,             # Counter tracking button_fig_save
-         new_counter      = 0,             # Counter tracking button_fig_new
-         new_counter      = 0,             # Counter tracking button_fig_del
+         #DS = DS,
+         button_counters = list(           # Counters to track button clicks
+          "add"             = 0,           # Element: Adding a new element
+          "save"            = 0,           # Figure:  Saving the current figure
+          "new"             = 0,           # Figure:  New blank figure
+          "del"             = 0,           # Figure:  Delete the current figure
+          "copy"            = 0,           # Figure:  Copy the current figure
+          "upds"            = 0),          # Figure:  Update the dataset for the current figure
          code_init        = code_init,     # Code needed to initialize the plot
          aes_elements     = aes_elements,  # Plot elements defined by aesthetics
          figs             = NULL,          # Placeholder for the figures
@@ -785,10 +914,9 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
   
   state[["FG"]] = FG_NULL
 
-
   if(isgood){
     # Initializing an empty figure
-    state = FG_new_fig(state)
+    state = FG_new_fig(state, id_UD, id_DW, react_state)
   }
 
 state}
@@ -798,8 +926,11 @@ state}
 #'@title Initialize New Figure
 #'@description Creates a new figure in a FG module
 #'@param state FG state created with FG_init_state
+#'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
+#'@param id_DW  ID string for the data wrangling module to process any uploaded data
+#'@param react_state Variable passed to server to allow reaction outside of module (`NULL`)
 #'@return list containing an empty app state object
-FG_new_fig    = function(state){
+FG_new_fig    = function(state, id_UD, id_DW, react_state){
 
   # Incrementing the figure counter
   state[["FG"]][["fig_cntr"]] = state[["FG"]][["fig_cntr"]] + 1
@@ -808,18 +939,33 @@ FG_new_fig    = function(state){
   fig_id = paste0("Fig_", state[["FG"]][["fig_cntr"]])
 
   # Initialzing the ggplot object
-  DS        = state[["DS"]][["contents"]]
-  code_init = state[["FG"]][["code_init"]] 
+  DS = FM_find_DS(id_UD       = id_UD,
+                  id_DW       = id_DW,
+                  react_state = react_state)
+
+  # Creating the dataset object
+  # This object contains the name of the dataset
+  ds_object_name = DS[["object_name"]]
+  # Creating that object loally
+  assign(ds_object_name, DS[["contents"]])
+  code_init     = state[["FG"]][["code_init"]] 
+
+  # This object contains the name of the figure
+  fg_object_name = state[["MC"]][["fg_object_name"]]
+
   if(!is.null(code_init)){
     eval(parse(text=code_init))
   } else {
-    p = NULL
+    # pulling out the figure object name
+    assign(fg_object_name, NULL)
   }
 
   # This is the object that contains the different components of the figure:
   fig_def =
     list(key            = fig_id,
-         p              = p,
+         p              = get(fg_object_name),
+         DS             = DS,
+         code_init      = code_init,     
          caption        = NULL,
          elements_table = NULL)
 
@@ -869,9 +1015,10 @@ fers_builder = function(state){
   descs  = c()
   element= ""
 
-  element      = state[["FG"]][["ui"]][["select_fg_element"]]
-  ui           = state[["FG"]][["ui"]]
-  aes_elements = state[["FG"]][["aes_elements"]]
+  element        = state[["FG"]][["ui"]][["select_fg_element"]]
+  ui             = state[["FG"]][["ui"]]
+  aes_elements   = state[["FG"]][["aes_elements"]]
+  fg_object_name = state[["MC"]][["fg_object_name"]]
 
   # Pulling out the element configuration from the yaml file:
   element_cfg = state[["MC"]][["elements"]][[element]]
@@ -932,8 +1079,8 @@ fers_builder = function(state){
     if(length(man_comp) > 0){
       man_chunk = paste0(man_comp, collapse=", ")
     }
-
-    cmd = paste0("p = p + ", fcn,"(", 
+    cmd = paste0(fg_object_name , " = ", fg_object_name, " + ", 
+                 fcn,"(", 
                 paste0(c(aes_chunk, man_chunk), collapse=", "),
                 ")")
 
@@ -949,12 +1096,16 @@ fers_builder = function(state){
     } else {
       # The faceting command will depend on the number of columns selected
       if(length(ui[["select_component_facet"]]) == 2){
-        cmd = paste0("facet_grid(", 
+        cmd = paste0(
+                     fg_object_name , " = ", fg_object_name, " + ", 
+                     "facet_grid(", 
                      ui[["select_component_facet"]][1],
                      "~",
                      ui[["select_component_facet"]][2], ")")
       } else{
-        cmd = paste0("facet_wrap(vars(", 
+        cmd = paste0(
+                     fg_object_name , " = ", fg_object_name, " + ", 
+                     "facet_wrap(vars(", 
                      paste0(ui[["select_component_facet"]], collapse=", ")
                      , "))")
       }
@@ -984,7 +1135,9 @@ fers_builder = function(state){
       isgood = FALSE
       msgs = c(msgs, state[["MC"]][["labels"]][["msg_bad_label"]])
     } else {
-      cmd  = paste0("p = p + ", paste0(cmds, collapse = " + "))
+      cmd  = paste0(
+                    fg_object_name , " = ", fg_object_name, " + ", 
+                    paste0(cmds, collapse = " + "))
       desc = paste0(descs, collapse= ", ")
     }
   }else{
@@ -1005,3 +1158,52 @@ fers_builder = function(state){
 res}
 
 
+#'@export
+#'@title Evaluates Figure Generation Generated Code
+#'@description Takes the current state and a string containing a data
+#'wranlging command and evaluates it.
+#'@param state data wrangling module state
+#'@param cmd string containing the data wrangling command
+#'@return list with the following elements
+#'\itemize{
+#'  \item{isgood:} Return status of the function.
+#'  \item{msgs:}   Messages to be passed back to the user.
+#'  \item{p:}      plot 
+#'}
+fg_eval_element = function(state, cmd){
+
+
+  # Pulling out the current figure
+  current_fig = FG_fetch_current_fig(state)
+  p           = current_fig[["p"]] 
+  msgs        = c()
+
+  # Creating the figure object locally
+  fg_object_name = state[["MC"]][["fg_object_name"]]
+  assign(fg_object_name,p) 
+
+  # Trying to evaluate the generated command against p
+  # to see if any errors are generated:
+  tcres = tryCatch({
+    eval(parse(text=cmd))
+    p = get(fg_object_name)
+    list(p = p, isgood=TRUE)},
+    error = function(e) {
+      list(error=e, isgood=FALSE)}
+  )
+
+  if(!tcres[["isgood"]]){
+    msgs = c(msgs, state[["MC"]][["errors"]][["element_not_added"]])
+    if(!is.null(tcres[["error"]][["message"]])){
+      msgs = c(msgs, paste0("message: ", tcres[["error"]][["message"]])) }
+    if(!is.null(tcres[["error"]][["call"]])){
+      msgs = c(msgs, paste0("call:    ", tcres[["error"]][["call"]])) }
+  } else {
+    p = tcres[["p"]]
+  }
+
+  res = list(isgood = tcres[["isgood"]],
+             msgs   = msgs,
+             p      = p)
+
+res}

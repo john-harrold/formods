@@ -1,0 +1,61 @@
+---
+title: "Included Modules"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Included Modules}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Introduction 
+
+Do you ever make a Shiny app and think: Didn't I just do all this stuff last week? From creating data upload forms to generating a UI for building ggplot figures there are certain components we all use in our apps. The purpose of `formods` is to create customizable Shiny modules to allow many of these components to be created quickly so you can focus on the part of the app that is unique and interesting. 
+
+
+## Implementation
+
+Each module will have a server function using a short name for the module as a prefix. For example the upload data module would use UD. Each module would then have a series of UI elements that you can place in your UI description. 
+
+* Server
+* UI elements
+* UI compact 
+* YAML configuration
+
+# Avialable modules
+
+## Upload Data (UD)
+
+## Data Wrangling (DW)
+
+## Figure Generation (FG)
+
+# Module interaction
+
+Say you are using the Upload Data module to feed data into the Data Wrangling module and the user goes back to the upload form and uploads a different data set. This will need to trigger a reset of the Data Wrangling module as well as tell your larger app that something has changed. 
+
+## Module state and reacting to changes
+
+ `react_state[[id_UD]][["DS"]][["checksum"]]`
+
+* `isgood` A boolean variable to indicate the general state of the module. 
+* `checksum` A checksum that can be used to detect changes in this module. For
+  example in the UD module this will change if the uploaded file or the sheet
+  selected from a currently uploaded file changes. 
+* `code_previous` Carries over the code from other modules the current one
+  depends on. For ecample the DW module would depend on the UD model to load
+  the data. So `code_previous` here would contain the code to load the
+  dataset.
+* `code` Code to repelicate the current state of the module. 
+
+## Configuration file
+```{r echo=FALSE, comment='', message=TRUE, eval=TRUE}
+cat(readLines(file.path(system.file(package="formods"), "templates", "config.yaml")) , sep="\n")
+```

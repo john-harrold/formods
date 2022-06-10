@@ -2,16 +2,16 @@
 % Please edit documentation in R/UD_Server.R
 \name{UD_init_state}
 \alias{UD_init_state}
-\title{Initialize App State}
+\title{Initialize UD Module State}
 \usage{
 UD_init_state(yaml_file)
 }
 \arguments{
-\item{yaml_file}{App cofiguration file}
+\item{yaml_file}{App configuration file}
 }
 \value{
 list containing an empty app state object
 }
 \description{
-Creates a list of the initialized app state
+Creates a list of the initialized module state
 }

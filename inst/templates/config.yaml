@@ -43,12 +43,16 @@ UD:
   code: # module specific code options
     readOnly: TRUE
     mode:     r    
+  ds_object_name: "myDS"
 # Data Wrangling (DW) configuration
 DW: 
   # Controls what is shown in the compact ui mode: DW_ui_compact
   compact:
     code:    TRUE 
     preview: TRUE 
+  tooltips: 
+    # Set to FALSE to disable tool tips for this module
+    include: TRUE
   labels: 
     tab_main:             "Wrangle"
     tab_code:             "Code"
@@ -73,6 +77,7 @@ DW:
     unknown_action:       "The selection action is not supported."
     no_rows:              "There are no rows in the dataset."
     element_not_added:    "Unable to add the data wrangling element:"
+    fix_bad_element:      "There is a bad element in the data wrangling chain,\nyou need to fix that before adding new elements"
   operators:  
     # Do not change the type or rop. Only modify the text element
     - type: "factor"
@@ -125,6 +130,8 @@ FG:
     code:    TRUE 
     preview: TRUE 
   tooltips: 
+    # Set to FALSE to disable tool tips for this module
+    include: TRUE
     components:
       manual:
         x:             "Numeric location on the x-axis"
@@ -137,6 +144,8 @@ FG:
         group:         NULL
         xintercept:    NULL
         yintercept:    NULL
+    caption:           "Optional figure caption that will be carried over and used in other elements (e.g. reporting)"
+    fig_key:           "Unique descriptive figure key used for referencing figures."
   labels:
     components:
       x:             "x-axis"
@@ -153,7 +162,7 @@ FG:
       xlab:          "x-axis label"
       ylab:          "y-axis label"
       ggtitle:       "plot title"
-      caption:       "caption (opt)"
+      caption:       "optional caption text here"
       fig_key:       "figure key (opt)"
       manual:        "Manual"
     manual:          "Manual"
@@ -162,12 +171,17 @@ FG:
     new_fig:         "New"
     save_fig:        "Save"
     del_fig:         "Delete"
+    copy_fig:        "Copy"
+    upds_fig:        "Update Dataset"
     add_ele:         "Add Figure Element"
     msg_bad_label:   "No labels were specified, unable to add element."
     msg_bad_facet:   "At least one column must be selected to add a faceting element."
     msg_bad_element: "Unable to add the specified element: ===ELEMENT==="
     msg_bad_manual_comp: |- 
       The plot element component ===COMP=== was specified manually but no manual value was provided.
+    select_current_fig: "Choose figure"
+  errors:
+    element_not_added:    "Unable to add the data figure element:"
   elements:
     # For each element below you should only modify the choice and subtext
     # elements
@@ -209,8 +223,8 @@ FG:
       height: 200
     # Dimensions of the caption text area
     caption:    
-      width:  "100%"
-      height: 400
+      width:  300  
+      height: 75
     components:
       aes:
         width: 100
@@ -218,8 +232,11 @@ FG:
         width: 200
       label:
         width: 150
+    select_current_fig:
+      width: 100
   # You can put any post_processing you want to apply to all figures.
   # The ggplot object will be avialble as p
   post_processing: |-
     p = p + theme_light()
+  fg_object_name: "myp"
     

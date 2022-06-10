@@ -10,8 +10,16 @@ dwrs_builder(state)
 \item{state}{module state with all of the current ui elements populated}
 }
 \value{
-list containing an empty app state object
+list containing the following elements
+\itemize{
+ \item{isgood:} Return status of the function
+ \item{cmd:}    Data wrangling R command
+ \item{action:} The action being performed
+ \item{desc:}   Verbose description of the action
+ \item{msgs:}   Messages to be passed back to the user
+}
 }
 \description{
-Creates a list of the initialized app state
+Takes the current ui elements and constructs the appropriate
+data wrangling command from the user input.
 }

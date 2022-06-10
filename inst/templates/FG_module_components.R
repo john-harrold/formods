@@ -19,7 +19,7 @@ ui <- dashboardPage(
      tabItem(tabName="FG",
              fluidRow(
                box(title="Current Figures",
-                 htmlOutput(NS("FG", "ui_fg_curr_figs")), width=4)),
+                 htmlOutput(NS("FG", "ui_fg_curr_figs")), width=5)),
              fluidRow(
                box(title="Figure ID",
                  htmlOutput(NS("FG", "ui_fg_fig_name")), width=3),
@@ -28,7 +28,11 @@ ui <- dashboardPage(
                box(title="Save Figure",
                  htmlOutput(NS("FG", "ui_fg_save_fig")), width=3),
                box(title="Delete Figure",
-                 htmlOutput(NS("FG", "ui_fg_del_fig")), width=3)
+                 htmlOutput(NS("FG", "ui_fg_del_fig")), width=3),
+               box(title="Copy Figure",
+                 htmlOutput(NS("FG", "ui_fg_copy_fig")), width=3),
+               box(title="Update DS",
+                 htmlOutput(NS("FG", "ui_fg_upds_fig")), width=3)
                ),
              fluidRow(
                box(title="Figure Caption",
@@ -82,6 +86,7 @@ server <- function(input, output, session) {
           data_file       = NULL,
           sheet           = NULL,
           sheets          = NULL,
+          object_name     = "TMPDS",
           code            = "# NULL",
           contents        = DATA,
           checksum        = digest::digest(DATA, algo=c("md5")),

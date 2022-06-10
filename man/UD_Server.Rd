@@ -16,7 +16,7 @@ UD_Server(
 
 \item{yaml_section}{Section of the yaml file with the module configuration (`"UD"`)}
 
-\item{yaml_file}{Upload Data cofiguration file}
+\item{yaml_file}{Upload Data configuration file}
 
 \item{react_state}{Variable passed to server to allow reaction outside of module (`NULL`)}
 }
