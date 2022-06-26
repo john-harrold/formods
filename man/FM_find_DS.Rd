@@ -10,20 +10,19 @@ FM_find_DS(id_UD, id_DW, react_state)
 \item{id_UD}{ID string for the upload data module used to handle uploads or
 the name of the list element in react_state where the data set is stored.}
 
-\item{id_DW}{ID string for the data wrangling module to process any uploaded data}
+\item{id_DW}{ID string for the data wrangling module used to process any uploaded data}
 
-\item{react_state}{Variable passed to server to allow reaction outside of module (`NULL`)}
+\item{react_state}{Variable passed to server to allow reaction outside of module (\code{NULL})}
 }
 \value{
 list containing the current dataset with the following format:
-values from the yaml file as well as any changes made by the user
 \itemize{
   \item{isgood:} Boolean indicating the whether a dataset was found
-  (`FALSE`)
+  (\code{FALSE})
   \item{dsm:} Module where the dataset was found or "Not Found"
   \item{contents:} Data frame containting the contents of the dataset
-  (`NULL`)
-  \item{columns:} Columns names from the contents or ('NULL')
+  (\code{NULL})
+  \item{columns:} Columns names from the contents or (\code{NULL})
   \item{object_name:} Object name for the dataset (e.g. DS)
   \item{checksum:} This is an MD5 sum of the contents element and can be
   used to detect changes in the loaded file.
@@ -36,5 +35,5 @@ take the ids for both modules and try to determine which one is being used.
 The function first looks for a dataset in data wrangling module associated
 with id_DW. If it finds a dataset there it returns that value. If it fails
 it then looks for a dataset in the upload data module associated with id_UD.
-If it fails ther it returns a list with the defaults below.
+If it fails ther it returns a list with the defaults shown in parentheses below.
 }

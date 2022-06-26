@@ -30,7 +30,7 @@ FG_fetch_state(
 
 \item{id_DW}{ID string for the data wrangling module to process any uploaded data}
 
-\item{react_state}{Variable passed to server to allow reaction outside of module (`NULL`)}
+\item{react_state}{Variable passed to server to allow reaction outside of module (\code{NULL})}
 }
 \value{
 list containing the current state of the app including default

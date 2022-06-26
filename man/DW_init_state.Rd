@@ -4,15 +4,21 @@
 \alias{DW_init_state}
 \title{Initialize DW Module State}
 \usage{
-DW_init_state(yaml_file, yaml_section)
+DW_init_state(yaml_file, yaml_section, id_UD, react_state)
 }
 \arguments{
 \item{yaml_file}{App configuration file}
 
 \item{yaml_section}{Section of the yaml file with the module configuration}
+
+\item{id_UD}{ID string for the upload data module used to handle uploads or
+the name of the list element in react_state where the data set is stored.}
+
+\item{react_state}{Variable passed to server to allow reaction outside of
+module (\code{NULL})}
 }
 \value{
-list containing an empty app state object
+list containing an empty DW state
 }
 \description{
 Creates a list of the initialized module state

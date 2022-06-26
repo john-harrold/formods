@@ -56,6 +56,15 @@ Say you are using the Upload Data module to feed data into the Data Wrangling mo
 * `code` Code to repelicate the current state of the module. 
 
 ## Configuration file
-```{r echo=FALSE, comment='', message=TRUE, eval=TRUE}
+```{css, echo=FALSE}
+.scroll-100 {
+  max-height: 100px;
+  overflow-y: auto;
+  background-color: inherit;
+}
+```
+
+
+```{r echo=FALSE, comment='', message=TRUE, eval=TRUE, class.output="scroll-100"}
 cat(readLines(file.path(system.file(package="formods"), "templates", "config.yaml")) , sep="\n")
 ```

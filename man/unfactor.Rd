@@ -10,7 +10,7 @@ unfactor(fctobj)
 \item{fctobj}{Factorized object}
 }
 \value{
-object with factors removed
+Object with factors removed
 }
 \description{
 Takes an object that is a factor and returns an unfactored

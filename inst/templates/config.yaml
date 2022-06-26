@@ -28,7 +28,7 @@ UD:
     msg_bad_extension: |- 
       Incorrect file extension (===EXT===). Unable to load file  ===FILE===.
       Only the following extesions are allowed: ===ALLOWEDEXT===.
-  dimensions:
+  formatting:
     # Dimensions of the table preview in pixels
     preview:    
       width:  400
@@ -43,6 +43,7 @@ UD:
   code: # module specific code options
     readOnly: TRUE
     mode:     r    
+  # Name of the data set after being loaded
   ds_object_name: "myDS"
 # Data Wrangling (DW) configuration
 DW: 
@@ -65,6 +66,10 @@ DW:
     fds_rename_column:    "Curret Column"   
     fds_rename_rhs:       "New Name"
     fds_group_column:     "Columns to Group"
+    new_dw:               "New"
+    del_dw:               "Delete"
+    copy_dw:              "Copy"
+    save_dw:              "Save"
   errors:
     fds_filter_column:    "Filter column not specified."
     fds_filter_operator:  "Filter codition not specified."
@@ -74,6 +79,8 @@ DW:
     fds_rename_column:    "Column to rename not specified."   
     fds_rename_rhs:       "New column name not specified."
     fds_group_column:     "No columns to group specified."
+    current_key:          "Short description"
+    current_key_empty:    "The data view description field cannot be empty"
     unknown_action:       "The selection action is not supported."
     no_rows:              "There are no rows in the dataset."
     element_not_added:    "Unable to add the data wrangling element:"
@@ -95,7 +102,6 @@ DW:
     - type: "not_factor"
       text: "is not equal to"
       rop:  "!="
-  # dimensions of the table preview in pixels
   actions:
     filter:
       choice:  "Filter"   
@@ -112,17 +118,35 @@ DW:
     ungroup:
       choice:  "Ungroup" 
       subtext: "Removing groping"                        
-  dimensions:
+  formatting:
+    # dimensions of the table preview in pixels
     preview:    
-      width:  400
-      height: 200
+      width:  600
+      height: 400
     # Dimensions of the table with the data wrangling elements
     dw_elements:    
       width:  400
       height: 100
+    current_key:
+      width: 100
+    # Button sizes from actionBttn (shinyWidgets) 
+    # xs,sm, md, lg.
+    button_dw_del:
+      size: "sm" 
+    button_dw_save:
+      size: "sm" 
+    button_dw_copy:
+      size: "sm" 
+    button_dw_new:
+      size: "sm" 
+    button_dw_add_element:
+      size: "sm" 
   code: # module specific code options
     readOnly: TRUE
     mode:     r    
+  # Name of the data set after wrangling it should be different than the value
+  # in the UD section
+  ds_object_name: "DW_myDS"
 # Figure Generation (FG) configuration
 FG:
   # Controls what is shown in the compact ui mode: FG_ui_compact
@@ -172,7 +196,7 @@ FG:
     save_fig:        "Save"
     del_fig:         "Delete"
     copy_fig:        "Copy"
-    upds_fig:        "Update Dataset"
+    upds_fig:        "Dataset"
     add_ele:         "Add Figure Element"
     msg_bad_label:   "No labels were specified, unable to add element."
     msg_bad_facet:   "At least one column must be selected to add a faceting element."
@@ -216,27 +240,47 @@ FG:
       choice:  "Label"  
       subtext: "Label axes or plot title"
       ui_text: ["xlab", "ylab", "ggtitle"]
-  dimensions:
+  formatting:
     # Dimensions of the figure preview
     preview:    
-      width:  600
-      height: 200
+      width:  "600px"
+      height: "200px"
     # Dimensions of the caption text area
     caption:    
-      width:  300  
-      height: 75
+      width:  "300px"
+      height: "75px"
     components:
       aes:
-        width: 100
+        width: "100px"
       facet:
-        width: 200
+        width: "200px"
       label:
-        width: 150
+        width: "150px"
     select_current_fig:
       width: 100
+    # When faceting is selected (wrapping or grid) the result will be
+    # paginated according to the dimensions below:
+    faceting:  
+      rows:  2
+      cols:  3
+    # Button sizes from actionBttn (shinyWidgets) 
+    # xs,sm, md, lg.
+    button_fig_del:
+      size: "sm" 
+    button_fig_save:
+      size: "sm" 
+    button_fig_copy:
+      size: "sm" 
+    button_fig_new:
+      size: "sm" 
+    button_fig_add:
+      size: "sm" 
+    button_fig_upds:
+      size: "sm" 
   # You can put any post_processing you want to apply to all figures.
-  # The ggplot object will be avialble as p
+  # The ggplot object will be avialble as the fg_object_name specified 
+  # in this part of the yaml file
   post_processing: |-
-    p = p + theme_light()
+    myp = myp + theme_light()
   fg_object_name: "myp"
     

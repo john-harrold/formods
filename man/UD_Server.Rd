@@ -12,16 +12,16 @@ UD_Server(
 )
 }
 \arguments{
-\item{id}{An ID string that corresponds with the ID used to call the module's UI function}
+\item{id}{An ID string that corresponds with the ID used to call the modules UI elements}
 
-\item{yaml_section}{Section of the yaml file with the module configuration (`"UD"`)}
+\item{yaml_section}{Section of the yaml file with the module configuration (\code{"UD"})}
 
 \item{yaml_file}{Upload Data configuration file}
 
-\item{react_state}{Variable passed to server to allow reaction outside of module (`NULL`)}
+\item{react_state}{Variable passed to server to allow reaction outside of module (\code{NULL})}
 }
 \value{
-return
+UD Server object
 }
 \description{
 Server function for the Data Uplaod Shiny Module

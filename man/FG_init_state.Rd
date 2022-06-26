@@ -15,7 +15,7 @@ FG_init_state(yaml_file, yaml_section, id_UD, id_DW, react_state)
 
 \item{id_DW}{ID string for the data wrangling module to process any uploaded data}
 
-\item{react_state}{Variable passed to server to allow reaction outside of module (`NULL`)}
+\item{react_state}{Variable passed to server to allow reaction outside of module (\code{NULL})}
 }
 \value{
 list containing an empty app state object

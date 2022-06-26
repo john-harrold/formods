@@ -7,10 +7,10 @@
 FG_fetch_current_fig(state)
 }
 \arguments{
-\item{state}{FG state created with FG_init_state}
+\item{state}{FG state from \code{FG_fetch_state()}}
 }
 \value{
-list containing an empty app state object
+list containing the current figure
 }
 \description{
 Takes an FG state and returns the ccurrent active figure

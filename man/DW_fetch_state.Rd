@@ -21,11 +21,46 @@ DW_fetch_state(id, input, session, yaml_file, yaml_section, id_UD, react_state)
 the name of the list element in react_state where the data set is stored.}
 
 \item{react_state}{Variable passed to server to allow reaction outside of
-module (`NULL`)}
+module (\code{NULL})}
 }
 \value{
-list containing the current state of the app including default
-values from the yaml file as well as any changes made by the user
+List containing the current state of the DM module including default
+values from the yaml file as well as any changes made by the user. The
+structure of the list is defined below.
+\itemize{
+ \item{yaml:} Contents of the yaml file.
+ \item{MC:} Section of the yaml file, specified by \code{yaml_section}, containing the DW module components 
+ \item{DW:} Data wrangling state
+ \itemize{
+   \item{isgood:} Boolean status of the state. FALSE if the dataset
+   identified by id_UD is bad.
+   \item{button_counters:}  List of counters to detect button clicks.
+   \item{button_click_msg:} Message returned when buttons are clicked.
+   \item{code_previous:}    Loading code from the DS field.
+   \item{current_view:}     View id of the current active data wrangling view.
+   \item{DS:}               Copy of the \code{"DS"} field of the  \code{id_UD} from the \code{react_state} input.
+   \item{ui:}               Current value of form elements in the UI
+   \item{ui_hold:}          List of hold elements to disable updates before a full ui referesh is complete.
+   \item{view_cntr:}        Counter for tracking view ids, value contains the id of the last view created.
+   \item{views:}            List of data wrangling views. Each view has the following structure:
+     \itemize{
+       \item{isgood:} Boolean status of the data view. False if evaluation fails
+       \item{id: Character id (\code{view_idx})}
+       \item{idx: Numeric id (\code{1})}
+       \item{view_ds_object_name: Object name for this data view}
+       \item{code_previous: Code to load data and assign to view object.}
+       \item{key: User key (short description)}
+       \item{WDS: Current value of the data view with all of the successful commands in elements_table evaluated.}
+       \item{elements_table: Table of data wrangling elements.}
+       \item{checksum: MD5 sum of WDS}
+       \item{code: Code to generate WDS from start to finish}
+       \item{code_dw_only: Code for jsut the wrangling portion.}
+     }
+ }
+ \item{MOD_TYPE:} Character data containing the type of module \code{"DW"}
+ \item{SESSION_LOCATION:} Character data containing the location of this
+ module in the session variable.
+}
 }
 \description{
 Merges default app options with the changes made in the UI

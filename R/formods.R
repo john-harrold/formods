@@ -8,20 +8,19 @@
 #'The function first looks for a dataset in data wrangling module associated
 #'with id_DW. If it finds a dataset there it returns that value. If it fails
 #'it then looks for a dataset in the upload data module associated with id_UD.
-#'If it fails ther it returns a list with the defaults below.
+#'If it fails ther it returns a list with the defaults shown in parentheses below.
 #'@param id_UD  ID string for the upload data module used to handle uploads or
 #'the name of the list element in react_state where the data set is stored.
-#'@param id_DW  ID string for the data wrangling module to process any uploaded data
-#'@param react_state Variable passed to server to allow reaction outside of module (`NULL`)
+#'@param id_DW  ID string for the data wrangling module used to process any uploaded data
+#'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return list containing the current dataset with the following format:
-#'values from the yaml file as well as any changes made by the user
 #' \itemize{
 #'   \item{isgood:} Boolean indicating the whether a dataset was found
-#'   (`FALSE`)
+#'   (\code{FALSE})
 #'   \item{dsm:} Module where the dataset was found or "Not Found"
 #'   \item{contents:} Data frame containting the contents of the dataset
-#'   (`NULL`)
-#'   \item{columns:} Columns names from the contents or ('NULL')
+#'   (\code{NULL})
+#'   \item{columns:} Columns names from the contents or (\code{NULL})
 #'   \item{object_name:} Object name for the dataset (e.g. DS)
 #'   \item{checksum:} This is an MD5 sum of the contents element and can be
 #'   used to detect changes in the loaded file.
@@ -87,7 +86,7 @@ res}
 #'@description Takes UI input and tries to figure out if it's numeric or text
 #'@param ui_input UI input from a shiny form
 #'@param quote_char TRUE will include double quotes in the character string
-#'@return best guess at type casting a variable
+#'@return Best guess of type casting applied to the ui_input
 autocast = function(ui_input, quote_char=TRUE){
 
 
@@ -111,7 +110,7 @@ res}
 #'@description Takes an object that is a factor and returns an unfactored
 #'vector with the same type by the value removed
 #'@param fctobj Factorized object
-#'@return object with factors removed
+#'@return Object with factors removed
 unfactor = function(fctobj){
   res = fctobj
   if(is.factor(fctobj)){
@@ -123,25 +122,51 @@ res}
 
 
 #'@export
-#'@title Detect if a UI Button Has Been Clicked
-#'@description Takes a UI element value and a button counter and determines if
-#'it has been clicked
-#'@param ui_value   Current value from the button UI.
-#'@param counter    Current value of the button counter.
+#'@title Detect if a UI element has changed 
+#'@description Takes a UI element value and an older value and determines if
+#'it has been modified
+#'@param ui_val     Current value from the UI.
+#'@param old_val    Last value of of the element.     
 #'@param init_value Default value for reading in UI data when it has not been
 #'defined.
-#'@return object with factors removed
-was_clicked = function(ui_value   = NULL,
-                       counter    = NULL,
+#'@return Boolean result of the comparison
+has_changed = function(ui_val     = NULL,
+                       old_val    = NULL,
                        init_value = c("")){
   res = FALSE
   # We only Sure
-  if(!is.null(ui_value)){
-    if(ui_value  != 0 & ui_value !=init_value){
-      if(ui_value  != counter){
+  if(!is.null(ui_val)){
+    if(ui_val    != 0 & ui_val   !=init_value){
+      if(ui_val    != old_val){
         res = TRUE
       }
     }
   }
 res}
 
+#'@export
+#'@title Removes Hold on UI Element
+#'@description When some buttons are clicked they will change the state of the
+#'system, but other UI components will not detect that change correctly. So those
+#'triggers are put on hold. This will remove the hold after those UI
+#'components have updated.
+#'@param state module state with all of the current ui elements populated
+#'@param id Shiny module ID
+#'@param session Shiny session variable
+#'@param inputId The input ID of the UI element that was put on hold
+#'@return NULL
+remove_hold = function(state, session, inputId){
+
+  FM_ID    = state[["SESSION_LOCATION"]]
+  MOD_TYPE = state[["MOD_TYPE"]]
+
+  # pulling out the state
+  state = session$userData[[FM_ID]]
+
+  # removing hold on inputId
+  state[[MOD_TYPE]][["ui_hold"]][[inputId]] = FALSE
+
+  # Saving the state
+  session$userData[[FM_ID]] = state
+
+NULL}

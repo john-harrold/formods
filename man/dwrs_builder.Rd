@@ -7,7 +7,7 @@
 dwrs_builder(state)
 }
 \arguments{
-\item{state}{module state with all of the current ui elements populated}
+\item{state}{DW state from \code{DW_fetch_state()}}
 }
 \value{
 list containing the following elements

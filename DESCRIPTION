@@ -15,6 +15,7 @@ Imports:
   digest,
   dplyr,
   magrittr,
+  plotly,
   readr,
   readxl,
   rlang,
@@ -27,6 +28,7 @@ Imports:
   tools,
   yaml
 Suggests:
+  ggpubr,
   knitr,
   shinydashboard,
   rmarkdown,

@@ -1,13 +1,16 @@
 url: ~
 template:
   bootstrap: 5
-  bootswatch: materia
-  #bootswatch: flatly
+  bootswatch: united
+  bslib:
+    primary: "#006fe7"
 reference:
   - title: "formods general"
   - contents:
     - autocast
     - FM_find_DS
+    - has_changed
+    - remove_hold
     - unfactor
   - title: "Upload Data (UD)"
   - contents:
@@ -16,11 +19,13 @@ reference:
   - contents:
     - starts_with("DW_")
     - dwrs_builder
-    - eval_element
-    - set_wds
+    - dw_eval_element
+    - fetch_DS_NULL
   - title: "Figure Generation (FG)"
   - contents:
     - starts_with("FG_")
+    - fers_builder
+    - fg_eval
 
 
 

@@ -7,7 +7,7 @@
 fers_builder(state)
 }
 \arguments{
-\item{state}{module state with all of the current ui elements populated}
+\item{state}{FG state from \code{FG_fetch_state()}}
 }
 \value{
 list containing the following elements
@@ -22,5 +22,5 @@ list containing the following elements
 \description{
 Takes the current ui elements and constructs the appropriate
 ggplot commands forom the user input. The plot commands assume the existance
-of a ggplot object `p`.
+of a ggplot object \code{p}.
 }

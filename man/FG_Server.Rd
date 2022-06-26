@@ -16,7 +16,7 @@ FG_Server(
 \arguments{
 \item{id}{An ID string that corresponds with the ID used to call the module's UI function}
 
-\item{yaml_section}{Section of the yaml file with the module configuration (`"FG"`)}
+\item{yaml_section}{Section of the yaml file with the module configuration (\code{"FG"})}
 
 \item{yaml_file}{Upload Data cofiguration file}
 
@@ -24,10 +24,10 @@ FG_Server(
 
 \item{id_DW}{ID string for the data wrangling module to process any uploaded data}
 
-\item{react_state}{Variable passed to server to allow reaction outside of module (`NULL`)}
+\item{react_state}{Variable passed to server to allow reaction outside of module (\code{NULL})}
 }
 \value{
-return
+FG Server object
 }
 \description{
 Server function for the figure generation module

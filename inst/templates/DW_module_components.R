@@ -20,29 +20,44 @@ ui <- dashboardPage(
               fluidRow(
                 box(title="Add Data Wrangling Element Button",
                     htmlOutput(NS("DW", "ui_dw_add_element_button"), width=6)),
-                
+
                 box(title="Add Data Wrangling Select",
                     htmlOutput(NS("DW", "ui_dw_select")), width=6)),
-              
+             fluidRow(
+              box(title="Data View Actions",
+              div(style="display:inline-block",
+              htmlOutput(NS("DW", "ui_dw_views")),
+              htmlOutput(NS("DW", "ui_dw_key"))),
+              div(style="display:inline-block",
+                 htmlOutput(NS("DW", "ui_dw_new_view")) ),
+              div(style="display:inline-block",
+                 htmlOutput(NS("DW", "ui_dw_save_view"))),
+              div(style="display:inline-block",
+                 htmlOutput(NS("DW", "ui_dw_del_view")) ),
+              div(style="display:inline-block",
+                 htmlOutput(NS("DW", "ui_dw_copy_view"))),
+              width = 12)
+               ),
+
               fluidRow(
                 box(title="New Element Row",
                     htmlOutput(NS("DW", "ui_dw_new_element_row")), width=12)),
-              
+
               fluidRow(
-                box(title="Element Add Message",
-                    verbatimTextOutput(NS("DW", "ui_dw_new_element_msg")), width=12)),
-              
+                box(title="Button Click Message",
+                    verbatimTextOutput(NS("DW", "ui_dw_button_click_msg")), width=12)),
+
               fluidRow(
                 box(title="Current Elements",
                     rhandsontable::rHandsontableOutput(NS("DW", "hot_dw_elements")), width=12)),
-              
+
               fluidRow(
                 box(title="Generated Code",
                     shinyAce::aceEditor(NS("DW", "ui_dw_code")), width=12)),
-              
+
               fluidRow(box(title="Wrangled Data",
                            rhandsontable::rHandsontableOutput(NS("DW", "hot_data_preview")), width=12)),
-              
+
               fluidRow(
                 box(title="Current Module State",
                     verbatimTextOutput("ui_state"),width=12))
@@ -63,7 +78,7 @@ server <- function(input, output, session) {
 
   # Module server
   react_FM    = reactiveValues()
-  
+
   # Format of ds is described in JMH
   ds = list(
      DS = list(
@@ -72,7 +87,7 @@ server <- function(input, output, session) {
           data_file       = NULL,
           sheet           = NULL,
           sheets          = NULL,
-          code            = "# NULL",
+          code            = "# Raw data loading code goes here",
           object_name     = "TMPDS",
           contents        = DATA,
           checksum        = digest::digest(DATA, algo=c("md5")),
@@ -81,14 +96,14 @@ server <- function(input, output, session) {
     )
 
   react_FM$UD = ds
-  
+
   DW_Server(id="DW", id_UD = "UD", react_state=react_FM)
-  
+
   # Current state outside of the module
   output$ui_state  =  renderText({
     uiele = paste(capture.output(str(react_FM[["DW"]])), collapse="\n")
     uiele})
-  
+
 }
 
 shinyApp(ui, server)

@@ -10,7 +10,7 @@ UD_init_state(yaml_file)
 \item{yaml_file}{App configuration file}
 }
 \value{
-list containing an empty app state object
+list containing an empty UD state
 }
 \description{
 Creates a list of the initialized module state

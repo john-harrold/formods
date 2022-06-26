@@ -21,22 +21,24 @@ ui <- dashboardPage(
                box(title="Current Figures",
                  htmlOutput(NS("FG", "ui_fg_curr_figs")), width=5)),
              fluidRow(
-               box(title="Figure ID",
-                 htmlOutput(NS("FG", "ui_fg_fig_name")), width=3),
-               box(title="New Figure",
-                 htmlOutput(NS("FG", "ui_fg_new_fig")), width=3),
-               box(title="Save Figure",
-                 htmlOutput(NS("FG", "ui_fg_save_fig")), width=3),
-               box(title="Delete Figure",
-                 htmlOutput(NS("FG", "ui_fg_del_fig")), width=3),
-               box(title="Copy Figure",
-                 htmlOutput(NS("FG", "ui_fg_copy_fig")), width=3),
-               box(title="Update DS",
-                 htmlOutput(NS("FG", "ui_fg_upds_fig")), width=3)
+              box(title="Figure Actions",
+              div(style="display:inline-block",
+                 htmlOutput(NS("FG", "ui_fg_new_fig")) ),
+              div(style="display:inline-block",
+                 htmlOutput(NS("FG", "ui_fg_save_fig"))),
+              div(style="display:inline-block",
+                 htmlOutput(NS("FG", "ui_fg_del_fig")) ),
+              div(style="display:inline-block",
+                 htmlOutput(NS("FG", "ui_fg_copy_fig"))),
+              div(style="display:inline-block",
+                 htmlOutput(NS("FG", "ui_fg_upds_fig")) ), 
+              width = 12)
                ),
              fluidRow(
                box(title="Figure Caption",
-                 htmlOutput(NS("FG", "ui_fg_fig_cap")), width=12)),
+                 htmlOutput(NS("FG", "ui_fg_fig_name")),
+                 htmlOutput(NS("FG", "ui_fg_fig_cap")), 
+              width=12)),
              fluidRow(
                box(title="Add Plot Element Button",
                  htmlOutput(NS("FG", "ui_fg_add_element_button")), width=4),
@@ -46,11 +48,17 @@ ui <- dashboardPage(
                box(title="New Element Row",
                  htmlOutput(NS("FG", "ui_fg_new_element_row")), width=12)),
              fluidRow(
-               box(title="Element Add Message",
-                 verbatimTextOutput(NS("FG", "ui_fg_new_element_msg")), width=12)),
+               box(title="Button Message",
+                 verbatimTextOutput(NS("FG", "ui_fg_button_click_msg")), width=12)),
              fluidRow(
                box(title="Plot Preview",
-                 plotOutput(NS("FG", "ui_fg_preview")), width=12)),
+                 plotOutput(NS("FG", "ui_fg_preview_ggplot")), width=12)),
+             fluidRow(
+               box(title="Plotly Preview",
+                 plotly::plotlyOutput(NS("FG", "ui_fg_preview_plotly")), width=12)),
+             fluidRow(
+               box(title="Multipage Slider",
+                 htmlOutput(NS("FG", "ui_fg_slider_page")), width=12)),
              fluidRow(
                box(title="Current Elements",
                 rhandsontable::rHandsontableOutput(NS("FG", "hot_fg_elements")), width=12)),

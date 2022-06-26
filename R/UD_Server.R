@@ -14,11 +14,11 @@
 #'@export
 #'@title Data Upload Server
 #'@description Server function for the Data Uplaod Shiny Module
-#'@param id An ID string that corresponds with the ID used to call the module's UI function
-#'@param yaml_section  Section of the yaml file with the module configuration (`"UD"`)
+#'@param id An ID string that corresponds with the ID used to call the modules UI elements 
+#'@param yaml_section  Section of the yaml file with the module configuration (\code{"UD"})
 #'@param yaml_file Upload Data configuration file
-#'@param react_state Variable passed to server to allow reaction outside of module (`NULL`)
-#'@return return
+#'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
+#'@return UD Server object
 UD_Server <- function(id,
                       yaml_section = "UD",
                       yaml_file    = system.file(package = "formods", 
@@ -126,8 +126,8 @@ UD_Server <- function(id,
       state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
       if(is.data.frame(state[["DS"]][["contents"]])){
         uiele = rhandsontable::rhandsontable(state[["DS"]][["contents"]],
-                                             width  = state[["MC"]][["dimensions"]][["preview"]][["width"]],
-                                             height = state[["MC"]][["dimensions"]][["preview"]][["height"]])
+                                             width  = state[["MC"]][["formatting"]][["preview"]][["width"]],
+                                             height = state[["MC"]][["formatting"]][["preview"]][["height"]])
       } else {uiele=NULL}
       uiele})
     #------------------------------------
@@ -193,7 +193,7 @@ UD_Server <- function(id,
 #' \item{MC:} Module components of the yaml file.
 #' \item{DS:} Loaded dataset with the following elements
 #' \itemize{
-#'   \item{isgood:} Boolean indicating the success of the file being loaded.
+#'   \item{isgood:} Boolean object indicating if the file was successfully loaded.
 #'   \item{load_msg:} Text message indicated the success or any problems
 #'   encountered when uploading the file.
 #'   \item{data_file_local:} Full path to the data file on the server.
@@ -347,6 +347,9 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
     state[["DS"]][["load_msg"]]        = load_msg
   }
   
+  # Saving the session location
+  state[["SESSION_LOCATION"]] = FM_UD_ID
+
   #---------------------------------------------
   # Saving the state
   session$userData[[FM_UD_ID]] = state
@@ -359,7 +362,7 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
 #'@title Initialize UD Module State
 #'@description Creates a list of the initialized module state
 #'@param yaml_file App configuration file
-#'@return list containing an empty app state object
+#'@return list containing an empty UD state 
 UD_init_state = function(yaml_file){
   
   state = list()
@@ -367,6 +370,8 @@ UD_init_state = function(yaml_file){
   state[["yaml"]] = yaml::read_yaml(yaml_file)
   
   state[["DS"]] = fetch_DS_NULL()
+
+  state[["MOD_TYPE"]] = "UD"
   
   state}
 

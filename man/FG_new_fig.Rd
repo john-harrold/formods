@@ -7,16 +7,17 @@
 FG_new_fig(state, id_UD, id_DW, react_state)
 }
 \arguments{
-\item{state}{FG state created with FG_init_state}
+\item{state}{FG state from \code{FG_fetch_state()}}
 
 \item{id_UD}{ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.}
 
 \item{id_DW}{ID string for the data wrangling module to process any uploaded data}
 
-\item{react_state}{Variable passed to server to allow reaction outside of module (`NULL`)}
+\item{react_state}{Variable passed to server to allow reaction outside of module (\code{NULL})}
 }
 \value{
-list containing an empty app state object
+FG state object containing a new empty figure  and that figure set as the
+current active figure
 }
 \description{
 Creates a new figure in a FG module

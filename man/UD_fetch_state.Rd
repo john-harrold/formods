@@ -26,7 +26,7 @@ has the following structure:
 \item{MC:} Module components of the yaml file.
 \item{DS:} Loaded dataset with the following elements
 \itemize{
-  \item{isgood:} Boolean indicating the success of the file being loaded.
+  \item{isgood:} Boolean object indicating if the file was successfully loaded.
   \item{load_msg:} Text message indicated the success or any problems
   encountered when uploading the file.
   \item{data_file_local:} Full path to the data file on the server.

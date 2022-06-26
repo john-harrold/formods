@@ -12,7 +12,7 @@ autocast(ui_input, quote_char = TRUE)
 \item{quote_char}{TRUE will include double quotes in the character string}
 }
 \value{
-best guess at type casting a variable
+Best guess of type casting applied to the ui_input
 }
 \description{
 Takes UI input and tries to figure out if it's numeric or text

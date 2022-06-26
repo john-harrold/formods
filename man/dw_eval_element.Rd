@@ -7,7 +7,7 @@
 dw_eval_element(state, cmd)
 }
 \arguments{
-\item{state}{data wrangling module state}
+\item{state}{DW state from \code{DW_fetch_state()}}
 
 \item{cmd}{string containing the data wrangling command}
 }
