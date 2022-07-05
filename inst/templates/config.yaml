@@ -7,9 +7,19 @@ FM:
   ui:
     # See ?actionBttn for styles
     button_style: "fill"
-    color_green: "#00BB8A"
-    color_red:   "#FF475E"
-    color_blue:  "#0088FF"
+    color_green:  "#00BB8A"
+    color_red:    "#FF475E"
+    color_blue:   "#0088FF"
+    color_purple: "#bd2cf4"
+  labels:
+    default_ds:         "Original data set"
+  logging:
+    enabled:        TRUE
+    use_tmpdir:     TRUE
+    timestamp:      TRUE
+    timestamp_fmt: "%Y-%m-%d %H:%M:%S"
+    log_file:      "formods_log.txt"
+    console:       TRUE
 # Upload Data  (UD) configuration
 UD:
   # Controls what is shown in the compact ui mode: UD_ui_compact
@@ -28,11 +38,15 @@ UD:
     msg_bad_extension: |- 
       Incorrect file extension (===EXT===). Unable to load file  ===FILE===.
       Only the following extesions are allowed: ===ALLOWEDEXT===.
+    code_tooltip:         "Show data reading code"
   formatting:
     # Dimensions of the table preview in pixels
     preview:    
       width:  400
       height: 400
+    code:
+      width:  500
+      height: 100
   # The app supports csv, tsv, xls and xlsx. You can remove those you don't
   # want to use
   allowed_extensions: 
@@ -70,6 +84,8 @@ DW:
     del_dw:               "Delete"
     copy_dw:              "Copy"
     save_dw:              "Save"
+    code_tooltip:         "Show data wrangling code"
+    dw_elements_tooltip:  "Current wrangling elements"
   errors:
     fds_filter_column:    "Filter column not specified."
     fds_filter_operator:  "Filter codition not specified."
@@ -82,7 +98,7 @@ DW:
     current_key:          "Short description"
     current_key_empty:    "The data view description field cannot be empty"
     unknown_action:       "The selection action is not supported."
-    no_rows:              "There are no rows in the dataset."
+    no_rows:              "There are no rows in the data set."
     element_not_added:    "Unable to add the data wrangling element:"
     fix_bad_element:      "There is a bad element in the data wrangling chain,\nyou need to fix that before adding new elements"
   operators:  
@@ -125,10 +141,13 @@ DW:
       height: 400
     # Dimensions of the table with the data wrangling elements
     dw_elements:    
-      width:  400
+      width:  600
       height: 100
     current_key:
-      width: 100
+      width: 300
+    code:
+      width:  500
+      height: 100
     # Button sizes from actionBttn (shinyWidgets) 
     # xs,sm, md, lg.
     button_dw_del:
@@ -196,7 +215,7 @@ FG:
     save_fig:        "Save"
     del_fig:         "Delete"
     copy_fig:        "Copy"
-    upds_fig:        "Dataset"
+    upds_fig:        "Data set"
     add_ele:         "Add Figure Element"
     msg_bad_label:   "No labels were specified, unable to add element."
     msg_bad_facet:   "At least one column must be selected to add a faceting element."
@@ -283,4 +302,3 @@ FG:
   post_processing: |-
     myp = myp + theme_light()
   fg_object_name: "myp"
-    

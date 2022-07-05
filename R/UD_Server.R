@@ -134,32 +134,48 @@ UD_Server <- function(id,
     # Creates the ui for the compact view of the module
     output$UD_ui_compact  =  renderUI({
       state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
-      
-      uiele = NULL
-      
-      uiele_main   = tagList(htmlOutput(NS(id, "UD_ui_load_data")),
-                             htmlOutput(NS(id, "UD_ui_select_sheets")),
-                             htmlOutput(NS(id, "UD_ui_text_load_result")))
-      
-      if( state$MC$compact$code | state$MC$compact$preview){
-        uiele_preview = tagList(htmlOutput(NS(id, "UD_ui_data_preview")))
-        uiele_code    = tagList(shinyAce::aceEditor(NS(id, "UD_ui_ace_code")))
-        
-        uiele_str ="tabPanel(state$MC$labels$tab_main,  uiele_main  )"
-        if(state$MC$compact$preview){
-          uiele_str = paste0(uiele_str, ",tabPanel(state$MC$labels$tab_preview, uiele_preview)") }
-        if(state$MC$compact$code){
-          uiele_str = paste0(uiele_str, ",tabPanel(state$MC$labels$tab_code, uiele_code)") }
-        
-        uiele_str = paste0("tabsetPanel(",uiele_str, ")")
-        
-        uiele = eval(parse(text=uiele_str))
-      } else {
-        uiele = uiele_main  
+
+      uiele_code_button = NULL
+      # Creating the code button if it's enabled
+      if(state$MC$compact$code){
+        uiele_code    = tagList(shinyAce::aceEditor(
+           NS(id, "UD_ui_ace_code"),
+           height  = state[["MC"]][["formatting"]][["code"]][["height"]]
+           ))
+        uiele_code_button = tagList(
+         shinyWidgets::dropdownButton(
+           uiele_code,
+           inline  = FALSE,
+           right   = FALSE,
+           circle  = TRUE, 
+           width   = state[["MC"]][["formatting"]][["code"]][["width"]],
+           status  = "danger",
+           icon    = icon("code", lib="font-awesome"),
+           tooltip = tooltipOptions(title = state[["MC"]][["labels"]][["code_tooltip"]]))
+        )
       }
+
+      uiele  = tagList( div(style="display:inline-block", htmlOutput(NS(id, "UD_ui_load_data"))))
+
+
+      uiele = tagList(uiele,
+                      tags$br(),
+                      htmlOutput(NS(id, "UD_ui_select_sheets")),
+                      htmlOutput(NS(id, "UD_ui_text_load_result")))
+      # Attaching gode button
+      if(!is.null(uiele_code_button)){
+        uiele = tagList(
+          uiele, tags$br(),
+          div(style="display:inline-block", uiele_code_button))
+      }
+      # Attaching the preview to the bottom if it's enabled
+      if(state$MC$compact$preview){
+        uiele_preview = tagList(div(style="display:inline-block;vertical-align:top",
+                                    htmlOutput(NS(id, "UD_ui_data_preview"))))
+        uiele = tagList(uiele, uiele_preview, tags$br())}
       
       uiele})
-    #outputOptions(output, "UD_ui_compact", priority = -1)
+    outputOptions(output, "UD_ui_compact", priority = -1)
     #------------------------------------
     # Creating reaction if a variable has been specified
     if(!is.null(react_state)){
@@ -169,7 +185,9 @@ UD_Server <- function(id,
              input$input_select_sheet) })
       # This updates the reaction state:
       observeEvent(toListen(), {
-        react_state[[id]] = UD_fetch_state(id, input, session, yaml_file, yaml_section)
+        state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
+        FG_le(state, "reaction state updated")
+        react_state[[id]] = state
       })
     }
     
@@ -373,6 +391,7 @@ UD_init_state = function(yaml_file){
 
   state[["MOD_TYPE"]] = "UD"
   
+  FG_le(state, "State initialized")
   state}
 
 #'@export

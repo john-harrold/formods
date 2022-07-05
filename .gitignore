@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 formods.Rproj
+pkgdown/
 tmp/
 vignettes/*.R
 vignettes/*.html

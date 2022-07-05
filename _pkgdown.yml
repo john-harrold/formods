@@ -1,14 +1,15 @@
 url: ~
 template:
   bootstrap: 5
-  bootswatch: united
+  #bootswatch: united
+  bootswatch: quartz
   bslib:
     primary: "#006fe7"
 reference:
   - title: "formods general"
   - contents:
     - autocast
-    - FM_find_DS
+    - starts_with("FM_")
     - has_changed
     - remove_hold
     - unfactor
@@ -25,8 +26,6 @@ reference:
   - contents:
     - starts_with("FG_")
     - fers_builder
-    - fg_eval
-
 
 
 

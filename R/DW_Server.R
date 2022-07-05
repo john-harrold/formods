@@ -14,7 +14,7 @@
 #'@export
 #'@title Data Wrangling Server
 #'@description Server function for the data wrangling module
-#'@param id An ID string that corresponds with the ID used to call the modules UI elements 
+#'@param id An ID string that corresponds with the ID used to call the modules UI elements
 #'@param yaml_section  Section of the yaml file with the module
 #'configuration (\code{"DW"})
 #'@param yaml_file Upload Data cofiguration file
@@ -64,9 +64,9 @@ DW_Server <- function(id,
       if(state[["DW"]][["DS"]][["isgood"]]){
         if(is.null(current_view[["elements_table"]])){
           df = data.frame("No_Data"="# No data wragling elements defined yet!")
-
           hot= rhandsontable::rhandsontable(
             df,
+            stretchH = "all",
             width  = state[["MC"]][["formatting"]][["dw_elements"]][["width"]],
             height = state[["MC"]][["formatting"]][["dw_elements"]][["height"]],
             rowHeaders = NULL
@@ -80,8 +80,9 @@ DW_Server <- function(id,
 
           hot = rhandsontable::rhandsontable(
             df,
-            width  = state[["MC"]][["dw_elements"]][["width"]],
-            height = state[["MC"]][["dw_elements"]][["height"]],
+            stretchH = "all",
+            width  = state[["MC"]][["formatting"]][["dw_elements"]][["width"]],
+            height = state[["MC"]][["formatting"]][["dw_elements"]][["height"]],
             rowHeaders = NULL
           ) %>%
             hot_cols(renderer = "
@@ -148,7 +149,7 @@ DW_Server <- function(id,
         if(is.null(current_view[["elements_table"]])){
           uiele = "# No data wragling elements defined yet!"
         } else {
-          uiele = current_view[["code"]] 
+          uiele = current_view[["code"]]
         }
 
         shinyAce::updateAceEditor(
@@ -185,17 +186,17 @@ DW_Server <- function(id,
 
       if(length(view_ids)> 0){
 
-        # Building up the vew choices 
+        # Building up the vew choices
         current_view = DW_fetch_current_view(state)
         choices = c()
-        cnames  = c() 
+        cnames  = c()
         for(view_id in view_ids){
           cnames  = c(cnames, state[["DW"]][["views"]][[view_id]][["key"]])
           choices = c(choices, view_id)
         }
-       
+
         names(choices) = cnames
-       
+
         uiele = tagList(uiele,
           shinyWidgets::pickerInput(
              inputId    = NS(id, "select_dw_views"),
@@ -228,7 +229,7 @@ DW_Server <- function(id,
                              react_state  = react_state)
 
     current_view = DW_fetch_current_view(state)
-      uiele = 
+      uiele =
       textInput(
         inputId     = NS(id, "current_key"),
         label       = NULL,
@@ -676,7 +677,7 @@ DW_Server <- function(id,
              label   = state[["MC"]][["labels"]][["add_element"]],
              icon    = icon("plus-sign", lib="glyphicon"),
              size    = state[["MC"]][["formatting"]][["button_dw_add_element"]][["size"]],
-             color   = "primary",
+             color   = "success",
              style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]]
              ))
       } else {
@@ -825,37 +826,95 @@ DW_Server <- function(id,
                              id_UD        = id_UD,
                              react_state  = react_state)
 
-      uiele = NULL
-
-      uiele_main = tagList(
-        div(style="display:inline-block",
-            htmlOutput(NS(id, "ui_dw_select"))),
-        div(style="display:inline-block",
-            htmlOutput(NS(id, "ui_dw_add_element_button"))),
-        htmlOutput(NS(id, "ui_dw_new_element_row")),
-        verbatimTextOutput(NS(id, "ui_dw_new_element_msg")),
-        rhandsontable::rHandsontableOutput(NS(id, "hot_dw_elements")))
-      if( state$MC$compact$preview){
-        uiele_main = tagList(
-          uiele_main,
-          tags$br(),
-          rhandsontable::rHandsontableOutput(NS(id, "hot_data_preview")))
-      }
-
+      uiele_code_button = NULL
+      # Generating code button if enabled
       if( state$MC$compact$code){
-        # uiele_preview = tagList(htmlOutput(NS(id, "UD_ui_data_preview")))
-        uiele_code = tagList(shinyAce::aceEditor(NS(id, "ui_dw_code")))
+        uiele_code = tagList(shinyAce::aceEditor(
+          NS(id, "ui_dw_code"),
+          height  = state[["MC"]][["formatting"]][["code"]][["height"]]
+          ))
 
-        uiele_str ="tabPanel(state$MC$labels$tab_main,   uiele_main)"
-        if(state$MC$compact$code){
-          uiele_str = paste0(uiele_str, ",tabPanel(state$MC$labels$tab_code, uiele_code)") }
-
-        uiele_str = paste0("tabsetPanel(",uiele_str, ")")
-
-        uiele = eval(parse(text=uiele_str))
-      } else {
-        uiele = uiele_main
+        uiele_code_button = tagList(
+         shinyWidgets::dropdownButton(
+           uiele_code,
+           inline  = FALSE,
+           right   = FALSE,
+           circle  = TRUE, 
+           width   = state[["MC"]][["formatting"]][["code"]][["width"]],
+           status  = "danger",
+           icon    = icon("code", lib="font-awesome"),
+           tooltip = tooltipOptions(title = state[["MC"]][["labels"]][["code_tooltip"]]))
+        )
+      
       }
+
+      # Button with DW elements table
+      uiele_dw_elements = rhandsontable::rHandsontableOutput(NS(id, "hot_dw_elements"))
+      uiele_dw_elements_button = tagList(
+       shinyWidgets::dropdownButton(
+         uiele_dw_elements,
+         inline  = FALSE,
+         right   = FALSE,
+         circle  = TRUE, 
+         #width   = state[["MC"]][["formatting"]][["dw_elements"]][["width"]],
+         status  = "primary",
+         icon    = icon("layer-group", lib="font-awesome"),
+         tooltip = tooltipOptions(title = state[["MC"]][["labels"]][["dw_elements_tooltip"]]))
+      )
+
+
+      uiele = tagList(
+        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_save_view"))),
+        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_key"))),
+        tags$br(),
+        verbatimTextOutput(NS(id, "ui_dw_new_element_msg"))
+      )
+
+      # adding elements button:
+      uiele_buttons = tagList(uiele_dw_elements_button)
+      # Adding the code button if enabled
+      if( state$MC$compact$code){
+        uiele_buttons = tagList(uiele_buttons, 
+          tags$br(), uiele_code_button)
+      }
+      uiele_buttons = tagList(
+        div(style="display:inline-block;vertical-align:top",
+        uiele_buttons))
+
+      # Appending the buttons to the main uiele
+      uiele = tagList(
+        uiele,
+        uiele_buttons)
+
+
+      # Appending the preview
+      uiele_preview = NULL
+      if( state$MC$compact$preview){
+       uiele_preview =  
+          div(style="display:inline-block;vertical-align:top",
+            rhandsontable::rHandsontableOutput(NS(id, "hot_data_preview")))
+        uiele = tagList(
+          uiele,
+          uiele_preview,
+          tags$br()
+        )
+      }
+
+
+
+      uiele = tagList( uiele,
+        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_copy_view"))),
+        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_del_view"))),
+        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_new_view"))),
+        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_views"))),
+        tags$br(),
+        div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_add_element_button"))),
+        div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_select"))),
+        tags$br(),
+        htmlOutput(NS(id, "ui_dw_new_element_row"))
+      )
+
+
 
       uiele
     })
@@ -872,7 +931,7 @@ DW_Server <- function(id,
       })
       # This updates the reaction state:
       observeEvent(toListen(), {
-        react_state[[id]] = DW_fetch_state(
+        state = DW_fetch_state(
           id           = id,
           input        = input,
           session      = session,
@@ -880,6 +939,9 @@ DW_Server <- function(id,
           yaml_section = yaml_section,
           id_UD        = id_UD,
           react_state  = react_state)
+
+        FG_le(state, "reaction state updated")
+        react_state[[id]] = state
       })
     }
 
@@ -918,11 +980,14 @@ DW_Server <- function(id,
 #'structure of the list is defined below.
 #'\itemize{
 #'  \item{yaml:} Contents of the yaml file.
-#'  \item{MC:} Section of the yaml file, specified by \code{yaml_section}, containing the DW module components 
+#'  \item{MC:} Section of the yaml file, specified by \code{yaml_section}, containing the DW module components
 #'  \item{DW:} Data wrangling state
 #'  \itemize{
 #'    \item{isgood:} Boolean status of the state. FALSE if the dataset
 #'    identified by id_UD is bad.
+#'    \item{checksum:}         MD5 sum indicating if there was a change in the
+#'    datasets within the view. Use this to trigger updates in respose to
+#'    changes in this module.
 #'    \item{button_counters:}  List of counters to detect button clicks.
 #'    \item{button_click_msg:} Message returned when buttons are clicked.
 #'    \item{code_previous:}    Loading code from the DS field.
@@ -990,6 +1055,7 @@ DW_fetch_state = function(id,           input,           session,
     }
     # If the dataset has been updated we need to reset the DW app state:
     if(UPDATE_DS){
+      FG_le(state, "original dataset changed")
       state = DW_init_state(yaml_file, yaml_section, id_UD, react_state)
     }
   }
@@ -1085,7 +1151,7 @@ DW_fetch_state = function(id,           input,           session,
                     # We have to assinge this to the elements table and the
                     # dataset:
                     current_view[["elements_table"]]  = NEW_ET
-                    current_view[["WDS"]]             = dwee_res[["DS"]] 
+                    current_view[["WDS"]]             = dwee_res[["DS"]]
                     # We set this view to update the code as well:
                     state = DW_set_current_view(state, current_view)
 
@@ -1120,19 +1186,20 @@ DW_fetch_state = function(id,           input,           session,
     }
   }
 
-  # Detecting 
+  # Detecting
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["select_dw_views"]],
                  old_val  = state[["DW"]][["current_view"]]) &
       (!state[["DW"]][["ui_hold"]][["select_dw_views"]]) ){
 
     # Changing the current view to the one selected in the UI
-    state[["DW"]][["current_view"]] =  state[["DW"]][["ui"]][["select_dw_views"]] 
+    state[["DW"]][["current_view"]] =  state[["DW"]][["ui"]][["select_dw_views"]]
   }
   # Detecting add_element clicks
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_add_element"]],
                  old_val  = state[["DW"]][["button_counters"]][["add"]])){
     # Empty messages:
     msgs = c()
+    FG_le(state, "adding wrangling element")
 
     # Plucking out the current view
     current_view = DW_fetch_current_view(state)
@@ -1165,7 +1232,7 @@ DW_fetch_state = function(id,           input,           session,
         # table
         if(dwee_res[["isgood"]]){
           # - append the cmd and description to the DW table
-          current_view[["elements_table"]] = 
+          current_view[["elements_table"]] =
             rbind(current_view[["elements_table"]],
               data.frame(
               Action        = dwb_res[["action"]],
@@ -1195,7 +1262,7 @@ DW_fetch_state = function(id,           input,           session,
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_new"]],
                  old_val  = state[["DW"]][["button_counters"]][["new"]])){
 
-      warning("new click")
+    FG_le(state, "creating new wrangling view")
     # Empty messages:
     msgs = c()
 
@@ -1212,7 +1279,7 @@ DW_fetch_state = function(id,           input,           session,
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_del"]],
                  old_val  = state[["DW"]][["button_counters"]][["del"]])){
 
-      warning("del click")
+    FG_le(state, "deleting wrangling view")
     # Empty messages:
     msgs = c()
 
@@ -1241,7 +1308,7 @@ DW_fetch_state = function(id,           input,           session,
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_copy"]],
                  old_val  = state[["DW"]][["button_counters"]][["copy"]])){
 
-      warning("copy click")
+    FG_le(state, "copying wrangling view")
 
     # Empty messages:
     msgs = c()
@@ -1256,16 +1323,18 @@ DW_fetch_state = function(id,           input,           session,
     new_view = DW_fetch_current_view(state)
 
     # Changing object references
-    # Each view has a unique object that is generated (e.g. the first view 
+    # Each view has a unique object that is generated (e.g. the first view
     # will have something like DW_myDS_1, the second one will have DW_myDS_2,
     # etc). When we copy an old view to a new one, we need those object
     # references to change to the new one as well:
-    original_view[["elements_table"]]  = 
-      dplyr::mutate( original_view[["elements_table"]],
-        cmd = str_replace_all(
-          cmd, 
-          original_view[["view_ds_object_name"]],
-          new_view[["view_ds_object_name"]]))
+    if(!is.null(original_view[["elements_table"]])){
+      original_view[["elements_table"]]  =
+        dplyr::mutate( original_view[["elements_table"]],
+          cmd = str_replace_all(
+            cmd,
+            paste0("\\b", original_view[["view_ds_object_name"]], "\\b"),
+            new_view[["view_ds_object_name"]]))
+    }
 
 
     # From the original view we copy both the WDS and elements_table fields
@@ -1282,7 +1351,8 @@ DW_fetch_state = function(id,           input,           session,
   #------------------------------------
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_save"]],
                  old_val  = state[["DW"]][["button_counters"]][["save"]])){
-      warning("save click")
+
+    FG_le(state, "saving changes to current wrangling view")
     # Empty messages:
     msgs = c()
 
@@ -1294,7 +1364,7 @@ DW_fetch_state = function(id,           input,           session,
 
     } else {
       # returning an error
-      msgs = c(msgs, 
+      msgs = c(msgs,
           tags$em(state[["MC"]][["errors"]][["current_key_empty"]]))
     }
 
@@ -1320,7 +1390,7 @@ state }
 #'the name of the list element in react_state where the data set is stored.
 #'@param react_state Variable passed to server to allow reaction outside of
 #'module (\code{NULL})
-#'@return list containing an empty DW state 
+#'@return list containing an empty DW state
 DW_init_state = function(yaml_file, yaml_section, id_UD, react_state){
   state = list()
   # Reading in default information from the yaml file
@@ -1380,7 +1450,12 @@ DW_init_state = function(yaml_file, yaml_section, id_UD, react_state){
     state = DW_new_view(state, id_UD, react_state)
   }
 
+  # initializing the module checksum:
+  state = DW_update_checksum(state)
+
   state[["MOD_TYPE"]] = "DW"
+
+  FG_le(state, "State initialized")
 
 state }
 
@@ -1605,15 +1680,15 @@ DW_new_view = function(state, id_UD, react_state){
   view_id = paste0("view_", state[["DW"]][["view_cntr"]])
 
   # Creating the object name for this view
-  view_ds_object_name = paste0(state[["MC"]][["ds_object_name"]], 
+  view_ds_object_name = paste0(state[["MC"]][["ds_object_name"]],
                           "_", state[["DW"]][["view_cntr"]])
   # Default for a new view:
   view_def =
     list(
          # internal use only
-         isgood              = TRUE, 
+         isgood              = TRUE,
          id                  = view_id,
-         idx                 = state[["DW"]][["view_cntr"]], 
+         idx                 = state[["DW"]][["view_cntr"]],
          view_ds_object_name = view_ds_object_name,
          code_previous       = NULL,
          # user facing
@@ -1624,11 +1699,11 @@ DW_new_view = function(state, id_UD, react_state){
          checksum            = digest::digest(state[["DW"]][["DS"]][["contents"]], algo=c("md5")),
          code                = NULL,
          code_dw_only        = NULL)
-                             
+
 
   # This contains the code to generate the input dataset
   code_previous = c(
-    paste0(view_ds_object_name, 
+    paste0(view_ds_object_name,
            " = ",
             state[["DW"]][["DS"]][["object_name"]]))
   view_def[["code_previous"]] = code_previous
@@ -1660,7 +1735,7 @@ current_view}
 #'@description Takes a DW state and an updated view and sets that view to the
 #'current view_id
 #'@param state DW state from \code{DW_fetch_state()}
-#'@param dw_view Data view list of the format returned from \code{DW_fetch_current_view()} 
+#'@param dw_view Data view list of the format returned from \code{DW_fetch_current_view()}
 #'(see the structure of \code{state$DW$views} in the output of \code{DW_fetch_state()}).
 #'@return DW state object with the value of \code{dw_view} set to the current view id.
 DW_set_current_view    = function(state, dw_view){
@@ -1694,5 +1769,30 @@ DW_set_current_view    = function(state, dw_view){
 
   state[["DW"]][["views"]][[view_id]] = dw_view
 
+  # Forcing an checksum update
+  state = DW_update_checksum(state)
+
 state}
 
+
+#'@export
+#'@title Updates DW Module Checksum
+#'@description Takes a DW state and updates the checksum used to trigger
+#'downstream updates
+#'@param state DW state from \code{DW_fetch_state()}
+#'@return DW state object with the checksum updated
+DW_update_checksum     = function(state){
+
+  # checksum string
+  chk_str = ""
+
+  # We'll concatinate all the individual checksums together 
+  # and create a checksum of those:
+  view_ids = names(state[["DW"]][["views"]])
+  for(view_id in view_ids){
+    chk_str = paste0(chk_str, ":", state[["DW"]][["views"]][[view_id]][["checksum"]])
+  }
+
+  state[["DW"]][["checksum"]] = digest::digest(chk_str, algo=c("md5"))
+
+state}

@@ -22,6 +22,7 @@ Imports:
   rhandsontable,
   shiny,
   shinyAce,
+  shinyBS,
   shinyWidgets,
   stats,
   stringr,
@@ -33,5 +34,5 @@ Suggests:
   shinydashboard,
   rmarkdown,
   utils
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 VignetteBuilder: knitr

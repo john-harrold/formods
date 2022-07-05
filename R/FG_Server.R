@@ -439,6 +439,9 @@ FG_Server <- function(id,
       # Getting the current figure
       current_fig = FG_fetch_current_fig(state)
 
+      # Getting the columns of the dataset attached to the current figure:
+      fig_dscols = state[["FG"]][["DSV"]][["dsviews"]][["columns"]][[current_fig[["fig_dsview"]]]]
+
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
 
@@ -468,9 +471,9 @@ FG_Server <- function(id,
             }
 
             # Adding the columns
-            sel_names   = c(sel_names  , current_fig[["DS"]][["columns"]])
-            sel_choices = c(sel_choices, current_fig[["DS"]][["columns"]])
-            sel_style   = c(sel_style  , rep("", length(current_fig[["DS"]][["columns"]])))
+            sel_names   = c(sel_names  , fig_dscols)
+            sel_choices = c(sel_choices, fig_dscols)
+            sel_style   = c(sel_style  , rep("", length(fig_dscols)))
 
             # Adding manual option
             sel_names      = c(sel_names  , state[["MC"]][["labels"]][["manual"]])
@@ -505,7 +508,7 @@ FG_Server <- function(id,
                     label      = state[["MC"]][["labels"]][["components"]][[ui_aes]],
                     choices    = sel_choices,
                     width      = state[["MC"]][["formatting"]][["components"]][["aes"]][["width"]],
-                    choicesOpt = list( style = sel_style)),
+                    choicesOpt = list( style = sel_style, "live-search"=TRUE)),
                   # Manual text input on the bottom
                   textInput(
                      inputId     = NS(id, id_manual),
@@ -520,7 +523,7 @@ FG_Server <- function(id,
           uiele = aes_list
         } else if(curr_element == "facet") {
 
-          sel_choices = current_fig[["DS"]][["columns"]]
+          sel_choices = fig_dscols
 
           uiele =
             pickerInput(
@@ -702,7 +705,7 @@ FG_Server <- function(id,
       })
       # This updates the reaction state:
       observeEvent(toListen(), {
-        react_state[[id]] = FG_fetch_state(
+        state = FG_fetch_state(
                              id           = id,
                              input        = input,
                              session      = session,
@@ -711,6 +714,9 @@ FG_Server <- function(id,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
+
+        FG_le(state, "reaction state updated")
+        react_state[[id]] = state
       })
     }
   })
@@ -773,7 +779,7 @@ FG_fetch_state = function(id,
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_element_add"]],
                  old_val  = state[["FG"]][["button_counters"]][["add"]])){
 
-    warning("add clicked")
+    FG_le(state, "adding figure element")
     msgs = c()
 
     # Building the plot element command
@@ -787,7 +793,7 @@ FG_fetch_state = function(id,
     # evaluate this element to make sure it works correctly
     if( fgb_res[["isgood"]]){
       # Evaluating the element
-      fbee_res = fg_eval(state,  fgb_res[["cmd"]])
+      fbee_res = FG_eval(state,  fgb_res[["cmd"]])
       # Appending any messages
       msgs = c(msgs, fbee_res[["msgs"]])
 
@@ -824,7 +830,7 @@ FG_fetch_state = function(id,
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_new"]],
                  old_val  = state[["FG"]][["button_counters"]][["new"]])){
 
-    warning("new clicked")
+    FG_le(state, "creating new figure")
     msgs = c()
 
     # Saving the button state to the counter
@@ -838,7 +844,7 @@ FG_fetch_state = function(id,
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_del"]],
                  old_val  = state[["FG"]][["button_counters"]][["del"]])){
 
-    warning("del clicked")
+    FG_le(state, "deleting figure view")
     msgs = c()
     # Saving the button state to the counter
     state[["FG"]][["button_counters"]][["del"]] =
@@ -851,7 +857,7 @@ FG_fetch_state = function(id,
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_save"]],
                  old_val  = state[["FG"]][["button_counters"]][["save"]])){
 
-    warning("save clicked")
+    FG_le(state, "saving changes to current figure")
     msgs = c()
     # Saving the button state to the counter
     state[["FG"]][["button_counters"]][["save"]] =
@@ -864,7 +870,7 @@ FG_fetch_state = function(id,
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_copy"]],
                  old_val  = state[["FG"]][["button_counters"]][["copy"]])){
 
-    warning("copy clicked")
+    FG_le(state, "copying figure")
     msgs = c()
     # Saving the button state to the counter
     state[["FG"]][["button_counters"]][["copy"]] =
@@ -877,7 +883,7 @@ FG_fetch_state = function(id,
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_upds"]],
                  old_val  = state[["FG"]][["button_counters"]][["upds"]])){
 
-    warning("upds clicked")
+    FG_le(state, "updating dataset")
     msgs = c()
     # Saving the button state to the counter
     state[["FG"]][["button_counters"]][["upds"]] =
@@ -920,18 +926,15 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
 
   #---------------------------------------------
   # Finding the dataset
-  DS = FM_find_DS(id_UD       = id_UD,
-                 id_DW       = id_DW,
-                 react_state = react_state)
+  DSV = FM_fetch_dsviews(
+    state       = state,
+    id_UD       = id_UD,
+    id_DW       = id_DW,
+    react_state = react_state)
 
 
   # Plot elements defined by aesthetics
   aes_elements = c("line", "point", "hguide", "vguide")
-
-  # ggplot initialization code:
-  ds_object_name = DS[["object_name"]]
-  fg_object_name = state[["MC"]][["fg_object_name"]]
-  code_init = paste0(fg_object_name, " = ggplot2::ggplot(data=", ds_object_name,")")
 
   # This will hold the ids of the UI elements that need to be collected
   # when module fetch_state function is called. Some of them will be
@@ -941,7 +944,7 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
 
   # If the dataset isn't good then we need to
   # flag the whole module as not being good
-  if(!DS[["isgood"]]){
+  if(!DSV[["isgood"]]){
     isgood = FALSE
   }
 
@@ -988,22 +991,21 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
   # Defaults for the module
   FG_NULL =
     list(isgood           = isgood,
-         #DS = DS,
-         button_counters = list(           # Counters to track button clicks
-          "add"             = 0,           # Element: Adding a new element
-          "save"            = 0,           # Figure:  Saving the current figure
-          "new"             = 0,           # Figure:  New blank figure
-          "del"             = 0,           # Figure:  Delete the current figure
-          "copy"            = 0,           # Figure:  Copy the current figure
-          "upds"            = 0),          # Figure:  Update the dataset for the current figure
-         code_init        = code_init,     # Code needed to initialize the plot
-         aes_elements     = aes_elements,  # Plot elements defined by aesthetics
-         figs             = NULL,          # Placeholder for the figures
-         fig_cntr         = 0,             # Internal counter for creating unique figure ids
-         current_fig      = NULL,          # currently active fig id
-         ui_hold          = list(),        # List of states to hold to prevent updates/refresh until after ui has been rebuilt with the curretn state
-         ui_ids           = ui_ids         # List of the possible ui_ids in the model
-         )
+      button_counters = list(            # Counters to track button clicks
+        "add"             = 0,           # Element: Adding a new element
+        "save"            = 0,           # Figure:  Saving the current figure
+        "new"             = 0,           # Figure:  New blank figure
+        "del"             = 0,           # Figure:  Delete the current figure
+        "copy"            = 0,           # Figure:  Copy the current figure
+        "upds"            = 0),          # Figure:  Update the dataset for the current figure
+      aes_elements     = aes_elements,   # Plot elements defined by aesthetics
+      figs             = NULL,           # Placeholder for the figures
+      fig_cntr         = 0,              # Internal counter for creating unique figure ids
+      current_fig      = NULL,           # currently active fig id
+      ui_hold          = list(),         # List of states to hold to prevent updates/refresh until after ui has been rebuilt with the curretn state
+      ui_ids           = ui_ids,         # List of the possible ui_ids in the model
+      DSV              = DSV             # List containing the dataset views from FM_fetch_dsviews()
+      )
 
   state[["FG"]] = FG_NULL
 
@@ -1013,6 +1015,8 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
   }
 
   state[["MOD_TYPE"]] = "FG"
+
+  FG_le(state, "State initialized")
 
 state}
 
@@ -1035,23 +1039,34 @@ FG_new_fig    = function(state, id_UD, id_DW, react_state){
   fig_id = paste0("Fig_", state[["FG"]][["fig_cntr"]])
 
   # Initialzing the ggplot object
-  DS = FM_find_DS(id_UD       = id_UD,
-                  id_DW       = id_DW,
-                  react_state = react_state)
+
+  # Pulling out the dataset views
+  DSV = state[["FG"]][["DSV"]]
+
+  # Using the default dsview for the new figure
+  fig_dsview = DSV[["active"]]
+
 
   # Creating the dataset object
   # This object contains the name of the dataset
-  ds_object_name = DS[["object_name"]]
+  ds_object_name = DSV[["dsviews"]][["object_name"]][[fig_dsview]]
+
   # Creating that object loally
-  assign(ds_object_name, DS[["contents"]])
-  code_init     = state[["FG"]][["code_init"]]
+  assign(ds_object_name, DSV[["dsviews"]][["contents"]][[fig_dsview]])
+
+  # ggplot initialization code:
+  fg_object_name = state[["MC"]][["fg_object_name"]]
+  code_init = paste0(fg_object_name, " = ggplot2::ggplot(data=", ds_object_name,")")
 
   # This is the object that contains the different components of the figure:
   fig_def =
     list(key            = fig_id,
          num_pages      = 1,
          pages          = NULL,
-         DS             = DS,
+         fig_dsview     = fig_dsview,
+         UD_checksum    = DSV[["UD_checksum"]],
+         DW_checksum    = DSV[["DW_checksum"]],
+         DSV_checksum   = DSV[["dsviews"]][["checksum"]][[fig_dsview]],
          code_init      = code_init,
          caption        = NULL,
          elements_table = NULL)
@@ -1063,7 +1078,7 @@ FG_new_fig    = function(state, id_UD, id_DW, react_state){
   state[["FG"]][["current_fig"]]    = fig_id
 
   # Creating the new figure pages
-  new_fig = fg_eval(state, NULL)
+  new_fig = FG_eval(state, NULL)
   state[["FG"]][["figs"]][[fig_id]][["pages"]] =  new_fig[["pages"]]
 
 state}
@@ -1266,15 +1281,15 @@ res}
 #'  \item{msgs:}   Messages to be passed back to the user.
 #'  \item{pages:}  List with each element containing a ggplot object (\code{p}) and the code to generate that object (\code{code})
 #'}
-fg_eval = function(state, cmd){
+FG_eval = function(state, cmd){
 
   # Pulling out the current figure
   current_fig = FG_fetch_current_fig(state)
   msgs        = c()
 
   # Defining the dataset locally:
-  assign(current_fig[["DS"]][["object_name"]],
-         current_fig[["DS"]][["contents"]])
+  assign(state[["FG"]][["DSV"]][["dsviews"]][["object_name"]][[current_fig[["fig_dsview"]]]],
+         state[["FG"]][["DSV"]][["dsviews"]][["contents"]][[current_fig[["fig_dsview"]]]])
 
   # Defining the figure object name locally:
   fg_object_name = state[["MC"]][["fg_object_name"]]

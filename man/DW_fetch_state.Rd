@@ -29,11 +29,14 @@ values from the yaml file as well as any changes made by the user. The
 structure of the list is defined below.
 \itemize{
  \item{yaml:} Contents of the yaml file.
- \item{MC:} Section of the yaml file, specified by \code{yaml_section}, containing the DW module components 
+ \item{MC:} Section of the yaml file, specified by \code{yaml_section}, containing the DW module components
  \item{DW:} Data wrangling state
  \itemize{
    \item{isgood:} Boolean status of the state. FALSE if the dataset
    identified by id_UD is bad.
+   \item{checksum:}         MD5 sum indicating if there was a change in the
+   datasets within the view. Use this to trigger updates in respose to
+   changes in this module.
    \item{button_counters:}  List of counters to detect button clicks.
    \item{button_click_msg:} Message returned when buttons are clicked.
    \item{code_previous:}    Loading code from the DS field.

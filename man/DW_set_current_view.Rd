@@ -9,7 +9,7 @@ DW_set_current_view(state, dw_view)
 \arguments{
 \item{state}{DW state from \code{DW_fetch_state()}}
 
-\item{dw_view}{Data view list of the format returned from \code{DW_fetch_current_view()} 
+\item{dw_view}{Data view list of the format returned from \code{DW_fetch_current_view()}
 (see the structure of \code{state$DW$views} in the output of \code{DW_fetch_state()}).}
 }
 \value{
