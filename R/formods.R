@@ -226,7 +226,7 @@ res}
 #'@param state module state after yaml read
 #'@param entry text to add
 #'@return NULL
-FG_le = function(state, entry){
+FM_le = function(state, entry){
   # pulling out the log file
   log_file = FG_fetch_log_path(state)
 
@@ -265,3 +265,72 @@ FG_le = function(state, entry){
   isgood = write(entry, file=log_file, append=TRUE)
 
 isgood}
+
+
+
+#'@export
+#'@title Rung Try/Catch and Process Results
+#'@description Add the supplied txt and the module type to the log file
+#'@param cmd    R command to evaluate in the try/catch block
+#'@param tc_env list of with names corresponding to object names and
+#'corresponding Values to define in the try/catch environment
+#'@param capture Character vector of values to capture after the command is
+#'successfully captured
+#'@return NULL
+FM_tc = function(cmd, tc_env, capture){
+
+  isgood = TRUE
+  tcres  = list()
+  msgs   = c()
+
+  # Defining the environment
+  for(name in names(tc_env)){
+    assign(name, tc_env[[name]])
+  }
+
+  tcres = tryCatch({
+    # Running the command
+    eval(parse(text=cmd))
+    # Capturing objects
+    obj_cap = list()
+    for(obj_name in capture){
+      obj_cap[[obj_name]] = get(obj_name)
+    }
+    list(capture = obj_cap, isgood=TRUE)},
+    error = function(e) {
+      list(error=e, isgood=FALSE)}
+  )
+
+
+  # If there was an error we want to capture any messages from that here
+  if(!tcres$isgood){
+    if(!is.null(tcres[["error"]][["message"]])){
+      msgs = c(msgs, paste0("message: ", tcres[["error"]][["message"]])) }
+    if(!is.null(tcres[["error"]][["call"]])){
+      msgs = c(msgs, paste0("call:    ", tcres[["error"]][["call"]])) }
+  }
+
+
+
+  tcres[["msgs"]] = msgs
+
+tcres}
+
+
+#'@export
+#'@title Generates `ggplot` Object with Error Message
+#'@description Takes a vector of messages and returns a ggplot object with the
+#'text in the figure. This can be used in automated figure generation to
+#'cascade an error message to the end user.
+#'@param msgs Vector of error messages
+#'@return ggplot object
+FM_mk_error_fig  <- function(msgs){
+  p_res = ggplot()+annotate("text",
+                   hjust= 0, vjust=1,
+                   x=0, y=0,
+                   label = paste(msgs, collapse="\n")) +
+    xlab(NULL) + ylab(NULL)  + theme(axis.ticks = element_blank()) +
+    scale_x_continuous(labels = NULL, limits = c(-.1,1))        +
+    scale_y_continuous(labels = NULL, limits = c(-1,0))
+
+p_res}

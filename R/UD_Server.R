@@ -186,7 +186,7 @@ UD_Server <- function(id,
       # This updates the reaction state:
       observeEvent(toListen(), {
         state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
-        FG_le(state, "reaction state updated")
+        FM_le(state, "reaction state updated")
         react_state[[id]] = state
       })
     }
@@ -391,7 +391,7 @@ UD_init_state = function(yaml_file){
 
   state[["MOD_TYPE"]] = "UD"
   
-  FG_le(state, "State initialized")
+  FM_le(state, "State initialized")
   state}
 
 #'@export

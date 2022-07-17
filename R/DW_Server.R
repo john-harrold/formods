@@ -940,7 +940,7 @@ DW_Server <- function(id,
           id_UD        = id_UD,
           react_state  = react_state)
 
-        FG_le(state, "reaction state updated")
+        FM_le(state, "reaction state updated")
         react_state[[id]] = state
       })
     }
@@ -1055,7 +1055,7 @@ DW_fetch_state = function(id,           input,           session,
     }
     # If the dataset has been updated we need to reset the DW app state:
     if(UPDATE_DS){
-      FG_le(state, "original dataset changed")
+      FM_le(state, "original dataset changed")
       state = DW_init_state(yaml_file, yaml_section, id_UD, react_state)
     }
   }
@@ -1186,7 +1186,7 @@ DW_fetch_state = function(id,           input,           session,
     }
   }
 
-  # Detecting
+  # Detecting view selection changes
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["select_dw_views"]],
                  old_val  = state[["DW"]][["current_view"]]) &
       (!state[["DW"]][["ui_hold"]][["select_dw_views"]]) ){
@@ -1199,7 +1199,7 @@ DW_fetch_state = function(id,           input,           session,
                  old_val  = state[["DW"]][["button_counters"]][["add"]])){
     # Empty messages:
     msgs = c()
-    FG_le(state, "adding wrangling element")
+    FM_le(state, "adding wrangling element")
 
     # Plucking out the current view
     current_view = DW_fetch_current_view(state)
@@ -1262,7 +1262,7 @@ DW_fetch_state = function(id,           input,           session,
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_new"]],
                  old_val  = state[["DW"]][["button_counters"]][["new"]])){
 
-    FG_le(state, "creating new wrangling view")
+    FM_le(state, "creating new wrangling view")
     # Empty messages:
     msgs = c()
 
@@ -1279,7 +1279,7 @@ DW_fetch_state = function(id,           input,           session,
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_del"]],
                  old_val  = state[["DW"]][["button_counters"]][["del"]])){
 
-    FG_le(state, "deleting wrangling view")
+    FM_le(state, "deleting wrangling view")
     # Empty messages:
     msgs = c()
 
@@ -1308,7 +1308,7 @@ DW_fetch_state = function(id,           input,           session,
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_copy"]],
                  old_val  = state[["DW"]][["button_counters"]][["copy"]])){
 
-    FG_le(state, "copying wrangling view")
+    FM_le(state, "copying wrangling view")
 
     # Empty messages:
     msgs = c()
@@ -1352,7 +1352,7 @@ DW_fetch_state = function(id,           input,           session,
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_save"]],
                  old_val  = state[["DW"]][["button_counters"]][["save"]])){
 
-    FG_le(state, "saving changes to current wrangling view")
+    FM_le(state, "saving changes to current wrangling view")
     # Empty messages:
     msgs = c()
 
@@ -1455,7 +1455,7 @@ DW_init_state = function(yaml_file, yaml_section, id_UD, react_state){
 
   state[["MOD_TYPE"]] = "DW"
 
-  FG_le(state, "State initialized")
+  FM_le(state, "State initialized")
 
 state }
 

@@ -30,8 +30,8 @@ ui <- dashboardPage(
                  htmlOutput(NS("FG", "ui_fg_del_fig")) ),
               div(style="display:inline-block",
                  htmlOutput(NS("FG", "ui_fg_copy_fig"))),
-              div(style="display:inline-block",
-                 htmlOutput(NS("FG", "ui_fg_upds_fig")) ),
+           #  div(style="display:inline-block",
+           #     htmlOutput(NS("FG", "ui_fg_upds_fig")) ),
               width = 12)
                ),
              fluidRow(
@@ -49,7 +49,7 @@ ui <- dashboardPage(
                  htmlOutput(NS("FG", "ui_fg_new_element_row")), width=12)),
              fluidRow(
                box(title="Button Message",
-                 verbatimTextOutput(NS("FG", "ui_fg_button_click_msg")), width=12)),
+                 verbatimTextOutput(NS("FG", "ui_fg_msg")), width=12)),
              fluidRow(
                box(title="Plot Preview",
                  plotOutput(NS("FG", "ui_fg_preview_ggplot")), width=12)),

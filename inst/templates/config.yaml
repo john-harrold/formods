@@ -206,11 +206,12 @@ FG:
       ylab:          "y-axis label"
       ggtitle:       "plot title"
       caption:       "optional caption text here"
-      fig_key:       "figure key (opt)"
+      fig_key:       "figure key"
       manual:        "Manual"
     manual:          "Manual"
     not_used:        "Not Used"
     curr_figs_none:  "No figures yet created"
+    no_fig_elements: "Add figure elements"
     new_fig:         "New"
     save_fig:        "Save"
     del_fig:         "Delete"
@@ -225,6 +226,8 @@ FG:
     select_current_fig: "Choose figure"
   errors:
     element_not_added:    "Unable to add the data figure element:"
+    current_key_empty:    "The figure description field cannot be empty."
+    only_one_facet:       "This figure already has a faceting element."
   elements:
     # For each element below you should only modify the choice and subtext
     # elements
@@ -237,7 +240,7 @@ FG:
     point:
       choice:  "Point"  
       subtext: "Scatter plot"
-      ui_aes:  ["x", "y", "color", "shape", "size", "alpha"]
+      ui_aes:  ["x", "y", "color", "group", "shape", "size", "alpha",]
       aes_req: ["x", "y"]
       fcn:     "geom_point"
     hguide:
@@ -254,7 +257,7 @@ FG:
       fcn:     "geom_vline"
     facet:
       choice:  "Facet"  
-      subtext: "Facet by one or two variables"
+      subtext: "Facet by one or more variables"
     label:
       choice:  "Label"  
       subtext: "Label axes or plot title"
@@ -277,11 +280,15 @@ FG:
         width: "150px"
     select_current_fig:
       width: 100
+    # Dimensions of the table with the figure generation elements
+    fg_elements:    
+      width:  600
+      height: 100
     # When faceting is selected (wrapping or grid) the result will be
     # paginated according to the dimensions below:
     faceting:  
-      rows:  2
-      cols:  3
+      rows:  3
+      cols:  4
     # Button sizes from actionBttn (shinyWidgets) 
     # xs,sm, md, lg.
     button_fig_del:
@@ -297,8 +304,7 @@ FG:
     button_fig_upds:
       size: "sm" 
   # You can put any post_processing you want to apply to all figures.
-  # The ggplot object will be avialble as the fg_object_name specified 
-  # in this part of the yaml file
+  # The ggplot object will be avialble as the ===FGOBJ=== 
   post_processing: |-
-    myp = myp + theme_light()
+    ===FGOBJ=== = ===FGOBJ=== + theme_light()
   fg_object_name: "myp"
