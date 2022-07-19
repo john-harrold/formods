@@ -146,8 +146,9 @@ UD_Server <- function(id,
          shinyWidgets::dropdownButton(
            uiele_code,
            inline  = FALSE,
-           right   = FALSE,
-           circle  = TRUE, 
+           right   = TRUE, 
+           size    = "sm",
+           circle  = FALSE,
            width   = state[["MC"]][["formatting"]][["code"]][["width"]],
            status  = "danger",
            icon    = icon("code", lib="font-awesome"),
@@ -162,16 +163,14 @@ UD_Server <- function(id,
                       tags$br(),
                       htmlOutput(NS(id, "UD_ui_select_sheets")),
                       htmlOutput(NS(id, "UD_ui_text_load_result")))
-      # Attaching gode button
-      if(!is.null(uiele_code_button)){
-        uiele = tagList(
-          uiele, tags$br(),
-          div(style="display:inline-block", uiele_code_button))
-      }
+
       # Attaching the preview to the bottom if it's enabled
       if(state$MC$compact$preview){
         uiele_preview = tagList(div(style="display:inline-block;vertical-align:top",
-                                    htmlOutput(NS(id, "UD_ui_data_preview"))))
+                                    htmlOutput(NS(id, "UD_ui_data_preview"))),
+                                div(style="display:inline-block;vertical-align:top",
+                                   uiele_code_button)
+                                )
         uiele = tagList(uiele, uiele_preview, tags$br())}
       
       uiele})
@@ -352,6 +351,8 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
       state[["DS"]][["contents"]]        = contents
       state[["DS"]][["checksum"]]        = digest::digest(contents, algo=c("md5"))
       state[["DS"]][["isgood"]]          = TRUE
+
+      FM_le(state, paste0("module checksum updated:", state[["DS"]][["checksum"]]))
     }
     
     # If someone loads a good file then a bad one (e.g. bad file extension)

@@ -677,6 +677,7 @@ DW_Server <- function(id,
              label   = state[["MC"]][["labels"]][["add_element"]],
              icon    = icon("plus-sign", lib="glyphicon"),
              size    = state[["MC"]][["formatting"]][["button_dw_add_element"]][["size"]],
+             block   = state[["MC"]][["formatting"]][["button_dw_add_element"]][["block"]],
              color   = "success",
              style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]]
              ))
@@ -704,6 +705,7 @@ DW_Server <- function(id,
                   label   = state[["MC"]][["labels"]][["new_dw"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
                   size    = state[["MC"]][["formatting"]][["button_dw_new"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["button_dw_new"]][["block"]],
                   color   = "success",
                   icon    = icon("plus"))
       }
@@ -726,6 +728,7 @@ DW_Server <- function(id,
                   label   = state[["MC"]][["labels"]][["save_dw"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
                   size    = state[["MC"]][["formatting"]][["button_dw_save"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["button_dw_save"]][["block"]],
                   color   = "primary",
                   icon    = icon("arrow-down"))
       }
@@ -748,6 +751,7 @@ DW_Server <- function(id,
                   label   = state[["MC"]][["labels"]][["copy_dw"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
                   size    = state[["MC"]][["formatting"]][["button_dw_copy"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["button_dw_copy"]][["block"]],
                   color   = "royal",
                   icon    = icon("copy"))
       }
@@ -770,6 +774,7 @@ DW_Server <- function(id,
                   label   = state[["MC"]][["labels"]][["del_dw"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
                   size    = state[["MC"]][["formatting"]][["button_dw_del"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["button_dw_del"]][["block"]],
                   color   = "danger",
                   icon    = icon("minus"))
       }
@@ -784,9 +789,10 @@ DW_Server <- function(id,
       input$button_dw_new
       input$button_dw_del
       input$button_dw_copy
-      # input$button_dw_save
       # Force update on deletion clicks
       input$hot_dw_elements
+      # Force update when the view is changed
+      input$select_dw_views
       state = DW_fetch_state(id           = id,
                              input        = input,
                              session      = session,
@@ -838,8 +844,9 @@ DW_Server <- function(id,
          shinyWidgets::dropdownButton(
            uiele_code,
            inline  = FALSE,
-           right   = FALSE,
-           circle  = TRUE, 
+           right   = TRUE ,
+           size    = "sm",
+           circle  = FALSE,
            width   = state[["MC"]][["formatting"]][["code"]][["width"]],
            status  = "danger",
            icon    = icon("code", lib="font-awesome"),
@@ -854,8 +861,9 @@ DW_Server <- function(id,
        shinyWidgets::dropdownButton(
          uiele_dw_elements,
          inline  = FALSE,
-         right   = FALSE,
-         circle  = TRUE, 
+         right   = TRUE ,
+         size    = "sm",
+         circle  = FALSE,
          #width   = state[["MC"]][["formatting"]][["dw_elements"]][["width"]],
          status  = "primary",
          icon    = icon("layer-group", lib="font-awesome"),
@@ -864,27 +872,41 @@ DW_Server <- function(id,
 
 
       uiele = tagList(
-        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_save_view"))),
+        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_views"))),
         div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_key"))),
         tags$br(),
         verbatimTextOutput(NS(id, "ui_dw_new_element_msg"))
       )
 
-      # adding elements button:
-      uiele_buttons = tagList(uiele_dw_elements_button)
-      # Adding the code button if enabled
-      if( state$MC$compact$code){
-        uiele_buttons = tagList(uiele_buttons, 
-          tags$br(), uiele_code_button)
-      }
-      uiele_buttons = tagList(
+    # # adding elements button:
+    # # Adding the code button if enabled
+    # if( state$MC$compact$code){
+    #   uiele_buttons_right = tagList(uiele_buttons_right, 
+    #      uiele_code_button)
+    # }
+
+
+      uiele_buttons_right = tagList(
+               div(style="display:inline-block;vertical-align:top",
+               uiele_dw_elements_button,
+               uiele_code_button))
+
+
+
+      uiele_buttons_left = tagList(
         div(style="display:inline-block;vertical-align:top",
-        uiele_buttons))
+        htmlOutput(NS("DW", "ui_dw_save_view")),
+        htmlOutput(NS("DW", "ui_dw_copy_view")),
+        htmlOutput(NS("DW", "ui_dw_del_view")),
+        htmlOutput(NS("DW", "ui_dw_new_view"))
+        ))
+
+
 
       # Appending the buttons to the main uiele
       uiele = tagList(
         uiele,
-        uiele_buttons)
+        uiele_buttons_left)
 
 
       # Appending the preview
@@ -896,6 +918,7 @@ DW_Server <- function(id,
         uiele = tagList(
           uiele,
           uiele_preview,
+          uiele_buttons_right,
           tags$br()
         )
       }
@@ -903,15 +926,13 @@ DW_Server <- function(id,
 
 
       uiele = tagList( uiele,
-        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_copy_view"))),
-        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_del_view"))),
-        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_new_view"))),
-        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_views"))),
         tags$br(),
         div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_add_element_button"))),
         div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_select"))),
         tags$br(),
-        htmlOutput(NS(id, "ui_dw_new_element_row"))
+        htmlOutput(NS(id, "ui_dw_new_element_row")),
+        tags$br(),
+        verbatimTextOutput(NS("DW", "ui_dw_button_click_msg"))
       )
 
 
@@ -1450,12 +1471,12 @@ DW_init_state = function(yaml_file, yaml_section, id_UD, react_state){
     state = DW_new_view(state, id_UD, react_state)
   }
 
+  state[["MOD_TYPE"]] = "DW"
+  FM_le(state, "State initialized")
+
   # initializing the module checksum:
   state = DW_update_checksum(state)
 
-  state[["MOD_TYPE"]] = "DW"
-
-  FM_le(state, "State initialized")
 
 state }
 
@@ -1794,5 +1815,6 @@ DW_update_checksum     = function(state){
   }
 
   state[["DW"]][["checksum"]] = digest::digest(chk_str, algo=c("md5"))
+  FM_le(state, paste0("module checksum updated:", state[["DW"]][["checksum"]]))
 
 state}

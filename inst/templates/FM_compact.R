@@ -10,15 +10,15 @@ ui <- dashboardPage(
   dashboardHeader(title="formods"),
   dashboardSidebar(
      sidebarMenu(
-       menuItem("Upload",     tabName="dupload",  icon=icon("table")) ,
+       menuItem("Upload",     tabName="upload",   icon=icon("table")) ,
        menuItem("Wrangle",    tabName="wrangle",  icon=icon("hat-cowboy")),
        menuItem("Plot",       tabName="plot",     icon=icon("chart-line"))
      )
   ),
   dashboardBody(
     tabItems(
-       tabItem(tabName="dupload", htmlOutput(NS("UD", "UD_ui_compact"))),
-       tabItem(tabName="wrangle", htmlOutput(NS("DW", "DW_ui_compact"))),
+       tabItem(tabName="upload",   htmlOutput(NS("UD", "UD_ui_compact"))),
+       tabItem(tabName="wrangle",  htmlOutput(NS("DW", "DW_ui_compact"))),
        tabItem(tabName="plot",    "plot")
       )
     )

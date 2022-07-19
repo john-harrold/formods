@@ -42,11 +42,11 @@ UD:
   formatting:
     # Dimensions of the table preview in pixels
     preview:    
-      width:  400
+      width:  500
       height: 400
     code:
       width:  500
-      height: 100
+      height: 150
   # The app supports csv, tsv, xls and xlsx. You can remove those you don't
   # want to use
   allowed_extensions: 
@@ -142,24 +142,29 @@ DW:
     # Dimensions of the table with the data wrangling elements
     dw_elements:    
       width:  600
-      height: 100
+      height: 200
     current_key:
       width: 300
     code:
       width:  500
-      height: 100
+      height: 200
     # Button sizes from actionBttn (shinyWidgets) 
     # xs,sm, md, lg.
     button_dw_del:
       size: "sm" 
+      block: TRUE 
     button_dw_save:
       size: "sm" 
+      block: TRUE 
     button_dw_copy:
       size: "sm" 
+      block: TRUE 
     button_dw_new:
       size: "sm" 
+      block: TRUE 
     button_dw_add_element:
       size: "sm" 
+      block: TRUE 
   code: # module specific code options
     readOnly: TRUE
     mode:     r    
@@ -223,7 +228,8 @@ FG:
     msg_bad_element: "Unable to add the specified element: ===ELEMENT==="
     msg_bad_manual_comp: |- 
       The plot element component ===COMP=== was specified manually but no manual value was provided.
-    select_current_fig: "Choose figure"
+    select_current_fig:  "Current figure"
+    select_current_view: "Data from"
   errors:
     element_not_added:    "Unable to add the data figure element:"
     current_key_empty:    "The figure description field cannot be empty."
@@ -280,10 +286,12 @@ FG:
         width: "150px"
     select_current_fig:
       width: 100
+    select_current_view:
+      width: 100
     # Dimensions of the table with the figure generation elements
     fg_elements:    
       width:  600
-      height: 100
+      height: 200
     # When faceting is selected (wrapping or grid) the result will be
     # paginated according to the dimensions below:
     faceting:  
@@ -293,16 +301,22 @@ FG:
     # xs,sm, md, lg.
     button_fig_del:
       size: "sm" 
+      block: TRUE
     button_fig_save:
       size: "sm" 
+      block: TRUE
     button_fig_copy:
       size: "sm" 
+      block: TRUE
     button_fig_new:
       size: "sm" 
+      block: TRUE
     button_fig_add:
       size: "sm" 
+      block: TRUE
     button_fig_upds:
       size: "sm" 
+      block: TRUE
   # You can put any post_processing you want to apply to all figures.
   # The ggplot object will be avialble as the ===FGOBJ=== 
   post_processing: |-

@@ -18,26 +18,29 @@ ui <- dashboardPage(
     tabItems(
      tabItem(tabName="FG",
              fluidRow(
-               box(title="Current Figures",
-                 htmlOutput(NS("FG", "ui_fg_curr_figs")), width=5)),
+               box(title="Current Figures ui_fg_curr_figs",
+                 htmlOutput(NS("FG", "ui_fg_curr_figs")), width=5),
+               box(title="Current Data Views ui_fg_curr_views",
+                 htmlOutput(NS("FG", "ui_fg_curr_views")), width=5)),
              fluidRow(
               box(title="Figure Actions",
               div(style="display:inline-block",
-                 htmlOutput(NS("FG", "ui_fg_new_fig")) ),
+                 htmlOutput(NS("FG", "ui_fg_new_fig")),  "ui_fg_new_fig"  ),
               div(style="display:inline-block",
-                 htmlOutput(NS("FG", "ui_fg_save_fig"))),
+                 htmlOutput(NS("FG", "ui_fg_save_fig")), "ui_fg_save_fig"),
               div(style="display:inline-block",
-                 htmlOutput(NS("FG", "ui_fg_del_fig")) ),
+                 htmlOutput(NS("FG", "ui_fg_del_fig")),  "ui_fg_del_fig"),
               div(style="display:inline-block",
-                 htmlOutput(NS("FG", "ui_fg_copy_fig"))),
+                 htmlOutput(NS("FG", "ui_fg_copy_fig")), "ui_fg_copy_fig"),
            #  div(style="display:inline-block",
            #     htmlOutput(NS("FG", "ui_fg_upds_fig")) ),
               width = 12)
                ),
              fluidRow(
                box(title="Figure Caption",
-                 htmlOutput(NS("FG", "ui_fg_fig_name")),
-                 htmlOutput(NS("FG", "ui_fg_fig_cap")),
+                 htmlOutput(NS("FG", "ui_fg_fig_name")),  "ui_fg_fig_name",
+                 tags$br(),
+                 htmlOutput(NS("FG", "ui_fg_fig_cap")),  "ui_fg_fig_cap",
               width=12)),
              fluidRow(
                box(title="Add Plot Element Button",

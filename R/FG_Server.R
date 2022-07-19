@@ -32,7 +32,6 @@ FG_Server <- function(id,
       input[["button_fig_save"]]
       input[["button_fig_del"]]
       input[["button_fig_copy"]]
-      #input[["button_fig_upds"]]
       input[["button_element_add"]]
       input[["hot_fg_elements"]]
       input[["select_current_fig"]]
@@ -104,7 +103,6 @@ FG_Server <- function(id,
       input[["button_fig_save"]]
       input[["button_fig_del"]]
       input[["button_fig_copy"]]
-      #input[["button_fig_upds"]]
       input[["hot_fg_elements"]]
       input[["button_element_add"]]
       input[["select_current_fig"]]
@@ -138,7 +136,6 @@ FG_Server <- function(id,
       input[["button_fig_save"]]
       input[["button_fig_del"]]
       input[["button_fig_copy"]]
-      #input[["button_fig_upds"]]
       input[["hot_fg_elements"]]
       input[["button_element_add"]]
       input[["select_current_fig"]]
@@ -224,7 +221,6 @@ FG_Server <- function(id,
       input[["button_fig_save"]]
       input[["button_fig_del"]]
       input[["button_fig_copy"]]
-      #input[["button_fig_upds"]]
       input[["select_current_fig"]]
       state = FG_fetch_state(id           = id,
                              input        = input,
@@ -269,6 +265,7 @@ FG_Server <- function(id,
                   label   = state[["MC"]][["labels"]][["new_fig"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
                   size    = state[["MC"]][["formatting"]][["button_fig_new"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["button_fig_new"]][["block"]],
                   color   = "success",
                   icon    = icon("plus"))
       }
@@ -291,6 +288,7 @@ FG_Server <- function(id,
                   label   = state[["MC"]][["labels"]][["save_fig"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
                   size    = state[["MC"]][["formatting"]][["button_fig_save"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["button_fig_save"]][["block"]],
                   color   = "primary",
                   icon    = icon("arrow-down"))
       }
@@ -313,32 +311,11 @@ FG_Server <- function(id,
                   label   = state[["MC"]][["labels"]][["del_fig"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
                   size    = state[["MC"]][["formatting"]][["button_fig_del"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["button_fig_del"]][["block"]],
                   color   = "danger",
                   icon    = icon("minus"))
       }
       uiele})
-  # #------------------------------------
-  # output$ui_fg_upds_fig   = renderUI({
-  #   #req(input$X)
-  #   state = FG_fetch_state(id           = id,
-  #                          input        = input,
-  #                          session      = session,
-  #                          yaml_file    = yaml_file,
-  #                          yaml_section = yaml_section,
-  #                          id_UD        = id_UD,
-  #                          id_DW        = id_DW,
-  #                          react_state  = react_state)
-  #   uiele = NULL
-  #   if(state[["FG"]][["isgood"]]){
-  #     uiele = actionBttn(
-  #               inputId = NS(id, "button_fig_upds"),
-  #               label   = state[["MC"]][["labels"]][["upds_fig"]],
-  #               style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
-  #               size    = state[["MC"]][["formatting"]][["button_fig_upds"]][["size"]],
-  #               color   = "warning",
-  #               icon    = icon("sync"))
-  #   }
-  #   uiele})
     #------------------------------------
     output$ui_fg_copy_fig   = renderUI({
       #req(input$X)
@@ -357,6 +334,7 @@ FG_Server <- function(id,
                   label   = state[["MC"]][["labels"]][["copy_fig"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
                   size    = state[["MC"]][["formatting"]][["button_fig_copy"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["button_fig_copy"]][["block"]],
                   color   = "royal",
                   icon    = icon("copy"))
       }
@@ -368,7 +346,6 @@ FG_Server <- function(id,
       input[["button_fig_save"]]
       input[["button_fig_del"]]
       input[["button_fig_copy"]]
-      input[["button_fig_upds"]]
       input[["select_current_fig"]]
       state = FG_fetch_state(id           = id,
                              input        = input,
@@ -453,6 +430,7 @@ FG_Server <- function(id,
                   label   = state[["MC"]][["labels"]][["add_ele"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
                   size    = state[["MC"]][["formatting"]][["button_fig_add"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["button_fig_add"]][["block"]],
                   color   = "success",
                   icon    = icon("plus"))
       }
@@ -464,7 +442,6 @@ FG_Server <- function(id,
       input[["button_fig_save"]]
       input[["button_fig_del"]]
       input[["button_fig_copy"]]
-      #input[["button_fig_upds"]]
       input[["button_element_add"]]
       state = FG_fetch_state(id           = id,
                              input        = input,
@@ -625,7 +602,6 @@ FG_Server <- function(id,
       input[["button_fig_save"]]
       input[["button_fig_del"]]
       input[["button_fig_copy"]]
-      input[["button_fig_upds"]]
       input[["button_element_add"]]
       state = FG_fetch_state(id           = id,
                              input        = input,
@@ -675,7 +651,38 @@ FG_Server <- function(id,
 
       uiele})
     #------------------------------------
-    # Generating the figure generation code
+    output$ui_fg_curr_views = renderUI({
+      #req(input$X)
+      input[["button_fig_new"]]
+      input[["button_fig_save"]]
+      input[["button_fig_del"]]
+      input[["button_fig_copy"]]
+      input[["button_element_add"]]
+      state = FG_fetch_state(id           = id,
+                             input        = input,
+                             session      = session,
+                             yaml_file    = yaml_file,
+                             yaml_section = yaml_section,
+                             id_UD        = id_UD,
+                             id_DW        = id_DW,
+                             react_state  = react_state)
+
+      uiele = "ui_fg_curr_views"
+
+      current_view_id = NULL
+      choices = c("1")
+      choicesOpt = NULL
+      uiele =
+        shinyWidgets::pickerInput(
+          selected   = current_view_id,
+          inputId    = NS(id, "select_current_view"),
+          label      = state[["MC"]][["labels"]][["select_current_view"]],
+          choices    = choices,
+          width      = state[["MC"]][["formatting"]][["select_current_view"]][["width"]],
+          choicesOpt = choicesOpt)
+
+      uiele})
+    #------------------------------------
     observe({
       # Forcing a reaction to changes from the upload data module
       react_state[[id_UD]]
@@ -684,7 +691,6 @@ FG_Server <- function(id,
       input[["button_fig_save"]]
       input[["button_fig_del"]]
       input[["button_fig_copy"]]
-      input[["button_fig_upds"]]
       input[["button_element_add"]]
       input[["hot_fg_elements"]]
       input[["select_current_fig"]]
@@ -767,7 +773,6 @@ FG_Server <- function(id,
         list(input$button_element_add,
              input$button_fig_new,
              input$button_fig_save,
-             #input$button_fig_upds,
              input$button_fig_copy,
              input$button_fig_del)
       })
@@ -832,6 +837,7 @@ FG_Server <- function(id,
 #'    \item{ui:}               Current value of form elements in the UI.
 #'    \item{ui_ids:}           Vector of UI elements for the module.
 #'    \item{ui_hold:}          List of hold elements to disable updates before a full ui referesh is complete.
+#'    \item{checksum:          checksum of the FG module used to detect changes in the module.}
 #'    \item{aes_elements:}     JMH
 #'    \item{current_fig:}      JMH
 #'    \item{fig_cntr:}         JMH
@@ -844,6 +850,7 @@ FG_Server <- function(id,
 #'        \item{id: Character id (\code{fig_idx})}
 #'        \item{idx: Numeric id (\code{1})}
 #'        \item{fig_dsview:  Name of the dataset view for the current figure.}
+#'        \item{checksum:    checksum of the figure used to detect changes in the figure.}
 #'        \item{UD_checksum: checksum of the UD state when the figure was created.}
 #'        \item{DW_checksum: checksum of DW module if data view was used.}
 #'        \item{DSV_checksum:checksum of the dataset view that was used to create the figure }
@@ -1103,20 +1110,6 @@ FG_fetch_state = function(id,
     # Updating any messages
     state = FG_set_ui_msg(state, msgs)
   }
-  # Update dataset for figure
-# if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_upds"]],
-#                old_val  = state[["FG"]][["button_counters"]][["upds"]])){
-#
-#   FM_le(state, "updating dataset")
-#   msgs = c()
-#   # Saving the button state to the counter
-#   state[["FG"]][["button_counters"]][["upds"]] =
-#     state[["FG"]][["ui"]][["button_fig_upds"]]
-#
-#   # Updating any messages
-#   state = FG_set_ui_msg(state, msgs)
-# }
-
   # Saving the session location
   state[["SESSION_LOCATION"]] = FM_FG_ID
 
@@ -1195,7 +1188,6 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
       "button_fig_save",
       "button_fig_del",
       "button_fig_copy",
-    # "button_fig_upds",
       "button_element_add",
       "hot_fg_elements",
       "text_fig_key",
@@ -1234,15 +1226,13 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
       )
 
   state[["FG"]] = FG_NULL
+  state[["MOD_TYPE"]] = "FG"
+  FM_le(state, "State initialized")
 
   if(isgood){
     # Initializing an empty figure
     state = FG_new_fig(state, id_UD, id_DW, react_state)
   }
-
-  state[["MOD_TYPE"]] = "FG"
-
-  FM_le(state, "State initialized")
 
 state}
 
@@ -1293,6 +1283,7 @@ FG_new_fig    = function(state, id_UD, id_DW, react_state){
          fobj           = NULL,
          msgs           = c(),
          fig_dsview     = fig_dsview,
+         checksum       = digest::digest(NULL, algo=c("md5")),
          UD_checksum    = DSV[["UD_checksum"]],
          DW_checksum    = DSV[["DW_checksum"]],
          DSV_checksum   = DSV[["dsviews"]][["checksum"]][[fig_dsview]],
@@ -1753,20 +1744,52 @@ FG_build = function(state,
   current_fig[["add_isgood"]]       = add_isgood
   current_fig[["fobj"]]             = get(fg_object_name)
   current_fig[["elements_table"]]   = curr_ET
+  current_fig[["checksum"]]         = digest::digest(get(fg_object_name), algo=c("md5"))
+
+
 
   # updating the current figure with the changes above
   state = FG_set_current_fig(state, current_fig)
 
+  # updating the module checksum
+  state = FG_update_checksum(state)
+
 state}
 
+
+#'@export
+#'@title Updates FG Module Checksum
+#'@description Called after any changes to figures, this function will update
+#'the checksum of the module. This allows other modules to determine if there
+#'were any changes to the figures within it.
+#'@param state FG state from \code{FG_fetch_state()}
+#'@return state with checksum updated.
+FG_update_checksum = function(state){
+
+  fig_checksums = c()
+
+  for(fig_id in names(state[["FG"]][["figs"]])){
+    fig_checksums = c(fig_checksums, 
+          state[["FG"]][["figs"]][[fig_id]][["checksum"]])
+  }
+
+  # This concatinates all the individual checksums together into a string.
+  # This will be used to create a module checksum below:
+  all_checksum_string = paste(fig_checksums, collapse=":")
+
+  # updating the checksum
+  state[["FG"]][["checksum"]] = digest::digest(all_checksum_string, algo=c("md5")) 
+
+  FM_le(state, paste0("module checksum updated:", state[["FG"]][["checksum"]]))
+
+state}
 
 #'@export
 #'@title Sets State Message from Button Click
 #'@description Any errors that need to be passed back to the user can be set
 #'with this function.
 #'@param state FG state from \code{FG_fetch_state()}
-#'@param cmd Character vector of messages.
-#'@return state with button message set
+#'@return state with ui message set
 FG_set_ui_msg = function(state, msgs){
 
   if(is.null(msgs)){
