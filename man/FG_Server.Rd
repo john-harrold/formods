@@ -8,8 +8,9 @@ FG_Server(
   id,
   yaml_section = "FG",
   yaml_file = system.file(package = "formods", "templates", "config.yaml"),
-  id_UD = NULL,
-  id_DW = NULL,
+  id_ASM = "ASM",
+  id_UD = "UD",
+  id_DW = "DW",
   react_state = NULL
 )
 }
@@ -19,6 +20,8 @@ FG_Server(
 \item{yaml_section}{Section of the yaml file with the module configuration (\code{"FG"})}
 
 \item{yaml_file}{Upload Data cofiguration file}
+
+\item{id_ASM}{ID string for the app state management module used to save and load app states}
 
 \item{id_UD}{ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.}
 

@@ -13,6 +13,7 @@
 #'@param id An ID string that corresponds with the ID used to call the module's UI function
 #'@param yaml_section  Section of the yaml file with the module configuration (\code{"FG"})
 #'@param yaml_file Upload Data cofiguration file
+#'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
@@ -20,8 +21,9 @@
 FG_Server <- function(id,
                 yaml_section = "FG",
                 yaml_file    = system.file(package = "formods", "templates", "config.yaml"),
-                id_UD        = NULL,
-                id_DW        = NULL,
+                id_ASM       = "ASM",
+                id_UD        = "UD",
+                id_DW        = "DW",
                 react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
 
@@ -41,6 +43,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -97,40 +100,141 @@ FG_Server <- function(id,
 
       uiele})
     #------------------------------------
-    output$ui_fg_preview_ggplot   = renderPlot({
-      # Forcing reactions:
-      input[["button_fig_new"]]
-      input[["button_fig_save"]]
-      input[["button_fig_del"]]
-      input[["button_fig_copy"]]
-      input[["hot_fg_elements"]]
-      input[["button_element_add"]]
-      input[["select_current_fig"]]
-
+    # Creates the ui for the compact view of the module
+    output$FG_ui_compact  =  renderUI({
+      # Forcing a reaction to changes in other modules
+      react_state[[id_UD]]
+      react_state[[id_DW]]
+      react_state[[id_ASM]]
       state = FG_fetch_state(id           = id,
                              input        = input,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
 
       current_fig = FG_fetch_current_fig(state)
-  #   # Figuring out the page to use
-  #   if(state[["FG"]][["ui"]][["select_fig_page"]] == ""){
-  #     # Default to the first page if the select_fig_page ui element hasn't
-  #     # been populated. It wont populate if there is only one page.
-  #     fig_page =  names(current_fig[["pages"]])[1]
-  #   } else {
-  #     fig_page = state[["FG"]][["ui"]][["select_fig_page"]]
-  #   }
 
-      uiele = current_fig[["fobj"]]
+      if(is.null(current_fig)){
+        uiele = state[["MC"]][["labels"]][["no_figures_defined"]]
+      } else {
+        uiele_code_button = NULL
+        # Generating code button if enabled
+        if( state$MC$compact$code){
+          uiele_code = tagList(shinyAce::aceEditor(
+            NS(id, "ui_fg_code"),
+            height  = state[["MC"]][["formatting"]][["code"]][["height"]]
+            ))
 
-      uiele})
+          uiele_code_button = tagList(
+           shinyWidgets::dropdownButton(
+             uiele_code,
+             inline  = FALSE,
+             right   = TRUE ,
+             size    = "sm",
+             circle  = FALSE,
+             width   = state[["MC"]][["formatting"]][["code"]][["width"]],
+             status  = "danger btn-custom-fg",
+             icon    = icon("code", lib="font-awesome"),
+             tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["show_code"]]))
+          )
+
+        }
+
+
+        # Button with FG elements table
+        uiele_fg_elements = rhandsontable::rHandsontableOutput(NS(id, "hot_fg_elements"))
+        uiele_fg_elements_button = tagList(
+         shinyWidgets::dropdownButton(
+           uiele_fg_elements,
+           inline  = FALSE,
+           right   = TRUE ,
+           size    = "sm",
+           circle  = FALSE,
+           status  = "primary btn-custom-fg",
+           icon    = icon("layer-group", lib="font-awesome"),
+           tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["fg_elements"]]))
+        )
+
+        uiele = tagList(
+          div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_curr_figs"))),
+          div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_fig_name"))),
+          tags$br(),
+          verbatimTextOutput(NS(id, "ui_fg_msg"))
+        )
+
+        uiele_buttons_right = tagList(
+                 tags$style(".btn-custom-fg {width: 100px;}"),
+                 div(style="display:inline-block;vertical-align:top",
+                 uiele_fg_elements_button,
+                 uiele_code_button,
+                 htmlOutput(NS(id, "ui_fg_save_fig")),
+                 htmlOutput(NS(id, "ui_fg_copy_fig")),
+                 htmlOutput(NS(id, "ui_fg_del_fig")),
+                 htmlOutput(NS(id, "ui_fg_new_fig"))
+                 ))
+
+        # these are all the save, copy, etc buttons
+        uiele_buttons_left = tagList(
+       #  div(style="display:inline-block;vertical-align:top",
+       #  htmlOutput(NS(id, "ui_fg_save_fig")),
+       #  htmlOutput(NS(id, "ui_fg_copy_fig")),
+       #  htmlOutput(NS(id, "ui_fg_del_fig")),
+       #  htmlOutput(NS(id, "ui_fg_new_fig"))
+       #  )
+        )
+
+        # Appending the preview
+        pvh          = state[["MC"]][["formatting"]][["preview"]][["height"]]
+        pvw          = state[["MC"]][["formatting"]][["preview"]][["width"]]
+        pv_div_style = paste0("height:",pvh,"px;width:",pvw,"px;display:inline-block;vertical-align:top")
+        if(state[["MC"]][["compact"]][["preview"]] == "plotly"){
+          uiele_preview =
+             div(style=pv_div_style,
+               plotly::plotlyOutput(NS("FG", "ui_fg_preview_plotly")))
+           # div(style=pv_div_style,
+           # div(style=pv_div_style,
+           #   plotly::plotlyOutput(NS("FG", "ui_fg_preview_plotly"))),
+           #   htmlOutput(NS("FG", "ui_fg_slider_page")))
+
+        } else {
+          uiele_preview =
+             div(style=pv_div_style,
+               plotOutput(NS("FG", "ui_fg_preview_ggplot"), width="100%", height="100%"))
+        }
+
+        #      htmlOutput(NS("FG", "ui_fg_slider_page"))))
+
+          uiele = tagList(
+            uiele,
+            uiele_buttons_left,
+            uiele_preview,
+            uiele_buttons_right,
+            tags$br(),
+            htmlOutput(NS("FG", "ui_fg_slider_page"))
+          )
+
+        uiele = tagList( uiele,
+          tags$br(),
+          div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_add_element_button"))),
+          div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_select"))),
+          tags$br(),
+          htmlOutput(NS(id, "ui_fg_new_element_row")),
+          tags$br(),
+          verbatimTextOutput(NS(id, "ui_fg_msg"))
+        )
+      }
+
+    uiele})
     #------------------------------------
-    output$ui_fg_preview_plotly   = plotly::renderPlotly({
+    output$ui_fg_preview_ggplot   = renderPlot({
+      # Forcing a reaction to changes in other modules
+      react_state[[id_UD]]
+      react_state[[id_DW]]
+      react_state[[id_ASM]]
       # Forcing reactions:
       input[["button_fig_new"]]
       input[["button_fig_save"]]
@@ -139,26 +243,82 @@ FG_Server <- function(id,
       input[["hot_fg_elements"]]
       input[["button_element_add"]]
       input[["select_current_fig"]]
+
+      input[["select_fg_page"]]
+
       state = FG_fetch_state(id           = id,
                              input        = input,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
+                             id_UD        = id_UD,
+                             id_DW        = id_DW,
+                             react_state  = react_state)
+
+      current_fig = FG_fetch_current_fig(state)
+      fobj = current_fig[["fobj"]]
+
+      if(current_fig[["num_pages"]] > 1){
+        fobj = FG_extract_page(state, current_fig[["page"]])
+      }
+
+
+      fobj})
+    #------------------------------------
+    output$ui_fg_preview_plotly   = plotly::renderPlotly({
+      # Forcing a reaction to changes in other modules
+      react_state[[id_UD]]
+      react_state[[id_DW]]
+      react_state[[id_ASM]]
+      # Forcing reactions:
+      input[["button_fig_new"]]
+      input[["button_fig_save"]]
+      input[["button_fig_del"]]
+      input[["button_fig_copy"]]
+      input[["hot_fg_elements"]]
+      input[["button_element_add"]]
+      input[["select_current_fig"]]
+
+      input[["select_fg_page"]]
+
+      state = FG_fetch_state(id           = id,
+                             input        = input,
+                             session      = session,
+                             yaml_file    = yaml_file,
+                             yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
 
       current_fig = FG_fetch_current_fig(state)
     # # Figuring out the page to use
-    # if(state[["FG"]][["ui"]][["select_fig_page"]] == ""){
-    #   # Default to the first page if the select_fig_page ui element hasn't
+    # if(state[["FG"]][["ui"]][["select_fg_page"]] == ""){
+    #   # Default to the first page if the select_fg_page ui element hasn't
     #   # been populated. It wont populate if there is only one page.
     #   fig_page =  names(current_fig[["pages"]])[1]
     # } else {
-    #   fig_page = state[["FG"]][["ui"]][["select_fig_page"]]
+    #   fig_page = state[["FG"]][["ui"]][["select_fg_page"]]
     # }
 
-      uiele = plotly::ggplotly(current_fig[["fobj"]])
+      current_fig = FG_fetch_current_fig(state)
+      fobj = current_fig[["fobj"]]
+
+      if(current_fig[["num_pages"]] > 1){
+        fobj = FG_extract_page(state, current_fig[["page"]])
+      }
+
+
+
+      if(is.null(fobj)){
+        uiele = NULL
+      }else{
+        uiele = plotly::ggplotly(fobj,
+          width = state[["MC"]][["formatting"]][["preview"]][["width"]],
+          height = state[["MC"]][["formatting"]][["preview"]][["height"]]
+        )
+      }
 
       uiele})
     #------------------------------------
@@ -169,6 +329,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -216,6 +377,10 @@ FG_Server <- function(id,
       uiele})
     #------------------------------------
     output$ui_fg_fig_name  = renderUI({
+      # Forcing a reaction to changes in other modules
+      react_state[[id_UD]]
+      react_state[[id_DW]]
+      react_state[[id_ASM]]
       #req(input$X)
       input[["button_fig_new"]]
       input[["button_fig_save"]]
@@ -227,6 +392,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -254,6 +420,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -278,6 +445,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -301,6 +469,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -324,6 +493,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -341,6 +511,10 @@ FG_Server <- function(id,
       uiele})
     #------------------------------------
     output$ui_fg_fig_cap   = renderUI({
+      # Forcing a reaction to changes in other modules
+      react_state[[id_UD]]
+      react_state[[id_DW]]
+      react_state[[id_ASM]]
       #req(input$X)
       input[["button_fig_new"]]
       input[["button_fig_save"]]
@@ -352,6 +526,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -382,13 +557,24 @@ FG_Server <- function(id,
       uiele})
     #------------------------------------
     output$ui_fg_slider_page = renderUI({
-      # This will update when the preview does
-      req(input$ui_fg_preview)
+      react_state[[id_UD]]
+      react_state[[id_DW]]
+      react_state[[id_ASM]]
+      # Forcing reactions:
+      input[["button_fig_new"]]
+      input[["button_fig_save"]]
+      input[["button_fig_del"]]
+      input[["button_fig_copy"]]
+      input[["hot_fg_elements"]]
+      input[["button_element_add"]]
+      input[["select_current_fig"]]
+
       state = FG_fetch_state(id           = id,
                              input        = input,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -396,19 +582,33 @@ FG_Server <- function(id,
       # Figuring out the pages in the current figure
       current_fig = FG_fetch_current_fig(state)
 
+      uiele =  " "
+      if(current_fig[["num_pages"]] > 1){
+        pages = c(1:current_fig[["num_pages"]])
+        uiele =
+           sliderTextInput(
+             inputId  = NS(id, "select_fg_page"),
+             label    = NULL,
+             width    = state[["MC"]][["formatting"]][["select_fg_page"]][["width"]],
+             grid     = TRUE,
+             selected = current_fig[["page"]],
+             choices  = pages
+           # options  = list(
+           #   title = state[["MC"]][["labels"]][["fds_mutate_column"]])
+           )
+     
 
-      uiele = 1
-    # if(length(pages) > 1){
-    #   uiele =
-    #      pickerInput(
-    #        inputId  = NS(id, "select_fig_page"),
-    #        label    = NULL,
-    #        width    = 200,
-    #        choices  = pages
-    #      # options  = list(
-    #      #   title = state[["MC"]][["labels"]][["fds_mutate_column"]])
-    #      )
-    # }
+
+#       uiele = 
+#       noUiSliderInput(
+#            inputId  = NS(id, "select_fg_page"),
+#            label    = NULL,
+#            value    = current_fig[["page"]],
+#            min      = 1,
+#            max      = current_fig[["num_pages"]],
+#            step     = 1
+#                       )
+      }
 
       uiele})
     #------------------------------------
@@ -419,6 +619,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -448,6 +649,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -464,6 +666,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -597,6 +800,10 @@ FG_Server <- function(id,
       uiele})
     #------------------------------------
     output$ui_fg_curr_figs = renderUI({
+      # Forcing a reaction to changes in other modules
+      react_state[[id_UD]]
+      react_state[[id_DW]]
+      react_state[[id_ASM]]
       #req(input$X)
       input[["button_fig_new"]]
       input[["button_fig_save"]]
@@ -608,6 +815,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -652,25 +860,48 @@ FG_Server <- function(id,
       uiele})
     #------------------------------------
     output$ui_fg_curr_views = renderUI({
+      # Forcing a reaction to changes in other modules
+      react_state[[id_UD]]
+      react_state[[id_DW]]
+      react_state[[id_ASM]]
       #req(input$X)
       input[["button_fig_new"]]
       input[["button_fig_save"]]
       input[["button_fig_del"]]
       input[["button_fig_copy"]]
       input[["button_element_add"]]
+
       state = FG_fetch_state(id           = id,
                              input        = input,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
 
       uiele = "ui_fg_curr_views"
 
-      current_view_id = NULL
-      choices = c("1")
+      current_fig = FG_fetch_current_fig(state)
+
+      # Pulling out the data set views summary:
+      dsv_summary = state[["FG"]][["DSV"]][["dsviews"]][["dsv_summary"]]
+
+      if(current_fig[["fig_dsview"]] %in% dsv_summary[["view_key"]]){
+        current_view_id=value = current_fig[["fig_dsview"]]
+      } else {
+        current_view_id = dsv_summary[["view_key"]][1]
+        FM_le(state, paste0("ui_fg_curr_views: dataset view missing."   ))
+        FM_le(state, paste0("fig_key: ",     current_fig[["key"]]       ))
+        FM_le(state, paste0("fig_dsview: ",  current_fig[["fig_dsview"]]))
+        FM_le(state, paste0("switching to view:", current_view_id ))
+      }
+
+      choices        = dsv_summary[["view_key"]]
+      names(choices) = dsv_summary[["description"]]
+      #current_view_id = NULL
+      #choices = c("1")
       choicesOpt = NULL
       uiele =
         shinyWidgets::pickerInput(
@@ -684,9 +915,10 @@ FG_Server <- function(id,
       uiele})
     #------------------------------------
     observe({
-      # Forcing a reaction to changes from the upload data module
+      # Forcing a reaction to changes in other modules
       react_state[[id_UD]]
       react_state[[id_DW]]
+      react_state[[id_ASM]]
       input[["button_fig_new"]]
       input[["button_fig_save"]]
       input[["button_fig_del"]]
@@ -700,6 +932,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -723,48 +956,6 @@ FG_Server <- function(id,
         value           = uiele)
 
       })
-
-    #------------------------------------
-    # Creates the ui for the compact view of the module
-    output$FG_ui_compact  =  renderUI({
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
-
-      uiele = NULL
-
-    # uiele_main = tagList(
-    #   div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_select"))),
-    #   div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_add_element_button"))),
-    #    htmlOutput(NS(id, "ui_dw_new_element_row")),
-    #    verbatimTextOutput(NS(id, "ui_dw_new_element_msg")),
-    #    rhandsontable::rHandsontableOutput(NS(id, "hot_dw_elements")))
-    # if( state$MC$compact$preview){
-    #   uiele_main = tagList(uiele_main, tags$br(),
-    #     rhandsontable::rHandsontableOutput(NS(id, "hot_data_preview")))
-    # }
-    #
-    # if( state$MC$compact$code){
-    # # uiele_preview = tagList(htmlOutput(NS(id, "UD_ui_data_preview")))
-    #   uiele_code = tagList(shinyAce::aceEditor(NS(id, "ui_dw_code")))
-    #
-    #   uiele_str ="tabPanel(state$MC$labels$tab_main,   uiele_main)"
-    #   if(state$MC$compact$code){
-    #     uiele_str = paste0(uiele_str, ",tabPanel(state$MC$labels$tab_code, uiele_code)") }
-    #
-    #   uiele_str = paste0("tabsetPanel(",uiele_str, ")")
-    #
-    #   uiele = eval(parse(text=uiele_str))
-    # } else {
-    #   uiele = uiele_main
-    # }
-
-    uiele})
     #------------------------------------
     # Creating reaction if a variable has been specified
     if(!is.null(react_state)){
@@ -784,6 +975,7 @@ FG_Server <- function(id,
                              session      = session,
                              yaml_file    = yaml_file,
                              yaml_section = yaml_section,
+                             id_ASM       = id_ASM,
                              id_UD        = id_UD,
                              id_DW        = id_DW,
                              react_state  = react_state)
@@ -794,19 +986,29 @@ FG_Server <- function(id,
     }
 
     # Removing holds
-    observeEvent(input$select_current_fig, {
-      # Once that's generated we need to remove any holds on this UI element
-        state = FG_fetch_state(
-                             id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
-      remove_hold(state, session, "select_current_fig")
-    }, priority = 100)
+    remove_hold_listen  <- reactive({
+      list(input$select_current_fig)
+    })
+    observeEvent(remove_hold_listen(), {
+      # Once the UI has been regenerated we
+      # remove any holds for this module
+      state = FG_fetch_state(
+        id           = id,
+        input        = input,
+        session      = session,
+        yaml_file    = yaml_file,
+        yaml_section = yaml_section,
+        id_ASM       = id_ASM,
+        id_UD        = id_UD,
+        id_DW        = id_DW,
+        react_state  = react_state)
+      FM_le(state, "removing holds")
+      # Removing all holds
+      for(hname in names(state[["FG"]][["ui_hold"]])){
+        remove_hold(state, session, hname)
+      }
+    }, priority = -100)
+
 
   })
 }
@@ -820,6 +1022,7 @@ FG_Server <- function(id,
 #'@param session Shiny session variable
 #'@param yaml_file cofiguration file
 #'@param yaml_section  Section of the yaml file with the module configuration
+#'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
@@ -861,7 +1064,7 @@ FG_Server <- function(id,
 #'      }
 #'  }
 #'  \item{MOD_TYPE:} Character data containing the type of module \code{"DW"}
-#'  \item{SESSION_LOCATION:} Character data containing the location of this
+#'  \item{id:} Character data containing the module id
 #'  module in the session variable.
 #'}
 FG_fetch_state = function(id,
@@ -869,37 +1072,65 @@ FG_fetch_state = function(id,
                           session,
                           yaml_file,
                           yaml_section,
-                          id_UD = NULL,
-                          id_DW = NULL,
+                          id_ASM = NULL,
+                          id_UD  = NULL,
+                          id_DW  = NULL,
                           react_state){
 
   # After the app has loaded the state must be initialized
-  FM_FG_ID = paste0("FM_FG_", id)
 
   #---------------------------------------------
   # Getting the current state
-  if(is.null(session$userData[[FM_FG_ID]])){
+  state = FM_fetch_mod_state(session, id)
+  # If the state has not yet been defined then we
+  # initialize it
+
+  if(is.null(state)){
     # General state information
     state = FG_init_state(yaml_file    = yaml_file,
                           yaml_section = yaml_section,
+                          id           = id,
                           id_UD        = id_UD,
                           id_DW        = id_DW,
                           react_state  = react_state)
-  } else {
-    # If it's not null we just pluck the state
-    # from the session variable
-    state = session$userData[[FM_FG_ID]]
   }
 
- #---------------------------------------------
- # Here we update the state based on user input
- for(ui_name in state[["FG"]][["ui_ids"]]){
-   if(!is.null(isolate(input[[ui_name]]))){
-      state[["FG"]][["ui"]][[ui_name]] = isolate(input[[ui_name]])
-    } else {
-      state[["FG"]][["ui"]][[ui_name]] = ""
+  # detecting changes in the datasets
+  UPDATE_DS = FALSE
+  if("checksum" %in% names(isolate(react_state[[id_UD]][["UD"]]))){
+    if(!is.null(isolate(react_state[[id_UD]][["UD"]][["checksum"]]))){
+      if(is.null(state[["FG"]][["DSV"]][["UD_checksum"]])){
+        # If the UD checksum isn't NULL but the stored value in DSV is then we
+        # need to update the dataset
+        UPDATE_DS = TRUE
+      } else if(isolate(react_state[[id_UD]][["UD"]][["checksum"]]) !=
+                state[["FG"]][["DSV"]][["UD_checksum"]]){
+        # If the stored checksum in DSV is different than the currently
+        # uploaded dataset in UD then we force a reset as well:
+        UPDATE_DS = TRUE
+      }
     }
   }
+
+  if(UPDATE_DS){
+    FM_le(state, "Updateing DS")
+    state = FG_init_state(yaml_file    = yaml_file,
+                          yaml_section = yaml_section,
+                          id           = id,
+                          id_UD        = id_UD,
+                          id_DW        = id_DW,
+                          react_state  = react_state)
+
+  }
+  #---------------------------------------------
+  # Here we update the state based on user input
+  for(ui_name in state[["FG"]][["ui_ids"]]){
+    if(!is.null(isolate(input[[ui_name]]))){
+       state[["FG"]][["ui"]][[ui_name]] = isolate(input[[ui_name]])
+     } else {
+       state[["FG"]][["ui"]][[ui_name]] = ""
+     }
+   }
 
   #---------------------------------------------
   # Reacting to button clicks
@@ -929,14 +1160,54 @@ FG_fetch_state = function(id,
   # Detecting figure selection changes
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["select_current_fig"]],
                  old_val  = state[["FG"]][["current_fig"]]) &
-      (!state[["FG"]][["ui_hold"]][["select_current_fig"]]) ){
+      (!fetch_hold(state, "select_current_fig"))){
 
     # Changing the current view to the one selected in the UI
     state[["FG"]][["current_fig"]]  =  state[["FG"]][["ui"]][["select_current_fig"]]
   }
+
+  # Detecting page selects
+  if(has_changed(ui_val   = state[["FG"]][["ui"]][["select_fg_page"]],
+                 old_val  =  FG_fetch_current_fig(state)[["page"]])
+      #(!fetch_hold(state, "select_fg_page"))
+      ){
+
+
+    FM_le(state, "figure page change detected")
+
+    # pulling the current figure
+    current_fig = FG_fetch_current_fig(state)
+
+    # updating the view id
+    current_fig[["page"]] = state[["FG"]][["ui"]][["select_fg_page"]]
+
+    # saving the updated figure
+    state = FG_set_current_fig(state, current_fig)
+
+  }
+  # Processing changes to the figure dataset view
+  if(has_changed(ui_val   = state[["FG"]][["ui"]][["select_current_view"]],
+                 old_val  =  FG_fetch_current_fig(state)[["fig_dsview"]])
+     #(!fetch_hold(state, "select_current_fig"))
+      ){
+
+    # JMH we probably need a hold here when changing figures. Test this after
+    # the DW module has been integrated.
+    FM_le(state, "dsview change detected")
+
+    # pulling the current figure
+    current_fig = FG_fetch_current_fig(state)
+
+    # updating the view id
+    current_fig[["fig_dsview"]] = state[["FG"]][["ui"]][["select_current_view"]]
+
+    # saving the updated figure
+    state = FG_set_current_fig(state, current_fig)
+  }
+
   # Adding a new element
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_element_add"]],
-                 old_val  = state[["FG"]][["button_counters"]][["add"]])){
+                 old_val  = state[["FG"]][["button_counters"]][["button_element_add"]])){
 
     FM_le(state, "adding figure element")
     msgs = c()
@@ -959,7 +1230,7 @@ FG_fetch_state = function(id,
     }
 
     # Saving the button state to the counter
-    state[["FG"]][["button_counters"]][["add"]] =
+    state[["FG"]][["button_counters"]][["button_element_add"]] =
       state[["FG"]][["ui"]][["button_element_add"]]
 
     # pulling out the current figure to extract any messages
@@ -968,11 +1239,11 @@ FG_fetch_state = function(id,
     msgs = c(msgs, current_fig[["msgs"]])
 
     # Updating any messages
-    state = FG_set_ui_msg(state, msgs)
+    state = FM_set_ui_msg(state, msgs)
   }
   # New figure
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_new"]],
-                 old_val  = state[["FG"]][["button_counters"]][["new"]])){
+                 old_val  = state[["FG"]][["button_counters"]][["button_fig_new"]])){
 
     FM_le(state, "creating new figure")
     msgs = c()
@@ -981,18 +1252,18 @@ FG_fetch_state = function(id,
     state = FG_new_fig(state, id_UD, id_DW, react_state)
 
     # Setting hold for figure select
-    state[["FG"]][["ui_hold"]][["select_current_fig"]] = TRUE
+    state = set_hold(state, inputId = "select_current_fig")
 
     # Saving the button state to the counter
-    state[["FG"]][["button_counters"]][["new"]] =
+    state[["FG"]][["button_counters"]][["button_fig_new"]] =
       state[["FG"]][["ui"]][["button_fig_new"]]
 
     # Updating any messages
-    state = FG_set_ui_msg(state, msgs)
+    state = FM_set_ui_msg(state, msgs)
   }
   # Delete figure
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_del"]],
-                 old_val  = state[["FG"]][["button_counters"]][["del"]])){
+                 old_val  = state[["FG"]][["button_counters"]][["button_fig_del"]])){
 
     FM_le(state, "deleting figure")
     msgs = c()
@@ -1012,18 +1283,18 @@ FG_fetch_state = function(id,
     }
 
     # Setting hold for figure select
-    state[["FG"]][["ui_hold"]][["select_current_fig"]] = TRUE
+    state = set_hold(state, inputId = "select_current_fig")
 
     # Saving the button state to the counter
-    state[["FG"]][["button_counters"]][["del"]] =
+    state[["FG"]][["button_counters"]][["button_fig_del"]] =
       state[["FG"]][["ui"]][["button_fig_del"]]
 
     # Updating any messages
-    state = FG_set_ui_msg(state, msgs)
+    state = FM_set_ui_msg(state, msgs)
   }
   # Save figure
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_save"]],
-                 old_val  = state[["FG"]][["button_counters"]][["save"]])){
+                 old_val  = state[["FG"]][["button_counters"]][["button_fig_save"]])){
 
     FM_le(state, "saving changes to current figure")
     msgs = c()
@@ -1047,15 +1318,15 @@ FG_fetch_state = function(id,
     state = FG_set_current_fig(state, current_fig)
 
     # Saving the button state to the counter
-    state[["FG"]][["button_counters"]][["save"]] =
+    state[["FG"]][["button_counters"]][["button_fig_save"]] =
       state[["FG"]][["ui"]][["button_fig_save"]]
 
     # Updating any messages
-    state = FG_set_ui_msg(state, msgs)
+    state = FM_set_ui_msg(state, msgs)
   }
   # Copy figure
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_copy"]],
-                 old_val  = state[["FG"]][["button_counters"]][["copy"]])){
+                 old_val  = state[["FG"]][["button_counters"]][["button_fig_copy"]])){
 
     FM_le(state, "copying figure")
     msgs = c()
@@ -1101,20 +1372,18 @@ FG_fetch_state = function(id,
     state = FG_set_current_fig(state, new_fig)
 
     # Setting hold for figure select
-    state[["FG"]][["ui_hold"]][["select_current_fig"]] = TRUE
+    state = set_hold(state, inputId = "select_current_fig")
 
     # Saving the button state to the counter
-    state[["FG"]][["button_counters"]][["copy"]] =
+    state[["FG"]][["button_counters"]][["button_fig_copy"]] =
       state[["FG"]][["ui"]][["button_fig_copy"]]
 
     # Updating any messages
-    state = FG_set_ui_msg(state, msgs)
+    state = FM_set_ui_msg(state, msgs)
   }
-  # Saving the session location
-  state[["SESSION_LOCATION"]] = FM_FG_ID
 
   # Saving the state
-  session$userData[[FM_FG_ID]] = state
+  FM_set_mod_state(session, id, state)
 
   # Returning the state
 
@@ -1126,11 +1395,12 @@ state}
 #'@description Creates a list of the initialized module state
 #'@param yaml_file App cofiguration file
 #'@param yaml_section  Section of the yaml file with the module configuration
+#'@param id Shiny module ID
 #'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return list containing an empty app state object
-FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
+FG_init_state = function(yaml_file, yaml_section, id, id_UD, id_DW, react_state){
   state = list()
   # Reading in default information from the yaml file
   state[["yaml"]] = yaml::read_yaml(yaml_file)
@@ -1141,15 +1411,6 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
   isgood = TRUE
 
 
-  #---------------------------------------------
-  # Finding the dataset
-  DSV = FM_fetch_dsviews(
-    state       = state,
-    id_UD       = id_UD,
-    id_DW       = id_DW,
-    react_state = react_state)
-
-
   # Plot elements defined by aesthetics
   aes_elements = c("line", "point", "hguide", "vguide")
 
@@ -1158,12 +1419,6 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
   # specified explicitly and others will be generated on the fly from the
   # configuration file.
   ui_ids = c()
-
-  # If the dataset isn't good then we need to
-  # flag the whole module as not being good
-  if(!DSV[["isgood"]]){
-    isgood = FALSE
-  }
 
   # We only do the rest if
   if(isgood){
@@ -1195,8 +1450,9 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
       "text_component_xlab",
       "text_component_ylab",
       "text_component_ggtitle",
-      "select_fig_page",
+      "select_fg_page",
       "select_current_fig",
+      "select_current_view",
       "select_component_facet",
       "select_fg_element")
 
@@ -1205,28 +1461,63 @@ FG_init_state = function(yaml_file, yaml_section, id_UD, id_DW, react_state){
     ui_ids = unique(ui_ids)
   }
 
-  # Defaults for the module
-  FG_NULL =
-    list(isgood           = isgood,
-      button_counters = list(            # Counters to track button clicks
-        "add"             = 0,           # Element: Adding a new element
-        "save"            = 0,           # Figure:  Saving the current figure
-        "new"             = 0,           # Figure:  New blank figure
-        "del"             = 0,           # Figure:  Delete the current figure
-        "copy"            = 0,           # Figure:  Copy the current figure
-        "upds"            = 0),          # Figure:  Update the dataset for the current figure
-      aes_elements     = aes_elements,   # Plot elements defined by aesthetics
-      figs             = NULL,           # Placeholder for the figures
-      fig_cntr         = 0,              # Internal counter for creating unique figure ids
-      current_fig      = NULL,           # currently active fig id
-      ui_hold          = list(           # List of states to hold to prevent updates/refresh until after ui has been rebuilt with the curretn state
-       select_current_fig = FALSE  ),
-      ui_ids           = ui_ids,         # List of the possible ui_ids in the model
-      DSV              = DSV             # List containing the dataset views from FM_fetch_dsviews()
-      )
+  state_tmp = state
 
-  state[["FG"]] = FG_NULL
-  state[["MOD_TYPE"]] = "FG"
+  # Names of button elements:
+  button_counters = c(
+    "button_element_add",     # Element: Adding a new element
+    "button_fig_save"   ,     # Figure:  Saving the current figure
+    "button_fig_new"    ,     # Figure:  New blank figure
+    "button_fig_del"    ,     # Figure:  Delete the current figure
+    "button_fig_copy"         # Figure:  Copy the current figure
+    )
+
+  # Hold-able UI elements
+  ui_hold = c(
+    "hot_fg_elements"    ,
+    "text_fig_key"       ,
+    "text_fig_cap"       ,
+    "select_current_view",
+    "select_current_fig"
+    )
+
+  # Populating the formods state elements
+  state = FM_init_state(
+    yaml_file       = yaml_file,
+    yaml_section    = yaml_section,
+    id              = id,
+    MT              = "FG",
+    button_counters = button_counters,
+    ui_ids          = ui_ids,
+    ui_hold         = ui_hold)
+
+  state[["MC"]] = state_tmp[["MC"]]
+
+  #---------------------------------------------
+  # Finding the dataset
+  DSV = FM_fetch_dsviews(
+    state       = state,
+    id_UD       = id_UD,
+    id_DW       = id_DW,
+    react_state = react_state)
+
+  # If the dataset isn't good then we need to
+  # flag the whole module as not being good
+  if(!DSV[["isgood"]]){
+    isgood = FALSE
+  }
+
+  # Module-specific elements
+  state[["FG"]][["isgood"]]        = isgood
+  state[["FG"]][["DSV"]]           = DSV
+  state[["FG"]][["figs"]]          = NULL
+  state[["FG"]][["fig_cntr"]]      = 0
+  state[["FG"]][["current_fig"]]   = NULL
+  state[["FG"]][["aes_elements"]]  = aes_elements
+
+
+
+
   FM_le(state, "State initialized")
 
   if(isgood){
@@ -1278,6 +1569,7 @@ FG_new_fig    = function(state, id_UD, id_DW, react_state){
     list(key            = fig_id,
          id             = fig_id,
          idx            = state[["FG"]][["fig_cntr"]],
+         page           = 1,
          num_pages      = 1,
          fg_object_name = fg_object_name,
          fobj           = NULL,
@@ -1453,18 +1745,35 @@ fers_builder = function(state){
     } else {
       # The faceting command will depend on the number of columns selected
       if(length(ui[["select_component_facet"]]) == 2){
+        state[["MC"]][["formatting"]][["faceting"]][["cols"]]
         cmd = paste0(
                      fg_object_name , " = ", fg_object_name, " + ",
-                     "facet_grid(",
+                     "ggforce::facet_grid_paginate(",
                      ui[["select_component_facet"]][1],
                      "~",
-                     ui[["select_component_facet"]][2], ")")
+                     ui[["select_component_facet"]][2],
+                     ", nrow = ", state[["MC"]][["formatting"]][["faceting"]][["nrow"]],
+                     ", ncol = ", state[["MC"]][["formatting"]][["faceting"]][["ncol"]],
+                     ", page=1",
+                     ")")
+
       } else{
         cmd = paste0(
                      fg_object_name , " = ", fg_object_name, " + ",
-                     "facet_wrap(vars(",
+                     "ggforce::facet_wrap_paginate(vars(",
                      paste0(ui[["select_component_facet"]], collapse=", ")
-                     , "))")
+                     , ")",
+                     ", nrow = ", state[["MC"]][["formatting"]][["faceting"]][["nrow"]],
+                     ", ncol = ", state[["MC"]][["formatting"]][["faceting"]][["ncol"]],
+                     ", page=1",
+                     ")")
+
+      # cmd = paste0(
+      #              fg_object_name , " = ", fg_object_name, " + ",
+      #              "facet_wrap(vars(",
+      #              paste0(ui[["select_component_facet"]], collapse=", ")
+      #              , "))")
+      #
       }
 
       desc = paste0(ui[["select_component_facet"]], collapse= ", ")
@@ -1769,7 +2078,7 @@ FG_update_checksum = function(state){
   fig_checksums = c()
 
   for(fig_id in names(state[["FG"]][["figs"]])){
-    fig_checksums = c(fig_checksums, 
+    fig_checksums = c(fig_checksums,
           state[["FG"]][["figs"]][[fig_id]][["checksum"]])
   }
 
@@ -1778,24 +2087,51 @@ FG_update_checksum = function(state){
   all_checksum_string = paste(fig_checksums, collapse=":")
 
   # updating the checksum
-  state[["FG"]][["checksum"]] = digest::digest(all_checksum_string, algo=c("md5")) 
+  state[["FG"]][["checksum"]] = digest::digest(all_checksum_string, algo=c("md5"))
 
   FM_le(state, paste0("module checksum updated:", state[["FG"]][["checksum"]]))
 
 state}
 
-#'@export
-#'@title Sets State Message from Button Click
-#'@description Any errors that need to be passed back to the user can be set
-#'with this function.
-#'@param state FG state from \code{FG_fetch_state()}
-#'@return state with ui message set
-FG_set_ui_msg = function(state, msgs){
 
-  if(is.null(msgs)){
-    state[["FG"]][["ui_msg"]] = NULL
+#'@export
+#'@title Extracts Specific Page from Paginated Figure
+#'@description Called after any changes to figures, this function will update
+#'the checksum of the module. This allows other modules to determine if there
+#'were any changes to the figures within it.
+#'@param state FG state from \code{FG_fetch_state()}
+#'@param page  Page number to extract
+#'@return state with checksum updated.
+FG_extract_page  = function(state, page){
+
+  # Current figure
+  current_fig = FG_fetch_current_fig(state)
+
+  # Current ggplot object
+  fobj = current_fig[["fobj"]]
+
+  # Creating the named figure object locally
+  assign(current_fig[["fg_object_name"]], fobj)
+
+  facet_row = current_fig[["elements_table"]] %>%
+    dplyr::filter(.data[["Element"]] =="facet")
+
+  if(nrow(facet_row > 0)){
+    # original faceting command
+    facet_cmd = facet_row[1,][["cmd"]]
+
+    # replacing the page number
+    facet_cmd = stringr::str_replace(facet_cmd, "page=1", paste0("page=", page))
+
+    # Pulling out the faceting command
+    eval(parse(text=facet_cmd))
+
+    # replacing the object
+    fobj = get(current_fig[["fg_object_name"]])
+
   } else {
-    state[["FG"]][["ui_msg"]] = paste(msgs, collapse = "\n")
+    FM_le(state, "unable to extract figure page, no facet elements found")
+    FM_le(state, paste0(  "figure id: ", current_fig[["id"]]))
   }
 
-state}
+fobj}

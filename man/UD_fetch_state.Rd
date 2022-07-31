@@ -4,10 +4,12 @@
 \alias{UD_fetch_state}
 \title{Fetch Upload Data State}
 \usage{
-UD_fetch_state(id, input, session, yaml_file, yaml_section)
+UD_fetch_state(id, id_ASM, input, session, yaml_file, yaml_section)
 }
 \arguments{
 \item{id}{Shiny module ID}
+
+\item{id_ASM}{ID string for the app state management module used to save and load app states}
 
 \item{input}{Shiny input variable}
 
@@ -30,16 +32,17 @@ has the following structure:
   \item{load_msg:} Text message indicated the success or any problems
   encountered when uploading the file.
   \item{data_file_local:} Full path to the data file on the server.
-  \item{data_file:} Dataset file name without the path. 
+  \item{data_file:} Dataset file name without the path.
   \item{data_file_ext:} File extension of the uploaded file.
   \item{sheet:} If the uploaded file is an excel file, this is the
   currently selected sheet.
-  \item{sheets:} If the uploaded file is an excel file, this is a character
-  vector of the sheets present in that file.
+  \item{sheets:} If the uploaded file is an excel file, this is a character vector of the sheets present in that file.
   \item{contents:} Data frame containting the contents of the data file.
   \item{checksum:} This is an MD5 sum of the contents element and can be
   used to detect changes in the loaded file.
 }
+ \item{MOD_TYPE:} Character data containing the type of module \code{"UD"}
+ \item{id:} Character data containing the module id module in the session variable.
 }
 }
 \description{

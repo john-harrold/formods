@@ -4,12 +4,14 @@
 \alias{FG_init_state}
 \title{Initialize FG Module State}
 \usage{
-FG_init_state(yaml_file, yaml_section, id_UD, id_DW, react_state)
+FG_init_state(yaml_file, yaml_section, id, id_UD, id_DW, react_state)
 }
 \arguments{
 \item{yaml_file}{App cofiguration file}
 
 \item{yaml_section}{Section of the yaml file with the module configuration}
+
+\item{id}{Shiny module ID}
 
 \item{id_UD}{ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.}
 

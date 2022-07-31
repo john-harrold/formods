@@ -8,6 +8,7 @@ DW_Server(
   id,
   yaml_section = "DW",
   yaml_file = system.file(package = "formods", "templates", "config.yaml"),
+  id_ASM = "ASM",
   id_UD = "UD",
   react_state = NULL
 )
@@ -19,6 +20,8 @@ DW_Server(
 configuration (\code{"DW"})}
 
 \item{yaml_file}{Upload Data cofiguration file}
+
+\item{id_ASM}{ID string for the app state managment module used to save and load app states}
 
 \item{id_UD}{ID string for the upload data module used to handle uploads or
 the name of the list element in react_state where the data set is stored.}

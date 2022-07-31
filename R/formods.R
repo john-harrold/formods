@@ -48,14 +48,16 @@ FM_fetch_dsviews = function(state, id_UD, id_DW, react_state){
   UD_checksum  = NULL
   active       = ""
 
-
   # First we check the upload data module
   if(id_UD %in% names(react_state)){
-    tmp_checksum    = isolate(react_state[[id_UD]][["DS"]][["checksum"]])
-    tmp_contents    = isolate(react_state[[id_UD]][["DS"]][["contents"]])
-    tmp_object_name = isolate(react_state[[id_UD]][["DS"]][["object_name"]])
-    tmp_code        = isolate(react_state[[id_UD]][["DS"]][["code"]])
-    # If both of these are not null then we're good:
+    tmp_checksum    = isolate(react_state[[id_UD]][["UD"]][["checksum"]])
+    tmp_contents    = isolate(react_state[[id_UD]][["UD"]][["contents"]])
+    tmp_object_name = isolate(react_state[[id_UD]][["UD"]][["object_name"]])
+    tmp_code        = isolate(react_state[[id_UD]][["UD"]][["code"]])
+    # FM_le(state, paste0("checksum:    ", is.null(tmp_checksum)))
+    # FM_le(state, paste0("object_name: ", is.null(tmp_object_name)))
+    # FM_le(state, paste0("contents:    ", is.null(tmp_contents)))
+    # If these three are not null then we're good:
     if(!is.null(tmp_checksum)    &
        !is.null(tmp_object_name) &
        !is.null(tmp_contents)){
@@ -93,9 +95,8 @@ FM_fetch_dsviews = function(state, id_UD, id_DW, react_state){
   # Next we append any data views from the
   # Data wrangling module
   if(id_DW %in% names(react_state)){
-    browser()
+    #browser()
   }
-
 
   # putting it all together
   res = list(
@@ -189,46 +190,139 @@ res}
 #'@return NULL
 remove_hold = function(state, session, inputId){
 
-  FM_ID    = state[["SESSION_LOCATION"]]
+  #FM_ID    = state[["SESSION_LOCATION"]]
+  FM_ID = paste0("FM_", state[["id"]])
+
   MOD_TYPE = state[["MOD_TYPE"]]
 
   # pulling out the state
-  state = session$userData[[FM_ID]]
+  state = session$userData[["FM"]][[FM_ID]]
 
   # removing hold on inputId
   state[[MOD_TYPE]][["ui_hold"]][[inputId]] = FALSE
 
   # Saving the state
-  session$userData[[FM_ID]] = state
+  session$userData[["FM"]][[FM_ID]] = state
 
 NULL}
+
+
+#'@export
+#'@title Sets Hold on One or All UI Elements
+#'@description When some buttons are clicked they will change the state of the
+#'system, but other UI components will not detect that change correctly. So those
+#'triggers are put on hold. This will set the hold for a specified inputId or
+#'all ids if that value is set to NULL
+#'@param state module state with all of the current ui elements populated
+#'@param inputId The input ID of the UI element that was put on hold or
+#'\code{NULL} to hold all IDs in the module
+#'@return state with hold or holds set
+set_hold = function(state, inputId=NULL){
+
+  isgood = TRUE
+  MOD_TYPE = state[["MOD_TYPE"]]
+  if(is.null(inputId)){
+    # here we set the hold for all inputIds in the module
+    if(tmpinputID %in% names(state[[MOD_TYPE]][["ui_hold"]])){
+      state[[MOD_TYPE]][["ui_hold"]][[tmpinputId]] = TRUE
+    }
+  } else {
+    if(inputId %in% names(state[[MOD_TYPE]][["ui_hold"]])){
+      state[[MOD_TYPE]][["ui_hold"]][[inputId]] = TRUE
+    }else{
+      # here we set the hold for a single inputId
+      cli::cli_alert_danger(paste0("Unable to set hold for unknown inputId: ", inputId))
+      isgood = FALSE
+    }
+  }
+
+  if(!isgood){
+    stop("Hold not set") }
+
+state}
+
+#'@export
+#'@title Fetches the Hold Status UI Element Supplied
+#'@description When some buttons are clicked they will change the state of the
+#'system, but other UI components will not detect that change correctly. So those
+#'triggers are put on hold. This will fetch hold status for a specified inputId
+#'@param state module state with all of the current ui elements populated
+#'@param inputId The input ID of the UI element that was put on hold
+#'@return Boolean value with the hold status
+fetch_hold = function(state, inputId=NULL){
+
+  hold_status = NULL
+  isgood = TRUE
+
+  MOD_TYPE = state[["MOD_TYPE"]]
+  if(is.null(inputId)){
+    isgood = FALSE
+  } else {
+    if(inputId %in% names(state[[MOD_TYPE]][["ui_hold"]])){
+      hold_status =   state[[MOD_TYPE]][["ui_hold"]][[inputId]]
+    }else{
+      # here we set the hold for a single inputId
+      browser()
+      stop(paste0("Unable to fetch hold for unknown inputId: ", inputId))
+      isgood = FALSE
+    }
+  }
+
+  if(!isgood){
+    stop("Hold status not found") }
+
+hold_status}
+
+
+
 
 #'@export
 #'@title Fetches the path to the log file
 #'@description Use this to get the path to the formods log file
 #'@param state module state after yaml read
 #'@return Character string with the path to the log file.
-FG_fetch_log_path = function(state){
+FM_fetch_log_path = function(state){
 
   res = state[["yaml"]][["FM"]][["logging"]][["log_file"]]
 
-  if(!is.null(state[["yaml"]][["FM"]][["logging"]][["use_tmpdir"]])){
-    if(state[["yaml"]][["FM"]][["logging"]][["use_tmpdir"]]){
-      res  = file.path(tempdir(), res)
-    }
-  }
+  res = file.path(FM_fetch_user_files_path(state), res)
 res}
 
+#'@export
+#'@title Fetches the path to the user files
+#'@description Use this to get the path to the formods log file
+#'@param state module state after yaml read
+#'@return Character string with the path to the log file.
+FM_fetch_user_files_path = function(state){
+
+  # Finding the path to the user directory:
+  use_tmpdir = TRUE
+  if(!is.null(state[["yaml"]][["FM"]][["user_"]][["use_tmpdir"]])){
+    use_tmpdir = state[["yaml"]][["FM"]][["logging"]][["use_tmpdir"]]
+  }
+
+  if(use_tmpdir){
+    user_dir = file.path(tempdir(), "FM")
+  } else{
+    user_dir = file.path(getwd(), "FM")
+  }
+
+  # Making sure the directory exits
+  if(!dir.exists(user_dir)){
+    dir.create(user_dir, recursive = TRUE)
+  }
+
+user_dir}
 
 #'@export
-#'@title Appends entry to log file 
+#'@title Appends entry to log file
 #'@description Add the supplied txt and the module type to the log file
 #'@param state module state after yaml read
 #'@param entry text to add
 #'@return NULL
 FM_le = function(state, entry){
   # pulling out the log file
-  log_file = FG_fetch_log_path(state)
+  log_file = FM_fetch_log_path(state)
 
   isgood = NULL
 
@@ -255,7 +349,7 @@ FM_le = function(state, entry){
 
   # Appending the optional time stamp
   if(state[["yaml"]][["FM"]][["logging"]][["timestamp"]]){
-     entry = paste0(format(Sys.time(), 
+     entry = paste0(format(Sys.time(),
                            state[["yaml"]][["FM"]][["logging"]][["timestamp_fmt"]]),
                     " ", entry)
 
@@ -334,3 +428,339 @@ FM_mk_error_fig  <- function(msgs){
     scale_y_continuous(labels = NULL, limits = c(-1,0))
 
 p_res}
+
+#'@export
+#'@title Populates Modles for Testing
+#'@description Loads modules and creates an app state for testing
+#'@param session Shiny session variable
+#'@param input Shiny input variable
+#'@param yaml_file App configuration file
+#'@param yaml_section  Section of the yaml file with the module configuration.
+#'@param id_UD  ID string for the upload data module.
+#'@param id_DW  ID string for the data wrangling module.
+#'@param id_FG  ID string for the figure generation module.
+#'the name of the list element in react_state where the data set is stored.
+#'@param react_state Variable passed to server to allow reaction outside of
+#'@return ggplot object
+FM_load_test_state <- function(session, input,
+                        yaml_file       = system.file(package = "formods",
+                                                      "templates",
+                                                      "config.yaml"),
+                        yaml_section_UD = "UD",
+                        yaml_section_DW = "DW",
+                        yaml_section_FG = "FG",
+                        id_ASM          = "ASM",
+                        id_UD           = "UD",
+                        id_DW           = "DW",
+                        id_FG           = "FG",
+                        react_state){
+
+  #---------------------------------------------
+  # UD module:
+  # This creates an empyt module state:
+  state_UD = UD_fetch_state(id           = id_UD,
+                            id_ASM       = id_ASM,
+                            input        = input,
+                            session      = session,
+                            yaml_file    = yaml_file,
+                            yaml_section = yaml_section_UD)
+  # Next we attach the test dataset
+  data_file_local  = system.file(package="formods", "data", "PK_DATA.xlsx")
+  data_file        = basename(data_file_local)
+  data_file_ext    = tools::file_ext(data_file)
+  sheet            = "DATA"
+  sheets           = readxl::excel_sheets(data_file_local)
+
+  # Reading the contents and generating the read code:
+  read_res = UD_ds_read(
+    state           = state_UD,
+    data_file_ext   = data_file_ext,
+    data_file       = data_file,
+    data_file_local = data_file_local,
+    sheets          = sheets,
+    sheet           = sheet)
+
+  contents         = read_res[["contents"]]
+  code             = read_res[["code"]]
+
+  state_UD = UD_attach_ds(
+            state_UD,
+            data_file_local = data_file_local,
+            data_file_ext   = data_file_ext  ,
+            data_file       = data_file      ,
+            sheet           = sheet          ,
+            sheets          = sheets         ,
+            code            = code           ,
+            contents        = contents       ,
+            isgood          = TRUE)
+
+  # Saving the state to the session
+  FM_set_mod_state(session, id=id_UD, state_UD)
+  #---------------------------------------------
+  # DW module:
+  state_DW = DW_fetch_state(
+                         id           = id_DW,
+                         input        = input,
+                         session      = session,
+                         yaml_file    = yaml_file,
+                         yaml_section = yaml_section_DW,
+                         id_UD        = id_UD,
+                         react_state  = react_state)
+
+
+  # Attachign a dataset to the DW module
+  state_DW = DW_attach_ds(state_DW, state_UD[["UD"]])
+
+  #----All data----------------------
+  # Creating a new dataset view
+  state_DW = DW_new_view(state_DW, id_UD, react_state)
+
+  # Changing the key:
+  current_view          = DW_fetch_current_view(state_DW)
+  current_view[["key"]] = "All Observations"
+  state_DW = DW_set_current_view(state_DW, current_view)
+
+  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+
+  # Building the wrangling statement
+  dwb_res = dwrs_builder(state_DW)
+
+  # evaluating it
+  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+
+
+  #----Only SC----------------------
+  # Creating a new dataset view
+  state_DW = DW_new_view(state_DW, id_UD, react_state)
+  # Pulling out the current view
+  current_view          = DW_fetch_current_view(state_DW)
+  current_view[["key"]] = "SC Only"
+  state_DW = DW_set_current_view(state_DW, current_view)
+
+  # Observations only
+  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+  dwb_res = dwrs_builder(state_DW)
+  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+
+  # Now just the SC data
+  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "ROUTE"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "%in%"
+  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             =  "SC"
+  dwb_res = dwrs_builder(state_DW)
+  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+
+  # Saving the state
+  FM_set_mod_state(session, id=id_DW, state_DW)
+
+  #----First Dose IV 10 mg----------------------
+  # Creating a new dataset view
+  state_DW = DW_new_view(state_DW, id_UD, react_state)
+  # Pulling out the current view
+  current_view          = DW_fetch_current_view(state_DW)
+  current_view[["key"]] = "10 mg, IV first dose"
+  state_DW = DW_set_current_view(state_DW, current_view)
+
+  # Observations only
+  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+  dwb_res = dwrs_builder(state_DW)
+  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+
+  # 10 mg
+  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DOSE"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 10
+  dwb_res = dwrs_builder(state_DW)
+  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+
+  # First dose
+  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DOSE_NUM"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 1
+  dwb_res = dwrs_builder(state_DW)
+  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+
+  # Now just the IV data
+  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "ROUTE"
+  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "%in%"
+  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             =  "IV"
+  dwb_res = dwrs_builder(state_DW)
+  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+
+  # Saving the state
+  FM_set_mod_state(session, id=id_DW, state_DW)
+
+
+  #---------------------------------------------
+  # FG module:
+  #---------------------------------------------
+
+NULL}
+
+
+#'@export
+#'@title Fetch the Module State
+#'@description Fetches the module state from the userdata under the specified
+#'id
+#'@param session Shiny session variable.
+#'@param id ID string for the module.
+#'@return module state or NULL if it's not defined.
+FM_fetch_mod_state <- function(session,id){
+
+  FM_ID = paste0("FM_", id)
+  state = session$userData[["FM"]][[FM_ID]]
+
+state}
+
+#'@export
+#'@title Set the Module State
+#'@description Sets the module state from the userdata under the specified
+#'id
+#'@param session Shiny session variable
+#'@param id ID string for the module.
+#'@param state Module state to set.
+#'@return ggplot object
+FM_set_mod_state <- function(session,id,state){
+
+  FM_ID = paste0("FM_", id)
+  session$userData[["FM"]][[FM_ID]]=state
+
+NULL}
+
+
+#'@export
+#'@title Set the App State
+#'@description Takes a loaded app state and overwrites the current app state
+#'@param session Shiny session variable.
+#'@param app_state Loaded app state.
+#'@param set_holds If TRUE (default) the holds will be set for all of the
+#' modules present in the app state.
+#'@return NULL
+FM_set_app_state <- function(session, app_state, set_holds = TRUE){
+
+  if(set_holds){
+    for(mod_key in names(app_state)){
+      # Current module type:
+      MT = app_state[[mod_key]][["MOD_TYPE"]]
+      # Walking through each ui element in the hold list and setting it to
+      # TRUE
+      for(tmp_ui_hold in names(app_state[[mod_key]][[MT]][["ui_hold"]])){
+        app_state[[mod_key]][[MT]][["ui_hold"]][[tmp_ui_hold]] = TRUE
+      }
+    }
+  }
+
+  # Replacing the app state in session:
+  session$userData[["FM"]] = app_state
+
+NULL}
+
+
+#'@export
+#'@title Fetches the App State
+#'@description Returns the entire state of the App
+#'@param session Shiny session variable.
+#' modules present in the app state.
+#'@return App state or NULL if it's not defined.
+FM_fetch_app_state <- function(session){
+
+
+  # Fetching the app state
+  app_state = session$userData[["FM"]]
+
+app_state}
+
+
+#'@export
+#'@title Initialize a formods State Object
+#'@description Initializes a formods state object with common elements.
+#'@param yaml_file App cofiguration file.
+#'@param yaml_section  Section of the yaml file with the module configuration.
+#'@param id Shiny module ID.
+#'@param MT Type of module using the short name (e.g. "UD", "FG", etc.).
+#'@param button_counters Vector of button UI elements that need to be tracked.
+#'@param ui_ids List of UI ids in the model.
+#'@param ui_hold Vector of UI elements that require holding.
+FM_init_state = function(
+                      yaml_file,
+                      yaml_section,
+                      id,
+                      MT,
+                      button_counters,
+                      ui_ids,
+                      ui_hold){
+
+  state = list()
+
+  # Reading in default information from the yaml file
+  state[["yaml"]] = yaml::read_yaml(yaml_file)
+
+  # This assigns the module config "MC" element to the correct yaml_section.
+  state[["MC"]] = state[["yaml"]][[yaml_section]]
+
+
+  # Initializing the button counters
+  state[[MT]][["button_counters"]]    = list()
+  for(tmp_bc in button_counters){
+    state[[MT]][["button_counters"]][[tmp_bc]] = 0
+  }
+
+  #Initializing the ui_hold
+  state[[MT]][["ui_hold"]]    = list()
+  for(tmp_ui_hold in ui_hold){
+    state[[MT]][["ui_hold"]][[tmp_ui_hold]] = FALSE
+  }
+
+  # This holds all the ui IDs from the interface
+  state[[MT]][["ui_ids"]]    = ui_ids
+
+  # Messaging passed back to the user
+  state[[MT]][["ui_msg"]]    = NULL
+
+  state[[MT]][["isgood"]]    = TRUE
+
+  state[["MOD_TYPE"]]        = MT
+  state[["id"]]              = id
+
+
+state}
+
+
+#'@export
+#'@title Sets Message in State from UI Processing
+#'@description Any errors that need to be passed back to the user can be set
+#'with this function.
+#'@param state formods State object.
+#'@param msgs Character vector of messages.
+#'@return state with ui message set.
+FM_set_ui_msg = function(state, msgs){
+
+  MT = state[["MOD_TYPE"]]
+
+  if(is.null(msgs)){
+    state[[MT]][["ui_msg"]] = NULL
+  } else {
+    state[[MT]][["ui_msg"]] = paste(msgs, collapse = "\n")
+  }
+
+state}
+

@@ -10,6 +10,7 @@ FG_fetch_state(
   session,
   yaml_file,
   yaml_section,
+  id_ASM = NULL,
   id_UD = NULL,
   id_DW = NULL,
   react_state
@@ -26,6 +27,8 @@ FG_fetch_state(
 
 \item{yaml_section}{Section of the yaml file with the module configuration}
 
+\item{id_ASM}{ID string for the app state management module used to save and load app states}
+
 \item{id_UD}{ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.}
 
 \item{id_DW}{ID string for the data wrangling module to process any uploaded data}
@@ -34,7 +37,46 @@ FG_fetch_state(
 }
 \value{
 list containing the current state of the app including default
-values from the yaml file as well as any changes made by the user
+values from the yaml file as well as any changes made by the user. The
+structure ofthe list is defined below:
+\itemize{
+ \item{yaml:} Contents of the yaml file.
+ \item{MC:} Section of the yaml file, specified by \code{yaml_section}, containing the FG module components
+ \item{FG:} Data wrangling state
+ \itemize{
+   \item{isgood:} Boolean status of the state. Currently just TRUE
+   \item{button_counters:}  List of counters to detect button clicks.
+   \item{ui_msg:}           Message returned when users perform actions.
+   \item{ui:}               Current value of form elements in the UI.
+   \item{ui_ids:}           Vector of UI elements for the module.
+   \item{ui_hold:}          List of hold elements to disable updates before a full ui referesh is complete.
+   \item{checksum:          checksum of the FG module used to detect changes in the module.}
+   \item{aes_elements:}     JMH
+   \item{current_fig:}      JMH
+   \item{fig_cntr:}         JMH
+   \item{DSV:}              JMH
+   \item{figs:}             List of figures. Each view has the following structure:
+     \itemize{
+       \item{isgood:} Boolean status of the figure. False if evaluation fails.
+       \item{key:     Figure key (user editable)}
+       \item{caption: Figure caption  (user editable)}
+       \item{id: Character id (\code{fig_idx})}
+       \item{idx: Numeric id (\code{1})}
+       \item{fig_dsview:  Name of the dataset view for the current figure.}
+       \item{checksum:    checksum of the figure used to detect changes in the figure.}
+       \item{UD_checksum: checksum of the UD state when the figure was created.}
+       \item{DW_checksum: checksum of DW module if data view was used.}
+       \item{DSV_checksum:checksum of the dataset view that was used to create the figure }
+       \item{elements_table: Table of figure generation elements.}
+       \item{code:          Code to generate figure from start to finish.}
+       \item{code_previous: Code to load and/or wrangle the dataset.}
+       \item{code_fg_only:  Code to just generate the figure.}
+     }
+ }
+ \item{MOD_TYPE:} Character data containing the type of module \code{"DW"}
+ \item{id:} Character data containing the module id
+ module in the session variable.
+}
 }
 \description{
 Merges default app options with the changes made in the UI

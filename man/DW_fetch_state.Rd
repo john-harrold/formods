@@ -38,10 +38,9 @@ structure of the list is defined below.
    datasets within the view. Use this to trigger updates in respose to
    changes in this module.
    \item{button_counters:}  List of counters to detect button clicks.
-   \item{button_click_msg:} Message returned when buttons are clicked.
-   \item{code_previous:}    Loading code from the DS field.
+   \item{code_previous:}    Loading code from the UD field.
    \item{current_view:}     View id of the current active data wrangling view.
-   \item{DS:}               Copy of the \code{"DS"} field of the  \code{id_UD} from the \code{react_state} input.
+   \item{UD:}               Copy of the \code{"UD"} field of the  \code{id_UD} from the \code{react_state} input.
    \item{ui:}               Current value of form elements in the UI
    \item{ui_hold:}          List of hold elements to disable updates before a full ui referesh is complete.
    \item{view_cntr:}        Counter for tracking view ids, value contains the id of the last view created.
@@ -61,7 +60,7 @@ structure of the list is defined below.
      }
  }
  \item{MOD_TYPE:} Character data containing the type of module \code{"DW"}
- \item{SESSION_LOCATION:} Character data containing the location of this
+ \item{id:} Character data containing the module id
  module in the session variable.
 }
 }

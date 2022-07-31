@@ -8,41 +8,42 @@ load_all()
 
 ui <- dashboardPage(
   skin="red",
-  dashboardHeader(title="Upload Data"),
+  dashboardHeader(title="ZZ Module Template"),
   dashboardSidebar(
      sidebarMenu(
-       menuItem("Upload Data",    tabName="dupload",  icon=icon("table")) ,
+       menuItem("Save/Load",    tabName="appstate",  icon=icon("archive")) ,
        menuItem("Other",  tabName="other", icon=icon("archive"))
      )
   ),
   dashboardBody(
     tabItems(
-       tabItem(tabName="dupload",
+       tabItem(tabName="appstate",
        fluidRow(
          box(title="Example",
-             "This app demonstrates how to use the data upload
+             "This app demonstrates how to use the app state manager
              module with each ui component isolated to make
              it easy to see the behavior.",
            width=12)),
        fluidRow(
-         box(title="Upload",
-           "UD_ui_load_data",
-           htmlOutput(NS("UD", "UD_ui_load_data"))),
-         box(title="Select Sheet for Excel Files",
-           "UD_ui_select_sheets",
-           htmlOutput(NS("UD", "UD_ui_select_sheets")))),
+         box(title="Save",
+           "ASM_ui_save_name",
+           htmlOutput(NS("ASM", "ASM_ui_save_name")),
+           "ASM_ui_save_input",
+           htmlOutput(NS("ASM", "ASM_ui_save_button"))
+         ),
+         box(title="Load",
+           "ASM_ui_load_state",
+           htmlOutput(NS("ASM", "ASM_ui_load_state"))
+         )
+         ),
        fluidRow(
-         box(title="Load Results",
-           "UD_ui_text_load_result",
-           htmlOutput(NS("UD", "UD_ui_text_load_result"))),
-         box(title="Data Preview",
-           "UD_ui_data_preview",
-           htmlOutput(NS("UD", "UD_ui_data_preview")))),
+         box(title="Messages",
+           "ui_zz_msg",
+           verbatimTextOutput(NS("ZZ", "ui_zz_msg")), width=12)),
        fluidRow(
          box(title="Generated Code",
-           #htmlOutput(NS("UD", "UD_ui_code")), width=12)),
-           "UD_ui_ace_code",
-           shinyAce::aceEditor(NS("UD", "UD_ui_ace_code")), width=12)),
+           "ZZ_ui_ace_code",
+           shinyAce::aceEditor(NS("ZZ", "ZZ_ui_ace_code")), width=12)),
        fluidRow(
          box(title="Current Module State",
            verbatimTextOutput("ui_state"),width=12))
@@ -59,11 +60,11 @@ server <- function(input, output, session) {
   react_FM = reactiveValues()
 
   # Module server
-  UD_Server(id="UD", react_state=react_FM)
+  ZZ_Server(id="ZZ", react_state=react_FM)
 
   # Current state outside of the module
   output$ui_state  =  renderText({
-    uiele = paste(capture.output(str(react_FM[["UD"]])), collapse="\n")
+    uiele = paste(capture.output(str(react_FM[["ZZ"]])), collapse="\n")
   uiele})
 }
 

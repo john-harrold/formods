@@ -18,6 +18,7 @@
 #'@param yaml_section  Section of the yaml file with the module
 #'configuration (\code{"DW"})
 #'@param yaml_file Upload Data cofiguration file
+#'@param id_ASM ID string for the app state managment module used to save and load app states
 #'@param id_UD  ID string for the upload data module used to handle uploads or
 #'the name of the list element in react_state where the data set is stored.
 #'@param react_state Variable passed to server to allow reaction outside of
@@ -28,6 +29,7 @@ DW_Server <- function(id,
                       yaml_file    = system.file(package = "formods",
                                                  "templates",
                                                  "config.yaml"),
+                      id_ASM       = "ASM",
                       id_UD        = "UD",
                       react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
@@ -46,6 +48,9 @@ DW_Server <- function(id,
       input$hot_dw_elements
       # Changes in view selected
       input$select_dw_views
+      # Forcing a reaction to changes in other modules
+      react_state[[id_UD]]
+      react_state[[id_ASM]]
 
 
       state = DW_fetch_state(id           = id,
@@ -61,9 +66,10 @@ DW_Server <- function(id,
 
       uiele = NULL
 
-      if(state[["DW"]][["DS"]][["isgood"]]){
+      if(state[["DW"]][["UD"]][["isgood"]]){
         if(is.null(current_view[["elements_table"]])){
-          df = data.frame("No_Data"="# No data wragling elements defined yet!")
+          df = data.frame("No_Data"= paste0("# ", state[["MC"]][["labels"]][["no_dw_elements"]]))
+
           hot= rhandsontable::rhandsontable(
             df,
             stretchH = "all",
@@ -118,8 +124,9 @@ DW_Server <- function(id,
     #------------------------------------
     # Generated data wrangling code
     observe({
-      # Forcing a reaction to changes from the upload data module
+      # Forcing a reaction to changes in other modules
       react_state[[id_UD]]
+      react_state[[id_ASM]]
       # Force update on button click
       input$button_dw_add_element
       input$button_dw_new
@@ -141,7 +148,7 @@ DW_Server <- function(id,
 
       uiele = NULL
 
-      if(state[["DW"]][["DS"]][["isgood"]]){
+      if(state[["DW"]][["UD"]][["isgood"]]){
 
         # Pulling out the current view
         current_view = DW_fetch_current_view(state)
@@ -171,6 +178,9 @@ DW_Server <- function(id,
       input$button_dw_del
       input$button_dw_copy
       input$button_dw_save
+      # Forcing a reaction to changes in other modules
+      react_state[[id_UD]]
+      react_state[[id_ASM]]
 
       state = DW_fetch_state(id           = id,
                              input        = input,
@@ -182,7 +192,6 @@ DW_Server <- function(id,
 
       view_ids = names(state[["DW"]][["views"]])
       uiele = NULL
-
 
       if(length(view_ids)> 0){
 
@@ -213,12 +222,14 @@ DW_Server <- function(id,
     #------------------------------------
     # Sele
     output$ui_dw_key = renderUI({
-      #input$button_dw_add_element
       input$button_dw_new
       input$button_dw_del
       input$button_dw_copy
       input$button_dw_save
       input$select_dw_views
+      # Forcing a reaction to changes in other modules
+      react_state[[id_UD]]
+      react_state[[id_ASM]]
 
       state = DW_fetch_state(id           = id,
                              input        = input,
@@ -239,7 +250,7 @@ DW_Server <- function(id,
       )
     uiele})
     #------------------------------------
-    output$ui_dw_button_click_msg = renderText({
+    output$ui_dw_msg = renderText({
       # Force update on button click
       input$button_dw_add_element
       input$button_dw_new
@@ -258,9 +269,8 @@ DW_Server <- function(id,
                              react_state  = react_state)
 
       uiele = NULL
-      if(state[["DW"]][["DS"]][["isgood"]]){
-        # If the add element message isn't NULL we return that.
-        uiele = state[["DW"]][["button_click_msg"]]
+      if(state[["DW"]][["UD"]][["isgood"]]){
+        uiele = state[["DW"]][["ui_msg"]]
       }
       uiele})
     #------------------------------------
@@ -276,7 +286,7 @@ DW_Server <- function(id,
                              id_UD        = id_UD,
                              react_state  = react_state)
 
-      if(state[["DW"]][["DS"]][["isgood"]]){
+      if(state[["DW"]][["UD"]][["isgood"]]){
         if(state[["DW"]][["isgood"]]){
           # Current final dataset
           WDS = DW_fetch_current_view(state)[["WDS"]]
@@ -464,6 +474,9 @@ DW_Server <- function(id,
     #------------------------------------
     # filter
     output$ui_dw_fds_filter_column_select = renderUI({
+      # Forcing a reaction to changes in other modules
+      react_state[[id_UD]]
+      react_state[[id_ASM]]
       state = DW_fetch_state(id           = id,
                              input        = input,
                              session      = session,
@@ -599,7 +612,7 @@ DW_Server <- function(id,
                              id_UD        = id_UD,
                              react_state  = react_state)
 
-      if(state[["DW"]][["DS"]][["isgood"]]){
+      if(state[["DW"]][["UD"]][["isgood"]]){
         uiele = tagList()
         choicesOpt = list(
           subtext = c(
@@ -660,8 +673,9 @@ DW_Server <- function(id,
     output$ui_dw_add_element_button = renderUI({
       # req(input$fds_filter_rhs)
       input$select_dw_element
-      # Forcing a reaction to changes from the upload data module
+      # Forcing a reaction to changes in other modules
       react_state[[id_UD]]
+      react_state[[id_ASM]]
       state = DW_fetch_state(id           = id,
                              input        = input,
                              session      = session,
@@ -670,7 +684,7 @@ DW_Server <- function(id,
                              id_UD        = id_UD,
                              react_state  = react_state)
 
-      if(state[["DW"]][["DS"]][["isgood"]]){
+      if(state[["DW"]][["UD"]][["isgood"]]){
         uiele = tagList(
           actionBttn(
             inputId  = NS(id, "button_dw_add_element"),
@@ -782,8 +796,9 @@ DW_Server <- function(id,
     #------------------------------------
     # table preview of the data
     output$hot_data_preview =  rhandsontable::renderRHandsontable({
-      # Forcing a reaction to changes from the upload data module
+      # Forcing a reaction to changes in other modules
       react_state[[id_UD]]
+      react_state[[id_ASM]]
       # Triggering rebuilding of the table
       input$button_dw_add_element
       input$button_dw_new
@@ -800,30 +815,33 @@ DW_Server <- function(id,
                              yaml_section = yaml_section,
                              id_UD        = id_UD,
                              react_state  = react_state)
-      #ds = isolate(react_state[[id_UD]])
-      #df = ds$DS$contents
 
-      if(state[["DW"]][["DS"]][["isgood"]]){
+
+      df = NULL
+
+      if(state[["DW"]][["UD"]][["isgood"]]){
         df = DW_fetch_current_view(state)[["WDS"]]
-        ds = state[["DW"]][["DS"]]
-        if(ds[["isgood"]]){
-          uiele = rhandsontable::rhandsontable(
-            df,
-            width  = state[["MC"]][["formatting"]][["preview"]][["width"]],
-            height = state[["MC"]][["formatting"]][["preview"]][["height"]],
-            rowHeaders = NULL
-          )
-        } else {
-          uiele = NULL
-        }
-      } else {
-        uiele = NULL
+        ds = state[["DW"]][["UD"]]
       }
-      uiele
-    })
+
+     if(is.null(df)){
+       df = data.frame("No_Data"= state[["MC"]][["labels"]][["no_dataset"]])
+     }
+
+     uiele = rhandsontable::rhandsontable(
+       df,
+       width  = state[["MC"]][["formatting"]][["preview"]][["width"]],
+       height = state[["MC"]][["formatting"]][["preview"]][["height"]],
+       rowHeaders = NULL
+       )
+
+    uiele})
     #------------------------------------
     # Creates the ui for the compact view of the module
     output$DW_ui_compact  =  renderUI({
+      # Forcing a reaction to changes in other modules
+      react_state[[id_UD]]
+      react_state[[id_ASM]]
       state = DW_fetch_state(id           = id,
                              input        = input,
                              session      = session,
@@ -832,108 +850,111 @@ DW_Server <- function(id,
                              id_UD        = id_UD,
                              react_state  = react_state)
 
-      uiele_code_button = NULL
-      # Generating code button if enabled
-      if( state$MC$compact$code){
-        uiele_code = tagList(shinyAce::aceEditor(
-          NS(id, "ui_dw_code"),
-          height  = state[["MC"]][["formatting"]][["code"]][["height"]]
-          ))
+      current_view = DW_fetch_current_view(state)
 
-        uiele_code_button = tagList(
+
+      if(is.null(current_view[["WDS"]])){
+        uiele = state[["MC"]][["labels"]][["no_dataset"]]
+      } else {
+        uiele_code_button = NULL
+        # Generating code button if enabled
+        if( state$MC$compact$code){
+          uiele_code = tagList(shinyAce::aceEditor(
+            NS(id, "ui_dw_code"),
+            height  = state[["MC"]][["formatting"]][["code"]][["height"]]
+            ))
+       
+          uiele_code_button = tagList(
+           shinyWidgets::dropdownButton(
+             uiele_code,
+             inline  = FALSE,
+             right   = TRUE ,
+             size    = "sm",
+             circle  = FALSE,
+             width   = state[["MC"]][["formatting"]][["code"]][["width"]],
+             status  = "danger btn-custom-dw",
+             icon    = icon("code", lib="font-awesome"),
+             tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["show_code"]]))
+          )
+       
+        }
+       
+        # Button with DW elements table
+        uiele_dw_elements = rhandsontable::rHandsontableOutput(NS(id, "hot_dw_elements"))
+        uiele_dw_elements_button = tagList(
          shinyWidgets::dropdownButton(
-           uiele_code,
+           uiele_dw_elements,
            inline  = FALSE,
            right   = TRUE ,
            size    = "sm",
            circle  = FALSE,
-           width   = state[["MC"]][["formatting"]][["code"]][["width"]],
-           status  = "danger",
-           icon    = icon("code", lib="font-awesome"),
-           tooltip = tooltipOptions(title = state[["MC"]][["labels"]][["code_tooltip"]]))
+           #width   = state[["MC"]][["formatting"]][["dw_elements"]][["width"]],
+           status  = "primary btn-custom-dw",
+           icon    = icon("layer-group", lib="font-awesome"),
+           tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["dw_elements"]]))
         )
-      
-      }
-
-      # Button with DW elements table
-      uiele_dw_elements = rhandsontable::rHandsontableOutput(NS(id, "hot_dw_elements"))
-      uiele_dw_elements_button = tagList(
-       shinyWidgets::dropdownButton(
-         uiele_dw_elements,
-         inline  = FALSE,
-         right   = TRUE ,
-         size    = "sm",
-         circle  = FALSE,
-         #width   = state[["MC"]][["formatting"]][["dw_elements"]][["width"]],
-         status  = "primary",
-         icon    = icon("layer-group", lib="font-awesome"),
-         tooltip = tooltipOptions(title = state[["MC"]][["labels"]][["dw_elements_tooltip"]]))
-      )
-
-
-      uiele = tagList(
-        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_views"))),
-        div(style="display:inline-block", htmlOutput(NS("DW", "ui_dw_key"))),
-        tags$br(),
-        verbatimTextOutput(NS(id, "ui_dw_new_element_msg"))
-      )
-
-    # # adding elements button:
-    # # Adding the code button if enabled
-    # if( state$MC$compact$code){
-    #   uiele_buttons_right = tagList(uiele_buttons_right, 
-    #      uiele_code_button)
-    # }
-
-
-      uiele_buttons_right = tagList(
-               div(style="display:inline-block;vertical-align:top",
-               uiele_dw_elements_button,
-               uiele_code_button))
-
-
-
-      uiele_buttons_left = tagList(
-        div(style="display:inline-block;vertical-align:top",
-        htmlOutput(NS("DW", "ui_dw_save_view")),
-        htmlOutput(NS("DW", "ui_dw_copy_view")),
-        htmlOutput(NS("DW", "ui_dw_del_view")),
-        htmlOutput(NS("DW", "ui_dw_new_view"))
-        ))
-
-
-
-      # Appending the buttons to the main uiele
-      uiele = tagList(
-        uiele,
-        uiele_buttons_left)
-
-
-      # Appending the preview
-      uiele_preview = NULL
-      if( state$MC$compact$preview){
-       uiele_preview =  
-          div(style="display:inline-block;vertical-align:top",
-            rhandsontable::rHandsontableOutput(NS(id, "hot_data_preview")))
+       
+        uiele = tagList(
+          div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_views"))),
+          div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_key"))),
+          tags$br(),
+          verbatimTextOutput(NS(id, "ui_dw_new_element_msg"))
+        )
+       
+        uiele_buttons_right = tagList(
+                 tags$style(".btn-custom-dw {width: 100px;}"),
+                 div(style="display:inline-block;vertical-align:top",
+                 uiele_dw_elements_button,
+                 uiele_code_button,
+                 htmlOutput(NS(id, "ui_dw_save_view")),
+                 htmlOutput(NS(id, "ui_dw_copy_view")),
+                 htmlOutput(NS(id, "ui_dw_del_view")),
+                 htmlOutput(NS(id, "ui_dw_new_view"))
+                 ))
+       
+        uiele_buttons_left = tagList(
+        # div(style="display:inline-block;vertical-align:top",
+        # htmlOutput(NS(id, "ui_dw_save_view")),
+        # htmlOutput(NS(id, "ui_dw_copy_view")),
+        # htmlOutput(NS(id, "ui_dw_del_view")),
+        # htmlOutput(NS(id, "ui_dw_new_view"))
+        # )
+        )
+       
+       
+       
+        # Appending the buttons to the main uiele
         uiele = tagList(
           uiele,
-          uiele_preview,
-          uiele_buttons_right,
-          tags$br()
+          uiele_buttons_left)
+       
+       
+        # Appending the preview
+        uiele_preview = NULL
+        if( state$MC$compact$preview){
+         uiele_preview =
+            div(style="display:inline-block;vertical-align:top",
+              rhandsontable::rHandsontableOutput(NS(id, "hot_data_preview")))
+          uiele = tagList(
+            uiele,
+            uiele_preview,
+            uiele_buttons_right,
+            tags$br()
+          )
+        }
+       
+       
+       
+        uiele = tagList( uiele,
+          tags$br(),
+          div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_add_element_button"))),
+          div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_select"))),
+          tags$br(),
+          htmlOutput(NS(id, "ui_dw_new_element_row")),
+          tags$br(),
+          verbatimTextOutput(NS(id, "ui_dw_msg"))
         )
       }
-
-
-
-      uiele = tagList( uiele,
-        tags$br(),
-        div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_add_element_button"))),
-        div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_select"))),
-        tags$br(),
-        htmlOutput(NS(id, "ui_dw_new_element_row")),
-        tags$br(),
-        verbatimTextOutput(NS("DW", "ui_dw_button_click_msg"))
-      )
 
 
 
@@ -945,10 +966,12 @@ DW_Server <- function(id,
       # Here we list the ui inputs that will result in a state change:
       toListen <- reactive({
         list(input$button_dw_add_element,
+             input$select_dw_views,
              input$button_dw_new,
              input$button_dw_del,
              input$button_dw_copy,
-             input$button_dw_save)
+             input$button_dw_save,
+             react_state[[id_ASM]]) 
       })
       # This updates the reaction state:
       observeEvent(toListen(), {
@@ -963,22 +986,30 @@ DW_Server <- function(id,
 
         FM_le(state, "reaction state updated")
         react_state[[id]] = state
-      })
+      }, priority=99)
     }
 
     # Removing holds
-    observeEvent(input$select_dw_views, {
-      # Once that's generated we need to remove any holds on this UI element
-        state = DW_fetch_state(
-          id           = id,
-          input        = input,
-          session      = session,
-          yaml_file    = yaml_file,
-          yaml_section = yaml_section,
-          id_UD        = id_UD,
-          react_state  = react_state)
-      remove_hold(state, session, "select_dw_views")
-    }, priority = 100)
+    remove_hold_listen  <- reactive({
+      list(input$select_dw_views)
+    })
+    observeEvent(remove_hold_listen(), {
+      # Once the UI has been regenerated we
+      # remove any holds for this module
+      state = DW_fetch_state(
+        id           = id,
+        input        = input,
+        session      = session,
+        yaml_file    = yaml_file,
+        yaml_section = yaml_section,
+        id_UD        = id_UD,
+        react_state  = react_state)
+      FM_le(state, "removing holds")
+      # Removing all holds
+      for(hname in names(state[["DW"]][["ui_hold"]])){
+        remove_hold(state, session, hname)
+      }
+    }, priority = -100)
 
   })
 }
@@ -1010,10 +1041,9 @@ DW_Server <- function(id,
 #'    datasets within the view. Use this to trigger updates in respose to
 #'    changes in this module.
 #'    \item{button_counters:}  List of counters to detect button clicks.
-#'    \item{button_click_msg:} Message returned when buttons are clicked.
-#'    \item{code_previous:}    Loading code from the DS field.
+#'    \item{code_previous:}    Loading code from the UD field.
 #'    \item{current_view:}     View id of the current active data wrangling view.
-#'    \item{DS:}               Copy of the \code{"DS"} field of the  \code{id_UD} from the \code{react_state} input.
+#'    \item{UD:}               Copy of the \code{"UD"} field of the  \code{id_UD} from the \code{react_state} input.
 #'    \item{ui:}               Current value of form elements in the UI
 #'    \item{ui_hold:}          List of hold elements to disable updates before a full ui referesh is complete.
 #'    \item{view_cntr:}        Counter for tracking view ids, value contains the id of the last view created.
@@ -1033,35 +1063,31 @@ DW_Server <- function(id,
 #'      }
 #'  }
 #'  \item{MOD_TYPE:} Character data containing the type of module \code{"DW"}
-#'  \item{SESSION_LOCATION:} Character data containing the location of this
+#'  \item{id:} Character data containing the module id
 #'  module in the session variable.
 #'}
 DW_fetch_state = function(id,           input,           session,
                           yaml_file,    yaml_section,    id_UD,
                           react_state){
 
-  # After the app has loaded the state must be initialized
-  FM_DW_ID = paste0("FM_DW_", id)
-
   #---------------------------------------------
   # Getting the current state
-  if(is.null(session$userData[[FM_DW_ID]])){
+  state = FM_fetch_mod_state(session, id)
+  # If the state has not yet been defined then we
+  # initialize it
+  if(is.null(state)){
     # General state information
-    state = DW_init_state(yaml_file, yaml_section, id_UD, react_state)
-  } else {
-    # If it's not null we just pluck the state
-    # from the session variable
-    state = session$userData[[FM_DW_ID]]
+    state = DW_init_state(yaml_file, yaml_section, id, id_UD, react_state)
   }
 
 
   #---------------------------------------------
   # detecting changes in the datasets
-  if("checksum" %in% names(react_state[[id_UD]][["DS"]])){
+  if("checksum" %in% names(isolate(react_state[[id_UD]][["UD"]]))){
     # Checksum of the uploaded dataset from the UD module
-    UD_checksum = isolate(react_state[[id_UD]][["DS"]][["checksum"]])
+    UD_checksum = isolate(react_state[[id_UD]][["UD"]][["checksum"]])
     # Checksum of the copy in the DW module:
-    DW_checksum = isolate(state[["DW"]][["DS"]][["checksum"]])
+    DW_checksum = isolate(state[["DW"]][["UD"]][["checksum"]])
 
     UPDATE_DS = FALSE
     if(is.null(DW_checksum)){
@@ -1076,33 +1102,15 @@ DW_fetch_state = function(id,           input,           session,
     }
     # If the dataset has been updated we need to reset the DW app state:
     if(UPDATE_DS){
+      # JMH prevent triggering UPDATE_DS on app state reset
       FM_le(state, "original dataset changed")
-      state = DW_init_state(yaml_file, yaml_section, id_UD, react_state)
+      state = DW_init_state(yaml_file, yaml_section, id, id_UD, react_state)
     }
   }
 
   #---------------------------------------------
   # Getting the current ui elements into the state
-  ui_elements = list(
-    "hot_dw_elements"            = "update_elements",
-    "button_dw_add_element"      = "add_element",
-    "button_dw_new"              = "new_view",
-    "button_dw_del"              = "del_view",
-    "button_dw_copy"             = "copy_view",
-    "button_dw_save"             = "save_view",
-    "select_fds_filter_column"   = "filter",
-    "select_fds_filter_operator" = "filter",
-    "fds_filter_rhs"             = "filter",
-    "select_fds_mutate_column"   = "mutate",
-    "select_fds_mutate_rhs"      = "mutate",
-    "select_fds_rename_column"   = "rename",
-    "fds_rename_rhs"             = "rename",
-    "current_key"                = "text",
-    "select_fds_group_column"    = "group",
-    "select_dw_views"            = "select_views",
-    "select_dw_element"          = "element_type"
-  )
-  for(ui_name in names(ui_elements)){
+  for(ui_name in state[["DW"]][["ui_ids"]]){
     if(!is.null(isolate(input[[ui_name]]))){
       state[["DW"]][["ui"]][[ui_name]] = isolate(input[[ui_name]])
     } else {
@@ -1113,94 +1121,91 @@ DW_fetch_state = function(id,           input,           session,
 
   # Here we're processing any element delete requests
   # - first we only do this if the hot_dw_elements has been defined
-  if(is.list(state[["DW"]][["ui"]][["hot_dw_elements"]])){
-    # - If that's the case we get the data frame for it:
-    hot_df = rhandsontable::hot_to_r(state[["DW"]][["ui"]][["hot_dw_elements"]])
-    # - Because the UI initialzes to a "no elements defined message" we need
-    # to make sure there is a delete column
-    if("Delete" %in% names(hot_df)){
-      # - lastly we check to see if any have been selected for deletion:
-      if(any(hot_df$Delete == TRUE)){
+  if(!fetch_hold(state,"hot_dw_elements")){
+    if(is.list(state[["DW"]][["ui"]][["hot_dw_elements"]])){
+      # - If that's the case we get the data frame for it:
+      hot_df = rhandsontable::hot_to_r(state[["DW"]][["ui"]][["hot_dw_elements"]])
+      # - Because the UI initialzes to a "no elements defined message" we need
+      # to make sure there is a delete column
+      if("Delete" %in% names(hot_df)){
+        # - lastly we check to see if any have been selected for deletion:
+        if(any(hot_df$Delete == TRUE)){
 
-        # Pulling out the current view
-        current_view = DW_fetch_current_view(state)
+          # Pulling out the current view
+          current_view = DW_fetch_current_view(state)
 
-        # We walk through the current elements table and keep only the
-        # rows where Delete is FALSE
-        NEW_ET = NULL
-        OLD_ET = current_view[["elements_table"]]
-        # This can be run before the hot_table updates and if the
-        # last element has been deleted the OLD_ET (already updated)
-        # will be NULL
-        if(!is.null(OLD_ET)){
-          # If this is run before the hot_table updates we want to skip it
-          # So this, so we only update when the OLD_ET and the table in the UI have
-          # the same number of rows
-          if(nrow(OLD_ET) == nrow(hot_df)){
-            for(eridx in 1:nrow(OLD_ET)){
-              if(hot_df[eridx, ]$Delete == FALSE){
-                NEW_ET = rbind(NEW_ET,
-                               OLD_ET[eridx,])
-              }
-            }
-
-
-            # First we set the elements table to NULL and reset the wrangled
-            # dataset to the uploaded value:
-            current_view[["elements_table"]]  = NULL
-            current_view[["WDS"]]             = state[["DW"]][["DS"]][["contents"]]
-            state = DW_set_current_view(state, current_view)
-
-            # If NEW_ET is NULL then we don't have any wrangling elements left
-            # (ie we deleted the last one). If it's not null then we need to apply
-            # the filters that are left:
-            if(!is.null(NEW_ET)){
-              # Walking through each element
-              error_found = FALSE
-              msgs = c()
-              for(eridx in 1:nrow(NEW_ET)){
-                # Running the current element
-                if(!error_found){
-                  dwee_res = dw_eval_element(state,NEW_ET[eridx,][["cmd"]])
-
-                  # Appending any messages
-                  msgs = c(msgs, dwee_res[["msgs"]])
-
-                  if(dwee_res[["isgood"]]){
-                    # We set the status to success here:
-                    NEW_ET[eridx,][["Status"]] = "Success"
-                    # We have to assinge this to the elements table and the
-                    # dataset:
-                    current_view[["elements_table"]]  = NEW_ET
-                    current_view[["WDS"]]             = dwee_res[["DS"]]
-                    # We set this view to update the code as well:
-                    state = DW_set_current_view(state, current_view)
-
-                  } else {
-                    # If an element fails we filp the error_found flag.
-                    # This will skip the remaining elements
-                    error_found = TRUE
-                    # Then we set the status to Failure
-                    NEW_ET[eridx,][["Status"]] = "Failure"
-                  }
-                } else {
-                  # If any errors occured before this
-                  # element is set to Not Run
-                  NEW_ET[eridx,][["Status"]] = "Not Run"
+          # We walk through the current elements table and keep only the
+          # rows where Delete is FALSE
+          NEW_ET = NULL
+          OLD_ET = current_view[["elements_table"]]
+          # This can be run before the hot_table updates and if the
+          # last element has been deleted the OLD_ET (already updated)
+          # will be NULL
+          if(!is.null(OLD_ET)){
+            # If this is run before the hot_table updates we want to skip it
+            # So this, so we only update when the OLD_ET and the table in the UI have
+            # the same number of rows
+            if(nrow(OLD_ET) == nrow(hot_df)){
+              for(eridx in 1:nrow(OLD_ET)){
+                if(hot_df[eridx, ]$Delete == FALSE){
+                  NEW_ET = rbind(NEW_ET,
+                                 OLD_ET[eridx,])
                 }
               }
 
-              # Passing any messages ack to the user
-              if(is.null(msgs)){
-                state[["DW"]][["button_click_msg"]] = NULL
-              } else {
-                state[["DW"]][["button_click_msg"]] = paste(msgs, collapse = "\n")
-              }
 
+              # First we set the elements table to NULL and reset the wrangled
+              # dataset to the uploaded value:
+              current_view[["elements_table"]]  = NULL
+              current_view[["WDS"]]             = state[["DW"]][["UD"]][["contents"]]
+              state = DW_set_current_view(state, current_view)
+
+              # If NEW_ET is NULL then we don't have any wrangling elements left
+              # (ie we deleted the last one). If it's not null then we need to apply
+              # the filters that are left:
+              if(!is.null(NEW_ET)){
+                # Walking through each element
+                error_found = FALSE
+                msgs = c()
+                for(eridx in 1:nrow(NEW_ET)){
+                  # Running the current element
+                  if(!error_found){
+                    dwee_res = dw_eval_element(state,NEW_ET[eridx,][["cmd"]])
+
+                    # Appending any messages
+                    msgs = c(msgs, dwee_res[["msgs"]])
+
+                    if(dwee_res[["isgood"]]){
+                      # We set the status to success here:
+                      NEW_ET[eridx,][["Status"]] = "Success"
+                      # We have to assinge this to the elements table and the
+                      # dataset:
+                      current_view[["elements_table"]]  = NEW_ET
+                      current_view[["WDS"]]             = dwee_res[["DS"]]
+                      # We set this view to update the code as well:
+                      state = DW_set_current_view(state, current_view)
+
+                    } else {
+                      # If an element fails we filp the error_found flag.
+                      # This will skip the remaining elements
+                      error_found = TRUE
+                      # Then we set the status to Failure
+                      NEW_ET[eridx,][["Status"]] = "Failure"
+                    }
+                  } else {
+                    # If any errors occured before this
+                    # element is set to Not Run
+                    NEW_ET[eridx,][["Status"]] = "Not Run"
+                  }
+                }
+
+                # Passing any messages back to the user
+                state = FM_set_ui_msg(state, msgs)
+              }
+              # Saving the NEW_ET over the elements_table in the state
+              current_view[["elements_table"]]  = NEW_ET
+              state = DW_set_current_view(state, current_view)
             }
-            # Saving the NEW_ET over the elements_table in the state
-            current_view[["elements_table"]]  = NEW_ET
-            state = DW_set_current_view(state, current_view)
           }
         }
       }
@@ -1210,14 +1215,15 @@ DW_fetch_state = function(id,           input,           session,
   # Detecting view selection changes
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["select_dw_views"]],
                  old_val  = state[["DW"]][["current_view"]]) &
-      (!state[["DW"]][["ui_hold"]][["select_dw_views"]]) ){
+      (!fetch_hold(state,"select_dw_views"))){
 
     # Changing the current view to the one selected in the UI
     state[["DW"]][["current_view"]] =  state[["DW"]][["ui"]][["select_dw_views"]]
+    FM_le(state, "updated: select_dw_views")
   }
   # Detecting add_element clicks
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_add_element"]],
-                 old_val  = state[["DW"]][["button_counters"]][["add"]])){
+                 old_val  = state[["DW"]][["button_counters"]][["button_dw_add_element"]])){
     # Empty messages:
     msgs = c()
     FM_le(state, "adding wrangling element")
@@ -1252,36 +1258,22 @@ DW_fetch_state = function(id,           input,           session,
         # If that was successful we append the element to the elements
         # table
         if(dwee_res[["isgood"]]){
-          # - append the cmd and description to the DW table
-          current_view[["elements_table"]] =
-            rbind(current_view[["elements_table"]],
-              data.frame(
-              Action        = dwb_res[["action"]],
-              Description   = dwb_res[["desc"]],
-              cmd           = dwb_res[["cmd"]],
-              Status        = "Success",
-              Delete        = FALSE))
-
-          current_view[["WDS"]]  = dwee_res[["DS"]]
-          state = DW_set_current_view(state, current_view)
+          state = DW_add_wrangling_element(state, dwb_res, dwee_res)
         }
+
       }
     }
-    # Passing any messages ack to the user
-    if(is.null(msgs)){
-      state[["DW"]][["button_click_msg"]] = NULL
-    } else {
-      state[["DW"]][["button_click_msg"]] = paste(msgs, collapse = "\n")
-    }
+    # Passing any messages back to the user
+    state = FM_set_ui_msg(state, msgs)
 
     # Lastly we save the button value from the UI to the state:
-    state[["DW"]][["button_counters"]][["add"]] =state[["DW"]][["ui"]][["button_dw_add_element"]]
+    state[["DW"]][["button_counters"]][["button_dw_add_element"]] =state[["DW"]][["ui"]][["button_dw_add_element"]]
 
   }
 
   #------------------------------------
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_new"]],
-                 old_val  = state[["DW"]][["button_counters"]][["new"]])){
+                 old_val  = state[["DW"]][["button_counters"]][["button_dw_new"]])){
 
     FM_le(state, "creating new wrangling view")
     # Empty messages:
@@ -1291,14 +1283,14 @@ DW_fetch_state = function(id,           input,           session,
     state = DW_new_view(state, id_UD, react_state)
 
     # Setting hold for views select
-    state[["DW"]][["ui_hold"]][["select_dw_views"]] = TRUE
+    state = set_hold(state, inputId = "select_dw_views")
 
     # Lastly we save the button value from the UI to the state:
-    state[["DW"]][["button_counters"]][["new"]] =state[["DW"]][["ui"]][["button_dw_new"]]
+    state[["DW"]][["button_counters"]][["button_dw_new"]] =state[["DW"]][["ui"]][["button_dw_new"]]
   }
   #------------------------------------
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_del"]],
-                 old_val  = state[["DW"]][["button_counters"]][["del"]])){
+                 old_val  = state[["DW"]][["button_counters"]][["button_dw_del"]])){
 
     FM_le(state, "deleting wrangling view")
     # Empty messages:
@@ -1319,15 +1311,15 @@ DW_fetch_state = function(id,           input,           session,
     }
 
     # Setting hold for views select
-    state[["DW"]][["ui_hold"]][["select_dw_views"]] = TRUE
+    state = set_hold(state, inputId = "select_dw_views")
 
     # Lastly we save the button value from the UI to the state:
-    state[["DW"]][["button_counters"]][["del"]] =state[["DW"]][["ui"]][["button_dw_del"]]
+    state[["DW"]][["button_counters"]][["button_dw_del"]] =state[["DW"]][["ui"]][["button_dw_del"]]
   }
 
   #------------------------------------
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_copy"]],
-                 old_val  = state[["DW"]][["button_counters"]][["copy"]])){
+                 old_val  = state[["DW"]][["button_counters"]][["button_dw_copy"]])){
 
     FM_le(state, "copying wrangling view")
 
@@ -1364,14 +1356,14 @@ DW_fetch_state = function(id,           input,           session,
     state = DW_set_current_view(state, new_view)
 
     # Setting hold for views select
-    state[["DW"]][["ui_hold"]][["select_dw_views"]] = TRUE
+    state = set_hold(state, inputId = "select_dw_views")
 
     # Lastly we save the button value from the UI to the state:
-    state[["DW"]][["button_counters"]][["copy"]] =state[["DW"]][["ui"]][["button_dw_copy"]]
+    state[["DW"]][["button_counters"]][["button_dw_copy"]] =state[["DW"]][["ui"]][["button_dw_copy"]]
   }
   #------------------------------------
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_save"]],
-                 old_val  = state[["DW"]][["button_counters"]][["save"]])){
+                 old_val  = state[["DW"]][["button_counters"]][["button_dw_save"]])){
 
     FM_le(state, "saving changes to current wrangling view")
     # Empty messages:
@@ -1390,14 +1382,11 @@ DW_fetch_state = function(id,           input,           session,
     }
 
     # Lastly we save the button value from the UI to the state:
-    state[["DW"]][["button_counters"]][["save"]] =state[["DW"]][["ui"]][["button_dw_save"]]
+    state[["DW"]][["button_counters"]][["button_dw_save"]] = state[["DW"]][["ui"]][["button_dw_save"]]
   }
 
-  # Saving the session location
-  state[["SESSION_LOCATION"]] = FM_DW_ID
-
   # Saving the state
-  session$userData[[FM_DW_ID]] = state
+  FM_set_mod_state(session, id, state)
 
   # Returning the state
 state }
@@ -1407,19 +1396,58 @@ state }
 #'@description Creates a list of the initialized module state
 #'@param yaml_file App configuration file
 #'@param yaml_section  Section of the yaml file with the module configuration
+#'@param id Shiny module ID
 #'@param id_UD  ID string for the upload data module used to handle uploads or
 #'the name of the list element in react_state where the data set is stored.
 #'@param react_state Variable passed to server to allow reaction outside of
 #'module (\code{NULL})
 #'@return list containing an empty DW state
-DW_init_state = function(yaml_file, yaml_section, id_UD, react_state){
-  state = list()
-  # Reading in default information from the yaml file
-  state[["yaml"]] = yaml::read_yaml(yaml_file)
+DW_init_state = function(yaml_file, yaml_section, id, id_UD, react_state){
 
-  # This assigns the module config "MC" element to the correct yaml_section.
-  state[["MC"]] = state[["yaml"]][[yaml_section]]
+  # initializing the state with the required formods elements:
+  button_counters = c(
+    "button_dw_add_element"   , # Element: Adding a new element
+    "button_dw_new"           , # View:    New blank view
+    "button_dw_del"           , # View:    Delete the current view
+    "button_dw_save"          , # View:    Save the current view
+    "button_dw_copy"            # View:    Copy the current view
+    )
+  ui_ids          = c(
+    "hot_dw_elements"            ,
+    "button_dw_add_element"      ,
+    "button_dw_new"              ,
+    "button_dw_del"              ,
+    "button_dw_copy"             ,
+    "button_dw_save"             ,
+    "select_fds_filter_column"   ,
+    "select_fds_filter_operator" ,
+    "fds_filter_rhs"             ,
+    "select_fds_mutate_column"   ,
+    "select_fds_mutate_rhs"      ,
+    "select_fds_rename_column"   ,
+    "fds_rename_rhs"             ,
+    "current_key"                ,
+    "select_fds_group_column"    ,
+    "select_dw_views"            ,
+    "select_dw_element"
+    )
 
+  ui_hold         = c(
+    "hot_dw_elements",
+    "current_key"    ,
+    "select_dw_views"
+    )
+
+  state = FM_init_state(
+    yaml_file       = yaml_file,
+    yaml_section    = yaml_section,
+    id              = id,
+    MT              = "DW",
+    button_counters = button_counters,
+    ui_ids          = ui_ids,
+    ui_hold         = ui_hold)
+
+  # Adding other module-specific fields
   # Creating operator table
   opdf = NULL
   for(op_idx in c(1:length(state[["MC"]][["operators"]]))){
@@ -1433,34 +1461,17 @@ DW_init_state = function(yaml_file, yaml_section, id_UD, react_state){
   state[["MC"]][["op_choices"]][["not_factor"]] = stats::setNames(tmpdf$rop, c(tmpdf$text))
 
 
-  # Defaults for the module
-  DW_NULL =
-    list(isgood           = TRUE,
-         button_counters = list(           # Counters to track button clicks
-          "add"             = 0,           # Element: Adding a new element
-          "new"             = 0,           # View:    New blank view
-          "del"             = 0,           # View:    Delete the current view
-          "save"            = 0,           # View:    Save the current view
-          "copy"            = 0),          # View:    Copy the current view
-         code_previous    = NULL,
-         button_click_msg = NULL,
-         views            = NULL,
-         current_view     = NULL,
-         ui_hold          = list(
-          select_dw_views = FALSE),
-         view_cntr        = 0)
-
-  state[["DW"]] = DW_NULL
+  state[["DW"]][["code_previous"]]        = NULL
+  state[["DW"]][["views"]]                = NULL
+  state[["DW"]][["current_view"]]         = NULL
+  state[["DW"]][["view_cntr"]]            = 0
 
   # Attaching the dataset to the state object
-  if(is.null(state[["DW"]][["DS"]])){
-    if(!is.null(react_state)){
-      # This contains the input dataset:
-      state[["DW"]][["DS"]]    = isolate(react_state[[id_UD]][["DS"]])
-      # This is the loading code
-      state[["DW"]][["code_previous"]] = state[["DW"]][["DS"]][["code"]]
+  if(is.null(state[["DW"]][["UD"]])){
+    if(!is.null(isolate(react_state[[id_UD]][["UD"]]))){
+      state = DW_attach_ds(state, isolate(react_state[[id_UD]][["UD"]]))
     } else {
-      state[["DW"]][["DS"]][["isgood"]] = FALSE
+      state[["DW"]][["UD"]][["isgood"]] = FALSE
       state[["DW"]][["isgood"]]         = FALSE
     }
   }
@@ -1471,7 +1482,6 @@ DW_init_state = function(yaml_file, yaml_section, id_UD, react_state){
     state = DW_new_view(state, id_UD, react_state)
   }
 
-  state[["MOD_TYPE"]] = "DW"
   FM_le(state, "State initialized")
 
   # initializing the module checksum:
@@ -1713,11 +1723,11 @@ DW_new_view = function(state, id_UD, react_state){
          view_ds_object_name = view_ds_object_name,
          code_previous       = NULL,
          # user facing
-         key                 = paste0("key", view_id),
-         WDS                 = state[["DW"]][["DS"]][["contents"]],
+         key                 = paste0("data_", view_id),
+         WDS                 = state[["DW"]][["UD"]][["contents"]],
          elements_table      = NULL,
          # Generated on save
-         checksum            = digest::digest(state[["DW"]][["DS"]][["contents"]], algo=c("md5")),
+         checksum            = digest::digest(state[["DW"]][["UD"]][["contents"]], algo=c("md5")),
          code                = NULL,
          code_dw_only        = NULL)
 
@@ -1726,7 +1736,7 @@ DW_new_view = function(state, id_UD, react_state){
   code_previous = c(
     paste0(view_ds_object_name,
            " = ",
-            state[["DW"]][["DS"]][["object_name"]]))
+            state[["DW"]][["UD"]][["object_name"]]))
   view_def[["code_previous"]] = code_previous
 
   # Dropping the new view into the state
@@ -1807,7 +1817,7 @@ DW_update_checksum     = function(state){
   # checksum string
   chk_str = ""
 
-  # We'll concatinate all the individual checksums together 
+  # We'll concatinate all the individual checksums together
   # and create a checksum of those:
   view_ids = names(state[["DW"]][["views"]])
   for(view_id in view_ids){
@@ -1818,3 +1828,48 @@ DW_update_checksum     = function(state){
   FM_le(state, paste0("module checksum updated:", state[["DW"]][["checksum"]]))
 
 state}
+
+
+#'@export
+#'@title Attach Data Set to DW State
+#'@description Attaches a dataset to the DW state supplied.
+#'@param state DW state module.
+#'@param DS Dataset list object with elements described by the DS field
+#'returned by \code{UD_fetch_state()}.
+#'@return state with data set attached
+DW_attach_ds = function(state, DS){
+
+  # This contains the input dataset:
+  state[["DW"]][["UD"]]    = DS
+  # This is the loading code
+  state[["DW"]][["code_previous"]] = state[["DW"]][["UD"]][["code"]]
+  # Setting the DW stat to good
+  state[["DW"]][["isgood"]]        = TRUE
+
+state}
+
+#'@export
+#'@title Adding Wrangling Element to Current Data View
+#'@description Adds the wrangling element to the current data view.
+#'@param state DW state module.
+#'@param DS Dataset list object with elements described by the DS field
+#'returned by \code{UD_fetch_state()}.
+#'@return state with data set attached
+DW_add_wrangling_element = function(state, dwb_res, dwee_res){
+
+  current_view = DW_fetch_current_view(state)
+  # - append the cmd and description to the DW table
+  current_view[["elements_table"]] =
+    rbind(current_view[["elements_table"]],
+      data.frame(
+      Action        = dwb_res[["action"]],
+      Description   = dwb_res[["desc"]],
+      cmd           = dwb_res[["cmd"]],
+      Status        = "Success",
+      Delete        = FALSE))
+
+  current_view[["WDS"]]  = dwee_res[["DS"]]
+  state = DW_set_current_view(state, current_view)
+
+state}
+

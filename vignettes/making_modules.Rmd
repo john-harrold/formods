@@ -1,0 +1,32 @@
+---
+title: "Making Modules"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Included Modules}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Introduction 
+
+
+## formods framework
+
+state fields
+
+- `yaml`
+- `MC`
+
+
+
+# Expected functions
+
+

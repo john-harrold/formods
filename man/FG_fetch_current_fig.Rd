@@ -2,7 +2,7 @@
 % Please edit documentation in R/FG_Server.R
 \name{FG_fetch_current_fig}
 \alias{FG_fetch_current_fig}
-\title{Fetchs Current Figure}
+\title{Fetches Current Figure}
 \usage{
 FG_fetch_current_fig(state)
 }

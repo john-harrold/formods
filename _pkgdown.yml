@@ -21,7 +21,6 @@ reference:
     - starts_with("DW_")
     - dwrs_builder
     - dw_eval_element
-    - fetch_DS_NULL
   - title: "Figure Generation (FG)"
   - contents:
     - starts_with("FG_")

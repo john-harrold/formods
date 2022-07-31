@@ -18,55 +18,72 @@ ui <- dashboardPage(
     tabItems(
      tabItem(tabName="FG",
              fluidRow(
-               box(title="Current Figures ui_fg_curr_figs",
+               box(title="Current Figures",
+                 "ui_fg_curr_figs",
                  htmlOutput(NS("FG", "ui_fg_curr_figs")), width=5),
-               box(title="Current Data Views ui_fg_curr_views",
+               box(title="Current Data Views",
+                 "ui_fg_curr_views",
                  htmlOutput(NS("FG", "ui_fg_curr_views")), width=5)),
              fluidRow(
               box(title="Figure Actions",
               div(style="display:inline-block",
-                 htmlOutput(NS("FG", "ui_fg_new_fig")),  "ui_fg_new_fig"  ),
+                "ui_fg_new_fig",
+                 htmlOutput(NS("FG", "ui_fg_new_fig"))),
               div(style="display:inline-block",
-                 htmlOutput(NS("FG", "ui_fg_save_fig")), "ui_fg_save_fig"),
+                "ui_fg_save_fig",
+                 htmlOutput(NS("FG", "ui_fg_save_fig"))),
               div(style="display:inline-block",
-                 htmlOutput(NS("FG", "ui_fg_del_fig")),  "ui_fg_del_fig"),
+                 "ui_fg_del_fig", 
+                 htmlOutput(NS("FG", "ui_fg_del_fig"))),
               div(style="display:inline-block",
-                 htmlOutput(NS("FG", "ui_fg_copy_fig")), "ui_fg_copy_fig"),
+                 "ui_fg_copy_fig", 
+                 htmlOutput(NS("FG", "ui_fg_copy_fig"))),
            #  div(style="display:inline-block",
            #     htmlOutput(NS("FG", "ui_fg_upds_fig")) ),
               width = 12)
                ),
              fluidRow(
                box(title="Figure Caption",
-                 htmlOutput(NS("FG", "ui_fg_fig_name")),  "ui_fg_fig_name",
+                 "ui_fg_fig_name",
+                 htmlOutput(NS("FG", "ui_fg_fig_name")),  
                  tags$br(),
-                 htmlOutput(NS("FG", "ui_fg_fig_cap")),  "ui_fg_fig_cap",
+                 "ui_fg_fig_cap",
+                 htmlOutput(NS("FG", "ui_fg_fig_cap")),  
               width=12)),
              fluidRow(
                box(title="Add Plot Element Button",
+                 "ui_fg_add_element_button",
                  htmlOutput(NS("FG", "ui_fg_add_element_button")), width=4),
                box(title="Plot Element Select",
+                 "ui_fg_select",
                  htmlOutput(NS("FG", "ui_fg_select")), width=4)),
              fluidRow(
                box(title="New Element Row",
+                 "ui_fg_new_element_row",
                  htmlOutput(NS("FG", "ui_fg_new_element_row")), width=12)),
              fluidRow(
-               box(title="Button Message",
+               box(title="Messages",
+                 "ui_fg_msg",
                  verbatimTextOutput(NS("FG", "ui_fg_msg")), width=12)),
              fluidRow(
                box(title="Plot Preview",
+                 "ui_fg_preview_ggplot",
                  plotOutput(NS("FG", "ui_fg_preview_ggplot")), width=12)),
              fluidRow(
                box(title="Plotly Preview",
-                 plotly::plotlyOutput(NS("FG", "ui_fg_preview_plotly")), width=12)),
+                 "ui_fg_preview_plotly",
+                 plotly::plotlyOutput(NS("FG", "ui_fg_preview_plotly"), width="1000px", height="600px"), width=12)),
              fluidRow(
                box(title="Multipage Slider",
+                 "ui_fg_slider_page",
                  htmlOutput(NS("FG", "ui_fg_slider_page")), width=12)),
              fluidRow(
                box(title="Current Elements",
+                 "hot_fg_elements",
                 rhandsontable::rHandsontableOutput(NS("FG", "hot_fg_elements")), width=12)),
              fluidRow(
                box(title="Generated Code",
+                 "ui_fg_code",      
                  shinyAce::aceEditor(NS("FG", "ui_fg_code")), width=12)),
              fluidRow(
                box(title="Current Module State",
@@ -92,7 +109,7 @@ server <- function(input, output, session) {
 
   # Format of ds is described in JMH
   ds = list(
-     DS = list(
+     UD = list(
           data_file_local = NULL,
           data_file_ext   = NULL,
           data_file       = NULL,

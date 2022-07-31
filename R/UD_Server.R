@@ -14,24 +14,31 @@
 #'@export
 #'@title Data Upload Server
 #'@description Server function for the Data Uplaod Shiny Module
-#'@param id An ID string that corresponds with the ID used to call the modules UI elements 
+#'@param id An ID string that corresponds with the ID used to call the modules UI elements
+#'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param yaml_section  Section of the yaml file with the module configuration (\code{"UD"})
 #'@param yaml_file Upload Data configuration file
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
 UD_Server <- function(id,
+                      id_ASM       = "ASM",
                       yaml_section = "UD",
-                      yaml_file    = system.file(package = "formods", 
-                                                 "templates", 
+                      yaml_file    = system.file(package = "formods",
+                                                 "templates",
                                                  "config.yaml"),
                       react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
-    
-    
+
+
     #------------------------------------
     # Creates the file upload elements
     output$UD_ui_load_data = renderUI({
-      state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
+      state = UD_fetch_state(id           = id,
+                             id_ASM       = id_ASM,
+                             input        = input,
+                             session      = session,
+                             yaml_file    = yaml_file,
+                             yaml_section = yaml_section)
       accept = state[["MC"]][["allowed_extensions"]]
       label  = paste0( state[["MC"]][["labels"]][["upload_button"]],
                        " (", paste(accept, collapse=", "), ")")
@@ -48,19 +55,23 @@ UD_Server <- function(id,
     output$UD_ui_select_sheets =  renderUI({
       # Reacting to data file changes
       input$input_data_file
-      state = UD_fetch_state(id, input, session, yaml_file)
-      
-      if(!is.null(state[["DS"]][["data_file_ext"]]) &
-         !is.null(state[["DS"]][["sheet"]]) &
-         !is.null(state[["DS"]][["sheets"]])){
+      state = UD_fetch_state(id           = id,
+                             id_ASM       = id_ASM,
+                             input        = input,
+                             session      = session,
+                             yaml_file    = yaml_file,
+                             yaml_section = yaml_section)
+
+      if(!is.null(state[["UD"]][["data_file_ext"]]) &
+         !is.null(state[["UD"]][["sheets"]])){
         uiele =
           selectInput(
             NS(id, "input_select_sheet"),
             "Select Sheet",
-            choices  = state[["DS"]][["sheets"]],
-            selected = state[["DS"]][["sheet"]],
+            choices  = state[["UD"]][["sheets"]],
+            selected = state[["UD"]][["sheet"]],
             multiple = FALSE)
-        
+
       } else {
         uiele = NULL
       }
@@ -71,9 +82,14 @@ UD_Server <- function(id,
       # Reacting to data file changes
       input$input_data_file
       input$input_select_sheet
-      state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
-      if(!is.null(state[["DS"]][["load_msg"]])){
-        uiele = state[["DS"]][["load_msg"]]
+      state = UD_fetch_state(id           = id,
+                             id_ASM       = id_ASM,
+                             input        = input,
+                             session      = session,
+                             yaml_file    = yaml_file,
+                             yaml_section = yaml_section)
+      if(!is.null(state[["UD"]][["load_msg"]])){
+        uiele = state[["UD"]][["load_msg"]]
       } else {
         uiele = NULL
       }
@@ -81,51 +97,70 @@ UD_Server <- function(id,
     #------------------------------------
     # A simple preview of the data:
     output$UD_ui_data_preview  =  renderUI({
+      # Forcing a reaction to changes in other modules
+      react_state[[id_ASM]]
       # Reacting to data file changes
       input$input_data_file
       input$input_select_sheet
-      state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
-      
-      if(is.data.frame(state[["DS"]][["contents"]])){
+      state = UD_fetch_state(id           = id,
+                             id_ASM       = id_ASM,
+                             input        = input,
+                             session      = session,
+                             yaml_file    = yaml_file,
+                             yaml_section = yaml_section)
+
+      if(is.data.frame(state[["UD"]][["contents"]])){
         uiele = tagList(tags$b("Dataset Preveiw"),
                         rhandsontable::rHandsontableOutput(NS(id, "hot_data_preview")))
       } else {uiele = NULL}
       uiele})
-    
+
     #------------------------------------
     # Generated data reading code
     observe({
       # Reacting to file changes
       input$input_data_file
       input$input_select_sheet
-      state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
-      
-      if(is.null(state[["DS"]][["code"]])){
+      state = UD_fetch_state(id           = id,
+                             id_ASM       = id_ASM,
+                             input        = input,
+                             session      = session,
+                             yaml_file    = yaml_file,
+                             yaml_section = yaml_section)
+
+      if(is.null(state[["UD"]][["code"]])){
         uiele = "# No file loaded"
       } else {
-        uiele = state[["DS"]][["code"]]
+        uiele = state[["UD"]][["code"]]
       }
-      
-      
+
+
       shinyAce::updateAceEditor(
-        session         = session, 
-        editorId        = "UD_ui_ace_code", 
+        session         = session,
+        editorId        = "UD_ui_ace_code",
         theme           = state[["yaml"]][["FM"]][["code"]][["theme"]],
         showLineNumbers = state[["yaml"]][["FM"]][["code"]][["showLineNumbers"]],
         readOnly        = state[["MC"]][["code"]][["readOnly"]],
         mode            = state[["MC"]][["code"]][["mode"]],
         value           = uiele)
-      
-    }) 
+
+    })
     #------------------------------------
     # A simple preview of the data:
     output$hot_data_preview  =  rhandsontable::renderRHandsontable({
       # Reacting to data file changes
       input$input_data_file
       input$input_select_sheet
-      state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
-      if(is.data.frame(state[["DS"]][["contents"]])){
-        uiele = rhandsontable::rhandsontable(state[["DS"]][["contents"]],
+      # Forcing a reaction to changes in other modules
+      react_state[[id_ASM]]
+      state = UD_fetch_state(id           = id,
+                             id_ASM       = id_ASM,
+                             input        = input,
+                             session      = session,
+                             yaml_file    = yaml_file,
+                             yaml_section = yaml_section)
+      if(is.data.frame(state[["UD"]][["contents"]])){
+        uiele = rhandsontable::rhandsontable(state[["UD"]][["contents"]],
                                              width  = state[["MC"]][["formatting"]][["preview"]][["width"]],
                                              height = state[["MC"]][["formatting"]][["preview"]][["height"]])
       } else {uiele=NULL}
@@ -133,7 +168,12 @@ UD_Server <- function(id,
     #------------------------------------
     # Creates the ui for the compact view of the module
     output$UD_ui_compact  =  renderUI({
-      state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
+      state = UD_fetch_state(id           = id,
+                             id_ASM       = id_ASM,
+                             input        = input,
+                             session      = session,
+                             yaml_file    = yaml_file,
+                             yaml_section = yaml_section)
 
       uiele_code_button = NULL
       # Creating the code button if it's enabled
@@ -143,20 +183,23 @@ UD_Server <- function(id,
            height  = state[["MC"]][["formatting"]][["code"]][["height"]]
            ))
         uiele_code_button = tagList(
+         tags$br(),
+         tags$br(),
          shinyWidgets::dropdownButton(
            uiele_code,
            inline  = FALSE,
-           right   = TRUE, 
+           right   = TRUE,
            size    = "sm",
            circle  = FALSE,
            width   = state[["MC"]][["formatting"]][["code"]][["width"]],
            status  = "danger",
            icon    = icon("code", lib="font-awesome"),
-           tooltip = tooltipOptions(title = state[["MC"]][["labels"]][["code_tooltip"]]))
+           tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["show_code"]]))
         )
       }
 
-      uiele  = tagList( div(style="display:inline-block", htmlOutput(NS(id, "UD_ui_load_data"))))
+      uiele  = tagList( div(style="display:inline-block", htmlOutput(NS(id, "UD_ui_load_data"))),
+                        div(style="display:inline-block;vertical-align:top", uiele_code_button))
 
 
       uiele = tagList(uiele,
@@ -168,11 +211,9 @@ UD_Server <- function(id,
       if(state$MC$compact$preview){
         uiele_preview = tagList(div(style="display:inline-block;vertical-align:top",
                                     htmlOutput(NS(id, "UD_ui_data_preview"))),
-                                div(style="display:inline-block;vertical-align:top",
-                                   uiele_code_button)
                                 )
         uiele = tagList(uiele, uiele_preview, tags$br())}
-      
+
       uiele})
     outputOptions(output, "UD_ui_compact", priority = -1)
     #------------------------------------
@@ -181,16 +222,22 @@ UD_Server <- function(id,
       # Here we list the ui inputs that will result in a state change:
       toListen <- reactive({
         list(input$input_data_file,
-             input$input_select_sheet) })
+             input$input_select_sheet,
+             react_state[[id_ASM]]) })
       # This updates the reaction state:
       observeEvent(toListen(), {
-        state = UD_fetch_state(id, input, session, yaml_file, yaml_section)
+        state = UD_fetch_state(id           = id,
+                               id_ASM       = id_ASM,
+                               input        = input,
+                               session      = session,
+                               yaml_file    = yaml_file,
+                               yaml_section = yaml_section)
         FM_le(state, "reaction state updated")
         react_state[[id]] = state
-      })
+      }, priority=100)
     }
-    
-    
+
+
   })
 }
 
@@ -198,6 +245,7 @@ UD_Server <- function(id,
 #'@title Fetch Upload Data State
 #'@description Merges default app options with the changes made in the UI
 #'@param id Shiny module ID
+#'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param input Shiny input variable
 #'@param session Shiny session variable
 #'@param yaml_file cofiguration file
@@ -214,50 +262,50 @@ UD_Server <- function(id,
 #'   \item{load_msg:} Text message indicated the success or any problems
 #'   encountered when uploading the file.
 #'   \item{data_file_local:} Full path to the data file on the server.
-#'   \item{data_file:} Dataset file name without the path. 
+#'   \item{data_file:} Dataset file name without the path.
 #'   \item{data_file_ext:} File extension of the uploaded file.
 #'   \item{sheet:} If the uploaded file is an excel file, this is the
 #'   currently selected sheet.
-#'   \item{sheets:} If the uploaded file is an excel file, this is a character
-#'   vector of the sheets present in that file.
+#'   \item{sheets:} If the uploaded file is an excel file, this is a character vector of the sheets present in that file.
 #'   \item{contents:} Data frame containting the contents of the data file.
 #'   \item{checksum:} This is an MD5 sum of the contents element and can be
 #'   used to detect changes in the loaded file.
 #' }
+#'  \item{MOD_TYPE:} Character data containing the type of module \code{"UD"}
+#'  \item{id:} Character data containing the module id module in the session variable.
 #'}
-UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
-  
-  # After the app has loaded the state must be initialized
-  FM_UD_ID = paste0("FM_UD_", id)
-  
+UD_fetch_state = function(id, id_ASM, input, session, yaml_file, yaml_section){
+
   # Template for an empty dataset
   #---------------------------------------------
   # Getting the current state
-  if(is.null(session$userData[[FM_UD_ID]])){
+  state = FM_fetch_mod_state(session, id)
+  # If the state has not yet been defined then we
+  # initialize it
+  if(is.null(state)){
     # General state information
-    state = UD_init_state(yaml_file)
-    
-    # This assigns the module config "MC" element to the correct yaml_section.
-    state[["MC"]] = state[["yaml"]][[yaml_section]]
-  } else {
-    # If it's not null we just pluck the state
-    # from the session variable
-    state = session$userData[[FM_UD_ID]]
+    state = UD_init_state(yaml_file, yaml_section, id)
   }
-  
+
   #---------------------------------------------
   # Here we update the state based on user input
   # Loadinng the data file
   if(!is.null(isolate(input$input_data_file))){
     # Pulling the data_file and sheet from interface
-    data_file       = isolate(input$input_data_file$name)
-    data_file_local = isolate(input$input_data_file$datapath)
-    sheet           = isolate(input$input_select_sheet)
-    sheets          = c()
-    contents        = NULL
-    data_file_ext   = tools::file_ext(data_file)
-    load_msg        = NULL
-    
+    data_file            = isolate(input$input_data_file$name)
+    data_file_local_form = isolate(input$input_data_file$datapath)
+    sheet                = isolate(input$input_select_sheet)
+    sheets               = c()
+    contents             = NULL
+    data_file_ext        = tools::file_ext(data_file)
+    load_msg             = NULL
+
+    # This is where the user files will be stored on the server
+    data_file_local = file.path(FM_fetch_user_files_path(state), data_file)
+
+    # Copying the temporary form file to the user directory
+    file.copy(data_file_local_form, data_file_local)
+
     allowed_extensions = state[["MC"]][["allowed_extensions"]]
     # determining if we need to load data
     load_data  = FALSE
@@ -265,22 +313,24 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
     if(data_file_ext %in% allowed_extensions){
       # If we're dealing with an excel file we get the sheet names
       if(data_file_ext %in% c("xls", "xlsx")){
-        sheets = readxl::excel_sheets(data_file_local)
+        sheets = readxl::excel_sheets(data_file_local_form)
       }
       # If we have an allowed file type and nothing loaded before then we load
       # the file:
-      if(is.null(state[["DS"]][["data_file_local"]])){
+      if(is.null(state[["UD"]][["data_file_local"]])){
         load_data = TRUE
       } else{
         # If there is already a file loaded we need to see
         # if there are any changes. For example if the sheet
         # name has changed.
         # This is triggered when a new file has been uploaded
-        if(state[["DS"]][["data_file_local"]] != data_file_local){
+        if(state[["UD"]][["data_file_local"]] != data_file_local){
           load_data = TRUE
         } else if(!is.null(sheet)){
           # This should be triggered when the sheet has changed
-          if(sheet !=  state[["DS"]][["data_file_local"]]){
+          if(is.null(state[["UD"]][["sheet"]] )){
+            load_data = TRUE
+          } else if(sheet !=  state[["UD"]][["sheet"]]){
             load_data = TRUE
           }
         }
@@ -288,91 +338,60 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
     } else {
       # pulling out the template:
       load_msg = state[["MC"]][["labels"]][["msg_bad_extension"]]
-      
+
       load_msg = stringr::str_replace_all(load_msg, "===EXT===",        data_file_ext)
       load_msg = stringr::str_replace_all(load_msg, "===FILE===",       data_file)
       load_msg = stringr::str_replace_all(load_msg, "===ALLOWEDEXT===", paste(allowed_extensions, collapse=", "))
       load_msg = tagList(tags$em(load_msg))
-      
+
       # This will force a reset of the DS field in the state
       clear_data = TRUE
     }
-    
+
     # If load data is true then we store all that in the state variable
     if(load_data){
-      # getting the object name:
-      if(is.null(state[["MC"]][["ds_object_name"]])){
-        object_name  = "DS"
-        warning(paste0("Unable to find ds_object_name in yaml file. Using default: ", object_name))
-      } else {
-        object_name = state[["MC"]][["ds_object_name"]]
-      }
+      # Generating the read code and reading in the contents of the file.
+      read_res = UD_ds_read(
+        state           = state,
+        data_file_ext   = data_file_ext,
+        data_file       = data_file,
+        data_file_local = data_file_local,
+        sheets          = sheets,
+        sheet           = sheet)
 
-      code = NULL
-      # Reading in the file contents:
-      if(data_file_ext %in% c("csv")){
-        contents = readr::read_csv(file=data_file_local)
-        code = paste0(object_name, ' = readr::read_csv(file="',data_file,'")\n')
-      }
-      if(data_file_ext %in% c("tsv")){
-        contents = readr::read_tsv(file=data_file_local)
-        code = paste0(object_name, ' = readr::read_tsv(file="',data_file,'")\n')
-      }
-      if(data_file_ext %in% c("xls", "xlsx")){
-        # If you load one excel sheet and then switch to another
-        # where that sheet isn't present this will reset "sheet"
-        # in that scenario.
-        if(!is.null(sheet)){
-          if(!(sheet %in% sheets)){
-            sheet = NULL
-          }
-        }
-        # By default we read the first sheet
-        if(is.null(sheet)){
-          sheet = sheets[1] }
-        contents = readxl::read_excel(path=data_file_local, sheet=sheet)
-        code = paste0(object_name, ' = readxl::read_excel(path="',data_file,'", sheet="',sheet,'")\n')
-        
-      }
       load_msg = tagList(tags$em(paste0("File loaded.")))
 
-      if(!is.null(code)){
-        code = paste0("# Loading dataset\n", code)
-      }
-
       # Storing all the elements in the state
-      state[["DS"]][["data_file_local"]] = data_file_local
-      state[["DS"]][["data_file_ext"]]   = data_file_ext
-      state[["DS"]][["data_file"]]       = data_file
-      state[["DS"]][["object_name"]]     = object_name
-      state[["DS"]][["sheet"]]           = sheet
-      state[["DS"]][["sheets"]]          = sheets
-      state[["DS"]][["code"]]            = code
-      state[["DS"]][["contents"]]        = contents
-      state[["DS"]][["checksum"]]        = digest::digest(contents, algo=c("md5"))
-      state[["DS"]][["isgood"]]          = TRUE
+      state = UD_attach_ds(
+                state,
+                data_file_local = data_file_local        ,
+                data_file_ext   = data_file_ext          ,
+                data_file       = data_file              ,
+                sheet           = sheet                  ,
+                sheets          = sheets                 ,
+                code            = read_res[["code"]]     ,
+                contents        = read_res[["contents"]] ,
+                object_name     = read_res[["object_name"]] ,
+                isgood          = TRUE)
 
-      FM_le(state, paste0("module checksum updated:", state[["DS"]][["checksum"]]))
+      FM_le(state, paste0("module checksum updated:", state[["UD"]][["checksum"]]))
     }
-    
+
     # If someone loads a good file then a bad one (e.g. bad file extension)
     # We clear the data and set the dataset to bad to prevent showing the old
     # dataset that is no longer relevant.
     if(clear_data){
-      state[["DS"]] = fetch_DS_NULL()
+      state = UD_attach_ds(state)
     }
-    
+
     # Picking up any loading messages that were defined
-    state[["DS"]][["load_msg"]]        = load_msg
+    state[["UD"]][["load_msg"]]        = load_msg
   }
-  
-  # Saving the session location
-  state[["SESSION_LOCATION"]] = FM_UD_ID
 
   #---------------------------------------------
   # Saving the state
-  session$userData[[FM_UD_ID]] = state
-  
+  FM_set_mod_state(session, id, state)
+
   # Returning the state
   state}
 
@@ -381,28 +400,45 @@ UD_fetch_state = function(id, input, session, yaml_file, yaml_section){
 #'@title Initialize UD Module State
 #'@description Creates a list of the initialized module state
 #'@param yaml_file App configuration file
-#'@return list containing an empty UD state 
-UD_init_state = function(yaml_file){
-  
+#'@param yaml_section  Section of the yaml file with the module configuration
+#'@param id ID string for the module.
+#'@return list containing an empty UD state
+UD_init_state = function(yaml_file, yaml_section, id){
+
   state = list()
   # Reading in default information from the yaml file
   state[["yaml"]] = yaml::read_yaml(yaml_file)
-  
-  state[["DS"]] = fetch_DS_NULL()
+
+  # This assigns the module config "MC" element to the correct yaml_section.
+  state[["MC"]] = state[["yaml"]][[yaml_section]]
+
 
   state[["MOD_TYPE"]] = "UD"
-  
+  state[["id"]] = id
+  state = UD_attach_ds(state)
+
+
   FM_le(state, "State initialized")
   state}
 
 #'@export
-#'@title Empty Data Set Object
-#'@description Creates a list with default elements for a dataset
-#'@return Null dataset list
-fetch_DS_NULL = function(){
-  
-  DS_NULL =
-    list(isgood          = FALSE,
+#'@title Attach Data Set to UD State
+#'@description Attaches a dataset to the UD state supplied.
+#'@param state UD state module.
+#'@param isgood Boolean object indicating if the file was successfully loaded.
+#'@param load_msg Text message indicated the success or any problems encountered when uploading the file.
+#'@param data_file_local Full path to the data file on the server.
+#'@param data_file Dataset file name without the path.
+#'@param data_file_ext File extension of the uploaded file.
+#'@param sheet If the uploaded file is an excel file, this is the currently selected sheet.
+#'@param sheets If the uploaded file is an excel file, this is a character vector of the sheets present in that file.
+#'@param code Code to load dataset.
+#'@param object_name Name of the dataset object created when code is evaluated.
+#'@param contents Data frame containting the contents of the data file.
+#'@return state with data set attached
+UD_attach_ds = function(
+         state,
+         isgood          = TRUE,
          load_msg        = NULL,
          data_file_local = NULL,
          data_file_ext   = NULL,
@@ -410,9 +446,90 @@ fetch_DS_NULL = function(){
          sheet           = NULL,
          sheets          = NULL,
          code            = NULL,
-         code_previous   = NULL,
-         checksum        = digest::digest(NULL, algo=c("md5")),
-         contents        = NULL)
-  
-  DS_NULL}
+         object_name     = NULL,
+         contents        = NULL){
+
+  # Calculating the checksum
+  checksum        = digest::digest(contents, algo=c("md5"))
+
+  state[["UD"]] =
+    list(isgood          = isgood         ,
+         load_msg        = load_msg       ,
+         data_file_local = data_file_local,
+         data_file_ext   = data_file_ext  ,
+         data_file       = data_file      ,
+         sheet           = sheet          ,
+         sheets          = sheets         ,
+         code            = code           ,
+         object_name     = object_name    ,
+         checksum        = checksum       ,
+         contents        = contents      )
+
+  state}
+
+
+#'@export
+#'@title Generate Code and Load DS
+#'@description Generates the code for loading a dataset and returns both the
+#'code and the contents
+#'@param data_file_local Full path to the data file on the server.
+#'@param data_file Dataset file name without the path.
+#'@param data_file_ext File extension of the uploaded file.
+#'@param sheets If the uploaded file is an excel file, this is all the sheets in the file.
+#'@param sheet If the uploaded file is an excel file, this is the currently selected sheet.
+#'@param sheets If the uploaded file is an excel file, this is a character vector of the sheets present in that file.
+#'@return list with the elements of the dataset (contents, object_name and code)
+UD_ds_read = function(state,
+                      data_file_ext    = NULL,
+                      data_file_local  = NULL,
+                      data_file        = NULL,
+                      sheets           = NULL,
+                      sheet            = NULL){
+
+  contents = c()
+  code     = NULL
+
+  # getting the object name:
+  if(is.null(state[["MC"]][["ds_object_name"]])){
+    object_name  = "UD"
+    warning(paste0("Unable to find ds_object_name in yaml file. Using default: ", object_name))
+  } else {
+    object_name = state[["MC"]][["ds_object_name"]]
+  }
+
+  # Reading in the file contents:
+  if(data_file_ext %in% c("csv")){
+    contents = readr::read_csv(file=data_file_local)
+    code = paste0(object_name, ' = readr::read_csv(file="',data_file,'")\n')
+  }
+  if(data_file_ext %in% c("tsv")){
+    contents = readr::read_tsv(file=data_file_local)
+    code = paste0(object_name, ' = readr::read_tsv(file="',data_file,'")\n')
+  }
+  if(data_file_ext %in% c("xls", "xlsx")){
+    # If you load one excel sheet and then switch to another
+    # where that sheet isn't present this will reset "sheet"
+    # in that scenario.
+    if(!is.null(sheet)){
+      if(!(sheet %in% sheets)){
+        sheet = NULL
+      }
+    }
+    # By default we read the first sheet
+    if(is.null(sheet)){
+      sheet = sheets[1] }
+    contents = readxl::read_excel(path=data_file_local, sheet=sheet)
+    code = paste0(object_name, ' = readxl::read_excel(path="',data_file,'", sheet="',sheet,'")\n')
+
+  }
+
+  if(!is.null(code)){
+    code = paste0("# Loading dataset\n", code)
+  }
+
+  res = list(contents    = contents,
+             object_name = object_name,
+             code        = code)
+
+res}
 
