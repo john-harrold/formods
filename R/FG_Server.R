@@ -162,6 +162,9 @@ FG_Server <- function(id,
         uiele = tagList(
           div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_curr_figs"))),
           div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_fig_name"))),
+          div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_curr_views"))),
+          tags$br(),
+          div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_fig_cap"))),
           tags$br(),
           verbatimTextOutput(NS(id, "ui_fg_msg"))
         )
