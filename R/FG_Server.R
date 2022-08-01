@@ -11,20 +11,20 @@
 #'@title Figure Generation Server
 #'@description Server function for the figure generation module
 #'@param id An ID string that corresponds with the ID used to call the module's UI function
-#'@param yaml_section  Section of the yaml file with the module configuration (\code{"FG"})
-#'@param yaml_file Upload Data cofiguration file
+#'@param FM_yaml_file App configuration file with FM as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return FG Server object
 FG_Server <- function(id,
-                yaml_section = "FG",
-                yaml_file    = system.file(package = "formods", "templates", "config.yaml"),
-                id_ASM       = "ASM",
-                id_UD        = "UD",
-                id_DW        = "DW",
-                react_state  = NULL) {
+                FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
+                MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml"),
+                id_ASM        = "ASM",
+                id_UD         = "UD",
+                id_DW         = "DW",
+                react_state   = NULL) {
   moduleServer(id, function(input, output, session) {
 
     #------------------------------------
@@ -38,15 +38,15 @@ FG_Server <- function(id,
       input[["hot_fg_elements"]]
       input[["select_current_fig"]]
 
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
       current_fig = FG_fetch_current_fig(state)
 
       if(is.null(current_fig[["elements_table"]])){
@@ -106,15 +106,15 @@ FG_Server <- function(id,
       react_state[[id_UD]]
       react_state[[id_DW]]
       react_state[[id_ASM]]
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
 
       current_fig = FG_fetch_current_fig(state)
 
@@ -249,15 +249,15 @@ FG_Server <- function(id,
 
       input[["select_fg_page"]]
 
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
 
       current_fig = FG_fetch_current_fig(state)
       fobj = current_fig[["fobj"]]
@@ -285,25 +285,17 @@ FG_Server <- function(id,
 
       input[["select_fg_page"]]
 
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
 
       current_fig = FG_fetch_current_fig(state)
-    # # Figuring out the page to use
-    # if(state[["FG"]][["ui"]][["select_fg_page"]] == ""){
-    #   # Default to the first page if the select_fg_page ui element hasn't
-    #   # been populated. It wont populate if there is only one page.
-    #   fig_page =  names(current_fig[["pages"]])[1]
-    # } else {
-    #   fig_page = state[["FG"]][["ui"]][["select_fg_page"]]
-    # }
 
       current_fig = FG_fetch_current_fig(state)
       fobj = current_fig[["fobj"]]
@@ -327,15 +319,16 @@ FG_Server <- function(id,
     #------------------------------------
     output$ui_fg_select    = renderUI({
       #req(input$X)
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
+
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
         uiele = tagList()
@@ -390,17 +383,15 @@ FG_Server <- function(id,
       input[["button_fig_del"]]
       input[["button_fig_copy"]]
       input[["select_current_fig"]]
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
-
-
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
 
 
       uiele = NULL
@@ -418,15 +409,15 @@ FG_Server <- function(id,
     #------------------------------------
     output$ui_fg_new_fig   = renderUI({
       #req(input$X)
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
 
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
@@ -443,15 +434,16 @@ FG_Server <- function(id,
     #------------------------------------
     output$ui_fg_save_fig   = renderUI({
       #req(input$X)
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
+
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
         uiele = actionBttn(
@@ -467,15 +459,16 @@ FG_Server <- function(id,
     #------------------------------------
     output$ui_fg_del_fig   = renderUI({
       #req(input$X)
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
+
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
         uiele = actionBttn(
@@ -491,15 +484,16 @@ FG_Server <- function(id,
     #------------------------------------
     output$ui_fg_copy_fig   = renderUI({
       #req(input$X)
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
+
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
         uiele = actionBttn(
@@ -524,17 +518,15 @@ FG_Server <- function(id,
       input[["button_fig_del"]]
       input[["button_fig_copy"]]
       input[["select_current_fig"]]
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
-
-
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
 
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
@@ -572,21 +564,30 @@ FG_Server <- function(id,
       input[["button_element_add"]]
       input[["select_current_fig"]]
 
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
 
       # Figuring out the pages in the current figure
       current_fig = FG_fetch_current_fig(state)
 
       uiele =  " "
       if(current_fig[["num_pages"]] > 1){
+
+        # If faceting changes and the selected facet page is > the current
+        # number of pages then we set the current page to 1
+        if( current_fig[["page"]] <= current_fig[["num_pages"]] ){
+          current_page = current_fig[["page"]]
+        } else {
+          current_page = 1
+        }
+
         pages = c(1:current_fig[["num_pages"]])
         uiele =
            sliderTextInput(
@@ -594,38 +595,27 @@ FG_Server <- function(id,
              label    = NULL,
              width    = state[["MC"]][["formatting"]][["select_fg_page"]][["width"]],
              grid     = TRUE,
-             selected = current_fig[["page"]],
+             selected = current_page,
              choices  = pages
-           # options  = list(
-           #   title = state[["MC"]][["labels"]][["fds_mutate_column"]])
            )
      
-
-
-#       uiele = 
-#       noUiSliderInput(
-#            inputId  = NS(id, "select_fg_page"),
-#            label    = NULL,
-#            value    = current_fig[["page"]],
-#            min      = 1,
-#            max      = current_fig[["num_pages"]],
-#            step     = 1
-#                       )
       }
 
       uiele})
     #------------------------------------
     output$ui_fg_add_element_button = renderUI({
       #req(input$X)
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
+
       uiele = "ui_fg_add_element_button"
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
@@ -647,15 +637,15 @@ FG_Server <- function(id,
       input[["button_fig_del"]]
       input[["button_fig_copy"]]
       input[["button_element_add"]]
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
 
       uiele = state[["FG"]][["ui_msg"]]
 
@@ -664,15 +654,16 @@ FG_Server <- function(id,
     output$ui_fg_new_element_row = renderUI({
       req(input$select_fg_element)
       # force update when a new plot element is selected
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
+
       # Pulling out the current plot element:
       curr_element = state[["FG"]][["ui"]][["select_fg_element"]]
 
@@ -813,15 +804,15 @@ FG_Server <- function(id,
       input[["button_fig_del"]]
       input[["button_fig_copy"]]
       input[["button_element_add"]]
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
 
       if(is.null(names(state[["FG"]][["figs"]]))){
         uiele  = tags$em(state[["MC"]][["labels"]][["curr_figs_none"]])
@@ -874,15 +865,15 @@ FG_Server <- function(id,
       input[["button_fig_copy"]]
       input[["button_element_add"]]
 
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
 
       uiele = "ui_fg_curr_views"
 
@@ -930,15 +921,15 @@ FG_Server <- function(id,
       input[["hot_fg_elements"]]
       input[["select_current_fig"]]
 
-      state = FG_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
 
       uiele = NULL
       current_fig = FG_fetch_current_fig(state)
@@ -972,17 +963,17 @@ FG_Server <- function(id,
       })
       # This updates the reaction state:
       observeEvent(toListen(), {
-        state = FG_fetch_state(
-                             id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_ASM       = id_ASM,
-                             id_UD        = id_UD,
-                             id_DW        = id_DW,
-                             react_state  = react_state)
 
+        state = FG_fetch_state(id             = id,
+                               input          = input,
+                               session        = session,
+                               FM_yaml_file   = FM_yaml_file,
+                               MOD_yaml_file  = MOD_yaml_file,
+                               id_ASM         = id_ASM,
+                               id_UD          = id_UD,
+                               id_DW          = id_DW,
+                               react_state    = react_state)
+        
         FM_le(state, "reaction state updated")
         react_state[[id]] = state
       })
@@ -995,16 +986,15 @@ FG_Server <- function(id,
     observeEvent(remove_hold_listen(), {
       # Once the UI has been regenerated we
       # remove any holds for this module
-      state = FG_fetch_state(
-        id           = id,
-        input        = input,
-        session      = session,
-        yaml_file    = yaml_file,
-        yaml_section = yaml_section,
-        id_ASM       = id_ASM,
-        id_UD        = id_UD,
-        id_DW        = id_DW,
-        react_state  = react_state)
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
       FM_le(state, "removing holds")
       # Removing all holds
       for(hname in names(state[["FG"]][["ui_hold"]])){
@@ -1023,18 +1013,18 @@ FG_Server <- function(id,
 #'@param id Shiny module ID
 #'@param input Shiny input variable
 #'@param session Shiny session variable
-#'@param yaml_file cofiguration file
-#'@param yaml_section  Section of the yaml file with the module configuration
+#'@param FM_yaml_file App configuration file with FM as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return list containing the current state of the app including default
 #'values from the yaml file as well as any changes made by the user. The
-#'structure ofthe list is defined below:
+#'structure of the list is defined below:
 #'\itemize{
 #'  \item{yaml:} Contents of the yaml file.
-#'  \item{MC:} Section of the yaml file, specified by \code{yaml_section}, containing the FG module components
+#'  \item{MC:} Module components of the yaml file.
 #'  \item{FG:} Data wrangling state
 #'  \itemize{
 #'    \item{isgood:} Boolean status of the state. Currently just TRUE
@@ -1067,14 +1057,15 @@ FG_Server <- function(id,
 #'      }
 #'  }
 #'  \item{MOD_TYPE:} Character data containing the type of module \code{"DW"}
-#'  \item{id:} Character data containing the module id
-#'  module in the session variable.
+#'  \item{id:} Character data containing the module id module in the session variable.
+#'  \item{FM_yaml_file:} App configuration file with FM as main section.
+#'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 #'}
 FG_fetch_state = function(id,
                           input,
                           session,
-                          yaml_file,
-                          yaml_section,
+                          FM_yaml_file,
+                          MOD_yaml_file,
                           id_ASM = NULL,
                           id_UD  = NULL,
                           id_DW  = NULL,
@@ -1090,12 +1081,12 @@ FG_fetch_state = function(id,
 
   if(is.null(state)){
     # General state information
-    state = FG_init_state(yaml_file    = yaml_file,
-                          yaml_section = yaml_section,
-                          id           = id,
-                          id_UD        = id_UD,
-                          id_DW        = id_DW,
-                          react_state  = react_state)
+    state = FG_init_state(FM_yaml_file    = FM_yaml_file,
+                          MOD_yaml_file   = MOD_yaml_file,
+                          id              = id,
+                          id_UD           = id_UD,
+                          id_DW           = id_DW,
+                          react_state     = react_state)
   }
 
   # detecting changes in the datasets
@@ -1117,8 +1108,8 @@ FG_fetch_state = function(id,
 
   if(UPDATE_DS){
     FM_le(state, "Updateing DS")
-    state = FG_init_state(yaml_file    = yaml_file,
-                          yaml_section = yaml_section,
+    state = FG_init_state(FM_yaml_file    = FM_yaml_file,
+                          MOD_yaml_file   = MOD_yaml_file,
                           id           = id,
                           id_UD        = id_UD,
                           id_DW        = id_DW,
@@ -1396,20 +1387,22 @@ state}
 #'@export
 #'@title Initialize FG Module State
 #'@description Creates a list of the initialized module state
-#'@param yaml_file App cofiguration file
-#'@param yaml_section  Section of the yaml file with the module configuration
+#'@param FM_yaml_file App configuration file with FM as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id Shiny module ID
 #'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return list containing an empty app state object
-FG_init_state = function(yaml_file, yaml_section, id, id_UD, id_DW, react_state){
+FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_state){
   state = list()
-  # Reading in default information from the yaml file
-  state[["yaml"]] = yaml::read_yaml(yaml_file)
 
-  # This assigns the module config "MC" element to the correct yaml_section.
-  state[["MC"]] = state[["yaml"]][[yaml_section]]
+  # Reading in default information from the yaml file
+  state[["yaml"]] = yaml::read_yaml(FM_yaml_file)
+
+  # This assigns the module config "MC" element to the correct 
+  MOD_CONFIG = yaml::read_yaml(MOD_yaml_file)
+  state[["MC"]] = MOD_CONFIG[["MC"]]
 
   isgood = TRUE
 
@@ -1486,8 +1479,8 @@ FG_init_state = function(yaml_file, yaml_section, id, id_UD, id_DW, react_state)
 
   # Populating the formods state elements
   state = FM_init_state(
-    yaml_file       = yaml_file,
-    yaml_section    = yaml_section,
+    FM_yaml_file    = FM_yaml_file,
+    MOD_yaml_file   = MOD_yaml_file,
     id              = id,
     MT              = "FG",
     button_counters = button_counters,

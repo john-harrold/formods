@@ -1,0 +1,27 @@
+# ASM module configuration 
+MC:
+  code: # module specific code options
+    readOnly: TRUE
+    mode:     r    
+  formatting:
+    input_load_state:
+      width: "100%"
+    ui_asm_save_name:
+      width: "100%"
+    button_state_save:
+      size: "sm" 
+      block: TRUE
+  labels:    
+    ui_asm_save_name:    "Save Analysis"
+    ui_asm_save_name_ph: "my_analysis"
+    save_state:          "Save"
+    input_load_state:    "Load Analysis"
+    upload_button:       "Load"
+    upload_placeholder:  "Select analysis file" 
+  errors:
+    bad_input: "Input error message"
+  tooltips: 
+    # Set to FALSE to disable tool tips for this module
+    include: TRUE
+    components:
+      input_tip: "My tool tip"

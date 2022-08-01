@@ -14,22 +14,28 @@
 #'@title Save State Server
 #'@description Server function for the Save State Shiny Module
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
-#'@param yaml_section  Section of the yaml file with the module configuration (\code{"UD"})
-#'@param yaml_file Upload Data configuration file
+#'@param FM_yaml_file App configuration file with FM as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
 ASM_Server <- function(id,
-                      yaml_section = "ASM",
-                      yaml_file    = system.file(package = "formods",
-                                                 "templates",
-                                                 "config.yaml"),
+                      FM_yaml_file  = system.file(package = "formods",
+                                                  "templates",
+                                                  "formods.yaml"),
+                      MOD_yaml_file = system.file(package = "formods",
+                                                  "templates",
+                                                  "ASM.yaml"),
                       react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
 
     #------------------------------------
     # Create ui outputs here:
     output$ASM_ui_save_name  = renderUI({
-      state = ASM_fetch_state(id, input, session, yaml_file, yaml_section)
+      state = ASM_fetch_state(id           = id, 
+                              input        = input, 
+                              session      = session, 
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
 
       uiele =
         textInput(
@@ -41,7 +47,12 @@ ASM_Server <- function(id,
       uiele})
     #------------------------------------
     output$ASM_ui_save_button  = renderUI({
-      state = ASM_fetch_state(id, input, session, yaml_file, yaml_section)
+      state = ASM_fetch_state(id           = id, 
+                              input        = input, 
+                              session      = session, 
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+
         uiele = downloadBttn(
                   outputId = NS(id, "button_state_save"),
                   label    = state[["MC"]][["labels"]][["save_state"]],
@@ -53,7 +64,6 @@ ASM_Server <- function(id,
       uiele})
     #------------------------------------
     output$ASM_ui_compact  =  renderUI({
-      #state = ASM_fetch_state(id, input, session, yaml_file, yaml_section)
       uiele = tagList(
            htmlOutput(NS("ASM", "ASM_ui_save_name")),
            htmlOutput(NS("ASM", "ASM_ui_save_button")),
@@ -68,19 +78,31 @@ ASM_Server <- function(id,
     output$button_state_save   = downloadHandler(
 
       filename = function() {
-        state = ASM_fetch_state(id, input, session, yaml_file, yaml_section)
+        state = ASM_fetch_state(id           = id, 
+                                input        = input, 
+                                session      = session, 
+                                FM_yaml_file = FM_yaml_file,
+                                MOD_yaml_file = MOD_yaml_file)
         dlfn = ASM_fetch_dlfn(state)
         FM_le(state, paste0("pushing app state download: ", dlfn))
         dlfn},
       content = function(file) {
-        state = ASM_fetch_state(id, input, session, yaml_file, yaml_section)
+        state = ASM_fetch_state(id           = id, 
+                                input        = input, 
+                                session      = session, 
+                                FM_yaml_file = FM_yaml_file,
+                                MOD_yaml_file = MOD_yaml_file)
         ASM_write_state(state, session, file)
         }
     )
     #------------------------------------
     # Upload State
     output$ASM_ui_load_state = renderUI({
-      state = ASM_fetch_state(id, input, session, yaml_file, yaml_section)
+      state = ASM_fetch_state(id           = id, 
+                              input        = input, 
+                              session      = session, 
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
 
       uiele = fileInput(NS(id, "input_load_state"),
         label       = state[["MC"]][["labels"]][["input_load_state"]],
@@ -95,7 +117,11 @@ ASM_Server <- function(id,
     output$ui_asm_msg = renderText({
       input[["button_state_save"]]
       input[["input_load_state"]]
-      state = ASM_fetch_state(id, input, session, yaml_file, yaml_section)
+      state = ASM_fetch_state(id           = id, 
+                              input        = input, 
+                              session      = session, 
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
 
       uiele = state[["ASM"]][["ui_msg"]]
 
@@ -106,7 +132,11 @@ ASM_Server <- function(id,
       # Reacting to file changes
       input$input_load_state
       input$input_select_sheet
-      state = ASM_fetch_state(id, input, session, yaml_file, yaml_section)
+      state = ASM_fetch_state(id           = id, 
+                              input        = input, 
+                              session      = session, 
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
 
       if(is.null(state[["ASM"]][["code"]])){
         uiele = "# code"
@@ -136,13 +166,12 @@ ASM_Server <- function(id,
       })
       # This updates the reaction state:
       observeEvent(toListen(), {
-        state = ASM_fetch_state(
-                             id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section)
-
+        state = ASM_fetch_state(id           = id, 
+                                input        = input, 
+                                session      = session, 
+                                FM_yaml_file = FM_yaml_file,
+                                MOD_yaml_file = MOD_yaml_file)
+        
         FM_le(state, "reaction state updated")
         react_state[[id]] = state
       })
@@ -156,8 +185,8 @@ ASM_Server <- function(id,
 #'@param id Shiny module ID
 #'@param input Shiny input variable
 #'@param session Shiny session variable
-#'@param yaml_file cofiguration file
-#'@param yaml_section  Section of the yaml file with the module configuration
+#'@param FM_yaml_file App configuration file with FM as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@return list containing the current state of the app including default
 #'values from the yaml file as well as any changes made by the user. The list
 #'has the following structure:
@@ -171,8 +200,10 @@ ASM_Server <- function(id,
 #' }
 #'  \item{MOD_TYPE:} Character data containing the type of module \code{"ASM"}
 #'  \item{id:} Character data containing the module id module in the session variable.
+#'  \item{FM_yaml_file:} App configuration file with FM as main section.
+#'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 #'}
-ASM_fetch_state = function(id, input, session, yaml_file, yaml_section){
+ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
 
   # Template for an empty dataset
   #---------------------------------------------
@@ -182,7 +213,7 @@ ASM_fetch_state = function(id, input, session, yaml_file, yaml_section){
   # initialize it
   if(is.null(state)){
     # General state information
-    state = ASM_init_state(yaml_file, yaml_section, id)
+    state = ASM_init_state(FM_yaml_file, MOD_yaml_file, id)
   }
 
   #---------------------------------------------
@@ -280,11 +311,11 @@ ASM_fetch_state = function(id, input, session, yaml_file, yaml_section){
 #'@export
 #'@title Initialize ASM Module State
 #'@description Creates a list of the initialized module state
-#'@param yaml_file App configuration file
-#'@param yaml_section  Section of the yaml file with the module configuration
+#'@param FM_yaml_file App configuration file with FM as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id ID string for the module.
 #'@return list containing an empty ASM state
-ASM_init_state = function(yaml_file, yaml_section, id){
+ASM_init_state = function(FM_yaml_file, MOD_yaml_file, id){
 
   button_counters = c(
    "button_state_save"
@@ -297,8 +328,8 @@ ASM_init_state = function(yaml_file, yaml_section, id){
 
 
   state = FM_init_state(
-    yaml_file       = yaml_file,
-    yaml_section    = yaml_section,
+    FM_yaml_file    = FM_yaml_file,
+    MOD_yaml_file   = MOD_yaml_file,
     id              = id,
     MT              = "ASM",
     button_counters = button_counters,

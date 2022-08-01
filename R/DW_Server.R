@@ -15,22 +15,24 @@
 #'@title Data Wrangling Server
 #'@description Server function for the data wrangling module
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
-#'@param yaml_section  Section of the yaml file with the module
-#'configuration (\code{"DW"})
 #'@param yaml_file Upload Data cofiguration file
 #'@param id_ASM ID string for the app state managment module used to save and load app states
 #'@param id_UD  ID string for the upload data module used to handle uploads or
 #'the name of the list element in react_state where the data set is stored.
+#'@param FM_yaml_file App configuration file with FM as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param react_state Variable passed to server to allow reaction outside of
 #'module (\code{NULL})
 #'@return DW Server object
 DW_Server <- function(id,
-                      yaml_section = "DW",
-                      yaml_file    = system.file(package = "formods",
-                                                 "templates",
-                                                 "config.yaml"),
                       id_ASM       = "ASM",
                       id_UD        = "UD",
+                      FM_yaml_file  = system.file(package = "formods",
+                                                  "templates",
+                                                  "formods.yaml"),
+                      MOD_yaml_file = system.file(package = "formods",
+                                                  "templates",
+                                                  "DW.yaml"),
                       react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
 
@@ -53,13 +55,13 @@ DW_Server <- function(id,
       react_state[[id_ASM]]
 
 
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
 
       # Pulling out the current view
       current_view = DW_fetch_current_view(state)
@@ -138,13 +140,13 @@ DW_Server <- function(id,
       # Changes in view selected
       input$select_dw_views
 
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
 
       uiele = NULL
 
@@ -182,13 +184,13 @@ DW_Server <- function(id,
       react_state[[id_UD]]
       react_state[[id_ASM]]
 
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
 
       view_ids = names(state[["DW"]][["views"]])
       uiele = NULL
@@ -231,13 +233,13 @@ DW_Server <- function(id,
       react_state[[id_UD]]
       react_state[[id_ASM]]
 
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
 
     current_view = DW_fetch_current_view(state)
       uiele =
@@ -260,14 +262,13 @@ DW_Server <- function(id,
       # Update when they delete elements as well
       input$hot_dw_elements
       #req(input$select_dw_element)
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
-
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
       uiele = NULL
       if(state[["DW"]][["UD"]][["isgood"]]){
         uiele = state[["DW"]][["ui_msg"]]
@@ -278,13 +279,13 @@ DW_Server <- function(id,
     output$ui_dw_new_element_row = renderUI({
       #input$button_dw_add_element
       req(input$select_dw_element)
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
 
       if(state[["DW"]][["UD"]][["isgood"]]){
         if(state[["DW"]][["isgood"]]){
@@ -332,13 +333,14 @@ DW_Server <- function(id,
     # mutate chunks
     output$ui_dw_fds_mutate_row = renderUI({
       req(input$select_dw_element)
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
       req(input$select_dw_element)
       uiele = NULL
       if(state[["DW"]][["isgood"]]){
@@ -380,13 +382,14 @@ DW_Server <- function(id,
     #------------------------------------
     # rename chunks
     output$ui_dw_fds_rename = renderUI({
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
       req(input$select_dw_element)
       uiele = NULL
       if(state[["DW"]][["isgood"]]){
@@ -417,13 +420,14 @@ DW_Server <- function(id,
     #------------------------------------
     output$ui_dw_fds_group_column_select = renderUI({
       req(input$select_dw_element)
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
       req(input$select_dw_element)
       uiele = NULL
       if(state[["DW"]][["isgood"]]){
@@ -451,13 +455,14 @@ DW_Server <- function(id,
     #------------------------------------
     output$ui_dw_fds_ungroup             = renderUI({
       req(input$select_dw_element)
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
       req(input$select_dw_element)
       uiele = NULL
       if(state[["DW"]][["isgood"]]){
@@ -477,13 +482,14 @@ DW_Server <- function(id,
       # Forcing a reaction to changes in other modules
       react_state[[id_UD]]
       react_state[[id_ASM]]
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
       req(input$select_dw_element)
       uiele = NULL
       if(state[["DW"]][["isgood"]]){
@@ -507,13 +513,14 @@ DW_Server <- function(id,
 
     #------------------------------------
     output$ui_dw_fds_filter_operator_select = renderUI({
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
       req(input$select_fds_filter_column)
       uiele = NULL
       if(state[["DW"]][["isgood"]]){
@@ -525,9 +532,9 @@ DW_Server <- function(id,
         filter_col = state[["DW"]][["ui"]][["select_fds_filter_column"]]
 
         if(!is.numeric(WDS[[filter_col]])){
-          choices  = state[["MC"]][["op_choices"]][["factor"]]
+          choices  = state[["DW"]][["op_choices"]][["factor"]]
         } else {
-          choices  = state[["MC"]][["op_choices"]][["not_factor"]]
+          choices  = state[["DW"]][["op_choices"]][["not_factor"]]
         }
         uiele = pickerInput(
           inputId  = NS(id, "select_fds_filter_operator"),
@@ -543,13 +550,14 @@ DW_Server <- function(id,
     })
     #------------------------------------
     output$ui_dw_fds_filter_rhs = renderUI({
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
       req(input$select_fds_filter_column)
       req(input$select_fds_filter_operator)
       uiele = NULL
@@ -604,13 +612,14 @@ DW_Server <- function(id,
     #------------------------------------
     # UI for selecting the type of dw element to add
     output$ui_dw_select = renderUI({
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
 
       if(state[["DW"]][["UD"]][["isgood"]]){
         uiele = tagList()
@@ -676,13 +685,13 @@ DW_Server <- function(id,
       # Forcing a reaction to changes in other modules
       react_state[[id_UD]]
       react_state[[id_ASM]]
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
 
       if(state[["DW"]][["UD"]][["isgood"]]){
         uiele = tagList(
@@ -704,13 +713,13 @@ DW_Server <- function(id,
     #------------------------------------
     output$ui_dw_new_view  = renderUI({
       #req(input$X)
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
 
       uiele = NULL
       if(state[["DW"]][["isgood"]]){
@@ -727,13 +736,13 @@ DW_Server <- function(id,
     #------------------------------------
     output$ui_dw_save_view  = renderUI({
       #req(input$X)
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
 
       uiele = NULL
       if(state[["DW"]][["isgood"]]){
@@ -750,13 +759,13 @@ DW_Server <- function(id,
     #------------------------------------
     output$ui_dw_copy_view  = renderUI({
       #req(input$X)
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
 
       uiele = NULL
       if(state[["DW"]][["isgood"]]){
@@ -773,13 +782,13 @@ DW_Server <- function(id,
     #------------------------------------
     output$ui_dw_del_view  = renderUI({
       #req(input$X)
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
 
       uiele = NULL
       if(state[["DW"]][["isgood"]]){
@@ -808,14 +817,13 @@ DW_Server <- function(id,
       input$hot_dw_elements
       # Force update when the view is changed
       input$select_dw_views
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
-
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
 
       df = NULL
 
@@ -842,13 +850,13 @@ DW_Server <- function(id,
       # Forcing a reaction to changes in other modules
       react_state[[id_UD]]
       react_state[[id_ASM]]
-      state = DW_fetch_state(id           = id,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section,
-                             id_UD        = id_UD,
-                             react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
 
       current_view = DW_fetch_current_view(state)
 
@@ -975,15 +983,14 @@ DW_Server <- function(id,
       })
       # This updates the reaction state:
       observeEvent(toListen(), {
-        state = DW_fetch_state(
-          id           = id,
-          input        = input,
-          session      = session,
-          yaml_file    = yaml_file,
-          yaml_section = yaml_section,
-          id_UD        = id_UD,
-          react_state  = react_state)
-
+        state = DW_fetch_state(id              = id,
+                               input           = input,
+                               session         = session,
+                               FM_yaml_file    = FM_yaml_file,
+                               MOD_yaml_file   = MOD_yaml_file,
+                               id_UD           = id_UD,
+                               react_state     = react_state)
+        
         FM_le(state, "reaction state updated")
         react_state[[id]] = state
       }, priority=99)
@@ -996,14 +1003,14 @@ DW_Server <- function(id,
     observeEvent(remove_hold_listen(), {
       # Once the UI has been regenerated we
       # remove any holds for this module
-      state = DW_fetch_state(
-        id           = id,
-        input        = input,
-        session      = session,
-        yaml_file    = yaml_file,
-        yaml_section = yaml_section,
-        id_UD        = id_UD,
-        react_state  = react_state)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+      
       FM_le(state, "removing holds")
       # Removing all holds
       for(hname in names(state[["DW"]][["ui_hold"]])){
@@ -1021,8 +1028,8 @@ DW_Server <- function(id,
 #'@param id Shiny module ID
 #'@param input Shiny input variable
 #'@param session Shiny session variable
-#'@param yaml_file cofiguration file
-#'@param yaml_section  Section of the yaml file with the module configuration
+#'@param FM_yaml_file App configuration file with FM as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id_UD  ID string for the upload data module used to handle uploads or
 #'the name of the list element in react_state where the data set is stored.
 #'@param react_state Variable passed to server to allow reaction outside of
@@ -1032,7 +1039,7 @@ DW_Server <- function(id,
 #'structure of the list is defined below.
 #'\itemize{
 #'  \item{yaml:} Contents of the yaml file.
-#'  \item{MC:} Section of the yaml file, specified by \code{yaml_section}, containing the DW module components
+#'  \item{MC:} Module components of the yaml file.
 #'  \item{DW:} Data wrangling state
 #'  \itemize{
 #'    \item{isgood:} Boolean status of the state. FALSE if the dataset
@@ -1064,10 +1071,12 @@ DW_Server <- function(id,
 #'  }
 #'  \item{MOD_TYPE:} Character data containing the type of module \code{"DW"}
 #'  \item{id:} Character data containing the module id
+#'  \item{FM_yaml_file:} App configuration file with FM as main section.
+#'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 #'  module in the session variable.
 #'}
-DW_fetch_state = function(id,           input,           session,
-                          yaml_file,    yaml_section,    id_UD,
+DW_fetch_state = function(id,                    input,     session,
+                          FM_yaml_file,  MOD_yaml_file,       id_UD,
                           react_state){
 
   #---------------------------------------------
@@ -1077,7 +1086,7 @@ DW_fetch_state = function(id,           input,           session,
   # initialize it
   if(is.null(state)){
     # General state information
-    state = DW_init_state(yaml_file, yaml_section, id, id_UD, react_state)
+    state = DW_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state)
   }
 
 
@@ -1104,7 +1113,7 @@ DW_fetch_state = function(id,           input,           session,
     if(UPDATE_DS){
       # JMH prevent triggering UPDATE_DS on app state reset
       FM_le(state, "original dataset changed")
-      state = DW_init_state(yaml_file, yaml_section, id, id_UD, react_state)
+      state = DW_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state)
     }
   }
 
@@ -1394,15 +1403,15 @@ state }
 #'@export
 #'@title Initialize DW Module State
 #'@description Creates a list of the initialized module state
-#'@param yaml_file App configuration file
-#'@param yaml_section  Section of the yaml file with the module configuration
+#'@param FM_yaml_file App configuration file with FM as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id Shiny module ID
 #'@param id_UD  ID string for the upload data module used to handle uploads or
 #'the name of the list element in react_state where the data set is stored.
 #'@param react_state Variable passed to server to allow reaction outside of
 #'module (\code{NULL})
 #'@return list containing an empty DW state
-DW_init_state = function(yaml_file, yaml_section, id, id_UD, react_state){
+DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state){
 
   # initializing the state with the required formods elements:
   button_counters = c(
@@ -1439,8 +1448,8 @@ DW_init_state = function(yaml_file, yaml_section, id, id_UD, react_state){
     )
 
   state = FM_init_state(
-    yaml_file       = yaml_file,
-    yaml_section    = yaml_section,
+    FM_yaml_file    = FM_yaml_file,
+    MOD_yaml_file   = MOD_yaml_file,
     id              = id,
     MT              = "DW",
     button_counters = button_counters,
@@ -1455,10 +1464,12 @@ DW_init_state = function(yaml_file, yaml_section, id, id_UD, react_state){
                  as.data.frame(state[["MC"]][["operators"]][[op_idx]]))
   }
 
+  # Creating operator choices 
+  state[["DW"]][["op_choices"]] =  list()
   tmpdf = dplyr::filter(opdf, .data[["type"]] == "factor")
-  state[["MC"]][["op_choices"]][["factor"]] = stats::setNames(tmpdf$rop, c(tmpdf$text))
+  state[["DW"]][["op_choices"]][["factor"]] = stats::setNames(tmpdf$rop, c(tmpdf$text))
   tmpdf = dplyr::filter(opdf, .data[["type"]] == "not_factor")
-  state[["MC"]][["op_choices"]][["not_factor"]] = stats::setNames(tmpdf$rop, c(tmpdf$text))
+  state[["DW"]][["op_choices"]][["not_factor"]] = stats::setNames(tmpdf$rop, c(tmpdf$text))
 
 
   state[["DW"]][["code_previous"]]        = NULL
@@ -1592,7 +1603,7 @@ dwrs_builder = function(state){
         }
         # Creatig a description of the action
         op_desc =  names(
-          state[["MC"]][["op_choices"]][["factor"]][state[["MC"]][["op_choices"]][["factor"]]
+          state[["DW"]][["op_choices"]][["factor"]][state[["DW"]][["op_choices"]][["factor"]]
                                                     == ui[["select_fds_filter_operator"]]] )[1]
         desc = paste0(ui[["select_fds_filter_column"]]," ",
                       op_desc, " ",

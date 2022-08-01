@@ -693,16 +693,16 @@ app_state}
 #'@export
 #'@title Initialize a formods State Object
 #'@description Initializes a formods state object with common elements.
-#'@param yaml_file App cofiguration file.
-#'@param yaml_section  Section of the yaml file with the module configuration.
+#'@param FM_yaml_file App configuration file with FM as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id Shiny module ID.
 #'@param MT Type of module using the short name (e.g. "UD", "FG", etc.).
 #'@param button_counters Vector of button UI elements that need to be tracked.
 #'@param ui_ids List of UI ids in the model.
 #'@param ui_hold Vector of UI elements that require holding.
 FM_init_state = function(
-                      yaml_file,
-                      yaml_section,
+                      FM_yaml_file,
+                      MOD_yaml_file,
                       id,
                       MT,
                       button_counters,
@@ -712,11 +712,11 @@ FM_init_state = function(
   state = list()
 
   # Reading in default information from the yaml file
-  state[["yaml"]] = yaml::read_yaml(yaml_file)
+  state[["yaml"]] = yaml::read_yaml(FM_yaml_file)
 
-  # This assigns the module config "MC" element to the correct yaml_section.
-  state[["MC"]] = state[["yaml"]][[yaml_section]]
-
+  # This assigns the module config "MC" element 
+  MOD_CONFIG = yaml::read_yaml(MOD_yaml_file)
+  state[["MC"]] = MOD_CONFIG[["MC"]]
 
   # Initializing the button counters
   state[[MT]][["button_counters"]]    = list()
@@ -740,6 +740,8 @@ FM_init_state = function(
 
   state[["MOD_TYPE"]]        = MT
   state[["id"]]              = id
+  state[["FM_yaml_file"]]    = FM_yaml_file
+  state[["MOD_yaml_file"]]   = MOD_yaml_file
 
 
 state}

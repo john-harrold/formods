@@ -16,16 +16,18 @@
 #'@description Server function for the Data Uplaod Shiny Module
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
 #'@param id_ASM ID string for the app state management module used to save and load app states
-#'@param yaml_section  Section of the yaml file with the module configuration (\code{"UD"})
-#'@param yaml_file Upload Data configuration file
+#'@param FM_yaml_file App configuration file with FM as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
 UD_Server <- function(id,
                       id_ASM       = "ASM",
-                      yaml_section = "UD",
-                      yaml_file    = system.file(package = "formods",
-                                                 "templates",
-                                                 "config.yaml"),
+                      FM_yaml_file  = system.file(package = "formods",
+                                                  "templates",
+                                                  "formods.yaml"),
+                      MOD_yaml_file = system.file(package = "formods",
+                                                  "templates",
+                                                  "UD.yaml"),
                       react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
 
@@ -33,12 +35,12 @@ UD_Server <- function(id,
     #------------------------------------
     # Creates the file upload elements
     output$UD_ui_load_data = renderUI({
-      state = UD_fetch_state(id           = id,
-                             id_ASM       = id_ASM,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section)
+      state = UD_fetch_state(id            = id,
+                             id_ASM        = id_ASM,
+                             input         = input,
+                             session       = session,
+                             FM_yaml_file  = FM_yaml_file,
+                             MOD_yaml_file = MOD_yaml_file)
       accept = state[["MC"]][["allowed_extensions"]]
       label  = paste0( state[["MC"]][["labels"]][["upload_button"]],
                        " (", paste(accept, collapse=", "), ")")
@@ -55,12 +57,12 @@ UD_Server <- function(id,
     output$UD_ui_select_sheets =  renderUI({
       # Reacting to data file changes
       input$input_data_file
-      state = UD_fetch_state(id           = id,
-                             id_ASM       = id_ASM,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section)
+      state = UD_fetch_state(id            = id,
+                             id_ASM        = id_ASM,
+                             input         = input,
+                             session       = session,
+                             FM_yaml_file  = FM_yaml_file,
+                             MOD_yaml_file = MOD_yaml_file)
 
       if(!is.null(state[["UD"]][["data_file_ext"]]) &
          !is.null(state[["UD"]][["sheets"]])){
@@ -82,12 +84,13 @@ UD_Server <- function(id,
       # Reacting to data file changes
       input$input_data_file
       input$input_select_sheet
-      state = UD_fetch_state(id           = id,
-                             id_ASM       = id_ASM,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section)
+      state = UD_fetch_state(id            = id,
+                             id_ASM        = id_ASM,
+                             input         = input,
+                             session       = session,
+                             FM_yaml_file  = FM_yaml_file,
+                             MOD_yaml_file = MOD_yaml_file)
+
       if(!is.null(state[["UD"]][["load_msg"]])){
         uiele = state[["UD"]][["load_msg"]]
       } else {
@@ -102,12 +105,12 @@ UD_Server <- function(id,
       # Reacting to data file changes
       input$input_data_file
       input$input_select_sheet
-      state = UD_fetch_state(id           = id,
-                             id_ASM       = id_ASM,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section)
+      state = UD_fetch_state(id            = id,
+                             id_ASM        = id_ASM,
+                             input         = input,
+                             session       = session,
+                             FM_yaml_file  = FM_yaml_file,
+                             MOD_yaml_file = MOD_yaml_file)
 
       if(is.data.frame(state[["UD"]][["contents"]])){
         uiele = tagList(tags$b("Dataset Preveiw"),
@@ -121,12 +124,12 @@ UD_Server <- function(id,
       # Reacting to file changes
       input$input_data_file
       input$input_select_sheet
-      state = UD_fetch_state(id           = id,
-                             id_ASM       = id_ASM,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section)
+      state = UD_fetch_state(id            = id,
+                             id_ASM        = id_ASM,
+                             input         = input,
+                             session       = session,
+                             FM_yaml_file  = FM_yaml_file,
+                             MOD_yaml_file = MOD_yaml_file)
 
       if(is.null(state[["UD"]][["code"]])){
         uiele = "# No file loaded"
@@ -153,12 +156,13 @@ UD_Server <- function(id,
       input$input_select_sheet
       # Forcing a reaction to changes in other modules
       react_state[[id_ASM]]
-      state = UD_fetch_state(id           = id,
-                             id_ASM       = id_ASM,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section)
+      state = UD_fetch_state(id            = id,
+                             id_ASM        = id_ASM,
+                             input         = input,
+                             session       = session,
+                             FM_yaml_file  = FM_yaml_file,
+                             MOD_yaml_file = MOD_yaml_file)
+
       if(is.data.frame(state[["UD"]][["contents"]])){
         uiele = rhandsontable::rhandsontable(state[["UD"]][["contents"]],
                                              width  = state[["MC"]][["formatting"]][["preview"]][["width"]],
@@ -168,12 +172,12 @@ UD_Server <- function(id,
     #------------------------------------
     # Creates the ui for the compact view of the module
     output$UD_ui_compact  =  renderUI({
-      state = UD_fetch_state(id           = id,
-                             id_ASM       = id_ASM,
-                             input        = input,
-                             session      = session,
-                             yaml_file    = yaml_file,
-                             yaml_section = yaml_section)
+      state = UD_fetch_state(id            = id,
+                             id_ASM        = id_ASM,
+                             input         = input,
+                             session       = session,
+                             FM_yaml_file  = FM_yaml_file,
+                             MOD_yaml_file = MOD_yaml_file)
 
       uiele_code_button = NULL
       # Creating the code button if it's enabled
@@ -226,17 +230,16 @@ UD_Server <- function(id,
              react_state[[id_ASM]]) })
       # This updates the reaction state:
       observeEvent(toListen(), {
-        state = UD_fetch_state(id           = id,
-                               id_ASM       = id_ASM,
-                               input        = input,
-                               session      = session,
-                               yaml_file    = yaml_file,
-                               yaml_section = yaml_section)
+        state = UD_fetch_state(id            = id,
+                               id_ASM        = id_ASM,
+                               input         = input,
+                               session       = session,
+                               FM_yaml_file  = FM_yaml_file,
+                               MOD_yaml_file = MOD_yaml_file)
         FM_le(state, "reaction state updated")
         react_state[[id]] = state
       }, priority=100)
     }
-
 
   })
 }
@@ -248,8 +251,8 @@ UD_Server <- function(id,
 #'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param input Shiny input variable
 #'@param session Shiny session variable
-#'@param yaml_file cofiguration file
-#'@param yaml_section  Section of the yaml file with the module configuration
+#'@param FM_yaml_file App configuration file with FM as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@return list containing the current state of the app including default
 #'values from the yaml file as well as any changes made by the user. The list
 #'has the following structure:
@@ -273,8 +276,10 @@ UD_Server <- function(id,
 #' }
 #'  \item{MOD_TYPE:} Character data containing the type of module \code{"UD"}
 #'  \item{id:} Character data containing the module id module in the session variable.
+#'  \item{FM_yaml_file:} App configuration file with FM as main section.
+#'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 #'}
-UD_fetch_state = function(id, id_ASM, input, session, yaml_file, yaml_section){
+UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_file ){
 
   # Template for an empty dataset
   #---------------------------------------------
@@ -284,7 +289,7 @@ UD_fetch_state = function(id, id_ASM, input, session, yaml_file, yaml_section){
   # initialize it
   if(is.null(state)){
     # General state information
-    state = UD_init_state(yaml_file, yaml_section, id)
+    state = UD_init_state(FM_yaml_file, MOD_yaml_file, id)
   }
 
   #---------------------------------------------
@@ -399,22 +404,22 @@ UD_fetch_state = function(id, id_ASM, input, session, yaml_file, yaml_section){
 #'@export
 #'@title Initialize UD Module State
 #'@description Creates a list of the initialized module state
-#'@param yaml_file App configuration file
-#'@param yaml_section  Section of the yaml file with the module configuration
+#'@param FM_yaml_file App configuration file with FM as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id ID string for the module.
 #'@return list containing an empty UD state
-UD_init_state = function(yaml_file, yaml_section, id){
-
-  state = list()
-  # Reading in default information from the yaml file
-  state[["yaml"]] = yaml::read_yaml(yaml_file)
-
-  # This assigns the module config "MC" element to the correct yaml_section.
-  state[["MC"]] = state[["yaml"]][[yaml_section]]
+UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id){
 
 
-  state[["MOD_TYPE"]] = "UD"
-  state[["id"]] = id
+  state = FM_init_state(
+    FM_yaml_file    = FM_yaml_file,
+    MOD_yaml_file   = MOD_yaml_file,
+    id              = id,
+    MT              = "UD",
+    button_counters = NULL,
+    ui_ids          = NULL,
+    ui_hold         = NULL)
+
   state = UD_attach_ds(state)
 
 

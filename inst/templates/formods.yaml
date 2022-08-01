@@ -1,0 +1,24 @@
+#General formods (FM) configuration across modules
+FM: 
+  #General code options for the modules
+  code: 
+    #theme:           "solarized_light"    
+    theme:           "vibrant_ink"    
+    showLineNumbers: TRUE
+  ui:
+    # See ?actionBttn for styles
+    button_style: "fill"
+    color_green:  "#00BB8A"
+    color_red:    "#FF475E"
+    color_blue:   "#0088FF"
+    color_purple: "#bd2cf4"
+  labels:
+    default_ds:         "Original data set"
+  user_files:
+    use_tmpdir:     TRUE
+  logging:
+    enabled:        TRUE
+    timestamp:      TRUE
+    timestamp_fmt: "%Y-%m-%d %H:%M:%S"
+    log_file:      "formods_log.txt"
+    console:       TRUE

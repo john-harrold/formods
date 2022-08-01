@@ -1,0 +1,39 @@
+MC:
+  # Controls what is shown in the compact ui mode: UD_ui_compact
+  compact:
+    code:    TRUE 
+    preview: TRUE 
+  labels:
+    upload_button: "Select file"
+    tab_main:      "Upload File"
+    tab_code:      "Code"
+    tab_preview:   "Data Preview"
+    # In the following you can use placeholder for the follwing:
+    # ===EXT===        Uploaded file extension
+    # ===FILE===       Loaded file name
+    # ===ALLOWEDEXT=== Allowed file extensions
+    msg_bad_extension: |- 
+      Incorrect file extension (===EXT===). Unable to load file  ===FILE===.
+      Only the following extesions are allowed: ===ALLOWEDEXT===.
+  tooltips:
+    show_code:         "Show data reading code"
+  formatting:
+    # Dimensions of the table preview in pixels
+    preview:    
+      width:  500
+      height: 400
+    code:
+      width:  500
+      height: 150
+  # The app supports csv, tsv, xls and xlsx. You can remove those you don't
+  # want to use
+  allowed_extensions: 
+    - csv
+    - tsv
+    - xls
+    - xlsx
+  code: # module specific code options
+    readOnly: TRUE
+    mode:     r    
+  # Name of the data set after being loaded
+  ds_object_name: "myDS"

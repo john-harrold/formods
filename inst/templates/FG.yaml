@@ -1,0 +1,167 @@
+# Figure Generation (FG) configuration
+MC:
+  # Controls what is shown in the compact ui mode: FG_ui_compact
+  compact:
+    code:    TRUE 
+    preview: "ggplot"   # Either "ggplot" or "plotly"
+  tooltips: 
+    # Set to FALSE to disable tool tips for this module
+    include: TRUE
+    components:
+      manual:
+        x:             "Numeric location on the x-axis"
+        "y":           "Numeric location on the y-axis"
+        color:         "A named color red, blue, green"
+        linetype:      "Specify either solid, dashed, dotted, dotdash, longdash or twodash"
+        shape:         "Open shapes: square (0), circle (1), triangle (2); Filled shapes:  square (15), circle (16), triangle (17)"
+        size:          "Numeric value"
+        alpha:         "Numeric value between 0 (completely transparent) and 1 (solid)"
+        group:         NULL
+        xintercept:    NULL
+        yintercept:    NULL
+    caption:           "Optional figure caption that will be carried over and used in other elements (e.g. reporting)"
+    fig_key:           "Unique descriptive figure key used for referencing figures."
+    show_code:         "Show figure generation code"
+    fg_elements:       "Current figure elements"
+  labels:
+    components:
+      x:             "x-axis"
+      "y":           "y-axis"
+      color:         "color"
+      linetype:      "line type"
+      shape:         "shape"     
+      size:          "size"     
+      alpha:         "transparency"
+      group:         "group"     
+      xintercept:    "x intercept"
+      yintercept:    "y intercept"
+    ph:              
+      xlab:          "x-axis label"
+      ylab:          "y-axis label"
+      ggtitle:       "plot title"
+      caption:       "optional caption text here"
+      fig_key:       "short description"
+      manual:        "Manual"
+    manual:          "Manual"
+    not_used:        "Not Used"
+    curr_figs_none:  "No figures yet created"
+    no_fig_elements: "Add figure elements"
+    new_fig:         "New"
+    save_fig:        "Save"
+    del_fig:         "Delete"
+    copy_fig:        "Copy"
+    upds_fig:        "Data set"
+    add_ele:         "Add Figure Element"
+    msg_bad_label:   "No labels were specified, unable to add element."
+    msg_bad_facet:   "At least one column must be selected to add a faceting element."
+    msg_bad_element: "Unable to add the specified element: ===ELEMENT==="
+    msg_bad_manual_comp: |- 
+      The plot element component ===COMP=== was specified manually but 
+      no manual value was provided.
+    select_current_fig:  "Current figure"
+    select_current_view: "Data from"
+    no_figures_defined:  "No figures have been defined"
+  errors:
+    element_not_added:    "Unable to add the data figure element:"
+    current_key_empty:    "The figure description field cannot be empty."
+    only_one_facet:       "This figure already has a faceting element."
+  elements:
+    # For each element below you should only modify the choice and subtext
+    # elements
+    line:
+      choice:  "Line"     
+      subtext: "Continuous line"
+      ui_aes:  ["x", "y", "color", "group", "linetype", "size", "alpha"]
+      aes_req: ["x", "y"]
+      fcn:     "geom_line"
+    point:
+      choice:  "Point"  
+      subtext: "Scatter plot"
+      ui_aes:  ["x", "y", "color", "group", "shape", "size", "alpha",]
+      aes_req: ["x", "y"]
+      fcn:     "geom_point"
+    hguide:
+      choice:  "H-Guide"  
+      subtext: "Horizontal guide"
+      ui_aes:  ["yintercept", "linetype", "color", "size"]
+      aes_req: ["yintercept"]
+      fcn:     "geom_hline"
+    vguide:
+      choice:  "V-Guide"  
+      subtext: "Vertical guide"
+      ui_aes:  ["xintercept", "linetype", "color", "size"]
+      aes_req: ["xintercept"]
+      fcn:     "geom_vline"
+    facet:
+      choice:  "Facet"  
+      subtext: "Facet by one or more variables"
+    label:
+      choice:  "Label"  
+      subtext: "Label axes or plot title"
+      ui_text: ["xlab", "ylab", "ggtitle"]
+  formatting:
+    # Dimensions of code snippet box
+    code:
+      width:  500
+      height: 150
+    # Dimensions of the figure preview
+    # Must be numeric
+    preview:    
+      width:  1000
+      height: 600
+    #If you make the slider width = preview it will
+    # span the bottom of the figure
+    select_fg_page:    
+      width:  1000
+    # Dimensions of the caption text area
+    caption:    
+      width:  "300px"
+      height: "75px"
+    components:
+      aes:
+        width: "100px"
+      facet:
+        width: "200px"
+      label:
+        width: "150px"
+    select_current_fig:
+      width: 200
+    select_current_view:
+      width: 200
+    # Dimensions of the table with the figure generation elements
+    fg_elements:    
+      width:  600
+      height: 200
+    # When faceting is selected (wrapping or grid) the result will be
+    # paginated according to the dimensions below:
+    faceting:  
+      nrow:  3
+      ncol:  4
+    # Button sizes from actionBttn (shinyWidgets) 
+    # xs,sm, md, lg.
+    button_fig_del:
+      size: "sm" 
+      block: TRUE
+    button_fig_save:
+      size: "sm" 
+      block: TRUE
+    button_fig_copy:
+      size: "sm" 
+      block: TRUE
+    button_fig_new:
+      size: "sm" 
+      block: TRUE
+    button_fig_add:
+      size: "sm" 
+      block: TRUE
+    button_fig_upds:
+      size: "sm" 
+      block: TRUE
+  # You can put any post_processing you want to apply to all figures.
+  # The ggplot object will be avialble as the ===FGOBJ=== 
+  post_processing: |-
+    ===FGOBJ=== = ===FGOBJ=== + theme_light()
+  fg_object_name: "myp"
+  code: # module specific code options
+    readOnly: TRUE
+    mode:     r    

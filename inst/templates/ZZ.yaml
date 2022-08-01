@@ -1,0 +1,19 @@
+# The ZZ field is a skeleton for constructing new modules
+ZZ:
+  code: # module specific code options
+    readOnly: TRUE
+    mode:     r    
+  # put different formatting options (widths, heights, 
+  # shinyWidgets button sizes, etc) here.
+  formatting:
+    input:
+      width: 100
+  labels:    
+    input_label: "This is the text for a label"
+  errors:
+    bad_input: "Input error message"
+  tooltips: 
+    # Set to FALSE to disable tool tips for this module
+    include: TRUE
+    components:
+      input_tip: "My tool tip"

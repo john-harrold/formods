@@ -1,6 +1,7 @@
 #library(formods)
 
 library(devtools)
+library(shinydashboard)
 load_all()
 
 #https://fontawesome.com/icons?from=io
@@ -23,8 +24,19 @@ ui <- dashboardPage(
                fluidRow(
                  column(width=4,
                    htmlOutput(NS("ASM", "ASM_ui_compact"))),
-                 column(width=6,
-                   "text")
+                 column(width=4,
+                     tags$p("Formods is a set of modules and an framework for developing modules which interact and create code to replicate analyses performed within an app.")),
+                 column(width=2,
+                     tags$figure(
+                       align = "right",
+                       tags$img(
+                         src="https://r.ubiquity.tools/reference/figures/logo.png",
+                         width = 100,
+                         alt = "formods logo"
+                       )
+                     ) #,
+                   #rep("text ", times=1000)
+                 )
                )
                ),
        tabItem(tabName="upload",      htmlOutput(NS("UD",  "UD_ui_compact"))),
