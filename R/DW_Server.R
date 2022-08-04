@@ -1278,6 +1278,8 @@ DW_fetch_state = function(id,                    input,     session,
     # Lastly we save the button value from the UI to the state:
     state[["DW"]][["button_counters"]][["button_dw_add_element"]] =state[["DW"]][["ui"]][["button_dw_add_element"]]
 
+    # updating the state checksum
+    state = DW_update_checksum(state)
   }
 
   #------------------------------------
@@ -1296,6 +1298,9 @@ DW_fetch_state = function(id,                    input,     session,
 
     # Lastly we save the button value from the UI to the state:
     state[["DW"]][["button_counters"]][["button_dw_new"]] =state[["DW"]][["ui"]][["button_dw_new"]]
+
+    # updating the state checksum
+    state = DW_update_checksum(state)
   }
   #------------------------------------
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_del"]],
@@ -1324,6 +1329,9 @@ DW_fetch_state = function(id,                    input,     session,
 
     # Lastly we save the button value from the UI to the state:
     state[["DW"]][["button_counters"]][["button_dw_del"]] =state[["DW"]][["ui"]][["button_dw_del"]]
+
+    # updating the state checksum
+    state = DW_update_checksum(state)
   }
 
   #------------------------------------
@@ -1369,6 +1377,9 @@ DW_fetch_state = function(id,                    input,     session,
 
     # Lastly we save the button value from the UI to the state:
     state[["DW"]][["button_counters"]][["button_dw_copy"]] =state[["DW"]][["ui"]][["button_dw_copy"]]
+
+    # updating the state checksum
+    state = DW_update_checksum(state)
   }
   #------------------------------------
   if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_save"]],
@@ -1392,6 +1403,9 @@ DW_fetch_state = function(id,                    input,     session,
 
     # Lastly we save the button value from the UI to the state:
     state[["DW"]][["button_counters"]][["button_dw_save"]] = state[["DW"]][["ui"]][["button_dw_save"]]
+
+    # updating the state checksum
+    state = DW_update_checksum(state)
   }
 
   # Saving the state
@@ -1832,7 +1846,11 @@ DW_update_checksum     = function(state){
   # and create a checksum of those:
   view_ids = names(state[["DW"]][["views"]])
   for(view_id in view_ids){
+    # We trigger updates when the dataframe changes:
     chk_str = paste0(chk_str, ":", state[["DW"]][["views"]][[view_id]][["checksum"]])
+
+    # We also trigger updates when the key has changed as well:
+    chk_str = paste0(chk_str, ":", state[["DW"]][["views"]][[view_id]][["key"]])
   }
 
   state[["DW"]][["checksum"]] = digest::digest(chk_str, algo=c("md5"))

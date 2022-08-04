@@ -19,7 +19,7 @@ MC:
         group:         NULL
         xintercept:    NULL
         yintercept:    NULL
-    caption:           "Optional figure caption that will be carried over and used in other elements (e.g. reporting)"
+    notes:             "Optional figure notes that will be carried over and used in other elements (e.g. reporting)"
     fig_key:           "Unique descriptive figure key used for referencing figures."
     show_code:         "Show figure generation code"
     fg_elements:       "Current figure elements"
@@ -39,8 +39,8 @@ MC:
       xlab:          "x-axis label"
       ylab:          "y-axis label"
       ggtitle:       "plot title"
-      caption:       "optional caption text here"
-      fig_key:       "short description"
+      notes:         "optional notes here"
+      fig_key:       "title/caption"     
       manual:        "Manual"
     manual:          "Manual"
     not_used:        "Not Used"
@@ -113,8 +113,8 @@ MC:
     # span the bottom of the figure
     select_fg_page:    
       width:  1000
-    # Dimensions of the caption text area
-    caption:    
+    # Dimensions of the notes text area
+    notes:      
       width:  "300px"
       height: "75px"
     components:

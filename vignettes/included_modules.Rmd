@@ -66,5 +66,5 @@ Say you are using the Upload Data module to feed data into the Data Wrangling mo
 
 
 ```{r echo=FALSE, comment='', message=TRUE, eval=TRUE, class.output="scroll-100"}
-cat(readLines(file.path(system.file(package="formods"), "templates", "config.yaml")) , sep="\n")
+cat(readLines(file.path(system.file(package="formods"), "templates", "formods.yaml")) , sep="\n")
 ```

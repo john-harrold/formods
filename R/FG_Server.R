@@ -531,19 +531,19 @@ FG_Server <- function(id,
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
         current_fig = FG_fetch_current_fig(state)
-        value       = current_fig[["caption"]]
+        value       = current_fig[["notes"]]
         uiele = textAreaInput(inputId     = NS(id, "text_fig_cap"),
-                             width        = state[["MC"]][["formatting"]][["caption"]][["width"]],
-                             height       = state[["MC"]][["formatting"]][["caption"]][["height"]],
+                             width        = state[["MC"]][["formatting"]][["notes"]][["width"]],
+                             height       = state[["MC"]][["formatting"]][["notes"]][["height"]],
                              label        = NULL,
                              value        = value,
-                             placeholder  = state[["MC"]][["labels"]][["ph"]][["caption"]])
+                             placeholder  = state[["MC"]][["labels"]][["ph"]][["notes"]])
         if(state[["MC"]][["tooltips"]][["include"]]){
-          if(!is.null(state[["MC"]][["tooltips"]][["caption"]])){
+          if(!is.null(state[["MC"]][["tooltips"]][["notes"]])){
             uiele = tagList(uiele,
               shinyBS::bsPopover(NS(id,"text_fig_cap"),
                                  title=NULL,
-                                 state[["MC"]][["tooltips"]][["caption"]],
+                                 state[["MC"]][["tooltips"]][["notes"]],
                                  "bottom"))
           }
         }
@@ -598,7 +598,7 @@ FG_Server <- function(id,
              selected = current_page,
              choices  = pages
            )
-     
+
       }
 
       uiele})
@@ -653,6 +653,7 @@ FG_Server <- function(id,
     #------------------------------------
     output$ui_fg_new_element_row = renderUI({
       req(input$select_fg_element)
+      input[["button_fig_save"]]
       # force update when a new plot element is selected
       state = FG_fetch_state(id             = id,
                              input          = input,
@@ -798,6 +799,7 @@ FG_Server <- function(id,
       react_state[[id_UD]]
       react_state[[id_DW]]
       react_state[[id_ASM]]
+
       #req(input$X)
       input[["button_fig_new"]]
       input[["button_fig_save"]]
@@ -828,10 +830,10 @@ FG_Server <- function(id,
         for(fig_id in names(state[["FG"]][["figs"]])){
            tmp_fig = state[["FG"]][["figs"]][[fig_id]]
            # Creating the select subtext from the caption
-           if(is.null(tmp_fig[["caption"]])){
+           if(is.null(tmp_fig[["notes"]])){
              subtext = c(subtext, "")
            } else {
-             subtext = c(subtext, strtrim(tmp_fig[["caption"]], 20))
+             subtext = c(subtext, strtrim(tmp_fig[["notes"]], 20))
            }
 
            choices = c(choices, fig_id)
@@ -852,19 +854,66 @@ FG_Server <- function(id,
       }
 
       uiele})
-    #------------------------------------
+   ##------------------------------------
+   #output$ui_fg_curr_views = renderUI({
+   #  # Forcing a reaction to changes in other modules
+   #  react_state[[id_UD]]
+   #  react_state[[id_DW]]
+   #  react_state[[id_ASM]]
+   #  #req(input$X)
+   #  input[["button_fig_new"]]
+   #  input[["button_fig_save"]]
+   #  input[["button_fig_del"]]
+   #  input[["button_fig_copy"]]
+   #  input[["button_element_add"]]
+   #
+   #  state = FG_fetch_state(id             = id,
+   #                         input          = input,
+   #                         session        = session,
+   #                         FM_yaml_file   = FM_yaml_file,
+   #                         MOD_yaml_file  = MOD_yaml_file,
+   #                         id_ASM         = id_ASM,
+   #                         id_UD          = id_UD,
+   #                         id_DW          = id_DW,
+   #                         react_state    = react_state)
+   #
+   #  current_fig = FG_fetch_current_fig(state)
+   #
+   #  # Pulling out the data set views summary:
+   #  dsv_summary = state[["FG"]][["DSV"]][["dsviews"]][["dsv_summary"]]
+   #
+   #  if(current_fig[["fig_dsview"]] %in% dsv_summary[["view_key"]]){
+   #    current_view_id= current_fig[["fig_dsview"]]
+   #  } else {
+   #    current_view_id = dsv_summary[["view_key"]][1]
+   #    FM_le(state, paste0("ui_fg_curr_views: dataset view missing."   ))
+   #    FM_le(state, paste0("fig_key: ",     current_fig[["key"]]       ))
+   #    FM_le(state, paste0("fig_dsview: ",  current_fig[["fig_dsview"]]))
+   #    FM_le(state, paste0("switching to view:", current_view_id ))
+   #  }
+   #
+   #  choices        = dsv_summary[["view_key"]]
+   #  names(choices) = dsv_summary[["description"]]
+   #
+   #
+   #  # JMH update select input:
+   #  #current_view_id = NULL
+   #  #choices = c("1")
+   #  choicesOpt = NULL
+   #  uiele =
+   #    shinyWidgets::pickerInput(
+   #      selected   = current_view_id,
+   #      inputId    = NS(id, "select_current_view"),
+   #      label      = state[["MC"]][["labels"]][["select_current_view"]],
+   #      choices    = choices,
+   #      width      = state[["MC"]][["formatting"]][["select_current_view"]][["width"]],
+   #      choicesOpt = choicesOpt)
+   #
+   #  uiele})
+   ##------------------------------------
+    # DSV dataset views
+    # This creates the selection UI
     output$ui_fg_curr_views = renderUI({
-      # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_DW]]
-      react_state[[id_ASM]]
-      #req(input$X)
-      input[["button_fig_new"]]
-      input[["button_fig_save"]]
-      input[["button_fig_del"]]
-      input[["button_fig_copy"]]
-      input[["button_element_add"]]
-
       state = FG_fetch_state(id             = id,
                              input          = input,
                              session        = session,
@@ -874,39 +923,86 @@ FG_Server <- function(id,
                              id_UD          = id_UD,
                              id_DW          = id_DW,
                              react_state    = react_state)
-
-      uiele = "ui_fg_curr_views"
-
-      current_fig = FG_fetch_current_fig(state)
-
-      # Pulling out the data set views summary:
-      dsv_summary = state[["FG"]][["DSV"]][["dsviews"]][["dsv_summary"]]
-
-      if(current_fig[["fig_dsview"]] %in% dsv_summary[["view_key"]]){
-        current_view_id=value = current_fig[["fig_dsview"]]
-      } else {
-        current_view_id = dsv_summary[["view_key"]][1]
-        FM_le(state, paste0("ui_fg_curr_views: dataset view missing."   ))
-        FM_le(state, paste0("fig_key: ",     current_fig[["key"]]       ))
-        FM_le(state, paste0("fig_dsview: ",  current_fig[["fig_dsview"]]))
-        FM_le(state, paste0("switching to view:", current_view_id ))
-      }
-
-      choices        = dsv_summary[["view_key"]]
-      names(choices) = dsv_summary[["description"]]
-      #current_view_id = NULL
-      #choices = c("1")
       choicesOpt = NULL
+     #uiele =
+     #  shinyWidgets::pickerInput(
+     #    selected   = state[["yaml"]][["FM"]][["labels"]][["default_ds"]],
+     #    inputId    = NS(id, "select_current_view"),
+     #    label      = state[["MC"]][["labels"]][["select_current_view"]],
+     #    choices    = c(state[["yaml"]][["FM"]][["labels"]][["default_ds"]]),
+     #    width      = state[["MC"]][["formatting"]][["select_current_view"]][["width"]],
+     #    choicesOpt = choicesOpt)
       uiele =
         shinyWidgets::pickerInput(
-          selected   = current_view_id,
+          selected   = "PH", 
           inputId    = NS(id, "select_current_view"),
           label      = state[["MC"]][["labels"]][["select_current_view"]],
-          choices    = choices,
+          choices    = c("PH"),
           width      = state[["MC"]][["formatting"]][["select_current_view"]][["width"]],
           choicesOpt = choicesOpt)
 
       uiele})
+      # This forces the dataset view selection to update
+      observe({
+        input$button_element_add 
+        input$button_fig_new 
+        input$button_fig_save 
+        input$button_fig_copy 
+        input$button_fig_del 
+      # input$select_current_view
+        input$select_current_fig
+
+        react_state[[id_UD]] 
+        react_state[[id_DW]] 
+        react_state[[id_ASM]]
+        # Forcing a reaction to changes in other modules
+        state = FG_fetch_state(id             = id,
+                               input          = input,
+                               session        = session,
+                               FM_yaml_file   = FM_yaml_file,
+                               MOD_yaml_file  = MOD_yaml_file,
+                               id_ASM         = id_ASM,
+                               id_UD          = id_UD,
+                               id_DW          = id_DW,
+                               react_state    = react_state)
+
+        current_fig = FG_fetch_current_fig(state)
+
+        # If this is triggered before datasets have been loaded the state will
+        # be bad:
+        if(state[["FG"]][["isgood"]]){
+          # Pulling out the data set views summary:
+          dsv_summary = state[["FG"]][["DSV"]][["dsviews"]][["dsv_summary"]]
+          if(current_fig[["fig_dsview"]] %in% dsv_summary[["view_key"]]){
+            current_view_id= current_fig[["fig_dsview"]]
+          } else {
+            current_view_id = dsv_summary[["view_key"]][1]
+            FM_le(state, paste0("ui_fg_curr_views: dataset view missing."   ))
+            FM_le(state, paste0("fig_key: ",     current_fig[["key"]]       ))
+            FM_le(state, paste0("fig_dsview: ",  current_fig[["fig_dsview"]]))
+            FM_le(state, paste0("switching to view:", current_view_id ))
+          }
+        
+          choices        = dsv_summary[["view_key"]]
+          names(choices) = dsv_summary[["description"]]
+        
+          choicesOpt = NULL
+          shinyWidgets::updatePickerInput(
+            session    = session, 
+            selected   = current_view_id,
+            inputId    = "select_current_view",
+            choices    = choices,
+            choicesOpt = choicesOpt)
+
+        # shinyWidgets::updatePickerInput(
+        #   session    = session, 
+        #   selected   = current_view_id,
+        #   inputId    = NS(id, "select_current_view"),
+        #   choices    = choices,
+        #   choicesOpt = choicesOpt)
+
+        }
+      })
     #------------------------------------
     observe({
       # Forcing a reaction to changes in other modules
@@ -959,7 +1055,11 @@ FG_Server <- function(id,
              input$button_fig_new,
              input$button_fig_save,
              input$button_fig_copy,
-             input$button_fig_del)
+             input$button_fig_del,
+             react_state[[id_UD]],
+             react_state[[id_DW]],
+             react_state[[id_ASM]]
+            )
       })
       # This updates the reaction state:
       observeEvent(toListen(), {
@@ -973,7 +1073,7 @@ FG_Server <- function(id,
                                id_UD          = id_UD,
                                id_DW          = id_DW,
                                react_state    = react_state)
-        
+
         FM_le(state, "reaction state updated")
         react_state[[id]] = state
       })
@@ -981,7 +1081,8 @@ FG_Server <- function(id,
 
     # Removing holds
     remove_hold_listen  <- reactive({
-      list(input$select_current_fig)
+      list(input$select_current_fig,
+           input$select_current_view)
     })
     observeEvent(remove_hold_listen(), {
       # Once the UI has been regenerated we
@@ -1041,8 +1142,8 @@ FG_Server <- function(id,
 #'    \item{figs:}             List of figures. Each view has the following structure:
 #'      \itemize{
 #'        \item{isgood:} Boolean status of the figure. False if evaluation fails.
-#'        \item{key:     Figure key (user editable)}
-#'        \item{caption: Figure caption  (user editable)}
+#'        \item{key:     Figure key acts as a title/caption (user editable)}
+#'        \item{notes:   Figure notes  (user editable)}
 #'        \item{id: Character id (\code{fig_idx})}
 #'        \item{idx: Numeric id (\code{1})}
 #'        \item{fig_dsview:  Name of the dataset view for the current figure.}
@@ -1106,15 +1207,42 @@ FG_fetch_state = function(id,
     }
   }
 
-  if(UPDATE_DS){
-    FM_le(state, "Updateing DS")
-    state = FG_init_state(FM_yaml_file    = FM_yaml_file,
-                          MOD_yaml_file   = MOD_yaml_file,
-                          id           = id,
-                          id_UD        = id_UD,
-                          id_DW        = id_DW,
-                          react_state  = react_state)
+  if("checksum" %in% names(isolate(react_state[[id_DW]][["DW"]]))){
+    if(!is.null(isolate(react_state[[id_DW]][["DW"]][["checksum"]]))){
+      if(is.null(state[["FG"]][["DSV"]][["DW_checksum"]])){
+        # If the DW checksum isn't NULL but the stored value in DSV is then we
+        # need to update the dataset
+        UPDATE_DS = TRUE
+      } else if(isolate(react_state[[id_DW]][["DW"]][["checksum"]]) !=
+                state[["FG"]][["DSV"]][["DW_checksum"]]){
+        # If the stored checksum in DSV is different than the currently
+        # uploaded dataset in DW then we force a reset as well:
+        UPDATE_DS = TRUE
+      }
+    }
+  }
 
+  if(UPDATE_DS){
+    FM_le(state, "Updating DS")
+    # If the module initializes and there is a dataset then the figure
+    # generation state will be good. Then we just need to attach the updated
+    # dataset views:
+    if(state[["FG"]][["isgood"]]){
+      state[["FG"]][["DSV"]] = FM_fetch_dsviews(
+        state       = state,
+        id_UD       = id_UD,
+        id_DW       = id_DW,
+        react_state = react_state)
+    } else {
+      # If there is no dataset loaded the figure generation state will be bad
+      # (isgood is FALSE). Then we need to reinitialize the module:
+      state = FG_init_state(FM_yaml_file    = FM_yaml_file,
+                            MOD_yaml_file   = MOD_yaml_file,
+                            id              = id,
+                            id_UD           = id_UD,
+                            id_DW           = id_DW,
+                            react_state     = react_state)
+    }
   }
   #---------------------------------------------
   # Here we update the state based on user input
@@ -1179,25 +1307,28 @@ FG_fetch_state = function(id,
     state = FG_set_current_fig(state, current_fig)
 
   }
-  # Processing changes to the figure dataset view
-  if(has_changed(ui_val   = state[["FG"]][["ui"]][["select_current_view"]],
-                 old_val  =  FG_fetch_current_fig(state)[["fig_dsview"]])
-     #(!fetch_hold(state, "select_current_fig"))
-      ){
-
-    # JMH we probably need a hold here when changing figures. Test this after
-    # the DW module has been integrated.
-    FM_le(state, "dsview change detected")
-
-    # pulling the current figure
-    current_fig = FG_fetch_current_fig(state)
-
-    # updating the view id
-    current_fig[["fig_dsview"]] = state[["FG"]][["ui"]][["select_current_view"]]
-
-    # saving the updated figure
-    state = FG_set_current_fig(state, current_fig)
-  }
+# # Processing changes to the figure dataset view
+# if(has_changed(ui_val   = state[["FG"]][["ui"]][["select_current_view"]],
+#                old_val  =  FG_fetch_current_fig(state)[["fig_dsview"]]) &
+#     (!fetch_hold(state, "select_current_view"))
+#     ){
+#
+#   # JMH we probably need a hold here when changing figures. Test this after
+#   # the DW module has been integrated.
+#   FM_le(state, "dsview change detected")
+#
+#   # pulling the current figure
+#   current_fig = FG_fetch_current_fig(state)
+#
+#   # Setting hold for figure select
+#   state = set_hold(state, inputId = "select_current_fig")
+#
+#   # updating the view id
+#   current_fig[["fig_dsview"]] = state[["FG"]][["ui"]][["select_current_view"]]
+#
+#   # saving the updated figure
+#   state = FG_set_current_fig(state, current_fig)
+# }
 
   # Adding a new element
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_element_add"]],
@@ -1247,6 +1378,7 @@ FG_fetch_state = function(id,
 
     # Setting hold for figure select
     state = set_hold(state, inputId = "select_current_fig")
+    state = set_hold(state, inputId = "select_current_view")
 
     # Saving the button state to the counter
     state[["FG"]][["button_counters"]][["button_fig_new"]] =
@@ -1278,6 +1410,7 @@ FG_fetch_state = function(id,
 
     # Setting hold for figure select
     state = set_hold(state, inputId = "select_current_fig")
+    state = set_hold(state, inputId = "select_current_view")
 
     # Saving the button state to the counter
     state[["FG"]][["button_counters"]][["button_fig_del"]] =
@@ -1306,7 +1439,13 @@ FG_fetch_state = function(id,
     }
 
     # Saving the caption as well
-    current_fig[["caption"]] = state[["FG"]][["ui"]][["text_fig_cap"]]
+    current_fig[["notes"]] = state[["FG"]][["ui"]][["text_fig_cap"]]
+
+
+    # JMH save dsv here
+#   # updating the view id
+    current_fig[["fig_dsview"]] = state[["FG"]][["ui"]][["select_current_view"]]
+    FM_le(state, paste0("  setting dsview to: ", current_fig[["fig_dsview"]]))
 
     # Saving changes to the current figure
     state = FG_set_current_fig(state, current_fig)
@@ -1317,6 +1456,9 @@ FG_fetch_state = function(id,
 
     # Updating any messages
     state = FM_set_ui_msg(state, msgs)
+
+    # Forcing a rebuild of the figure:
+    state = FG_build( state=state, del_row = NULL, cmd = NULL)
   }
   # Copy figure
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_copy"]],
@@ -1359,7 +1501,7 @@ FG_fetch_state = function(id,
     new_fig[["fobj"          ]]  = old_fig[["fobj"          ]]
     new_fig[["code_previous" ]]  = old_fig[["code_previous" ]]
     new_fig[["code_fg_only"  ]]  = old_fig[["code_fg_only"  ]]
-    new_fig[["caption"       ]]  = old_fig[["caption"       ]]
+    new_fig[["notes"         ]]  = old_fig[["notes"         ]]
 
     # Now we dump the new figure with the old components
     # copied into it back into the state object:
@@ -1367,6 +1509,7 @@ FG_fetch_state = function(id,
 
     # Setting hold for figure select
     state = set_hold(state, inputId = "select_current_fig")
+    state = set_hold(state, inputId = "select_current_view")
 
     # Saving the button state to the counter
     state[["FG"]][["button_counters"]][["button_fig_copy"]] =
@@ -1400,7 +1543,7 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_st
   # Reading in default information from the yaml file
   state[["yaml"]] = yaml::read_yaml(FM_yaml_file)
 
-  # This assigns the module config "MC" element to the correct 
+  # This assigns the module config "MC" element to the correct
   MOD_CONFIG = yaml::read_yaml(MOD_yaml_file)
   state[["MC"]] = MOD_CONFIG[["MC"]]
 
@@ -1547,17 +1690,18 @@ FG_new_fig    = function(state, id_UD, id_DW, react_state){
   # Using the default dsview for the new figure
   fig_dsview = DSV[["active"]]
 
+ ## JMH moving code_ini to figure building function
+ ## Creating the dataset object
+ ## This object contains the name of the dataset
+ #ds_object_name = DSV[["dsviews"]][["object_name"]][[fig_dsview]]
+ #
+ ## Creating that object loally
+ #assign(ds_object_name, DSV[["dsviews"]][["contents"]][[fig_dsview]])
+ #
+ ## ggplot initialization code:
+ #code_init = paste0(fg_object_name, " = ggplot2::ggplot(data=", ds_object_name,")")
 
-  # Creating the dataset object
-  # This object contains the name of the dataset
-  ds_object_name = DSV[["dsviews"]][["object_name"]][[fig_dsview]]
-
-  # Creating that object loally
-  assign(ds_object_name, DSV[["dsviews"]][["contents"]][[fig_dsview]])
-
-  # ggplot initialization code:
-  fg_object_name = paste0("FG_", state[["MC"]][["fg_object_name"]], "_", state[["FG"]][["fig_cntr"]])
-  code_init = paste0(fg_object_name, " = ggplot2::ggplot(data=", ds_object_name,")")
+ fg_object_name = paste0("FG_", state[["MC"]][["fg_object_name"]], "_", state[["FG"]][["fig_cntr"]])
 
   # This is the object that contains the different components of
   # the figure list:
@@ -1575,11 +1719,10 @@ FG_new_fig    = function(state, id_UD, id_DW, react_state){
          UD_checksum    = DSV[["UD_checksum"]],
          DW_checksum    = DSV[["DW_checksum"]],
          DSV_checksum   = DSV[["dsviews"]][["checksum"]][[fig_dsview]],
-         code_init      = code_init,
          code_fg_only   = NULL,
          code_previous  = NULL,
          code           = NULL,
-         caption        = "",
+         notes          = "",
          isgood         = TRUE,
          add_isgood     = TRUE,
          elements_table = NULL)
@@ -1728,11 +1871,6 @@ fers_builder = function(state){
     # creating the description
     desc = paste(descs, collapse = ", ")
   } else if(element == "facet"){
-
-    # JMH add support for multi-figure facet
-    # ggforce::facet_wrap_paginate
-    # ggforce::facet_grid_paginate
-
     # We want to make sure at least one column has been selected
     if(ui[["select_component_facet"]][1] == ""){
       isgood = FALSE
@@ -1848,10 +1986,11 @@ FG_build = function(state,
   msgs        = c()
 
   # Defining the dataset locally:
-  assign(state[["FG"]][["DSV"]][["dsviews"]][["object_name"]][[current_fig[["fig_dsview"]]]],
+  ds_object_name = state[["FG"]][["DSV"]][["dsviews"]][["object_name"]][[current_fig[["fig_dsview"]]]]
+  assign(ds_object_name,
          state[["FG"]][["DSV"]][["dsviews"]][["contents"]][[current_fig[["fig_dsview"]]]])
 
-  # Defining the figure object name locally:
+  # Pulling out the figure object name:
   fg_object_name = current_fig[["fg_object_name"]]
 
   # Initializing the figure object
@@ -1861,8 +2000,11 @@ FG_build = function(state,
   isgood     = TRUE
   add_isgood = TRUE
 
-  # The figure code is initalized with the code init:
-  code_lines = current_fig[["code_init"]]
+  # The figure code is initialized with the code init:
+  code_init = paste0(fg_object_name, " = ggplot2::ggplot(data=", ds_object_name,")")
+
+  # The figure code lines start with this:
+  code_lines = code_init
 
   # This is the elements table
   curr_ET = current_fig[["elements_table"]]
@@ -1892,7 +2034,7 @@ FG_build = function(state,
 
     # First we create the code to initialize the
     # figure
-    eval(parse(text=current_fig[["code_init"]]))
+    eval(parse(text=code_init))
 
     # Process current elements
     if(!is.null(curr_ET)){
@@ -1971,8 +2113,6 @@ FG_build = function(state,
              FM_mk_error_fig(state[["MC"]][["labels"]][["no_fig_elements"]]))
     }
 
-
-
     # Lastly we apply any post processing
     if(!is.null(state[["MC"]][["post_processing"]])){
       # Pulling out the post processing code:
@@ -2037,7 +2177,10 @@ FG_build = function(state,
   # Just the code to build the figure
   code_fg_only    = paste(code_lines, collapse="\n")
   # All the code required to generate this module
-  code            = paste(c(code_previous, code_fg_only), collapse="\n")
+  code            = paste(c(code_previous, 
+                            "", 
+                            "# Figure Generation", 
+                            code_fg_only), collapse="\n")
 
   # Updating figure with the components above
   current_fig[["num_pages"]]        = num_pages
@@ -2050,8 +2193,6 @@ FG_build = function(state,
   current_fig[["fobj"]]             = get(fg_object_name)
   current_fig[["elements_table"]]   = curr_ET
   current_fig[["checksum"]]         = digest::digest(get(fg_object_name), algo=c("md5"))
-
-
 
   # updating the current figure with the changes above
   state = FG_set_current_fig(state, current_fig)

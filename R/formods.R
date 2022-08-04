@@ -54,9 +54,7 @@ FM_fetch_dsviews = function(state, id_UD, id_DW, react_state){
     tmp_contents    = isolate(react_state[[id_UD]][["UD"]][["contents"]])
     tmp_object_name = isolate(react_state[[id_UD]][["UD"]][["object_name"]])
     tmp_code        = isolate(react_state[[id_UD]][["UD"]][["code"]])
-    # FM_le(state, paste0("checksum:    ", is.null(tmp_checksum)))
-    # FM_le(state, paste0("object_name: ", is.null(tmp_object_name)))
-    # FM_le(state, paste0("contents:    ", is.null(tmp_contents)))
+
     # If these three are not null then we're good:
     if(!is.null(tmp_checksum)    &
        !is.null(tmp_object_name) &
@@ -95,7 +93,51 @@ FM_fetch_dsviews = function(state, id_UD, id_DW, react_state){
   # Next we append any data views from the
   # Data wrangling module
   if(id_DW %in% names(react_state)){
-    #browser()
+    DW_checksum = isolate(react_state[[id_DW]][["DW"]][["checksum"]])
+
+    # Walking through each view:
+    dw_views = names(isolate(react_state[[id_DW]][["DW"]][["views"]]))
+    for(dw_view in dw_views){
+      # Pulling out the view components
+      tmp_checksum      = isolate(react_state[[id_DW]][["DW"]][["views"]][[dw_view]][["checksum"]])
+      tmp_object_name   = isolate(react_state[[id_DW]][["DW"]][["views"]][[dw_view]][["view_ds_object_name"]])
+      tmp_code          = isolate(react_state[[id_DW]][["DW"]][["views"]][[dw_view]][["code"]])
+      tmp_key           = isolate(react_state[[id_DW]][["DW"]][["views"]][[dw_view]][["key"]])
+      tmp_code_previous = isolate(react_state[[id_DW]][["DW"]][["views"]][[dw_view]][["code_previous"]])
+      tmp_contents      = isolate(react_state[[id_DW]][["DW"]][["views"]][[dw_view]][["WDS"]])
+
+      # The module code is the two chuncks pasted together
+      modcode = paste(c(tmp_code_previous, tmp_code), collapse="\n")
+      if(is.null(modcode)){
+        modcode = ""
+      }
+      if(is.null(tmp_key)){
+        tmp_key = dw_view
+      }
+
+      if(!is.null(tmp_checksum)    &
+         !is.null(tmp_object_name) &
+         !is.null(tmp_contents)){
+
+        # Adding them to the dataset views data frame
+        dsv_summary     = rbind(dsv_summary,
+         data.frame(
+           checksum    = tmp_checksum,
+           object_name = tmp_object_name,
+           view_key    = dw_view,
+           code        = modcode ,
+           dsm         = "DW",
+           description = tmp_key
+         )
+        )
+
+        contents[[dw_view]]    = tmp_contents
+        checksum[[dw_view]]    = tmp_checksum
+        columns[[dw_view]]     = names(tmp_contents)
+        code[[dw_view]]        = tmp_code
+        object_name[[dw_view]] = tmp_object_name
+      }
+    }
   }
 
   # putting it all together
@@ -262,7 +304,6 @@ fetch_hold = function(state, inputId=NULL){
       hold_status =   state[[MOD_TYPE]][["ui_hold"]][[inputId]]
     }else{
       # here we set the hold for a single inputId
-      browser()
       stop(paste0("Unable to fetch hold for unknown inputId: ", inputId))
       isgood = FALSE
     }
@@ -714,7 +755,7 @@ FM_init_state = function(
   # Reading in default information from the yaml file
   state[["yaml"]] = yaml::read_yaml(FM_yaml_file)
 
-  # This assigns the module config "MC" element 
+  # This assigns the module config "MC" element
   MOD_CONFIG = yaml::read_yaml(MOD_yaml_file)
   state[["MC"]] = MOD_CONFIG[["MC"]]
 

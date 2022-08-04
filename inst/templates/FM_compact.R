@@ -7,7 +7,7 @@ load_all()
 #https://fontawesome.com/icons?from=io
 
 ui <- dashboardPage(
-  skin="red",
+  skin="black",
   dashboardHeader(title="formods"),
   dashboardSidebar(
      sidebarMenu(

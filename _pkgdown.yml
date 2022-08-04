@@ -1,8 +1,8 @@
 url: ~
 template:
   bootstrap: 5
-  #bootswatch: united
-  bootswatch: quartz
+  bootswatch: united
+  #bootswatch: quartz
   bslib:
     primary: "#006fe7"
 reference:
@@ -11,11 +11,16 @@ reference:
     - autocast
     - starts_with("FM_")
     - has_changed
+    - set_hold
+    - fetch_hold
     - remove_hold
     - unfactor
   - title: "Upload Data (UD)"
   - contents:
     - starts_with("UD_")
+  - title: "App State Managemnt (ASM)"
+  - contents:
+    - starts_with("ASM_")
   - title: "Data Wrangling (DW)"
   - contents:
     - starts_with("DW_")
@@ -25,9 +30,3 @@ reference:
   - contents:
     - starts_with("FG_")
     - fers_builder
-
-
-
-
-
-
