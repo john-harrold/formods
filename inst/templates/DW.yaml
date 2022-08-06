@@ -16,15 +16,22 @@ MC:
     fds_filter_column:    "Filter by Column"
     fds_filter_operator:  "Condition"
     fds_filter_rhs:       "Matching"
-    fds_mutate_column:    "Column to Mutate"
+    fds_mutate_column:    "New or current column to alter"
     fds_mutate_rhs:       "New Value"
     fds_rename_column:    "Curret Column"   
     fds_rename_rhs:       "New Name"
-    fds_group_column:     "Columns to Group"
+    fds_group_column:     "Columns to group"
+    fds_longer_column:    "Columns to make longer"
+    fds_longer_names:     "New column to contain names"
+    fds_longer_values:    "New column to contain values"
+    fds_wider_names:      "Column with names"
+    fds_wider_values:     "Column with values"
     new_dw:               "New"
     del_dw:               "Delete"
     copy_dw:              "Copy"
     save_dw:              "Save"
+    ungroup_data:         "Removing current grouping"
+    keep_onerow:          "Keep first row in current grouping"
     no_dataset:           "No dataset loaded!"
     no_dw_elements:       "No data wrangling elements defined yet"
   errors:
@@ -36,6 +43,12 @@ MC:
     fds_rename_column:    "Column to rename not specified."   
     fds_rename_rhs:       "New column name not specified."
     fds_group_column:     "No columns to group specified."
+    fds_select_column:    "You must select at least one column to keep."
+    fds_longer_column:    "You must select at least one column to make longer."
+    fds_longer_names:     "You must supply a column for the names of the new longer dataset"
+    fds_longer_values:    "You must supply a column for the values of the new longer dataset"
+    fds_wider_names :     "You must select a column with the names."
+    fds_wider_value s:    "You must select a column with the values."
     current_key:          "Short description"
     current_key_empty:    "The data view description field cannot be empty"
     unknown_action:       "The selection action is not supported."
@@ -65,7 +78,7 @@ MC:
       subtext: "Filter data"
     mutate:
       choice:  "Alter"  
-      subtext: "Change the contents of a column"
+      subtext: "Create new column or change existing column"
     rename:
       choice:  "Rename"  
       subtext: "Rename column"
@@ -75,6 +88,18 @@ MC:
     ungroup:
       choice:  "Ungroup" 
       subtext: "Removing groping"                        
+    longer: 
+      choice:  "Elongate" 
+      subtext: "Make Longer: rows to columns"                        
+    wider:  
+      choice:  "Widen" 
+      subtext: "Make Wider: columns to rows"                        
+    onerow: 
+      choice:  "First Row" 
+      subtext: "Keep only first row of grouped data"                          
+    select: 
+      choice:  "Select" 
+      subtext: "Choose columns to keep"
   formatting:
     # dimensions of the table preview in pixels
     preview:    

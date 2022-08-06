@@ -320,6 +320,22 @@ DW_Server <- function(id,
             uiele = tagList(
               htmlOutput(NS(id, "ui_dw_fds_ungroup"  )))
           }
+          if(state[["DW"]][["ui"]][["select_dw_element"]] == "onerow" ){
+            uiele = tagList(
+              htmlOutput(NS(id, "ui_dw_fds_onerow"  )))
+          }
+          if(state[["DW"]][["ui"]][["select_dw_element"]] == "select" ){
+            uiele = tagList(
+              htmlOutput(NS(id, "ui_dw_fds_select"  )))
+          }
+          if(state[["DW"]][["ui"]][["select_dw_element"]] == "longer" ){
+            uiele = tagList(
+              htmlOutput(NS(id, "ui_dw_fds_longer"  )))
+          }
+          if(state[["DW"]][["ui"]][["select_dw_element"]] == "wider" ){
+            uiele = tagList(
+              htmlOutput(NS(id, "ui_dw_fds_wider"  )))
+          }
 
           # this makes the inputs into a line
           #uiele =   div(style = "display: flex;", uiele)
@@ -350,23 +366,12 @@ DW_Server <- function(id,
         dscols = names(WDS)
         uiele = tagList(
           div(style = "display: flex;",
-              pickerInput(
-                inputId  = NS(id, "select_fds_mutate_column"),
-                label    = NULL,
-                width    = 200,
-                choices  = dscols,
-                options  = list(
-                  title = state[["MC"]][["labels"]][["fds_mutate_column"]])
+              textInput(
+                inputId     = NS(id, "select_fds_mutate_column"),
+                label       = NULL,
+                width       = 200,
+                placeholder = state[["MC"]][["labels"]][["fds_mutate_column"]]
               ),
-              #selectizeInput(
-              #   inputId  = NS(id, "select_fds_mutate_column"),
-              #   label    = NULL,
-              #   width    = 200,
-              #   choices  = dscols,
-              #   options = list(
-              #     placeholder = state[["MC"]][["labels"]][["fds_mutate_column"]],
-              #     maxItems = 1)
-              #),
               textInput(
                 inputId     = NS(id, "select_fds_mutate_rhs"),
                 label       = NULL,
@@ -452,6 +457,133 @@ DW_Server <- function(id,
       uiele
     })
     #------------------------------------
+    output$ui_dw_fds_wider = renderUI({
+      req(input$select_dw_element)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
+      req(input$select_dw_element)
+      uiele = NULL
+      if(state[["DW"]][["isgood"]]){
+        # Current final dataset
+        WDS = DW_fetch_current_view(state)[["WDS"]]
+        # Columns in that dataset
+        dscols = names(WDS)
+        # JMH: adding pivot_longer inputs
+        uiele = tagList(
+          div(style = "display: flex;",
+              pickerInput(
+                inputId  = NS(id, "select_fds_wider_names"),
+                label    = NULL,
+                width    = 200,
+                choices  = dscols,
+                multiple = FALSE, 
+                options  = list(
+                  title = state[["MC"]][["labels"]][["fds_wider_names"]])
+              ),
+              pickerInput(
+                inputId  = NS(id, "select_fds_wider_values"),
+                label    = NULL,
+                width    = 200,
+                choices  = dscols,
+                multiple = FALSE, 
+                options  = list(
+                  title = state[["MC"]][["labels"]][["fds_wider_values"]])
+              )
+          ))
+
+      }
+      uiele
+    })
+    #------------------------------------
+    output$ui_dw_fds_longer = renderUI({
+      req(input$select_dw_element)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
+      req(input$select_dw_element)
+      uiele = NULL
+      if(state[["DW"]][["isgood"]]){
+        # Current final dataset
+        WDS = DW_fetch_current_view(state)[["WDS"]]
+        # Columns in that dataset
+        dscols = names(WDS)
+        # JMH: adding pivot_longer inputs
+        uiele = tagList(
+          div(style = "display: flex;",
+              pickerInput(
+                inputId  = NS(id, "select_fds_longer_column"),
+                label    = NULL,
+                width    = 200,
+                choices  = dscols,
+                multiple = TRUE,
+                options  = list(
+                  title = state[["MC"]][["labels"]][["fds_longer_column"]])
+              ),
+              textInput(
+                inputId     = NS(id, "select_fds_longer_names"),
+                label       = NULL,
+                width       = 200, 
+                value       = "names",
+                placeholder = state[["MC"]][["labels"]][["fds_longer_names"]]
+              ),
+              textInput(
+                inputId     = NS(id, "select_fds_longer_values"),
+                label       = NULL,
+                width       = 200, 
+                value       = "values",
+                placeholder = state[["MC"]][["labels"]][["fds_longer_values"]]
+              )
+          ))
+
+      }
+      uiele
+    })
+    #------------------------------------
+    #------------------------------------
+    output$ui_dw_fds_select = renderUI({
+      req(input$select_dw_element)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
+      req(input$select_dw_element)
+      uiele = NULL
+      if(state[["DW"]][["isgood"]]){
+        # Current final dataset
+        WDS = DW_fetch_current_view(state)[["WDS"]]
+        # Columns in that dataset
+        dscols = names(WDS)
+        uiele = tagList(
+          div(style = "display: flex;",
+              pickerInput(
+                inputId  = NS(id, "select_fds_select_column"),
+                label    = NULL,
+                width    = 200,
+                choices  = dscols,
+                multiple = TRUE,
+                options  = list(
+                  title = state[["MC"]][["labels"]][["uknown_action"]])
+              )
+          ))
+
+      }
+      uiele
+    })
     #------------------------------------
     output$ui_dw_fds_ungroup             = renderUI({
       req(input$select_dw_element)
@@ -471,7 +603,31 @@ DW_Server <- function(id,
         # Columns in that dataset
         dscols = names(WDS)
         uiele = tagList(
-          tags$b("ungroup dataset")
+          tags$b(state[["MC"]][["labels"]][["ungroup_data"]])
+        )
+      }
+      uiele
+    })
+    #------------------------------------
+    output$ui_dw_fds_onerow              = renderUI({
+      req(input$select_dw_element)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
+      req(input$select_dw_element)
+      uiele = NULL
+      if(state[["DW"]][["isgood"]]){
+        # Current final dataset
+        WDS = DW_fetch_current_view(state)[["WDS"]]
+        # Columns in that dataset
+        dscols = names(WDS)
+        uiele = tagList(
+          tags$b(state[["MC"]][["labels"]][["keep_onerow"]])
         )
       }
       uiele
@@ -628,22 +784,23 @@ DW_Server <- function(id,
             state[["MC"]][["actions"]][["filter"]] [["subtext"]],
             state[["MC"]][["actions"]][["mutate"]] [["subtext"]],
             state[["MC"]][["actions"]][["rename"]] [["subtext"]],
+            state[["MC"]][["actions"]][["select"]] [["subtext"]],
             state[["MC"]][["actions"]][["group"]]  [["subtext"]],
-            state[["MC"]][["actions"]][["ungroup"]][["subtext"]]
+            state[["MC"]][["actions"]][["ungroup"]][["subtext"]],
+            state[["MC"]][["actions"]][["longer"]][["subtext"]],
+            state[["MC"]][["actions"]][["wider"]][["subtext"]],
+            state[["MC"]][["actions"]][["onerow"]][["subtext"]]
           ),
-          # icon    = c(
-          #   "glyphicon-filter" ,
-          #   "glyphicon-wrench",
-          #   "glyphicon-edit",
-          #   "glyphicon-resize-small",
-          #   "glyphicon-resize-full"
-          # ))
           icon    = c(
-            "filter" ,
-            "wrench",
-            "edit",
-            "resize-small",
-            "resize-full"
+            "glyphicon-filter" ,
+            "glyphicon-wrench",
+            "glyphicon-edit",
+            "glyphicon-basket-check",
+            "glyphicon-resize-small",
+            "glyphicon-resize-full",
+            "glyphicon-resize-vertical",
+            "glyphicon-resize-horizontal",
+            "glyphicon-export"
           ),
           lib = rep("glyphicon", length(icon)))
 
@@ -651,15 +808,23 @@ DW_Server <- function(id,
         cnames = c( state[["MC"]][["actions"]][["filter"]] [["choice"]] ,
                     state[["MC"]][["actions"]][["mutate"]] [["choice"]] ,
                     state[["MC"]][["actions"]][["rename"]] [["choice"]] ,
+                    state[["MC"]][["actions"]][["select"]] [["choice"]] ,
                     state[["MC"]][["actions"]][["group"]]  [["choice"]] ,
-                    state[["MC"]][["actions"]][["ungroup"]][["choice"]]
+                    state[["MC"]][["actions"]][["ungroup"]][["choice"]],
+                    state[["MC"]][["actions"]][["longer"]] [["choice"]],
+                    state[["MC"]][["actions"]][["wider"]]  [["choice"]],
+                    state[["MC"]][["actions"]][["onerow"]] [["choice"]]
         )
         choices   = c(
           "filter",
           "mutate",
           "rename",
+          "select",
           "group",
-          "ungroup"
+          "ungroup",
+          "longer",
+          "wider",
+          "onerow"
         )
         names(choices) = cnames
 
@@ -871,7 +1036,7 @@ DW_Server <- function(id,
             NS(id, "ui_dw_code"),
             height  = state[["MC"]][["formatting"]][["code"]][["height"]]
             ))
-       
+
           uiele_code_button = tagList(
            shinyWidgets::dropdownButton(
              uiele_code,
@@ -884,9 +1049,9 @@ DW_Server <- function(id,
              icon    = icon("code", lib="font-awesome"),
              tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["show_code"]]))
           )
-       
+
         }
-       
+
         # Button with DW elements table
         uiele_dw_elements = rhandsontable::rHandsontableOutput(NS(id, "hot_dw_elements"))
         uiele_dw_elements_button = tagList(
@@ -901,14 +1066,14 @@ DW_Server <- function(id,
            icon    = icon("layer-group", lib="font-awesome"),
            tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["dw_elements"]]))
         )
-       
+
         uiele = tagList(
           div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_views"))),
           div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_key"))),
           tags$br(),
           verbatimTextOutput(NS(id, "ui_dw_new_element_msg"))
         )
-       
+
         uiele_buttons_right = tagList(
                  tags$style(".btn-custom-dw {width: 100px;}"),
                  div(style="display:inline-block;vertical-align:top",
@@ -919,7 +1084,7 @@ DW_Server <- function(id,
                  htmlOutput(NS(id, "ui_dw_del_view")),
                  htmlOutput(NS(id, "ui_dw_new_view"))
                  ))
-       
+
         uiele_buttons_left = tagList(
         # div(style="display:inline-block;vertical-align:top",
         # htmlOutput(NS(id, "ui_dw_save_view")),
@@ -928,15 +1093,15 @@ DW_Server <- function(id,
         # htmlOutput(NS(id, "ui_dw_new_view"))
         # )
         )
-       
-       
-       
+
+
+
         # Appending the buttons to the main uiele
         uiele = tagList(
           uiele,
           uiele_buttons_left)
-       
-       
+
+
         # Appending the preview
         uiele_preview = NULL
         if( state$MC$compact$preview){
@@ -950,9 +1115,9 @@ DW_Server <- function(id,
             tags$br()
           )
         }
-       
-       
-       
+
+
+
         uiele = tagList( uiele,
           tags$br(),
           div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_add_element_button"))),
@@ -979,7 +1144,7 @@ DW_Server <- function(id,
              input$button_dw_del,
              input$button_dw_copy,
              input$button_dw_save,
-             react_state[[id_ASM]]) 
+             react_state[[id_ASM]])
       })
       # This updates the reaction state:
       observeEvent(toListen(), {
@@ -990,7 +1155,7 @@ DW_Server <- function(id,
                                MOD_yaml_file   = MOD_yaml_file,
                                id_UD           = id_UD,
                                react_state     = react_state)
-        
+
         FM_le(state, "reaction state updated")
         react_state[[id]] = state
       }, priority=99)
@@ -1010,7 +1175,7 @@ DW_Server <- function(id,
                              MOD_yaml_file   = MOD_yaml_file,
                              id_UD           = id_UD,
                              react_state     = react_state)
-      
+
       FM_le(state, "removing holds")
       # Removing all holds
       for(hname in names(state[["DW"]][["ui_hold"]])){
@@ -1451,6 +1616,12 @@ DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state){
     "fds_rename_rhs"             ,
     "current_key"                ,
     "select_fds_group_column"    ,
+    "select_fds_select_column"   ,
+    "select_fds_longer_column"   ,
+    "select_fds_longer_values"   ,
+    "select_fds_longer_names"    ,
+    "select_fds_wider_values"    ,
+    "select_fds_wider_names"     ,
     "select_dw_views"            ,
     "select_dw_element"
     )
@@ -1478,7 +1649,7 @@ DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state){
                  as.data.frame(state[["MC"]][["operators"]][[op_idx]]))
   }
 
-  # Creating operator choices 
+  # Creating operator choices
   state[["DW"]][["op_choices"]] =  list()
   tmpdf = dplyr::filter(opdf, .data[["type"]] == "factor")
   state[["DW"]][["op_choices"]][["factor"]] = stats::setNames(tmpdf$rop, c(tmpdf$text))
@@ -1582,7 +1753,36 @@ dwrs_builder = function(state){
       isgood = FALSE
       msgs = c(msgs, state[["MC"]][["errors"]][["fds_group_column"]])
     }
+  } else if(action == "longer"){
+    if(paste(ui[["select_fds_longer_column"]], collapse=", ") == ""){
+      isgood = FALSE
+      msgs = c(msgs, state[["MC"]][["errors"]][["fds_longer_column"]])
+    }
+    if( ui[["select_fds_longer_names"]] == ""){
+      isgood = FALSE
+      msgs = c(msgs, state[["MC"]][["errors"]][["fds_longer_names"]])
+    }
+    if( ui[["select_fds_longer_values"]] == ""){
+      isgood = FALSE
+      msgs = c(msgs, state[["MC"]][["errors"]][["fds_longer_values"]])
+    }
+  } else if(action == "wider"){
+    if(paste(ui[["select_fds_wider_names"]], collapse=", ") == ""){
+      isgood = FALSE
+      msgs = c(msgs, state[["MC"]][["errors"]][["fds_wider_names"]])
+    }
+    if(paste(ui[["select_fds_wider_values"]], collapse=", ") == ""){
+      isgood = FALSE
+      msgs = c(msgs, state[["MC"]][["errors"]][["fds_wider_values"]])
+    }
+  } else if(action == "select"){
+    if(paste(ui[["select_fds_select_column"]], collapse=", ") == ""){
+      isgood = FALSE
+      msgs = c(msgs, state[["MC"]][["errors"]][["fds_select_column"]])
+    }
   } else if(action == "ungroup"){
+    # Nothing needs to be done here
+  } else if(action == "onerow"){
     # Nothing needs to be done here
   } else {
     isgood = FALSE
@@ -1647,9 +1847,40 @@ dwrs_builder = function(state){
                   group_cols_str,
                   ")")
       desc = paste(group_cols_str)
+    } else if(action == "select"){
+      select_cols_str   = paste(ui[["select_fds_select_column"]], collapse=', ')
+      cmd = paste0(view_ds_object_name, " = dplyr::select(", view_ds_object_name,",",
+                  select_cols_str,
+                  ")")
+      desc = paste(select_cols_str)
+    } else if(action == "longer"){
+      select_cols_str         = paste(ui[["select_fds_longer_column"]], collapse=', ')
+      select_cols_str_quote   = paste(ui[["select_fds_longer_column"]], collapse='", "')
+      select_cols_str_quote   = paste0('c("', select_cols_str_quote, '")')
+      names_to          = ui[["select_fds_longer_names"]]
+      values_to         = ui[["select_fds_longer_values"]]
+
+      cmd = paste0(view_ds_object_name, " = tidyr::pivot_longer(", view_ds_object_name,
+                  ', cols      = ', select_cols_str_quote,
+                  ', names_to  = "',  names_to,  '"',
+                  ', values_to = "', values_to, '"',
+                  ")")
+      desc = paste(select_cols_str, "-->", names_to, ", ", values_to)
+    } else if(action == "wider"){
+      names_from        = ui[["select_fds_wider_names"]]
+      values_from       = ui[["select_fds_wider_values"]]
+
+      cmd = paste0(view_ds_object_name, " = tidyr::pivot_wider(", view_ds_object_name,
+                  ', names_from  = "',  names_from,  '"',
+                  ', values_from = "', values_from, '"',
+                  ")")
+      desc = paste("names_from: ", names_from, ", values_from: ", values_from)
     } else if(action == "ungroup"){
       cmd = paste0(view_ds_object_name, " = dplyr::ungroup(",view_ds_object_name,")")
-      desc = "grouping removed"
+      desc = state[["MC"]][["labels"]][["ungroup_data"]]
+    } else if(action == "onerow"){
+      cmd = paste0(view_ds_object_name, " = dplyr::filter(", view_ds_object_name, ",row_number()==1)")
+      desc = state[["MC"]][["labels"]][["keep_onerow"]]
     } else {
       isgood = FALSE
       msgs = c(msgs, paste("Action not found:", action))
