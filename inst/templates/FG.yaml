@@ -64,7 +64,7 @@ MC:
   errors:
     element_not_added:    "Unable to add the data figure element:"
     current_key_empty:    "The figure description field cannot be empty."
-    only_one_facet:       "This figure already has a faceting element."
+    only_one_element:     "Only one element of ===ELEMENT=== type is allowed. The old ===ELEMENT=== will be replaced."
   elements:
     # For each element below you should only modify the choice and subtext
     # elements

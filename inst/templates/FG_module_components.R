@@ -33,10 +33,10 @@ ui <- dashboardPage(
                 "ui_fg_save_fig",
                  htmlOutput(NS("FG", "ui_fg_save_fig"))),
               div(style="display:inline-block",
-                 "ui_fg_del_fig", 
+                 "ui_fg_del_fig",
                  htmlOutput(NS("FG", "ui_fg_del_fig"))),
               div(style="display:inline-block",
-                 "ui_fg_copy_fig", 
+                 "ui_fg_copy_fig",
                  htmlOutput(NS("FG", "ui_fg_copy_fig"))),
            #  div(style="display:inline-block",
            #     htmlOutput(NS("FG", "ui_fg_upds_fig")) ),
@@ -45,10 +45,10 @@ ui <- dashboardPage(
              fluidRow(
                box(title="Figure Caption",
                  "ui_fg_fig_name",
-                 htmlOutput(NS("FG", "ui_fg_fig_name")),  
+                 htmlOutput(NS("FG", "ui_fg_fig_name")),
                  tags$br(),
                  "ui_fg_fig_cap",
-                 htmlOutput(NS("FG", "ui_fg_fig_cap")),  
+                 htmlOutput(NS("FG", "ui_fg_fig_cap")),
               width=12)),
              fluidRow(
                box(title="Add Plot Element Button",
@@ -71,6 +71,7 @@ ui <- dashboardPage(
                  plotOutput(NS("FG", "ui_fg_preview_ggplot")), width=12)),
              fluidRow(
                box(title="Plotly Preview",
+                  "The plotly output is experimental. It doesnt work with all the plotting elements, namly the mulit-page faceting with ggforce, so it's not reccomended for use until these things are worked out.",
                  "ui_fg_preview_plotly",
                  plotly::plotlyOutput(NS("FG", "ui_fg_preview_plotly"), width="1000px", height="600px"), width=12)),
              fluidRow(
@@ -83,7 +84,7 @@ ui <- dashboardPage(
                 rhandsontable::rHandsontableOutput(NS("FG", "hot_fg_elements")), width=12)),
              fluidRow(
                box(title="Generated Code",
-                 "ui_fg_code",      
+                 "ui_fg_code",
                  shinyAce::aceEditor(NS("FG", "ui_fg_code")), width=12)),
              fluidRow(
                box(title="Current Module State",

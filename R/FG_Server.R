@@ -1931,14 +1931,19 @@ FG_build = function(state,
     }
   }
 
-  if(!is.null(cmd)){
-    if(!is.null(curr_ET)){
-      if(element == "facet" & any(curr_ET[["Element"]] == "facet")){
-        add_isgood = FALSE
-        msgs = c(msgs, state[["MC"]][["errors"]][["only_one_facet"]])
-      }
-    }
-  }
+# if(!is.null(cmd)){
+#   if(!is.null(curr_ET)){
+#   # JMH dealing with duplicates by replacement
+#   # if(element == "facet" & any(curr_ET[["Element"]] == "facet")){
+#   #   browser()
+#   #   add_isgood = FALSE
+#   #   msgs = c(msgs, state[["MC"]][["errors"]][["only_one_facet"]])
+#   # }
+#   }
+# }
+
+  dupe_replace = c("facet", "label")
+  dupe_found   = FALSE
 
   if(isgood){
 
@@ -1949,6 +1954,27 @@ FG_build = function(state,
     # Process current elements
     if(!is.null(curr_ET)){
       for(row_idx in 1:nrow(curr_ET)){
+
+        # This is triggered when the element being added is already present
+        # and it is a "duplicate"
+        if((element %in% dupe_replace) &
+           (element == curr_ET[row_idx, ][["Element"]])){
+
+          # We flag that we found a duplicate:
+          dupe_found = TRUE
+          # Then we replace the cmd and Description elements of the old row
+          # with the new one:
+          curr_ET[row_idx, ][["cmd"]]         = cmd
+          curr_ET[row_idx, ][["Description"]] = desc
+          msgs = c(msgs,  
+            stringr::str_replace_all(
+              state[["MC"]][["errors"]][["only_one_element"]],
+              "===ELEMENT===",
+               element))
+        }
+
+        # Now we either add the previous element or the new one if a
+        # dupliacate was found:
         if(isgood){
           tc_env  = list()
           tc_env[[fg_object_name]] = get(fg_object_name)
@@ -1956,7 +1982,6 @@ FG_build = function(state,
              cmd     = curr_ET[row_idx, ]$cmd,
              tc_env  = tc_env,
              capture = c(fg_object_name))
-
 
           if(tcres[["isgood"]]){
             # If the try catch was successful we extract the updated plot object
@@ -1987,31 +2012,35 @@ FG_build = function(state,
     # Adding any new elements
     if(add_isgood){
       if(!is.null(cmd)){
-        # Defining the environment for the try/catch
-        tc_env  = list()
-        tc_env[[fg_object_name]] = get(fg_object_name)
-        tcres = FM_tc(
-           cmd     = cmd,
-           tc_env  = tc_env,
-           capture = c(fg_object_name))
-
-        if(tcres[["isgood"]]){
-          # If the try catch was successful we extract the updated plot object
-          assign(fg_object_name, tcres[["capture"]][[fg_object_name]])
-          # Then we add the new row to the event table
-          curr_ET = rbind(curr_ET,
-                data.frame(Element     = element,
-                           cmd         = cmd,
-                           Description = desc,
-                           Status      = "Success",
-                           Delete      = FALSE))
-          # Saveing the command for the code block
-          code_lines = c(code_lines, cmd)
-        } else {
-          # Otherwise we mark the add_isgood as false
-          add_isgood = FALSE
-          # Append any messages as well
-          msgs = c(msgs, tcres[["msgs"]])
+        # We only run the new element if a duplicate wasn't found. If it was
+        # found it should have been run in line with the elements above.
+        if(!dupe_found){
+          # Defining the environment for the try/catch
+          tc_env  = list()
+          tc_env[[fg_object_name]] = get(fg_object_name)
+          tcres = FM_tc(
+             cmd     = cmd,
+             tc_env  = tc_env,
+             capture = c(fg_object_name))
+         
+          if(tcres[["isgood"]]){
+            # If the try catch was successful we extract the updated plot object
+            assign(fg_object_name, tcres[["capture"]][[fg_object_name]])
+            # Then we add the new row to the event table
+            curr_ET = rbind(curr_ET,
+                  data.frame(Element     = element,
+                             cmd         = cmd,
+                             Description = desc,
+                             Status      = "Success",
+                             Delete      = FALSE))
+            # Saveing the command for the code block
+            code_lines = c(code_lines, cmd)
+          } else {
+            # Otherwise we mark the add_isgood as false
+            add_isgood = FALSE
+            # Append any messages as well
+            msgs = c(msgs, tcres[["msgs"]])
+          }
         }
       }
     }
