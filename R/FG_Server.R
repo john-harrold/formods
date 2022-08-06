@@ -1931,17 +1931,12 @@ FG_build = function(state,
     }
   }
 
-# if(!is.null(cmd)){
-#   if(!is.null(curr_ET)){
-#   # JMH dealing with duplicates by replacement
-#   # if(element == "facet" & any(curr_ET[["Element"]] == "facet")){
-#   #   browser()
-#   #   add_isgood = FALSE
-#   #   msgs = c(msgs, state[["MC"]][["errors"]][["only_one_facet"]])
-#   # }
-#   }
-# }
 
+  # Certain elements can only be used once in a figure. When these already
+  # exist in a figure and are added again by the user we replace the last
+  # instance of the element with the new one. Here the dupe_replace vector
+  # lists the element types to force that replacement. All other element types 
+  # will just be layered on top of the current.
   dupe_replace = c("facet", "label")
   dupe_found   = FALSE
 
