@@ -332,32 +332,20 @@ FG_Server <- function(id,
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
         uiele = tagList()
-        choicesOpt = list(
-          subtext = c(
-                      state[["MC"]][["elements"]][["line"   ]][["subtext"]],
-                      state[["MC"]][["elements"]][["point"  ]][["subtext"]],
-                      state[["MC"]][["elements"]][["hguide" ]][["subtext"]],
-                      state[["MC"]][["elements"]][["vguide" ]][["subtext"]],
-                      state[["MC"]][["elements"]][["facet"  ]][["subtext"]],
-                      state[["MC"]][["elements"]][["label"  ]][["subtext"]]
-                      )
-        )
 
-        cnames = c( state[["MC"]][["elements"]][["line"   ]][["choice"]] ,
-                    state[["MC"]][["elements"]][["point"  ]][["choice"]] ,
-                    state[["MC"]][["elements"]][["hguide" ]][["choice"]] ,
-                    state[["MC"]][["elements"]][["vguide" ]][["choice"]] ,
-                    state[["MC"]][["elements"]][["facet"  ]][["choice"]] ,
-                    state[["MC"]][["elements"]][["label"  ]][["choice"]]
-                  )
-        choices   = c(
-                      "line"  ,
-                      "point" ,
-                      "hguide" ,
-                      "vguide" ,
-                      "facet" ,
-                      "label"
-                     )
+
+        # Creating the choices based on the names in the configuration file.
+        subtext = c()
+        cnames  = c()
+        choices = c()
+        for(choice in names(state[["MC"]][["elements"]])){
+          choices = c(choices, choice)
+          subtext = c(subtext, state[["MC"]][["elements"]][[choice]][["subtext"]])
+          cnames  = c(cnames,  state[["MC"]][["elements"]][[choice]][["choice"]])
+        }
+
+        choicesOpt = list(
+          subtext = subtext )
         names(choices) = cnames
 
         uiele = tagList(uiele,
@@ -367,7 +355,6 @@ FG_Server <- function(id,
              width = "fit",
              inline = TRUE,
             choicesOpt = choicesOpt))
-
       }
 
       uiele})
@@ -768,6 +755,50 @@ FG_Server <- function(id,
               choices    = sel_choices,
               width      = state[["MC"]][["formatting"]][["components"]][["facet"]][["width"]],
               options    = list(maxItems=2))
+        } else if(curr_element == "scales") {
+
+          scale_choices = c("linear", "log10", "log2")
+          yscale = 
+            pickerInput(
+              inputId    = NS(id, "select_component_yscale"),
+              label      = state[["MC"]][["labels"]][["components"]][["yscale"]],
+              selected   = "log10",
+              multiple   = FALSE, 
+              choices    = scale_choices,
+              width      = state[["MC"]][["formatting"]][["components"]][["axscale"]][["width"]])
+
+          ylim = 
+             textInput(
+                inputId     = NS(id, "text_component_ylim"),
+                label       = state[["MC"]][["labels"]][["components"]][["ylim"]],
+                placeholder = state[["MC"]][["labels"]][["ph"]][["axlim"]],
+                width       = state[["MC"]][["formatting"]][["components"]][["axlim"]][["width"]])
+
+          xscale = 
+            pickerInput(
+              inputId    = NS(id, "select_component_xscale"),
+              label      = state[["MC"]][["labels"]][["components"]][["xscale"]],
+              selected   = "linear", 
+              multiple   = TRUE,
+              choices    = scale_choices,
+              width      = state[["MC"]][["formatting"]][["components"]][["axscale"]][["width"]])
+
+          xlim = 
+             textInput(
+                inputId     = NS(id, "text_component_xlim"),
+                label       = state[["MC"]][["labels"]][["components"]][["xlim"]],
+                placeholder = state[["MC"]][["labels"]][["ph"]][["axlim"]],
+                width       = state[["MC"]][["formatting"]][["components"]][["axlim"]][["width"]])
+
+
+          uiele = tagList(
+            div(style="display:inline-block", yscale),
+            div(style="display:inline-block", ylim),
+            tags$br(),
+            div(style="display:inline-block", xscale),
+            div(style="display:inline-block", xlim)
+          )
+
         } else if(curr_element == "label") {
           uiele =
             tagList(
@@ -870,7 +901,7 @@ FG_Server <- function(id,
       choicesOpt = NULL
       uiele =
         shinyWidgets::pickerInput(
-          selected   = "PH", 
+          selected   = "PH",
           inputId    = NS(id, "select_current_view"),
           label      = state[["MC"]][["labels"]][["select_current_view"]],
           choices    = c("PH"),
@@ -881,15 +912,15 @@ FG_Server <- function(id,
     #------------------------------------
     # This forces the dataset view selection to update
     observe({
-      input$button_element_add 
-      input$button_fig_new 
-      input$button_fig_save 
-      input$button_fig_copy 
-      input$button_fig_del 
+      input$button_element_add
+      input$button_fig_new
+      input$button_fig_save
+      input$button_fig_copy
+      input$button_fig_del
       input$select_current_fig
 
-      react_state[[id_UD]] 
-      react_state[[id_DW]] 
+      react_state[[id_UD]]
+      react_state[[id_DW]]
       react_state[[id_ASM]]
       # Forcing a reaction to changes in other modules
       state = FG_fetch_state(id             = id,
@@ -918,20 +949,20 @@ FG_Server <- function(id,
           FM_le(state, paste0("fig_dsview: ",  current_fig[["fig_dsview"]]))
           FM_le(state, paste0("switching to view:", current_view_id ))
         }
-      
+
         choices        = dsv_summary[["view_key"]]
         names(choices) = dsv_summary[["description"]]
-      
+
         choicesOpt = NULL
         shinyWidgets::updatePickerInput(
-          session    = session, 
+          session    = session,
           selected   = current_view_id,
           inputId    = "select_current_view",
           choices    = choices,
           choicesOpt = choicesOpt)
 
       # shinyWidgets::updatePickerInput(
-      #   session    = session, 
+      #   session    = session,
       #   selected   = current_view_id,
       #   inputId    = NS(id, "select_current_view"),
       #   choices    = choices,
@@ -1461,7 +1492,7 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_st
 
 
   # Plot elements defined by aesthetics
-  aes_elements = c("line", "point", "hguide", "vguide")
+  aes_elements = c("line", "point", "errorbar", "hguide", "vguide", "smooth", "ribbon", "boxplot")
 
   # This will hold the ids of the UI elements that need to be collected
   # when module fetch_state function is called. Some of them will be
@@ -1498,11 +1529,15 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_st
       "text_fig_cap",
       "text_component_xlab",
       "text_component_ylab",
+      "text_component_xlim",
+      "text_component_ylim",
       "text_component_ggtitle",
       "select_fg_page",
       "select_current_fig",
       "select_current_view",
       "select_component_facet",
+      "select_component_xscale", 
+      "select_component_yscale", 
       "select_fg_element")
 
     # Since some IDs can be reused in the elements above we do this to
@@ -1823,6 +1858,59 @@ fers_builder = function(state){
       desc = paste0(ui[["select_component_facet"]], collapse= ", ")
 
     }
+  } else if(element == "scales"){
+
+    cmds      = c() # All the scale commands
+    descs     = c() # All the descriptions
+    # Walking through x and y here:
+    snames = c("x", "y")
+    for(sname in snames){
+
+      # Processing the axis limits
+      tmp_lim = ui[[paste0("text_component_", sname, "lim")]]
+      tmp_lim_str = "NULL"
+      if(tmp_lim !=""){
+        # First we try to evaluate the limits
+        tcres = 
+          FM_tc(tc_env = NULL,
+                cmd = paste0("limval = c(", tmp_lim, ")"),
+                capture = c("limval"))
+
+        # This just makes sure it evaluted correctly
+        if(tcres[["isgood"]]){
+          if(is.numeric(tcres[["capture"]][["limval"]])){
+             if(length(tcres[["capture"]][["limval"]]) == 2){
+               descs = c(descs, paste0(sname, "lim:", tmp_lim)) 
+               tmp_lim_str = paste0("c(", tmp_lim, ")")
+      #        cmds = c(cmds,  paste0( fg_object_name , " = ", fg_object_name, 
+      #                        " + ",sname,"lim(", tmp_lim, ")"))
+             } else {
+               isgood = FALSE
+               msgs = c(msgs, paste0("Length of ",sname,"-axis limits should be 2, instead ",length(tcres[["capture"]][["limval"]]), " were found."))
+             }
+          } else {
+            isgood = FALSE
+            msgs = c(msgs, paste0("Supplied ",sname,"-axis limits were not numeric."))
+          }
+        } else {
+          isgood = FALSE
+          msgs = c(msgs, paste0("Unable to process ",sname,"-axis limits."))
+          msgs = c(msgs, tcres[["msgs"]])
+        }
+      }
+
+      # Processing axis scale:
+      if(ui[[paste0("select_component_", sname, "scale")]] =="linear"){
+        descs = c(descs, paste0(sname, "scale:linear")) 
+      }else if(ui[[paste0("select_component_", sname, "scale")]] =="log10"){
+        descs = c(descs, paste0(sname, "-scale:log10")) 
+        cmds = c(cmds,  paste0( fg_object_name , " = ", fg_object_name, 
+                               " + scale_",sname,"_log10(limits=", tmp_lim_str, ")"))
+      }
+
+    }
+    cmd  = paste0(cmds,  collapse= " \n")
+    desc = paste0(descs, collapse= ", ")
   } else if(element == "label"){
 
     # We'll construct the indiviudal commands xlab(), ylab(), etc, and
@@ -1935,9 +2023,9 @@ FG_build = function(state,
   # Certain elements can only be used once in a figure. When these already
   # exist in a figure and are added again by the user we replace the last
   # instance of the element with the new one. Here the dupe_replace vector
-  # lists the element types to force that replacement. All other element types 
-  # will just be layered on top of the current.
-  dupe_replace = c("facet", "label")
+  # lists the element types to force that replacement. All other element types
+  # will just be layered on top of the current figure.
+  dupe_replace = c("facet", "label", "scales")
   dupe_found   = FALSE
 
   if(isgood){
@@ -1961,7 +2049,7 @@ FG_build = function(state,
           # with the new one:
           curr_ET[row_idx, ][["cmd"]]         = cmd
           curr_ET[row_idx, ][["Description"]] = desc
-          msgs = c(msgs,  
+          msgs = c(msgs,
             stringr::str_replace_all(
               state[["MC"]][["errors"]][["only_one_element"]],
               "===ELEMENT===",
@@ -2017,7 +2105,7 @@ FG_build = function(state,
              cmd     = cmd,
              tc_env  = tc_env,
              capture = c(fg_object_name))
-         
+
           if(tcres[["isgood"]]){
             # If the try catch was successful we extract the updated plot object
             assign(fg_object_name, tcres[["capture"]][[fg_object_name]])
@@ -2111,9 +2199,9 @@ FG_build = function(state,
   # Just the code to build the figure
   code_fg_only    = paste(code_lines, collapse="\n")
   # All the code required to generate this module
-  code            = paste(c(code_previous, 
-                            "", 
-                            "# Figure Generation", 
+  code            = paste(c(code_previous,
+                            "",
+                            "# Figure Generation",
                             code_fg_only), collapse="\n")
 
   # Updating figure with the components above

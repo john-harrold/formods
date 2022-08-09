@@ -29,12 +29,23 @@ MC:
       "y":           "y-axis"
       color:         "color"
       linetype:      "line type"
+      fill:          "fill color"
+      weight:        "weight"
+      ymin:          "ymin"
+      ymax:          "ymax"
+      lower:         "lower"
+      middle:        "middle"
+      upper:         "upper"
       shape:         "shape"     
       size:          "size"     
       alpha:         "transparency"
       group:         "group"     
       xintercept:    "x intercept"
       yintercept:    "y intercept"
+      yscale:        "y-scale"
+      xscale:        "x-scale"
+      ylim:          "y limits"
+      xlim:          "x limits"
     ph:              
       xlab:          "x-axis label"
       ylab:          "y-axis label"
@@ -42,6 +53,7 @@ MC:
       notes:         "optional notes here"
       fig_key:       "title/caption"     
       manual:        "Manual"
+      axlim:         "0.1, 1000 # Empty for auto"
     manual:          "Manual"
     not_used:        "Not Used"
     curr_figs_none:  "No figures yet created"
@@ -77,9 +89,15 @@ MC:
     point:
       choice:  "Point"  
       subtext: "Scatter plot"
-      ui_aes:  ["x", "y", "color", "group", "shape", "size", "alpha",]
+      ui_aes:  ["x", "y", "color", "group", "shape", "size", "alpha"]
       aes_req: ["x", "y"]
       fcn:     "geom_point"
+    errorbar:
+      choice:  "Errobar"  
+      subtext: "Errorbars around points"
+      ui_aes:  ["x", "ymin", "ymax", "color", "group", "size", "alpha"]
+      aes_req: ["x", "ymin", "ymax"]
+      fcn:     "geom_errorbar"
     hguide:
       choice:  "H-Guide"  
       subtext: "Horizontal guide"
@@ -99,6 +117,27 @@ MC:
       choice:  "Label"  
       subtext: "Label axes or plot title"
       ui_text: ["xlab", "ylab", "ggtitle"]
+    scales:
+      choice:  "Format Axes"
+      subtext: "Axis scales and limits"
+    smooth:
+      choice:  "Smooth Trend"     
+      subtext: "Smoothed conditional means"
+      ui_aes:  ["x", "y", "color", "group", "fill", "weight", "linetype", "size", "alpha", "ymax", "ymin"]
+      aes_req: ["x", "y"]
+      fcn:     "geom_smooth"
+    ribbon: 
+      choice:  "Shaded Area"     
+      subtext: "Creating prediction intervals"
+      ui_aes:  ["x", "ymin", "ymax", "color", "group", "fill", "linetype", "size", "alpha"]
+      aes_req: ["x", "ymin", "ymax"]
+      fcn:     "geom_ribbon"  
+    boxplot:
+      choice:  "Boxplot"     
+      subtext: "Box and whiskers plot"
+      ui_aes:  ["x", "y", "lower", "middle", "upper", "ymin", "ymax", "color", "group", "fill", "weight", "linetype", "size", "shape", "alpha"]
+      aes_req: ["x", "y"]
+      fcn:     "geom_boxplot"
   formatting:
     # Dimensions of code snippet box
     code:
@@ -123,6 +162,10 @@ MC:
       facet:
         width: "200px"
       label:
+        width: "150px"
+      axscale:
+        width: "150px"
+      axlim:
         width: "150px"
     select_current_fig:
       width: 200
