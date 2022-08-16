@@ -6,17 +6,17 @@
 \usage{
 ASM_Server(
   id,
-  yaml_section = "ASM",
-  yaml_file = system.file(package = "formods", "templates", "config.yaml"),
+  FM_yaml_file = system.file(package = "formods", "templates", "formods.yaml"),
+  MOD_yaml_file = system.file(package = "formods", "templates", "ASM.yaml"),
   react_state = NULL
 )
 }
 \arguments{
 \item{id}{An ID string that corresponds with the ID used to call the modules UI elements}
 
-\item{yaml_section}{Section of the yaml file with the module configuration (\code{"UD"})}
+\item{FM_yaml_file}{App configuration file with FM as main section.}
 
-\item{yaml_file}{Upload Data configuration file}
+\item{MOD_yaml_file}{Module configuration file with MC as main section.}
 
 \item{react_state}{Variable passed to server to allow reaction outside of module (\code{NULL})}
 }

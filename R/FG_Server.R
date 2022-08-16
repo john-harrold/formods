@@ -164,7 +164,7 @@ FG_Server <- function(id,
           div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_fig_name"))),
           div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_curr_views"))),
           tags$br(),
-          div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_fig_cap"))),
+          div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_fig_notes"))),
           tags$br(),
           verbatimTextOutput(NS(id, "ui_fg_msg"))
         )
@@ -494,7 +494,7 @@ FG_Server <- function(id,
       }
       uiele})
     #------------------------------------
-    output$ui_fg_fig_cap   = renderUI({
+    output$ui_fg_fig_notes = renderUI({
       # Forcing a reaction to changes in other modules
       react_state[[id_UD]]
       react_state[[id_DW]]
@@ -519,7 +519,7 @@ FG_Server <- function(id,
       if(state[["FG"]][["isgood"]]){
         current_fig = FG_fetch_current_fig(state)
         value       = current_fig[["notes"]]
-        uiele = textAreaInput(inputId     = NS(id, "text_fig_cap"),
+        uiele = textAreaInput(inputId     = NS(id, "text_fig_notes"),
                              width        = state[["MC"]][["formatting"]][["notes"]][["width"]],
                              height       = state[["MC"]][["formatting"]][["notes"]][["height"]],
                              label        = NULL,
@@ -528,7 +528,7 @@ FG_Server <- function(id,
         if(state[["MC"]][["tooltips"]][["include"]]){
           if(!is.null(state[["MC"]][["tooltips"]][["notes"]])){
             uiele = tagList(uiele,
-              shinyBS::bsPopover(NS(id,"text_fig_cap"),
+              shinyBS::bsPopover(NS(id,"text_fig_notes"),
                                  title=NULL,
                                  state[["MC"]][["tooltips"]][["notes"]],
                                  "bottom"))
@@ -1383,7 +1383,7 @@ FG_fetch_state = function(id,
     }
 
     # Saving the caption as well
-    current_fig[["notes"]] = state[["FG"]][["ui"]][["text_fig_cap"]]
+    current_fig[["notes"]] = state[["FG"]][["ui"]][["text_fig_notes"]]
 
     # updating the view id
     current_fig[["fig_dsview"]] = state[["FG"]][["ui"]][["select_current_view"]]
@@ -1526,7 +1526,7 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_st
       "button_element_add",
       "hot_fg_elements",
       "text_fig_key",
-      "text_fig_cap",
+      "text_fig_notes",
       "text_component_xlab",
       "text_component_ylab",
       "text_component_xlim",
@@ -1560,7 +1560,7 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_st
   ui_hold = c(
     "hot_fg_elements"    ,
     "text_fig_key"       ,
-    "text_fig_cap"       ,
+    "text_fig_notes"     ,
     "select_current_view",
     "select_current_fig"
     )

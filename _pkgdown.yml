@@ -6,6 +6,8 @@ template:
   bslib:
     primary: "#006fe7"
 reference:
+  - contents:
+    - formods
   - title: "formods general"
   - contents:
     - autocast

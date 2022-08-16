@@ -26,23 +26,22 @@ ui <- dashboardPage(
            width=12)),
        fluidRow(
          box(title="Upload",
-           "UD_ui_load_data",
-           htmlOutput(NS("UD", "UD_ui_load_data"))),
+           "ui_ud_load_data",
+           htmlOutput(NS("UD", "ui_ud_load_data"))),
          box(title="Select Sheet for Excel Files",
-           "UD_ui_select_sheets",
-           htmlOutput(NS("UD", "UD_ui_select_sheets")))),
+           "ui_ud_select_sheets",
+           htmlOutput(NS("UD", "ui_ud_select_sheets")))),
        fluidRow(
          box(title="Load Results",
-           "UD_ui_text_load_result",
-           htmlOutput(NS("UD", "UD_ui_text_load_result"))),
+           "ui_ud_text_load_result",
+           htmlOutput(NS("UD", "ui_ud_text_load_result"))),
          box(title="Data Preview",
-           "UD_ui_data_preview",
-           htmlOutput(NS("UD", "UD_ui_data_preview")))),
+           "ui_ud_data_preview",
+           htmlOutput(NS("UD", "ui_ud_data_preview")))),
        fluidRow(
          box(title="Generated Code",
-           #htmlOutput(NS("UD", "UD_ui_code")), width=12)),
-           "UD_ui_ace_code",
-           shinyAce::aceEditor(NS("UD", "UD_ui_ace_code")), width=12)),
+           "ui_ud_ace_code",
+           shinyAce::aceEditor(NS("UD", "ui_ud_ace_code")), width=12)),
        fluidRow(
          box(title="Current Module State",
            verbatimTextOutput("ui_state"),width=12))

@@ -30,7 +30,7 @@ ASM_Server <- function(id,
 
     #------------------------------------
     # Create ui outputs here:
-    output$ASM_ui_save_name  = renderUI({
+    output$ui_asm_save_name  = renderUI({
       state = ASM_fetch_state(id           = id, 
                               input        = input, 
                               session      = session, 
@@ -46,7 +46,7 @@ ASM_Server <- function(id,
         )
       uiele})
     #------------------------------------
-    output$ASM_ui_save_button  = renderUI({
+    output$ui_asm_save_button  = renderUI({
       state = ASM_fetch_state(id           = id, 
                               input        = input, 
                               session      = session, 
@@ -63,13 +63,14 @@ ASM_Server <- function(id,
                   icon     = icon("arrow-down"))
       uiele})
     #------------------------------------
-    output$ASM_ui_compact  =  renderUI({
+    output$ui_asm_compact  =  renderUI({
       uiele = tagList(
-           htmlOutput(NS("ASM", "ASM_ui_save_name")),
-           htmlOutput(NS("ASM", "ASM_ui_save_button")),
+           htmlOutput(NS("ASM", "ui_asm_save_name")),
+           htmlOutput(NS("ASM", "ui_asm_save_button")),
            tags$br(),
            tags$br(),
-           htmlOutput(NS("ASM", "ASM_ui_load_state"))
+           htmlOutput(NS("ASM", "ui_asm_load_state")),
+           verbatimTextOutput(NS("ASM", "ui_asm_msg"))
       ) 
 
       uiele})
@@ -97,7 +98,7 @@ ASM_Server <- function(id,
     )
     #------------------------------------
     # Upload State
-    output$ASM_ui_load_state = renderUI({
+    output$ui_asm_load_state = renderUI({
       state = ASM_fetch_state(id           = id, 
                               input        = input, 
                               session      = session, 
@@ -127,34 +128,35 @@ ASM_Server <- function(id,
 
       uiele})
     #------------------------------------
-    # Generated data reading code
-    observe({
-      # Reacting to file changes
-      input$input_load_state
-      input$input_select_sheet
-      state = ASM_fetch_state(id           = id, 
-                              input        = input, 
-                              session      = session, 
-                              FM_yaml_file = FM_yaml_file,
-                              MOD_yaml_file = MOD_yaml_file)
-
-      if(is.null(state[["ASM"]][["code"]])){
-        uiele = "# code"
-      } else {
-        uiele = state[["ASM"]][["code"]]
-      }
-
-
-      shinyAce::updateAceEditor(
-        session         = session,
-        editorId        = "ASM_ui_ace_code",
-        theme           = state[["yaml"]][["FM"]][["code"]][["theme"]],
-        showLineNumbers = state[["yaml"]][["FM"]][["code"]][["showLineNumbers"]],
-        readOnly        = state[["MC"]][["code"]][["readOnly"]],
-        mode            = state[["MC"]][["code"]][["mode"]],
-        value           = uiele)
-
-    })
+ # JMH delete?
+ #  # Generated data reading code
+ #  observe({
+ #    # Reacting to file changes
+ #    input$input_load_state
+ #    input$input_select_sheet
+ #    state = ASM_fetch_state(id           = id, 
+ #                            input        = input, 
+ #                            session      = session, 
+ #                            FM_yaml_file = FM_yaml_file,
+ #                            MOD_yaml_file = MOD_yaml_file)
+ #
+ #    if(is.null(state[["ASM"]][["code"]])){
+ #      uiele = "# code"
+ #    } else {
+ #      uiele = state[["ASM"]][["code"]]
+ #    }
+ #
+ #
+ #    shinyAce::updateAceEditor(
+ #      session         = session,
+ #      editorId        = "ui_asm_ace_code",
+ #      theme           = state[["yaml"]][["FM"]][["code"]][["theme"]],
+ #      showLineNumbers = state[["yaml"]][["FM"]][["code"]][["showLineNumbers"]],
+ #      readOnly        = state[["MC"]][["code"]][["readOnly"]],
+ #      mode            = state[["MC"]][["code"]][["mode"]],
+ #      value           = uiele)
+ #
+ #  })
     #------------------------------------
     if(!is.null(react_state)){
       # Here we list the ui inputs that will result in a state change:
@@ -229,7 +231,6 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
 
   #---------------------------------------------
   # Here we react to changes between the UI and the current state
-
   # This detects file uploads
   if(!is.null(isolate(input$input_load_state))){
     file_path = isolate(input$input_load_state$datapath)
@@ -237,12 +238,12 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
 
     ls_isgood = TRUE
 
-    if(!(file_ext(file_path) == "zip")){
+    if(!(tolower(file_ext(file_path)) == "zip")){
       ls_isgood = FALSE
       msgs = c(msgs, paste0(
            "Unknown file extension (",
-             file_ext(file_path)),
-           " for saved state")
+             file_ext(file_path),
+           ") for saved state. Only .zip files allowed."))
     }
 
     if(ls_isgood){
@@ -286,7 +287,6 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
           msgs = c(msgs, "fmas.rds file not found in saved state")
         }
 
-
         # The last thing we do is replace the state checksum with
         # the uploaded file checksum to prevent multiple uploads
         # each time the state has been fetched. We do this even if
@@ -294,10 +294,10 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
         # calls will attempt to load the failed state again.
         state[["ASM"]][["checksum"]] = test_checksum
         #---------------------------------------------
-        # Passing any messages back to the user
-        state = FM_set_ui_msg(state, msgs)
       }
     }
+    # Passing any messages back to the user
+    state = FM_set_ui_msg(state, msgs)
   }
 
 

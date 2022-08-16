@@ -12,6 +12,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+library(formods)
 ```
 
 
@@ -31,11 +33,46 @@ Each module will have a server function using a short name for the module as a p
 
 # Avialable modules
 
+```{r, echo = FALSE, eval=TRUE}
+
+library(magrittr)
+curr_mods = FM_fetch_current_mods()
+#library(rhandsontable)
+#rhandsontable::rhandsontable(curr_mods$df, width=750, rowHeaders = NULL) %>%
+#hot_cols(colWidths = c(100, 50, 300, 300)) 
+
+
+mapping = data.frame(
+  col_keys = c("Module", "SN", "htmlOutput", "otherOutput"),
+  what     = c("Module", "SN", "htmlOutput", "Other Outputs"),
+  stringsAsFactors = FALSE
+)
+
+library(flextable)
+ft = flextable(curr_mods$df)                       |>
+  valign(valign = "top", part = "body")            |>
+  set_header_df(mapping = mapping, key="col_keys") |>
+  autofit()                                        |>
+  theme_vanilla()
+ft
+```
+
+
+```
+copy.file(system.file(package="formods", "templates", "formods.yaml"), "formods.yaml")
+copy.file(system.file(package="formods", "templates", "DW.yaml"),      "DW.yaml")
+
+copy.file(system.file(package="formods", "templates", "DW_module_components.R"),      "DW_module_components.R")
+runApp(system.file(package="formods", "templates", "DW_module_components.R"))
+```
+
 ## Upload Data (UD)
 
 ## Data Wrangling (DW)
 
 ## Figure Generation (FG)
+
+## App State Management (ASM)
 
 # Module interaction
 

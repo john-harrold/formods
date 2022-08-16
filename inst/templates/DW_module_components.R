@@ -86,7 +86,7 @@ server <- function(input, output, session) {
 
   # Test dataset in the package
   DATA = readxl::read_excel(
-           path  = system.file(package="formods", "data", "PK_DATA.xlsx"),
+           path  = system.file(package="formods", "data", "TEST_DATA.xlsx"),
            sheet = "DATA")
 
   # Module server

@@ -26,24 +26,25 @@ ui <- dashboardPage(
            width=12)),
        fluidRow(
          box(title="Save",
-           "ASM_ui_save_name",
-           htmlOutput(NS("ASM", "ASM_ui_save_name")),
-           "ASM_ui_save_input",
-           htmlOutput(NS("ASM", "ASM_ui_save_button"))
+           "ui_asm_save_name",
+           htmlOutput(NS("ASM", "ui_asm_save_name")),
+           "ui_asm_save_input",
+           htmlOutput(NS("ASM", "ui_asm_save_button"))
          ),
          box(title="Load",
-           "ASM_ui_load_state",
-           htmlOutput(NS("ASM", "ASM_ui_load_state"))
+           "ui_asm_load_state",
+           htmlOutput(NS("ASM", "ui_asm_load_state"))
          )
          ),
        fluidRow(
          box(title="Messages",
            "ui_asm_msg",
            verbatimTextOutput(NS("ASM", "ui_asm_msg")), width=12)),
-       fluidRow(
-         box(title="Generated Code",
-           "ASM_ui_ace_code",
-           shinyAce::aceEditor(NS("ASM", "ASM_ui_ace_code")), width=12)),
+     # JMH delete this too?
+     # fluidRow(
+     #   box(title="Generated Code",
+     #     "ui_asm_ace_code",
+     #     shinyAce::aceEditor(NS("ASM", "ui_asm_ace_code")), width=12)),
        fluidRow(
          box(title="Current Module State",
            verbatimTextOutput("ui_state"),width=12))

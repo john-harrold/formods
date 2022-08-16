@@ -1,8 +1,22 @@
+#' formods: Shiny modules for common tasks.
+#'
+#' Shiny apps can often make use of the same key elements, this package
+#' provides modules for common tasks (data upload, wrangling data, figure
+#' generation and saving the app state). These modules can react and interact
+#' as well as generate code to create reproducible analyses.
+#'
+#' @seealso \url{https://github.com/john-harrold/formods}
+#' @docType package
+#' @name formods
+"_PACKAGE"
+
+
 #'@importFrom digest digest
 
+
 #'@export
-#'@title Fetchs data set views when both UD and DW modules are in use
-#'@description The upload data and data wranling modules can be used together.
+#'@title Fetches data set views when both UD and DW modules are in use
+#'@description The upload data and data wrangling modules can be used together.
 #' This will take the ids for both modules and return the different views
 #' available. It will also return an "acive" view. This either the uploaded
 #' dataset if no wrangling information is available or the last wrangled view.
@@ -470,192 +484,192 @@ FM_mk_error_fig  <- function(msgs){
 
 p_res}
 
-#'@export
-#'@title Populates Modles for Testing
-#'@description Loads modules and creates an app state for testing
-#'@param session Shiny session variable
-#'@param input Shiny input variable
-#'@param yaml_file App configuration file
-#'@param yaml_section  Section of the yaml file with the module configuration.
-#'@param id_UD  ID string for the upload data module.
-#'@param id_DW  ID string for the data wrangling module.
-#'@param id_FG  ID string for the figure generation module.
-#'the name of the list element in react_state where the data set is stored.
-#'@param react_state Variable passed to server to allow reaction outside of
-#'@return ggplot object
-FM_load_test_state <- function(session, input,
-                        yaml_file       = system.file(package = "formods",
-                                                      "templates",
-                                                      "config.yaml"),
-                        yaml_section_UD = "UD",
-                        yaml_section_DW = "DW",
-                        yaml_section_FG = "FG",
-                        id_ASM          = "ASM",
-                        id_UD           = "UD",
-                        id_DW           = "DW",
-                        id_FG           = "FG",
-                        react_state){
-
-  #---------------------------------------------
-  # UD module:
-  # This creates an empyt module state:
-  state_UD = UD_fetch_state(id           = id_UD,
-                            id_ASM       = id_ASM,
-                            input        = input,
-                            session      = session,
-                            yaml_file    = yaml_file,
-                            yaml_section = yaml_section_UD)
-  # Next we attach the test dataset
-  data_file_local  = system.file(package="formods", "data", "PK_DATA.xlsx")
-  data_file        = basename(data_file_local)
-  data_file_ext    = tools::file_ext(data_file)
-  sheet            = "DATA"
-  sheets           = readxl::excel_sheets(data_file_local)
-
-  # Reading the contents and generating the read code:
-  read_res = UD_ds_read(
-    state           = state_UD,
-    data_file_ext   = data_file_ext,
-    data_file       = data_file,
-    data_file_local = data_file_local,
-    sheets          = sheets,
-    sheet           = sheet)
-
-  contents         = read_res[["contents"]]
-  code             = read_res[["code"]]
-
-  state_UD = UD_attach_ds(
-            state_UD,
-            data_file_local = data_file_local,
-            data_file_ext   = data_file_ext  ,
-            data_file       = data_file      ,
-            sheet           = sheet          ,
-            sheets          = sheets         ,
-            code            = code           ,
-            contents        = contents       ,
-            isgood          = TRUE)
-
-  # Saving the state to the session
-  FM_set_mod_state(session, id=id_UD, state_UD)
-  #---------------------------------------------
-  # DW module:
-  state_DW = DW_fetch_state(
-                         id           = id_DW,
-                         input        = input,
-                         session      = session,
-                         yaml_file    = yaml_file,
-                         yaml_section = yaml_section_DW,
-                         id_UD        = id_UD,
-                         react_state  = react_state)
-
-
-  # Attachign a dataset to the DW module
-  state_DW = DW_attach_ds(state_DW, state_UD[["UD"]])
-
-  #----All data----------------------
-  # Creating a new dataset view
-  state_DW = DW_new_view(state_DW, id_UD, react_state)
-
-  # Changing the key:
-  current_view          = DW_fetch_current_view(state_DW)
-  current_view[["key"]] = "All Observations"
-  state_DW = DW_set_current_view(state_DW, current_view)
-
-  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
-  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
-
-  # Building the wrangling statement
-  dwb_res = dwrs_builder(state_DW)
-
-  # evaluating it
-  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
-  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-
-
-  #----Only SC----------------------
-  # Creating a new dataset view
-  state_DW = DW_new_view(state_DW, id_UD, react_state)
-  # Pulling out the current view
-  current_view          = DW_fetch_current_view(state_DW)
-  current_view[["key"]] = "SC Only"
-  state_DW = DW_set_current_view(state_DW, current_view)
-
-  # Observations only
-  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
-  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
-  dwb_res = dwrs_builder(state_DW)
-  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
-  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-
-  # Now just the SC data
-  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "ROUTE"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "%in%"
-  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             =  "SC"
-  dwb_res = dwrs_builder(state_DW)
-  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
-  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-
-  # Saving the state
-  FM_set_mod_state(session, id=id_DW, state_DW)
-
-  #----First Dose IV 10 mg----------------------
-  # Creating a new dataset view
-  state_DW = DW_new_view(state_DW, id_UD, react_state)
-  # Pulling out the current view
-  current_view          = DW_fetch_current_view(state_DW)
-  current_view[["key"]] = "10 mg, IV first dose"
-  state_DW = DW_set_current_view(state_DW, current_view)
-
-  # Observations only
-  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
-  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
-  dwb_res = dwrs_builder(state_DW)
-  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
-  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-
-  # 10 mg
-  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DOSE"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
-  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 10
-  dwb_res = dwrs_builder(state_DW)
-  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
-  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-
-  # First dose
-  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DOSE_NUM"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
-  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 1
-  dwb_res = dwrs_builder(state_DW)
-  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
-  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-
-  # Now just the IV data
-  state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "ROUTE"
-  state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "%in%"
-  state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             =  "IV"
-  dwb_res = dwrs_builder(state_DW)
-  dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
-  state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-
-  # Saving the state
-  FM_set_mod_state(session, id=id_DW, state_DW)
-
-
-  #---------------------------------------------
-  # FG module:
-  #---------------------------------------------
-
-NULL}
+# #'@export
+# #'@title Populates Modles for Testing
+# #'@description Loads modules and creates an app state for testing
+# #'@param session Shiny session variable
+# #'@param input Shiny input variable
+# #'@param yaml_file App configuration file
+# #'@param yaml_section  Section of the yaml file with the module configuration.
+# #'@param id_UD  ID string for the upload data module.
+# #'@param id_DW  ID string for the data wrangling module.
+# #'@param id_FG  ID string for the figure generation module.
+# #'the name of the list element in react_state where the data set is stored.
+# #'@param react_state Variable passed to server to allow reaction outside of
+# #'@return ggplot object
+# FM_load_test_state <- function(session, input,
+#                         yaml_file       = system.file(package = "formods",
+#                                                       "templates",
+#                                                       "config.yaml"),
+#                         yaml_section_UD = "UD",
+#                         yaml_section_DW = "DW",
+#                         yaml_section_FG = "FG",
+#                         id_ASM          = "ASM",
+#                         id_UD           = "UD",
+#                         id_DW           = "DW",
+#                         id_FG           = "FG",
+#                         react_state){
+# 
+#   #---------------------------------------------
+#   # UD module:
+#   # This creates an empyt module state:
+#   state_UD = UD_fetch_state(id           = id_UD,
+#                             id_ASM       = id_ASM,
+#                             input        = input,
+#                             session      = session,
+#                             yaml_file    = yaml_file,
+#                             yaml_section = yaml_section_UD)
+#   # Next we attach the test dataset
+#   data_file_local  = system.file(package="formods", "data", "PK_DATA.xlsx")
+#   data_file        = basename(data_file_local)
+#   data_file_ext    = tools::file_ext(data_file)
+#   sheet            = "DATA"
+#   sheets           = readxl::excel_sheets(data_file_local)
+# 
+#   # Reading the contents and generating the read code:
+#   read_res = UD_ds_read(
+#     state           = state_UD,
+#     data_file_ext   = data_file_ext,
+#     data_file       = data_file,
+#     data_file_local = data_file_local,
+#     sheets          = sheets,
+#     sheet           = sheet)
+# 
+#   contents         = read_res[["contents"]]
+#   code             = read_res[["code"]]
+# 
+#   state_UD = UD_attach_ds(
+#             state_UD,
+#             data_file_local = data_file_local,
+#             data_file_ext   = data_file_ext  ,
+#             data_file       = data_file      ,
+#             sheet           = sheet          ,
+#             sheets          = sheets         ,
+#             code            = code           ,
+#             contents        = contents       ,
+#             isgood          = TRUE)
+# 
+#   # Saving the state to the session
+#   FM_set_mod_state(session, id=id_UD, state_UD)
+#   #---------------------------------------------
+#   # DW module:
+#   state_DW = DW_fetch_state(
+#                          id           = id_DW,
+#                          input        = input,
+#                          session      = session,
+#                          yaml_file    = yaml_file,
+#                          yaml_section = yaml_section_DW,
+#                          id_UD        = id_UD,
+#                          react_state  = react_state)
+# 
+# 
+#   # Attachign a dataset to the DW module
+#   state_DW = DW_attach_ds(state_DW, state_UD[["UD"]])
+# 
+#   #----All data----------------------
+#   # Creating a new dataset view
+#   state_DW = DW_new_view(state_DW, id_UD, react_state)
+# 
+#   # Changing the key:
+#   current_view          = DW_fetch_current_view(state_DW)
+#   current_view[["key"]] = "All Observations"
+#   state_DW = DW_set_current_view(state_DW, current_view)
+# 
+#   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+#   state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+# 
+#   # Building the wrangling statement
+#   dwb_res = dwrs_builder(state_DW)
+# 
+#   # evaluating it
+#   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+#   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+# 
+# 
+#   #----Only SC----------------------
+#   # Creating a new dataset view
+#   state_DW = DW_new_view(state_DW, id_UD, react_state)
+#   # Pulling out the current view
+#   current_view          = DW_fetch_current_view(state_DW)
+#   current_view[["key"]] = "SC Only"
+#   state_DW = DW_set_current_view(state_DW, current_view)
+# 
+#   # Observations only
+#   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+#   state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+#   dwb_res = dwrs_builder(state_DW)
+#   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+#   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+# 
+#   # Now just the SC data
+#   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "ROUTE"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "%in%"
+#   state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             =  "SC"
+#   dwb_res = dwrs_builder(state_DW)
+#   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+#   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+# 
+#   # Saving the state
+#   FM_set_mod_state(session, id=id_DW, state_DW)
+# 
+#   #----First Dose IV 10 mg----------------------
+#   # Creating a new dataset view
+#   state_DW = DW_new_view(state_DW, id_UD, react_state)
+#   # Pulling out the current view
+#   current_view          = DW_fetch_current_view(state_DW)
+#   current_view[["key"]] = "10 mg, IV first dose"
+#   state_DW = DW_set_current_view(state_DW, current_view)
+# 
+#   # Observations only
+#   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+#   state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+#   dwb_res = dwrs_builder(state_DW)
+#   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+#   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+# 
+#   # 10 mg
+#   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DOSE"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+#   state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 10
+#   dwb_res = dwrs_builder(state_DW)
+#   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+#   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+# 
+#   # First dose
+#   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DOSE_NUM"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+#   state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 1
+#   dwb_res = dwrs_builder(state_DW)
+#   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+#   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+# 
+#   # Now just the IV data
+#   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "ROUTE"
+#   state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "%in%"
+#   state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             =  "IV"
+#   dwb_res = dwrs_builder(state_DW)
+#   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
+#   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
+# 
+#   # Saving the state
+#   FM_set_mod_state(session, id=id_DW, state_DW)
+# 
+# 
+#   #---------------------------------------------
+#   # FG module:
+#   #---------------------------------------------
+# 
+# NULL}
 
 
 #'@export
@@ -807,3 +821,89 @@ FM_set_ui_msg = function(state, msgs){
 
 state}
 
+#'@export
+#'@title Fetches Details About Current Modules
+#'@description Use this to get information about the currently supported
+#'modules. This includes short names, UI elements, 
+#'@return list with details about the currently supported modules.
+FM_fetch_current_mods = function(){
+
+  res = list(mods=list(), df=NULL)
+
+  # Outlining the metadata for each module:
+  res[["mods"]][["ASM"]] = list(
+    Name       = "App State Mangement",
+    Short_Name = "ASM",
+    UI         = 
+      list(htmlOutput=c("ui_asm_save_name",
+                        "ui_asm_save_button",
+                        "ui_asm_load_state"),
+            other    =c("ui_asm_msg",
+                        "ui_asm_ace_code"))
+  )
+  res[["mods"]][["UD"]] = list(
+    Name       = "Upload Data",
+    Short_Name = "UD",
+    UI         = 
+      list(htmlOutput=c("ui_ud_load_data", 
+                        "ui_ud_select_sheets", 
+                        "ui_ud_text_load_result", 
+                        "ui_ud_data_preview"),
+            other=c("ui_ud_ace_code"))
+  )
+  res[["mods"]][["DW"]] = list(
+    Name       = "Data Wrangling", 
+    Short_Name = "DW",
+    UI         = 
+      list(htmlOutput=c("ui_dw_views",
+                        "ui_dw_key",
+                        "ui_dw_new_view",
+                        "ui_dw_save_view",
+                        "ui_dw_del_view",
+                        "ui_dw_copy_view",
+                        "ui_dw_add_element_button",
+                        "ui_dw_select",
+                        "ui_dw_new_element_row"
+            ),
+           other=c(     "hot_dw_elements",
+                        "hot_data_preview",
+                        "ui_dw_msg",
+                        "ui_dw_code"))
+  )
+  res[["mods"]][["FG"]] = list(
+    Name       = "Figure Generation",
+    Short_Name = "FG",
+    UI         = 
+      list(htmlOutput=c("ui_fg_curr_views",
+                        "ui_fg_curr_figs",
+                        "ui_fg_new_fig",
+                        "ui_fg_save_fig",
+                        "ui_fg_del_fig",
+                        "ui_fg_copy_fig",
+                        "ui_fg_fig_name",
+                        "ui_fg_fig_notes",
+                        "ui_fg_add_element_button",
+                        "ui_fg_select", 
+                        "ui_fg_new_element_row",
+                        "ui_fg_msg",
+                        "ui_fg_slider_page"
+            ),
+           other=c("hot_fg_elements",
+                   "ui_fg_preview_ggplot",
+                   "ui_fg_msg",
+                   "ui_fg_code"))
+  )
+
+  for(mn in names(res[["mods"]])){
+    res[["df"]] = 
+      rbind(res[["df"]],
+      data.frame(
+      Module               = res[["mods"]][[mn]][["Name"]],
+      SN                   = res[["mods"]][[mn]][["Short_Name"]],
+      htmlOutput           = paste0(res[["mods"]][[mn]][["UI"]][["htmlOutput"]],          collapse=", "),
+      otherOutput          = paste0(res[["mods"]][[mn]][["UI"]][["other"]],               collapse=", "))
+      )
+
+  }
+
+  res}

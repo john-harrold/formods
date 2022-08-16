@@ -4,7 +4,15 @@
 \alias{DW_fetch_state}
 \title{Fetch Data Wrangling State}
 \usage{
-DW_fetch_state(id, input, session, yaml_file, yaml_section, id_UD, react_state)
+DW_fetch_state(
+  id,
+  input,
+  session,
+  FM_yaml_file,
+  MOD_yaml_file,
+  id_UD,
+  react_state
+)
 }
 \arguments{
 \item{id}{Shiny module ID}
@@ -13,9 +21,9 @@ DW_fetch_state(id, input, session, yaml_file, yaml_section, id_UD, react_state)
 
 \item{session}{Shiny session variable}
 
-\item{yaml_file}{cofiguration file}
+\item{FM_yaml_file}{App configuration file with FM as main section.}
 
-\item{yaml_section}{Section of the yaml file with the module configuration}
+\item{MOD_yaml_file}{Module configuration file with MC as main section.}
 
 \item{id_UD}{ID string for the upload data module used to handle uploads or
 the name of the list element in react_state where the data set is stored.}
@@ -29,7 +37,7 @@ values from the yaml file as well as any changes made by the user. The
 structure of the list is defined below.
 \itemize{
  \item{yaml:} Contents of the yaml file.
- \item{MC:} Section of the yaml file, specified by \code{yaml_section}, containing the DW module components
+ \item{MC:} Module components of the yaml file.
  \item{DW:} Data wrangling state
  \itemize{
    \item{isgood:} Boolean status of the state. FALSE if the dataset
@@ -61,6 +69,8 @@ structure of the list is defined below.
  }
  \item{MOD_TYPE:} Character data containing the type of module \code{"DW"}
  \item{id:} Character data containing the module id
+ \item{FM_yaml_file:} App configuration file with FM as main section.
+ \item{MOD_yaml_file:}  Module configuration file with MC as main section.
  module in the session variable.
 }
 }

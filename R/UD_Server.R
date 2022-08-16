@@ -34,7 +34,7 @@ UD_Server <- function(id,
 
     #------------------------------------
     # Creates the file upload elements
-    output$UD_ui_load_data = renderUI({
+    output$ui_ud_load_data = renderUI({
       state = UD_fetch_state(id            = id,
                              id_ASM        = id_ASM,
                              input         = input,
@@ -54,7 +54,7 @@ UD_Server <- function(id,
     #------------------------------------
     # If the user has uploaded an excel file this will
     # allow them to select the sheets:
-    output$UD_ui_select_sheets =  renderUI({
+    output$ui_ud_select_sheets =  renderUI({
       # Reacting to data file changes
       input$input_data_file
       state = UD_fetch_state(id            = id,
@@ -80,7 +80,7 @@ UD_Server <- function(id,
       uiele})
     #------------------------------------
     # Data loading messages go here
-    output$UD_ui_text_load_result  =  renderUI({
+    output$ui_ud_text_load_result  =  renderUI({
       # Reacting to data file changes
       input$input_data_file
       input$input_select_sheet
@@ -99,7 +99,7 @@ UD_Server <- function(id,
       uiele})
     #------------------------------------
     # A simple preview of the data:
-    output$UD_ui_data_preview  =  renderUI({
+    output$ui_ud_data_preview  =  renderUI({
       # Forcing a reaction to changes in other modules
       react_state[[id_ASM]]
       # Reacting to data file changes
@@ -140,7 +140,7 @@ UD_Server <- function(id,
 
       shinyAce::updateAceEditor(
         session         = session,
-        editorId        = "UD_ui_ace_code",
+        editorId        = "ui_ud_ace_code",
         theme           = state[["yaml"]][["FM"]][["code"]][["theme"]],
         showLineNumbers = state[["yaml"]][["FM"]][["code"]][["showLineNumbers"]],
         readOnly        = state[["MC"]][["code"]][["readOnly"]],
@@ -171,7 +171,7 @@ UD_Server <- function(id,
       uiele})
     #------------------------------------
     # Creates the ui for the compact view of the module
-    output$UD_ui_compact  =  renderUI({
+    output$ui_ud_compact  =  renderUI({
       state = UD_fetch_state(id            = id,
                              id_ASM        = id_ASM,
                              input         = input,
@@ -183,7 +183,7 @@ UD_Server <- function(id,
       # Creating the code button if it's enabled
       if(state$MC$compact$code){
         uiele_code    = tagList(shinyAce::aceEditor(
-           NS(id, "UD_ui_ace_code"),
+           NS(id, "ui_ud_ace_code"),
            height  = state[["MC"]][["formatting"]][["code"]][["height"]]
            ))
         uiele_code_button = tagList(
@@ -202,24 +202,24 @@ UD_Server <- function(id,
         )
       }
 
-      uiele  = tagList( div(style="display:inline-block", htmlOutput(NS(id, "UD_ui_load_data"))),
+      uiele  = tagList( div(style="display:inline-block", htmlOutput(NS(id, "ui_ud_load_data"))),
                         div(style="display:inline-block;vertical-align:top", uiele_code_button))
 
 
       uiele = tagList(uiele,
                       tags$br(),
-                      htmlOutput(NS(id, "UD_ui_select_sheets")),
-                      htmlOutput(NS(id, "UD_ui_text_load_result")))
+                      htmlOutput(NS(id, "ui_ud_select_sheets")),
+                      htmlOutput(NS(id, "ui_ud_text_load_result")))
 
       # Attaching the preview to the bottom if it's enabled
       if(state$MC$compact$preview){
         uiele_preview = tagList(div(style="display:inline-block;vertical-align:top",
-                                    htmlOutput(NS(id, "UD_ui_data_preview"))),
+                                    htmlOutput(NS(id, "ui_ud_data_preview"))),
                                 )
         uiele = tagList(uiele, uiele_preview, tags$br())}
 
       uiele})
-    outputOptions(output, "UD_ui_compact", priority = -1)
+    outputOptions(output, "ui_ud_compact", priority = -1)
     #------------------------------------
     # Creating reaction if a variable has been specified
     if(!is.null(react_state)){

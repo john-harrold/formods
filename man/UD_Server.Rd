@@ -7,8 +7,8 @@
 UD_Server(
   id,
   id_ASM = "ASM",
-  yaml_section = "UD",
-  yaml_file = system.file(package = "formods", "templates", "config.yaml"),
+  FM_yaml_file = system.file(package = "formods", "templates", "formods.yaml"),
+  MOD_yaml_file = system.file(package = "formods", "templates", "UD.yaml"),
   react_state = NULL
 )
 }
@@ -17,9 +17,9 @@ UD_Server(
 
 \item{id_ASM}{ID string for the app state management module used to save and load app states}
 
-\item{yaml_section}{Section of the yaml file with the module configuration (\code{"UD"})}
+\item{FM_yaml_file}{App configuration file with FM as main section.}
 
-\item{yaml_file}{Upload Data configuration file}
+\item{MOD_yaml_file}{Module configuration file with MC as main section.}
 
 \item{react_state}{Variable passed to server to allow reaction outside of module (\code{NULL})}
 }

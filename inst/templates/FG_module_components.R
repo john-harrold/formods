@@ -38,8 +38,6 @@ ui <- dashboardPage(
               div(style="display:inline-block",
                  "ui_fg_copy_fig",
                  htmlOutput(NS("FG", "ui_fg_copy_fig"))),
-           #  div(style="display:inline-block",
-           #     htmlOutput(NS("FG", "ui_fg_upds_fig")) ),
               width = 12)
                ),
              fluidRow(
@@ -47,8 +45,8 @@ ui <- dashboardPage(
                  "ui_fg_fig_name",
                  htmlOutput(NS("FG", "ui_fg_fig_name")),
                  tags$br(),
-                 "ui_fg_fig_cap",
-                 htmlOutput(NS("FG", "ui_fg_fig_cap")),
+                 "ui_fg_fig_notes",
+                 htmlOutput(NS("FG", "ui_fg_fig_notes")),
               width=12)),
              fluidRow(
                box(title="Add Plot Element Button",
@@ -101,7 +99,7 @@ server <- function(input, output, session) {
 
   # Test dataset in the package
   DATA = readxl::read_excel(
-           path  = system.file(package="formods", "data", "PK_DATA.xlsx"),
+           path  = system.file(package="formods", "data", "TEST_DATA.xlsx"),
            sheet = "DATA") %>%
     dplyr::filter(EVID==0)
 

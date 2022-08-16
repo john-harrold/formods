@@ -8,8 +8,8 @@ FG_fetch_state(
   id,
   input,
   session,
-  yaml_file,
-  yaml_section,
+  FM_yaml_file,
+  MOD_yaml_file,
   id_ASM = NULL,
   id_UD = NULL,
   id_DW = NULL,
@@ -23,9 +23,9 @@ FG_fetch_state(
 
 \item{session}{Shiny session variable}
 
-\item{yaml_file}{cofiguration file}
+\item{FM_yaml_file}{App configuration file with FM as main section.}
 
-\item{yaml_section}{Section of the yaml file with the module configuration}
+\item{MOD_yaml_file}{Module configuration file with MC as main section.}
 
 \item{id_ASM}{ID string for the app state management module used to save and load app states}
 
@@ -38,10 +38,10 @@ FG_fetch_state(
 \value{
 list containing the current state of the app including default
 values from the yaml file as well as any changes made by the user. The
-structure ofthe list is defined below:
+structure of the list is defined below:
 \itemize{
  \item{yaml:} Contents of the yaml file.
- \item{MC:} Section of the yaml file, specified by \code{yaml_section}, containing the FG module components
+ \item{MC:} Module components of the yaml file.
  \item{FG:} Data wrangling state
  \itemize{
    \item{isgood:} Boolean status of the state. Currently just TRUE
@@ -58,8 +58,8 @@ structure ofthe list is defined below:
    \item{figs:}             List of figures. Each view has the following structure:
      \itemize{
        \item{isgood:} Boolean status of the figure. False if evaluation fails.
-       \item{key:     Figure key (user editable)}
-       \item{caption: Figure caption  (user editable)}
+       \item{key:     Figure key acts as a title/caption (user editable)}
+       \item{notes:   Figure notes  (user editable)}
        \item{id: Character id (\code{fig_idx})}
        \item{idx: Numeric id (\code{1})}
        \item{fig_dsview:  Name of the dataset view for the current figure.}
@@ -74,8 +74,9 @@ structure ofthe list is defined below:
      }
  }
  \item{MOD_TYPE:} Character data containing the type of module \code{"DW"}
- \item{id:} Character data containing the module id
- module in the session variable.
+ \item{id:} Character data containing the module id module in the session variable.
+ \item{FM_yaml_file:} App configuration file with FM as main section.
+ \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 }
 }
 \description{

@@ -6,8 +6,8 @@
 \usage{
 FG_Server(
   id,
-  yaml_section = "FG",
-  yaml_file = system.file(package = "formods", "templates", "config.yaml"),
+  FM_yaml_file = system.file(package = "formods", "templates", "formods.yaml"),
+  MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml"),
   id_ASM = "ASM",
   id_UD = "UD",
   id_DW = "DW",
@@ -17,9 +17,9 @@ FG_Server(
 \arguments{
 \item{id}{An ID string that corresponds with the ID used to call the module's UI function}
 
-\item{yaml_section}{Section of the yaml file with the module configuration (\code{"FG"})}
+\item{FM_yaml_file}{App configuration file with FM as main section.}
 
-\item{yaml_file}{Upload Data cofiguration file}
+\item{MOD_yaml_file}{Module configuration file with MC as main section.}
 
 \item{id_ASM}{ID string for the app state management module used to save and load app states}
 

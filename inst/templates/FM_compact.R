@@ -4,6 +4,15 @@ library(devtools)
 library(shinydashboard)
 load_all()
 
+
+CSS <- "
+.wrapfig {
+  float: right;
+  shape-margin: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+"
 #https://fontawesome.com/icons?from=io
 
 ui <- dashboardPage(
@@ -11,35 +20,33 @@ ui <- dashboardPage(
   dashboardHeader(title="formods"),
   dashboardSidebar(
      sidebarMenu(
-       menuItem("App State",       tabName="app_state",   icon=icon("archive")) ,
        menuItem("Source Data",     tabName="upload",      icon=icon("table")) ,
        menuItem("Wrangle",         tabName="wrangle",     icon=icon("hat-cowboy")),
-       menuItem("Plot",            tabName="plot",        icon=icon("chart-line"))
+       menuItem("Plot",            tabName="plot",        icon=icon("chart-line")),
+       menuItem("App State",       tabName="app_state",   icon=icon("archive"))
      )
   ),
   dashboardBody(
+  tags$head(
+    tags$style(HTML(CSS))
+  ),
     tabItems(
-       tabItem(tabName="app_state",
-
+       tabItem(tabName="app_state", htmlOutput(NS("ASM", "ui_asm_compact"))),
+       tabItem(tabName="upload",
                fluidRow(
-                 column(width=4,
-                   htmlOutput(NS("ASM", "ASM_ui_compact"))),
-                 column(width=4,
-                     tags$p("Formods is a set of modules and an framework for developing modules which interact and create code to replicate analyses performed within an app.")),
-                 column(width=2,
-                     tags$figure(
-                       align = "right",
-                       tags$img(
-                         src="https://r.ubiquity.tools/reference/figures/logo.png",
-                         width = 100,
-                         alt = "formods logo"
-                       )
-                     ) #,
-                   #rep("text ", times=1000)
-                 )
+                 column(width=6,
+                   htmlOutput(NS("UD",  "ui_ud_compact"))),
+                 column(width=6,
+                     tags$p(
+                         tags$img(
+                         class = "wrapfig",
+                         src="https://r.ubiquity.tools/reference/figures/logo.png", width = 100,
+                         alt = "formods logo" ),
+                       'Formods is a set of modules and an framework for developing modules which interact and create code to replicate analyses performed within an app. To experiment download this',
+                     tags$a("test dataset", href="https://github.com/john-harrold/formods/blob/master/inst/data/PK_DATA.xlsx?raw=true"),
+                            'and upload it into the App using the form on the left.'))
                )
                ),
-       tabItem(tabName="upload",      htmlOutput(NS("UD",  "UD_ui_compact"))),
        tabItem(tabName="wrangle",     htmlOutput(NS("DW",  "DW_ui_compact"))),
        tabItem(tabName="plot",        htmlOutput(NS("FG",  "FG_ui_compact")))
       )

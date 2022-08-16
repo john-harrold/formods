@@ -4,7 +4,7 @@
 \alias{UD_fetch_state}
 \title{Fetch Upload Data State}
 \usage{
-UD_fetch_state(id, id_ASM, input, session, yaml_file, yaml_section)
+UD_fetch_state(id, id_ASM, input, session, FM_yaml_file, MOD_yaml_file)
 }
 \arguments{
 \item{id}{Shiny module ID}
@@ -15,9 +15,9 @@ UD_fetch_state(id, id_ASM, input, session, yaml_file, yaml_section)
 
 \item{session}{Shiny session variable}
 
-\item{yaml_file}{cofiguration file}
+\item{FM_yaml_file}{App configuration file with FM as main section.}
 
-\item{yaml_section}{Section of the yaml file with the module configuration}
+\item{MOD_yaml_file}{Module configuration file with MC as main section.}
 }
 \value{
 list containing the current state of the app including default
@@ -43,6 +43,8 @@ has the following structure:
 }
  \item{MOD_TYPE:} Character data containing the type of module \code{"UD"}
  \item{id:} Character data containing the module id module in the session variable.
+ \item{FM_yaml_file:} App configuration file with FM as main section.
+ \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 }
 }
 \description{

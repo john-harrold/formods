@@ -4,12 +4,12 @@
 \alias{ASM_init_state}
 \title{Initialize ASM Module State}
 \usage{
-ASM_init_state(yaml_file, yaml_section, id)
+ASM_init_state(FM_yaml_file, MOD_yaml_file, id)
 }
 \arguments{
-\item{yaml_file}{App configuration file}
+\item{FM_yaml_file}{App configuration file with FM as main section.}
 
-\item{yaml_section}{Section of the yaml file with the module configuration}
+\item{MOD_yaml_file}{Module configuration file with MC as main section.}
 
 \item{id}{ID string for the module.}
 }

@@ -4,12 +4,12 @@
 \alias{DW_init_state}
 \title{Initialize DW Module State}
 \usage{
-DW_init_state(yaml_file, yaml_section, id, id_UD, react_state)
+DW_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state)
 }
 \arguments{
-\item{yaml_file}{App configuration file}
+\item{FM_yaml_file}{App configuration file with FM as main section.}
 
-\item{yaml_section}{Section of the yaml file with the module configuration}
+\item{MOD_yaml_file}{Module configuration file with MC as main section.}
 
 \item{id}{Shiny module ID}
 

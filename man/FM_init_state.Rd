@@ -5,8 +5,8 @@
 \title{Initialize a formods State Object}
 \usage{
 FM_init_state(
-  yaml_file,
-  yaml_section,
+  FM_yaml_file,
+  MOD_yaml_file,
   id,
   MT,
   button_counters,
@@ -15,9 +15,9 @@ FM_init_state(
 )
 }
 \arguments{
-\item{yaml_file}{App cofiguration file.}
+\item{FM_yaml_file}{App configuration file with FM as main section.}
 
-\item{yaml_section}{Section of the yaml file with the module configuration.}
+\item{MOD_yaml_file}{Module configuration file with MC as main section.}
 
 \item{id}{Shiny module ID.}
 
