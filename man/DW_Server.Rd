@@ -27,8 +27,6 @@ the name of the list element in react_state where the data set is stored.}
 
 \item{react_state}{Variable passed to server to allow reaction outside of
 module (\code{NULL})}
-
-\item{yaml_file}{Upload Data cofiguration file}
 }
 \value{
 DW Server object

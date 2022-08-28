@@ -15,7 +15,6 @@
 #'@title Data Wrangling Server
 #'@description Server function for the data wrangling module
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
-#'@param yaml_file Upload Data cofiguration file
 #'@param id_ASM ID string for the app state managment module used to save and load app states
 #'@param id_UD  ID string for the upload data module used to handle uploads or
 #'the name of the list element in react_state where the data set is stored.
@@ -474,7 +473,6 @@ DW_Server <- function(id,
         WDS = DW_fetch_current_view(state)[["WDS"]]
         # Columns in that dataset
         dscols = names(WDS)
-        # JMH: adding pivot_longer inputs
         uiele = tagList(
           div(style = "display: flex;",
               pickerInput(
@@ -518,7 +516,6 @@ DW_Server <- function(id,
         WDS = DW_fetch_current_view(state)[["WDS"]]
         # Columns in that dataset
         dscols = names(WDS)
-        # JMH: adding pivot_longer inputs
         uiele = tagList(
           div(style = "display: flex;",
               pickerInput(
@@ -1456,7 +1453,7 @@ DW_fetch_state = function(id,                    input,     session,
     msgs = c()
 
     # Creatign a new view
-    state = DW_new_view(state, id_UD, react_state)
+    state = DW_new_view(state)
 
     # Setting hold for views select
     state = set_hold(state, inputId = "select_dw_views")
@@ -1483,7 +1480,7 @@ DW_fetch_state = function(id,                    input,     session,
 
     # If there are no views then we create an empty one
     if(length(state[["DW"]][["views"]]) == 0){
-      state = DW_new_view(state, id_UD, react_state)
+      state = DW_new_view(state)
     } else {
     # If there are views then we set the first one as active
       state[["DW"]][["current_view"]] = names(state[["DW"]][["views"]])[1]
@@ -1512,7 +1509,7 @@ DW_fetch_state = function(id,                    input,     session,
     original_view = DW_fetch_current_view(state)
 
     # This creates the new view and makes it active:
-    state = DW_new_view(state, id_UD, react_state)
+    state = DW_new_view(state)
 
     # Now we pull out the new view:
     new_view = DW_fetch_current_view(state)
@@ -1675,7 +1672,7 @@ DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state){
 
   if(state[["DW"]][["isgood"]]){
     # Initializing an empty figure
-    state = DW_new_view(state, id_UD, react_state)
+    state = DW_new_view(state)
   }
 
   FM_le(state, "State initialized")
@@ -1946,19 +1943,15 @@ dw_eval_element = function(state, cmd){
 
 res}
 
-# JMH are id_UD and react_state neeeded for this function?
 #'@export
 #'@title New Data Wrangling View
 #'@description Appends a new empty data wrangling view to the DW state object
 #'and makes this new view the active view.
 #'@param state DW state from \code{DW_fetch_state()}
-#'@param id_UD  ID string for the upload data module used to handle uploads or
-#'the name of the list element in react_state where the data set is stored.
-#'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return DW state object containing a new data view and that view set as the
 #'current active view. See the help for \code{DW_fetch_state()} for view
 #'format.
-DW_new_view = function(state, id_UD, react_state){
+DW_new_view = function(state){
 
   # Incrementing the view   counter
   state[["DW"]][["view_cntr"]] = state[["DW"]][["view_cntr"]] + 1
@@ -2003,7 +1996,7 @@ DW_new_view = function(state, id_UD, react_state){
 state}
 
 #'@export
-#'@title Fetchs Current Data View
+#'@title Fetches Current Data View
 #'@description Takes a DW state and returns the current active view
 #'@param state DW state from \code{DW_fetch_state()}
 #'@return List containing the details of the active data view. The structure
@@ -2112,6 +2105,8 @@ state}
 #'@title Adding Wrangling Element to Current Data View
 #'@description Adds the wrangling element to the current data view.
 #'@param state DW state module.
+#'@param dwb_res  Output from \code{dwrs_builder()}
+#'@param dwee_res Output from \code{dw_eval_element()}
 #'@param DS Dataset list object with elements described by the DS field
 #'returned by \code{UD_fetch_state()}.
 #'@return state with data set attached

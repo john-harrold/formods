@@ -2,7 +2,6 @@
 #'@import readxl
 #'@import shiny
 #'@importFrom digest digest
-#'@importFrom magrittr "%>%"
 #'@importFrom readr read_csv
 #'@importFrom shinyAce aceEditor updateAceEditor
 #'@importFrom stats setNames
@@ -302,7 +301,7 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
     sheet                = isolate(input$input_select_sheet)
     sheets               = c()
     contents             = NULL
-    data_file_ext        = tools::file_ext(data_file)
+    data_file_ext        = tolower(tools::file_ext(data_file))
     load_msg             = NULL
 
     # This is where the user files will be stored on the server
@@ -483,7 +482,8 @@ UD_attach_ds = function(
 #'@param sheets If the uploaded file is an excel file, this is all the sheets in the file.
 #'@param sheet If the uploaded file is an excel file, this is the currently selected sheet.
 #'@param sheets If the uploaded file is an excel file, this is a character vector of the sheets present in that file.
-#'@return list with the elements of the dataset (contents, object_name and code)
+#'@return list with the elements of the dataset (contents, object_name, code,
+#'and isgood)
 UD_ds_read = function(state,
                       data_file_ext    = NULL,
                       data_file_local  = NULL,
@@ -493,6 +493,10 @@ UD_ds_read = function(state,
 
   contents = c()
   code     = NULL
+  isgood   = FALSE
+
+  # making sure the extension is lower case for comparisons below.
+  data_file_ext = tolower(data_file_ext)
 
   # getting the object name:
   if(is.null(state[["MC"]][["ds_object_name"]])){
@@ -505,11 +509,13 @@ UD_ds_read = function(state,
   # Reading in the file contents:
   if(data_file_ext %in% c("csv")){
     contents = readr::read_csv(file=data_file_local)
-    code = paste0(object_name, ' = readr::read_csv(file="',data_file,'")\n')
+    code     = paste0(object_name, ' = readr::read_csv(file="',data_file,'")\n')
+    isgood   = TRUE
   }
   if(data_file_ext %in% c("tsv")){
     contents = readr::read_tsv(file=data_file_local)
-    code = paste0(object_name, ' = readr::read_tsv(file="',data_file,'")\n')
+    code     = paste0(object_name, ' = readr::read_tsv(file="',data_file,'")\n')
+    isgood   = TRUE
   }
   if(data_file_ext %in% c("xls", "xlsx")){
     # If you load one excel sheet and then switch to another
@@ -525,7 +531,7 @@ UD_ds_read = function(state,
       sheet = sheets[1] }
     contents = readxl::read_excel(path=data_file_local, sheet=sheet)
     code = paste0(object_name, ' = readxl::read_excel(path="',data_file,'", sheet="',sheet,'")\n')
-
+    isgood   = TRUE
   }
 
   if(!is.null(code)){
@@ -534,6 +540,7 @@ UD_ds_read = function(state,
 
   res = list(contents    = contents,
              object_name = object_name,
+             isgood      = isgood,
              code        = code)
 
 res}

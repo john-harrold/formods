@@ -266,7 +266,23 @@ FG_Server <- function(id,
         fobj = FG_extract_page(state, current_fig[["page"]])
       }
 
+      # This forces a build of the ggplot to capure errors that only occur
+      # when the figure is built.
+      tcres =
+        FM_tc(tc_env = list(fobj=fobj),
+              cmd = "fbuild = ggplot2::ggplot_build(fobj); suppressMessages(ggsave(tempfile(fileext='.png'), fobj))",
+              capture = c("fbuild"))
 
+      if(tcres[["isgood"]]){
+        fobj = tcres[["capture"]][["fbuild"]]
+      } else {
+        # capturing the errors and returning those in the figure
+        fobj = FM_mk_error_fig(tcres[["msgs"]])
+
+        # Making sure the messages are also returned
+        state = FM_set_ui_msg(state, tcres[["msgs"]])
+        FM_set_mod_state(session, id, state)
+      }
       fobj})
     #------------------------------------
     output$ui_fg_preview_plotly   = plotly::renderPlotly({
@@ -303,8 +319,6 @@ FG_Server <- function(id,
       if(current_fig[["num_pages"]] > 1){
         fobj = FG_extract_page(state, current_fig[["page"]])
       }
-
-
 
       if(is.null(fobj)){
         uiele = NULL
@@ -758,32 +772,32 @@ FG_Server <- function(id,
         } else if(curr_element == "scales") {
 
           scale_choices = c("linear", "log10", "log2")
-          yscale = 
+          yscale =
             pickerInput(
               inputId    = NS(id, "select_component_yscale"),
               label      = state[["MC"]][["labels"]][["components"]][["yscale"]],
               selected   = "log10",
-              multiple   = FALSE, 
+              multiple   = FALSE,
               choices    = scale_choices,
               width      = state[["MC"]][["formatting"]][["components"]][["axscale"]][["width"]])
 
-          ylim = 
+          ylim =
              textInput(
                 inputId     = NS(id, "text_component_ylim"),
                 label       = state[["MC"]][["labels"]][["components"]][["ylim"]],
                 placeholder = state[["MC"]][["labels"]][["ph"]][["axlim"]],
                 width       = state[["MC"]][["formatting"]][["components"]][["axlim"]][["width"]])
 
-          xscale = 
+          xscale =
             pickerInput(
               inputId    = NS(id, "select_component_xscale"),
               label      = state[["MC"]][["labels"]][["components"]][["xscale"]],
-              selected   = "linear", 
+              selected   = "linear",
               multiple   = TRUE,
               choices    = scale_choices,
               width      = state[["MC"]][["formatting"]][["components"]][["axscale"]][["width"]])
 
-          xlim = 
+          xlim =
              textInput(
                 inputId     = NS(id, "text_component_xlim"),
                 label       = state[["MC"]][["labels"]][["components"]][["xlim"]],
@@ -1536,8 +1550,8 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_st
       "select_current_fig",
       "select_current_view",
       "select_component_facet",
-      "select_component_xscale", 
-      "select_component_yscale", 
+      "select_component_xscale",
+      "select_component_yscale",
       "select_fg_element")
 
     # Since some IDs can be reused in the elements above we do this to
@@ -1871,7 +1885,7 @@ fers_builder = function(state){
       tmp_lim_str = "NULL"
       if(tmp_lim !=""){
         # First we try to evaluate the limits
-        tcres = 
+        tcres =
           FM_tc(tc_env = NULL,
                 cmd = paste0("limval = c(", tmp_lim, ")"),
                 capture = c("limval"))
@@ -1880,9 +1894,9 @@ fers_builder = function(state){
         if(tcres[["isgood"]]){
           if(is.numeric(tcres[["capture"]][["limval"]])){
              if(length(tcres[["capture"]][["limval"]]) == 2){
-               descs = c(descs, paste0(sname, "lim:", tmp_lim)) 
+               descs = c(descs, paste0(sname, "lim:", tmp_lim))
                tmp_lim_str = paste0("c(", tmp_lim, ")")
-      #        cmds = c(cmds,  paste0( fg_object_name , " = ", fg_object_name, 
+      #        cmds = c(cmds,  paste0( fg_object_name , " = ", fg_object_name,
       #                        " + ",sname,"lim(", tmp_lim, ")"))
              } else {
                isgood = FALSE
@@ -1901,10 +1915,10 @@ fers_builder = function(state){
 
       # Processing axis scale:
       if(ui[[paste0("select_component_", sname, "scale")]] =="linear"){
-        descs = c(descs, paste0(sname, "scale:linear")) 
+        descs = c(descs, paste0(sname, "scale:linear"))
       }else if(ui[[paste0("select_component_", sname, "scale")]] =="log10"){
-        descs = c(descs, paste0(sname, "-scale:log10")) 
-        cmds = c(cmds,  paste0( fg_object_name , " = ", fg_object_name, 
+        descs = c(descs, paste0(sname, "-scale:log10"))
+        cmds = c(cmds,  paste0( fg_object_name , " = ", fg_object_name,
                                " + scale_",sname,"_log10(limits=", tmp_lim_str, ")"))
       }
 

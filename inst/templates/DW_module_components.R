@@ -92,7 +92,7 @@ server <- function(input, output, session) {
   # Module server
   react_FM    = reactiveValues()
 
-  # Format of ds is described in JMH
+  # Format of ds is described in the help for UD_fetch_state
   ds = list(
      UD = list(
           data_file_local = NULL,

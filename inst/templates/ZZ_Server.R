@@ -1,7 +1,6 @@
 #'@import rhandsontable
 #'@import shiny
 #'@importFrom digest digest
-#'@importFrom magrittr "%>%"
 #'@importFrom shinyAce aceEditor updateAceEditor
 
 
@@ -11,12 +10,11 @@
 # - Change button values to current or zero
 
 #'@export
-#'@title Save State Server
-#'@description Server function for the Save State Shiny Module
+#'@title ZZDESC State Server
+#'@description Server function for the ZZDESC  Shiny Module
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
 #'@param yaml_section  Section of the yaml file with the module configuration (\code{"UD"})
 #'@param yaml_file Upload Data configuration file
-#'@param id_ASM ID string for the app state managment module used to save and load app states
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
 ZZ_Server <- function(id,

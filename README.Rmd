@@ -45,3 +45,7 @@ devtools::install_github("john-harrold/formods")
 # Getting started
 
 
+``` r 
+library(shiny); 
+runApp('inst/templates/FM_compact.R')
+```

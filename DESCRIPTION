@@ -14,6 +14,8 @@ LazyData: false
 Imports:
   digest,
   dplyr,
+  ggforce,
+  ggplot2,
   magrittr,
   plotly,
   readr,
@@ -29,10 +31,12 @@ Imports:
   tools,
   yaml
 Suggests:
-  ggpubr,
-  knitr,
-  shinydashboard,
-  rmarkdown,
-  utils
+    ggpubr,
+    knitr,
+    shinydashboard,
+    rmarkdown,
+    utils,
+    testthat (>= 3.0.0)
 RoxygenNote: 7.2.0
 VignetteBuilder: knitr
+Config/testthat/edition: 3

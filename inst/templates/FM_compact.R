@@ -1,7 +1,8 @@
-#library(formods)
 
-library(devtools)
 library(shinydashboard)
+
+#library(formods)
+library(devtools)
 load_all()
 
 
@@ -31,24 +32,30 @@ ui <- dashboardPage(
     tags$style(HTML(CSS))
   ),
     tabItems(
-       tabItem(tabName="app_state", htmlOutput(NS("ASM", "ui_asm_compact"))),
+       tabItem(tabName="app_state", box(title="Manage App State", htmlOutput(NS("ASM", "ui_asm_compact")))),
        tabItem(tabName="upload",
-               fluidRow(
-                 column(width=6,
-                   htmlOutput(NS("UD",  "ui_ud_compact"))),
-                 column(width=6,
-                     tags$p(
-                         tags$img(
-                         class = "wrapfig",
-                         src="https://r.ubiquity.tools/reference/figures/logo.png", width = 100,
-                         alt = "formods logo" ),
-                       'Formods is a set of modules and an framework for developing modules which interact and create code to replicate analyses performed within an app. To experiment download this',
-                     tags$a("test dataset", href="https://github.com/john-harrold/formods/blob/master/inst/data/PK_DATA.xlsx?raw=true"),
-                            'and upload it into the App using the form on the left.'))
+               box(title="Load Data", width=12,
+                 fluidRow(
+                   column(width=6,
+                     htmlOutput(NS("UD",  "ui_ud_compact"))),
+                   column(width=6,
+                       tags$p(
+                           tags$img(
+                           class = "wrapfig",
+                           src="https://r.ubiquity.tools/reference/figures/logo.png", width = 100,
+                           alt = "formods logo" ),
+                         'Formods is a set of modules and an framework for developing modules which interact and create code to replicate analyses performed within an app. To experiment download this',
+                       tags$a("test dataset", href="https://github.com/john-harrold/formods/blob/master/inst/data/TEST_DATA.xlsx?raw=true"),
+                              'and upload it into the App using the form on the left.'))
+                 )
                )
                ),
-       tabItem(tabName="wrangle",     htmlOutput(NS("DW",  "DW_ui_compact"))),
-       tabItem(tabName="plot",        htmlOutput(NS("FG",  "FG_ui_compact")))
+       tabItem(tabName="wrangle",     
+               box(title="Transform and Create Views of Your Data", width=12,
+               htmlOutput(NS("DW",  "DW_ui_compact")))),
+       tabItem(tabName="plot",        
+               box(title="Visualize Data", width=12,
+               htmlOutput(NS("FG",  "FG_ui_compact"))))
       )
     )
   )

@@ -2,7 +2,7 @@
 title: "Making Modules"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Included Modules}
+  %\VignetteIndexEntry{Making Modules}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -29,4 +29,21 @@ state fields
 
 # Expected functions
 
+- `ZZ_Server`  
+- `ZZ_fetch_state`  
+- `ZZ_init_state`  
+
+
+# {formods} helper functions
+
+- `FM_le()`
+- `FM_tc()`
+- `has_changed()`
+- `set_hold()`
+- `fetch_hold()`
+- `remove_hold()`
+- `FM_init_state()`
+- `FM_set_mod_state()`
+- `FM_fetch_mod_state()`
+- `FM_set_ui_msg()`
 
