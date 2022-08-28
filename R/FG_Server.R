@@ -70,7 +70,7 @@ FG_Server <- function(id,
           width  = state[["MC"]][["formatting"]][["fg_elements"]][["width"]],
           height = state[["MC"]][["formatting"]][["fg_elements"]][["height"]],
           rowHeaders = NULL
-        ) %>%
+        ) |> 
           hot_cols(renderer = "
                function (instance, td, row, col, prop, value, cellProperties) {
                Handsontable.renderers.TextRenderer.apply(this, arguments);
@@ -83,15 +83,15 @@ FG_Server <- function(id,
                td.style.background = 'lightorange'}
 
               return td;
-               }") %>%
+               }") |> 
           hot_col(col = "Delete",
                   renderer = "
                function(instance, td, row, col, prop, value, cellProperties) {
                  Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
                  return td;
-               }") %>%
-          hot_col("Element" ,      readOnly = TRUE) %>%
-          hot_col("Description" , readOnly = TRUE) %>%
+               }") |> 
+          hot_col("Element" ,      readOnly = TRUE) |> 
+          hot_col("Description" , readOnly = TRUE) |> 
           hot_col("Status" ,      readOnly = TRUE)
 
         uiele = hot
@@ -2286,7 +2286,7 @@ FG_extract_page  = function(state, page){
   # Creating the named figure object locally
   assign(current_fig[["fg_object_name"]], fobj)
 
-  facet_row = current_fig[["elements_table"]] %>%
+  facet_row = current_fig[["elements_table"]] |> 
     dplyr::filter(.data[["Element"]] =="facet")
 
   if(nrow(facet_row > 0)){

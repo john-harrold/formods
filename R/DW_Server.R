@@ -3,7 +3,6 @@
 #'@import shiny
 #'@import shinyWidgets
 #'@importFrom digest digest
-#'@importFrom magrittr "%>%"
 #'@importFrom readr read_csv
 #'@importFrom rlang .data
 #'@importFrom shinyAce aceEditor updateAceEditor
@@ -91,7 +90,7 @@ DW_Server <- function(id,
             width  = state[["MC"]][["formatting"]][["dw_elements"]][["width"]],
             height = state[["MC"]][["formatting"]][["dw_elements"]][["height"]],
             rowHeaders = NULL
-          ) %>%
+          ) |> 
             hot_cols(renderer = "
                  function (instance, td, row, col, prop, value, cellProperties) {
                  Handsontable.renderers.TextRenderer.apply(this, arguments);
@@ -104,15 +103,15 @@ DW_Server <- function(id,
                  td.style.background = 'lightorange'}
 
                 return td;
-                 }") %>%
+                 }") |> 
             hot_col(col = "Delete",
                     renderer = "
                  function(instance, td, row, col, prop, value, cellProperties) {
                    Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
                    return td;
-                 }") %>%
-            hot_col("Action" ,      readOnly = TRUE) %>%
-            hot_col("Description" , readOnly = TRUE) %>%
+                 }") |> 
+            hot_col("Action" ,      readOnly = TRUE) |> 
+            hot_col("Description" , readOnly = TRUE) |> 
             hot_col("Status" ,      readOnly = TRUE)
 
           uiele = hot

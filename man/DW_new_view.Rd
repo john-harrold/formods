@@ -4,15 +4,10 @@
 \alias{DW_new_view}
 \title{New Data Wrangling View}
 \usage{
-DW_new_view(state, id_UD, react_state)
+DW_new_view(state)
 }
 \arguments{
 \item{state}{DW state from \code{DW_fetch_state()}}
-
-\item{id_UD}{ID string for the upload data module used to handle uploads or
-the name of the list element in react_state where the data set is stored.}
-
-\item{react_state}{Variable passed to server to allow reaction outside of module (\code{NULL})}
 }
 \value{
 DW state object containing a new data view and that view set as the

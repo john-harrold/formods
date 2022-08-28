@@ -2,7 +2,7 @@
 % Please edit documentation in R/DW_Server.R
 \name{DW_fetch_current_view}
 \alias{DW_fetch_current_view}
-\title{Fetchs Current Data View}
+\title{Fetches Current Data View}
 \usage{
 DW_fetch_current_view(state)
 }

@@ -16,7 +16,6 @@ Imports:
   dplyr,
   ggforce,
   ggplot2,
-  magrittr,
   plotly,
   readr,
   readxl,

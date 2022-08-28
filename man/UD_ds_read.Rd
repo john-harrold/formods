@@ -25,7 +25,8 @@ UD_ds_read(
 \item{sheet}{If the uploaded file is an excel file, this is the currently selected sheet.}
 }
 \value{
-list with the elements of the dataset (contents, object_name and code)
+list with the elements of the dataset (contents, object_name, code,
+and isgood)
 }
 \description{
 Generates the code for loading a dataset and returns both the

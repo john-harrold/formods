@@ -1,7 +1,6 @@
 #'@import rhandsontable
 #'@import shiny
 #'@importFrom digest digest
-#'@importFrom magrittr "%>%"
 #'@importFrom shinyAce aceEditor updateAceEditor
 
 
