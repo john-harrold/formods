@@ -6,8 +6,9 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/john-harrold/formods/workflows/R-CMD-check/badge.svg)](https://github.com/john-harrold/formods/actions)
+<!---
 [![version](https://www.r-pkg.org/badges/version/formods)](https://CRAN.R-project.org/package=formods)
-![cranlogs](https://cranlogs.r-pkg.org/badges/formods)
+---> ![cranlogs](https://cranlogs.r-pkg.org/badges/formods)
 ![Active](https://www.repostatus.org/badges/latest/active.svg)
 [![Lifecycle:
 Experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
@@ -24,17 +25,25 @@ modules as well as how to create other modules within this framework.
 
 # Installation
 
-You can install the released version of `formods` from
-[CRAN](https://cran.r-project.org/package=formods) with:
+<!---
+You can install the released version of ``formods`` from [CRAN](https://cran.r-project.org/package=formods) with:
 
 ``` r
 install.packages("formods")
 ```
+--->
 
-And the development version from
+You can install the development version from
 [GitHub](https://github.com/john-harrold/formods) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("john-harrold/formods")
+```
+
+# Getting started
+
+``` r
+library(shiny); 
+runApp('inst/templates/FM_compact.R')
 ```

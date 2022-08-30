@@ -35,7 +35,6 @@ Each module will have a server function using a short name for the module as a p
 
 ```{r, echo = FALSE, eval=TRUE}
 
-library(magrittr)
 curr_mods = FM_fetch_current_mods()
 #library(rhandsontable)
 #rhandsontable::rhandsontable(curr_mods$df, width=750, rowHeaders = NULL) %>%

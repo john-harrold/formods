@@ -5,7 +5,7 @@
 #' generation and saving the app state). These modules can react and interact
 #' as well as generate code to create reproducible analyses.
 #'
-#' @seealso \url{https://github.com/john-harrold/formods}
+#' @seealso \url{https://formods.ubiquity.tools/}
 #' @docType package
 #' @name formods
 "_PACKAGE"
