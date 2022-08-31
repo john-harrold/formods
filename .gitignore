@@ -9,4 +9,3 @@ tmp/
 vignettes/*.R
 vignettes/*.html
 inst/doc
-docs

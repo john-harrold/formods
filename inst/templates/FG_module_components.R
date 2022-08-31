@@ -1,9 +1,5 @@
 #library(formods)
 library(shinydashboard)
-
-library(devtools)
-load_all()
-
 #https://fontawesome.com/icons?from=io
 ui <- dashboardPage(
   skin="red",

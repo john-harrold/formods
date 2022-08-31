@@ -19,27 +19,23 @@ library(formods)
 
 # Introduction 
 
-Do you ever make a Shiny app and think: Didn't I just do all this stuff last week? From creating data upload forms to generating a UI for building ggplot figures there are certain components we all use in our apps. The purpose of `formods` is to create customizable Shiny modules to allow many of these components to be created quickly so you can focus on the part of the app that is unique and interesting. 
-
+Do you ever make a Shiny app and think: Didn't I just do all this stuff last week? From creating data upload forms to generating a UI for building ggplot figures there are certain components we all use in our apps. The purpose of `formods` is to create customizable Shiny modules to allow many of these components to be created quickly so you can focus on the part of the app that is unique and interesting. Each of the modules in `formods` generates code dynamically to produce the underlying outputs. This allows modules combined under this framework to generate code that allows the state of apps to be reproduced as a single script. 
 
 ## Implementation
 
-Each module will have a server function using a short name for the module as a prefix. For example the upload data module would use UD. Each module would then have a series of UI elements that you can place in your UI description. 
-
-* Server
-* UI elements
-* UI compact 
-* YAML configuration
+Each module will have a short name that is used with functions and namespaces. For example the upload data module would use UD. To use a module you need to create the appropriate UI elements as well as call the module server. Both the high level `formods` components and the individual modules are configured through YAML configuration files.  
 
 # Avialable modules
 
-```{r, echo = FALSE, eval=TRUE}
+The currently available modules are listed in the table below. The SN column
+contains the short name used to identify that module. The individual HTML UI
+elements are listed as well as other UI outputs.
 
+```{r, echo = FALSE, eval=TRUE}
 curr_mods = FM_fetch_current_mods()
 #library(rhandsontable)
 #rhandsontable::rhandsontable(curr_mods$df, width=750, rowHeaders = NULL) %>%
 #hot_cols(colWidths = c(100, 50, 300, 300)) 
-
 
 mapping = data.frame(
   col_keys = c("Module", "SN", "htmlOutput", "otherOutput"),
@@ -56,14 +52,51 @@ ft = flextable(curr_mods$df)                       |>
 ft
 ```
 
+## Using a module
 
+Using a module requires two components: You need to add UI elements for those in the module, and then you need to add the server component as well. Take care to use the same `id` for both the UI and server components. The UI elements are listed in the table above. Also each module in `formods` contains an example App file which isolates each UI component to allow you to see how it's used. This is called `XX_module_components.R`, where `XX` is the module short name. For example to see an example of the upload data module you could run the following to copy the file locally:
+
+``` r
+copy.file(system.file(package="formods", "templates", "UD_module_components.R"),      "UD_module_components.R")
+``` 
+
+If you want to run the App from within the package you can just do the following:
+
+``` r
+runApp(system.file(package="formods", "templates", "UD_module_components.R"))
+``` 
+
+### Compact UI elements
+
+Using the module components script above, you can see whate each UI element looks like and how it behaves. This allows you to have granular control over the UI elements and their placement. For each module, `formods` provides a single ui output to place all of the module UI components together. For the upload data module it looks like this:
+
+``` r
+htmlOutput(NS("UD", "ui_ud_compact"))
+``` 
+
+If you copy the `FM_compact.R` file locally, you can see how these are used for each module: 
+
+``` r
+copy.file(system.file(package="formods", "templates", "FM_compact.R"), "FM_compact.R")
 ```
+
+And you can this example and see how the modules interact as well:
+
+``` r
+runApp(system.file(package="formods", "templates", "FM_compact.R"))
+```
+
+### YAML configuration files
+
+Both `formods` and the individual modules are configured through YAML files. By default, the modules will use the included template YAML files. However, you may want to alter the default formatting and text. To do that you simply need to make local copies of the files like this:
+
+
+``` r
 copy.file(system.file(package="formods", "templates", "formods.yaml"), "formods.yaml")
-copy.file(system.file(package="formods", "templates", "DW.yaml"),      "DW.yaml")
-
-copy.file(system.file(package="formods", "templates", "DW_module_components.R"),      "DW_module_components.R")
-runApp(system.file(package="formods", "templates", "DW_module_components.R"))
+copy.file(system.file(package="formods", "templates", "UD.yaml"), "UD.yaml")
 ```
+
+You can then modify those files. To use them you need to point the server functions to those instead of the default templates. The following sections describe the current modules and how to use them. 
 
 ## Upload Data (UD)
 

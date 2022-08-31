@@ -2,8 +2,8 @@
 library(shinydashboard)
 
 #library(formods)
-library(devtools)
-load_all()
+#library(devtools)
+#load_all()
 
 
 CSS <- "
@@ -50,10 +50,10 @@ ui <- dashboardPage(
                  )
                )
                ),
-       tabItem(tabName="wrangle",     
+       tabItem(tabName="wrangle",
                box(title="Transform and Create Views of Your Data", width=12,
                htmlOutput(NS("DW",  "DW_ui_compact")))),
-       tabItem(tabName="plot",        
+       tabItem(tabName="plot",
                box(title="Visualize Data", width=12,
                htmlOutput(NS("FG",  "FG_ui_compact"))))
       )
