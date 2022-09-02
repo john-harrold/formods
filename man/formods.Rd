@@ -12,7 +12,7 @@ generation and saving the app state). These modules can react and interact
 as well as generate code to create reproducible analyses.
 }
 \seealso{
-\url{https://github.com/john-harrold/formods}
+\url{https://formods.ubiquity.tools/}
 }
 \author{
 \strong{Maintainer}: John Harrold \email{john.m.harrold@gmail.com} (\href{https://orcid.org/0000-0003-2052-4373}{ORCID})

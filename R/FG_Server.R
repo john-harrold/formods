@@ -1440,7 +1440,7 @@ FG_fetch_state = function(id,
       old_fig[["elements_table"]]  =
         dplyr::mutate( old_fig[["elements_table"]],
           cmd = str_replace_all(
-            cmd,
+            .data[["cmd"]],
             paste0("\\b", old_fig[["fg_object_name"]], "\\b"),
             new_fig[["fg_object_name"]]))
     }
@@ -1979,8 +1979,8 @@ res}
 #'@param del_row Row number to be deleted (NULL if no rows need to be deleted)
 #'@param cmd String containing the plotting command.  Set to NULL to initialize a
 #'new figure or force a rebuild after a dataset update.
-#'@param Action Short name for the action being performed, eg. point
-#'@param Description Verbose description for the action being performed
+#'@param element Short name for the figure element being performed, eg. point
+#'@param desc Verbose description for the action being performed
 #'@return list with the following elements
 #'\itemize{
 #'  \item{isgood:} Return status of the function.
@@ -2238,7 +2238,6 @@ FG_build = function(state,
 
 state}
 
-
 #'@export
 #'@title Updates FG Module Checksum
 #'@description Called after any changes to figures, this function will update
@@ -2269,9 +2268,7 @@ state}
 
 #'@export
 #'@title Extracts Specific Page from Paginated Figure
-#'@description Called after any changes to figures, this function will update
-#'the checksum of the module. This allows other modules to determine if there
-#'were any changes to the figures within it.
+#'@description Used to extract the specified page from the current figure. 
 #'@param state FG state from \code{FG_fetch_state()}
 #'@param page  Page number to extract
 #'@return state with checksum updated.

@@ -14,6 +14,8 @@ UD_ds_read(
 )
 }
 \arguments{
+\item{state}{UD state from \code{UD_fetch_state()}}
+
 \item{data_file_ext}{File extension of the uploaded file.}
 
 \item{data_file_local}{Full path to the data file on the server.}

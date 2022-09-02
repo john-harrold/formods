@@ -20,9 +20,9 @@ FG_build(
 \item{cmd}{String containing the plotting command.  Set to NULL to initialize a
 new figure or force a rebuild after a dataset update.}
 
-\item{Action}{Short name for the action being performed, eg. point}
+\item{element}{Short name for the figure element being performed, eg. point}
 
-\item{Description}{Verbose description for the action being performed}
+\item{desc}{Verbose description for the action being performed}
 }
 \value{
 list with the following elements

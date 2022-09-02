@@ -15,7 +15,5 @@ FG_extract_page(state, page)
 state with checksum updated.
 }
 \description{
-Called after any changes to figures, this function will update
-the checksum of the module. This allows other modules to determine if there
-were any changes to the figures within it.
+Used to extract the specified page from the current figure.
 }

@@ -12,8 +12,6 @@ remove_hold(state, session, inputId)
 \item{session}{Shiny session variable}
 
 \item{inputId}{The input ID of the UI element that was put on hold}
-
-\item{id}{Shiny module ID}
 }
 \description{
 When some buttons are clicked they will change the state of the

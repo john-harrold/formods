@@ -3,7 +3,7 @@ test_that("DW -- Data wrangling module", {
 
   # Test data:
   DATA = readxl::read_excel(
-           path  = system.file(package="formods", "data", "TEST_DATA.xlsx"),
+           path  = system.file(package="formods", "test_data", "TEST_DATA.xlsx"),
            sheet = "DATA")
   react_FM    = reactiveValues()
 

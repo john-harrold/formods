@@ -476,6 +476,7 @@ UD_attach_ds = function(
 #'@title Generate Code and Load DS
 #'@description Generates the code for loading a dataset and returns both the
 #'code and the contents
+#'@param state UD state from \code{UD_fetch_state()}
 #'@param data_file_local Full path to the data file on the server.
 #'@param data_file Dataset file name without the path.
 #'@param data_file_ext File extension of the uploaded file.

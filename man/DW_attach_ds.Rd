@@ -7,7 +7,7 @@
 DW_attach_ds(state, DS)
 }
 \arguments{
-\item{state}{DW state module.}
+\item{state}{DW state from \code{DW_fetch_state()}}
 
 \item{DS}{Dataset list object with elements described by the DS field
 returned by \code{UD_fetch_state()}.}

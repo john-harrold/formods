@@ -16,3 +16,11 @@ Object with factors removed
 Takes an object that is a factor and returns an unfactored
 vector with the same type by the value removed
 }
+\examples{
+
+df = data.frame(
+   text  = c("a", "b", "c"),
+   float = c( 1 ,  2 ,  3 ))
+
+df$float = as.factor(df$float)
+}

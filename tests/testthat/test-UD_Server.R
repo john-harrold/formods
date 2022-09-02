@@ -13,7 +13,7 @@ test_that("UD -- Upload data module", {
 
   # Test data from the package
   df   = readxl::read_excel(
-           path  = system.file(package="formods", "data", "TEST_DATA.xlsx"),
+           path  = system.file(package="formods", "test_data", "TEST_DATA.xlsx"),
            sheet = "DATA")
 
   # Files to hold the test data:

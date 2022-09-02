@@ -1522,7 +1522,7 @@ DW_fetch_state = function(id,                    input,     session,
       original_view[["elements_table"]]  =
         dplyr::mutate( original_view[["elements_table"]],
           cmd = str_replace_all(
-            cmd,
+            .data[["cmd"]],
             paste0("\\b", original_view[["view_ds_object_name"]], "\\b"),
             new_view[["view_ds_object_name"]]))
     }
@@ -2085,7 +2085,7 @@ state}
 #'@export
 #'@title Attach Data Set to DW State
 #'@description Attaches a dataset to the DW state supplied.
-#'@param state DW state module.
+#'@param state DW state from \code{DW_fetch_state()}
 #'@param DS Dataset list object with elements described by the DS field
 #'returned by \code{UD_fetch_state()}.
 #'@return state with data set attached
@@ -2103,10 +2103,9 @@ state}
 #'@export
 #'@title Adding Wrangling Element to Current Data View
 #'@description Adds the wrangling element to the current data view.
-#'@param state DW state module.
+#'@param state DW state from \code{DW_fetch_state()}
 #'@param dwb_res  Output from \code{dwrs_builder()}
 #'@param dwee_res Output from \code{dw_eval_element()}
-#'@param DS Dataset list object with elements described by the DS field
 #'returned by \code{UD_fetch_state()}.
 #'@return state with data set attached
 DW_add_wrangling_element = function(state, dwb_res, dwee_res){

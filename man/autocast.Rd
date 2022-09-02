@@ -17,3 +17,7 @@ Best guess of type casting applied to the ui_input
 \description{
 Takes UI input and tries to figure out if it's numeric or text
 }
+\examples{
+number = autocast('10')
+text   = autocast('ten')
+}

@@ -11,6 +11,7 @@
 "_PACKAGE"
 
 
+#'@import cli
 #'@importFrom digest digest
 
 
@@ -176,6 +177,9 @@ res}
 #'@param ui_input UI input from a shiny form
 #'@param quote_char TRUE will include double quotes in the character string
 #'@return Best guess of type casting applied to the ui_input
+#'@examples
+#' number = autocast('10')
+#' text   = autocast('ten')
 autocast = function(ui_input, quote_char=TRUE){
 
 
@@ -200,6 +204,14 @@ res}
 #'vector with the same type by the value removed
 #'@param fctobj Factorized object
 #'@return Object with factors removed
+#'@examples
+#'
+#' df = data.frame(
+#'    text  = c("a", "b", "c"),
+#'    float = c( 1 ,  2 ,  3 ))
+#'
+#' df$float = as.factor(df$float)
+
 unfactor = function(fctobj){
   res = fctobj
   if(is.factor(fctobj)){
@@ -219,6 +231,8 @@ res}
 #'@param init_value Default value for reading in UI data when it has not been
 #'defined.
 #'@return Boolean result of the comparison
+#' changed_true  = has_changed(ui_val = "a", old_val = "")
+#' changed_false = has_changed(ui_val = "a", old_val = "a")
 has_changed = function(ui_val     = NULL,
                        old_val    = NULL,
                        init_value = c("")){
@@ -240,13 +254,11 @@ res}
 #'triggers are put on hold. This will remove the hold after those UI
 #'components have updated.
 #'@param state module state with all of the current ui elements populated
-#'@param id Shiny module ID
 #'@param session Shiny session variable
 #'@param inputId The input ID of the UI element that was put on hold
 #'@return NULL
 remove_hold = function(state, session, inputId){
 
-  #FM_ID    = state[["SESSION_LOCATION"]]
   FM_ID = paste0("FM_", state[["id"]])
 
   MOD_TYPE = state[["MOD_TYPE"]]
@@ -279,7 +291,7 @@ set_hold = function(state, inputId=NULL){
   MOD_TYPE = state[["MOD_TYPE"]]
   if(is.null(inputId)){
     # here we set the hold for all inputIds in the module
-    if(tmpinputID %in% names(state[[MOD_TYPE]][["ui_hold"]])){
+    for(tmpinputId in names(state[[MOD_TYPE]][["ui_hold"]])){
       state[[MOD_TYPE]][["ui_hold"]][[tmpinputId]] = TRUE
     }
   } else {

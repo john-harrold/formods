@@ -3,3 +3,9 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+.gitignore
+^.github$
+build_custom.R
+^tmp$
+README.RMD
+

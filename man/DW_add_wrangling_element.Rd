@@ -7,13 +7,11 @@
 DW_add_wrangling_element(state, dwb_res, dwee_res)
 }
 \arguments{
-\item{state}{DW state module.}
+\item{state}{DW state from \code{DW_fetch_state()}}
 
 \item{dwb_res}{Output from \code{dwrs_builder()}}
 
-\item{dwee_res}{Output from \code{dw_eval_element()}}
-
-\item{DS}{Dataset list object with elements described by the DS field
+\item{dwee_res}{Output from \code{dw_eval_element()}
 returned by \code{UD_fetch_state()}.}
 }
 \value{

@@ -2,6 +2,7 @@
 #'@import shiny
 #'@importFrom digest digest
 #'@importFrom shinyAce aceEditor updateAceEditor
+#'@importFrom zip unzip zip
 
 
 # JMH

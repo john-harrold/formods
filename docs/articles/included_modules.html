@@ -57,7 +57,14 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
 </form>
 
-      <ul class="navbar-nav"></ul>
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/john-harrold/formods/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 
     
@@ -73,7 +80,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Included Modules</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/john-harrold/formods/blob/HEAD/vignettes/included_modules.Rmd" class="external-link"><code>vignettes/included_modules.Rmd</code></a></small>
       <div class="d-none name"><code>included_modules.Rmd</code></div>
     </div>
 
@@ -87,26 +94,29 @@ stuff last week? From creating data upload forms to generating a UI for
 building ggplot figures there are certain components we all use in our
 apps. The purpose of <code>formods</code> is to create customizable
 Shiny modules to allow many of these components to be created quickly so
-you can focus on the part of the app that is unique and interesting.</p>
+you can focus on the part of the app that is unique and interesting.
+Each of the modules in <code>formods</code> generates code dynamically
+to produce the underlying outputs. This allows modules combined under
+this framework to generate code that allows the state of apps to be
+reproduced as a single script.</p>
 <div class="section level3">
 <h3 id="implementation">Implementation<a class="anchor" aria-label="anchor" href="#implementation"></a>
 </h3>
-<p>Each module will have a server function using a short name for the
-module as a prefix. For example the upload data module would use UD.
-Each module would then have a series of UI elements that you can place
-in your UI description.</p>
-<ul>
-<li>Server</li>
-<li>UI elements</li>
-<li>UI compact</li>
-<li>YAML configuration</li>
-</ul>
+<p>Each module will have a short name that is used with functions and
+namespaces. For example the upload data module would use UD. To use a
+module you need to create the appropriate UI elements as well as call
+the module server. Both the high level <code>formods</code> components
+and the individual modules are configured through YAML configuration
+files.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="avialable-modules">Avialable modules<a class="anchor" aria-label="anchor" href="#avialable-modules"></a>
 </h2>
-<template id="7e5d5a28-3a75-482a-b6c3-94a8cba36bf3"><style>
+<p>The currently available modules are listed in the table below. The SN
+column contains the short name used to identify that module. The
+individual HTML UI elements are listed as well as other UI outputs.</p>
+<template id="435bb396-2d97-4bd0-8633-bf7865cd0478"><style>
 .tabwid table{
   border-spacing:0px !important;
   border-collapse:collapse;
@@ -142,45 +152,45 @@ background-color: transparent;
 }
 </style>
 <div class="tabwid">
-<style>.cl-5ba2f0c8{}.cl-5ba0166e{font-family:'Helvetica';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5ba01678{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-5ba02168{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-5ba02172{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-5ba03ba8{width:44.4pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03ba9{width:1116.4pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bb2{width:130pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bb3{width:328.7pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bb4{width:328.7pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bb5{width:44.4pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bbc{width:1116.4pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bbd{width:130pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bbe{width:130pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bbf{width:328.7pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bc0{width:44.4pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bc6{width:1116.4pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bc7{width:1116.4pt;background-color:transparent;vertical-align: top;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bc8{width:130pt;background-color:transparent;vertical-align: top;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bc9{width:328.7pt;background-color:transparent;vertical-align: top;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bd0{width:44.4pt;background-color:transparent;vertical-align: top;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bd1{width:1116.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bd2{width:130pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bd3{width:328.7pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-5ba03bd4{width:44.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
-<table class="table cl-5ba2f0c8">
+<style>.cl-3c5d8ea2{}.cl-3c5ab182{font-family:'Helvetica';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-3c5ab18c{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-3c5abc18{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-3c5abc22{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-3c5ad7f2{width:44.4pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad7f3{width:1116.4pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad7fc{width:130pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad7fd{width:328.7pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad7fe{width:328.7pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad806{width:44.4pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad807{width:1116.4pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad808{width:130pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad809{width:130pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad810{width:328.7pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad811{width:44.4pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad812{width:1116.4pt;background-color:transparent;vertical-align: top;border-bottom: 0.5pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad813{width:1116.4pt;background-color:transparent;vertical-align: top;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad814{width:130pt;background-color:transparent;vertical-align: top;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad815{width:328.7pt;background-color:transparent;vertical-align: top;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad81a{width:44.4pt;background-color:transparent;vertical-align: top;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad81b{width:1116.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad81c{width:130pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad81d{width:328.7pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c5ad81e{width:44.4pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table class="table cl-3c5d8ea2">
 <thead><tr style="overflow-wrap:break-word;">
-<td class="cl-5ba03bd2"><p class="cl-5ba02168"><span class="cl-5ba0166e">Module</span></p></td>
-<td class="cl-5ba03bd4"><p class="cl-5ba02168"><span class="cl-5ba0166e">SN</span></p></td>
-<td class="cl-5ba03bd1"><p class="cl-5ba02168"><span class="cl-5ba0166e">htmlOutput</span></p></td>
-<td class="cl-5ba03bd3"><p class="cl-5ba02168"><span class="cl-5ba0166e">Other Outputs</span></p></td>
+<td class="cl-3c5ad81c"><p class="cl-3c5abc18"><span class="cl-3c5ab182">Module</span></p></td>
+<td class="cl-3c5ad81e"><p class="cl-3c5abc18"><span class="cl-3c5ab182">SN</span></p></td>
+<td class="cl-3c5ad81b"><p class="cl-3c5abc18"><span class="cl-3c5ab182">htmlOutput</span></p></td>
+<td class="cl-3c5ad81d"><p class="cl-3c5abc18"><span class="cl-3c5ab182">Other Outputs</span></p></td>
 </tr></thead>
 <tbody>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-5ba03bb2"><p class="cl-5ba02172"><span class="cl-5ba01678">App State Mangement</span></p></td>
-<td class="cl-5ba03ba8"><p class="cl-5ba02172"><span class="cl-5ba01678">ASM</span></p></td>
-<td class="cl-5ba03ba9"><p class="cl-5ba02172"><span class="cl-5ba01678">ui_asm_save_name, ui_asm_save_button, ui_asm_load_state</span></p></td>
-<td class="cl-5ba03bb3"><p class="cl-5ba02172"><span class="cl-5ba01678">ui_asm_msg, ui_asm_ace_code</span></p></td>
+<td class="cl-3c5ad7fc"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">App State Mangement</span></p></td>
+<td class="cl-3c5ad7f2"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">ASM</span></p></td>
+<td class="cl-3c5ad7f3"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">ui_asm_save_name, ui_asm_save_button, ui_asm_load_state</span></p></td>
+<td class="cl-3c5ad7fd"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">ui_asm_msg, ui_asm_ace_code</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-5ba03bbd"><p class="cl-5ba02172"><span class="cl-5ba01678">Upload Data</span></p></td>
-<td class="cl-5ba03bb5"><p class="cl-5ba02172"><span class="cl-5ba01678">UD</span></p></td>
-<td class="cl-5ba03bbc"><p class="cl-5ba02172"><span class="cl-5ba01678">ui_ud_load_data, ui_ud_select_sheets, ui_ud_text_load_result, ui_ud_data_preview</span></p></td>
-<td class="cl-5ba03bb4"><p class="cl-5ba02172"><span class="cl-5ba01678">ui_ud_ace_code</span></p></td>
+<td class="cl-3c5ad808"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">Upload Data</span></p></td>
+<td class="cl-3c5ad806"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">UD</span></p></td>
+<td class="cl-3c5ad807"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">ui_ud_load_data, ui_ud_select_sheets, ui_ud_text_load_result, ui_ud_data_preview</span></p></td>
+<td class="cl-3c5ad7fe"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">ui_ud_ace_code</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-5ba03bbe"><p class="cl-5ba02172"><span class="cl-5ba01678">Data Wrangling</span></p></td>
-<td class="cl-5ba03bc0"><p class="cl-5ba02172"><span class="cl-5ba01678">DW</span></p></td>
-<td class="cl-5ba03bc6"><p class="cl-5ba02172"><span class="cl-5ba01678">ui_dw_views, ui_dw_key, ui_dw_new_view, ui_dw_save_view, ui_dw_del_view, ui_dw_copy_view, ui_dw_add_element_button, ui_dw_select, ui_dw_new_element_row</span></p></td>
-<td class="cl-5ba03bbf"><p class="cl-5ba02172"><span class="cl-5ba01678">hot_dw_elements, hot_data_preview, ui_dw_msg, ui_dw_code</span></p></td>
+<td class="cl-3c5ad809"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">Data Wrangling</span></p></td>
+<td class="cl-3c5ad811"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">DW</span></p></td>
+<td class="cl-3c5ad812"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">ui_dw_views, ui_dw_key, ui_dw_new_view, ui_dw_save_view, ui_dw_del_view, ui_dw_copy_view, ui_dw_add_element_button, ui_dw_select, ui_dw_new_element_row</span></p></td>
+<td class="cl-3c5ad810"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">hot_dw_elements, hot_data_preview, ui_dw_msg, ui_dw_code</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-5ba03bc8"><p class="cl-5ba02172"><span class="cl-5ba01678">Figure Generation</span></p></td>
-<td class="cl-5ba03bd0"><p class="cl-5ba02172"><span class="cl-5ba01678">FG</span></p></td>
-<td class="cl-5ba03bc7"><p class="cl-5ba02172"><span class="cl-5ba01678">ui_fg_curr_views, ui_fg_curr_figs, ui_fg_new_fig, ui_fg_save_fig, ui_fg_del_fig, ui_fg_copy_fig, ui_fg_fig_name, ui_fg_fig_notes, ui_fg_add_element_button, ui_fg_select, ui_fg_new_element_row, ui_fg_msg, ui_fg_slider_page</span></p></td>
-<td class="cl-5ba03bc9"><p class="cl-5ba02172"><span class="cl-5ba01678">hot_fg_elements, ui_fg_preview_ggplot, ui_fg_msg, ui_fg_code</span></p></td>
+<td class="cl-3c5ad814"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">Figure Generation</span></p></td>
+<td class="cl-3c5ad81a"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">FG</span></p></td>
+<td class="cl-3c5ad813"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">ui_fg_curr_views, ui_fg_curr_figs, ui_fg_new_fig, ui_fg_save_fig, ui_fg_del_fig, ui_fg_copy_fig, ui_fg_fig_name, ui_fg_fig_notes, ui_fg_add_element_button, ui_fg_select, ui_fg_new_element_row, ui_fg_msg, ui_fg_slider_page</span></p></td>
+<td class="cl-3c5ad815"><p class="cl-3c5abc22"><span class="cl-3c5ab18c">hot_fg_elements, ui_fg_preview_ggplot, ui_fg_msg, ui_fg_code</span></p></td>
 </tr>
 </tbody>
 </table>
-</div></template><div class="flextable-shadow-host" id="d9550ae4-ab8f-42bf-939c-bd1fa3ea0d36"></div>
+</div></template><div class="flextable-shadow-host" id="4dcdf7e5-798e-49ac-9545-db4a24c51411"></div>
 <script>
-var dest = document.getElementById("d9550ae4-ab8f-42bf-939c-bd1fa3ea0d36");
-var template = document.getElementById("7e5d5a28-3a75-482a-b6c3-94a8cba36bf3");
+var dest = document.getElementById("4dcdf7e5-798e-49ac-9545-db4a24c51411");
+var template = document.getElementById("435bb396-2d97-4bd0-8633-bf7865cd0478");
 var caption = template.content.querySelector("caption");
 if(caption) {
   caption.style.cssText = "display:block;text-align:center;";
@@ -191,11 +201,60 @@ if(caption) {
 var fantome = dest.attachShadow({mode: 'open'});
 var templateContent = template.content;
 fantome.appendChild(templateContent);
-</script><pre><code><span><span class="fu">copy.file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"formods.yaml"</span><span class="op">)</span>, <span class="st">"formods.yaml"</span><span class="op">)</span></span>
-<span><span class="fu">copy.file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"DW.yaml"</span><span class="op">)</span>,      <span class="st">"DW.yaml"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">copy.file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"DW_module_components.R"</span><span class="op">)</span>,      <span class="st">"DW_module_components.R"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"DW_module_components.R"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</script><div class="section level3">
+<h3 id="using-a-module">Using a module<a class="anchor" aria-label="anchor" href="#using-a-module"></a>
+</h3>
+<p>Using a module requires two components: You need to add UI elements
+for those in the module, and then you need to add the server component
+as well. Take care to use the same <code>id</code> for both the UI and
+server components. The UI elements are listed in the table above. Also
+each module in <code>formods</code> contains an example App file which
+isolates each UI component to allow you to see how it’s used. This is
+called <code>XX_module_components.R</code>, where <code>XX</code> is the
+module short name. For example to see an example of the upload data
+module you could run the following to copy the file locally:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">copy.file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"UD_module_components.R"</span><span class="op">)</span>,      <span class="st">"UD_module_components.R"</span><span class="op">)</span></span></code></pre></div>
+<p>If you want to run the App from within the package you can just do
+the following:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"UD_module_components.R"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="compact-ui-elements">Compact UI elements<a class="anchor" aria-label="anchor" href="#compact-ui-elements"></a>
+</h4>
+<p>Using the module components script above, you can see whate each UI
+element looks like and how it behaves. This allows you to have granular
+control over the UI elements and their placement. For each module,
+<code>formods</code> provides a single ui output to place all of the
+module UI components together. For the upload data module it looks like
+this:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/htmlOutput.html" class="external-link">htmlOutput</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="st">"UD"</span>, <span class="st">"ui_ud_compact"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>If you copy the <code>FM_compact.R</code> file locally, you can see
+how these are used for each module:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">copy.file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"FM_compact.R"</span><span class="op">)</span>, <span class="st">"FM_compact.R"</span><span class="op">)</span></span></code></pre></div>
+<p>And you can this example and see how the modules interact as
+well:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"FM_compact.R"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="yaml-configuration-files">YAML configuration files<a class="anchor" aria-label="anchor" href="#yaml-configuration-files"></a>
+</h4>
+<p>Both <code>formods</code> and the individual modules are configured
+through YAML files. By default, the modules will use the included
+template YAML files. However, you may want to alter the default
+formatting and text. To do that you simply need to make local copies of
+the files like this:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">copy.file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"formods.yaml"</span><span class="op">)</span>, <span class="st">"formods.yaml"</span><span class="op">)</span></span>
+<span><span class="fu">copy.file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"UD.yaml"</span><span class="op">)</span>, <span class="st">"UD.yaml"</span><span class="op">)</span></span></code></pre></div>
+<p>You can then modify those files. To use them you need to point the
+server functions to those instead of the default templates. The
+following sections describe the current modules and how to use them.</p>
+</div>
+</div>
 <div class="section level3">
 <h3 id="upload-data-ud">Upload Data (UD)<a class="anchor" aria-label="anchor" href="#upload-data-ud"></a>
 </h3>
