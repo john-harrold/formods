@@ -46,7 +46,7 @@ ui <- dashboardPage(
                            width = 100,
                            alt = "formods logo" ),
                          'Formods is a set of modules and an framework for developing modules which interact and create code to replicate analyses performed within an app. To experiment download this',
-                       tags$a("test dataset", href="https://github.com/john-harrold/formods/blob/master/inst/data/TEST_DATA.xlsx?raw=true"),
+                       tags$a("test dataset", href="https://github.com/john-harrold/formods/raw/master/inst/test_data/TEST_DATA.xlsx"),
                               'and upload it into the App using the form on the left.'))
                  )
                )
