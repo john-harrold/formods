@@ -146,8 +146,8 @@ MC:
     # Dimensions of the figure preview
     # Must be numeric
     preview:    
-      width:  1000
-      height: 600
+      width:  800
+      height: 400
     #If you make the slider width = preview it will
     # span the bottom of the figure
     select_fg_page:    

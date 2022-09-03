@@ -103,8 +103,8 @@ MC:
   formatting:
     # dimensions of the table preview in pixels
     preview:    
-      width:  1000
-      height: 600
+      width:  800 
+      height: 400
     # Dimensions of the table with the data wrangling elements
     dw_elements:    
       width:  600
@@ -112,8 +112,8 @@ MC:
     current_key:
       width: 300
     code:
-      width:  500
-      height: 200
+      width:  600
+      height: 300
     # Button sizes from actionBttn (shinyWidgets) 
     # xs,sm, md, lg.
     button_dw_del:
