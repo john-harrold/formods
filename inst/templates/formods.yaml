@@ -3,9 +3,22 @@
 FM: 
   #General code options for the modules
   code: 
-    #theme:           "solarized_light"    
     theme:           "vibrant_ink"    
     showLineNumbers: TRUE
+    # File name of the R script to contain generation code
+    gen_file: formods_export.R
+    # This is the preamble used in script generation. It goes on the
+    # top. Feel free to add to it if you need to.
+    gen_preamble: |-
+      # Formods automated output
+      # https://formods.ubiquity.tools/
+      rm(list=ls())
+      library(ggplot2)
+      library(ggforce)
+      library(readxl)
+      library(readr)
+      library(dplyr)
+      library(tidyr)
     # When generating scripts to reproduce the 
     # app elements you can list the module types
     # in the order they need to be appended. For 
@@ -13,13 +26,14 @@ FM:
     # before the data wrangling (DW) modules. The 
     # text that follows will be placed before the
     # module code
-    generation:
+    gen_mods:  
       UD: |-
-        "# Loading data"
+         # Loading data
       DW: |-
-        "# Wrangling data"
+         # Wrangling data
       FG: |-
-        "# Generating figures"
+         # Generating figures
+
   ui:
     # See ?actionBttn for styles
     button_style: "fill"

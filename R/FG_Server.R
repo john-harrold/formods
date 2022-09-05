@@ -70,7 +70,7 @@ FG_Server <- function(id,
           width  = state[["MC"]][["formatting"]][["fg_elements"]][["width"]],
           height = state[["MC"]][["formatting"]][["fg_elements"]][["height"]],
           rowHeaders = NULL
-        ) |> 
+        ) |>
           hot_cols(renderer = "
                function (instance, td, row, col, prop, value, cellProperties) {
                Handsontable.renderers.TextRenderer.apply(this, arguments);
@@ -83,15 +83,15 @@ FG_Server <- function(id,
                td.style.background = 'lightorange'}
 
               return td;
-               }") |> 
+               }") |>
           hot_col(col = "Delete",
                   renderer = "
                function(instance, td, row, col, prop, value, cellProperties) {
                  Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
                  return td;
-               }") |> 
-          hot_col("Element" ,      readOnly = TRUE) |> 
-          hot_col("Description" , readOnly = TRUE) |> 
+               }") |>
+          hot_col("Element" ,      readOnly = TRUE) |>
+          hot_col("Description" , readOnly = TRUE) |>
           hot_col("Status" ,      readOnly = TRUE)
 
         uiele = hot
@@ -1613,9 +1613,6 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_st
   state[["FG"]][["current_fig"]]   = NULL
   state[["FG"]][["aes_elements"]]  = aes_elements
 
-
-
-
   FM_le(state, "State initialized")
 
   if(isgood){
@@ -2268,7 +2265,7 @@ state}
 
 #'@export
 #'@title Extracts Specific Page from Paginated Figure
-#'@description Used to extract the specified page from the current figure. 
+#'@description Used to extract the specified page from the current figure.
 #'@param state FG state from \code{FG_fetch_state()}
 #'@param page  Page number to extract
 #'@return state with checksum updated.
@@ -2283,7 +2280,7 @@ FG_extract_page  = function(state, page){
   # Creating the named figure object locally
   assign(current_fig[["fg_object_name"]], fobj)
 
-  facet_row = current_fig[["elements_table"]] |> 
+  facet_row = current_fig[["elements_table"]] |>
     dplyr::filter(.data[["Element"]] =="facet")
 
   if(nrow(facet_row > 0)){
@@ -2305,3 +2302,22 @@ FG_extract_page  = function(state, page){
   }
 
 fobj}
+
+#'@export
+#'@title Fetch Module Code
+#'@description Fetches the code to generate results seen in the app
+#'@param state UD state from \code{FG_fetch_state()}
+#'@return Character object vector with the lines of code
+FG_fetch_code = function(state){
+  if(state[["FG"]][["isgood"]]){
+    figs_code = c()
+    for(fid in names(state[["FG"]][["figs"]])){
+      figs_code = c(figs_code,
+                    paste0("# ", state[["FG"]][["figs"]][[fid]][["key"]]),
+                    state[["FG"]][["figs"]][[fid]][["code_fg_only"]])
+    }
+    code = paste(figs_code, collapse="\n")
+  } else {
+    code = NULL
+  }
+code}

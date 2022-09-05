@@ -1,10 +1,11 @@
 ---
 title: "Included Modules"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Included Modules}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output: html_document
+# output: rmarkdown::html_vignette
+# vignette: >
+#   %\VignetteIndexEntry{Included Modules}
+#   %\VignetteEngine{knitr::rmarkdown}
+#   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -57,7 +58,7 @@ ft
 Using a module requires two components: You need to add UI elements for those in the module, and then you need to add the server component as well. Take care to use the same `id` for both the UI and server components. The UI elements are listed in the table above. Also each module in `formods` contains an example App file which isolates each UI component to allow you to see how it's used. This is called `XX_module_components.R`, where `XX` is the module short name. For example to see an example of the upload data module you could run the following to copy the file locally:
 
 ``` r
-copy.file(system.file(package="formods", "templates", "UD_module_components.R"),      "UD_module_components.R")
+copy.file(system.file(package="formods", "templates", "UD_module_components.R"), "UD_module_components.R")
 ``` 
 
 If you want to run the App from within the package you can just do the following:
@@ -80,10 +81,25 @@ If you copy the `FM_compact.R` file locally, you can see how these are used for 
 copy.file(system.file(package="formods", "templates", "FM_compact.R"), "FM_compact.R")
 ```
 
-And you can this example and see how the modules interact as well:
+And you can run this example and see how the modules interact as well:
 
 ``` r
 runApp(system.file(package="formods", "templates", "FM_compact.R"))
+```
+
+### Server functions
+
+Each module has a server function that uses the shortname followed by an underscore as the prefix. For example the server function named using the convention: `XX_Server()`. Where `XX` is the module short name. For example the server function for the upload data module is `UD_Server()`. At a minimum the server will take the module ID, a configuration file for the formods package, the module configuration file, and reactive object called `react_state`. The `react_state` object is used to link reactions between the modules.
+
+Again the the different `XX_module_components.R` files shows how to use the server functions for each module. Briefly, using the UD module as an example you would do the following in your app `server` function:
+
+```r
+server <- function(input, output, session) {
+  react_FM = reactiveValues()
+
+  # Module server
+  UD_Server(id="UD", react_state=react_FM)
+}
 ```
 
 ### YAML configuration files
@@ -98,42 +114,18 @@ copy.file(system.file(package="formods", "templates", "UD.yaml"), "UD.yaml")
 
 You can then modify those files. To use them you need to point the server functions to those instead of the default templates. The following sections describe the current modules and how to use them. 
 
+## App State Management (ASM)
+
+The ASM module is used to manage the app state. This allows the user to save the current app state and load it at a later time.
+
 ## Upload Data (UD)
+
+The UD module allows users to upload data files into the App. It will allow you to specify file types and for Excel files the sheet to be used.
 
 ## Data Wrangling (DW)
 
+The DW module provides an interface to `dplyr` and `tidyr`.These are used to create chains of data wrangling commands that the user can build to transform the data creating **data views**. The DW module can use data from the UD module, or can take in a list with a dataset.
+
 ## Figure Generation (FG)
 
-## App State Management (ASM)
-
-# Module interaction
-
-Say you are using the Upload Data module to feed data into the Data Wrangling module and the user goes back to the upload form and uploads a different data set. This will need to trigger a reset of the Data Wrangling module as well as tell your larger app that something has changed. 
-
-## Module state and reacting to changes
-
- `react_state[[id_UD]][["DS"]][["checksum"]]`
-
-* `isgood` A boolean variable to indicate the general state of the module. 
-* `checksum` A checksum that can be used to detect changes in this module. For
-  example in the UD module this will change if the uploaded file or the sheet
-  selected from a currently uploaded file changes. 
-* `code_previous` Carries over the code from other modules the current one
-  depends on. For ecample the DW module would depend on the UD model to load
-  the data. So `code_previous` here would contain the code to load the
-  dataset.
-* `code` Code to repelicate the current state of the module. 
-
-## Configuration file
-```{css, echo=FALSE}
-.scroll-100 {
-  max-height: 100px;
-  overflow-y: auto;
-  background-color: inherit;
-}
-```
-
-
-```{r echo=FALSE, comment='', message=TRUE, eval=TRUE, class.output="scroll-100"}
-cat(readLines(file.path(system.file(package="formods"), "templates", "formods.yaml")) , sep="\n")
-```
+The FG module provides an interface to `ggplot` and allows the user to select from both the original data set from the UD module as well as the data views created in the DW module. The user here can create multiple figures.

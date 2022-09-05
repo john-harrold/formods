@@ -31,9 +31,9 @@ ASM_Server <- function(id,
     #------------------------------------
     # Create ui outputs here:
     output$ui_asm_save_name  = renderUI({
-      state = ASM_fetch_state(id           = id, 
-                              input        = input, 
-                              session      = session, 
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -47,9 +47,9 @@ ASM_Server <- function(id,
       uiele})
     #------------------------------------
     output$ui_asm_save_button  = renderUI({
-      state = ASM_fetch_state(id           = id, 
-                              input        = input, 
-                              session      = session, 
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -71,7 +71,7 @@ ASM_Server <- function(id,
            tags$br(),
            htmlOutput(NS("ASM", "ui_asm_load_state")),
            verbatimTextOutput(NS("ASM", "ui_asm_msg"))
-      ) 
+      )
 
       uiele})
     #------------------------------------
@@ -79,18 +79,18 @@ ASM_Server <- function(id,
     output$button_state_save   = downloadHandler(
 
       filename = function() {
-        state = ASM_fetch_state(id           = id, 
-                                input        = input, 
-                                session      = session, 
+        state = ASM_fetch_state(id           = id,
+                                input        = input,
+                                session      = session,
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
         dlfn = ASM_fetch_dlfn(state)
         FM_le(state, paste0("pushing app state download: ", dlfn))
         dlfn},
       content = function(file) {
-        state = ASM_fetch_state(id           = id, 
-                                input        = input, 
-                                session      = session, 
+        state = ASM_fetch_state(id           = id,
+                                input        = input,
+                                session      = session,
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
         ASM_write_state(state, session, file)
@@ -99,9 +99,9 @@ ASM_Server <- function(id,
     #------------------------------------
     # Upload State
     output$ui_asm_load_state = renderUI({
-      state = ASM_fetch_state(id           = id, 
-                              input        = input, 
-                              session      = session, 
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -118,9 +118,9 @@ ASM_Server <- function(id,
     output$ui_asm_msg = renderText({
       input[["button_state_save"]]
       input[["input_load_state"]]
-      state = ASM_fetch_state(id           = id, 
-                              input        = input, 
-                              session      = session, 
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -134,9 +134,9 @@ ASM_Server <- function(id,
  #    # Reacting to file changes
  #    input$input_load_state
  #    input$input_select_sheet
- #    state = ASM_fetch_state(id           = id, 
- #                            input        = input, 
- #                            session      = session, 
+ #    state = ASM_fetch_state(id           = id,
+ #                            input        = input,
+ #                            session      = session,
  #                            FM_yaml_file = FM_yaml_file,
  #                            MOD_yaml_file = MOD_yaml_file)
  #
@@ -168,12 +168,12 @@ ASM_Server <- function(id,
       })
       # This updates the reaction state:
       observeEvent(toListen(), {
-        state = ASM_fetch_state(id           = id, 
-                                input        = input, 
-                                session      = session, 
+        state = ASM_fetch_state(id           = id,
+                                input        = input,
+                                session      = session,
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
-        
+
         FM_le(state, "reaction state updated")
         react_state[[id]] = state
       })
@@ -378,6 +378,22 @@ ASM_write_state = function(state, session, file){
   # Pulling out the app state
   app_state = FM_fetch_app_state(session)
 
+  # Pulling out the reproducable app code
+  app_code = FM_fetch_app_code(session)
+
+  if(app_code[["isgood"]]){
+    # Writing app_code to the export script
+    gen_file = state[["yaml"]][["FM"]][["code"]][["gen_file"]]
+    if(file.exists(file.path(user_dir, gen_file))){
+      unlink(file.path(user_dir, gen_file))
+    }
+    write(app_code[["code"]], file=file.path(user_dir, gen_file), append=FALSE)
+  } else {
+    if(!is.null(app_code[["msgs"]])){
+      FM_le(state, app_code[["msgs"]])
+    }
+  }
+
   # Writing the app state object to a file:
   saveRDS(app_state, file.path(user_dir, "fmas.rds"))
 
@@ -390,4 +406,14 @@ ASM_write_state = function(state, session, file){
   FM_le(state, "done writing app state")
   NULL}
 
+#'@export
+#'@title Fetch Module Code
+#'@description Fetches the code to generate results seen in the app
+#'@param state ASM state from \code{ASM_fetch_state()}
+#'@return NULL the ASM module does not generate code
+ASM_fetch_code = function(state){
+
+  code = NULL
+
+code}
 

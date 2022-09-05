@@ -220,5 +220,15 @@ ZZ_init_state = function(yaml_file, yaml_section, id){
     ui_hold         = ui_hold)
 
   FM_le(state, "State initialized")
-  state}
+state}
 
+#'@export
+#'@title Fetch Module Code 
+#'@description Fetches the code to generate results seen in the app
+#'@param state ZZ state from \code{ZZ_fetch_state()}
+#'@return Character object vector with the lines of code
+ZZ_fetch_code = function(state){
+
+  code = NULL
+
+code}

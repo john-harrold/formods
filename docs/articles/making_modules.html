@@ -88,15 +88,74 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
+<p>This vignette will provide an overview of the formods framework for
+creating reproducable modules that interact with each other. Each module
+has its own namespace that is mantained by using a module short name as
+a prefix for functions. For example the figure generation module uses
+<code>FG</code>. If you want to create a module, please submit an issue
+at the <a href="https://github.com/john-harrold/formods/issues" class="external-link">formods
+github repository</a> with the following information:</p>
+<ul>
+<li>The short name you intend to use</li>
+<li>A brief description of the module</li>
+<li>A list of modules it depends on</li>
+</ul>
 <div class="section level3">
-<h3 id="formods-framework">formods framework<a class="anchor" aria-label="anchor" href="#formods-framework"></a>
+<h3 id="current-modules">Current modules<a class="anchor" aria-label="anchor" href="#current-modules"></a>
 </h3>
+<ul>
+<li>ASM - <a href="https://formods.ubiquity.tools" class="external-link">App State
+Management</a>
+</li>
+<li>DW - <a href="https://formods.ubiquity.tools" class="external-link">Data
+Wrangling</a>
+</li>
+<li>FG - <a href="https://formods.ubiquity.tools" class="external-link">Figure
+Generation</a>
+</li>
+<li>FM - <a href="https://formods.ubiquity.tools" class="external-link">Formods</a>
+</li>
+<li>UD - <a href="https://formods.ubiquity.tools" class="external-link">Upload Data</a>
+</li>
+</ul>
+<p>The current modules are in development:</p>
+<ul>
+<li>NCA - <a href="https://github.com/john-harrold/ruminate" class="external-link">Non-Compartmental
+Analysis</a>
+</li>
+</ul>
+</div>
+</div>
+<div class="section level2">
+<h2 id="formods-framework">formods framework<a class="anchor" aria-label="anchor" href="#formods-framework"></a>
+</h2>
+<p>To get started you can make a copy of some example files:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">copy.file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"ZZ_module_components.R"</span><span class="op">)</span>, <span class="st">"ZZ_module_components.R"</span><span class="op">)</span></span>
+<span><span class="fu">copy.file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"ZZ_Server.R"</span><span class="op">)</span>, <span class="st">"ZZ_Server.R"</span><span class="op">)</span></span>
+<span><span class="fu">copy.file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"ZZ.yaml"</span><span class="op">)</span>, <span class="st">"ZZ.yaml"</span><span class="op">)</span></span></code></pre></div>
+<ul>
+<li>
+<code>ZZ_module_components.R</code> - An app that can be used for
+testing the module and highlighting the different UI elements that are
+used within the module.</li>
+<li>
+<code>ZZ_Server.R</code>: A bare bones file containing the expected
+functions and their minimal inputs.</li>
+<li>
+<code>ZZ.yaml</code>: This module configuration file contains the
+the minimal elements expected, but you can add your own fields to suit
+your modules needs.</li>
+</ul>
+<p>You can rename the <code>ZZ</code> portion of the files with the
+module short name you’re using. The <code>ZZ_Server.R</code> would go in
+the <code>R</code> directory in your package and the other two files
+would go into <code>inst/templates</code>.</p>
 <p>state fields</p>
 <ul>
 <li><code>yaml</code></li>
 <li><code>MC</code></li>
 </ul>
-</div>
 </div>
 <div class="section level2">
 <h2 id="expected-functions">Expected functions<a class="anchor" aria-label="anchor" href="#expected-functions"></a>
@@ -106,13 +165,33 @@
 <code>ZZ_Server</code><br>
 </li>
 <li>
+<code>ZZ_init_state</code><br>
+</li>
+<li>
 <code>ZZ_fetch_state</code><br>
 </li>
-<li><code>ZZ_init_state</code></li>
+<li>
+<code>ZZ_fetch_code</code> This takes as it’s first argument the
+module state. When called with only this argument it should return a
+character object containing all of the code needed to generate the
+elements of this module represented in the app. You can assume that any
+modules this one depends on will be defined previously. For example the
+<code>FG</code> module will return only that code associated with
+generating figures. It will be appended to the code from the
+<code>UD</code> and <code>DW</code> modules that define loading the
+dataset and creation of the data views. For modules where no code is
+generated (e.g. <code>ASM</code>) just return <code>NULL</code>.</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="formods-helper-functions">{formods} helper functions<a class="anchor" aria-label="anchor" href="#formods-helper-functions"></a>
+<h2 id="expected-ui-elements">Expected UI elements<a class="anchor" aria-label="anchor" href="#expected-ui-elements"></a>
+</h2>
+<ul>
+<li><code>ui_zz_compact</code></li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="helper-functions-in-formods">Helper functions in formods<a class="anchor" aria-label="anchor" href="#helper-functions-in-formods"></a>
 </h2>
 <ul>
 <li><code><a href="../reference/FM_le.html">FM_le()</a></code></li>
@@ -126,6 +205,52 @@
 <li><code><a href="../reference/FM_fetch_mod_state.html">FM_fetch_mod_state()</a></code></li>
 <li><code><a href="../reference/FM_set_ui_msg.html">FM_set_ui_msg()</a></code></li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="module-interaction">Module interaction<a class="anchor" aria-label="anchor" href="#module-interaction"></a>
+</h2>
+<p>Say you are using the UD module to feed data into the DW module and
+the user goes back to the upload form and uploads a different data set.
+This will need to trigger a reset of the Data Wrangling module as well
+as tell your larger app that something has changed.</p>
+<div class="section level3">
+<h3 id="module-state-and-reacting-to-changes">Module state and reacting to changes<a class="anchor" aria-label="anchor" href="#module-state-and-reacting-to-changes"></a>
+</h3>
+<p><code>react_state[[id_UD]][["DS"]][["checksum"]]</code></p>
+<ul>
+<li>
+<code>isgood</code> A boolean variable to indicate the general state
+of the module.</li>
+<li>
+<code>checksum</code> A checksum that can be used to detect changes
+in this module. For example in the UD module this will change if the
+uploaded file or the sheet selected from a currently uploaded file
+changes.</li>
+<li>
+<code>code_previous</code> Carries over the code from other modules
+the current one depends on. For ecample the DW module would depend on
+the UD model to load the data. So <code>code_previous</code> here would
+contain the code to load the dataset.</li>
+<li>
+<code>code</code> Code to repelicate the current state of the
+module.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="configuration-file">Configuration file<a class="anchor" aria-label="anchor" href="#configuration-file"></a>
+</h3>
+<style type="text/css">
+.scroll-100 {
+  max-height: 100px;
+  overflow-y: auto;
+  background-color: inherit;
+}
+</style>
+</div>
+</div>
+<div class="section level2">
+<h2 class="tabset" id="yaml-configuration-files">YAML configuration files<a class="anchor" aria-label="anchor" href="#yaml-configuration-files"></a>
+</h2>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

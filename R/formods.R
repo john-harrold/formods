@@ -340,8 +340,82 @@ fetch_hold = function(state, inputId=NULL){
 
 hold_status}
 
+#'@export
+#'@title Fetches the code to reproduce analysis
+#'@description Takes the current state of the app and builds a script to
+#'reproduce the analysis within the app.
+#'@return list with the following elements:
+#' \itemize{
+#'   \item{isgood:} Boolean indicating the whether code generation was
+#'   successful
+#'   (\code{TRUE})
+#' \item{msgs:} Any messages generated
+#' \item{code:} Code to regenerate the app
+#' }
+FM_fetch_app_code = function(session){
+  isgood = TRUE
+  msgs   = c()
+  code   = ""
+  code_chunks = c()
+
+  app_state = FM_fetch_app_state(session)
+
+  if(length(names(app_state))>0){
+    # Pulling out the generation options from the first app state
+    state_key = names(app_state)[1]
+    state = app_state[[state_key]]
+
+    mods_found = list()
+
+    # We start with the preamble
+    code_chunks = c(state[["yaml"]][["FM"]][["code"]][["gen_preamble"]], "\n")
+
+    # This contains the modules that should generate code in the order in which the should be generated
+    gen_mods = state[["yaml"]][["FM"]][["code"]][["gen_mods"]]
+    # Now we walk through each module type
+    for(gen_mod in names(gen_mods)){
+      # Then we walk through each state key and pull the code
+      # if it matchs the value in gen_mod
+      for(state_key in names(app_state)){
+        tmp_state = app_state[[state_key]]
+        MOD_TYPE  = tmp_state[["MOD_TYPE"]]
+        if(MOD_TYPE == gen_mod){
+
+          MOD_FUNC  = paste0(MOD_TYPE, "_fetch_code")
+          # We make sure the code generation function exists
+          # and if it does we generate the code for that module
+          if(exists(MOD_FUNC, mode="function")){
+            tmp_code  = NULL
+            FUNC_CALL = paste0("tmp_code = ", MOD_FUNC,"(tmp_state)")
 
 
+            eval(parse(text=FUNC_CALL))
+
+            if(!is.null(tmp_code)){
+              # This adds a header the first time a module type is encountered
+              if(!(MOD_TYPE %in% names(mods_found))){
+                code_chunks = c(code_chunks,  gen_mods[[gen_mod]])
+                mods_found[[MOD_TYPE]] = TRUE
+              }
+              code_chunks = c(code_chunks, tmp_code, "\n")
+            }
+          } else {
+            msgs = c(msgs, paste0("Unable to find code fetching function: ", MOD_FUNC, "() for module type: ", MOD_TYPE))
+          }
+        }
+      }
+    }
+  } else {
+    isgood = FALSE
+    msgs   = "No modules found"
+  }
+
+  code = paste(code_chunks, collapse="\n")
+
+  res = list(isgood = isgood,
+             msgs   = msgs,
+             code   = code)
+res}
 
 #'@export
 #'@title Fetches the path to the log file
@@ -521,7 +595,7 @@ p_res}
 #                         id_DW           = "DW",
 #                         id_FG           = "FG",
 #                         react_state){
-# 
+#
 #   #---------------------------------------------
 #   # UD module:
 #   # This creates an empyt module state:
@@ -537,7 +611,7 @@ p_res}
 #   data_file_ext    = tools::file_ext(data_file)
 #   sheet            = "DATA"
 #   sheets           = readxl::excel_sheets(data_file_local)
-# 
+#
 #   # Reading the contents and generating the read code:
 #   read_res = UD_ds_read(
 #     state           = state_UD,
@@ -546,10 +620,10 @@ p_res}
 #     data_file_local = data_file_local,
 #     sheets          = sheets,
 #     sheet           = sheet)
-# 
+#
 #   contents         = read_res[["contents"]]
 #   code             = read_res[["code"]]
-# 
+#
 #   state_UD = UD_attach_ds(
 #             state_UD,
 #             data_file_local = data_file_local,
@@ -560,7 +634,7 @@ p_res}
 #             code            = code           ,
 #             contents        = contents       ,
 #             isgood          = TRUE)
-# 
+#
 #   # Saving the state to the session
 #   FM_set_mod_state(session, id=id_UD, state_UD)
 #   #---------------------------------------------
@@ -573,33 +647,33 @@ p_res}
 #                          yaml_section = yaml_section_DW,
 #                          id_UD        = id_UD,
 #                          react_state  = react_state)
-# 
-# 
+#
+#
 #   # Attachign a dataset to the DW module
 #   state_DW = DW_attach_ds(state_DW, state_UD[["UD"]])
-# 
+#
 #   #----All data----------------------
 #   # Creating a new dataset view
 #   state_DW = DW_new_view(state_DW, id_UD, react_state)
-# 
+#
 #   # Changing the key:
 #   current_view          = DW_fetch_current_view(state_DW)
 #   current_view[["key"]] = "All Observations"
 #   state_DW = DW_set_current_view(state_DW, current_view)
-# 
+#
 #   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
 #   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
 #   state_DW[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
 #   state_DW[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
-# 
+#
 #   # Building the wrangling statement
 #   dwb_res = dwrs_builder(state_DW)
-# 
+#
 #   # evaluating it
 #   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
 #   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-# 
-# 
+#
+#
 #   #----Only SC----------------------
 #   # Creating a new dataset view
 #   state_DW = DW_new_view(state_DW, id_UD, react_state)
@@ -607,7 +681,7 @@ p_res}
 #   current_view          = DW_fetch_current_view(state_DW)
 #   current_view[["key"]] = "SC Only"
 #   state_DW = DW_set_current_view(state_DW, current_view)
-# 
+#
 #   # Observations only
 #   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
 #   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
@@ -616,7 +690,7 @@ p_res}
 #   dwb_res = dwrs_builder(state_DW)
 #   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
 #   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-# 
+#
 #   # Now just the SC data
 #   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
 #   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "ROUTE"
@@ -625,10 +699,10 @@ p_res}
 #   dwb_res = dwrs_builder(state_DW)
 #   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
 #   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-# 
+#
 #   # Saving the state
 #   FM_set_mod_state(session, id=id_DW, state_DW)
-# 
+#
 #   #----First Dose IV 10 mg----------------------
 #   # Creating a new dataset view
 #   state_DW = DW_new_view(state_DW, id_UD, react_state)
@@ -636,7 +710,7 @@ p_res}
 #   current_view          = DW_fetch_current_view(state_DW)
 #   current_view[["key"]] = "10 mg, IV first dose"
 #   state_DW = DW_set_current_view(state_DW, current_view)
-# 
+#
 #   # Observations only
 #   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
 #   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
@@ -645,7 +719,7 @@ p_res}
 #   dwb_res = dwrs_builder(state_DW)
 #   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
 #   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-# 
+#
 #   # 10 mg
 #   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
 #   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DOSE"
@@ -654,7 +728,7 @@ p_res}
 #   dwb_res = dwrs_builder(state_DW)
 #   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
 #   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-# 
+#
 #   # First dose
 #   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
 #   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DOSE_NUM"
@@ -663,7 +737,7 @@ p_res}
 #   dwb_res = dwrs_builder(state_DW)
 #   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
 #   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-# 
+#
 #   # Now just the IV data
 #   state_DW[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
 #   state_DW[["DW"]][["ui"]][["select_fds_filter_column"]]   = "ROUTE"
@@ -672,15 +746,15 @@ p_res}
 #   dwb_res = dwrs_builder(state_DW)
 #   dwee_res = dw_eval_element(state_DW, dwb_res[["cmd"]])
 #   state_DW = DW_add_wrangling_element(state_DW, dwb_res, dwee_res)
-# 
+#
 #   # Saving the state
 #   FM_set_mod_state(session, id=id_DW, state_DW)
-# 
-# 
+#
+#
 #   #---------------------------------------------
 #   # FG module:
 #   #---------------------------------------------
-# 
+#
 # NULL}
 
 
@@ -736,8 +810,25 @@ FM_set_app_state <- function(session, app_state, set_holds = TRUE){
     }
   }
 
+
+  # Replacing the configuration files:
+  # JMH before this is implemented the portion of the FG_init_state
+  # where changes are made to "MC" needs to be fixed.
+  #browser()
+  #if(length(names(app_state))>0){
+  #  for(state_key in names(app_state)){
+  #    tmp_state = app_state[[state_key]]
+  #    MOD_TYPE       = tmp_state[["MOD_TYPE"]]
+  #    FM_yaml_file   = tmp_state[["FM_yaml_file"]]
+  #    MOD_yaml_file  = tmp_state[["MOD_yaml_file"]]
+  #    app_state[[state_key]][["MC"]] =
+  #  }
+  #}
+
+
   # Replacing the app state in session:
   session$userData[["FM"]] = app_state
+
 
 NULL}
 
@@ -836,7 +927,7 @@ state}
 #'@export
 #'@title Fetches Details About Current Modules
 #'@description Use this to get information about the currently supported
-#'modules. This includes short names, UI elements, 
+#'modules. This includes short names, UI elements,
 #'@return list with details about the currently supported modules.
 FM_fetch_current_mods = function(){
 
@@ -846,7 +937,7 @@ FM_fetch_current_mods = function(){
   res[["mods"]][["ASM"]] = list(
     Name       = "App State Mangement",
     Short_Name = "ASM",
-    UI         = 
+    UI         =
       list(htmlOutput=c("ui_asm_save_name",
                         "ui_asm_save_button",
                         "ui_asm_load_state"),
@@ -856,17 +947,17 @@ FM_fetch_current_mods = function(){
   res[["mods"]][["UD"]] = list(
     Name       = "Upload Data",
     Short_Name = "UD",
-    UI         = 
-      list(htmlOutput=c("ui_ud_load_data", 
-                        "ui_ud_select_sheets", 
-                        "ui_ud_text_load_result", 
+    UI         =
+      list(htmlOutput=c("ui_ud_load_data",
+                        "ui_ud_select_sheets",
+                        "ui_ud_text_load_result",
                         "ui_ud_data_preview"),
             other=c("ui_ud_ace_code"))
   )
   res[["mods"]][["DW"]] = list(
-    Name       = "Data Wrangling", 
+    Name       = "Data Wrangling",
     Short_Name = "DW",
-    UI         = 
+    UI         =
       list(htmlOutput=c("ui_dw_views",
                         "ui_dw_key",
                         "ui_dw_new_view",
@@ -885,7 +976,7 @@ FM_fetch_current_mods = function(){
   res[["mods"]][["FG"]] = list(
     Name       = "Figure Generation",
     Short_Name = "FG",
-    UI         = 
+    UI         =
       list(htmlOutput=c("ui_fg_curr_views",
                         "ui_fg_curr_figs",
                         "ui_fg_new_fig",
@@ -895,7 +986,7 @@ FM_fetch_current_mods = function(){
                         "ui_fg_fig_name",
                         "ui_fg_fig_notes",
                         "ui_fg_add_element_button",
-                        "ui_fg_select", 
+                        "ui_fg_select",
                         "ui_fg_new_element_row",
                         "ui_fg_msg",
                         "ui_fg_slider_page"
@@ -907,7 +998,7 @@ FM_fetch_current_mods = function(){
   )
 
   for(mn in names(res[["mods"]])){
-    res[["df"]] = 
+    res[["df"]] =
       rbind(res[["df"]],
       data.frame(
       Module               = res[["mods"]][[mn]][["Name"]],

@@ -546,3 +546,19 @@ UD_ds_read = function(state,
 
 res}
 
+
+#'@export
+#'@title Fetch Module Code
+#'@description Fetches the code to generate results seen in the app
+#'@param state UD state from \code{UD_fetch_state()}
+#'@return Character object vector with the lines of code
+UD_fetch_code = function(state){
+
+  # If the contents are NULL then nothing has been uploaded and we return NULL
+  if(is.null(state[["UD"]][["contents"]])){
+    code = NULL
+  } else {
+    code = state[["UD"]][["code"]]
+  }
+
+code}

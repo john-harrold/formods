@@ -90,7 +90,7 @@ DW_Server <- function(id,
             width  = state[["MC"]][["formatting"]][["dw_elements"]][["width"]],
             height = state[["MC"]][["formatting"]][["dw_elements"]][["height"]],
             rowHeaders = NULL
-          ) |> 
+          ) |>
             hot_cols(renderer = "
                  function (instance, td, row, col, prop, value, cellProperties) {
                  Handsontable.renderers.TextRenderer.apply(this, arguments);
@@ -103,15 +103,15 @@ DW_Server <- function(id,
                  td.style.background = 'lightorange'}
 
                 return td;
-                 }") |> 
+                 }") |>
             hot_col(col = "Delete",
                     renderer = "
                  function(instance, td, row, col, prop, value, cellProperties) {
                    Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
                    return td;
-                 }") |> 
-            hot_col("Action" ,      readOnly = TRUE) |> 
-            hot_col("Description" , readOnly = TRUE) |> 
+                 }") |>
+            hot_col("Action" ,      readOnly = TRUE) |>
+            hot_col("Description" , readOnly = TRUE) |>
             hot_col("Status" ,      readOnly = TRUE)
 
           uiele = hot
@@ -479,7 +479,7 @@ DW_Server <- function(id,
                 label    = NULL,
                 width    = 200,
                 choices  = dscols,
-                multiple = FALSE, 
+                multiple = FALSE,
                 options  = list(
                   title = state[["MC"]][["labels"]][["fds_wider_names"]])
               ),
@@ -488,7 +488,7 @@ DW_Server <- function(id,
                 label    = NULL,
                 width    = 200,
                 choices  = dscols,
-                multiple = FALSE, 
+                multiple = FALSE,
                 options  = list(
                   title = state[["MC"]][["labels"]][["fds_wider_values"]])
               )
@@ -529,14 +529,14 @@ DW_Server <- function(id,
               textInput(
                 inputId     = NS(id, "select_fds_longer_names"),
                 label       = NULL,
-                width       = 200, 
+                width       = 200,
                 value       = "names",
                 placeholder = state[["MC"]][["labels"]][["fds_longer_names"]]
               ),
               textInput(
                 inputId     = NS(id, "select_fds_longer_values"),
                 label       = NULL,
-                width       = 200, 
+                width       = 200,
                 value       = "values",
                 placeholder = state[["MC"]][["labels"]][["fds_longer_values"]]
               )
@@ -2126,3 +2126,26 @@ DW_add_wrangling_element = function(state, dwb_res, dwee_res){
 
 state}
 
+#'@export
+#'@title Fetch Module Code
+#'@description Fetches the code to generate results seen in the app
+#'@param state DW state from \code{DW_fetch_state()}
+#'@return Character object vector with the lines of code
+#'and isgood)
+DW_fetch_code = function(state){
+
+  # If the UD contents is NULL we return NULL otherwise we return the code
+  if(is.null(state[["DW"]][["UD"]][["contents"]])){
+    code = NULL
+  } else {
+    codes = c()
+    # code = state[[""]][["code"]]
+    for(view_id in names(state[["DW"]][["views"]])){
+      codes=c(codes,
+              paste0("# ", state[["DW"]][["views"]][[view_id]][["key"]]),
+              state[["DW"]][["views"]][[view_id]][["code_previous"]],
+              state[["DW"]][["views"]][[view_id]][["code_dw_only"]])
+    }
+    code = paste(codes, collapse="\n")
+  }
+code}
