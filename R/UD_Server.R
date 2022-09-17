@@ -186,12 +186,10 @@ UD_Server <- function(id,
            height  = state[["MC"]][["formatting"]][["code"]][["height"]]
            ))
         uiele_code_button = tagList(
-         tags$br(),
-         tags$br(),
          shinyWidgets::dropdownButton(
            uiele_code,
            inline  = FALSE,
-           right   = TRUE,
+           right   = FALSE,
            size    = "sm",
            circle  = FALSE,
            width   = state[["MC"]][["formatting"]][["code"]][["width"]],
@@ -510,12 +508,12 @@ UD_ds_read = function(state,
   # Reading in the file contents:
   if(data_file_ext %in% c("csv")){
     contents = readr::read_csv(file=data_file_local)
-    code     = paste0(object_name, ' = readr::read_csv(file="',data_file,'")\n')
+    code     = paste0(object_name, ' = readr::read_csv(file="',data_file,'")')
     isgood   = TRUE
   }
   if(data_file_ext %in% c("tsv")){
     contents = readr::read_tsv(file=data_file_local)
-    code     = paste0(object_name, ' = readr::read_tsv(file="',data_file,'")\n')
+    code     = paste0(object_name, ' = readr::read_tsv(file="',data_file,'")')
     isgood   = TRUE
   }
   if(data_file_ext %in% c("xls", "xlsx")){
@@ -531,12 +529,8 @@ UD_ds_read = function(state,
     if(is.null(sheet)){
       sheet = sheets[1] }
     contents = readxl::read_excel(path=data_file_local, sheet=sheet)
-    code = paste0(object_name, ' = readxl::read_excel(path="',data_file,'", sheet="',sheet,'")\n')
+    code = paste0(object_name, ' = readxl::read_excel(path="',data_file,'", sheet="',sheet,'")')
     isgood   = TRUE
-  }
-
-  if(!is.null(code)){
-    code = paste0("# Loading dataset\n", code)
   }
 
   res = list(contents    = contents,

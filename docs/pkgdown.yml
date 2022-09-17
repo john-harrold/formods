@@ -1,8 +1,8 @@
-pandoc: '2.18'
+pandoc: 2.19.2
 pkgdown: 2.0.5
 pkgdown_sha: ~
 articles:
   included_modules: included_modules.html
   making_modules: making_modules.html
-last_built: 2022-09-05T16:33Z
+last_built: 2022-09-17T14:55Z
 

@@ -10,7 +10,7 @@ FM:
     # This is the preamble used in script generation. It goes on the
     # top. Feel free to add to it if you need to.
     gen_preamble: |-
-      # Formods automated output
+      # formods automated output
       # https://formods.ubiquity.tools/
       rm(list=ls())
       library(ggplot2)
