@@ -34,6 +34,28 @@ FM:
       FG: |-
          # Generating figures
 
+  reporting: 
+    # enabled here controls reporting for the app. Individual modules can be
+    # controlled in their respective configuration files
+    enabled: TRUE
+    # The content_init section is used to initialize reports. You shouldn't
+    # change the xlsx content but the docx and pptx content can be altered to
+    # use custom onbrand templates. The main thing is that you create an
+    # object called obnd with the appropriate template type in it. You can
+    # also do any preprocessing here as well such as adding default content or
+    # doing any placeholder assignments you might want to use.
+    content_init:
+      xlsx: |-
+           content   = list(summary = NULL,
+                            sheets  = list())
+      docx: |-
+           obnd = onbrand::read_template(
+             template = file.path(system.file(package="onbrand"), "templates", "report.docx"),
+             mapping  = file.path(system.file(package="onbrand"), "templates", "report.yaml"))
+      pptx: |-
+           obnd = onbrand::read_template(
+             template = file.path(system.file(package="onbrand"), "templates", "report.pptx"),
+             mapping  = file.path(system.file(package="onbrand"), "templates", "report.yaml"))
   ui:
     # See ?actionBttn for styles
     button_style: "fill"

@@ -232,3 +232,43 @@ ZZ_fetch_code = function(state){
   code = NULL
 
 code}
+
+#'@export
+#'@title Append Report Elements
+#'@description Description
+#'@param state ZZ state from \code{ZZ_fetch_state()}
+#'@param content Current content of the report which will be appended to in
+#'this function. For details on the structer see the documentation for \code{\link{formods::FM_generate_report}}.
+#'@param tpttype Type of report to generate (supported "xlsx", "pptx", "docx").
+#'@return list containing the following elements
+#'\itemize{
+#'  \item{isgood:}    Return status of the function
+#'  \item{hasrptele:} Boolean indicator if the module has any reportable elements
+#'  \item{code:}      Data wrangling R command
+#'  \item{msgs:}      Messages to be passed back to the user
+#'  \item{content:}   Messages to be passed back to the user
+#'}
+#'@seealso \code{\link{formods::FM_generate_report}}
+ZZ_append_report = function(state, content, rpttype){
+
+  isgood    = TRUE
+  hasrptele = FALSE
+  code      = c()
+  msgs      = c()
+
+
+  # The ZZ module only supports the following report types:
+  supported_rpttypes = c("xlsx", "pptx", "docx")
+
+  if(rpttype %in% supported_rpttypes){
+  }
+
+  res = list(
+    isgood    = isgood,
+    hasrptele = hasrptele,
+    code      = code,
+    msgs      = msgs,
+    content   = content
+  )
+
+res}

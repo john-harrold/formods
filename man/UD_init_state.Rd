@@ -19,3 +19,14 @@ list containing an empty UD state
 \description{
 Creates a list of the initialized module state
 }
+\examples{
+state = UD_init_state(
+   FM_yaml_file  = system.file(package = "formods",
+                               "templates",
+                               "formods.yaml"),
+   MOD_yaml_file = system.file(package = "formods",
+                               "templates",
+                               "UD.yaml"),
+   id              = "UD")
+state
+}

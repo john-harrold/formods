@@ -2,12 +2,12 @@
 % Please edit documentation in R/formods.R
 \name{FM_tc}
 \alias{FM_tc}
-\title{Rung Try/Catch and Process Results}
+\title{Run Try/Catch and Process Results}
 \usage{
 FM_tc(cmd, tc_env, capture)
 }
 \arguments{
-\item{cmd}{R command to evaluate in the try/catch block}
+\item{cmd}{Character object containing the R command to evaluate in the try/catch block}
 
 \item{tc_env}{list of with names corresponding to object names and
 corresponding Values to define in the try/catch environment}
@@ -15,6 +15,28 @@ corresponding Values to define in the try/catch environment}
 \item{capture}{Character vector of values to capture after the command is
 successfully captured}
 }
+\value{
+list with the following fields:
+\itemize{
+  \item{isgood:} Boolean indicating the whether the evaluation was
+  successful.
+  \item{error:} If the evaluation failed this contains the error object.
+  \item{msgs:} Character vector of messages and/or errors.
+  \item{capture:} List with names of objects to be captured and values
+  corresponding to those captured objects.
+}
+}
 \description{
-Add the supplied txt and the module type to the log file
+Attempts to execute the text in cmd. This is done in a
+try/catch environment to capture any errors.
+}
+\examples{
+# Successful command
+res_good = FM_tc("good_cmd=ls()", list(), c("good_cmd"))
+res_good
+
+# Failed command
+res_bad = FM_tc("bad_cmd =not_a_command()", list(), c("bad_cmd"))
+res_bad
+
 }

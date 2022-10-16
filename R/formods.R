@@ -422,6 +422,17 @@ res}
 #'@description Use this to get the path to the formods log file
 #'@param state module state after yaml read
 #'@return Character string with the path to the log file.
+#'@examples
+#'# This function assumes that some module state exists:
+#'state = UD_init_state(
+#'  FM_yaml_file  = system.file(package = "formods",
+#'                              "templates",
+#'                              "formods.yaml"),
+#'  MOD_yaml_file = system.file(package = "formods",
+#'                              "templates",
+#'                              "UD.yaml"),
+#'  id = "UD")
+#' FM_fetch_log_path(state)
 FM_fetch_log_path = function(state){
 
   res = state[["yaml"]][["FM"]][["logging"]][["log_file"]]
@@ -504,14 +515,32 @@ isgood}
 
 
 #'@export
-#'@title Rung Try/Catch and Process Results
-#'@description Add the supplied txt and the module type to the log file
-#'@param cmd    R command to evaluate in the try/catch block
+#'@title Run Try/Catch and Process Results
+#'@description Attempts to execute the text in cmd. This is done in a
+#'try/catch environment to capture any errors.
+#'@param cmd    Character object containing the R command to evaluate in the try/catch block
 #'@param tc_env list of with names corresponding to object names and
 #'corresponding Values to define in the try/catch environment
 #'@param capture Character vector of values to capture after the command is
 #'successfully captured
-#'@return NULL
+#'@return list with the following fields:
+#' \itemize{
+#'   \item{isgood:} Boolean indicating the whether the evaluation was
+#'   successful.
+#'   \item{error:} If the evaluation failed this contains the error object.
+#'   \item{msgs:} Character vector of messages and/or errors.
+#'   \item{capture:} List with names of objects to be captured and values
+#'   corresponding to those captured objects.
+#' }
+#'@examples
+#' # Successful command
+#' res_good = FM_tc("good_cmd=ls()", list(), c("good_cmd"))
+#' res_good
+#'
+#' # Failed command
+#' res_bad = FM_tc("bad_cmd =not_a_command()", list(), c("bad_cmd"))
+#' res_bad
+#'
 FM_tc = function(cmd, tc_env, capture){
 
   isgood = TRUE
@@ -779,7 +808,7 @@ state}
 #'@param session Shiny session variable
 #'@param id ID string for the module.
 #'@param state Module state to set.
-#'@return ggplot object
+#'@return NULL
 FM_set_mod_state <- function(session,id,state){
 
   FM_ID = paste0("FM_", id)
@@ -858,6 +887,22 @@ app_state}
 #'@param button_counters Vector of button UI elements that need to be tracked.
 #'@param ui_ids List of UI ids in the model.
 #'@param ui_hold Vector of UI elements that require holding.
+#'@return List with state initialized.
+#'@examples
+#'state = FM_init_state(
+#'    FM_yaml_file  = system.file(package = "formods",
+#'                                "templates",
+#'                                "formods.yaml"),
+#'    MOD_yaml_file = system.file(package = "formods",
+#'                                "templates",
+#'                                "UD.yaml"),
+#'    id              = "UD",
+#'    MT              = "UD",
+#'    button_counters = NULL,
+#'    ui_ids          = NULL,
+#'    ui_hold         = NULL)
+#'
+#' state
 FM_init_state = function(
                       FM_yaml_file,
                       MOD_yaml_file,
@@ -929,6 +974,8 @@ state}
 #'@description Use this to get information about the currently supported
 #'modules. This includes short names, UI elements,
 #'@return list with details about the currently supported modules.
+#'@examples
+#' FM_fetch_current_mods()
 FM_fetch_current_mods = function(){
 
   res = list(mods=list(), df=NULL)
@@ -1010,3 +1057,250 @@ FM_fetch_current_mods = function(){
   }
 
   res}
+
+#'@export
+#'@title Generate Report
+#'@description Generates a report from the states of the different modules.
+#'The type of report is based on the file extension of file_name.
+#'@param session Shiny session variable
+#'@param file_dir  path to the location where the file should be written.
+#'@param file_name base_filename (acceptable extensions are xlsx, docx, or pptx).
+#'@param rpterrors Boolean variable to generate reports with errors.
+#'@return List with the following elements
+#'@details
+#'  This function will look through the loaded modules and find those with
+#'  reporting enabbled. If reporting is enabled it will look for reporting functions
+#'  for that module. Reporting functions should be of the following format
+#'  (name and arguments):
+#'
+#'    \code{XX_append_report(state, content, rpttype)}
+#'
+#'   Where \code{XX} is the module short name. The state is the current state of the
+#'   module. The content contains the current content of the report. This will
+#'   vary based on the report type:
+#'
+#'\itemize{
+#'  \item{xlsx:} List with two elements. The first is \code{summary} a data
+#'  frame with two columns. The first column is called \code{Sheet_Name} and
+#'  the second column is called \code{Description}. This is a catalog of
+#'  sheets added to the report by the user and can be appended to using rbind.
+#'  The second element in xlsx content is another list with element names
+#'  corresponding to the report sheet names and the values corresponding to
+#'  dataframes to be exported in the report.
+#'  \item{pptx or docx:} Corresponding onbrand reporting object.
+#'}
+#'
+FM_generate_report = function(session,
+                              file_dir ,
+                              file_name,
+                              rpterrors = TRUE){
+
+  # Tracking whether we found any reporting elements.
+  hasrptele    = FALSE
+
+  # Pulling out the app state
+  app_state    = FM_fetch_app_state(session)
+  state        = NULL
+  mod_rpt_info = NULL
+
+  # This will hold the reporting code
+  code = c()
+
+  # Collecting the reporting details for each module
+  for(MOD in names(app_state)){
+    MODDATA = app_state[[MOD]]
+
+    # Creating a state object to use below:
+    if(MODDATA$id == "ASM"& is.null(state)){
+      state = MODDATA
+    }
+
+    if(!is.null(MODDATA[["MC"]][["reporting"]])){
+      # Constructing a data frame of each module and
+      # the reporting information for that module
+      mod_rpt_info =
+      rbind(mod_rpt_info,
+      data.frame(
+        MOD_TYPE = MODDATA[["MOD_TYPE"]],
+        id       = MODDATA[["id"]],
+        priority = MODDATA[["MC"]][["reporting"]][["priority"]],
+        enabled  = MODDATA[["MC"]][["reporting"]][["enabled"]]
+      )
+      )
+    }
+  }
+
+  #finding the report type
+  rpttype = "unknown"
+  content = NULL
+  if(stringr::str_detect(file_name, ".xlsx$")){
+    code = state[["yaml"]][["FM"]][["reporting"]][["content_init"]][["xlsx"]]
+    eval(parse(text=paste0(code, collapse="\n")))
+    rpttype   = "xlsx" }
+  if(stringr::str_detect(file_name, ".pptx$")){
+    code = state[["yaml"]][["FM"]][["reporting"]][["content_init"]][["pptx"]]
+    eval(parse(text=paste0(code, collapse="\n")))
+    rpttype   = "pptx" }
+  if(stringr::str_detect(file_name, ".docx$")){
+    code = state[["yaml"]][["FM"]][["reporting"]][["content_init"]][["docx"]]
+    eval(parse(text=paste0(code, collapse="\n")))
+    rpttype   = "docx" }
+
+  # Defaulting to success
+  isgood = TRUE
+  errmsg = ""
+
+  # These are the allowed report types
+  allowed_rpttypes = c("xlsx", "pptx", "docx")
+
+  if(rpttype %in% allowed_rpttypes){
+    # This looks at the summary table of the loaded modules and their
+    # reporting status to determine if we need to generate a report
+    if(!is.null(mod_rpt_info) & any(mod_rpt_info$enabled)){
+      # Getting a vector of the different priorities sorted from highest to
+      # lowest:
+      priorities = rev(unique(sort(mod_rpt_info[["priority"]])))
+      # Now we walk through the priorities
+      for(tmp_priority in priorities){
+        tmp_info = dplyr::filter(mod_rpt_info, priority == tmp_priority)
+        # next we walk through each row in the current priority level
+        for(ridx in 1:nrow(tmp_info)){
+          if(tmp_info[ridx,][["enabled"]]){
+            tmp_MOD_TYPE = tmp_info[ridx,][["MOD_TYPE"]]
+            tmp_id       = tmp_info[ridx,][["id"]]
+
+            # Next we look to see if there is a report generation function
+            MOD_FUNC  = paste0(tmp_MOD_TYPE, "_append_report")
+            if(exists(MOD_FUNC, mode="function")){
+
+              # We need the module state:
+              tmp_state = FM_fetch_mod_state(session, tmp_id)
+
+              # This is the function call used to append the report
+              FUNC_CALL = paste0("gen_rpt_res = ", MOD_FUNC,"(state = tmp_state, content=content, rpttype=rpttype)")
+
+              # This will evaluate it and store the results in the gen_rpt_res
+              eval(parse(text=FUNC_CALL))
+
+              # JMH check gen_rpt_res$isgood for failure and add contengencies for failure
+
+              # If reporting elements have been found
+              if(gen_rpt_res[["hasrptele"]]){
+                # we flag that we found reporting elements
+                hasrptele = TRUE
+
+                # We set the content to the content returned by the function
+                content = gen_rpt_res[["content"]]
+
+                # We append the code as well
+                code    = c(code, gen_rpt_res[["code"]])
+              }
+            }
+          }
+        }
+      }
+
+      # If we made it here and there are no reportable elments
+      # then we want to mark the status as bad
+      if(!hasrptele){
+        isgood = FALSE
+        errmsg = paste0("No reportable content in the App yet. You need to do something.")
+      }
+
+      # If we've made it this far then we've appended all the reporting elements
+      # and now we need to write the report:
+      if(isgood){
+        if(rpttype == "xlsx"){
+          # This combins the summary and sheets together:
+          code_chunk = c('rpt_list = append(',
+                         '  list("Summary" = content[["summary"]]),',
+                         '  content[["sheets"]])')
+          eval(parse(text=code_chunk))
+          code = c(code, code_chunk)
+
+          # This is the main difference between the app and the exported code.
+          # in the app we write to whichever location is specified:
+          writexl::write_xlsx(rpt_list,
+            path=file.path(file_dir, file_name))
+          # In the exported code we just write to the working directory:
+          code = c(code, paste0('writexl::write_xlsx(rpt_lsit, path="report.', rpttype, '")' ))
+        }
+        if(rpttype == "pptx" | rpttype=="docx"){
+          # JMH add word and powerpoint saving code here
+        }
+
+      }
+    } else{
+      isgood = FALSE
+      errmsg = paste0("No reportable modules found")
+    }
+
+  } else{
+    isgood = FALSE
+    errmsg = paste0("Invalid report type provided (", rpttype,"), allowed types:", paste(allowed_rpttypes, collapse=", "))
+  }
+
+
+  # If there was a failure up there somewhere we need to create a file with
+  # the error so the user can have some idea of what went wrong.
+  if(!isgood){
+
+    # We also want to return no code as well:
+    code = c()
+
+    # if we managed to find a state we also report the error
+    # message and log it
+    if(!is.null(state)){
+     FM_le(state, errmsg)
+    }
+
+    # This will push the errors to the user in the document
+    if(rpterrors){
+      if(rpttype == "pptx"){
+        # Creating a pptx document containing the errors
+        # generated above. We use the obnd object created 
+        # above when the rpttype is determined:
+      # obnd = read_template(
+      #   template = file.path(system.file(package="onbrand"), "templates", "report.pptx"),
+      #   mapping  = file.path(system.file(package="onbrand"), "templates", "report.yaml"))
+        obnd = onbrand::report_add_slide(obnd,
+        template = "content_text",
+        elements = list(
+           title         = list( content      = "Failed to generate report",
+                                 type         = "text"),
+           content_body  = list( content      = errmsg,
+                                 type         = "text")))
+        onbrand::save_report(obnd, file.path(file_dir, file_name))
+      }
+      if(rpttype == "docx"){
+        # Creating a docx document containing the errors
+        # generated above. We use the obnd object created 
+        # above when the rpttype is determined:
+      # obnd = read_template(
+      #   template = file.path(system.file(package="onbrand"), "templates", "report.docx"),
+      #   mapping  = file.path(system.file(package="onbrand"), "templates", "report.yaml"))
+        obnd = onbrand::report_add_doc_content(obnd,
+          type     = "text",
+          content  = list(text=errmsg))
+        onbrand::save_report(obnd, file.path(file_dir, file_name))
+      }
+      if(rpttype == "xlsx"){
+        # This writes a document containing errors
+        # so that they can be passed back to the user
+        writexl::write_xlsx(
+          list(Message = data.frame(Message = errmsg)),
+          path=file.path(file_dir, file_name))
+      }
+    }
+  }
+
+  res = list(
+    isgood = isgood,
+    code   = code
+  )
+
+
+res}
+
+
+

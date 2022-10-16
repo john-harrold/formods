@@ -1492,6 +1492,19 @@ state}
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return list containing an empty app state object
+#'@examples
+#'state = FG_init_state(
+#'    FM_yaml_file  = system.file(package = "formods",
+#'                                "templates",
+#'                                "formods.yaml"),
+#'    MOD_yaml_file = system.file(package = "formods",
+#'                                "templates",
+#'                                "FG.yaml"),
+#'    id              = "FG",
+#'    id_DW           = "DW",
+#'    id_UD           = "UD",
+#'    react_state     = NULL)
+#' state
 FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_state){
   state = list()
 

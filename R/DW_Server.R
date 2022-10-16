@@ -1586,6 +1586,18 @@ state }
 #'@param react_state Variable passed to server to allow reaction outside of
 #'module (\code{NULL})
 #'@return list containing an empty DW state
+#'@examples
+#'state = DW_init_state(
+#'    FM_yaml_file  = system.file(package = "formods",
+#'                                "templates",
+#'                                "formods.yaml"),
+#'    MOD_yaml_file = system.file(package = "formods",
+#'                                "templates",
+#'                                "DW.yaml"),
+#'    id              = "DW",
+#'    id_UD           = "UD",
+#'    react_state     = NULL)
+#' state
 DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state){
 
   # initializing the state with the required formods elements:
@@ -2149,3 +2161,78 @@ DW_fetch_code = function(state){
     code = paste(codes, collapse="\n")
   }
 code}
+
+#'@export
+#'@title Append Report Elements
+#'@description Takes the current state of the app and appends data views to an
+#'xlsx report object.
+#'@param state DW state from \code{DW_fetch_state()}
+#'@param content Current content of the report which will be appended to in
+#'this function. For details on the structer see the documentation for \code{\link{formods::FM_generate_report}}.
+#'@param tpttype Type of report to generate (supported "xlsx").
+#'@return list containing the following elements
+#'\itemize{
+#'  \item{isgood:}    Return status of the function
+#'  \item{hasrptele:} Boolean indicator if the module has any reportable elements
+#'  \item{code:}      Data wrangling R command
+#'  \item{msgs:}      Messages to be passed back to the user
+#'  \item{content:}   Messages to be passed back to the user
+#'}
+#'@seealso \code{\link{formods::FM_generate_report}}
+DW_append_report = function(state, content, rpttype){
+
+  isgood    = TRUE
+  hasrptele = FALSE
+  code      = c()
+  msgs      = c()
+
+
+  # The DW module only supports the xlsx report type
+  supported_rpttypes = c("xlsx")
+
+  if(rpttype %in% supported_rpttypes){
+    # Walking through each data view
+    for(view_id in names(state[["DW"]][["views"]])){
+      # If the working dataset is a data frame we append it to the report
+      if(is.data.frame(state[["DW"]][["views"]][[view_id]][["WDS"]])){
+        hasrptele = TRUE
+        # Storing the data frame in the object name used in the code
+        assign(state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]],
+               state[["DW"]][["views"]][[view_id]][["WDS"]])
+
+        # This appends the data frame to the report list
+        code_chunk = paste0('content[["sheets"]][["',
+                            state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]],
+                            '"]]=',
+                            state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]] )
+        # Evaluating the code
+        eval(parse(text=code_chunk))
+        # Appending to returned code
+        code = c(code, code_chunk)
+
+        # Appends the mapping between sheet name and description:
+        code_chunk = c('content[["summary"]] = rbind(content[["summary"]],',
+                       "  data.frame(",
+                paste0('    Sheet_Name="',  state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]], '",'),
+                paste0('    Description="', state[["DW"]][["views"]][[view_id]][["key"]], '"'),
+                       "  )",
+                       ')')
+        # Evaluating the code
+        eval(parse(text=code_chunk))
+        # Appending to returned code
+        code = c(code, code_chunk)
+        code = c(code, code_chunk)
+      }
+    }
+  }
+
+  res = list(
+    isgood    = isgood,
+    hasrptele = hasrptele,
+    code      = code,
+    msgs      = msgs,
+    content   = content
+  )
+
+res}
+

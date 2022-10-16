@@ -3,12 +3,24 @@ MC:
   code: # module specific code options
     readOnly: TRUE
     mode:     r    
+  reporting: # There's no reporting for the ASM module
+    enabled: FALSE
+    priority: 1
   formatting:
     input_load_state:
       width: "100%"
     ui_asm_save_name:
       width: "100%"
     button_state_save:
+      size: "sm" 
+      block: TRUE
+    button_rpt_xlsx:
+      size: "sm" 
+      block: TRUE
+    button_rpt_pptx:
+      size: "sm" 
+      block: TRUE
+    button_rpt_docx:
       size: "sm" 
       block: TRUE
   labels:    
@@ -18,6 +30,9 @@ MC:
     input_load_state:    "Load Analysis"
     upload_button:       "Load"
     upload_placeholder:  "Select analysis file" 
+    ui_asm_rpt_xlsx:     "xlsx"  
+    ui_asm_rpt_pptx:     "pptx"     
+    ui_asm_rpt_docx:     "docx"
   errors:
     bad_input: "Input error message"
   tooltips: 

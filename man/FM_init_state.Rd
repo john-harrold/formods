@@ -29,6 +29,25 @@ FM_init_state(
 
 \item{ui_hold}{Vector of UI elements that require holding.}
 }
+\value{
+List with state initialized.
+}
 \description{
 Initializes a formods state object with common elements.
+}
+\examples{
+state = FM_init_state(
+   FM_yaml_file  = system.file(package = "formods",
+                               "templates",
+                               "formods.yaml"),
+   MOD_yaml_file = system.file(package = "formods",
+                               "templates",
+                               "UD.yaml"),
+   id              = "UD",
+   MT              = "UD",
+   button_counters = NULL,
+   ui_ids          = NULL,
+   ui_hold         = NULL)
+
+state
 }

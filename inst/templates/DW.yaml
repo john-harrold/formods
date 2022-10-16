@@ -4,6 +4,9 @@ MC:
   compact:
     code:    TRUE 
     preview: TRUE 
+  reporting:
+    enabled: TRUE 
+    priority: 1
   tooltips: 
     # Set to FALSE to disable tool tips for this module
     include: TRUE

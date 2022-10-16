@@ -25,3 +25,16 @@ list containing an empty DW state
 \description{
 Creates a list of the initialized module state
 }
+\examples{
+state = DW_init_state(
+   FM_yaml_file  = system.file(package = "formods",
+                               "templates",
+                               "formods.yaml"),
+   MOD_yaml_file = system.file(package = "formods",
+                               "templates",
+                               "DW.yaml"),
+   id              = "DW",
+   id_UD           = "UD",
+   react_state     = NULL)
+state
+}

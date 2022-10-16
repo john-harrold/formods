@@ -89,6 +89,570 @@ module (<code>NULL</code>)</p></dd>
 <p>list containing an empty DW state</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="fu">DW_init_state</span><span class="op">(</span></span></span>
+<span class="r-in"><span>   FM_yaml_file  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"formods"</span>,</span></span>
+<span class="r-in"><span>                               <span class="st">"templates"</span>,</span></span>
+<span class="r-in"><span>                               <span class="st">"formods.yaml"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>   MOD_yaml_file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"formods"</span>,</span></span>
+<span class="r-in"><span>                               <span class="st">"templates"</span>,</span></span>
+<span class="r-in"><span>                               <span class="st">"DW.yaml"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>   id              <span class="op">=</span> <span class="st">"DW"</span>,</span></span>
+<span class="r-in"><span>   id_UD           <span class="op">=</span> <span class="st">"UD"</span>,</span></span>
+<span class="r-in"><span>   react_state     <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:2f88e16c4f21bfcb290b2a8288c05bd0</span>
+<span class="r-in"><span><span class="va">state</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$theme</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "vibrant_ink"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$showLineNumbers</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$gen_file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "formods_export.R"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$gen_preamble</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# formods automated output\n# https://formods.ubiquity.tools/\nrm(list=ls())\nlibrary(ggplot2)\nlibrary(ggforce)\nlibrary(readxl)\nlibrary(readr)\nlibrary(dplyr)\nlibrary(tidyr)"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$gen_mods</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$gen_mods$UD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$gen_mods$DW</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Wrangling data"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$gen_mods$FG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Generating figures"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$enabled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$templates</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$templates$yaml</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "system.file(package=\"onbrand\", \"templates\", \"report.yaml\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$templates$docx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "system.file(package=\"onbrand\", \"templates\", \"report.pptx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$templates$pptx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "system.file(package=\"onbrand\", \"templates\", \"report.docx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$ui</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$ui$button_style</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "fill"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$ui$color_green</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#00BB8A"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$ui$color_red</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#FF475E"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$ui$color_blue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#0088FF"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$ui$color_purple</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#bd2cf4"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$labels</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$labels$default_ds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Original data set"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$user_files</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$user_files$use_tmpdir</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$logging</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$logging$enabled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$logging$timestamp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$logging$timestamp_fmt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "%Y-%m-%d %H:%M:%S"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$logging$log_file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "formods_log.txt"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$logging$console</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$compact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$compact$code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$compact$preview</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$reporting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$reporting$enabled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$reporting$priority</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$tooltips</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$tooltips$include</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$tooltips$show_code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Show data wrangling code"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$tooltips$dw_elements</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Current wrangling elements"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$tab_main</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Wrangle"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$tab_code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Code"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$add_element</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Add Operation/Action"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$fds_filter_column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Filter by Column"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$fds_filter_operator</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Condition"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$fds_filter_rhs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Matching"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$fds_mutate_column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "New or current column to alter"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$fds_mutate_rhs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "New Value"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$fds_rename_column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Curret Column"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$fds_rename_rhs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "New Name"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$fds_group_column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Columns to group"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$fds_longer_column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Columns to make longer"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$fds_longer_names</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "New column to contain names"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$fds_longer_values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "New column to contain values"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$fds_wider_names</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Column with names"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$fds_wider_values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Column with values"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$new_dw</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "New"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$del_dw</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Delete"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$copy_dw</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Copy"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$save_dw</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Save"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$ungroup_data</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Removing current grouping"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$keep_onerow</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Keep first row in current grouping"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$no_dataset</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "No dataset loaded!"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$no_dw_elements</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "No data wrangling elements defined yet"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fds_filter_column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Filter column not specified."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fds_filter_operator</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Filter codition not specified."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fds_filter_rhs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Filter RHS not specified."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fds_mutate_column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Mutate column not specified."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fds_mutate_rhs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Mutate RHS not specified."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fds_rename_column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Column to rename not specified."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fds_rename_rhs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "New column name not specified."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fds_group_column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "No columns to group specified."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fds_select_column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "You must select at least one column to keep."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fds_longer_column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "You must select at least one column to make longer."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fds_longer_names</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "You must supply a column for the names of the new longer dataset"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fds_longer_values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "You must supply a column for the values of the new longer dataset"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fds_wider_names</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "You must select a column with the names."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$`fds_wider_value s`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "You must select a column with the values."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$current_key</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Short description"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$current_key_empty</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "The data view description field cannot be empty"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$unknown_action</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "The selection action is not supported."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$no_rows</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "There are no rows in the data set."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$element_not_added</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Unable to add the data wrangling element:"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$fix_bad_element</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "There is a bad element in the data wrangling chain,\nyou need to fix that before adding new elements"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[1]]$type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "factor"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[1]]$text</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "is one of"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[1]]$rop</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "%in%"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[2]]$type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "factor"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[2]]$text</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "is not"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[2]]$rop</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "!%in%"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[3]]$type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "not_factor"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[3]]$text</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "is within the range"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[3]]$rop</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "within"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[4]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[4]]$type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "not_factor"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[4]]$text</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "is equal to"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[4]]$rop</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "=="</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[5]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[5]]$type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "not_factor"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[5]]$text</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "is not equal to"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$operators[[5]]$rop</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "!="</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$filter</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$filter$choice</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Filter"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$filter$subtext</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Filter data"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$mutate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$mutate$choice</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Alter"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$mutate$subtext</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Create new column or change existing column"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$rename</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$rename$choice</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Rename"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$rename$subtext</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Rename column"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$group</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$group$choice</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Group"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$group$subtext</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Group subsequent operations by columns"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$ungroup</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$ungroup$choice</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Ungroup"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$ungroup$subtext</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Removing groping"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$longer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$longer$choice</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Elongate"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$longer$subtext</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Make Longer: rows to columns"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$wider</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$wider$choice</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Widen"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$wider$subtext</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Make Wider: columns to rows"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$onerow</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$onerow$choice</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "First Row"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$onerow$subtext</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Keep only first row of grouped data"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$select</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$select$choice</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Select"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$actions$select$subtext</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Choose columns to keep"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$preview</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$preview$width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$preview$height</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$dw_elements</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$dw_elements$width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 600</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$dw_elements$height</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$current_key</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$current_key$width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$code$width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 600</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$code$height</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_del</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_del$size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sm"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_del$block</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_save</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_save$size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sm"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_save$block</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_copy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_copy$size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sm"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_copy$block</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_new</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_new$size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sm"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_new$block</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_add_element</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_add_element$size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sm"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$button_dw_add_element$block</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$code$readOnly</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$code$mode</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "r"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$ds_object_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW_myDS"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$button_counters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$button_counters$button_dw_add_element</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$button_counters$button_dw_new</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$button_counters$button_dw_del</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$button_counters$button_dw_save</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$button_counters$button_dw_copy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$ui_hold</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$ui_hold$hot_dw_elements</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$ui_hold$current_key</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$ui_hold$select_dw_views</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$ui_ids</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "hot_dw_elements"            "button_dw_add_element"     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "button_dw_new"              "button_dw_del"             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "button_dw_copy"             "button_dw_save"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "select_fds_filter_column"   "select_fds_filter_operator"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "fds_filter_rhs"             "select_fds_mutate_column"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "select_fds_mutate_rhs"      "select_fds_rename_column"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "fds_rename_rhs"             "current_key"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] "select_fds_group_column"    "select_fds_select_column"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] "select_fds_longer_column"   "select_fds_longer_values"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "select_fds_longer_names"    "select_fds_wider_values"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] "select_fds_wider_names"     "select_dw_views"           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [23] "select_dw_element"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$isgood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$op_choices</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$op_choices$factor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> is one of    is not </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    "%in%"   "!%in%" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$op_choices$not_factor</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> is within the range         is equal to     is not equal to </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            "within"                "=="                "!=" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$view_cntr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$UD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$UD$isgood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $DW$checksum</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2f88e16c4f21bfcb290b2a8288c05bd0"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_TYPE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_yaml_file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmp0WKtWb/temp_libpath8501de7e223/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_yaml_file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmp0WKtWb/temp_libpath8501de7e223/formods/templates/DW.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

@@ -15,3 +15,15 @@ Character string with the path to the log file.
 \description{
 Use this to get the path to the formods log file
 }
+\examples{
+# This function assumes that some module state exists:
+state = UD_init_state(
+ FM_yaml_file  = system.file(package = "formods",
+                             "templates",
+                             "formods.yaml"),
+ MOD_yaml_file = system.file(package = "formods",
+                             "templates",
+                             "UD.yaml"),
+ id = "UD")
+FM_fetch_log_path(state)
+}

@@ -25,6 +25,9 @@
     <loc>/reference/ASM_Server.html</loc>
   </url>
   <url>
+    <loc>/reference/ASM_fetch_code.html</loc>
+  </url>
+  <url>
     <loc>/reference/ASM_fetch_dlfn.html</loc>
   </url>
   <url>
@@ -43,7 +46,13 @@
     <loc>/reference/DW_add_wrangling_element.html</loc>
   </url>
   <url>
+    <loc>/reference/DW_append_report.html</loc>
+  </url>
+  <url>
     <loc>/reference/DW_attach_ds.html</loc>
+  </url>
+  <url>
+    <loc>/reference/DW_fetch_code.html</loc>
   </url>
   <url>
     <loc>/reference/DW_fetch_current_view.html</loc>
@@ -73,6 +82,9 @@
     <loc>/reference/FG_extract_page.html</loc>
   </url>
   <url>
+    <loc>/reference/FG_fetch_code.html</loc>
+  </url>
+  <url>
     <loc>/reference/FG_fetch_current_fig.html</loc>
   </url>
   <url>
@@ -91,6 +103,9 @@
     <loc>/reference/FG_update_checksum.html</loc>
   </url>
   <url>
+    <loc>/reference/FM_fetch_app_code.html</loc>
+  </url>
+  <url>
     <loc>/reference/FM_fetch_app_state.html</loc>
   </url>
   <url>
@@ -107,6 +122,9 @@
   </url>
   <url>
     <loc>/reference/FM_fetch_user_files_path.html</loc>
+  </url>
+  <url>
+    <loc>/reference/FM_generate_report.html</loc>
   </url>
   <url>
     <loc>/reference/FM_init_state.html</loc>
@@ -137,6 +155,9 @@
   </url>
   <url>
     <loc>/reference/UD_ds_read.html</loc>
+  </url>
+  <url>
+    <loc>/reference/UD_fetch_code.html</loc>
   </url>
   <url>
     <loc>/reference/UD_fetch_state.html</loc>

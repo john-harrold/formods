@@ -4,10 +4,12 @@
 \alias{ASM_fetch_dlfn}
 \title{Fetch Download File Name}
 \usage{
-ASM_fetch_dlfn(state)
+ASM_fetch_dlfn(state, extension = ".zip")
 }
 \arguments{
 \item{state}{List withe the current app state}
+
+\item{extension}{File extension for the download (default: ".zip")}
 }
 \value{
 character object with the download file name

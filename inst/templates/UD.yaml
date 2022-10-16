@@ -3,6 +3,9 @@ MC:
   compact:
     code:    TRUE 
     preview: TRUE 
+  reporting: # There is no reporting for the UD module 
+    enabled: FALSE
+    priority: 1
   labels:
     upload_button: "Select file"
     tab_main:      "Upload File"

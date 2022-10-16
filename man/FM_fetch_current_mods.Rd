@@ -13,3 +13,6 @@ list with details about the currently supported modules.
 Use this to get information about the currently supported
 modules. This includes short names, UI elements,
 }
+\examples{
+FM_fetch_current_mods()
+}

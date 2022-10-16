@@ -1,6 +1,10 @@
-#library(formods)
+library(shiny)
 library(shinydashboard)
 #https://fontawesome.com/icons?from=io
+
+#library(formods)
+library(devtools)
+load_all()
 
 ui <- dashboardPage(
   skin="red",
@@ -32,6 +36,18 @@ ui <- dashboardPage(
            htmlOutput(NS("ASM", "ui_asm_load_state"))
          )
          ),
+       fluidRow(
+         box(title="Reporting",
+           div(style="display:inline-block",
+           "ui_asm_rpt_xlsx",
+           htmlOutput(NS("ASM", "ui_asm_rpt_xlsx"))) ,
+           div(style="display:inline-block",
+           "ui_asm_rpt_pptx",
+           htmlOutput(NS("ASM", "ui_asm_rpt_pptx"))) ,
+           div(style="display:inline-block",
+           "ui_asm_rpt_docx",
+           htmlOutput(NS("ASM", "ui_asm_rpt_docx"))) ,
+           width=12)),
        fluidRow(
          box(title="Messages",
            "ui_asm_msg",

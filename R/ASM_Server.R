@@ -69,6 +69,13 @@ ASM_Server <- function(id,
            htmlOutput(NS("ASM", "ui_asm_save_button")),
            tags$br(),
            tags$br(),
+           div(style="display:inline-block",
+           htmlOutput(NS("ASM", "ui_asm_rpt_pptx"))),
+           div(style="display:inline-block",
+           htmlOutput(NS("ASM", "ui_asm_rpt_docx"))),
+           div(style="display:inline-block",
+           htmlOutput(NS("ASM", "ui_asm_rpt_xlsx"))),
+           tags$br(),
            htmlOutput(NS("ASM", "ui_asm_load_state")),
            verbatimTextOutput(NS("ASM", "ui_asm_msg"))
       )
@@ -112,7 +119,79 @@ ASM_Server <- function(id,
         width       = state[["MC"]][["formatting"]][["input_load_state"]][["width"]],
         multiple    = FALSE)
 
+    #------------------------------------
+    # Download pptx report
+    output$button_rpt_pptx   = downloadHandler(
+      filename = function() {
+        state = ASM_fetch_state(id           = id,
+                                input        = input,
+                                session      = session,
+                                FM_yaml_file = FM_yaml_file,
+                                MOD_yaml_file = MOD_yaml_file)
+       dlfn = ASM_fetch_dlfn(state, ".pptx")
+       FM_le(state, paste0("pushing report: ", dlfn))
+       dlfn},
+      content = function(file) {
+        state = ASM_fetch_state(id           = id,
+                                input        = input,
+                                session      = session,
+                                FM_yaml_file = FM_yaml_file,
+                                MOD_yaml_file = MOD_yaml_file)
+        rpt_res = 
+        FM_generate_report(session   =session, 
+                           file_dir  = dirname(file),
+                           file_name = basename(file))
+        }
+    )
+    #------------------------------------
+    # Download docx report
+    output$button_rpt_docx   = downloadHandler(
+      filename = function() {
+        state = ASM_fetch_state(id           = id,
+                                input        = input,
+                                session      = session,
+                                FM_yaml_file = FM_yaml_file,
+                                MOD_yaml_file = MOD_yaml_file)
+       dlfn = ASM_fetch_dlfn(state, ".docx")
+       FM_le(state, paste0("pushing report: ", dlfn))
+       dlfn},
+      content = function(file) {
+        state = ASM_fetch_state(id           = id,
+                                input        = input,
+                                session      = session,
+                                FM_yaml_file = FM_yaml_file,
+                                MOD_yaml_file = MOD_yaml_file)
+        rpt_res = 
+        FM_generate_report(session   =session, 
+                           file_dir  = dirname(file),
+                           file_name = basename(file))
+        }
+    )
       uiele})
+    #------------------------------------
+    # Download xlsx report
+    output$button_rpt_xlsx   = downloadHandler(
+      filename = function() {
+        state = ASM_fetch_state(id           = id,
+                                input        = input,
+                                session      = session,
+                                FM_yaml_file = FM_yaml_file,
+                                MOD_yaml_file = MOD_yaml_file)
+       dlfn = ASM_fetch_dlfn(state, ".xlsx")
+       FM_le(state, paste0("pushing report: ", dlfn))
+       dlfn},
+      content = function(file) {
+        state = ASM_fetch_state(id           = id,
+                                input        = input,
+                                session      = session,
+                                FM_yaml_file = FM_yaml_file,
+                                MOD_yaml_file = MOD_yaml_file)
+        rpt_res = 
+        FM_generate_report(session   =session, 
+                           file_dir  = dirname(file),
+                           file_name = basename(file))
+        }
+    )
     #------------------------------------
     # User messages:
     output$ui_asm_msg = renderText({
@@ -128,6 +207,69 @@ ASM_Server <- function(id,
 
       uiele})
     #------------------------------------
+    # rpt xlsx
+    output$ui_asm_rpt_xlsx  = renderUI({
+      #req(input$X)
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+
+      uiele = NULL
+      if(state[["ASM"]][["isgood"]]){
+        uiele = downloadBttn(
+                  outputId = NS(id, "button_rpt_xlsx"),
+                  label    = state[["MC"]][["labels"]][["ui_asm_rpt_xlsx"]],
+                  style    = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                  size     = state[["MC"]][["formatting"]][["button_rpt_xlsx"]][["size"]],
+                  block    = state[["MC"]][["formatting"]][["button_rpt_xlsx"]][["block"]],
+                  color    = "success",
+                  icon     = icon("arrow-down"))
+      }
+      uiele})
+    # rpt docx
+    output$ui_asm_rpt_pptx  = renderUI({
+      #req(input$X)
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+
+      uiele = NULL
+      if(state[["ASM"]][["isgood"]]){
+        uiele = downloadBttn(
+                  outputId = NS(id, "button_rpt_pptx"),
+                  label    = state[["MC"]][["labels"]][["ui_asm_rpt_pptx"]],
+                  style    = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                  size     = state[["MC"]][["formatting"]][["button_rpt_pptx"]][["size"]],
+                  block    = state[["MC"]][["formatting"]][["button_rpt_pptx"]][["block"]],
+                  color    = "danger",
+                  icon     = icon("arrow-down"))
+      }
+      uiele})
+    # rpt docx
+    output$ui_asm_rpt_docx  = renderUI({
+      #req(input$X)
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+
+      uiele = NULL
+      if(state[["ASM"]][["isgood"]]){
+        uiele = downloadBttn(
+                  outputId = NS(id, "button_rpt_docx"),
+                  label    = state[["MC"]][["labels"]][["ui_asm_rpt_docx"]],
+                  style    = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                  size     = state[["MC"]][["formatting"]][["button_rpt_docx"]][["size"]],
+                  block    = state[["MC"]][["formatting"]][["button_rpt_docx"]][["block"]],
+                  color    = "primary",
+                  icon     = icon("arrow-down"))
+      }
+      uiele})
  # JMH delete?
  #  # Generated data reading code
  #  observe({
@@ -315,17 +457,34 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id ID string for the module.
 #'@return list containing an empty ASM state
+#'@examples
+#'state = ASM_init_state(
+#'    FM_yaml_file  = system.file(package = "formods",
+#'                                "templates",
+#'                                "formods.yaml"),
+#'    MOD_yaml_file = system.file(package = "formods",
+#'                                "templates",
+#'                                "ASM.yaml"),
+#'    id              = "ASM")
+#' state
 ASM_init_state = function(FM_yaml_file, MOD_yaml_file, id){
 
   button_counters = c(
-   "button_state_save"
+   "button_state_save",
+   "button_rpt_xlsx",
+   "button_rpt_docx",
+   "button_rpt_pptx"
   )
+
   ui_ids          = c(
    "button_state_save",
+   "button_rpt_xlsx",
+   "button_rpt_docx",
+   "button_rpt_pptx",
    "ui_asm_save_name"
     )
-  ui_hold         = c()
 
+  ui_hold         = c()
 
   state = FM_init_state(
     FM_yaml_file    = FM_yaml_file,
@@ -348,15 +507,16 @@ ASM_init_state = function(FM_yaml_file, MOD_yaml_file, id){
 #'@description Gets either the file name specified by the user or the default
 #'value if that is null
 #'@param state List withe the current app state
+#'@param extension File extension for the download (default: ".zip")
 #'@return character object with the download file name
-ASM_fetch_dlfn = function(state){
+ASM_fetch_dlfn = function(state, extension=".zip"){
   save_bfn  = state[["ASM"]][["ui"]][["ui_asm_save_name"]]
   if(is.null(save_bfn )){
      save_bfn  = state[["MC"]][["labels"]][["ui_asm_save_name"]]
   } else if(save_bfn  == "") {
      save_bfn  = state[["MC"]][["labels"]][["ui_asm_save_name"]]
   }
-  dlfn    = paste0(save_bfn, ".zip")
+  dlfn    = paste0(save_bfn, extension)
   dlfn}
 
 #'@export

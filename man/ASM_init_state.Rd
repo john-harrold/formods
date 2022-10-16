@@ -19,3 +19,14 @@ list containing an empty ASM state
 \description{
 Creates a list of the initialized module state
 }
+\examples{
+state = ASM_init_state(
+   FM_yaml_file  = system.file(package = "formods",
+                               "templates",
+                               "formods.yaml"),
+   MOD_yaml_file = system.file(package = "formods",
+                               "templates",
+                               "ASM.yaml"),
+   id              = "ASM")
+state
+}

@@ -405,6 +405,16 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id ID string for the module.
 #'@return list containing an empty UD state
+#'@examples
+#'state = UD_init_state(
+#'    FM_yaml_file  = system.file(package = "formods",
+#'                                "templates",
+#'                                "formods.yaml"),
+#'    MOD_yaml_file = system.file(package = "formods",
+#'                                "templates",
+#'                                "UD.yaml"),
+#'    id              = "UD")
+#' state
 UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id){
 
 

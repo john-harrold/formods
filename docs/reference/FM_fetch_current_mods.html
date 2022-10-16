@@ -68,6 +68,106 @@ modules. This includes short names, UI elements,</p>
 <p>list with details about the currently supported modules.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">FM_fetch_current_mods</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$ASM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$ASM$Name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "App State Mangement"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$ASM$Short_Name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ASM"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$ASM$UI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$ASM$UI$htmlOutput</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ui_asm_save_name"   "ui_asm_save_button" "ui_asm_load_state" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$ASM$UI$other</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ui_asm_msg"      "ui_asm_ace_code"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$UD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$UD$Name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Upload Data"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$UD$Short_Name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$UD$UI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$UD$UI$htmlOutput</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ui_ud_load_data"        "ui_ud_select_sheets"    "ui_ud_text_load_result"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4] "ui_ud_data_preview"    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$UD$UI$other</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ui_ud_ace_code"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$DW</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$DW$Name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Data Wrangling"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$DW$Short_Name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$DW$UI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$DW$UI$htmlOutput</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ui_dw_views"              "ui_dw_key"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "ui_dw_new_view"           "ui_dw_save_view"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "ui_dw_del_view"           "ui_dw_copy_view"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7] "ui_dw_add_element_button" "ui_dw_select"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [9] "ui_dw_new_element_row"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$DW$UI$other</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "hot_dw_elements"  "hot_data_preview" "ui_dw_msg"        "ui_dw_code"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$FG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$FG$Name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Figure Generation"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$FG$Short_Name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$FG$UI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$FG$UI$htmlOutput</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "ui_fg_curr_views"         "ui_fg_curr_figs"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "ui_fg_new_fig"            "ui_fg_save_fig"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "ui_fg_del_fig"            "ui_fg_copy_fig"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "ui_fg_fig_name"           "ui_fg_fig_notes"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "ui_fg_add_element_button" "ui_fg_select"            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "ui_fg_new_element_row"    "ui_fg_msg"               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "ui_fg_slider_page"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mods$FG$UI$other</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "hot_fg_elements"      "ui_fg_preview_ggplot" "ui_fg_msg"           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4] "ui_fg_code"          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $df</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                Module  SN</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 App State Mangement ASM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         Upload Data  UD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      Data Wrangling  DW</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   Figure Generation  FG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                      htmlOutput</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                                                                                                                                                       ui_asm_save_name, ui_asm_save_button, ui_asm_load_state</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                                                                                                              ui_ud_load_data, ui_ud_select_sheets, ui_ud_text_load_result, ui_ud_data_preview</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                                       ui_dw_views, ui_dw_key, ui_dw_new_view, ui_dw_save_view, ui_dw_del_view, ui_dw_copy_view, ui_dw_add_element_button, ui_dw_select, ui_dw_new_element_row</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 ui_fg_curr_views, ui_fg_curr_figs, ui_fg_new_fig, ui_fg_save_fig, ui_fg_del_fig, ui_fg_copy_fig, ui_fg_fig_name, ui_fg_fig_notes, ui_fg_add_element_button, ui_fg_select, ui_fg_new_element_row, ui_fg_msg, ui_fg_slider_page</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                    otherOutput</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                  ui_asm_msg, ui_asm_ace_code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                               ui_ud_ace_code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     hot_dw_elements, hot_data_preview, ui_dw_msg, ui_dw_code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 hot_fg_elements, ui_fg_preview_ggplot, ui_fg_msg, ui_fg_code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
