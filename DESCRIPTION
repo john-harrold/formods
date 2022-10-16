@@ -35,6 +35,7 @@ Imports:
   stats,
   stringr,
   tools,
+  writexl,
   yaml,
   zip
 Suggests:
