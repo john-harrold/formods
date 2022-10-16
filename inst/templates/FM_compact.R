@@ -1,9 +1,8 @@
-
 library(shinydashboard)
 
 #library(formods)
-library(devtools)
-load_all()
+#library(devtools)
+#load_all()
 
 
 CSS <- "
