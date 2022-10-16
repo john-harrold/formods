@@ -2334,3 +2334,125 @@ FG_fetch_code = function(state){
     code = NULL
   }
 code}
+
+#'@export
+#'@title Append Report Elements
+#'@description Description
+#'@param state FG state from \code{FG_fetch_state()}
+#'@param rpt Report with the current content of the report which will be appended to in
+#'this function. For details on the structure see the documentation for \code{\link{formods::FM_generate_report}}.
+#'@param rpttype Type of report to generate (supported "xlsx", "pptx", "docx").
+#'@return list containing the following elements
+#'\itemize{
+#'  \item{isgood:}    Return status of the function.
+#'  \item{hasrptele:} Boolean indicator if the module has any reportable elements.
+#'  \item{code:}      Data wrangling R command.
+#'  \item{msgs:}      Messages to be passed back to the user.
+#'  \item{rpt:}       Report with any additions passed back to the user.
+#'}
+#'@seealso \code{\link{formods::FM_generate_report}}
+FG_append_report = function(state, rpt, rpttype){
+
+  isgood    = TRUE
+  hasrptele = FALSE
+  code      = c()
+  msgs      = c()
+
+
+  # The FG module only supports the following report types:
+  supported_rpttypes = c("pptx", "docx")
+
+  if(rpttype %in% supported_rpttypes){
+    for(fig_id in names(state[["FG"]][["figs"]])){
+
+      #Making sure we've flipped the has reportable elements bit
+      hasrptele      = TRUE
+
+      # Pulling out the figure object
+      current_fig    = state[["FG"]][["figs"]][[fig_id]]
+      key            = current_fig[["key"]]
+      fg_object_name = current_fig[["fg_object_name"]]
+      fobj           = current_fig[["fobj"]]
+      # creating the fg_object_name locally
+      assign(fg_object_name, fobj)
+      if(rpttype == "pptx"){
+        # this is a normal ggplot object/single figure.
+        if(is.null(ggforce::n_pages(fobj))){
+
+          # creating the code for the slide:
+          code_chunk = c(
+     paste0('# Figure ', fig_id, ": ", key, '                                   '),
+            'rpt  = onbrand::report_add_slide(rpt,                              ',
+            '          template = "content_list",                               ',
+            '          elements = list(                                         ',
+     paste0('            title        = list( content = "', key,'",               '),
+            '                                 type    = "text"),                ',
+     paste0('            content_body = list( content = ', fg_object_name, ',   '),
+            '                                 type    = "ggplot")))               '
+          )
+
+          # Evaluating the code created above:
+          eval(parse(text=paste(code_chunk, collapse="\n")))
+
+          # Saving the code for the slide
+          code = c(code, code_chunk)
+
+        } else {
+
+          # Add a slide for each paginated object
+
+          # First we get the facet row from the elements_table:
+          facet_row = current_fig[["elements_table"]] |>
+            dplyr::filter(.data[["Element"]] =="facet")
+
+          for(page in 1:ggforce::n_pages(fobj)){
+
+            # original faceting command
+            facet_cmd = facet_row[1,][["cmd"]]
+
+            # Stripping off the assignment portion so the command will just
+            # return a ggplot object
+            facet_cmd = stringr::str_replace(facet_cmd, paste0(fg_object_name, "\\s*="), "")
+
+            #Wrapping the command in parentheses
+            facet_cmd = paste0("(", facet_cmd, ")")
+
+            # Assigning the current page
+            facet_cmd = stringr::str_replace(facet_cmd, "page=1", paste0("page=", page))
+
+            # creating the code for the slide:
+            code_chunk = c(
+       paste0('# Figure ', fig_id, '(',page,'): ', key, '                         '),
+              'rpt  = onbrand::report_add_slide(rpt,                              ',
+              '          template = "content_list",                               ',
+              '          elements = list(                                         ',
+       paste0('            title        = list( content = "', key,'",             '),
+              '                                 type    = "text"),                ',
+       paste0('            content_body = list( content = ', facet_cmd, ',        '),
+              '                                 type    = "ggplot")))               '
+            )
+
+            # Evaluating the code created above:
+            eval(parse(text=paste(code_chunk, collapse="\n")))
+
+            # Saving the code for the slide
+            code = c(code, code_chunk)
+          }
+        }
+      }
+      if(rpttype == "docx"){
+
+      }
+    }
+  }
+
+  res = list(
+    isgood    = isgood,
+    hasrptele = hasrptele,
+    code      = code,
+    msgs      = msgs,
+    rpt       = rpt
+
+  )
+
+res}

@@ -2167,19 +2167,19 @@ code}
 #'@description Takes the current state of the app and appends data views to an
 #'xlsx report object.
 #'@param state DW state from \code{DW_fetch_state()}
-#'@param content Current content of the report which will be appended to in
-#'this function. For details on the structer see the documentation for \code{\link{formods::FM_generate_report}}.
-#'@param tpttype Type of report to generate (supported "xlsx").
+#'@param rpt Report with the current content of the report which will be appended to in
+#'this function. For details on the structure see the documentation for \code{\link{formods::FM_generate_report}}.
+#'@param rpttype Type of report to generate (supported "xlsx").
 #'@return list containing the following elements
 #'\itemize{
-#'  \item{isgood:}    Return status of the function
-#'  \item{hasrptele:} Boolean indicator if the module has any reportable elements
-#'  \item{code:}      Data wrangling R command
-#'  \item{msgs:}      Messages to be passed back to the user
-#'  \item{content:}   Messages to be passed back to the user
+#'  \item{isgood:}    Return status of the function.
+#'  \item{hasrptele:} Boolean indicator if the module has any reportable elements.
+#'  \item{code:}      Data wrangling R command.
+#'  \item{msgs:}      Messages to be passed back to the user.
+#'  \item{rpt:}       Report with any additions passed back to the user.
 #'}
 #'@seealso \code{\link{formods::FM_generate_report}}
-DW_append_report = function(state, content, rpttype){
+DW_append_report = function(state, rpt, rpttype){
 
   isgood    = TRUE
   hasrptele = FALSE
@@ -2201,7 +2201,7 @@ DW_append_report = function(state, content, rpttype){
                state[["DW"]][["views"]][[view_id]][["WDS"]])
 
         # This appends the data frame to the report list
-        code_chunk = paste0('content[["sheets"]][["',
+        code_chunk = paste0('rpt[["sheets"]][["',
                             state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]],
                             '"]]=',
                             state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]] )
@@ -2211,7 +2211,7 @@ DW_append_report = function(state, content, rpttype){
         code = c(code, code_chunk)
 
         # Appends the mapping between sheet name and description:
-        code_chunk = c('content[["summary"]] = rbind(content[["summary"]],',
+        code_chunk = c('rpt[["summary"]] = rbind(rpt[["summary"]],',
                        "  data.frame(",
                 paste0('    Sheet_Name="',  state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]], '",'),
                 paste0('    Description="', state[["DW"]][["views"]][[view_id]][["key"]], '"'),
@@ -2231,7 +2231,7 @@ DW_append_report = function(state, content, rpttype){
     hasrptele = hasrptele,
     code      = code,
     msgs      = msgs,
-    content   = content
+    rpt       = rpt     
   )
 
 res}

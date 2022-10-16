@@ -1073,10 +1073,10 @@ FM_fetch_current_mods = function(){
 #'  for that module. Reporting functions should be of the following format
 #'  (name and arguments):
 #'
-#'    \code{XX_append_report(state, content, rpttype)}
+#'    \code{XX_append_report(state, rpt, rpttype)}
 #'
 #'   Where \code{XX} is the module short name. The state is the current state of the
-#'   module. The content contains the current content of the report. This will
+#'   module. The rpt contains the current content of the report. This will
 #'   vary based on the report type:
 #'
 #'\itemize{
@@ -1084,7 +1084,7 @@ FM_fetch_current_mods = function(){
 #'  frame with two columns. The first column is called \code{Sheet_Name} and
 #'  the second column is called \code{Description}. This is a catalog of
 #'  sheets added to the report by the user and can be appended to using rbind.
-#'  The second element in xlsx content is another list with element names
+#'  The second element in xlsx rpt is another list with element names
 #'  corresponding to the report sheet names and the values corresponding to
 #'  dataframes to be exported in the report.
 #'  \item{pptx or docx:} Corresponding onbrand reporting object.
@@ -1132,7 +1132,7 @@ FM_generate_report = function(session,
 
   #finding the report type
   rpttype = "unknown"
-  content = NULL
+  rpt = NULL
   if(stringr::str_detect(file_name, ".xlsx$")){
     code = state[["yaml"]][["FM"]][["reporting"]][["content_init"]][["xlsx"]]
     eval(parse(text=paste0(code, collapse="\n")))
@@ -1177,7 +1177,7 @@ FM_generate_report = function(session,
               tmp_state = FM_fetch_mod_state(session, tmp_id)
 
               # This is the function call used to append the report
-              FUNC_CALL = paste0("gen_rpt_res = ", MOD_FUNC,"(state = tmp_state, content=content, rpttype=rpttype)")
+              FUNC_CALL = paste0("gen_rpt_res = ", MOD_FUNC,"(state = tmp_state, rpt=rpt, rpttype=rpttype)")
 
               # This will evaluate it and store the results in the gen_rpt_res
               eval(parse(text=FUNC_CALL))
@@ -1189,8 +1189,8 @@ FM_generate_report = function(session,
                 # we flag that we found reporting elements
                 hasrptele = TRUE
 
-                # We set the content to the content returned by the function
-                content = gen_rpt_res[["content"]]
+                # We set the rpt to the rpt returned by the function
+                rpt = gen_rpt_res[["rpt"]]
 
                 # We append the code as well
                 code    = c(code, gen_rpt_res[["code"]])
@@ -1213,8 +1213,8 @@ FM_generate_report = function(session,
         if(rpttype == "xlsx"){
           # This combins the summary and sheets together:
           code_chunk = c('rpt_list = append(',
-                         '  list("Summary" = content[["summary"]]),',
-                         '  content[["sheets"]])')
+                         '  list("Summary" = rpt[["summary"]]),',
+                         '  rpt[["sheets"]])')
           eval(parse(text=code_chunk))
           code = c(code, code_chunk)
 
@@ -1258,31 +1258,25 @@ FM_generate_report = function(session,
     if(rpterrors){
       if(rpttype == "pptx"){
         # Creating a pptx document containing the errors
-        # generated above. We use the obnd object created 
+        # generated above. We use the rpt object created 
         # above when the rpttype is determined:
-      # obnd = read_template(
-      #   template = file.path(system.file(package="onbrand"), "templates", "report.pptx"),
-      #   mapping  = file.path(system.file(package="onbrand"), "templates", "report.yaml"))
-        obnd = onbrand::report_add_slide(obnd,
+        rpt = onbrand::report_add_slide(rpt,
         template = "content_text",
         elements = list(
            title         = list( content      = "Failed to generate report",
                                  type         = "text"),
            content_body  = list( content      = errmsg,
                                  type         = "text")))
-        onbrand::save_report(obnd, file.path(file_dir, file_name))
+        onbrand::save_report(rpt, file.path(file_dir, file_name))
       }
       if(rpttype == "docx"){
         # Creating a docx document containing the errors
-        # generated above. We use the obnd object created 
+        # generated above. We use the rpt object created 
         # above when the rpttype is determined:
-      # obnd = read_template(
-      #   template = file.path(system.file(package="onbrand"), "templates", "report.docx"),
-      #   mapping  = file.path(system.file(package="onbrand"), "templates", "report.yaml"))
-        obnd = onbrand::report_add_doc_content(obnd,
+        rpt = onbrand::report_add_doc_content(rpt,
           type     = "text",
           content  = list(text=errmsg))
-        onbrand::save_report(obnd, file.path(file_dir, file_name))
+        onbrand::save_report(rpt, file.path(file_dir, file_name))
       }
       if(rpttype == "xlsx"){
         # This writes a document containing errors
