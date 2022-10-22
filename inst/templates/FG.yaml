@@ -76,6 +76,8 @@ MC:
     select_current_fig:  "Current figure"
     select_current_view: "Data from"
     no_figures_defined:  "No figures have been defined"
+    busy:
+      fig_update:  "Updating the current figure. Please be patient..." 
   errors:
     element_not_added:    "Unable to add the data figure element:"
     current_key_empty:    "The figure description field cannot be empty."
@@ -204,7 +206,7 @@ MC:
       size: "sm" 
       block: TRUE
   # You can put any post_processing you want to apply to all figures.
-  # The ggplot object will be avialble as the ===FGOBJ=== 
+  # The ggplot object will be available as the ===FGOBJ=== 
   post_processing: |-
     ===FGOBJ=== = ===FGOBJ=== + theme_light()
   fg_object_name: "myp"

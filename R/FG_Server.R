@@ -102,6 +102,7 @@ FG_Server <- function(id,
     #------------------------------------
     # Creates the ui for the compact view of the module
     output$FG_ui_compact  =  renderUI({
+
       # Forcing a reaction to changes in other modules
       react_state[[id_UD]]
       react_state[[id_DW]]
@@ -231,6 +232,7 @@ FG_Server <- function(id,
         )
       }
 
+
     uiele})
     #------------------------------------
     output$ui_fg_preview_ggplot   = renderPlot({
@@ -259,6 +261,10 @@ FG_Server <- function(id,
                              id_DW          = id_DW,
                              react_state    = react_state)
 
+      if(system.file(package = "shinybusy") !=""){
+       shinybusy::show_modal_spinner(text=state[["MC"]][["labels"]][["busy"]][["fig_update"]])
+      }
+
       current_fig = FG_fetch_current_fig(state)
       fobj = current_fig[["fobj"]]
 
@@ -283,6 +289,12 @@ FG_Server <- function(id,
         state = FM_set_ui_msg(state, tcres[["msgs"]])
         FM_set_mod_state(session, id, state)
       }
+
+
+      if(system.file(package = "shinybusy") !=""){
+        shinybusy::remove_modal_spinner()
+      }
+
       fobj})
     #------------------------------------
     output$ui_fg_preview_plotly   = plotly::renderPlotly({
@@ -2342,6 +2354,8 @@ code}
 #'@param rpt Report with the current content of the report which will be appended to in
 #'this function. For details on the structure see the documentation for \code{\link{formods::FM_generate_report}}.
 #'@param rpttype Type of report to generate (supported "xlsx", "pptx", "docx").
+#'@param gen_code_only Boolean value indicating that only code should be
+#'generated (\code{FALSE}).
 #'@return list containing the following elements
 #'\itemize{
 #'  \item{isgood:}    Return status of the function.
@@ -2351,7 +2365,7 @@ code}
 #'  \item{rpt:}       Report with any additions passed back to the user.
 #'}
 #'@seealso \code{\link{formods::FM_generate_report}}
-FG_append_report = function(state, rpt, rpttype){
+FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
 
   isgood    = TRUE
   hasrptele = FALSE
@@ -2392,7 +2406,8 @@ FG_append_report = function(state, rpt, rpttype){
           )
 
           # Evaluating the code created above:
-          eval(parse(text=paste(code_chunk, collapse="\n")))
+          if(!gen_code_only){
+            eval(parse(text=paste(code_chunk, collapse="\n"))) }
 
           # Saving the code for the slide
           code = c(code, code_chunk)
@@ -2433,7 +2448,8 @@ FG_append_report = function(state, rpt, rpttype){
             )
 
             # Evaluating the code created above:
-            eval(parse(text=paste(code_chunk, collapse="\n")))
+            if(!gen_code_only){
+              eval(parse(text=paste(code_chunk, collapse="\n")))}
 
             # Saving the code for the slide
             code = c(code, code_chunk)

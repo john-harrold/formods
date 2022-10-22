@@ -33,7 +33,6 @@ FM:
          # Wrangling data
       FG: |-
          # Generating figures
-
   reporting: 
     # enabled here controls reporting for the app. Individual modules can be
     # controlled in their respective configuration files

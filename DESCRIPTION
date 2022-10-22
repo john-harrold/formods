@@ -23,7 +23,6 @@ Imports:
   ggforce,
   ggplot2,
   onbrand,
-  plotly,
   readr,
   readxl,
   rlang,
@@ -41,7 +40,9 @@ Imports:
 Suggests:
   ggpubr,
   knitr,
+  plotly,
   shinydashboard,
+  shinybusy,
   rmarkdown,
   utils,
   testthat (>= 3.0.0),

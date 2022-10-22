@@ -66,6 +66,7 @@ ASM_Server <- function(id,
     output$ui_asm_compact  =  renderUI({
       uiele = tagList(
            htmlOutput(NS("ASM", "ui_asm_save_name")),
+           htmlOutput(NS("ASM", "ui_asm_switch_gen_rpts")),
            htmlOutput(NS("ASM", "ui_asm_save_button")),
            tags$br(),
            tags$br(),
@@ -81,6 +82,26 @@ ASM_Server <- function(id,
       )
 
       uiele})
+    #------------------------------------
+    output$ui_asm_switch_gen_rpts = renderUI({
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+
+         uiele = materialSwitch(
+           inputId     = NS(id, "switch_gen_rpts"),
+           width       = state[["MC"]][["formatting"]][["switch_gen_reports"]][["width"]],
+           right       = state[["MC"]][["formatting"]][["switch_gen_reports"]][["right"]],
+           inline      = state[["MC"]][["formatting"]][["switch_gen_reports"]][["inline"]],
+           label       = state[["MC"]][["labels"]][["ui_asm_switch_gen_rpts"]],
+           status      = "success",
+           value       = state[["MC"]][["formatting"]][["switch_gen_reports"]][["default"]]
+           )
+
+      uiele})
+    #------------------------------------
     #------------------------------------
     # Download State
     output$button_state_save   = downloadHandler(
@@ -137,8 +158,9 @@ ASM_Server <- function(id,
                                 session      = session,
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
-        rpt_res = 
-        FM_generate_report(session   =session, 
+        rpt_res =
+        FM_generate_report(state     = state,
+                           session   = session,
                            file_dir  = dirname(file),
                            file_name = basename(file))
         }
@@ -161,8 +183,8 @@ ASM_Server <- function(id,
                                 session      = session,
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
-        rpt_res = 
-        FM_generate_report(session   =session, 
+        rpt_res =
+        FM_generate_report(session   =session,
                            file_dir  = dirname(file),
                            file_name = basename(file))
         }
@@ -186,8 +208,8 @@ ASM_Server <- function(id,
                                 session      = session,
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
-        rpt_res = 
-        FM_generate_report(session   =session, 
+        rpt_res =
+        FM_generate_report(session   =session,
                            file_dir  = dirname(file),
                            file_name = basename(file))
         }
@@ -218,14 +240,17 @@ ASM_Server <- function(id,
 
       uiele = NULL
       if(state[["ASM"]][["isgood"]]){
-        uiele = downloadBttn(
-                  outputId = NS(id, "button_rpt_xlsx"),
-                  label    = state[["MC"]][["labels"]][["ui_asm_rpt_xlsx"]],
-                  style    = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
-                  size     = state[["MC"]][["formatting"]][["button_rpt_xlsx"]][["size"]],
-                  block    = state[["MC"]][["formatting"]][["button_rpt_xlsx"]][["block"]],
-                  color    = "success",
-                  icon     = icon("arrow-down"))
+        # Only generate the button if reporting is enabled
+        if(state[["yaml"]][["FM"]][["reporting"]][["enabled"]]){
+          uiele = downloadBttn(
+                    outputId = NS(id, "button_rpt_xlsx"),
+                    label    = state[["MC"]][["labels"]][["ui_asm_rpt_xlsx"]],
+                    style    = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                    size     = state[["MC"]][["formatting"]][["button_rpt_xlsx"]][["size"]],
+                    block    = state[["MC"]][["formatting"]][["button_rpt_xlsx"]][["block"]],
+                    color    = "success",
+                    icon     = icon("arrow-down"))
+        }
       }
       uiele})
     # rpt docx
@@ -239,14 +264,17 @@ ASM_Server <- function(id,
 
       uiele = NULL
       if(state[["ASM"]][["isgood"]]){
-        uiele = downloadBttn(
-                  outputId = NS(id, "button_rpt_pptx"),
-                  label    = state[["MC"]][["labels"]][["ui_asm_rpt_pptx"]],
-                  style    = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
-                  size     = state[["MC"]][["formatting"]][["button_rpt_pptx"]][["size"]],
-                  block    = state[["MC"]][["formatting"]][["button_rpt_pptx"]][["block"]],
-                  color    = "danger",
-                  icon     = icon("arrow-down"))
+        # Only generate the button if reporting is enabled
+        if(state[["yaml"]][["FM"]][["reporting"]][["enabled"]]){
+          uiele = downloadBttn(
+                    outputId = NS(id, "button_rpt_pptx"),
+                    label    = state[["MC"]][["labels"]][["ui_asm_rpt_pptx"]],
+                    style    = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                    size     = state[["MC"]][["formatting"]][["button_rpt_pptx"]][["size"]],
+                    block    = state[["MC"]][["formatting"]][["button_rpt_pptx"]][["block"]],
+                    color    = "danger",
+                    icon     = icon("arrow-down"))
+        }
       }
       uiele})
     # rpt docx
@@ -260,14 +288,17 @@ ASM_Server <- function(id,
 
       uiele = NULL
       if(state[["ASM"]][["isgood"]]){
-        uiele = downloadBttn(
-                  outputId = NS(id, "button_rpt_docx"),
-                  label    = state[["MC"]][["labels"]][["ui_asm_rpt_docx"]],
-                  style    = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
-                  size     = state[["MC"]][["formatting"]][["button_rpt_docx"]][["size"]],
-                  block    = state[["MC"]][["formatting"]][["button_rpt_docx"]][["block"]],
-                  color    = "primary",
-                  icon     = icon("arrow-down"))
+        # Only generate the button if reporting is enabled
+        if(state[["yaml"]][["FM"]][["reporting"]][["enabled"]]){
+          uiele = downloadBttn(
+                    outputId = NS(id, "button_rpt_docx"),
+                    label    = state[["MC"]][["labels"]][["ui_asm_rpt_docx"]],
+                    style    = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                    size     = state[["MC"]][["formatting"]][["button_rpt_docx"]][["size"]],
+                    block    = state[["MC"]][["formatting"]][["button_rpt_docx"]][["block"]],
+                    color    = "primary",
+                    icon     = icon("arrow-down"))
+        }
       }
       uiele})
  # JMH delete?
@@ -481,7 +512,8 @@ ASM_init_state = function(FM_yaml_file, MOD_yaml_file, id){
    "button_rpt_xlsx",
    "button_rpt_docx",
    "button_rpt_pptx",
-   "ui_asm_save_name"
+   "ui_asm_save_name",
+   "switch_gen_rpts"
     )
 
   ui_hold         = c()
@@ -529,6 +561,11 @@ ASM_fetch_dlfn = function(state, extension=".zip"){
 #'@return NULL
 ASM_write_state = function(state, session, file){
 
+  if(system.file(package = "shinybusy") !=""){
+    shinybusy::show_modal_spinner(text=state[["MC"]][["labels"]][["busy"]][["saving_state"]])
+  }
+
+
   FM_le(state, paste0("writing app state to file on server: "))
   FM_le(state, paste0("  ", file))
 
@@ -540,6 +577,41 @@ ASM_write_state = function(state, session, file){
 
   # Pulling out the reproducable app code
   app_code = FM_fetch_app_code(session)
+
+  # Generating reports
+  switch_gen_rpts = state[["ASM"]][["ui"]][["switch_gen_rpts"]]
+  if(!is.logical(switch_gen_rpts)){
+    switch_gen_rpts =  FALSE
+  }
+
+
+  # Clearing reports from the user directory
+  rptdir = file.path(user_dir, "reports")
+  if(dir.exists(rptdir)){
+    unlink(rptdir, recursive=TRUE)
+  }
+  dir.create(rptdir)
+
+  rpttypes = c("xlsx", "pptx", "docx")
+  rptctr = 1
+  for(rpttype in rpttypes){
+
+    if(system.file(package = "shinybusy") !=""){
+      shinybusy::update_modal_spinner(text=
+              paste0(state[["MC"]][["labels"]][["busy"]][[rpttype]], "(",rptctr, "/", length(rpttypes),")"))
+    }
+
+    rpt_file_name = paste0("report.", rpttype)
+    grres = FM_generate_report(
+       state         = state,
+       session       = session,
+       file_dir      = rptdir ,
+       file_name     = rpt_file_name,
+       gen_code_only = !(switch_gen_reports),
+       rpterrors     = TRUE)
+
+    rptctr = rptctr + 1
+  }
 
   if(app_code[["isgood"]]){
     # Writing app_code to the export script
@@ -556,6 +628,11 @@ ASM_write_state = function(state, session, file){
 
   # Writing the app state object to a file:
   saveRDS(app_state, file.path(user_dir, "fmas.rds"))
+
+
+  if(system.file(package = "shinybusy") !=""){
+    shinybusy::remove_modal_spinner()
+  }
 
   # Zipping everything up into an archive
   zip::zip(zipfile=file,

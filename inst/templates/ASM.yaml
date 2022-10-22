@@ -12,27 +12,38 @@ MC:
     ui_asm_save_name:
       width: "100%"
     button_state_save:
-      size: "sm" 
-      block: TRUE
+      size:    "sm" 
+      block:   TRUE
     button_rpt_xlsx:
-      size: "sm" 
-      block: TRUE
+      size:    "sm" 
+      block:   TRUE
     button_rpt_pptx:
-      size: "sm" 
-      block: TRUE
+      size:    "sm" 
+      block:   TRUE
     button_rpt_docx:
-      size: "sm" 
-      block: TRUE
+      size:    "sm" 
+      block:   TRUE
+    switch_gen_reports:
+      default:      FALSE
+      right:        TRUE
+      inline:       TRUE  
+      width:        NULL
   labels:    
-    ui_asm_save_name:    "Save Analysis"
-    ui_asm_save_name_ph: "my_analysis"
-    save_state:          "Save"
-    input_load_state:    "Load Analysis"
-    upload_button:       "Load"
-    upload_placeholder:  "Select analysis file" 
-    ui_asm_rpt_xlsx:     "xlsx"  
-    ui_asm_rpt_pptx:     "pptx"     
-    ui_asm_rpt_docx:     "docx"
+    ui_asm_save_name:       "Save Analysis"
+    ui_asm_save_name_ph:    "my_analysis"
+    ui_asm_switch_gen_rpts: "Generate reports when saving."
+    save_state:             "Save"
+    input_load_state:       "Load Analysis"
+    upload_button:          "Load"
+    upload_placeholder:     "Select analysis file" 
+    ui_asm_rpt_xlsx:        "xlsx"  
+    ui_asm_rpt_pptx:        "pptx"     
+    ui_asm_rpt_docx:        "docx"
+    busy:
+      saving_state:      "Saving app state"
+      xlsx:              "Generating report: Excel"
+      docx:              "Generating report: Word"
+      pptx:              "Generating report: PowerPoint"
   errors:
     bad_input: "Input error message"
   tooltips: 

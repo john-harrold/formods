@@ -1062,9 +1062,12 @@ FM_fetch_current_mods = function(){
 #'@title Generate Report
 #'@description Generates a report from the states of the different modules.
 #'The type of report is based on the file extension of file_name.
+#'@param state Module state requesting the report generation 
 #'@param session Shiny session variable
 #'@param file_dir  path to the location where the file should be written.
 #'@param file_name base_filename (acceptable extensions are xlsx, docx, or pptx).
+#'@param gen_code_only Boolean value indicating that only code should be
+#'generated (\code{FALSE}).
 #'@param rpterrors Boolean variable to generate reports with errors.
 #'@return List with the following elements
 #'@details
@@ -1090,9 +1093,11 @@ FM_fetch_current_mods = function(){
 #'  \item{pptx or docx:} Corresponding onbrand reporting object.
 #'}
 #'
-FM_generate_report = function(session,
+FM_generate_report = function(state, 
+                              session,
                               file_dir ,
                               file_name,
+                              gen_code_only = FALSE,
                               rpterrors = TRUE){
 
   # Tracking whether we found any reporting elements.
@@ -1173,6 +1178,8 @@ FM_generate_report = function(session,
             MOD_FUNC  = paste0(tmp_MOD_TYPE, "_append_report")
             if(exists(MOD_FUNC, mode="function")){
 
+              FM_le(state, paste0("  appending report for module:", tmp_MOD_TYPE, " id:", tmp_id, " priority:", tmp_priority))
+
               # We need the module state:
               tmp_state = FM_fetch_mod_state(session, tmp_id)
 
@@ -1223,10 +1230,14 @@ FM_generate_report = function(session,
           writexl::write_xlsx(rpt_list,
             path=file.path(file_dir, file_name))
           # In the exported code we just write to the working directory:
-          code = c(code, paste0('writexl::write_xlsx(rpt_lsit, path="report.', rpttype, '")' ))
+          code = c(code, paste0('writexl::write_xlsx(rpt_lsit, path=file.path("reports", "report.', rpttype, '"))' ))
         }
         if(rpttype == "pptx" | rpttype=="docx"){
-          # JMH add word and powerpoint saving code here
+          # Saving the report on the app
+          onbrand::save_report(rpt, file.path(file_dir, file_name))
+
+          # Code to save the report:
+          code = c(code, paste0('onbrand::save_report(rpt, file.path("reports", "report.', rpttype,'"))'))
         }
 
       }

@@ -986,6 +986,11 @@ DW_Server <- function(id,
                              id_UD           = id_UD,
                              react_state     = react_state)
 
+   #   if(system.file(package = "shinybusy") !=""){
+   #    shinybusy::show_modal_spinner(text=state[["MC"]][["labels"]][["busy"]][["dv_update"]])
+   #   }
+
+
       df = NULL
 
       if(state[["DW"]][["UD"]][["isgood"]]){
@@ -1003,6 +1008,11 @@ DW_Server <- function(id,
        height = state[["MC"]][["formatting"]][["preview"]][["height"]],
        rowHeaders = NULL
        )
+
+
+    #if(system.file(package = "shinybusy") !=""){
+    #  shinybusy::remove_modal_spinner()
+    #}
 
     uiele})
     #------------------------------------
@@ -1124,8 +1134,6 @@ DW_Server <- function(id,
           verbatimTextOutput(NS(id, "ui_dw_msg"))
         )
       }
-
-
 
       uiele
     })
@@ -2170,6 +2178,8 @@ code}
 #'@param rpt Report with the current content of the report which will be appended to in
 #'this function. For details on the structure see the documentation for \code{\link{formods::FM_generate_report}}.
 #'@param rpttype Type of report to generate (supported "xlsx").
+#'@param gen_code_only Boolean value indicating that only code should be
+#'generated (\code{FALSE}).
 #'@return list containing the following elements
 #'\itemize{
 #'  \item{isgood:}    Return status of the function.
@@ -2179,7 +2189,7 @@ code}
 #'  \item{rpt:}       Report with any additions passed back to the user.
 #'}
 #'@seealso \code{\link{formods::FM_generate_report}}
-DW_append_report = function(state, rpt, rpttype){
+DW_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
 
   isgood    = TRUE
   hasrptele = FALSE
@@ -2206,7 +2216,8 @@ DW_append_report = function(state, rpt, rpttype){
                             '"]]=',
                             state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]] )
         # Evaluating the code
-        eval(parse(text=code_chunk))
+        if(!gen_code_only){
+          eval(parse(text=code_chunk))}
         # Appending to returned code
         code = c(code, code_chunk)
 
@@ -2218,7 +2229,8 @@ DW_append_report = function(state, rpt, rpttype){
                        "  )",
                        ')')
         # Evaluating the code
-        eval(parse(text=code_chunk))
+        if(!gen_code_only){
+          eval(parse(text=code_chunk))}
         # Appending to returned code
         code = c(code, code_chunk)
         code = c(code, code_chunk)
@@ -2235,4 +2247,3 @@ DW_append_report = function(state, rpt, rpttype){
   )
 
 res}
-

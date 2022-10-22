@@ -37,9 +37,11 @@ MC:
     keep_onerow:          "Keep first row in current grouping"
     no_dataset:           "No dataset loaded!"
     no_dw_elements:       "No data wrangling elements defined yet"
+    busy:
+      dv_update:  "Updating data views. Please be patient..." 
   errors:
     fds_filter_column:    "Filter column not specified."
-    fds_filter_operator:  "Filter codition not specified."
+    fds_filter_operator:  "Filter condition not specified."
     fds_filter_rhs:       "Filter RHS not specified."
     fds_mutate_column:    "Mutate column not specified."
     fds_mutate_rhs:       "Mutate RHS not specified."

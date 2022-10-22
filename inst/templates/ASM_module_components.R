@@ -28,6 +28,8 @@ ui <- dashboardPage(
          box(title="Save",
            "ui_asm_save_name",
            htmlOutput(NS("ASM", "ui_asm_save_name")),
+           "ui_asm_switch_gen_rpts",
+           htmlOutput(NS("ASM", "ui_asm_switch_gen_rpts")),
            "ui_asm_save_input",
            htmlOutput(NS("ASM", "ui_asm_save_button"))
          ),
