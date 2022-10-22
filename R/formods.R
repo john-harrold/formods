@@ -1230,7 +1230,7 @@ FM_generate_report = function(state,
           writexl::write_xlsx(rpt_list,
             path=file.path(file_dir, file_name))
           # In the exported code we just write to the working directory:
-          code = c(code, paste0('writexl::write_xlsx(rpt_lsit, path=file.path("reports", "report.', rpttype, '"))' ))
+          code = c(code, paste0('writexl::write_xlsx(rpt_list, path=file.path("reports", "report.', rpttype, '"))' ))
         }
         if(rpttype == "pptx" | rpttype=="docx"){
           # Saving the report on the app
