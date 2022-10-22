@@ -610,6 +610,15 @@ ASM_write_state = function(state, session, file){
        gen_code_only = !(switch_gen_reports),
        rpterrors     = TRUE)
 
+    # Appending the report generation code
+    if(grres[["isgood"]]){
+      app_code[["code"]] = c(app_code[["code"]], paste0("Generating report: ", rpttype))
+      app_code[["code"]] = c(app_code[["code"]], grres[["code"]])
+    } else {
+      app_code[["code"]] = c(app_code[["code"]], paste0("# ", rpttype, " not generated"))
+      app_code[["code"]] = c(app_code[["code"]], paste0("# ", grres[["errmsg"]]))
+    }
+
     rptctr = rptctr + 1
   }
 

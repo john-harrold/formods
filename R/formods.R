@@ -1301,6 +1301,7 @@ FM_generate_report = function(state,
 
   res = list(
     isgood = isgood,
+    errmsg = errmsg,
     code   = code
   )
 

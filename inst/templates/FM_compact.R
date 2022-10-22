@@ -2,13 +2,7 @@ library(shinydashboard)
 
 #library(formods)
 #library(devtools)
-devtools::load_all()
-
-# Only using waiter if it's installed
-if(system.file(package = "shinybusy") !=""){
-  library(shinybusy)
-}
-
+#devtools::load_all()
 
 CSS <- "
 .wrapfig {
