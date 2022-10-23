@@ -6,6 +6,9 @@
 \usage{
 FM_fetch_app_code(session)
 }
+\arguments{
+\item{session}{Shiny session variable}
+}
 \value{
 list with the following elements:
 \itemize{

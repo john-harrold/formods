@@ -1,8 +1,15 @@
-library(shinydashboard)
 
 #library(formods)
 #library(devtools)
 #devtools::load_all()
+
+
+# These are suggested packages
+library(shinydashboard)
+library(ggpubr)
+library(plotly)
+library(shinybusy)
+library(utils)
 
 CSS <- "
 .wrapfig {

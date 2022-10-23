@@ -344,6 +344,7 @@ hold_status}
 #'@title Fetches the code to reproduce analysis
 #'@description Takes the current state of the app and builds a script to
 #'reproduce the analysis within the app.
+#'@param session Shiny session variable
 #'@return list with the following elements:
 #' \itemize{
 #'   \item{isgood:} Boolean indicating the whether code generation was
@@ -1167,7 +1168,7 @@ FM_generate_report = function(state,
       priorities = rev(unique(sort(mod_rpt_info[["priority"]])))
       # Now we walk through the priorities
       for(tmp_priority in priorities){
-        tmp_info = dplyr::filter(mod_rpt_info, priority == tmp_priority)
+        tmp_info = dplyr::filter(mod_rpt_info, .data[["priority"]] == tmp_priority)
         # next we walk through each row in the current priority level
         for(ridx in 1:nrow(tmp_info)){
           if(tmp_info[ridx,][["enabled"]]){
@@ -1184,6 +1185,7 @@ FM_generate_report = function(state,
               tmp_state = FM_fetch_mod_state(session, tmp_id)
 
               # This is the function call used to append the report
+              gen_rpt_res = NULL # this is to get around "no visible binding" NOTE
               FUNC_CALL = paste0("gen_rpt_res = ", MOD_FUNC,"(state = tmp_state, rpt=rpt, rpttype=rpttype)")
 
               # This will evaluate it and store the results in the gen_rpt_res
@@ -1219,6 +1221,7 @@ FM_generate_report = function(state,
       if(isgood){
         if(rpttype == "xlsx"){
           # This combins the summary and sheets together:
+          rpt_list = NULL # this is to get around "no visible binding" NOTE
           code_chunk = c('rpt_list = append(',
                          '  list("Summary" = rpt[["summary"]]),',
                          '  rpt[["sheets"]])')

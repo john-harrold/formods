@@ -58,12 +58,23 @@ The type of report is based on the file extension of file_name.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">FM_generate_report</span><span class="op">(</span><span class="va">session</span>, <span class="va">file_dir</span>, <span class="va">file_name</span>, rpterrors <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">FM_generate_report</span><span class="op">(</span></span>
+<span>  <span class="va">state</span>,</span>
+<span>  <span class="va">session</span>,</span>
+<span>  <span class="va">file_dir</span>,</span>
+<span>  <span class="va">file_name</span>,</span>
+<span>  gen_code_only <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  rpterrors <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>session</dt>
+    <dl><dt>state</dt>
+<dd><p>Module state requesting the report generation</p></dd>
+
+
+<dt>session</dt>
 <dd><p>Shiny session variable</p></dd>
 
 
@@ -73,6 +84,11 @@ The type of report is based on the file extension of file_name.</p>
 
 <dt>file_name</dt>
 <dd><p>base_filename (acceptable extensions are xlsx, docx, or pptx).</p></dd>
+
+
+<dt>gen_code_only</dt>
+<dd><p>Boolean value indicating that only code should be
+generated (<code>FALSE</code>).</p></dd>
 
 
 <dt>rpterrors</dt>
@@ -91,15 +107,15 @@ The type of report is based on the file extension of file_name.</p>
  reporting enabbled. If reporting is enabled it will look for reporting functions
  for that module. Reporting functions should be of the following format
  (name and arguments):</p>
-<p><code>XX_append_report(state, content, rpttype)</code></p>
+<p><code>XX_append_report(state, rpt, rpttype)</code></p>
 <p>Where <code>XX</code> is the module short name. The state is the current state of the
-  module. The content contains the current content of the report. This will
+  module. The rpt contains the current content of the report. This will
   vary based on the report type:</p>
 <ul><li><p>xlsx: List with two elements. The first is <code>summary</code> a data
  frame with two columns. The first column is called <code>Sheet_Name</code> and
  the second column is called <code>Description</code>. This is a catalog of
  sheets added to the report by the user and can be appended to using rbind.
- The second element in xlsx content is another list with element names
+ The second element in xlsx rpt is another list with element names
  corresponding to the report sheet names and the values corresponding to
  dataframes to be exported in the report.</p></li>
 <li><p>pptx or docx: Corresponding onbrand reporting object.</p></li>

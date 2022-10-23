@@ -4,7 +4,6 @@
 #'@import shinyWidgets
 #'@importFrom shinyAce aceEditor updateAceEditor
 #'@importFrom ggforce facet_grid_paginate facet_wrap_paginate
-#'@importFrom plotly  ggplotly plotlyOutput renderPlotly
 
 
 #'@export
@@ -195,7 +194,20 @@ FG_Server <- function(id,
         pvh          = state[["MC"]][["formatting"]][["preview"]][["height"]]
         pvw          = state[["MC"]][["formatting"]][["preview"]][["width"]]
         pv_div_style = paste0("height:",pvh,"px;width:",pvw,"px;display:inline-block;vertical-align:top")
-        if(state[["MC"]][["compact"]][["preview"]] == "plotly"){
+
+
+
+        plot_method = "ggplot"
+
+        if(system.file(package = "plotly") != ""){
+          if(state[["MC"]][["compact"]][["preview"]] == "plotly"){
+            plot_method = "plotly"
+          }
+
+        }
+
+
+        if(plot_method == "plotly"){
           uiele_preview =
              div(style=pv_div_style,
                plotly::plotlyOutput(NS("FG", "ui_fg_preview_plotly")))
@@ -297,51 +309,53 @@ FG_Server <- function(id,
 
       fobj})
     #------------------------------------
-    output$ui_fg_preview_plotly   = plotly::renderPlotly({
-      # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_DW]]
-      react_state[[id_ASM]]
-      # Forcing reactions:
-      input[["button_fig_new"]]
-      input[["button_fig_save"]]
-      input[["button_fig_del"]]
-      input[["button_fig_copy"]]
-      input[["hot_fg_elements"]]
-      input[["button_element_add"]]
-      input[["select_current_fig"]]
-
-      input[["select_fg_page"]]
-
-      state = FG_fetch_state(id             = id,
-                             input          = input,
-                             session        = session,
-                             FM_yaml_file   = FM_yaml_file,
-                             MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
-                             react_state    = react_state)
-
-      current_fig = FG_fetch_current_fig(state)
-
-      current_fig = FG_fetch_current_fig(state)
-      fobj = current_fig[["fobj"]]
-
-      if(current_fig[["num_pages"]] > 1){
-        fobj = FG_extract_page(state, current_fig[["page"]])
-      }
-
-      if(is.null(fobj)){
-        uiele = NULL
-      }else{
-        uiele = plotly::ggplotly(fobj,
-          width = state[["MC"]][["formatting"]][["preview"]][["width"]],
-          height = state[["MC"]][["formatting"]][["preview"]][["height"]]
-        )
-      }
-
-      uiele})
+    if(system.file(package = "plotly") != ""){
+     output$ui_fg_preview_plotly   = plotly::renderPlotly({
+       # Forcing a reaction to changes in other modules
+       react_state[[id_UD]]
+       react_state[[id_DW]]
+       react_state[[id_ASM]]
+       # Forcing reactions:
+       input[["button_fig_new"]]
+       input[["button_fig_save"]]
+       input[["button_fig_del"]]
+       input[["button_fig_copy"]]
+       input[["hot_fg_elements"]]
+       input[["button_element_add"]]
+       input[["select_current_fig"]]
+     
+       input[["select_fg_page"]]
+     
+       state = FG_fetch_state(id             = id,
+                              input          = input,
+                              session        = session,
+                              FM_yaml_file   = FM_yaml_file,
+                              MOD_yaml_file  = MOD_yaml_file,
+                              id_ASM         = id_ASM,
+                              id_UD          = id_UD,
+                              id_DW          = id_DW,
+                              react_state    = react_state)
+     
+       current_fig = FG_fetch_current_fig(state)
+     
+       current_fig = FG_fetch_current_fig(state)
+       fobj = current_fig[["fobj"]]
+     
+       if(current_fig[["num_pages"]] > 1){
+         fobj = FG_extract_page(state, current_fig[["page"]])
+       }
+     
+       if(is.null(fobj)){
+         uiele = NULL
+       }else{
+         uiele = plotly::ggplotly(fobj,
+           width = state[["MC"]][["formatting"]][["preview"]][["width"]],
+           height = state[["MC"]][["formatting"]][["preview"]][["height"]]
+         )
+       }
+     
+       uiele})
+    }
     #------------------------------------
     output$ui_fg_select    = renderUI({
       #req(input$X)

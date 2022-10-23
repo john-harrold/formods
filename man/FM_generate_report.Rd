@@ -4,14 +4,26 @@
 \alias{FM_generate_report}
 \title{Generate Report}
 \usage{
-FM_generate_report(session, file_dir, file_name, rpterrors = TRUE)
+FM_generate_report(
+  state,
+  session,
+  file_dir,
+  file_name,
+  gen_code_only = FALSE,
+  rpterrors = TRUE
+)
 }
 \arguments{
+\item{state}{Module state requesting the report generation}
+
 \item{session}{Shiny session variable}
 
 \item{file_dir}{path to the location where the file should be written.}
 
 \item{file_name}{base_filename (acceptable extensions are xlsx, docx, or pptx).}
+
+\item{gen_code_only}{Boolean value indicating that only code should be
+generated (\code{FALSE}).}
 
 \item{rpterrors}{Boolean variable to generate reports with errors.}
 }
@@ -28,10 +40,10 @@ This function will look through the loaded modules and find those with
  for that module. Reporting functions should be of the following format
  (name and arguments):
 
-   \code{XX_append_report(state, content, rpttype)}
+   \code{XX_append_report(state, rpt, rpttype)}
 
   Where \code{XX} is the module short name. The state is the current state of the
-  module. The content contains the current content of the report. This will
+  module. The rpt contains the current content of the report. This will
   vary based on the report type:
 
 \itemize{
@@ -39,7 +51,7 @@ This function will look through the loaded modules and find those with
  frame with two columns. The first column is called \code{Sheet_Name} and
  the second column is called \code{Description}. This is a catalog of
  sheets added to the report by the user and can be appended to using rbind.
- The second element in xlsx content is another list with element names
+ The second element in xlsx rpt is another list with element names
  corresponding to the report sheet names and the values corresponding to
  dataframes to be exported in the report.
  \item{pptx or docx:} Corresponding onbrand reporting object.

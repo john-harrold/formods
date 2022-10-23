@@ -19,7 +19,6 @@ Imports:
   cli,
   digest,
   dplyr,
-  flextable,
   ggforce,
   ggplot2,
   onbrand,
@@ -46,6 +45,6 @@ Suggests:
   rmarkdown,
   utils,
   testthat (>= 3.0.0),
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 VignetteBuilder: knitr
 Config/testthat/edition: 3

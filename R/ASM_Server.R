@@ -607,7 +607,7 @@ ASM_write_state = function(state, session, file){
        session       = session,
        file_dir      = rptdir ,
        file_name     = rpt_file_name,
-       gen_code_only = !(switch_gen_reports),
+       gen_code_only = !(switch_gen_rpts),
        rpterrors     = TRUE)
 
     # Appending the report generation code

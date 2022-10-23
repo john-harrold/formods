@@ -58,7 +58,7 @@ xlsx report object.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">DW_append_report</span><span class="op">(</span><span class="va">state</span>, <span class="va">content</span>, <span class="va">rpttype</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">DW_append_report</span><span class="op">(</span><span class="va">state</span>, <span class="va">rpt</span>, <span class="va">rpttype</span>, gen_code_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -67,24 +67,29 @@ xlsx report object.</p>
 <dd><p>DW state from <code><a href="DW_fetch_state.html">DW_fetch_state()</a></code></p></dd>
 
 
-<dt>content</dt>
-<dd><p>Current content of the report which will be appended to in
-this function. For details on the structer see the documentation for <code><a href="FM_generate_report.html">formods::FM_generate_report</a></code>.</p></dd>
+<dt>rpt</dt>
+<dd><p>Report with the current content of the report which will be appended to in
+this function. For details on the structure see the documentation for <code><a href="FM_generate_report.html">formods::FM_generate_report</a></code>.</p></dd>
 
 
-<dt>tpttype</dt>
+<dt>rpttype</dt>
 <dd><p>Type of report to generate (supported "xlsx").</p></dd>
+
+
+<dt>gen_code_only</dt>
+<dd><p>Boolean value indicating that only code should be
+generated (<code>FALSE</code>).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>list containing the following elements</p><ul><li><p>isgood:    Return status of the function</p></li>
-<li><p>hasrptele: Boolean indicator if the module has any reportable elements</p></li>
-<li><p>code:      Data wrangling R command</p></li>
-<li><p>msgs:      Messages to be passed back to the user</p></li>
-<li><p>content:   Messages to be passed back to the user</p></li>
+<p>list containing the following elements</p><ul><li><p>isgood:    Return status of the function.</p></li>
+<li><p>hasrptele: Boolean indicator if the module has any reportable elements.</p></li>
+<li><p>code:      Data wrangling R command.</p></li>
+<li><p>msgs:      Messages to be passed back to the user.</p></li>
+<li><p>rpt:       Report with any additions passed back to the user.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
