@@ -1063,7 +1063,7 @@ FM_fetch_current_mods = function(){
 #'@title Generate Report
 #'@description Generates a report from the states of the different modules.
 #'The type of report is based on the file extension of file_name.
-#'@param state Module state requesting the report generation 
+#'@param state Module state requesting the report generation
 #'@param session Shiny session variable
 #'@param file_dir  path to the location where the file should be written.
 #'@param file_name base_filename (acceptable extensions are xlsx, docx, or pptx).
@@ -1094,7 +1094,7 @@ FM_fetch_current_mods = function(){
 #'  \item{pptx or docx:} Corresponding onbrand reporting object.
 #'}
 #'
-FM_generate_report = function(state, 
+FM_generate_report = function(state,
                               session,
                               file_dir ,
                               file_name,
@@ -1257,7 +1257,7 @@ FM_generate_report = function(state,
 
   # If there was a failure up there somewhere we need to create a file with
   # the error so the user can have some idea of what went wrong.
-  if(!isgood){
+  if(!isgood  & !gen_code_only){
 
     # We also want to return no code as well:
     code = c()
@@ -1272,7 +1272,7 @@ FM_generate_report = function(state,
     if(rpterrors){
       if(rpttype == "pptx"){
         # Creating a pptx document containing the errors
-        # generated above. We use the rpt object created 
+        # generated above. We use the rpt object created
         # above when the rpttype is determined:
         rpt = onbrand::report_add_slide(rpt,
         template = "content_text",
@@ -1285,7 +1285,7 @@ FM_generate_report = function(state,
       }
       if(rpttype == "docx"){
         # Creating a docx document containing the errors
-        # generated above. We use the rpt object created 
+        # generated above. We use the rpt object created
         # above when the rpttype is determined:
         rpt = onbrand::report_add_doc_content(rpt,
           type     = "text",

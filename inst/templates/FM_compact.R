@@ -1,7 +1,7 @@
 
 #library(formods)
 #library(devtools)
-#devtools::load_all()
+devtools::load_all()
 
 
 # These are suggested packages
