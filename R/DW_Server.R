@@ -18,7 +18,7 @@
 #'@param id_UD  ID string for the upload data module used to handle uploads or
 #'the name of the list element in react_state where the data set is stored.
 #'@param FM_yaml_file App configuration file with FM as main section.
-#'@param MOD_yaml_file  Module configuration file with MC as main section.
+#'@param MOD_yaml_file  Module configuration file with DW as main section.
 #'@param react_state Variable passed to server to allow reaction outside of
 #'module (\code{NULL})
 #'@return DW Server object
@@ -1138,6 +1138,25 @@ DW_Server <- function(id,
       uiele
     })
     #------------------------------------
+    toNotify <- reactive({
+      list(input$button_dw_add_element,
+           input$hot_dw_elements)
+    })
+    observeEvent(toNotify(), {
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
+      # Triggering optional notifications
+      notify_res =
+      FM_notify(state = state,
+       session     = session)
+    })
+    #------------------------------------
     # Creating reaction if a variable has been specified
     if(!is.null(react_state)){
       # Here we list the ui inputs that will result in a state change:
@@ -1328,6 +1347,13 @@ DW_fetch_state = function(id,                    input,     session,
                 if(hot_df[eridx, ]$Delete == FALSE){
                   NEW_ET = rbind(NEW_ET,
                                  OLD_ET[eridx,])
+                } else {
+                  # When we find the row being deleted we add a notification
+                  del_row = hot_df[eridx, ]
+                  notify_text = state[["MC"]][["notifications"]][["del_dw_element"]]
+                  notify_text = stringr::str_replace_all(notify_text, "===ACTION===", del_row$Action)
+                  notify_text = stringr::str_replace_all(notify_text, "===DESC===",   del_row$Description)
+                  state = FM_set_notification(state, notify_text, "DW element deleted", "warning")
                 }
               }
 
@@ -1437,8 +1463,11 @@ DW_fetch_state = function(id,                    input,     session,
         # table
         if(dwee_res[["isgood"]]){
           state = DW_add_wrangling_element(state, dwb_res, dwee_res)
+          notify_text = state[["MC"]][["notifications"]][["new_dw_element"]]
+          notify_text = stringr::str_replace_all(notify_text, "===ACTION===", dwb_res$action)
+          notify_text = stringr::str_replace_all(notify_text, "===DESC===", dwb_res$desc)
+          state = FM_set_notification(state, notify_text, "DW element added")
         }
-
       }
     }
     # Passing any messages back to the user
@@ -2243,7 +2272,7 @@ DW_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
     hasrptele = hasrptele,
     code      = code,
     msgs      = msgs,
-    rpt       = rpt     
+    rpt       = rpt
   )
 
 res}

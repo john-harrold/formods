@@ -23,7 +23,7 @@ the name of the list element in react_state where the data set is stored.}
 
 \item{FM_yaml_file}{App configuration file with FM as main section.}
 
-\item{MOD_yaml_file}{Module configuration file with MC as main section.}
+\item{MOD_yaml_file}{Module configuration file with DW as main section.}
 
 \item{react_state}{Variable passed to server to allow reaction outside of
 module (\code{NULL})}

@@ -7,6 +7,9 @@ MC:
   reporting:
     enabled: TRUE 
     priority: 1
+  notifications:
+    new_dw_element: "Added element: ===ACTION=== (===DESC===)"
+    del_dw_element: "Removed element: ===ACTION=== (===DESC===)"
   tooltips: 
     # Set to FALSE to disable tool tips for this module
     include: TRUE

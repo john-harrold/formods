@@ -139,10 +139,16 @@
     <loc>/reference/FM_mk_error_fig.html</loc>
   </url>
   <url>
+    <loc>/reference/FM_notify.html</loc>
+  </url>
+  <url>
     <loc>/reference/FM_set_app_state.html</loc>
   </url>
   <url>
     <loc>/reference/FM_set_mod_state.html</loc>
+  </url>
+  <url>
+    <loc>/reference/FM_set_notification.html</loc>
   </url>
   <url>
     <loc>/reference/FM_set_ui_msg.html</loc>

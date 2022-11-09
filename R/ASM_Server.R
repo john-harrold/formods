@@ -106,6 +106,7 @@ ASM_Server <- function(id,
     # Download State
     output$button_state_save   = downloadHandler(
 
+
       filename = function() {
         state = ASM_fetch_state(id           = id,
                                 input        = input,
@@ -184,7 +185,8 @@ ASM_Server <- function(id,
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
         rpt_res =
-        FM_generate_report(session   =session,
+        FM_generate_report(state     = state,
+                           session   = session,
                            file_dir  = dirname(file),
                            file_name = basename(file))
         }
@@ -209,7 +211,8 @@ ASM_Server <- function(id,
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
         rpt_res =
-        FM_generate_report(session   =session,
+        FM_generate_report(state     = state,
+                           session   = session,
                            file_dir  = dirname(file),
                            file_name = basename(file))
         }
@@ -595,12 +598,13 @@ ASM_write_state = function(state, session, file){
   rpttypes = c("xlsx", "pptx", "docx")
   rptctr = 1
   for(rpttype in rpttypes){
+ 
 
     if(system.file(package = "shinybusy") !=""){
       shinybusy::update_modal_spinner(text=
               paste0(state[["MC"]][["labels"]][["busy"]][[rpttype]], "(",rptctr, "/", length(rpttypes),")"))
     }
-
+ 
     rpt_file_name = paste0("report.", rpttype)
     grres = FM_generate_report(
        state         = state,
@@ -609,7 +613,7 @@ ASM_write_state = function(state, session, file){
        file_name     = rpt_file_name,
        gen_code_only = !(switch_gen_rpts),
        rpterrors     = TRUE)
-
+ 
     # Appending the report generation code
     if(grres[["isgood"]]){
       app_code[["code"]] = c(app_code[["code"]], paste0("# Generating report: ", rpttype))
@@ -618,7 +622,7 @@ ASM_write_state = function(state, session, file){
       app_code[["code"]] = c(app_code[["code"]], paste0("# ", rpttype, " not generated"))
       app_code[["code"]] = c(app_code[["code"]], paste0("# ", grres[["errmsg"]]))
     }
-
+ 
     rptctr = rptctr + 1
   }
 

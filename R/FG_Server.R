@@ -2399,37 +2399,60 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
       # Pulling out the figure object
       current_fig    = state[["FG"]][["figs"]][[fig_id]]
       key            = current_fig[["key"]]
+      notes          = current_fig[["notes"]]
       fg_object_name = current_fig[["fg_object_name"]]
       fobj           = current_fig[["fobj"]]
       # creating the fg_object_name locally
       assign(fg_object_name, fobj)
-      if(rpttype == "pptx"){
+      if(rpttype %in% c("pptx", "docx")){
         # this is a normal ggplot object/single figure.
         if(is.null(ggforce::n_pages(fobj))){
-
-          # creating the code for the slide:
-          code_chunk = c(
-     paste0('# Figure ', fig_id, ": ", key, '                                   '),
-            'rpt  = onbrand::report_add_slide(rpt,                              ',
-            '          template = "content_list",                               ',
-            '          elements = list(                                         ',
-     paste0('            title        = list( content = "', key,'",               '),
-            '                                 type    = "text"),                ',
-     paste0('            content_body = list( content = ', fg_object_name, ',   '),
-            '                                 type    = "ggplot")))               '
-          )
-
-          # Evaluating the code created above:
-          if(!gen_code_only){
-            eval(parse(text=paste(code_chunk, collapse="\n"))) }
-
-          # Saving the code for the slide
-          code = c(code, code_chunk)
-
+          if(rpttype == "pptx"){
+            # creating the code for the slide:
+            code_chunk = c(
+            paste0('# Figure ', fig_id, ": ", key, '                                   '),
+                   'rpt  = onbrand::report_add_slide(rpt,                              ',
+                   '          template = "content_list",                               ',
+                   '          elements = list(                                         ',
+            paste0('            title        = list( content = "', key,'",               '),
+                   '                                 type    = "text"),                ',
+            paste0('            content_body = list( content = ', fg_object_name, ',   '),
+                   '                                 type    = "ggplot")))               '
+            )
+          }
+          if(rpttype == "docx"){
+            notes_str = NULL
+            if(notes != ""){
+              notes_str = paste0('          notes    = "',notes,'",')
+            }
+            code_chunk = c(
+            paste0('# Inserting figure: ', key),
+                   'rpt = onbrand::report_add_doc_content(rpt,',
+                   '        type     = "ggplot",',
+                   '        content  = list(', 
+            paste0('          image    =  ', fg_object_name, ','),
+            paste0('          key      = "', fig_id,  '",'),
+                              notes_str, 
+            paste0('          caption  = "',key,'"))'),
+                   '# adding a page break',
+                   'rpt = onbrand::report_add_doc_content(rpt,',
+                   '        type    = "break",',
+                   '        content = NULL)',
+                   ' '
+            )
+          }
+          
+          if(!is.null(code_chunk)){
+            # Evaluating the code created above:
+            if(!gen_code_only){
+              eval(parse(text=paste(code_chunk, collapse="\n"))) }
+            
+            # Saving the code for the slide
+            code = c(code, code_chunk)
+          }
         } else {
 
-          # Add a slide for each paginated object
-
+          # Add each paginated object
           # First we get the facet row from the elements_table:
           facet_row = current_fig[["elements_table"]] |>
             dplyr::filter(.data[["Element"]] =="facet")
@@ -2449,29 +2472,53 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
             # Assigning the current page
             facet_cmd = stringr::str_replace(facet_cmd, "page=1", paste0("page=", page))
 
-            # creating the code for the slide:
-            code_chunk = c(
-       paste0('# Figure ', fig_id, '(',page,'): ', key, '                         '),
-              'rpt  = onbrand::report_add_slide(rpt,                              ',
-              '          template = "content_list",                               ',
-              '          elements = list(                                         ',
-       paste0('            title        = list( content = "', key,'",             '),
-              '                                 type    = "text"),                ',
-       paste0('            content_body = list( content = ', facet_cmd, ',        '),
-              '                                 type    = "ggplot")))               '
-            )
-
-            # Evaluating the code created above:
-            if(!gen_code_only){
-              eval(parse(text=paste(code_chunk, collapse="\n")))}
-
-            # Saving the code for the slide
-            code = c(code, code_chunk)
+           ## A slide for each picture
+            if(rpttype == "pptx"){
+              # creating the code for the slide:
+              code_chunk = c(
+              paste0('# Figure ', fig_id, '(',page,'): ', key, '                         '),
+                     'rpt  = onbrand::report_add_slide(rpt,                              ',
+                     '          template = "content_list",                               ',
+                     '          elements = list(                                         ',
+              paste0('            title        = list( content = "', key,'",             '),
+                     '                                 type    = "text"),                ',
+              paste0('            content_body = list( content = ', facet_cmd, ',        '),
+                     '                                 type    = "ggplot")))               '
+                   )
+            }
+            if(rpttype == "docx"){
+              code_chunk = c()
+              notes_str = NULL
+              if(notes != ""){
+                notes_str = paste0('          notes    = "',notes,'",')
+              }
+              code_chunk = c(
+              paste0('# Inserting figure ', fig_id, '(',page,'): ', key),
+                     'rpt = onbrand::report_add_doc_content(rpt,',
+                     '        type     = "ggplot",',
+                     '        content  = list(', 
+              paste0('          image    =  ', facet_cmd, ','),
+              paste0('          key      = "', fig_id,  '",'),
+                                notes_str, 
+              paste0('          caption  = "',key,'"))'),
+                     '# adding a page break',
+                     'rpt = onbrand::report_add_doc_content(rpt,',
+                     '        type    = "break",',
+                     '        content = NULL)',
+                     ' '
+              )
+            }
+            
+            if(!is.null(code_chunk)){
+              if(!gen_code_only){
+                # Evaluating the code created above:
+                eval(parse(text=paste(code_chunk, collapse="\n")))}
+              
+              # Saving the code for the slide
+              code = c(code, code_chunk)
+            }
           }
         }
-      }
-      if(rpttype == "docx"){
-
       }
     }
   }

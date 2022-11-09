@@ -131,9 +131,9 @@ Analysis</a>
 </h2>
 <p>To get started you can make a copy of some example files:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">copy.file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"ZZ_module_components.R"</span><span class="op">)</span>, <span class="st">"ZZ_module_components.R"</span><span class="op">)</span></span>
-<span><span class="fu">copy.file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"ZZ_Server.R"</span><span class="op">)</span>, <span class="st">"ZZ_Server.R"</span><span class="op">)</span></span>
-<span><span class="fu">copy.file</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"ZZ.yaml"</span><span class="op">)</span>, <span class="st">"ZZ.yaml"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"ZZ_module_components.R"</span><span class="op">)</span>, <span class="st">"ZZ_module_components.R"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"ZZ_Server.R"</span><span class="op">)</span>, <span class="st">"ZZ_Server.R"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"ZZ.yaml"</span><span class="op">)</span>, <span class="st">"ZZ.yaml"</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>
 <code>ZZ_module_components.R</code> - An app that can be used for
@@ -151,11 +151,6 @@ your modules needs.</li>
 module short name you’re using. The <code>ZZ_Server.R</code> would go in
 the <code>R</code> directory in your package and the other two files
 would go into <code>inst/templates</code>.</p>
-<p>state fields</p>
-<ul>
-<li><code>yaml</code></li>
-<li><code>MC</code></li>
-</ul>
 </div>
 <div class="section level2">
 <h2 id="expected-functions">Expected functions<a class="anchor" aria-label="anchor" href="#expected-functions"></a>
@@ -194,13 +189,23 @@ generated (e.g. <code>ASM</code>) just return <code>NULL</code>.</li>
 <h2 id="helper-functions-in-formods">Helper functions in formods<a class="anchor" aria-label="anchor" href="#helper-functions-in-formods"></a>
 </h2>
 <ul>
-<li><code><a href="../reference/FM_le.html">FM_le()</a></code></li>
-<li><code><a href="../reference/FM_tc.html">FM_tc()</a></code></li>
+<li>
+<code><a href="../reference/FM_le.html">FM_le()</a></code> - Creates log entries (<code>le</code>) that
+are displayed in the console.</li>
+<li>
+<code><a href="../reference/FM_tc.html">FM_tc()</a></code> - This can be used to evaluate code, trap
+errors, and process results.</li>
 <li><code><a href="../reference/has_changed.html">has_changed()</a></code></li>
 <li><code><a href="../reference/set_hold.html">set_hold()</a></code></li>
 <li><code><a href="../reference/fetch_hold.html">fetch_hold()</a></code></li>
 <li><code><a href="../reference/remove_hold.html">remove_hold()</a></code></li>
 <li><code><a href="../reference/FM_init_state.html">FM_init_state()</a></code></li>
+<li>
+<code><a href="../reference/FM_set_notification.html">FM_set_notification()</a></code> - Within you code you can create
+notifications and attach them to a module state.</li>
+<li>
+<code><a href="../reference/FM_notify.html">FM_notify()</a></code> - Used in <code><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent()</a></code> to
+show notifications that have not yet been displayed.</li>
 <li><code><a href="../reference/FM_set_mod_state.html">FM_set_mod_state()</a></code></li>
 <li><code><a href="../reference/FM_fetch_mod_state.html">FM_fetch_mod_state()</a></code></li>
 <li><code><a href="../reference/FM_set_ui_msg.html">FM_set_ui_msg()</a></code></li>
@@ -224,7 +229,7 @@ of the module.</li>
 <li>
 <code>checksum</code> A checksum that can be used to detect changes
 in this module. For example in the UD module this will change if the
-uploaded file or the sheet selected from a currently uploaded file
+uploaded file or the sheet selected from a currently uplo:waded file
 changes.</li>
 <li>
 <code>code_previous</code> Carries over the code from other modules
@@ -235,6 +240,85 @@ contain the code to load the dataset.</li>
 <code>code</code> Code to repelicate the current state of the
 module.</li>
 </ul>
+</div>
+</div>
+<div class="section level2">
+<h2 id="notifications">Notifications<a class="anchor" aria-label="anchor" href="#notifications"></a>
+</h2>
+<p>Notifications are created using the <a href="https://github.com/dreamRs/shinybusy" class="external-link">shinybusy</a> package
+and are produced with two different functions:
+<code><a href="../reference/FM_set_notification.html">FM_set_notification()</a></code> and <code><a href="../reference/FM_notify.html">FM_notify()</a></code>. This is
+done in a centralized fashion where notifications are added to the state
+object as user information is processed. This will set a notification
+called <code>Example Notification</code>. Along with that a timestamp is
+set:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>   <span class="va">state</span> <span class="op">=</span> <span class="fu"><a href="../reference/FM_set_notification.html">FM_set_notification</a></span><span class="op">(</span><span class="va">state</span>, <span class="st">"Something happened"</span>, <span class="st">"Example Notification"</span><span class="op">)</span></span></code></pre></div>
+<p>That timestamp is used to track and prevent the notification from
+being shown multiple times. Next you need to setup the reactions to
+display the notifications. Here you can create a reactive expression of
+the inputs that will lead to a notification:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="va">toNotify</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">input1</span>,</span>
+<span>           <span class="va">input</span><span class="op">$</span><span class="va">input2</span><span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<p>Next you use <code><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent()</a></code> with that reactive
+expression to trigger notifications. You need to use the fetch state
+function for that molecule to get the state object with the
+notifications. Then <code><a href="../reference/FM_notify.html">FM_notify()</a></code> will be called an any
+unprocessed notifications will be displayed:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="fu">toNotify</span><span class="op">(</span><span class="op">)</span>, <span class="op">{</span></span>
+<span>      <span class="va">state</span> <span class="op">=</span> <span class="fu">XX_fetch_state</span><span class="op">(</span>id              <span class="op">=</span> <span class="va">id</span>,</span>
+<span>                             input           <span class="op">=</span> <span class="va">input</span>,</span>
+<span>                             session         <span class="op">=</span> <span class="va">session</span>,</span>
+<span>                             FM_yaml_file    <span class="op">=</span> <span class="va">FM_yaml_file</span>,</span>
+<span>                             MOD_yaml_file   <span class="op">=</span> <span class="va">MOD_yaml_file</span>,</span>
+<span>                             react_state     <span class="op">=</span> <span class="va">react_state</span><span class="op">)</span></span>
+<span></span>
+<span>      <span class="co"># Triggering optional notifications</span></span>
+<span>      <span class="va">notify_res</span> <span class="op">=</span></span>
+<span>      <span class="fu"><a href="../reference/FM_notify.html">FM_notify</a></span><span class="op">(</span>state    <span class="op">=</span> <span class="va">state</span>,</span>
+<span>                session  <span class="op">=</span> <span class="va">session</span><span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="formods-state-objects">formods state objects<a class="anchor" aria-label="anchor" href="#formods-state-objects"></a>
+</h2>
+<p>When you create a formods state object it can have the following
+fields:</p>
+<ul>
+<li>
+<code>yaml</code>- Contents of the formods configuration file<br>
+</li>
+<li>
+<code>MC</code> - Contents of the module configuration file<br>
+</li>
+<li>
+<code>XX</code> - XX here is the short name of the current module
+(found in <code>MOD_TYPE</code> below), this is where you would store
+any app information (see below).</li>
+<li>
+<code>MOD_TYPE</code> - Short name of the module<br>
+</li>
+<li>
+<code>id</code> - ID of the module<br>
+</li>
+<li>
+<code>FM_yaml_file</code> - formods configuration file</li>
+<li>
+<code>MOD_yaml_file</code> - Module configuration file</li>
+<li>
+<code>notifications</code> - Contains notifications set by the user
+through <code><a href="../reference/FM_set_notification.html">FM_set_notification()</a></code>
+</li>
+</ul>
+<div class="section level3">
+<h3 id="app-information-in-xx">App information in XX<a class="anchor" aria-label="anchor" href="#app-information-in-xx"></a>
+</h3>
+<p>This field <code>state$XX</code> is relatively freeform but there are
+some expected elements.</p>
 </div>
 <div class="section level3">
 <h3 id="configuration-file">Configuration file<a class="anchor" aria-label="anchor" href="#configuration-file"></a>

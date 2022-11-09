@@ -33,6 +33,26 @@ FM:
          # Wrangling data
       FG: |-
          # Generating figures
+  notifications:
+    config:
+      # You can put any arguments here that would be arguments for
+      # config_notify(). See ?shinybusy::config_notify() for more information
+      success:
+        useFontAwesome: FALSE
+        useIcon:        FALSE
+        background:     "#5bb85b"
+      failure:
+        useFontAwesome: FALSE
+        useIcon:        FALSE
+        background:     "#d9534f"
+      info:
+        useFontAwesome: FALSE
+        useIcon:        FALSE
+        background:     "#5bc0de"
+      warning:
+        useFontAwesome: FALSE
+        useIcon:        FALSE
+        background:     "#f0ac4d"
   reporting: 
     # enabled here controls reporting for the app. Individual modules can be
     # controlled in their respective configuration files

@@ -2,17 +2,20 @@
 ZZ:
   code: # module specific code options
     readOnly: TRUE
-    mode:     r    
-  # put different formatting options (widths, heights, 
+    mode:     r
+  reporting:
+    enabled: FALSE
+    priority: 1
+  # put different formatting options (widths, heights,
   # shinyWidgets button sizes, etc) here.
   formatting:
     input:
       width: 100
-  labels:    
+  labels:
     input_label: "This is the text for a label"
   errors:
     bad_input: "Input error message"
-  tooltips: 
+  tooltips:
     # Set to FALSE to disable tool tips for this module
     include: TRUE
     components:

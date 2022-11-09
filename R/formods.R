@@ -1106,7 +1106,6 @@ FM_generate_report = function(state,
 
   # Pulling out the app state
   app_state    = FM_fetch_app_state(session)
-  state        = NULL
   mod_rpt_info = NULL
 
   # This will hold the reporting code
@@ -1116,10 +1115,6 @@ FM_generate_report = function(state,
   for(MOD in names(app_state)){
     MODDATA = app_state[[MOD]]
 
-    # Creating a state object to use below:
-    if(MODDATA$id == "ASM"& is.null(state)){
-      state = MODDATA
-    }
 
     if(!is.null(MODDATA[["MC"]][["reporting"]])){
       # Constructing a data frame of each module and
@@ -1156,6 +1151,7 @@ FM_generate_report = function(state,
   isgood = TRUE
   errmsg = ""
 
+
   # These are the allowed report types
   allowed_rpttypes = c("xlsx", "pptx", "docx")
 
@@ -1177,6 +1173,7 @@ FM_generate_report = function(state,
 
             # Next we look to see if there is a report generation function
             MOD_FUNC  = paste0(tmp_MOD_TYPE, "_append_report")
+
             if(exists(MOD_FUNC, mode="function")){
 
               FM_le(state, paste0("  appending report for module:", tmp_MOD_TYPE, " id:", tmp_id, " priority:", tmp_priority))
@@ -1310,6 +1307,138 @@ FM_generate_report = function(state,
 
 
 res}
+
+#'@export
+#'@title Shiny Notification
+#'@description Generates a notification that should only show once.
+#'@param state Module state generating the notification
+#'@param session Shiny session variable
+#'@param notify_id Unique string for this notification
+#'@param notify_text Text to go in the notification
+#'@param rpterrors Boolean variable to generate reports with errors.
+#'@param timestamp Time when noficiation was created (Sys.time())
+#'@return Boolean variable indicating if the notification was triggered
+FM_notify = function(state, session){
+
+
+  # current state id
+  id = state[["id"]]
+
+  if(system.file(package = "shinybusy") !=""){
+    if("notifications" %in% names(state)){
+      for(notify_id in names(state[["notifications"]])){
+
+        # Defaulting to not notifying user
+        notify_user = FALSE
+
+        notify_text = state[["notifications"]][[notify_id]][["text"]]
+        timestamp   = state[["notifications"]][[notify_id]][["timestamp"]]
+        type        = state[["notifications"]][[notify_id]][["type"]]
+
+        if(is.null(session$userData[["FM"]][["notifications"]][[id]][[notify_id]])){
+          # This checks to see if this notification ID has been used yet
+          notify_user = TRUE
+        } else {
+          # Now we check to see if this notification text has been sent to
+          # the user yet. To do that we see if the contents of the notify_id
+          # are the same or different from the notification text
+          if(timestamp != session$userData[["FM"]][["notifications"]][[id]][[notify_id]]){
+            notify_user = TRUE
+          }
+        }
+
+        if(notify_user){
+          # Default notify config
+          cn = config_notify()
+
+          # Loading formods
+          if(type %in% names(state[["yaml"]][["FM"]][["notifications"]][["config"]])){
+            tc_env = state[["yaml"]][["FM"]][["notifications"]][["config"]][[type]]
+            cmd_args = paste(paste(names(tc_env), "=", names(tc_env)), collapse = ",\n ")
+            cmd = paste("cn = config_notify(\n", cmd_args, ")")
+
+            # How we run it in the try catch environment in case there are any errors
+            tcres = FM_tc(cmd, tc_env, "cn")
+
+            # if we were successful we pluck out the config_notify object
+            if(tcres[["isgood"]]){
+              cn = tcres[["capture"]][["cn"]]
+            }else{
+              # Otherwise we throw some errors
+              FM_le(state, "Unable to extract the config_notify from yaml file")
+              for(msg in tcres[["msgs"]]){
+                FM_le(state, msg)
+              }
+            }
+          } else {
+            FM_le(state, paset0("Notification type >", type, "< not found using defaults."))
+          }
+
+          # Notifying the user
+          shinybusy::notify(notify_text, cn)
+          # Updating the text in the session variable to prevent further
+          # notifications
+          session$userData[["FM"]][["notifications"]][[id]][[notify_id]] = timestamp
+        }
+      }
+    }
+  }
+
+#
+# if(system.file(package = "shinybusy") !=""){
+#   notify_user = FALSE
+#
+#   if(is.null(session$userData[["FM"]][["notifications"]][[id]][[notify_id]])){
+#     # This checks to see if this notification ID has been used yet
+#     notify_user = TRUE
+#   } else {
+#     # Now we check to see if this notification text has been sent to
+#     # the user yet. To do that we see if the contents of the notify_id
+#     # are the same or different from the notification text
+#     if(timestamp != session$userData[["FM"]][["notifications"]][[id]][[notify_id]]){
+#       notify_user = TRUE
+#     }
+#   }
+#
+#   if(notify_user){
+#     # Notifying the user
+#     shinybusy::notify_info(notify_text)
+#     # Updating the text in the session variable to prevent further
+#     # notifications
+#     session$userData[["FM"]][["notifications"]][[id]][[notify_id]] = timestamp
+#   }
+# }
+
+NULL}
+
+#'@export
+#'@title Shiny Notification
+#'@description Generates a notification that should only show once.
+#'@param state Module state generating the notification
+#'@param notify_id Unique string for this notification
+#'@param notify_text Text to go in the notification
+#'@param type - Can be either "success", "failure", "info" (default), or
+#'"warning"
+#'@return Module state with notification text set
+FM_set_notification = function(state, notify_text, notify_id, type="info"){
+  isgood = TRUE
+  if( !is.character(notify_text) ){
+    isgood = FALSE
+    FM_le(state, "notify_text should be charater data.") }
+  if( !is.character(notify_id) ){
+    isgood = FALSE
+    FM_le(state, "notify_id should be charater data.") }
+  if(isgood){
+    # Setting notification
+    state[["notifications"]][[notify_id]][["text"]]      = notify_text
+    state[["notifications"]][[notify_id]][["type"]]      = type 
+    state[["notifications"]][[notify_id]][["timestamp"]] = as.numeric(Sys.time())
+  } else {
+    FM_le(state, "Notification not set, see above for details.")
+    FM_le(state, "FM_set_notification()")
+  }
+
+state}
 
 
 

@@ -41,9 +41,9 @@ The current modules are in development:
 To get started you can make a copy of some example files:
 
 ``` r
-copy.file(system.file(package="formods", "templates", "ZZ_module_components.R"), "ZZ_module_components.R")
-copy.file(system.file(package="formods", "templates", "ZZ_Server.R"), "ZZ_Server.R")
-copy.file(system.file(package="formods", "templates", "ZZ.yaml"), "ZZ.yaml")
+file.copy(system.file(package="formods", "templates", "ZZ_module_components.R"), "ZZ_module_components.R")
+file.copy(system.file(package="formods", "templates", "ZZ_Server.R"), "ZZ_Server.R")
+file.copy(system.file(package="formods", "templates", "ZZ.yaml"), "ZZ.yaml")
 ``` 
 
 - `ZZ_module_components.R` - An app that can be used for testing the module and highlighting the different UI elements that are used within the module. 
@@ -51,13 +51,6 @@ copy.file(system.file(package="formods", "templates", "ZZ.yaml"), "ZZ.yaml")
 - `ZZ.yaml`: This module configuration file contains the the minimal elements expected, but you can add your own fields to suit your modules needs. 
 
 You can rename the `ZZ` portion of the files with the module short name you're using. The `ZZ_Server.R` would go in the `R` directory in your package and the other two files would go into `inst/templates`.
-
-state fields
-
-- `yaml`
-- `MC`
-
-
 
 # Expected functions
 
@@ -73,13 +66,15 @@ state fields
 
 # Helper functions in formods
 
-- `FM_le()`
-- `FM_tc()`
+- `FM_le()` - Creates log entries (`le`) that are displayed in the console.
+- `FM_tc()` - This can be used to evaluate code, trap errors, and process results.
 - `has_changed()`
 - `set_hold()`
 - `fetch_hold()`
 - `remove_hold()`
 - `FM_init_state()`
+- `FM_set_notification()` - Within you code you can create notifications and attach them to a module state.
+- `FM_notify()` - Used in `observeEvent()` to show notifications that have not yet been displayed. 
 - `FM_set_mod_state()`
 - `FM_fetch_mod_state()`
 - `FM_set_ui_msg()`
@@ -95,12 +90,67 @@ Say you are using the UD module to feed data into the DW module and the user goe
 * `isgood` A boolean variable to indicate the general state of the module. 
 * `checksum` A checksum that can be used to detect changes in this module. For
   example in the UD module this will change if the uploaded file or the sheet
-  selected from a currently uploaded file changes. 
+  selected from a currently uplo:waded file changes. 
 * `code_previous` Carries over the code from other modules the current one
   depends on. For ecample the DW module would depend on the UD model to load
   the data. So `code_previous` here would contain the code to load the
   dataset.
 * `code` Code to repelicate the current state of the module. 
+
+# Notifications
+
+Notifications are created using the `{shinybusy}` package and are produced with two different functions: `FM_set_notification()` and `FM_notify()`. This is done in a centralized fashion where notifications are added to the state object as user information is processed. This will set a notification called `Example Notification`. Along with that a timestamp is set:
+
+```r
+   state = FM_set_notification(state, "Something happened", "Example Notification")
+``` 
+That timestamp is used to track and prevent the notification from being shown multiple times. Next you need to setup the reactions to display the notifications. 
+Here you can create a reactive expression of the inputs that will lead to a
+notification:
+
+```r
+    toNotify <- reactive({
+      list(input$input1,
+           input$input2)
+    })
+``` 
+
+Next you use `observeEvent()` with that reactive expression to trigger notifications. You need to use the fetch state function for that molecule to get the state object with the notifications. Then `FM_notify()` will be called an any unprocessed notifications will 
+be displayed:
+
+```r
+    observeEvent(toNotify(), {
+      state = XX_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
+
+      # Triggering optional notifications
+      notify_res =
+      FM_notify(state    = state,
+                session  = session)
+    })
+``` 
+# formods state objects
+
+When you create a formods state object it can have the following fields:
+
+* `yaml`- Contents of the formods configuration file          
+* `MC` - Contents of the module configuration file           
+* `XX` - XX here is the short name of the current module (found in `MOD_TYPE` below), this is where you would store any app information (see below).
+* `MOD_TYPE` - Short name of the module      
+* `id` - ID of the module           
+* `FM_yaml_file` - formods configuration file
+* `MOD_yaml_file` - Module configuration file
+* `notifications` - Contains notifications set by the user through `FM_set_notification()`
+
+
+## App information in XX
+
+This field `state$XX` is relatively freeform but there are some expected elements. 
+
 
 ## Configuration file
 ```{css, echo=FALSE}
