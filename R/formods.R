@@ -1349,13 +1349,13 @@ FM_notify = function(state, session){
 
         if(notify_user){
           # Default notify config
-          cn = config_notify()
+          cn = shinybusy::config_notify()
 
           # Loading formods
           if(type %in% names(state[["yaml"]][["FM"]][["notifications"]][["config"]])){
             tc_env = state[["yaml"]][["FM"]][["notifications"]][["config"]][[type]]
             cmd_args = paste(paste(names(tc_env), "=", names(tc_env)), collapse = ",\n ")
-            cmd = paste("cn = config_notify(\n", cmd_args, ")")
+            cmd = paste("cn = shinybusy::config_notify(\n", cmd_args, ")")
 
             # How we run it in the try catch environment in case there are any errors
             tcres = FM_tc(cmd, tc_env, "cn")

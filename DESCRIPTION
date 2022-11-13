@@ -40,6 +40,7 @@ Suggests:
   ggpubr,
   knitr,
   plotly,
+  clipr,
   shinydashboard,
   shinybusy,
   rmarkdown,

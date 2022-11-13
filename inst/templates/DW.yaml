@@ -4,6 +4,7 @@ MC:
   compact:
     code:    TRUE 
     preview: TRUE 
+    clip:    TRUE 
   reporting:
     enabled: TRUE 
     priority: 1
@@ -34,8 +35,8 @@ MC:
     fds_wider_values:     "Column with values"
     new_dw:               "New"
     del_dw:               "Delete"
-    copy_dw:              "Copy"
     save_dw:              "Save"
+    clip_dw:              "Code"
     ungroup_data:         "Removing current grouping"
     keep_onerow:          "Keep first row in current grouping"
     no_dataset:           "No dataset loaded!"
@@ -125,6 +126,9 @@ MC:
     # Button sizes from actionBttn (shinyWidgets) 
     # xs,sm, md, lg.
     button_dw_del:
+      size: "sm" 
+      block: TRUE 
+    button_dw_clip:
       size: "sm" 
       block: TRUE 
     button_dw_save:

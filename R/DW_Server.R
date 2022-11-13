@@ -170,6 +170,37 @@ DW_Server <- function(id,
       }
 
     })
+    # Generated data wrangling code
+    observeEvent(input$button_dw_clip, {
+
+      # this is all conditional on the whether clipr is installed
+      if(system.file(package="clipr") != ""){
+        state = DW_fetch_state(id              = id,
+                               input           = input,
+                               session         = session,
+                               FM_yaml_file    = FM_yaml_file,
+                               MOD_yaml_file   = MOD_yaml_file,
+                               id_UD           = id_UD,
+                               react_state     = react_state)
+
+
+        if(state[["DW"]][["UD"]][["isgood"]]){
+
+          # Pulling out the current view
+          current_view = DW_fetch_current_view(state)
+
+          if(is.null(current_view[["elements_table"]])){
+            uiele = "# No data wragling elements defined yet!"
+          } else {
+            uiele = current_view[["code"]]
+          }
+
+          clipr::write_clip(uiele)
+
+        }
+      }
+
+    })
     #------------------------------------
     # Selection the change the current view
     output$ui_dw_views = renderUI({
@@ -941,6 +972,31 @@ DW_Server <- function(id,
       }
       uiele})
     #------------------------------------
+    output$ui_dw_clip_code  = renderUI({
+      #req(input$X)
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
+
+      # This is a suggest, so we only generate this button conditionally
+      uiele = NULL
+      if(!(system.file(package="clipr") == "")){
+        uiele = actionBttn(
+                  inputId = NS(id, "button_dw_clip"),
+                  label   = state[["MC"]][["labels"]][["clip_dw"]],
+                  style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                  size    = state[["MC"]][["formatting"]][["button_dw_clip"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["button_dw_clip"]][["block"]],
+                  color   = "danger",
+                  icon    = icon("clipboard", lib="font-awesome"))
+      }
+
+      uiele})
+    #------------------------------------
     output$ui_dw_del_view  = renderUI({
       #req(input$X)
       state = DW_fetch_state(id              = id,
@@ -1080,11 +1136,18 @@ DW_Server <- function(id,
           verbatimTextOutput(NS(id, "ui_dw_new_element_msg"))
         )
 
+        # We only show the clip button if it's enabled
+        uiele_clip_button = NULL
+        if(state[["MC"]][["compact"]][["clip"]]){
+          uiele_clip_button = htmlOutput(NS(id, "ui_dw_clip_code"))
+        }
+
         uiele_buttons_right = tagList(
                  tags$style(".btn-custom-dw {width: 100px;}"),
                  div(style="display:inline-block;vertical-align:top",
                  uiele_dw_elements_button,
                  uiele_code_button,
+                 uiele_clip_button,
                  htmlOutput(NS(id, "ui_dw_save_view")),
                  htmlOutput(NS(id, "ui_dw_copy_view")),
                  htmlOutput(NS(id, "ui_dw_del_view")),

@@ -3,7 +3,8 @@ MC:
   # Controls what is shown in the compact ui mode: FG_ui_compact
   compact:
     code:    TRUE 
-    preview: "ggplot"   # Either "ggplot" or "plotly"
+    preview: "ggplot"   # Either "ggplot" or "plotly" (plotly is experimental)
+    clip:    TRUE 
   reporting:
     enabled: TRUE 
     priority: 1
