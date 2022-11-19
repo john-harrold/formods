@@ -172,16 +172,18 @@ DW_Server <- function(id,
     })
     # Generated data wrangling code
     observeEvent(input$button_dw_clip, {
+      state = DW_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             id_UD           = id_UD,
+                             react_state     = react_state)
 
-      # this is all conditional on the whether clipr is installed
-      if(system.file(package="clipr") != ""){
-        state = DW_fetch_state(id              = id,
-                               input           = input,
-                               session         = session,
-                               FM_yaml_file    = FM_yaml_file,
-                               MOD_yaml_file   = MOD_yaml_file,
-                               id_UD           = id_UD,
-                               react_state     = react_state)
+      # This is all conditional on the whether clipr is installed $
+      # and if the app isn't deployed
+      if((system.file(package="clipr") != "") &
+         !state[["yaml"]][["FM"]][["deployed"]]){
 
 
         if(state[["DW"]][["UD"]][["isgood"]]){
@@ -973,7 +975,7 @@ DW_Server <- function(id,
       uiele})
     #------------------------------------
     output$ui_dw_clip_code  = renderUI({
-      #req(input$X)
+      input$button_dw_clip
       state = DW_fetch_state(id              = id,
                              input           = input,
                              session         = session,
@@ -984,14 +986,15 @@ DW_Server <- function(id,
 
       # This is a suggest, so we only generate this button conditionally
       uiele = NULL
-      if(!(system.file(package="clipr") == "")){
+      if((system.file(package="clipr") != "") &
+         !state[["yaml"]][["FM"]][["deployed"]]){
         uiele = actionBttn(
                   inputId = NS(id, "button_dw_clip"),
                   label   = state[["MC"]][["labels"]][["clip_dw"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
                   size    = state[["MC"]][["formatting"]][["button_dw_clip"]][["size"]],
                   block   = state[["MC"]][["formatting"]][["button_dw_clip"]][["block"]],
-                  color   = "danger",
+                  color   = "royal",
                   icon    = icon("clipboard", lib="font-awesome"))
       }
 
@@ -1243,7 +1246,8 @@ DW_Server <- function(id,
                                react_state     = react_state)
 
         FM_le(state, "reaction state updated")
-        react_state[[id]] = state
+        #react_state[[id]] = state
+        react_state[[id]][["DW"]][["checksum"]] = state[["DW"]][["checksum"]]
       }, priority=99)
     }
 
@@ -1337,7 +1341,7 @@ DW_fetch_state = function(id,                    input,     session,
   # initialize it
   if(is.null(state)){
     # General state information
-    state = DW_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state)
+    state = DW_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, session)
   }
 
 
@@ -1364,7 +1368,7 @@ DW_fetch_state = function(id,                    input,     session,
     if(UPDATE_DS){
       # JMH prevent triggering UPDATE_DS on app state reset
       FM_le(state, "original dataset changed")
-      state = DW_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state)
+      state = DW_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, session)
     }
   }
 
@@ -1683,7 +1687,7 @@ state }
 #'@param id Shiny module ID
 #'@param id_UD  ID string for the upload data module used to handle uploads or
 #'the name of the list element in react_state where the data set is stored.
-#'@param react_state Variable passed to server to allow reaction outside of
+#'@param session Shiny session variable
 #'module (\code{NULL})
 #'@return list containing an empty DW state
 #'@examples
@@ -1698,7 +1702,7 @@ state }
 #'    id_UD           = "UD",
 #'    react_state     = NULL)
 #' state
-DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state){
+DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD,session){
 
   # initializing the state with the required formods elements:
   button_counters = c(
@@ -1770,14 +1774,14 @@ DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state){
   state[["DW"]][["current_view"]]         = NULL
   state[["DW"]][["view_cntr"]]            = 0
 
-  # Attaching the dataset to the state object
-  if(is.null(state[["DW"]][["UD"]])){
-    if(!is.null(isolate(react_state[[id_UD]][["UD"]]))){
-      state = DW_attach_ds(state, isolate(react_state[[id_UD]][["UD"]]))
-    } else {
-      state[["DW"]][["UD"]][["isgood"]] = FALSE
-      state[["DW"]][["isgood"]]         = FALSE
-    }
+  # By default the state is bad
+  state[["DW"]][["UD"]][["isgood"]] = FALSE
+  state[["DW"]][["isgood"]]         = FALSE
+
+  # If FM_fetch_mod_state is null then the module cannot be found
+  if(!is.null(FM_fetch_mod_state(session, id_UD))){
+    # Attaching the dataset to the state object
+    state = DW_attach_ds(state, id_UD, session)
   }
 
 
@@ -2198,17 +2202,37 @@ state}
 #'@title Attach Data Set to DW State
 #'@description Attaches a dataset to the DW state supplied.
 #'@param state DW state from \code{DW_fetch_state()}
-#'@param DS Dataset list object with elements described by the DS field
+#'@param id Shiny module ID
+#'@param id_UD  ID string for the upload data module used to handle uploads or
 #'returned by \code{UD_fetch_state()}.
 #'@return state with data set attached
-DW_attach_ds = function(state, DS){
+DW_attach_ds = function(state, id_UD, session){
 
-  # This contains the input dataset:
-  state[["DW"]][["UD"]]    = DS
-  # This is the loading code
-  state[["DW"]][["code_previous"]] = state[["DW"]][["UD"]][["code"]]
-  # Setting the DW stat to good
-  state[["DW"]][["isgood"]]        = TRUE
+
+  # Fetching the input dataset
+  ds_res = FM_fetch_ds(state=state, ids=id_UD, session=session)
+
+  # First we check to make sure we could fetch
+  # the dataset
+  if(ds_res[["isgood"]]){
+    # pulling the necessary bits out of the fetch results:
+    object_name = names(ds_res[["ds"]])[1]
+    contents    = ds_res[["ds"]][[object_name]][["DS"]]
+    code        = ds_res[["ds"]][[object_name]][["code"]]
+    checksum    = ds_res[["ds"]][[object_name]][["checksum"]]
+
+    # packing everything into the DW state variable
+    state[["DW"]][["UD"]][["isgood"]]       = TRUE
+    state[["DW"]][["UD"]][["checksum"]]     = checksum
+    state[["DW"]][["UD"]][["contents"]]     = contents
+    state[["DW"]][["UD"]][["object_name"]]  = object_name
+    state[["DW"]][["code_previous"]]        = code
+
+    # Setting the DW stat to good
+    state[["DW"]][["isgood"]]        = TRUE
+  }
+
+
 
 state}
 
@@ -2338,4 +2362,92 @@ DW_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
     rpt       = rpt
   )
 
+res}
+
+#'@export
+#'@title Fetch Module Datasets
+#'@description Fetches the datasets contained in the model
+#'@param state UD state from \code{UD_fetch_state()}
+#'@return Character object vector with the lines of code
+#'@return list containing the following elements
+#'\itemize{
+#'  \item{isgood:}    Return status of the function.
+#'  \item{hasds:}     Boolean indicator if the module has any datasets
+#'  \item{msgs:}      Messages to be passed back to the user.
+#'  \item{ds:}        List with datasets. Each list element has the name of
+#'  the R-object for that dataset. Each element has the following structure:
+#'  \itemize{
+#'    \item{label:}
+#'    \item{MOD_TYPE:}
+#'    \item{id:}
+#'    \item{DS:}
+#'    \item{DSMETA:}
+#'    \item{code:}
+#'    \item{checksum:}
+#'    \item{DSchecksum:}
+#'  }
+#'}
+DW_fetch_ds = function(state){
+
+  hasds  = FALSE
+  isgood = TRUE
+  msgs   = c()
+  ds     = list()
+
+  # Empty list for new datasets
+  NEWDS = list(label      = NULL,
+               MOD_TYPE    = NULL,
+               id         = NULL,
+               DS         = NULL,
+               DSMETA     = NULL,
+               code       = NULL,
+               checksum   = NULL,
+               DSchecksum = NULL)
+
+  DW_checksum = state[["DW"]][["checksum"]]
+  dw_views    = names(state[["DW"]][["views"]])
+  # Walking through each view:
+  for(dw_view in dw_views){
+    tmp_checksum      = state[["DW"]][["views"]][[dw_view]][["checksum"]]
+    tmp_object_name   = state[["DW"]][["views"]][[dw_view]][["view_ds_object_name"]]
+    tmp_code          = state[["DW"]][["views"]][[dw_view]][["code"]]
+    tmp_key           = state[["DW"]][["views"]][[dw_view]][["key"]]
+    tmp_code_previous = state[["DW"]][["views"]][[dw_view]][["code_previous"]]
+    tmp_contents      = state[["DW"]][["views"]][[dw_view]][["WDS"]]
+
+    # The module code is the two chuncks pasted together
+    modcode = paste(c(tmp_code_previous, tmp_code), collapse="\n")
+    if(is.null(modcode)){
+      modcode = ""
+    }
+    if(is.null(tmp_key)){
+      tmp_key = dw_view
+    }
+
+    # If the view is complete we append it to the ds list
+    if(!is.null(tmp_checksum)    &
+       !is.null(tmp_object_name) &
+       !is.null(tmp_contents)){
+
+      TMPDS = NEWDS
+
+      TMPDS[["label"]]      = tmp_key
+      TMPDS[["DS"]]         = tmp_contents
+      TMPDS[["checksum"]]   = DW_checksum
+      TMPDS[["DSchecksum"]] = tmp_checksum
+      TMPDS[["code"]]       = modcode
+      TMPDS[["MOD_TYPE"]]    = "DW"
+      TMPDS[["id"]]         = state[["id"]]
+      object_name           = tmp_object_name
+      hasds                 = TRUE
+
+      ds[[object_name]] = TMPDS
+    }
+  }
+
+
+  res = list(hasds  = hasds,
+             isgood = isgood,
+             msgs   = msgs,
+             ds     = ds)
 res}

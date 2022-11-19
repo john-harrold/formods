@@ -122,10 +122,22 @@ The ASM module is used to manage the app state. This allows the user to save the
 
 The UD module allows users to upload data files into the App. It will allow you to specify file types and for Excel files the sheet to be used.
 
+Provides 
+
+* Data sets via: `FM_fetch_ds()`  
+
 ## Data Wrangling (DW)
 
 The DW module provides an interface to `dplyr` and `tidyr`.These are used to create chains of data wrangling commands that the user can build to transform the data creating **data views**. The DW module can use data from the UD module, or can take in a list with a dataset.
 
+Provides 
+
+* Data views via: `FM_fetch_ds()`  
+* Reporting of data views (Excel)
+
 ## Figure Generation (FG)
 
 The FG module provides an interface to `ggplot` and allows the user to select from both the original data set from the UD module as well as the data views created in the DW module. The user here can create multiple figures.
+
+Provides 
+* Reporting of figures (PowerPoint and Word)

@@ -66,6 +66,7 @@ MC:
     save_fig:        "Save"
     del_fig:         "Delete"
     copy_fig:        "Copy"
+    clip_fig:        "Code"
     upds_fig:        "Data set"
     add_ele:         "Add Figure Element"
     msg_bad_label:   "No labels were specified, unable to add element."
@@ -192,6 +193,9 @@ MC:
       size: "sm" 
       block: TRUE
     button_fig_save:
+      size: "sm" 
+      block: TRUE
+    button_fig_clip:
       size: "sm" 
       block: TRUE
     button_fig_copy:

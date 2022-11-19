@@ -4,13 +4,15 @@
 \alias{DW_attach_ds}
 \title{Attach Data Set to DW State}
 \usage{
-DW_attach_ds(state, DS)
+DW_attach_ds(state, id_UD, session)
 }
 \arguments{
 \item{state}{DW state from \code{DW_fetch_state()}}
 
-\item{DS}{Dataset list object with elements described by the DS field
+\item{id_UD}{ID string for the upload data module used to handle uploads or
 returned by \code{UD_fetch_state()}.}
+
+\item{id}{Shiny module ID}
 }
 \value{
 state with data set attached

@@ -36,6 +36,7 @@ MC:
     new_dw:               "New"
     del_dw:               "Delete"
     save_dw:              "Save"
+    copy_dw:              "Copy"
     clip_dw:              "Code"
     ungroup_data:         "Removing current grouping"
     keep_onerow:          "Keep first row in current grouping"

@@ -62,7 +62,8 @@ structure of the list is defined below:
        \item{notes:   Figure notes  (user editable)}
        \item{id: Character id (\code{fig_idx})}
        \item{idx: Numeric id (\code{1})}
-       \item{fig_dsview:  Name of the dataset view for the current figure.}
+       \item{fig_dsview:  Name of the dataset view for the current figure
+       (also the R object name of the dataset view).}
        \item{checksum:    checksum of the figure used to detect changes in the figure.}
        \item{UD_checksum: checksum of the UD state when the figure was created.}
        \item{DW_checksum: checksum of DW module if data view was used.}

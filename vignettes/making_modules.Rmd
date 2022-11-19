@@ -54,11 +54,17 @@ You can rename the `ZZ` portion of the files with the module short name you're u
 
 # Expected functions
 
+For the module to work and interact with other modules, there are certain funcitons that are expected. 
 
 - `ZZ_Server`  
 - `ZZ_init_state`  
 - `ZZ_fetch_state`  
 - `ZZ_fetch_code` This takes as it's first argument the module state. When called with only this argument it should return a character object containing all of the code needed to generate the elements of this module represented in the app. You can assume that any modules this one depends on will be defined previously. For example the `FG` module will return only that code associated with generating figures. It will be appended to the code from the `UD` and `DW` modules that define loading the dataset and creation of the data views. For modules where no code is generated (e.g. `ASM`) just return `NULL`.
+
+- `ZZ_append_report`    
+
+- `ZZ_fetch_ds`    
+
 
 # Expected UI elements
 

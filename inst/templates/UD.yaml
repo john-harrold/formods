@@ -7,6 +7,7 @@ MC:
     enabled: FALSE
     priority: 1
   labels:
+    default_ds:         "Original data set"
     upload_button: "Select file"
     tab_main:      "Upload File"
     tab_code:      "Code"

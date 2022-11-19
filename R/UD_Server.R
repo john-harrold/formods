@@ -234,7 +234,8 @@ UD_Server <- function(id,
                                FM_yaml_file  = FM_yaml_file,
                                MOD_yaml_file = MOD_yaml_file)
         FM_le(state, "reaction state updated")
-        react_state[[id]] = state
+        #react_state[[id]] = state
+        react_state[[id]][["UD"]][["checksum"]] = state[["UD"]][["checksum"]]
       }, priority=100)
     }
 
@@ -457,12 +458,28 @@ UD_attach_ds = function(
          data_file       = NULL,
          sheet           = NULL,
          sheets          = NULL,
-         code            = NULL,
+         code            = "",
          object_name     = NULL,
          contents        = NULL){
 
   # Calculating the checksum
   checksum        = digest::digest(contents, algo=c("md5"))
+
+  if(is.null(object_name)){
+  # getting the object name:
+    if(is.null(state[["MC"]][["ds_object_name"]])){
+      object_name  = "UD"
+      warning(paste0("Unable to find ds_object_name in yaml file. Using default: ", object_name))
+    } else {
+      object_name = state[["MC"]][["ds_object_name"]]
+    }
+  }
+
+  # Contents is null at init. We want to set the flag to false since there is
+  # no data loaded
+  if(is.null(contents)){
+    isgood = FALSE
+  }
 
   state[["UD"]] =
     list(isgood          = isgood         ,
@@ -566,3 +583,64 @@ UD_fetch_code = function(state){
   }
 
 code}
+
+#'@export
+#'@title Fetch Module Datasets
+#'@description Fetches the datasets contained in the model
+#'@param state UD state from \code{UD_fetch_state()}
+#'@return Character object vector with the lines of code
+#'@return list containing the following elements
+#'\itemize{
+#'  \item{isgood:}    Return status of the function.
+#'  \item{hasds:}     Boolean indicator if the module has any datasets
+#'  \item{msgs:}      Messages to be passed back to the user.
+#'  \item{ds:}        List with datasets. Each list element has the name of
+#'  the R-object for that dataset. Each element has the following structure:
+#'  \itemize{
+#'    \item{label:}
+#'    \item{MOD_TYPE:}
+#'    \item{id:}
+#'    \item{DSMETA:}
+#'    \item{code:}
+#'    \item{checksum:}
+#'    \item{DSchecksum:}
+#'  }
+#'}
+UD_fetch_ds = function(state){
+  hasds  = FALSE
+  isgood = TRUE
+  msgs   = c()
+  ds     = list()
+
+  # Empty list for new datasets
+  NEWDS = list(label      = NULL,
+               MOD_TYPE   = NULL,
+               id         = NULL,
+               DS         = NULL,
+               DSMETA     = NULL,
+               code       = NULL,
+               checksum   = NULL,
+               DSchecksum = NULL)
+
+  # This prevents returning a dataset if this is triggered before data has
+  # been loaded
+  if(state[["UD"]][["isgood"]]){
+    NEWDS[["label"]]      = state[["MC"]][["labels"]][["default_ds"]]
+    NEWDS[["DS"]]         = state[["UD"]][["contents"]]
+    NEWDS[["checksum"]]   = state[["UD"]][["checksum"]]
+    NEWDS[["DSchecksum"]] = state[["UD"]][["checksum"]]
+    NEWDS[["code"]]       = state[["UD"]][["code"]]
+    NEWDS[["MOD_TYPE"]]   = "UD"
+    NEWDS[["id"]]         = state[["id"]]
+    object_name           = state[["UD"]][["object_name"]]
+    hasds                 = TRUE
+
+    # Putting it all into the ds object to be returned
+    ds[[object_name]] = NEWDS
+  }
+
+  res = list(hasds  = hasds,
+             isgood = isgood,
+             msgs   = msgs,
+             ds     = ds)
+res}

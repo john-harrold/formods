@@ -155,18 +155,13 @@ would go into <code>inst/templates</code>.</p>
 <div class="section level2">
 <h2 id="expected-functions">Expected functions<a class="anchor" aria-label="anchor" href="#expected-functions"></a>
 </h2>
+<p>For the module to work and interact with other modules, there are
+certain funcitons that are expected.</p>
 <ul>
-<li>
-<code>ZZ_Server</code><br>
-</li>
-<li>
-<code>ZZ_init_state</code><br>
-</li>
-<li>
-<code>ZZ_fetch_state</code><br>
-</li>
-<li>
-<code>ZZ_fetch_code</code> This takes as it’s first argument the
+<li><p><code>ZZ_Server</code><br></p></li>
+<li><p><code>ZZ_init_state</code><br></p></li>
+<li><p><code>ZZ_fetch_state</code><br></p></li>
+<li><p><code>ZZ_fetch_code</code> This takes as it’s first argument the
 module state. When called with only this argument it should return a
 character object containing all of the code needed to generate the
 elements of this module represented in the app. You can assume that any
@@ -175,7 +170,10 @@ modules this one depends on will be defined previously. For example the
 generating figures. It will be appended to the code from the
 <code>UD</code> and <code>DW</code> modules that define loading the
 dataset and creation of the data views. For modules where no code is
-generated (e.g. <code>ASM</code>) just return <code>NULL</code>.</li>
+generated (e.g. <code>ASM</code>) just return
+<code>NULL</code>.</p></li>
+<li><p><code>ZZ_append_report</code></p></li>
+<li><p><code>ZZ_fetch_ds</code></p></li>
 </ul>
 </div>
 <div class="section level2">

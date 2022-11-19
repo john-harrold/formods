@@ -169,11 +169,19 @@ FG_Server <- function(id,
           verbatimTextOutput(NS(id, "ui_fg_msg"))
         )
 
+        # We only show the clip button if it's enabled
+        uiele_clip_button = NULL
+        if(state[["MC"]][["compact"]][["clip"]]){
+          uiele_clip_button = htmlOutput(NS(id, "ui_fg_clip_code"))
+        }
+
+
         uiele_buttons_right = tagList(
                  tags$style(".btn-custom-fg {width: 100px;}"),
                  div(style="display:inline-block;vertical-align:top",
                  uiele_fg_elements_button,
                  uiele_code_button,
+                 uiele_clip_button,
                  htmlOutput(NS(id, "ui_fg_save_fig")),
                  htmlOutput(NS(id, "ui_fg_copy_fig")),
                  htmlOutput(NS(id, "ui_fg_del_fig")),
@@ -484,6 +492,34 @@ FG_Server <- function(id,
       }
       uiele})
     #------------------------------------
+    output$ui_fg_clip_code  = renderUI({
+      input$button_fg_clip
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
+
+      # This is a suggest, so we only generate this button conditionally
+      uiele = NULL
+      if((system.file(package="clipr") != "") &
+         !state[["yaml"]][["FM"]][["deployed"]]){
+        uiele = actionBttn(
+                  inputId = NS(id, "button_fg_clip"),
+                  label   = state[["MC"]][["labels"]][["clip_fig"]],
+                  style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                  size    = state[["MC"]][["formatting"]][["button_fig_clip"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["button_fig_clip"]][["block"]],
+                  color   = "royal",
+                  icon    = icon("clipboard", lib="font-awesome"))
+      }
+
+      uiele})
+    #------------------------------------
     output$ui_fg_del_fig   = renderUI({
       #req(input$X)
       state = FG_fetch_state(id             = id,
@@ -702,7 +738,8 @@ FG_Server <- function(id,
       current_fig = FG_fetch_current_fig(state)
 
       # Getting the columns of the dataset attached to the current figure:
-      fig_dscols = state[["FG"]][["DSV"]][["dsviews"]][["columns"]][[current_fig[["fig_dsview"]]]]
+      # JMH check the columns are being pulled
+      fig_dscols = names(state[["FG"]][["DSV"]][["ds"]][[current_fig[["fig_dsview"]]]][["DS"]])
 
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
@@ -977,21 +1014,24 @@ FG_Server <- function(id,
 
       # If this is triggered before datasets have been loaded the state will
       # be bad:
+      # JMH check the dsviews stuff
       if(state[["FG"]][["isgood"]]){
-        # Pulling out the data set views summary:
-        dsv_summary = state[["FG"]][["DSV"]][["dsviews"]][["dsv_summary"]]
-        if(current_fig[["fig_dsview"]] %in% dsv_summary[["view_key"]]){
+
+        # Pulling out the data set views catalog
+        ds_catalog = state[["FG"]][["DSV"]][["catalog"]]
+
+        if(current_fig[["fig_dsview"]] %in% ds_catalog[["object"]]){
           current_view_id= current_fig[["fig_dsview"]]
         } else {
-          current_view_id = dsv_summary[["view_key"]][1]
+          current_view_id = ds_catalog[["object"]][1]
           FM_le(state, paste0("ui_fg_curr_views: dataset view missing."   ))
           FM_le(state, paste0("fig_key: ",     current_fig[["key"]]       ))
           FM_le(state, paste0("fig_dsview: ",  current_fig[["fig_dsview"]]))
           FM_le(state, paste0("switching to view:", current_view_id ))
         }
 
-        choices        = dsv_summary[["view_key"]]
-        names(choices) = dsv_summary[["description"]]
+        choices        = ds_catalog[["object"]]
+        names(choices) = ds_catalog[["label"]]
 
         choicesOpt = NULL
         shinyWidgets::updatePickerInput(
@@ -1000,14 +1040,33 @@ FG_Server <- function(id,
           inputId    = "select_current_view",
           choices    = choices,
           choicesOpt = choicesOpt)
-
-      # shinyWidgets::updatePickerInput(
-      #   session    = session,
-      #   selected   = current_view_id,
-      #   inputId    = NS(id, "select_current_view"),
-      #   choices    = choices,
-      #   choicesOpt = choicesOpt)
-
+      }
+    })
+    #------------------------------------
+    observeEvent(input$button_fg_clip, {
+      state = FG_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             id_ASM         = id_ASM,
+                             id_UD          = id_UD,
+                             id_DW          = id_DW,
+                             react_state    = react_state)
+      # This is all conditional on the whether clipr is installed $
+      # and if the app isn't deployed
+      if((system.file(package="clipr") != "") &
+         !state[["yaml"]][["FM"]][["deployed"]]){
+   
+        uiele = NULL
+        current_fig = FG_fetch_current_fig(state)
+   
+        if(is.null(current_fig[["elements_table"]])){
+          uiele = "# No figure elements defined yet!"
+        } else {
+          uiele = current_fig[["code"]]
+        }
+        clipr::write_clip(uiele)
       }
     })
     #------------------------------------
@@ -1120,13 +1179,13 @@ FG_Server <- function(id,
 #'@description Merges default app options with the changes made in the UI
 #'@param id Shiny module ID
 #'@param input Shiny input variable
-#'@param session Shiny session variable
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
+#'@param session Shiny session variable
 #'@return list containing the current state of the app including default
 #'values from the yaml file as well as any changes made by the user. The
 #'structure of the list is defined below:
@@ -1153,7 +1212,8 @@ FG_Server <- function(id,
 #'        \item{notes:   Figure notes  (user editable)}
 #'        \item{id: Character id (\code{fig_idx})}
 #'        \item{idx: Numeric id (\code{1})}
-#'        \item{fig_dsview:  Name of the dataset view for the current figure.}
+#'        \item{fig_dsview:  Name of the dataset view for the current figure
+#'        (also the R object name of the dataset view).}
 #'        \item{checksum:    checksum of the figure used to detect changes in the figure.}
 #'        \item{UD_checksum: checksum of the UD state when the figure was created.}
 #'        \item{DW_checksum: checksum of DW module if data view was used.}
@@ -1194,19 +1254,19 @@ FG_fetch_state = function(id,
                           id              = id,
                           id_UD           = id_UD,
                           id_DW           = id_DW,
-                          react_state     = react_state)
+                          session         = session)
   }
 
   # detecting changes in the datasets
   UPDATE_DS = FALSE
   if("checksum" %in% names(isolate(react_state[[id_UD]][["UD"]]))){
     if(!is.null(isolate(react_state[[id_UD]][["UD"]][["checksum"]]))){
-      if(is.null(state[["FG"]][["DSV"]][["UD_checksum"]])){
+      if(is.null(state[["FG"]][["DSV"]][["modules"]][["UD"]][[id_UD]])){
         # If the UD checksum isn't NULL but the stored value in DSV is then we
         # need to update the dataset
         UPDATE_DS = TRUE
       } else if(isolate(react_state[[id_UD]][["UD"]][["checksum"]]) !=
-                state[["FG"]][["DSV"]][["UD_checksum"]]){
+                state[["FG"]][["DSV"]][["modules"]][["UD"]][[id_UD]]){
         # If the stored checksum in DSV is different than the currently
         # uploaded dataset in UD then we force a reset as well:
         UPDATE_DS = TRUE
@@ -1216,12 +1276,12 @@ FG_fetch_state = function(id,
 
   if("checksum" %in% names(isolate(react_state[[id_DW]][["DW"]]))){
     if(!is.null(isolate(react_state[[id_DW]][["DW"]][["checksum"]]))){
-      if(is.null(state[["FG"]][["DSV"]][["DW_checksum"]])){
+      if(is.null(state[["FG"]][["DSV"]][["modules"]][["DW"]][[id_DW]])){
         # If the DW checksum isn't NULL but the stored value in DSV is then we
         # need to update the dataset
         UPDATE_DS = TRUE
       } else if(isolate(react_state[[id_DW]][["DW"]][["checksum"]]) !=
-                state[["FG"]][["DSV"]][["DW_checksum"]]){
+                state[["FG"]][["DSV"]][["modules"]][["DW"]][[id_DW]]){
         # If the stored checksum in DSV is different than the currently
         # uploaded dataset in DW then we force a reset as well:
         UPDATE_DS = TRUE
@@ -1235,11 +1295,14 @@ FG_fetch_state = function(id,
     # generation state will be good. Then we just need to attach the updated
     # dataset views:
     if(state[["FG"]][["isgood"]]){
-      state[["FG"]][["DSV"]] = FM_fetch_dsviews(
-        state       = state,
-        id_UD       = id_UD,
-        id_DW       = id_DW,
-        react_state = react_state)
+      # JMH update the "DSV" components 
+      state[["FG"]][["DSV"]] = FM_fetch_ds(state, session, c(id_UD, id_DW))
+
+    # state[["FG"]][["DSV"]] = FM_fetch_dsviews(
+    #   state       = state,
+    #   id_UD       = id_UD,
+    #   id_DW       = id_DW,
+    #   react_state = react_state)
     } else {
       # If there is no dataset loaded the figure generation state will be bad
       # (isgood is FALSE). Then we need to reinitialize the module:
@@ -1248,7 +1311,7 @@ FG_fetch_state = function(id,
                             id              = id,
                             id_UD           = id_UD,
                             id_DW           = id_DW,
-                            react_state     = react_state)
+                            session         = session)
     }
   }
   #---------------------------------------------
@@ -1358,7 +1421,7 @@ FG_fetch_state = function(id,
     msgs = c()
 
     # Creating a new figure
-    state = FG_new_fig(state, id_UD, id_DW, react_state)
+    state = FG_new_fig(state, id_UD, id_DW)
 
     # Setting hold for figure select
     state = set_hold(state, inputId = "select_current_fig")
@@ -1386,7 +1449,7 @@ FG_fetch_state = function(id,
 
     # If there are no figures left then we create an empty one
     if( length(state[["FG"]][["figs"]])  == 0){
-      state = FG_new_fig(state, id_UD, id_DW, react_state)
+      state = FG_new_fig(state, id_UD, id_DW)
     } else {
       # If there are figures then we set the first one as active
       state[["FG"]][["current_fig"]] = names(state[["FG"]][["figs"]])[1]
@@ -1452,7 +1515,7 @@ FG_fetch_state = function(id,
     old_fig = FG_fetch_current_fig(state)
 
     # This creates a new figure and makes it active:
-    state = FG_new_fig(state, id_UD, id_DW, react_state)
+    state = FG_new_fig(state, id_UD, id_DW)
 
     # Now we pull out the new figure:
     new_fig = FG_fetch_current_fig(state)
@@ -1474,9 +1537,9 @@ FG_fetch_state = function(id,
 
     #From the original figure we copy several fields:
     new_fig[["fig_dsview"    ]]  = old_fig[["fig_dsview"    ]]
-    new_fig[["UD_checksum"   ]]  = old_fig[["UD_checksum"   ]]
-    new_fig[["DW_checksum"   ]]  = old_fig[["DW_checksum"   ]]
-    new_fig[["DSV_checksum"  ]]  = old_fig[["DSV_checksum"  ]]
+  # new_fig[["UD_checksum"   ]]  = old_fig[["UD_checksum"   ]]
+  # new_fig[["DW_checksum"   ]]  = old_fig[["DW_checksum"   ]]
+  # new_fig[["DSV_checksum"  ]]  = old_fig[["DSV_checksum"  ]]
     new_fig[["elements_table"]]  = old_fig[["elements_table"]]
     new_fig[["code"          ]]  = old_fig[["code"          ]]
     new_fig[["fobj"          ]]  = old_fig[["fobj"          ]]
@@ -1511,12 +1574,12 @@ state}
 #'@export
 #'@title Initialize FG Module State
 #'@description Creates a list of the initialized module state
+#'@param session Shiny session variable
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id Shiny module ID
 #'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
-#'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return list containing an empty app state object
 #'@examples
 #'state = FG_init_state(
@@ -1529,9 +1592,9 @@ state}
 #'    id              = "FG",
 #'    id_DW           = "DW",
 #'    id_UD           = "UD",
-#'    react_state     = NULL)
+#'    session         = session)
 #' state
-FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_state){
+FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session){
   state = list()
 
   # Reading in default information from the yaml file
@@ -1632,11 +1695,12 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_st
 
   #---------------------------------------------
   # Finding the dataset
-  DSV = FM_fetch_dsviews(
-    state       = state,
-    id_UD       = id_UD,
-    id_DW       = id_DW,
-    react_state = react_state)
+  DSV = FM_fetch_ds(state, session, c(id_UD, id_DW))
+ #DSV = FM_fetch_dsviews(
+ #  state       = state,
+ #  id_UD       = id_UD,
+ #  id_DW       = id_DW,
+ #  react_state = react_state)
 
   # If the dataset isn't good then we need to
   # flag the whole module as not being good
@@ -1656,7 +1720,7 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_st
 
   if(isgood){
     # Initializing an empty figure
-    state = FG_new_fig(state, id_UD, id_DW, react_state)
+    state = FG_new_fig(state, id_UD, id_DW)
   }
 
 state}
@@ -1668,10 +1732,9 @@ state}
 #'@param state FG state from \code{FG_fetch_state()}
 #'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
-#'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return FG state object containing a new empty figure  and that figure set as the
 #'current active figure
-FG_new_fig    = function(state, id_UD, id_DW, react_state){
+FG_new_fig    = function(state, id_UD, id_DW){
 
   # Incrementing the figure counter
   state[["FG"]][["fig_cntr"]] = state[["FG"]][["fig_cntr"]] + 1
@@ -1683,20 +1746,9 @@ FG_new_fig    = function(state, id_UD, id_DW, react_state){
   DSV = state[["FG"]][["DSV"]]
 
   # Using the default dsview for the new figure
-  fig_dsview = DSV[["active"]]
+  fig_dsview = names(DSV[["ds"]])[1]
 
- ## JMH moving code_ini to figure building function
- ## Creating the dataset object
- ## This object contains the name of the dataset
- #ds_object_name = DSV[["dsviews"]][["object_name"]][[fig_dsview]]
- #
- ## Creating that object loally
- #assign(ds_object_name, DSV[["dsviews"]][["contents"]][[fig_dsview]])
- #
- ## ggplot initialization code:
- #code_init = paste0(fg_object_name, " = ggplot2::ggplot(data=", ds_object_name,")")
-
- fg_object_name = paste0("FG_", state[["MC"]][["fg_object_name"]], "_", state[["FG"]][["fig_cntr"]])
+  fg_object_name = paste0("FG_", state[["MC"]][["fg_object_name"]], "_", state[["FG"]][["fig_cntr"]])
 
   # This is the object that contains the different components of
   # the figure list:
@@ -1711,9 +1763,9 @@ FG_new_fig    = function(state, id_UD, id_DW, react_state){
          msgs           = c(),
          fig_dsview     = fig_dsview,
          checksum       = digest::digest(NULL, algo=c("md5")),
-         UD_checksum    = DSV[["UD_checksum"]],
-         DW_checksum    = DSV[["DW_checksum"]],
-         DSV_checksum   = DSV[["dsviews"]][["checksum"]][[fig_dsview]],
+    #    UD_checksum    = DSV[["modules"]][["UD"]][[id_UD]],
+    #    DW_checksum    = DSV[["modules"]][["DW"]][[id_DW]],
+    #    DSV_checksum   = DSV[["dsviews"]][["checksum"]][[fig_dsview]],
          code_fg_only   = NULL,
          code_previous  = NULL,
          code           = NULL,
@@ -2034,9 +2086,10 @@ FG_build = function(state,
   msgs        = c()
 
   # Defining the dataset locally:
-  ds_object_name = state[["FG"]][["DSV"]][["dsviews"]][["object_name"]][[current_fig[["fig_dsview"]]]]
+  # JMH check assignments below:
+  ds_object_name = current_fig[["fig_dsview"]]
   assign(ds_object_name,
-         state[["FG"]][["DSV"]][["dsviews"]][["contents"]][[current_fig[["fig_dsview"]]]])
+         state[["FG"]][["DSV"]][["ds"]][[ds_object_name]][["DS"]])
 
   # Pulling out the figure object name:
   fg_object_name = current_fig[["fg_object_name"]]
@@ -2245,7 +2298,8 @@ FG_build = function(state,
   }
 
   # Code for the modules feeding into this one
-  code_previous   = state[["FG"]][["DSV"]][["dsviews"]][["code"]][[current_fig[["fig_dsview"]]]]
+  # JMH check this code works 
+  code_previous   = state[["FG"]][["DSV"]][["ds"]][[current_fig[["fig_dsview"]]]][["code"]]
   # Just the code to build the figure
   code_fg_only    = paste(code_lines, collapse="\n")
   # All the code required to generate this module

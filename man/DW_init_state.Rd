@@ -4,7 +4,7 @@
 \alias{DW_init_state}
 \title{Initialize DW Module State}
 \usage{
-DW_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state)
+DW_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, session)
 }
 \arguments{
 \item{FM_yaml_file}{App configuration file with FM as main section.}
@@ -16,7 +16,7 @@ DW_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, react_state)
 \item{id_UD}{ID string for the upload data module used to handle uploads or
 the name of the list element in react_state where the data set is stored.}
 
-\item{react_state}{Variable passed to server to allow reaction outside of
+\item{session}{Shiny session variable
 module (\code{NULL})}
 }
 \value{

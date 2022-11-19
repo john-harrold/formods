@@ -58,6 +58,9 @@
     <loc>/reference/DW_fetch_current_view.html</loc>
   </url>
   <url>
+    <loc>/reference/DW_fetch_ds.html</loc>
+  </url>
+  <url>
     <loc>/reference/DW_fetch_state.html</loc>
   </url>
   <url>
@@ -115,6 +118,9 @@
     <loc>/reference/FM_fetch_current_mods.html</loc>
   </url>
   <url>
+    <loc>/reference/FM_fetch_ds.html</loc>
+  </url>
+  <url>
     <loc>/reference/FM_fetch_dsviews.html</loc>
   </url>
   <url>
@@ -167,6 +173,9 @@
   </url>
   <url>
     <loc>/reference/UD_fetch_code.html</loc>
+  </url>
+  <url>
+    <loc>/reference/UD_fetch_ds.html</loc>
   </url>
   <url>
     <loc>/reference/UD_fetch_state.html</loc>

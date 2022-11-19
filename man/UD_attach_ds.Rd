@@ -13,7 +13,7 @@ UD_attach_ds(
   data_file = NULL,
   sheet = NULL,
   sheets = NULL,
-  code = NULL,
+  code = "",
   object_name = NULL,
   contents = NULL
 )

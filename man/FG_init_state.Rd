@@ -4,7 +4,7 @@
 \alias{FG_init_state}
 \title{Initialize FG Module State}
 \usage{
-FG_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_state)
+FG_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
 }
 \arguments{
 \item{FM_yaml_file}{App configuration file with FM as main section.}
@@ -17,7 +17,7 @@ FG_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, react_state)
 
 \item{id_DW}{ID string for the data wrangling module to process any uploaded data}
 
-\item{react_state}{Variable passed to server to allow reaction outside of module (\code{NULL})}
+\item{session}{Shiny session variable}
 }
 \value{
 list containing an empty app state object
@@ -36,6 +36,6 @@ state = FG_init_state(
    id              = "FG",
    id_DW           = "DW",
    id_UD           = "UD",
-   react_state     = NULL)
+   session         = session)
 state
 }
