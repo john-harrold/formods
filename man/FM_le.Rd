@@ -14,3 +14,10 @@ FM_le(state, entry)
 \description{
 Add the supplied txt and the module type to the log file
 }
+\examples{
+# We need a module state to use this function:
+id="UD"
+sess_res = UD_test_mksession(session=list(), id=id)
+state   = sess_res$state
+FM_le(state, "This is a message")
+}

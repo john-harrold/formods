@@ -15,3 +15,11 @@ Character string with the path to the log file.
 \description{
 Use this to get the path to the formods log file
 }
+\examples{
+# We need a state object to use this function:
+id="UD"
+sess_res = UD_test_mksession(session=list(), id=id)
+state = sess_res$state
+user_dir = FM_fetch_user_files_path(state) 
+user_dir
+}

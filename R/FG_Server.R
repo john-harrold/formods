@@ -2420,7 +2420,7 @@ code}
 #'@description Description
 #'@param state FG state from \code{FG_fetch_state()}
 #'@param rpt Report with the current content of the report which will be appended to in
-#'this function. For details on the structure see the documentation for \code{\link{formods::FM_generate_report}}.
+#'this function. For details on the structure see the documentation for \code{\link{FM_generate_report}}.
 #'@param rpttype Type of report to generate (supported "xlsx", "pptx", "docx").
 #'@param gen_code_only Boolean value indicating that only code should be
 #'generated (\code{FALSE}).
@@ -2432,7 +2432,7 @@ code}
 #'  \item{msgs:}      Messages to be passed back to the user.
 #'  \item{rpt:}       Report with any additions passed back to the user.
 #'}
-#'@seealso \code{\link{formods::FM_generate_report}}
+#'@seealso \code{\link{FM_generate_report}}
 FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
 
   isgood    = TRUE

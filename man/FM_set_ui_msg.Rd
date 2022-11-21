@@ -18,3 +18,10 @@ state with ui message set.
 Any errors that need to be passed back to the user can be set
 with this function.
 }
+\examples{
+# We need a module state object to use this function:
+id="UD"
+sess_res = UD_test_mksession(session=list(), id=id)
+state = sess_res$state
+state = FM_set_ui_msg(state, "Something happend.")
+}

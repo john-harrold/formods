@@ -10,7 +10,7 @@ DW_append_report(state, rpt, rpttype, gen_code_only = FALSE)
 \item{state}{DW state from \code{DW_fetch_state()}}
 
 \item{rpt}{Report with the current content of the report which will be appended to in
-this function. For details on the structure see the documentation for \code{\link{formods::FM_generate_report}}.}
+this function. For details on the structure see the documentation for \code{\link{FM_generate_report}}.}
 
 \item{rpttype}{Type of report to generate (supported "xlsx").}
 
@@ -32,5 +32,5 @@ Takes the current state of the app and appends data views to an
 xlsx report object.
 }
 \seealso{
-\code{\link{formods::FM_generate_report}}
+\code{\link{FM_generate_report}}
 }

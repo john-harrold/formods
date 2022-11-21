@@ -17,3 +17,11 @@ modules present in the app state.}
 \description{
 Takes a loaded app state and overwrites the current app state
 }
+\examples{
+# We need a Shiny session object to use this function:
+id="UD"
+sess_res = UD_test_mksession(session=list(), id=id)
+session = sess_res$session
+app_state = FM_fetch_app_state(session)
+FM_set_app_state(session, app_state)
+}

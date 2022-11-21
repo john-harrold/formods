@@ -10,18 +10,65 @@ FM_notify(state, session)
 \item{state}{Module state generating the notification}
 
 \item{session}{Shiny session variable}
-
-\item{notify_id}{Unique string for this notification}
-
-\item{notify_text}{Text to go in the notification}
-
-\item{rpterrors}{Boolean variable to generate reports with errors.}
-
-\item{timestamp}{Time when noficiation was created (Sys.time())}
 }
 \value{
 Boolean variable indicating if the notification was triggered
 }
 \description{
 Generates a notification that should only show once.
+}
+\examples{
+if(interactive()){
+library(formods)
+library(shiny)
+library(shinydashboard)
+#https://fontawesome.com/icons?from=io
+
+ui <- dashboardPage(
+  skin="red",
+  dashboardHeader(title="Test Notifications"),
+  dashboardSidebar(
+     sidebarMenu(
+       menuItem("Notifications",    tabName="example",  icon=icon("table"))
+     )
+  ),
+  dashboardBody(
+    tabItems(
+       tabItem(tabName="example",
+        fluidRow(
+          shiny::actionButton("set_notification", "Set Notification"),
+          shiny::textInput("user_text", label="Notify Text Here", value="Notify me"),
+          shiny::actionButton("show_notification", "Show Notification")
+         )
+       )
+     )
+   )
+ )
+
+# Main app server
+server <- function(input, output, session) {
+
+  # Need formods state object
+  sess_res = UD_test_mksession(session, id="UD")
+
+  # Captures input and sets the notification
+  observeEvent(input$set_notification, {
+
+    state = FM_fetch_mod_state(session, id="UD")
+    state = FM_set_notification(state,
+                                notify_text = isolate(input$user_text),
+                                notify_id   = "example")
+    FM_set_mod_state(session, id="UD", state)
+   })
+
+
+  # Displays the notification
+  observeEvent(input$show_notification, {
+    state = FM_fetch_mod_state(session, id="UD")
+    FM_notify(state, session)
+   })
+}
+
+shinyApp(ui, server)
+}
 }

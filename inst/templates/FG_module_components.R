@@ -105,23 +105,33 @@ server <- function(input, output, session) {
   # Module server
   react_FM    = reactiveValues()
 
-  # Format of ds is described in JMH
-  ds = list(
-     UD = list(
-          data_file_local = NULL,
-          data_file_ext   = NULL,
-          data_file       = NULL,
-          sheet           = NULL,
-          sheets          = NULL,
-          object_name     = "TMPDS",
-          code            = "# NULL",
-          contents        = DATA,
-          checksum        = digest::digest(DATA, algo=c("md5")),
-          isgood          = TRUE
-        )
-    )
+# # Format of ds is described in JMH
+# ds = list(
+#    UD = list(
+#         data_file_local = NULL,
+#         data_file_ext   = NULL,
+#         data_file       = NULL,
+#         sheet           = NULL,
+#         sheets          = NULL,
+#         object_name     = "TMPDS",
+#         code            = "# NULL",
+#         contents        = DATA,
+#         checksum        = digest::digest(DATA, algo=c("md5")),
+#         isgood          = TRUE
+#       )
+#   )
+#
+# react_FM$UD = ds
 
-  react_FM$UD = ds
+  # Creating upstream data for the UD module
+  id_UD = "UD"
+  res = UD_test_mksession(session)
+  react_FM[[id_UD]] = res[["rsc"]]
+
+  # Creating upstream data for the DW module
+  id_DW = "DW"
+  res = DW_test_mksession(session)
+  react_FM[[id_DW]] = res[["rsc"]]
 
   FG_Server(id="FG", id_UD = "UD", id_DW = "DW", react_state=react_FM)
 

@@ -15,3 +15,8 @@ Character object vector with the lines of code
 \description{
 Fetches the code to generate results seen in the app
 }
+\examples{
+# This creates a session variable that will be available in Shiny
+state = UD_test_mksession(session=list())$state
+UD_fetch_code(state)
+}

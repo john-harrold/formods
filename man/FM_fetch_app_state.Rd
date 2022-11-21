@@ -7,12 +7,19 @@
 FM_fetch_app_state(session)
 }
 \arguments{
-\item{session}{Shiny session variable.
-modules present in the app state.}
+\item{session}{Shiny session variable.}
 }
 \value{
 App state or NULL if it's not defined.
 }
 \description{
 Returns the entire state of the App
+}
+\examples{
+# We need a Shiny session object to use this function:
+id="UD"
+sess_res = UD_test_mksession(session=list(), id=id)
+session = sess_res$session
+app_state = FM_fetch_app_state(session)
+app_state
 }

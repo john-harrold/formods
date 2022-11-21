@@ -25,7 +25,10 @@ list containing the current dataset with the following format:
     \item{label:}  Text label for the dataset (used to display to the user)
     \item{DS:}     Data frame with the dataset
     \item{DSMETA:} Data frame with metadata about the colunns of the
-    dataset in \code{DS}.
+    dataset in \code{DS}. The data frame should have the following columns:
+    \itemize{
+       \item{col1:} column 1
+    }
     \item{code:} Code to generate the dataset.
     \item{checksum:} Module checksum when the dataset was pulled
     \item{DSchecksum:} Checksum of the dataframe in DS
@@ -33,23 +36,33 @@ list containing the current dataset with the following format:
   \item{catalog:} Dataframe containing the a tabular catalog of the
   datasets found.
   \itemize{
-    \item{label:} JMH
-    \item{object:} JMH
-    \item{MOD_TYPE:} JMH
-    \item{id:} JMH
+    \item{label:} Text label
+    \item{object:} Name of the R Object containing the data frame
+    \item{MOD_TYPE:} Short name of the type of module
+    \item{id:} Module ID 
     \item{checksum:} Module checksum
     \item{DSchecksum:} Checksum of the dataset
-    \item{code:} JMH
+    \item{code:} Code to generate the dataset
   }
   \item{modules:} List with an entry for each module. The element name is
   the short name. Each of these is a list with an entry that is the shiny module
   ID. For each of these there is a checksum. For example to access the
   checksum of a DW module with a  module ID of 'my_id', you would use the
-  following: \code{res$DW$my_id}.
+  following: \code{res$modules$DW$my_id}.
 }
 }
 \description{
 Loops through each specified module ID or all modules if no ID
 was specified. For each ID, an attempt will be made to extract any datasets
 available.
+}
+\examples{
+# We need a module state and a Shiny session variable 
+# to use this function:
+id="UD"
+sess_res = UD_test_mksession(session=list(), id=id)
+session = sess_res$session
+state   = sess_res$state
+ds = FM_fetch_ds(state, session) 
+ds$catalog
 }

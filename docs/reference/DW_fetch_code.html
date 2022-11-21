@@ -72,6 +72,35 @@
 and isgood)</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># This will create a formods DW state object for the example</span></span></span>
+<span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="DW_test_mksession.html">DW_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:631af84e28478adc1628dd2c9fb22662</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:f5866ed2a560dbc564dec9145314b519</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:4911af9c225aac6361acea8f26bbfac9</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:c9b0caeab52fb59e0dcbb88ee042729a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:d53e4eeadacffd272f5e584700d4e5c6</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:25e606a4b68a27b1b111d4ce7d6ed944</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:cf7553b85f514e80b0495bac005e30a3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:9237881640f3d22346fbce5f152d9e69</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:928a817e1c9205fbbe273de91af26c6a</span>
+<span class="r-in"><span><span class="va">state</span>   <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
+<span class="r-in"><span><span class="va">code</span> <span class="op">=</span> <span class="fu">DW_fetch_code</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">code</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # Observations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_1 = myDS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_1 = dplyr::filter(DW_myDS_1,EVID == 0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # Parameters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_2 = myDS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_2 = dplyr::group_by(DW_myDS_2,ID)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_2 = dplyr::filter(DW_myDS_2,row_number()==1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_2 = dplyr::select(DW_myDS_2,ID, DOSE, DOSE_STR, Cohort, ROUTE, ka, CL, Vc, Vp, Q)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_2 = tidyr::pivot_longer(DW_myDS_2, cols      = c("ka", "CL", "Vc", "Vp", "Q"), names_to  = "parameter", values_to = "values")</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

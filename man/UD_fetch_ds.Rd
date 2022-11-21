@@ -20,13 +20,15 @@ list containing the following elements
  \item{ds:}        List with datasets. Each list element has the name of
  the R-object for that dataset. Each element has the following structure:
  \itemize{
-   \item{label:}
-   \item{MOD_TYPE:}
-   \item{id:}
-   \item{DSMETA:}
-   \item{code:}
-   \item{checksum:}
-   \item{DSchecksum:}
+   \item{label: Text label for the dataset}
+   \item{MOD_TYPE: Short name for the type of module.}
+   \item{id: module ID}
+   \item{DS: Dataframe containing the actual dataset.}
+   \item{DSMETA: Metadata describing DS, see \code{FM_fetch_ds()} for
+   details on the format.}
+   \item{code: Complete code to build dataset.}
+   \item{checksum: Module checksum.}
+   \item{DSchecksum: Dataset checksum.}
  }
 }
 }

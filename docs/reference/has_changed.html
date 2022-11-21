@@ -80,11 +80,19 @@ defined.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Boolean result of the comparison
-changed_true  = has_changed(ui_val = "a", old_val = "")
-changed_false = has_changed(ui_val = "a", old_val = "a")</p>
+<p>Boolean result of the comparison</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">changed_true</span>  <span class="op">=</span> <span class="fu">has_changed</span><span class="op">(</span>ui_val <span class="op">=</span> <span class="st">"a"</span>, old_val <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">changed_true</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-in"><span><span class="va">changed_false</span> <span class="op">=</span> <span class="fu">has_changed</span><span class="op">(</span>ui_val <span class="op">=</span> <span class="st">"a"</span>, old_val <span class="op">=</span> <span class="st">"a"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">changed_false</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

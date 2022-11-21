@@ -34,7 +34,10 @@
 #'     \item{label:}  Text label for the dataset (used to display to the user)
 #'     \item{DS:}     Data frame with the dataset
 #'     \item{DSMETA:} Data frame with metadata about the colunns of the
-#'     dataset in \code{DS}.
+#'     dataset in \code{DS}. The data frame should have the following columns:
+#'     \itemize{
+#'        \item{col1:} column 1
+#'     }
 #'     \item{code:} Code to generate the dataset.
 #'     \item{checksum:} Module checksum when the dataset was pulled
 #'     \item{DSchecksum:} Checksum of the dataframe in DS
@@ -42,20 +45,29 @@
 #'   \item{catalog:} Dataframe containing the a tabular catalog of the
 #'   datasets found.
 #'   \itemize{
-#'     \item{label:} JMH
-#'     \item{object:} JMH
-#'     \item{MOD_TYPE:} JMH
-#'     \item{id:} JMH
+#'     \item{label:} Text label
+#'     \item{object:} Name of the R Object containing the data frame
+#'     \item{MOD_TYPE:} Short name of the type of module
+#'     \item{id:} Module ID 
 #'     \item{checksum:} Module checksum
 #'     \item{DSchecksum:} Checksum of the dataset
-#'     \item{code:} JMH
+#'     \item{code:} Code to generate the dataset
 #'   }
 #'   \item{modules:} List with an entry for each module. The element name is
 #'   the short name. Each of these is a list with an entry that is the shiny module
 #'   ID. For each of these there is a checksum. For example to access the
 #'   checksum of a DW module with a  module ID of 'my_id', you would use the
-#'   following: \code{res$DW$my_id}.
+#'   following: \code{res$modules$DW$my_id}.
 #' }
+#'@examples
+#' # We need a module state and a Shiny session variable 
+#' # to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' session = sess_res$session
+#' state   = sess_res$state
+#' ds = FM_fetch_ds(state, session) 
+#' ds$catalog
 FM_fetch_ds = function(state, session, ids=NULL){
 
   isgood  = TRUE
@@ -170,7 +182,10 @@ res}
 #'    float = c( 1 ,  2 ,  3 ))
 #'
 #' df$float = as.factor(df$float)
-
+#' # This is a factor
+#' df$float 
+#' # This is not a factor 
+#' unfactor(df$float)
 unfactor = function(fctobj){
   res = fctobj
   if(is.factor(fctobj)){
@@ -190,8 +205,11 @@ res}
 #'@param init_value Default value for reading in UI data when it has not been
 #'defined.
 #'@return Boolean result of the comparison
+#'@examples
 #' changed_true  = has_changed(ui_val = "a", old_val = "")
+#' changed_true
 #' changed_false = has_changed(ui_val = "a", old_val = "a")
+#' changed_false
 has_changed = function(ui_val     = NULL,
                        old_val    = NULL,
                        init_value = c("")){
@@ -312,6 +330,13 @@ hold_status}
 #' \item{msgs:} Any messages generated
 #' \item{code:} Code to regenerate the app
 #' }
+#'@examples
+#' # We need a Shiny session object to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' session = sess_res$session
+#' app_code = FM_fetch_app_code(session)
+#' cat(app_code$code)
 FM_fetch_app_code = function(session){
   isgood = TRUE
   msgs   = c()
@@ -405,6 +430,13 @@ res}
 #'@description Use this to get the path to the formods log file
 #'@param state module state after yaml read
 #'@return Character string with the path to the log file.
+#'@examples
+#' # We need a state object to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' state = sess_res$state
+#' user_dir = FM_fetch_user_files_path(state) 
+#' user_dir
 FM_fetch_user_files_path = function(state){
 
   # Finding the path to the user directory:
@@ -432,6 +464,12 @@ user_dir}
 #'@param state module state after yaml read
 #'@param entry text to add
 #'@return NULL
+#'@examples
+#' # We need a module state to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' state   = sess_res$state
+#' FM_le(state, "This is a message")
 FM_le = function(state, entry){
   # pulling out the log file
   log_file = FM_fetch_log_path(state)
@@ -500,7 +538,6 @@ isgood}
 #' # Failed command
 #' res_bad = FM_tc("bad_cmd =not_a_command()", list(), c("bad_cmd"))
 #' res_bad
-#'
 FM_tc = function(cmd, tc_env, capture){
 
   isgood = TRUE
@@ -548,6 +585,8 @@ tcres}
 #'cascade an error message to the end user.
 #'@param msgs Vector of error messages
 #'@return ggplot object
+#'@examples
+#'FM_mk_error_fig("Oh nos! You've made a mistake!")
 FM_mk_error_fig  <- function(msgs){
   p_res = ggplot()+annotate("text",
                    hjust= 0, vjust=1,
@@ -754,6 +793,12 @@ p_res}
 #'@param session Shiny session variable.
 #'@param id ID string for the module.
 #'@return module state or NULL if it's not defined.
+#'@examples
+#' # We need a Shiny session variable to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' session = sess_res$session
+#' state = FM_fetch_mod_state(session, id) 
 FM_fetch_mod_state <- function(session,id){
 
   FM_ID = paste0("FM_", id)
@@ -769,12 +814,20 @@ state}
 #'@param id ID string for the module.
 #'@param state Module state to set.
 #'@return NULL
+#'@examples
+#' # We need a Shiny session variable and a module state 
+#' # object to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' session = sess_res$session
+#' state   = sess_res$state
+#' FM_set_mod_state(session, id, state)
 FM_set_mod_state <- function(session,id,state){
 
   FM_ID = paste0("FM_", id)
   session$userData[["FM"]][[FM_ID]]=state
 
-NULL}
+session}
 
 
 #'@export
@@ -785,6 +838,13 @@ NULL}
 #'@param set_holds If TRUE (default) the holds will be set for all of the
 #' modules present in the app state.
 #'@return NULL
+#'@examples
+#' # We need a Shiny session object to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' session = sess_res$session
+#' app_state = FM_fetch_app_state(session)
+#' FM_set_app_state(session, app_state)
 FM_set_app_state <- function(session, app_state, set_holds = TRUE){
 
   if(set_holds){
@@ -826,8 +886,14 @@ NULL}
 #'@title Fetches the App State
 #'@description Returns the entire state of the App
 #'@param session Shiny session variable.
-#' modules present in the app state.
 #'@return App state or NULL if it's not defined.
+#'@examples
+#' # We need a Shiny session object to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' session = sess_res$session
+#' app_state = FM_fetch_app_state(session)
+#' app_state
 FM_fetch_app_state <- function(session){
 
 
@@ -917,6 +983,12 @@ state}
 #'@param state formods State object.
 #'@param msgs Character vector of messages.
 #'@return state with ui message set.
+#'@examples
+#' # We need a module state object to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' state = sess_res$state
+#' state = FM_set_ui_msg(state, "Something happend.")
 FM_set_ui_msg = function(state, msgs){
 
   MT = state[["MOD_TYPE"]]
@@ -1272,13 +1344,9 @@ res}
 #'@description Generates a notification that should only show once.
 #'@param state Module state generating the notification
 #'@param session Shiny session variable
-#'@param notify_id Unique string for this notification
-#'@param notify_text Text to go in the notification
-#'@param rpterrors Boolean variable to generate reports with errors.
-#'@param timestamp Time when noficiation was created (Sys.time())
 #'@return Boolean variable indicating if the notification was triggered
+#'@example inst/test_apps/FM_notify.R
 FM_notify = function(state, session){
-
 
   # current state id
   id = state[["id"]]
@@ -1330,7 +1398,7 @@ FM_notify = function(state, session){
               }
             }
           } else {
-            FM_le(state, paset0("Notification type >", type, "< not found using defaults."))
+            FM_le(state, paste0("Notification type >", type, "< not found using defaults."))
           }
 
           # Notifying the user
@@ -1343,31 +1411,6 @@ FM_notify = function(state, session){
     }
   }
 
-#
-# if(system.file(package = "shinybusy") !=""){
-#   notify_user = FALSE
-#
-#   if(is.null(session$userData[["FM"]][["notifications"]][[id]][[notify_id]])){
-#     # This checks to see if this notification ID has been used yet
-#     notify_user = TRUE
-#   } else {
-#     # Now we check to see if this notification text has been sent to
-#     # the user yet. To do that we see if the contents of the notify_id
-#     # are the same or different from the notification text
-#     if(timestamp != session$userData[["FM"]][["notifications"]][[id]][[notify_id]]){
-#       notify_user = TRUE
-#     }
-#   }
-#
-#   if(notify_user){
-#     # Notifying the user
-#     shinybusy::notify_info(notify_text)
-#     # Updating the text in the session variable to prevent further
-#     # notifications
-#     session$userData[["FM"]][["notifications"]][[id]][[notify_id]] = timestamp
-#   }
-# }
-
 NULL}
 
 #'@export
@@ -1379,6 +1422,7 @@ NULL}
 #'@param type - Can be either "success", "failure", "info" (default), or
 #'"warning"
 #'@return Module state with notification text set
+#'@example inst/test_apps/FM_notify.R
 FM_set_notification = function(state, notify_text, notify_id, type="info"){
   isgood = TRUE
   if( !is.character(notify_text) ){

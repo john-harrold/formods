@@ -75,13 +75,15 @@
 <li><p>hasds:     Boolean indicator if the module has any datasets</p></li>
 <li><p>msgs:      Messages to be passed back to the user.</p></li>
 <li><p>ds:        List with datasets. Each list element has the name of
- the R-object for that dataset. Each element has the following structure:</p><ul><li><p>label:</p></li>
-<li><p>MOD_TYPE:</p></li>
-<li><p>id:</p></li>
-<li><p>DSMETA:</p></li>
-<li><p>code:</p></li>
-<li><p>checksum:</p></li>
-<li><p>DSchecksum:</p></li>
+ the R-object for that dataset. Each element has the following structure:</p><ul><li><p>label: Text label for the dataset</p></li>
+<li><p>MOD_TYPE: Short name for the type of module.</p></li>
+<li><p>id: module ID</p></li>
+<li><p>DS: Dataframe containing the actual dataset.</p></li>
+<li><p>DSMETA: Metadata describing DS, see <code><a href="FM_fetch_ds.html">FM_fetch_ds()</a></code> for
+   details on the format.</p></li>
+<li><p>code: Complete code to build dataset.</p></li>
+<li><p>checksum: Module checksum.</p></li>
+<li><p>DSchecksum: Dataset checksum.</p></li>
 </ul></li>
 </ul></div>
 

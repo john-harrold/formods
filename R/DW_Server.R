@@ -1330,6 +1330,31 @@ DW_Server <- function(id,
 #'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 #'  module in the session variable.
 #'}
+#'@examples
+#' # Within shiny both session and input variables will exist, 
+#' # this creates examples here for testing purposes:
+#' sess_res = DW_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' # Configuration files
+#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+#' MOD_yaml_file = system.file(package = "formods", "templates", "DW.yaml")
+#'
+#' # We need to specify both the DW module id as well as the
+#' # id of the UD module that feeds into it.
+#' id    = "DW"
+#' id_UD = "UD"
+#'
+#' # Creating an empty state object
+#' state = DW_fetch_state(id              = id,           
+#'                        input           = input, 
+#'                        session         = session,
+#'                        FM_yaml_file    = FM_yaml_file, 
+#'                        MOD_yaml_file   = MOD_yaml_file,
+#'                        id_UD           = "UD",
+#'                        react_state     = NULL)
+#'
 DW_fetch_state = function(id,                    input,     session,
                           FM_yaml_file,  MOD_yaml_file,       id_UD,
                           react_state){
@@ -1691,7 +1716,13 @@ state }
 #'module (\code{NULL})
 #'@return list containing an empty DW state
 #'@examples
-#'state = DW_init_state(
+#' # Within shiny both session and input variables will exist, 
+#' # this creates examples here for testing purposes:
+#' sess_res = DW_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' state = DW_init_state(
 #'    FM_yaml_file  = system.file(package = "formods",
 #'                                "templates",
 #'                                "formods.yaml"),
@@ -1700,7 +1731,8 @@ state }
 #'                                "DW.yaml"),
 #'    id              = "DW",
 #'    id_UD           = "UD",
-#'    react_state     = NULL)
+#'    session         = session)
+#' 
 #' state
 DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD,session){
 
@@ -1812,6 +1844,7 @@ state }
 #'  \item{desc:}   Verbose description of the action
 #'  \item{msgs:}   Messages to be passed back to the user
 #'}
+#'@example inst/test_apps/DW_funcs.R
 dwrs_builder = function(state){
 
   isgood = TRUE
@@ -2021,6 +2054,7 @@ dwrs_builder = function(state){
 #'  \item{msgs:}   Messages to be passed back to the user.
 #'  \item{DS:}     Wrangled dataset.
 #'}
+#'@example inst/test_apps/DW_funcs.R
 dw_eval_element = function(state, cmd){
 
   msgs = c()
@@ -2066,6 +2100,7 @@ res}
 #'@return DW state object containing a new data view and that view set as the
 #'current active view. See the help for \code{DW_fetch_state()} for view
 #'format.
+#'@example inst/test_apps/DW_funcs.R
 DW_new_view = function(state){
 
   # Incrementing the view   counter
@@ -2117,6 +2152,7 @@ state}
 #'@return List containing the details of the active data view. The structure
 #'of this list is the same as the structure of \code{state$DW$views} in the output of
 #'\code{DW_fetch_state()}.
+#'@example inst/test_apps/DW_funcs.R
 DW_fetch_current_view    = function(state){
 
   view_id = state[["DW"]][["current_view"]]
@@ -2133,6 +2169,7 @@ current_view}
 #'@param dw_view Data view list of the format returned from \code{DW_fetch_current_view()}
 #'(see the structure of \code{state$DW$views} in the output of \code{DW_fetch_state()}).
 #'@return DW state object with the value of \code{dw_view} set to the current view id.
+#'@example inst/test_apps/DW_funcs.R
 DW_set_current_view    = function(state, dw_view){
 
   view_id = state[["DW"]][["current_view"]]
@@ -2176,6 +2213,17 @@ state}
 #'downstream updates
 #'@param state DW state from \code{DW_fetch_state()}
 #'@return DW state object with the checksum updated
+#'@examples
+#' # Within shiny both session and input variables will exist, 
+#' # this creates examples here for testing purposes:
+#' sess_res = DW_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' # We also need a state variable
+#' state = sess_res$state
+#'
+#' state = DW_update_checksum(state)
 DW_update_checksum     = function(state){
 
   # checksum string
@@ -2202,10 +2250,22 @@ state}
 #'@title Attach Data Set to DW State
 #'@description Attaches a dataset to the DW state supplied.
 #'@param state DW state from \code{DW_fetch_state()}
-#'@param id Shiny module ID
-#'@param id_UD  ID string for the upload data module used to handle uploads or
-#'returned by \code{UD_fetch_state()}.
+#'@param id_UD  ID string for the upload data module used to handle uploads
+#'@param session Shiny session variable
 #'@return state with data set attached
+#'@examples
+#' # Within shiny both session and input variables will exist, 
+#' # this creates examples here for testing purposes:
+#' sess_res = DW_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' # We also need a state variable
+#' state = sess_res$state
+#'
+#' # We need to identify the UD module with the data
+#' id_UD = "UD"
+#' state = DW_attach_ds(state, id_UD, session)
 DW_attach_ds = function(state, id_UD, session){
 
 
@@ -2244,6 +2304,7 @@ state}
 #'@param dwee_res Output from \code{dw_eval_element()}
 #'returned by \code{UD_fetch_state()}.
 #'@return state with data set attached
+#'@example inst/test_apps/DW_funcs.R
 DW_add_wrangling_element = function(state, dwb_res, dwee_res){
 
   current_view = DW_fetch_current_view(state)
@@ -2268,6 +2329,12 @@ state}
 #'@param state DW state from \code{DW_fetch_state()}
 #'@return Character object vector with the lines of code
 #'and isgood)
+#'@examples
+#' # This will create a formods DW state object for the example
+#' sess_res = DW_test_mksession(session=list())
+#' state   = sess_res$state
+#' code = DW_fetch_code(state)
+#' cat(code)
 DW_fetch_code = function(state){
 
   # If the UD contents is NULL we return NULL otherwise we return the code
@@ -2292,7 +2359,7 @@ code}
 #'xlsx report object.
 #'@param state DW state from \code{DW_fetch_state()}
 #'@param rpt Report with the current content of the report which will be appended to in
-#'this function. For details on the structure see the documentation for \code{\link{formods::FM_generate_report}}.
+#'this function. For details on the structure see the documentation for \code{\link{FM_generate_report}}.
 #'@param rpttype Type of report to generate (supported "xlsx").
 #'@param gen_code_only Boolean value indicating that only code should be
 #'generated (\code{FALSE}).
@@ -2304,7 +2371,7 @@ code}
 #'  \item{msgs:}      Messages to be passed back to the user.
 #'  \item{rpt:}       Report with any additions passed back to the user.
 #'}
-#'@seealso \code{\link{formods::FM_generate_report}}
+#'@seealso \code{\link{FM_generate_report}}
 DW_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
 
   isgood    = TRUE
@@ -2377,16 +2444,23 @@ res}
 #'  \item{ds:}        List with datasets. Each list element has the name of
 #'  the R-object for that dataset. Each element has the following structure:
 #'  \itemize{
-#'    \item{label:}
-#'    \item{MOD_TYPE:}
-#'    \item{id:}
-#'    \item{DS:}
-#'    \item{DSMETA:}
-#'    \item{code:}
-#'    \item{checksum:}
-#'    \item{DSchecksum:}
+#'    \item{label: Text label for the dataset}
+#'    \item{MOD_TYPE: Short name for the type of module.}
+#'    \item{id: module ID}
+#'    \item{DS: Dataframe containing the actual dataset.}
+#'    \item{DSMETA: Metadata describing DS, see \code{FM_fetch_ds()} for
+#'    details on the format.}
+#'    \item{code: Complete code to build dataset.}
+#'    \item{checksum: Module checksum.}
+#'    \item{DSchecksum: Dataset checksum.}
 #'  }
 #'}
+#'@examples
+#' # We need a state variable
+#' sess_res = DW_test_mksession(session=list())
+#' state = sess_res$state
+#'
+#' ds = DW_fetch_ds(state)
 DW_fetch_ds = function(state){
 
   hasds  = FALSE
@@ -2451,3 +2525,136 @@ DW_fetch_ds = function(state){
              msgs   = msgs,
              ds     = ds)
 res}
+
+
+#'@export
+#'@title Populate Session Data for Module Testing
+#'@description Populates the supplied session variable for testing.
+#'@param session Shiny session variable (in app) or a list (outside of app)
+#'@param id An ID string that corresponds with the ID used to call the modules UI elements
+#'@param id_UD An ID string that corresponds with the ID used to call the UD modules UI elements
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:} Boolean indicating the exit status of the function.
+#'   \item{session:} The value Shiny session variable (in app) or a list (outside of app) after initialization.
+#'   \item{input:} The value of the shiny input at the end of the session initialization.
+#'   \item{state:} App state.
+#'   \item{rsc:} The \code{react_state} components.
+#'}
+#'@examples
+#' sess_res = DW_test_mksession(session=list())
+DW_test_mksession = function(session, id = "DW", id_UD="UD"){
+
+  isgood = TRUE
+  rsc    = NULL
+  input  = list()
+
+  id_UD = "UD"
+  # Populating the session with UD components
+  sess_res = UD_test_mksession(session=list(), id = id_UD)
+  if(!("ShinySession" %in% class(session))){
+    session = sess_res[["session"]]
+  }
+  react_state = list()
+  react_state[[id_UD]] = sess_res$rsc
+
+
+  # YAML files for the fetch calls below
+  FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+  MOD_yaml_file = system.file(package = "formods", "templates", "DW.yaml")
+
+  # empty input
+  input = list()
+
+  # Creating an empty state object
+  state = DW_fetch_state(id              = id,           input           = input, session         = session,
+                         FM_yaml_file    = FM_yaml_file, MOD_yaml_file   = MOD_yaml_file,
+                         id_UD           = id_UD,        react_state     = react_state)
+
+
+  # Creating "Observations" data view
+  # Updating the key
+  state[["DW"]][["ui"]][["current_key"]] = "Observations"
+  current_view = DW_fetch_current_view(state)
+  current_view[["key"]] = state[["DW"]][["ui"]][["current_key"]]
+  state = DW_set_current_view(state, current_view)
+
+  # Adding the filtering elements:
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+
+
+  # Creating "Parameters" data view
+  # Creates an empty new data view
+  state = DW_new_view(state)
+
+
+  # Setting the key
+  state[["DW"]][["ui"]][["current_key"]] = "Parameters"
+  current_view = DW_fetch_current_view(state)
+  current_view[["key"]] = state[["DW"]][["ui"]][["current_key"]]
+  state = DW_set_current_view(state, current_view)
+
+
+  # Grouping by subject
+  state[["DW"]][["ui"]][["select_dw_element"]]         = "group"
+  state[["DW"]][["ui"]][["select_fds_group_column"]]   = "ID"
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+  # Getting the first row of each grouping
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "onerow"
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+  # Selecting the columns to keep
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "select"
+  state[["DW"]][["ui"]][["select_fds_select_column"]]   =
+                   c("ID", "DOSE", "DOSE_STR", "Cohort",
+                     "ROUTE", "ka", "CL", "Vc", "Vp", "Q")
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+
+  # Pivot longer:
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "longer"
+  state[["DW"]][["ui"]][["select_fds_longer_column"]]   = c("ka", "CL", "Vc", "Vp", "Q")
+  state[["DW"]][["ui"]][["select_fds_longer_names"]]    = "parameter"
+  state[["DW"]][["ui"]][["select_fds_longer_values"]]   = "values"
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+  # This functions works both in a shiny app and outside of one
+  # if we're in a shiny app then the 'session' then the class of
+  # session will be a ShinySession. Otherwise it'll be a list if
+  # we're not in the app (ie just running test examples) then
+  # we need to set the state manually
+  if(("ShinySession" %in% class(session))){
+    FM_set_mod_state(session, id, state)
+  } else {
+    session = FM_set_mod_state(session, id, state)
+  }
+
+  # Required for proper reaction:
+  rsc = list(DW = list(checksum=state[["DW"]][["checksum"]]))
+
+  res = list(
+    isgood  = isgood,
+    session = session,
+    input   = input,
+    state   = state,
+    rsc     = rsc
+  )
+}
+

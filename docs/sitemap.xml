@@ -73,6 +73,9 @@
     <loc>/reference/DW_set_current_view.html</loc>
   </url>
   <url>
+    <loc>/reference/DW_test_mksession.html</loc>
+  </url>
+  <url>
     <loc>/reference/DW_update_checksum.html</loc>
   </url>
   <url>
@@ -182,6 +185,9 @@
   </url>
   <url>
     <loc>/reference/UD_init_state.html</loc>
+  </url>
+  <url>
+    <loc>/reference/UD_test_mksession.html</loc>
   </url>
   <url>
     <loc>/reference/autocast.html</loc>

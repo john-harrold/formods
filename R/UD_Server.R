@@ -19,6 +19,7 @@
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
+#'@example inst/test_apps/UD_compact.R
 UD_Server <- function(id,
                       id_ASM       = "ASM",
                       FM_yaml_file  = system.file(package = "formods",
@@ -277,6 +278,23 @@ UD_Server <- function(id,
 #'  \item{FM_yaml_file:} App configuration file with FM as main section.
 #'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 #'}
+#'@examples
+#' # YAML configuration files from the package:
+#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+#' MOD_yaml_file = system.file(package = "formods", "templates", "UD.yaml")
+#' # This is the module id:
+#' id = "UD"
+#' # Within shiny both session and input variables will exist, 
+#' # this creates examples here for testing purposes:
+#' sess_res = UD_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#' state = UD_fetch_state(
+#'            id            = id, 
+#'            input         = input, 
+#'            session       = session, 
+#'            FM_yaml_file  = FM_yaml_file,  
+#'            MOD_yaml_file = MOD_yaml_file )
 UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_file ){
 
   # Template for an empty dataset
@@ -449,6 +467,59 @@ UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id){
 #'@param object_name Name of the dataset object created when code is evaluated.
 #'@param contents Data frame containting the contents of the data file.
 #'@return state with data set attached
+#'@examples
+#' # We need a module state object to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list())
+#' state = sess_res$state
+#' 
+#' # This is the full path to a test data file:
+#' data_file_local  =  system.file(package="formods", "test_data", "TEST_DATA.xlsx")
+#'
+#' # Excel file extension
+#' data_file_ext    = "xlsx"
+#' 
+#' # Base file name
+#' data_file        = "TEST_DATA.xlsx"
+#'
+#' # Excel files need a sheet specification:
+#' sheet           = "DATA"
+#'
+#' # We will also attach the sheets along with it
+#' sheets = readxl::excel_sheets(data_file_local)
+#'
+#' ds_read_res = UD_ds_read(state, 
+#'   data_file_ext   = data_file_ext,
+#'   data_file_local = data_file_local,
+#'   data_file       = data_file,
+#'   sheets          = sheets,
+#'   sheet          = sheet)
+#'
+#' # This would contain the loading code that will cascade down 
+#' # to the other modules when generating snippets and 
+#' # reproducible scripts
+#' code = ds_read_res$code
+#'
+#' # This is the R Object name that is used internally 
+#' # and in generated scripts. Should be the same as in 
+#' # the code above
+#' object_name = ds_read_res$object_name
+#'
+#' # This is the actual dataset:
+#' contents   = ds_read_res$contents
+#' 
+#' state =  UD_attach_ds(
+#'          state,
+#'          data_file_local = data_file_local,
+#'          data_file_ext   = ".xlsx",
+#'          data_file       = data_file,
+#'          sheet           = sheet,
+#'          sheets          = sheets,
+#'          code            = code, 
+#'          object_name     = object_name,
+#'          contents        = contents)
+#'
+#' state
 UD_attach_ds = function(
          state,
          isgood          = TRUE,
@@ -504,12 +575,42 @@ UD_attach_ds = function(
 #'@param state UD state from \code{UD_fetch_state()}
 #'@param data_file_local Full path to the data file on the server.
 #'@param data_file Dataset file name without the path.
-#'@param data_file_ext File extension of the uploaded file.
+#'@param data_file_ext File extension of the uploaded file (e.g. "xlsx",
+#'"csv", etc).
 #'@param sheets If the uploaded file is an excel file, this is all the sheets in the file.
 #'@param sheet If the uploaded file is an excel file, this is the currently selected sheet.
 #'@param sheets If the uploaded file is an excel file, this is a character vector of the sheets present in that file.
 #'@return list with the elements of the dataset (contents, object_name, code,
 #'and isgood)
+#'@examples
+#' # We need a module state object to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list())
+#' state = sess_res$state
+#' 
+#' # This is the full path to a test data file:
+#' data_file_local  =  system.file(package="formods", "test_data", "TEST_DATA.xlsx")
+#'
+#' # Excel file extension
+#' data_file_ext    = "xlsx"
+#' 
+#' # Base file name
+#' data_file        = "TEST_DATA.xlsx"
+#'
+#' # Excel files need a sheet specification:
+#' sheet            = "DATA"
+#'
+#' # We will also attach the sheets along with it
+#' sheets = readxl::excel_sheets(data_file_local)
+#'
+#' ds_read_res = UD_ds_read(state, 
+#'   data_file_ext   = data_file_ext,
+#'   data_file_local = data_file_local,
+#'   data_file       = data_file,
+#'   sheets          = sheets,
+#'   sheet          = sheet)
+#'
+#' ds_read_res
 UD_ds_read = function(state,
                       data_file_ext    = NULL,
                       data_file_local  = NULL,
@@ -573,6 +674,10 @@ res}
 #'@description Fetches the code to generate results seen in the app
 #'@param state UD state from \code{UD_fetch_state()}
 #'@return Character object vector with the lines of code
+#'@examples
+#' # This creates a session variable that will be available in Shiny
+#' state = UD_test_mksession(session=list())$state
+#' UD_fetch_code(state)
 UD_fetch_code = function(state){
 
   # If the contents are NULL then nothing has been uploaded and we return NULL
@@ -597,13 +702,15 @@ code}
 #'  \item{ds:}        List with datasets. Each list element has the name of
 #'  the R-object for that dataset. Each element has the following structure:
 #'  \itemize{
-#'    \item{label:}
-#'    \item{MOD_TYPE:}
-#'    \item{id:}
-#'    \item{DSMETA:}
-#'    \item{code:}
-#'    \item{checksum:}
-#'    \item{DSchecksum:}
+#'    \item{label: Text label for the dataset}
+#'    \item{MOD_TYPE: Short name for the type of module.}
+#'    \item{id: module ID}
+#'    \item{DS: Dataframe containing the actual dataset.}
+#'    \item{DSMETA: Metadata describing DS, see \code{FM_fetch_ds()} for
+#'    details on the format.}
+#'    \item{code: Complete code to build dataset.}
+#'    \item{checksum: Module checksum.}
+#'    \item{DSchecksum: Dataset checksum.}
 #'  }
 #'}
 UD_fetch_ds = function(state){
@@ -644,3 +751,58 @@ UD_fetch_ds = function(state){
              msgs   = msgs,
              ds     = ds)
 res}
+
+#'@export
+#'@title Populate Session Data for Module Testing
+#'@description Populates the supplied session variable for testing.
+#'@param session Shiny session variable (in app) or a list (outside of app)
+#'@param id An ID string that corresponds with the ID used to call the modules UI elements
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:} Boolean indicating the exit status of the function.
+#'   \item{session:} The value Shiny session variable (in app) or a list (outside of app) after initialization.
+#'   \item{input:} The value of the shiny input at the end of the session initialization.
+#'   \item{state:} App state.
+#'   \item{rsc:} The \code{react_state} components.
+#'}
+#'@examples
+#' res = UD_test_mksession(session=list())
+UD_test_mksession = function(session, id = "UD"){
+
+  isgood = TRUE
+  rsc    = NULL
+  input  = list()
+
+  input[["input_data_file"]][["datapath"]] = system.file(package="formods", "test_data","TEST_DATA.xlsx")
+  input[["input_data_file"]][["name"]]     = "TEST_DATA.xlsx"
+
+  FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+  MOD_yaml_file = system.file(package = "formods", "templates", "UD.yaml")
+
+  state = UD_fetch_state(id            = id,
+                         input         = input,
+                         session       = session,
+                         FM_yaml_file  = FM_yaml_file,
+                         MOD_yaml_file = MOD_yaml_file)
+
+
+  # This functions works both in a shiny app and outside of one
+  # if we're in a shiny app then the 'session' then the class of
+  # session will be a ShinySession. Otherwise it'll be a list if 
+  # we're not in the app (ie just running test examples) then
+  # we need to set the state manually
+  if(!("ShinySession" %in% class(session))){
+    session = FM_set_mod_state(session, id, state)
+  }
+
+  # Required for proper reaction:
+  rsc = list(UD = list(checksum=state[["UD"]][["checksum"]]))
+
+  res = list(
+    isgood  = isgood,
+    session = session,
+    input   = input,
+    state   = state,
+    rsc     = rsc
+  )
+}

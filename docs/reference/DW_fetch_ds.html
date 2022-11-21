@@ -75,17 +75,38 @@
 <li><p>hasds:     Boolean indicator if the module has any datasets</p></li>
 <li><p>msgs:      Messages to be passed back to the user.</p></li>
 <li><p>ds:        List with datasets. Each list element has the name of
- the R-object for that dataset. Each element has the following structure:</p><ul><li><p>label:</p></li>
-<li><p>MOD_TYPE:</p></li>
-<li><p>id:</p></li>
-<li><p>DS:</p></li>
-<li><p>DSMETA:</p></li>
-<li><p>code:</p></li>
-<li><p>checksum:</p></li>
-<li><p>DSchecksum:</p></li>
+ the R-object for that dataset. Each element has the following structure:</p><ul><li><p>label: Text label for the dataset</p></li>
+<li><p>MOD_TYPE: Short name for the type of module.</p></li>
+<li><p>id: module ID</p></li>
+<li><p>DS: Dataframe containing the actual dataset.</p></li>
+<li><p>DSMETA: Metadata describing DS, see <code><a href="FM_fetch_ds.html">FM_fetch_ds()</a></code> for
+   details on the format.</p></li>
+<li><p>code: Complete code to build dataset.</p></li>
+<li><p>checksum: Module checksum.</p></li>
+<li><p>DSchecksum: Dataset checksum.</p></li>
 </ul></li>
 </ul></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># We need a state variable</span></span></span>
+<span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="DW_test_mksession.html">DW_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:631af84e28478adc1628dd2c9fb22662</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:f5866ed2a560dbc564dec9145314b519</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:4911af9c225aac6361acea8f26bbfac9</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:c9b0caeab52fb59e0dcbb88ee042729a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:d53e4eeadacffd272f5e584700d4e5c6</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:25e606a4b68a27b1b111d4ce7d6ed944</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:cf7553b85f514e80b0495bac005e30a3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:9237881640f3d22346fbce5f152d9e69</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:928a817e1c9205fbbe273de91af26c6a</span>
+<span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ds</span> <span class="op">=</span> <span class="fu">DW_fetch_ds</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

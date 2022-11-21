@@ -16,3 +16,10 @@ and isgood)
 \description{
 Fetches the code to generate results seen in the app
 }
+\examples{
+# This will create a formods DW state object for the example
+sess_res = DW_test_mksession(session=list())
+state   = sess_res$state
+code = DW_fetch_code(state)
+cat(code)
+}

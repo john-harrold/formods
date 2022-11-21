@@ -17,3 +17,6 @@ Takes a vector of messages and returns a ggplot object with the
 text in the figure. This can be used in automated figure generation to
 cascade an error message to the end user.
 }
+\examples{
+FM_mk_error_fig("Oh nos! You've made a mistake!")
+}

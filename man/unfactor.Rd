@@ -23,4 +23,8 @@ df = data.frame(
    float = c( 1 ,  2 ,  3 ))
 
 df$float = as.factor(df$float)
+# This is a factor
+df$float 
+# This is not a factor 
+unfactor(df$float)
 }

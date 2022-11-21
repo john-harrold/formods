@@ -16,10 +16,14 @@ defined.}
 }
 \value{
 Boolean result of the comparison
-changed_true  = has_changed(ui_val = "a", old_val = "")
-changed_false = has_changed(ui_val = "a", old_val = "a")
 }
 \description{
 Takes a UI element value and an older value and determines if
 it has been modified
+}
+\examples{
+changed_true  = has_changed(ui_val = "a", old_val = "")
+changed_true
+changed_false = has_changed(ui_val = "a", old_val = "a")
+changed_false
 }

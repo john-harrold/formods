@@ -18,3 +18,10 @@ module state or NULL if it's not defined.
 Fetches the module state from the userdata under the specified
 id
 }
+\examples{
+# We need a Shiny session variable to use this function:
+id="UD"
+sess_res = UD_test_mksession(session=list(), id=id)
+session = sess_res$session
+state = FM_fetch_mod_state(session, id) 
+}

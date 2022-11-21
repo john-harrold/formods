@@ -295,3 +295,59 @@ ZZ_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
   )
 
 res}
+
+#'@export
+#'@title Fetch Module Datasets
+#'@description Fetches the datasets contained in the model
+#'@param state ZZ state from \code{ZZ_fetch_state()}
+#'@return Character object vector with the lines of code
+#'@return list containing the following elements
+#'\itemize{
+#'  \item{isgood:}    Return status of the function.
+#'  \item{hasds:}     Boolean indicator if the module has any datasets
+#'  \item{msgs:}      Messages to be passed back to the user.
+#'  \item{ds:}        List with datasets. Each list element has the name of
+#'  the R-object for that dataset. Each element has the following structure:
+#'  \itemize{
+#'    \item{label: Text label for the dataset}
+#'    \item{MOD_TYPE: Short name for the type of module.}
+#'    \item{id: module ID}
+#'    \item{DS: Dataframe containing the actual dataset.}
+#'    \item{DSMETA: Metadata describing DS}
+#'    \item{code: Complete code to build dataset.}
+#'    \item{checksum: Module checksum.}
+#'    \item{DSchecksum: Dataset checksum.}
+#'  }
+#'}
+ZZ_fetch_ds = function(state){
+  hasds  = FALSE
+  isgood = TRUE
+  msgs   = c()
+  ds     = list()
+
+  # Empty list for new datasets
+  NEWDS = list(label      = NULL,
+               MOD_TYPE   = NULL,
+               id         = NULL,
+               DS         = NULL,
+               DSMETA     = NULL,
+               code       = NULL,
+               checksum   = NULL,
+               DSchecksum = NULL)
+
+  # This prevents returning a dataset if this is triggered before data has
+  # been loaded
+  if(state[["ZZ"]][["isgood"]]){
+
+    # Fill in the DS creation stuff here
+    isgood = FALSE
+
+    # Putting it all into the ds object to be returned
+    ds[[object_name]] = NEWDS
+  }
+
+  res = list(hasds  = hasds,
+             isgood = isgood,
+             msgs   = msgs,
+             ds     = ds)
+res}

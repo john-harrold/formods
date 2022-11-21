@@ -38,5 +38,4 @@ res_good
 # Failed command
 res_bad = FM_tc("bad_cmd =not_a_command()", list(), c("bad_cmd"))
 res_bad
-
 }

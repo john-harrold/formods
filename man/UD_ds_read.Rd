@@ -16,7 +16,8 @@ UD_ds_read(
 \arguments{
 \item{state}{UD state from \code{UD_fetch_state()}}
 
-\item{data_file_ext}{File extension of the uploaded file.}
+\item{data_file_ext}{File extension of the uploaded file (e.g. "xlsx",
+"csv", etc).}
 
 \item{data_file_local}{Full path to the data file on the server.}
 
@@ -33,4 +34,34 @@ and isgood)
 \description{
 Generates the code for loading a dataset and returns both the
 code and the contents
+}
+\examples{
+# We need a module state object to use this function:
+id="UD"
+sess_res = UD_test_mksession(session=list())
+state = sess_res$state
+
+# This is the full path to a test data file:
+data_file_local  =  system.file(package="formods", "test_data", "TEST_DATA.xlsx")
+
+# Excel file extension
+data_file_ext    = "xlsx"
+
+# Base file name
+data_file        = "TEST_DATA.xlsx"
+
+# Excel files need a sheet specification:
+sheet            = "DATA"
+
+# We will also attach the sheets along with it
+sheets = readxl::excel_sheets(data_file_local)
+
+ds_read_res = UD_ds_read(state, 
+  data_file_ext   = data_file_ext,
+  data_file_local = data_file_local,
+  data_file       = data_file,
+  sheets          = sheets,
+  sheet          = sheet)
+
+ds_read_res
 }

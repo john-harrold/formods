@@ -77,3 +77,29 @@ structure of the list is defined below.
 \description{
 Merges default app options with the changes made in the UI
 }
+\examples{
+# Within shiny both session and input variables will exist, 
+# this creates examples here for testing purposes:
+sess_res = DW_test_mksession(session=list())
+session = sess_res$session
+input   = sess_res$input
+
+# Configuration files
+FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+MOD_yaml_file = system.file(package = "formods", "templates", "DW.yaml")
+
+# We need to specify both the DW module id as well as the
+# id of the UD module that feeds into it.
+id    = "DW"
+id_UD = "UD"
+
+# Creating an empty state object
+state = DW_fetch_state(id              = id,           
+                       input           = input, 
+                       session         = session,
+                       FM_yaml_file    = FM_yaml_file, 
+                       MOD_yaml_file   = MOD_yaml_file,
+                       id_UD           = "UD",
+                       react_state     = NULL)
+
+}

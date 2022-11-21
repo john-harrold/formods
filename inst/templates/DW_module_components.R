@@ -27,7 +27,7 @@ ui <- dashboardPage(
                  "ui_dw_save_view",
                  htmlOutput(NS("DW", "ui_dw_save_view"))),
               div(style="display:inline-block",
-                 "ui_dw_clip_code", 
+                 "ui_dw_clip_code",
                  htmlOutput(NS("DW", "ui_dw_clip_code")) ),
               div(style="display:inline-block",
                  "ui_dw_del_view",
@@ -80,6 +80,8 @@ ui <- dashboardPage(
 )
 
 
+
+
 # Main app server
 server <- function(input, output, session) {
 
@@ -91,25 +93,12 @@ server <- function(input, output, session) {
   # Module server
   react_FM    = reactiveValues()
 
-  # Format of ds is described in the help for UD_fetch_state
-  ds = list(
-     UD = list(
-          data_file_local = NULL,
-          data_file_ext   = NULL,
-          data_file       = NULL,
-          sheet           = NULL,
-          sheets          = NULL,
-          code            = "# Raw data loading code goes here",
-          object_name     = "TMPDS",
-          contents        = DATA,
-          checksum        = digest::digest(DATA, algo=c("md5")),
-          isgood          = TRUE
-        )
-    )
+  # Creating upstream data for the UD module
+  id_UD = "UD"
+  res = UD_test_mksession(session, id_UD)
+  react_FM[[id_UD]] = res[["rsc"]]
 
-  react_FM$UD = ds
-
-  DW_Server(id="DW", id_UD = "UD", react_state=react_FM)
+  DW_Server(id="DW", id_UD = id_UD, react_state=react_FM)
 
   # Current state outside of the module
   output$ui_state  =  renderText({
