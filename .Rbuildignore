@@ -9,3 +9,5 @@ build_custom.R
 ^tmp$
 README.RMD
 
+^codecov\.yml$
+^\.github$

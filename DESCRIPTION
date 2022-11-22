@@ -37,15 +37,16 @@ Imports:
   yaml,
   zip
 Suggests:
-  ggpubr,
-  knitr,
-  plotly,
-  clipr,
-  shinydashboard,
-  shinybusy,
-  rmarkdown,
-  utils,
-  testthat (>= 3.0.0),
+    ggpubr,
+    knitr,
+    plotly,
+    clipr,
+    shinydashboard,
+    shinybusy,
+    rmarkdown,
+    utils,
+    testthat (>= 3.0.0),
+    covr
 RoxygenNote: 7.2.1
 VignetteBuilder: knitr
 Config/testthat/edition: 3
