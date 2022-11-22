@@ -1581,19 +1581,7 @@ state}
 #'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@return list containing an empty app state object
-#'@examples
-#'state = FG_init_state(
-#'    FM_yaml_file  = system.file(package = "formods",
-#'                                "templates",
-#'                                "formods.yaml"),
-#'    MOD_yaml_file = system.file(package = "formods",
-#'                                "templates",
-#'                                "FG.yaml"),
-#'    id              = "FG",
-#'    id_DW           = "DW",
-#'    id_UD           = "UD",
-#'    session         = session)
-#' state
+#'
 FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session){
   state = list()
 

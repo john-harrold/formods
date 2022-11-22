@@ -25,17 +25,3 @@ list containing an empty app state object
 \description{
 Creates a list of the initialized module state
 }
-\examples{
-state = FG_init_state(
-   FM_yaml_file  = system.file(package = "formods",
-                               "templates",
-                               "formods.yaml"),
-   MOD_yaml_file = system.file(package = "formods",
-                               "templates",
-                               "FG.yaml"),
-   id              = "FG",
-   id_DW           = "DW",
-   id_UD           = "UD",
-   session         = session)
-state
-}
