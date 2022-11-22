@@ -16,8 +16,6 @@ knitr::opts_chunk$set(
 # formods <img src="man/figures/logo.png" align="right" height="138.5" />
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/john-harrold/formods/workflows/R-CMD-check/badge.svg)](https://github.com/john-harrold/formods/actions)
-
 <!---
 [![version](https://www.r-pkg.org/badges/version/formods)](https://CRAN.R-project.org/package=formods)
 ---> 

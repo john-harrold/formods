@@ -4,9 +4,6 @@
 # formods <img src="man/figures/logo.png" align="right" height="138.5" />
 
 <!-- badges: start -->
-
-[![R-CMD-check](https://github.com/john-harrold/formods/workflows/R-CMD-check/badge.svg)](https://github.com/john-harrold/formods/actions)
-
 <!---
 [![version](https://www.r-pkg.org/badges/version/formods)](https://CRAN.R-project.org/package=formods)
 --->
@@ -15,7 +12,9 @@
 ![Active](https://www.repostatus.org/badges/latest/active.svg)
 [![Lifecycle:
 Experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
-
+[![Codecov test
+coverage](https://codecov.io/gh/john-harrold/formods/branch/master/graph/badge.svg)](https://app.codecov.io/gh/john-harrold/formods?branch=master)
+[![R-CMD-check](https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Shiny apps can often make use of the same key elements,
