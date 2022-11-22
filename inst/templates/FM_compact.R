@@ -37,7 +37,7 @@ ui <- dashboardPage(
                box(title="Load Data", width=12,
                  fluidRow(
                    column(width=6,
-                     htmlOutput(NS("UD",  "ui_ud_compact"))),
+                     htmlOutput(NS("UD",  "UD_ui_compact"))),
                    column(width=6,
                        tags$p(
                            tags$img(

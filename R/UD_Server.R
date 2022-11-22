@@ -171,7 +171,7 @@ UD_Server <- function(id,
       uiele})
     #------------------------------------
     # Creates the ui for the compact view of the module
-    output$ui_ud_compact  =  renderUI({
+    output$UD_ui_compact  =  renderUI({
       state = UD_fetch_state(id            = id,
                              id_ASM        = id_ASM,
                              input         = input,
@@ -217,7 +217,7 @@ UD_Server <- function(id,
         uiele = tagList(uiele, uiele_preview, tags$br())}
 
       uiele})
-    outputOptions(output, "ui_ud_compact", priority = -1)
+    outputOptions(output, "UD_ui_compact", priority = -1)
     #------------------------------------
     # Creating reaction if a variable has been specified
     if(!is.null(react_state)){

@@ -6,17 +6,17 @@ library(shinydashboard)
 
 ui <- dashboardPage(
   skin="red",
-  dashboardHeader(title="Upload Data"),
+  dashboardHeader(title="Data Wrangling"),
   dashboardSidebar(
      sidebarMenu(
-       menuItem("Upload Data",    tabName="dupload",  icon=icon("table"))
+       menuItem("Data Wrangling",    tabName="main",  icon=icon("table"))
      )
   ),
   dashboardBody(
     tabItems(
-       tabItem(tabName="dupload",
+       tabItem(tabName="main",
         fluidRow(
-          htmlOutput(NS("UD",  "UD_ui_compact"))),
+          htmlOutput(NS("DW",  "DW_ui_compact"))),
         fluidRow(tags$br()),
         fluidRow(
           verbatimTextOutput("ui_state"),width=12)
@@ -31,13 +31,18 @@ server <- function(input, output, session) {
   # changes in the module state outside of the module
   react_FM = reactiveValues()
 
+  # Creating upstream data for the UD module
+  id_UD = "UD"
+  res = UD_test_mksession(session, id_UD)
+  react_FM[[id_UD]] = res[["rsc"]]
+
   # Module server
-  UD_Server(id="UD", react_state=react_FM)
+  DW_Server(id="DW", id_UD = id_UD, react_state=react_FM)
 
   # Current state outside of the module
   output$ui_state  =  renderText({
     input$input_data_file
-    uiele = paste(capture.output(str(react_FM[["UD"]])), collapse="\n")
+    uiele = paste(capture.output(str(react_FM[["DW"]])), collapse="\n")
   uiele})
 }
 
