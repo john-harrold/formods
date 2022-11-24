@@ -48,7 +48,7 @@ ui <- dashboardPage(
     tabItems(
        tabItem(tabName="dupload",
         fluidRow(
-          htmlOutput(NS("UD",  "ui_ud_compact"))),
+          htmlOutput(NS("UD",  "UD_ui_compact"))),
         fluidRow(tags$br()),
         fluidRow(
           verbatimTextOutput("ui_state"),width=12)

@@ -770,7 +770,7 @@ res}
 UD_test_mksession = function(session, id = "UD"){
 
   isgood = TRUE
-  rsc    = NULL
+  rsc    = list()
   input  = list()
 
   input[["input_data_file"]][["datapath"]] = system.file(package="formods", "test_data","TEST_DATA.xlsx")
@@ -796,7 +796,7 @@ UD_test_mksession = function(session, id = "UD"){
   }
 
   # Required for proper reaction:
-  rsc = list(UD = list(checksum=state[["UD"]][["checksum"]]))
+  rsc[[id]] = list(UD = list(checksum=state[[id]][["checksum"]]))
 
   res = list(
     isgood  = isgood,

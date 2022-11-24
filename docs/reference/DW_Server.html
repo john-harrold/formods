@@ -100,6 +100,60 @@ module (<code>NULL</code>)</p></dd>
 <p>DW Server object</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://formods.ubiquity.tools/" class="external-link">formods</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://rstudio.github.io/shinydashboard/" class="external-link">shinydashboard</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">#https://fontawesome.com/icons?from=io</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/dashboardPage.html" class="external-link">dashboardPage</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  skin<span class="op">=</span><span class="st">"red"</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/dashboardHeader.html" class="external-link">dashboardHeader</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Data Wrangling"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/dashboardSidebar.html" class="external-link">dashboardSidebar</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>     <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/sidebarMenu.html" class="external-link">sidebarMenu</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/sidebarMenu.html" class="external-link">menuItem</a></span><span class="op">(</span><span class="st">"Data Wrangling"</span>,    tabName<span class="op">=</span><span class="st">"main"</span>,  icon<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/icon.html" class="external-link">icon</a></span><span class="op">(</span><span class="st">"table"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>     <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/dashboardBody.html" class="external-link">dashboardBody</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/tabItems.html" class="external-link">tabItems</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/tabItem.html" class="external-link">tabItem</a></span><span class="op">(</span>tabName<span class="op">=</span><span class="st">"main"</span>,</span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidRow</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/htmlOutput.html" class="external-link">htmlOutput</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="st">"DW"</span>,  <span class="st">"DW_ui_compact"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidRow</a></span><span class="op">(</span><span class="va">tags</span><span class="op">$</span><span class="fu">br</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidRow</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="st">"ui_state"</span><span class="op">)</span>,width<span class="op">=</span><span class="fl">12</span><span class="op">)</span></span></span>
+<span class="r-in"><span>       <span class="op">)</span></span></span>
+<span class="r-in"><span>     <span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Main app server</span></span></span>
+<span class="r-in"><span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># Empty reactive object to track and react to</span></span></span>
+<span class="r-in"><span>  <span class="co"># changes in the module state outside of the module</span></span></span>
+<span class="r-in"><span>  <span class="va">react_FM</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactiveValues.html" class="external-link">reactiveValues</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># Creating upstream data for the UD module</span></span></span>
+<span class="r-in"><span>  <span class="va">id_UD</span> <span class="op">=</span> <span class="st">"UD"</span></span></span>
+<span class="r-in"><span>  <span class="va">res</span> <span class="op">=</span> <span class="fu"><a href="UD_test_mksession.html">UD_test_mksession</a></span><span class="op">(</span><span class="va">session</span>, <span class="va">id_UD</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">react_FM</span><span class="op">[[</span><span class="va">id_UD</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="va">res</span><span class="op">[[</span><span class="st">"rsc"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="va">id_UD</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># Module server</span></span></span>
+<span class="r-in"><span>  <span class="fu">DW_Server</span><span class="op">(</span>id<span class="op">=</span><span class="st">"DW"</span>, id_UD <span class="op">=</span> <span class="va">id_UD</span>, react_state<span class="op">=</span><span class="va">react_FM</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># Current state outside of the module</span></span></span>
+<span class="r-in"><span>  <span class="va">output</span><span class="op">$</span><span class="va">ui_state</span>  <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderText</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">input</span><span class="op">$</span><span class="va">input_data_file</span></span></span>
+<span class="r-in"><span>    <span class="va">uiele</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html" class="external-link">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">react_FM</span><span class="op">[[</span><span class="st">"DW"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>, collapse<span class="op">=</span><span class="st">"\n"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">uiele</span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

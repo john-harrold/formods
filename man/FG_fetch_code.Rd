@@ -15,3 +15,10 @@ Character object vector with the lines of code
 \description{
 Fetches the code to generate results seen in the app
 }
+\examples{
+# This will create a populated FG state object:
+sess_res = FG_test_mksession(session=list())
+state   = sess_res$state
+code  = FG_fetch_code(state)
+cat(paste(code, collapse="\n")) 
+}

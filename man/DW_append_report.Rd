@@ -31,6 +31,27 @@ list containing the following elements
 Takes the current state of the app and appends data views to an
 xlsx report object.
 }
+\examples{
+
+# We need a state object to use below
+sess_res = DW_test_mksession(session=list())
+state = sess_res$state
+
+rpt = list(summary = list(), sheets=list())
+
+rpt_res = DW_append_report(state,
+ rpt     = rpt,
+ rpttype = "xlsx")
+
+# Shows if report elements are present
+rpt_res$hasrptele
+
+# Code chunk to generate report element
+cat(paste(rpt_res$code, collapse="\n"))
+
+# Tabular summary of data views
+rpt_res$rpt$summary
+}
 \seealso{
 \code{\link{FM_generate_report}}
 }

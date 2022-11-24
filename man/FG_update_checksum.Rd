@@ -17,3 +17,9 @@ Called after any changes to figures, this function will update
 the checksum of the module. This allows other modules to determine if there
 were any changes to the figures within it.
 }
+\examples{
+# This will create a populated FG state object:
+sess_res = FG_test_mksession(session=list())
+state   = sess_res$state
+state = FG_update_checksum(state)
+}

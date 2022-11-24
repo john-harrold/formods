@@ -41,7 +41,7 @@ You can install the development version from [GitHub](https://github.com/john-ha
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("john-harrold/formods")
+devtools::install_github("john-harrold/formods", dependencies=TRUE)
 ```
 
 # Getting started

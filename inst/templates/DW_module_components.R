@@ -96,7 +96,7 @@ server <- function(input, output, session) {
   # Creating upstream data for the UD module
   id_UD = "UD"
   res = UD_test_mksession(session, id_UD)
-  react_FM[[id_UD]] = res[["rsc"]]
+  react_FM[[id_UD]] = res[["rsc"]][[id_UD]]
 
   DW_Server(id="DW", id_UD = id_UD, react_state=react_FM)
 

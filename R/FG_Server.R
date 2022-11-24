@@ -1229,6 +1229,34 @@ FG_Server <- function(id,
 #'  \item{FM_yaml_file:} App configuration file with FM as main section.
 #'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 #'}
+#'@examples
+#' # Within shiny both session and input variables will exist, 
+#' # this creates examples here for testing purposes:
+#' sess_res = FG_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' # Configuration files
+#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+#' MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml")
+#'
+#' # We need to specify both the FG module id as well as the
+#' # id of the UD module that feeds into it.
+#' id    = "FG"
+#' id_UD = "UD"
+#' id_DW = "DW"
+#'
+#' # Creating an empty state object
+#' state = FG_fetch_state(id              = id,           
+#'                        input           = input, 
+#'                        session         = session,
+#'                        FM_yaml_file    = FM_yaml_file, 
+#'                        MOD_yaml_file   = MOD_yaml_file,
+#'                        id_UD           = id_UD,
+#'                        id_DW           = id_DW,
+#'                        react_state     = NULL)
+#'
+#' state
 FG_fetch_state = function(id,
                           input,
                           session,
@@ -1355,6 +1383,7 @@ FG_fetch_state = function(id,
       (!fetch_hold(state, "select_current_fig"))){
 
     # Changing the current view to the one selected in the UI
+    # JMH create FG_mkactive_fig here to set active
     state[["FG"]][["current_fig"]]  =  state[["FG"]][["ui"]][["select_current_fig"]]
   }
 
@@ -1421,7 +1450,7 @@ FG_fetch_state = function(id,
     msgs = c()
 
     # Creating a new figure
-    state = FG_new_fig(state, id_UD, id_DW)
+    state = FG_new_fig(state)
 
     # Setting hold for figure select
     state = set_hold(state, inputId = "select_current_fig")
@@ -1449,7 +1478,7 @@ FG_fetch_state = function(id,
 
     # If there are no figures left then we create an empty one
     if( length(state[["FG"]][["figs"]])  == 0){
-      state = FG_new_fig(state, id_UD, id_DW)
+      state = FG_new_fig(state)
     } else {
       # If there are figures then we set the first one as active
       state[["FG"]][["current_fig"]] = names(state[["FG"]][["figs"]])[1]
@@ -1515,7 +1544,7 @@ FG_fetch_state = function(id,
     old_fig = FG_fetch_current_fig(state)
 
     # This creates a new figure and makes it active:
-    state = FG_new_fig(state, id_UD, id_DW)
+    state = FG_new_fig(state)
 
     # Now we pull out the new figure:
     new_fig = FG_fetch_current_fig(state)
@@ -1581,7 +1610,26 @@ state}
 #'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@return list containing an empty app state object
+#'@examples
+#' # Within shiny both session and input variables will exist, 
+#' # this creates examples here for testing purposes:
+#' sess_res = FG_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
 #'
+#' state = FG_init_state(
+#'    FM_yaml_file  = system.file(package = "formods",
+#'                                "templates",
+#'                                "formods.yaml"),
+#'    MOD_yaml_file = system.file(package = "formods",
+#'                                "templates",
+#'                                "FG.yaml"),
+#'    id              = "FG",
+#'    id_UD           = "UD",
+#'    id_DW           = "DW",
+#'    session         = session)
+#' 
+#' state
 FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session){
   state = list()
 
@@ -1708,7 +1756,7 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
 
   if(isgood){
     # Initializing an empty figure
-    state = FG_new_fig(state, id_UD, id_DW)
+    state = FG_new_fig(state)
   }
 
 state}
@@ -1718,11 +1766,10 @@ state}
 #'@title Initialize New Figure
 #'@description Creates a new figure in a FG module
 #'@param state FG state from \code{FG_fetch_state()}
-#'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
-#'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@return FG state object containing a new empty figure  and that figure set as the
 #'current active figure
-FG_new_fig    = function(state, id_UD, id_DW){
+#'@example inst/test_apps/FG_funcs.R
+FG_new_fig    = function(state){
 
   # Incrementing the figure counter
   state[["FG"]][["fig_cntr"]] = state[["FG"]][["fig_cntr"]] + 1
@@ -1751,9 +1798,6 @@ FG_new_fig    = function(state, id_UD, id_DW){
          msgs           = c(),
          fig_dsview     = fig_dsview,
          checksum       = digest::digest(NULL, algo=c("md5")),
-    #    UD_checksum    = DSV[["modules"]][["UD"]][[id_UD]],
-    #    DW_checksum    = DSV[["modules"]][["DW"]][[id_DW]],
-    #    DSV_checksum   = DSV[["dsviews"]][["checksum"]][[fig_dsview]],
          code_fg_only   = NULL,
          code_previous  = NULL,
          code           = NULL,
@@ -1778,6 +1822,7 @@ state}
 #'@description Takes an FG state and returns the ccurrent active figure
 #'@param state FG state from \code{FG_fetch_state()}
 #'@return list containing the current figure
+#'@example inst/test_apps/FG_funcs.R
 FG_fetch_current_fig    = function(state){
 
   # Current figure ID
@@ -1796,6 +1841,7 @@ fig}
 #'@param state FG state from \code{FG_fetch_state()}
 #'@param fig Figure list from \code{FG_fetch_current_fig}
 #'@return State with the current figure updated
+#'@example inst/test_apps/FG_funcs.R
 FG_set_current_fig    = function(state, fig){
 
   # Current figure ID
@@ -1859,8 +1905,9 @@ fers_builder = function(state){
       man_idx      = element_cfg[["ui_aes_manual_id"]][aes_idx]
 
       # First we check to make sure that the selection is not "not_used"
-      # this means it's either an aesthetic or manual specification
-      if(ui[[sel_idx]] != "not_used"){
+      # this means it's either an aesthetic or manual specification or
+      # not "", meaning nothing has been specified for it.
+      if((ui[[sel_idx]] != "not_used") & (ui[[sel_idx]] != "")){
 
         if(ui[[sel_idx]] == "manual"){
           # We need to make sure that the actually input a manual value
@@ -2063,6 +2110,7 @@ res}
 #'  \item{msgs:}   Messages to be passed back to the user.
 #'  \item{pages:}  List with each element containing a ggplot object (\code{p}) and the code to generate that object (\code{code})
 #'}
+#'@example inst/test_apps/FG_funcs.R
 FG_build = function(state,
                    del_row     = NULL,
                    cmd         = NULL,
@@ -2323,6 +2371,11 @@ state}
 #'were any changes to the figures within it.
 #'@param state FG state from \code{FG_fetch_state()}
 #'@return state with checksum updated.
+#'@examples
+#'# This will create a populated FG state object:
+#'sess_res = FG_test_mksession(session=list())
+#'state   = sess_res$state
+#'state = FG_update_checksum(state)
 FG_update_checksum = function(state){
 
   fig_checksums = c()
@@ -2349,7 +2402,8 @@ state}
 #'@description Used to extract the specified page from the current figure.
 #'@param state FG state from \code{FG_fetch_state()}
 #'@param page  Page number to extract
-#'@return state with checksum updated.
+#'@return ggplot object with the specified page.
+#'@example inst/test_apps/FG_funcs.R
 FG_extract_page  = function(state, page){
 
   # Current figure
@@ -2389,6 +2443,12 @@ fobj}
 #'@description Fetches the code to generate results seen in the app
 #'@param state UD state from \code{FG_fetch_state()}
 #'@return Character object vector with the lines of code
+#'@examples
+#'# This will create a populated FG state object:
+#'sess_res = FG_test_mksession(session=list())
+#'state   = sess_res$state
+#'code  = FG_fetch_code(state)
+#'cat(paste(code, collapse="\n")) 
 FG_fetch_code = function(state){
   if(state[["FG"]][["isgood"]]){
     figs_code = c()
@@ -2575,3 +2635,271 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
   )
 
 res}
+
+
+#'@export
+#'@title Populate Session Data for Module Testing
+#'@description Populates the supplied session variable for testing.
+#'@param session Shiny session variable (in app) or a list (outside of app)
+#'@param id An ID string that corresponds with the ID used to call the modules UI elements
+#'@param id_UD An ID string that corresponds with the ID used to call the UD modules UI elements
+#'@param id_DW An ID string that corresponds with the ID used to call the DW modules UI elements
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:} Boolean indicating the exit status of the function.
+#'   \item{session:} The value Shiny session variable (in app) or a list (outside of app) after initialization.
+#'   \item{input:} The value of the shiny input at the end of the session initialization.
+#'   \item{state:} App state.
+#'   \item{rsc:} The \code{react_state} components.
+#'}
+#'@examples
+#' sess_res = FG_test_mksession(session=list())
+FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
+
+  isgood = TRUE
+  rsc    = NULL
+  input  = list()
+
+  # Populating the session with UD and DW components
+  sess_res = DW_test_mksession(session=session, id=id_DW, id_UD = id_UD)
+  if(!("ShinySession" %in% class(session))){
+    session = sess_res[["session"]]
+  }
+
+  # Pulling out the react state components
+  rsc         = sess_res$rsc
+  react_state = rsc
+
+  # YAML files for the fetch calls below
+  FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+  MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml")
+
+  # empty input
+  input = list()
+
+  # Creating an empty state object
+  state = FG_fetch_state(id              = id,           
+                         input           = input, 
+                         session         = session,
+                         FM_yaml_file    = FM_yaml_file, 
+                         MOD_yaml_file   = MOD_yaml_file,
+                         id_ASM          = "ASM",
+                         id_UD           = id_UD,        
+                         id_DW           = id_DW,        
+                         react_state     = react_state)
+ 
+ 
+  #------------------------------------
+  # Creating "Individual profiles by cohort" data view
+  state[["FG"]][["ui"]][["text_fig_key"]]        = "Individual profiles by cohort"
+  state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_1"
+  current_fig = FG_fetch_current_fig(state)
+  current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
+  current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
+  state = FG_set_current_fig(state, current_fig)
+ 
+  # Adding the lines
+  state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
+  state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
+  state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
+  state[["FG"]][["ui"]][["select_component_color"]]     = "Cohort"
+  state[["FG"]][["ui"]][["select_component_group"]]     = "ID"
+ 
+  fgb_res  = fers_builder(state)
+  state = FG_build( state,
+    cmd     = fgb_res[["cmd"]],
+    element = fgb_res[["element"]],
+    desc    = fgb_res[["desc"]])
+ 
+  # faceting by cohort
+  state[["FG"]][["ui"]][["select_fg_element"]]          = "facet"
+  state[["FG"]][["ui"]][["select_component_facet"]]     = "Cohort"
+ 
+  fgb_res  = fers_builder(state)
+  state = FG_build( state,
+    cmd     = fgb_res[["cmd"]],
+    element = fgb_res[["element"]],
+    desc    = fgb_res[["desc"]])
+ 
+  # setting the log scale
+  state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
+  state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
+ 
+  fgb_res  = fers_builder(state)
+  state = FG_build( state,
+    cmd     = fgb_res[["cmd"]],
+    element = fgb_res[["element"]],
+    desc    = fgb_res[["desc"]])
+ 
+
+
+  #------------------------------------
+  # Plotting the 3 mg SD IV cohort
+  # Updating the key and data view
+  state = FG_new_fig(state)
+  state[["FG"]][["ui"]][["text_fig_key"]]        = "3 mg SD IV"
+  state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_2"
+  current_fig = FG_fetch_current_fig(state)
+  current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
+  current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
+  state = FG_set_current_fig(state, current_fig)
+ 
+  # Adding the lines
+  state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
+  state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
+  state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
+  state[["FG"]][["ui"]][["select_component_group"]]     = "ID"
+ 
+  fgb_res  = fers_builder(state)
+  state = FG_build( state,
+    cmd     = fgb_res[["cmd"]],
+    element = fgb_res[["element"]],
+    desc    = fgb_res[["desc"]])
+ 
+ 
+  # setting the log scale
+  state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
+  state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
+ 
+  fgb_res  = fers_builder(state)
+  state = FG_build( state,
+    cmd     = fgb_res[["cmd"]],
+    element = fgb_res[["element"]],
+    desc    = fgb_res[["desc"]])
+
+  #------------------------------------
+  # Plotting the 3 mg MD SC first dose cohort
+  # Updating the key and data view
+  state = FG_new_fig(state)
+  state[["FG"]][["ui"]][["text_fig_key"]]        = "3 mg SC first dose"
+  state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_3"
+  current_fig = FG_fetch_current_fig(state)
+  current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
+  current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
+  state = FG_set_current_fig(state, current_fig)
+ 
+  # Adding the lines
+  state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
+  state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
+  state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
+  state[["FG"]][["ui"]][["select_component_group"]]     = "ID"
+ 
+  fgb_res  = fers_builder(state)
+  state = FG_build( state,
+    cmd     = fgb_res[["cmd"]],
+    element = fgb_res[["element"]],
+    desc    = fgb_res[["desc"]])
+ 
+ 
+  # setting the log scale
+  state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
+  state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
+ 
+  fgb_res  = fers_builder(state)
+  state = FG_build( state,
+    cmd     = fgb_res[["cmd"]],
+    element = fgb_res[["element"]],
+    desc    = fgb_res[["desc"]])
+ 
+  #------------------------------------
+  # Boxplots of parameters
+  # Updating the key and data view
+  state = FG_new_fig(state)
+  state[["FG"]][["ui"]][["text_fig_key"]]        = "Parameter distribution by Cohort"
+  state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_4"
+  current_fig = FG_fetch_current_fig(state)
+  current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
+  current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
+  state = FG_set_current_fig(state, current_fig)
+ 
+  # Adding the boxplots
+  state[["FG"]][["ui"]][["select_fg_element"]]          = "boxplot"
+  state[["FG"]][["ui"]][["select_component_x"]]         = "parameter"
+  state[["FG"]][["ui"]][["select_component_y"]]         = "values"
+  state[["FG"]][["ui"]][["select_component_fill"]]      = "Cohort"
+  state[["FG"]][["ui"]][["select_component_group"]]     = "Cohort"
+ 
+  fgb_res  = fers_builder(state)
+  state = FG_build( state,
+    cmd     = fgb_res[["cmd"]],
+    element = fgb_res[["element"]],
+    desc    = fgb_res[["desc"]])
+
+  # setting the log scale
+  state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
+  state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
+ 
+  fgb_res  = fers_builder(state)
+  state = FG_build( state,
+    cmd     = fgb_res[["cmd"]],
+    element = fgb_res[["element"]],
+    desc    = fgb_res[["desc"]])
+  #------------------------------------
+ 
+ 
+# # Creating "Parameters" data view
+# # Creates an empty new data view
+# state = DW_new_view(state)
+#
+#
+# # Setting the key
+# state[["DW"]][["ui"]][["current_key"]] = "Parameters"
+# current_view = DW_fetch_current_view(state)
+# current_view[["key"]] = state[["DW"]][["ui"]][["current_key"]]
+# state = DW_set_current_view(state, current_view)
+#
+#
+# # Grouping by subject
+# state[["DW"]][["ui"]][["select_dw_element"]]         = "group"
+# state[["DW"]][["ui"]][["select_fds_group_column"]]   = "ID"
+# dwb_res  = dwrs_builder(state)
+# dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+# state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+#
+# # Getting the first row of each grouping
+# state[["DW"]][["ui"]][["select_dw_element"]]          = "onerow"
+# dwb_res  = dwrs_builder(state)
+# dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+# state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+#
+# # Selecting the columns to keep
+# state[["DW"]][["ui"]][["select_dw_element"]]          = "select"
+# state[["DW"]][["ui"]][["select_fds_select_column"]]   =
+#                  c("ID", "DOSE", "DOSE_STR", "Cohort",
+#                    "ROUTE", "ka", "CL", "Vc", "Vp", "Q")
+# dwb_res  = dwrs_builder(state)
+# dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+# state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+#
+#
+# # Pivot longer:
+# state[["DW"]][["ui"]][["select_dw_element"]]          = "longer"
+# state[["DW"]][["ui"]][["select_fds_longer_column"]]   = c("ka", "CL", "Vc", "Vp", "Q")
+# state[["DW"]][["ui"]][["select_fds_longer_names"]]    = "parameter"
+# state[["DW"]][["ui"]][["select_fds_longer_values"]]   = "values"
+# dwb_res  = dwrs_builder(state)
+# dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+# state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+ 
+  # This functions works both in a shiny app and outside of one
+  # if we're in a shiny app then the 'session' then the class of
+  # session will be a ShinySession. Otherwise it'll be a list if
+  # we're not in the app (ie just running test examples) then
+  # we need to set the state manually
+  if(("ShinySession" %in% class(session))){
+    FM_set_mod_state(session, id, state)
+  } else {
+    session = FM_set_mod_state(session, id, state)
+  }
+
+  # Required for proper reaction:
+  rsc[[id]]  = list(FG = list(checksum=state[[id]][["checksum"]]))
+
+  res = list(
+    isgood  = isgood,
+    session = session,
+    input   = input,
+    state   = state,
+    rsc     = rsc
+  )
+}

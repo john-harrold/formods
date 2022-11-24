@@ -71,6 +71,68 @@
 <p>Character object vector with the lines of code</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># This will create a populated FG state object:</span></span></span>
+<span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="FG_test_mksession.html">FG_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:631af84e28478adc1628dd2c9fb22662</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:f5866ed2a560dbc564dec9145314b519</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:4911af9c225aac6361acea8f26bbfac9</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:c9b0caeab52fb59e0dcbb88ee042729a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:b7f3e08819cabbd242f5bebe1290714b</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:8d8944be2daf4ea8aa3b1c1c707cee45</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:a6367d7e4e002eca11050774144105f8</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:4a381cdf6502fe13dca9c009a25b4418</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:1050496cc0eca17d51102e051220ec49</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:df684a1d4fbbd8bd33749607f9b982c0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:e3054989800f1e8ca24386371b52accc</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:3b43dbda29ded3a3a3ef514ccf0c0578</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:550d10d9e424d549878ab4ba5343896e</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:5d2a75ed77a22f4ff8cc2a0d2bf2e3e5</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:0272b5040b80ff35adf3500fdb60d8c7</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:173ecf7d96c0bbb0962c7846df0d4bca</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:91329389512102f6fab3f9986c1e5703</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:650ec75853f0bdfe72fb3bb495cf27e7</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:3642eec74d244876113148f1b95ab9a4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:2e78d97154fe0e788bdfd2ab8fdbde9b</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:eb5c510f4628e2444c2119ac29e2b231</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:3ec2b07f9e289a008ab2571f893de2bd</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:a622eb068af64c1556badb1646072727</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:7d4cd1c496f8d80cea0493c33561ac02</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:3b116eaf31ed1cb097b4941153fa20f3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:0c3ef8f3a59595879587f3c2d06ec8cc</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:a00934fb1419efda8ed646c2925898cb</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:1306c9a57ff37875dbc4193181a9739e</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:d96e85760b1d1c65a7a58f8d6edb4d08</span>
+<span class="r-in"><span><span class="va">state</span>   <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
+<span class="r-in"><span><span class="va">code</span>  <span class="op">=</span> <span class="fu">FG_fetch_code</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">code</span>, collapse<span class="op">=</span><span class="st">"\n"</span><span class="op">)</span><span class="op">)</span> </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # Individual profiles by cohort</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_1 = ggplot2::ggplot(data=DW_myDS_1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_1 = FG_myp_1 + geom_line(aes(x=TIME_DY, y=DV, color=Cohort, group=ID))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_1 = FG_myp_1 + ggforce::facet_wrap_paginate(vars(Cohort), nrow = 3, ncol = 4, page=1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_1 = FG_myp_1 + scale_y_log10(limits=NULL)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_1 = FG_myp_1 + theme_light()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # 3 mg SD IV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_2 = ggplot2::ggplot(data=DW_myDS_2)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_2 = FG_myp_2 + geom_line(aes(x=TIME_DY, y=DV, color=Cohort, group=ID))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_2 = FG_myp_2 + scale_y_log10(limits=NULL)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_2 = FG_myp_2 + theme_light()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # 3 mg SC first dose</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_3 = ggplot2::ggplot(data=DW_myDS_3)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_3 = FG_myp_3 + geom_line(aes(x=TIME_DY, y=DV, color=Cohort, group=ID))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_3 = FG_myp_3 + scale_y_log10(limits=NULL)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_3 = FG_myp_3 + theme_light()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # Parameter distribution by Cohort</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_4 = ggplot2::ggplot(data=DW_myDS_4)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_4 = FG_myp_4 + geom_boxplot(aes(x=parameter, y=values, color=Cohort, group=Cohort, fill=Cohort))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_4 = FG_myp_4 + scale_y_log10(limits=NULL)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FG_myp_4 = FG_myp_4 + theme_light()</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

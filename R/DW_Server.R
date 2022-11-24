@@ -22,6 +22,7 @@
 #'@param react_state Variable passed to server to allow reaction outside of
 #'module (\code{NULL})
 #'@return DW Server object
+#'@example inst/test_apps/DW_compact.R
 DW_Server <- function(id,
                       id_ASM       = "ASM",
                       id_UD        = "UD",
@@ -2133,7 +2134,9 @@ DW_new_view = function(state){
 
   # This contains the code to generate the input dataset
   code_previous = c(
-    paste0(view_ds_object_name,
+    "JMH HERE",
+    paste0( 
+           view_ds_object_name,
            " = ",
             state[["DW"]][["UD"]][["object_name"]]))
   view_def[["code_previous"]] = code_previous
@@ -2371,6 +2374,27 @@ code}
 #'  \item{msgs:}      Messages to be passed back to the user.
 #'  \item{rpt:}       Report with any additions passed back to the user.
 #'}
+#'
+#'@examples
+#'
+#'# We need a state object to use below
+#'sess_res = DW_test_mksession(session=list())
+#'state = sess_res$state
+#'
+#'rpt = list(summary = list(), sheets=list())
+#'
+#'rpt_res = DW_append_report(state,
+#'  rpt     = rpt,
+#'  rpttype = "xlsx")
+#'
+#'# Shows if report elements are present
+#'rpt_res$hasrptele
+#'
+#'# Code chunk to generate report element
+#'cat(paste(rpt_res$code, collapse="\n"))
+#'
+#'# Tabular summary of data views
+#'rpt_res$rpt$summary
 #'@seealso \code{\link{FM_generate_report}}
 DW_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
 
@@ -2378,7 +2402,6 @@ DW_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
   hasrptele = FALSE
   code      = c()
   msgs      = c()
-
 
   # The DW module only supports the xlsx report type
   supported_rpttypes = c("xlsx")
@@ -2546,17 +2569,19 @@ res}
 DW_test_mksession = function(session, id = "DW", id_UD="UD"){
 
   isgood = TRUE
-  rsc    = NULL
+  rsc    = list()
   input  = list()
 
-  id_UD = "UD"
   # Populating the session with UD components
-  sess_res = UD_test_mksession(session=list(), id = id_UD)
+  sess_res = UD_test_mksession(session, id = id_UD)
   if(!("ShinySession" %in% class(session))){
     session = sess_res[["session"]]
   }
-  react_state = list()
-  react_state[[id_UD]] = sess_res$rsc
+
+  # Pulling out the react state components
+  rsc         = sess_res$rsc
+  react_state = rsc
+
 
 
   # YAML files for the fetch calls below
@@ -2572,6 +2597,7 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
                          id_UD           = id_UD,        react_state     = react_state)
 
 
+  #------------------------------------
   # Creating "Observations" data view
   # Updating the key
   state[["DW"]][["ui"]][["current_key"]] = "Observations"
@@ -2589,13 +2615,81 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
   state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
 
+  #------------------------------------
+  # Creating "3mg SD IV" data view
+  state = DW_new_view(state)
+  # Updating the key
+  state[["DW"]][["ui"]][["current_key"]] = "3mg SD IV"
+  current_view = DW_fetch_current_view(state)
+  current_view[["key"]] = state[["DW"]][["ui"]][["current_key"]]
+  state = DW_set_current_view(state, current_view)
+
+  # Adding the filtering elements:
+  # Just the observations
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+  # The cohort we want:
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "Cohort"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "%in%"
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = "SD 3 mg IV"
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
 
 
+  #------------------------------------
+  # Creating "3mg MD SC (first dose)" data view
+  state = DW_new_view(state)
+  # Updating the key
+  state[["DW"]][["ui"]][["current_key"]] = "3mg MD SC (first dose)"
+  current_view = DW_fetch_current_view(state)
+  current_view[["key"]] = state[["DW"]][["ui"]][["current_key"]]
+  state = DW_set_current_view(state, current_view)
+
+  # Adding the filtering elements:
+  # Just the observations
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+  # The cohort we want:
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "Cohort"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "%in%"
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = "MD 3 mg SC"
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+  # Keeping just the first dose :
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DOSE_NUM"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 1
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+  #------------------------------------
   # Creating "Parameters" data view
   # Creates an empty new data view
   state = DW_new_view(state)
-
-
   # Setting the key
   state[["DW"]][["ui"]][["current_key"]] = "Parameters"
   current_view = DW_fetch_current_view(state)
@@ -2647,7 +2741,7 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   }
 
   # Required for proper reaction:
-  rsc = list(DW = list(checksum=state[["DW"]][["checksum"]]))
+  rsc[[id]]  = list(DW = list(checksum=state[[id]][["checksum"]]))
 
   res = list(
     isgood  = isgood,
