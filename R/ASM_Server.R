@@ -106,8 +106,6 @@ ASM_Server <- function(id,
     #------------------------------------
     # Download State
     output$button_state_save   = downloadHandler(
-
-
       filename = function() {
         state = ASM_fetch_state(id           = id,
                                 input        = input,
@@ -118,13 +116,27 @@ ASM_Server <- function(id,
         FM_le(state, paste0("pushing app state download: ", dlfn))
         dlfn},
       content = function(file) {
+        cat("Content before fetch state \n")
         state = ASM_fetch_state(id           = id,
                                 input        = input,
                                 session      = session,
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
-        ASM_write_state(state, session, file)
+        #ASM_write_state(state, session, file)
+
+        # Runing in a tryCatch enviornment to trap errors otherwise
+        # they are lost. If it fails we log them.
+        tcres = FM_tc("ws_res = ASM_write_state(state, session, file)",
+                      list(state   = state,
+                           session = session,
+                           file    = file),
+                      c("ws_res"))
+
+        if(!tcres$isgood){
+          FM_le(state, "Failed to write state")
+          FM_le(state, tcres$msgs)
         }
+      }
     )
     #------------------------------------
     # Upload State
@@ -383,7 +395,7 @@ ASM_Server <- function(id,
 #'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 #'}
 #'@examples
-#' # Within shiny both session and input variables will exist, 
+#' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
 #' sess_res = ASM_test_mksession(session=list())
 #' session = sess_res$session

@@ -365,29 +365,32 @@ FM_fetch_app_code = function(session){
       # if it matchs the value in gen_mod
       for(state_key in names(app_state)){
         tmp_state = app_state[[state_key]]
+        # This can be null if we're processing something other than a module
+        # (e.g. notifications).
         MOD_TYPE  = tmp_state[["MOD_TYPE"]]
-        if(MOD_TYPE == gen_mod){
-
-          MOD_FUNC  = paste0(MOD_TYPE, "_fetch_code")
-          # We make sure the code generation function exists
-          # and if it does we generate the code for that module
-          if(exists(MOD_FUNC, mode="function")){
-            tmp_code  = NULL
-            FUNC_CALL = paste0("tmp_code = ", MOD_FUNC,"(tmp_state)")
-
-
-            eval(parse(text=FUNC_CALL))
-
-            if(!is.null(tmp_code)){
-              # This adds a header the first time a module type is encountered
-              if(!(MOD_TYPE %in% names(mods_found))){
-                code_chunks = c(code_chunks,  gen_mods[[gen_mod]])
-                mods_found[[MOD_TYPE]] = TRUE
+        if(!is.null(MOD_TYPE)){
+          if(MOD_TYPE == gen_mod){
+            MOD_FUNC  = paste0(MOD_TYPE, "_fetch_code")
+            # We make sure the code generation function exists
+            # and if it does we generate the code for that module
+            if(exists(MOD_FUNC, mode="function")){
+              tmp_code  = NULL
+              FUNC_CALL = paste0("tmp_code = ", MOD_FUNC,"(tmp_state)")
+          
+          
+              eval(parse(text=FUNC_CALL))
+          
+              if(!is.null(tmp_code)){
+                # This adds a header the first time a module type is encountered
+                if(!(MOD_TYPE %in% names(mods_found))){
+                  code_chunks = c(code_chunks,  gen_mods[[gen_mod]])
+                  mods_found[[MOD_TYPE]] = TRUE
+                }
+                code_chunks = c(code_chunks, tmp_code, "\n")
               }
-              code_chunks = c(code_chunks, tmp_code, "\n")
+            } else {
+              msgs = c(msgs, paste0("Unable to find code fetching function: ", MOD_FUNC, "() for module type: ", MOD_TYPE))
             }
-          } else {
-            msgs = c(msgs, paste0("Unable to find code fetching function: ", MOD_FUNC, "() for module type: ", MOD_TYPE))
           }
         }
       }
@@ -497,7 +500,7 @@ FM_le = function(state, entry){
   # Writing messages to the console
   if(state[["yaml"]][["FM"]][["logging"]][["console"]]){
     for(line in entry){
-      cli::cli_alert(line)
+      cli::cli_alert("{line}")
     }
   }
 
