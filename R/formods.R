@@ -234,6 +234,7 @@ res}
 #'@param session Shiny session variable
 #'@param inputId The input ID of the UI element that was put on hold
 #'@return NULL
+#'@example inst/test_apps/FM_holds.R
 remove_hold = function(state, session, inputId){
 
   FM_ID = paste0("FM_", state[["id"]])
@@ -262,6 +263,7 @@ NULL}
 #'@param inputId The input ID of the UI element that was put on hold or
 #'\code{NULL} to hold all IDs in the module
 #'@return state with hold or holds set
+#'@example inst/test_apps/FM_holds.R
 set_hold = function(state, inputId=NULL){
 
   isgood = TRUE
@@ -1125,6 +1127,7 @@ FM_fetch_current_mods = function(){
 #'  \item{pptx or docx:} Corresponding onbrand reporting object.
 #'}
 #'
+#'@example inst/test_apps/FM_report.R
 FM_generate_report = function(state,
                               session,
                               file_dir ,

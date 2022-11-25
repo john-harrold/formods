@@ -67,8 +67,6 @@ server <- function(input, output, session) {
   # changes in the module state outside of the module
   react_FM = reactiveValues()
 
-  #FM_load_test_state(session=session, react_state=react_FM, input=input)
-
   # Module servers
   ASM_Server(id="ASM",                                           react_state=react_FM)
   UD_Server( id="UD", id_ASM = "ASM",                            react_state=react_FM)

@@ -22,7 +22,7 @@
 #'@param react_state Variable passed to server to allow reaction outside of
 #'module (\code{NULL})
 #'@return DW Server object
-#'@example inst/test_apps/DW_compact.R
+#'@example inst/test_apps/FM_compact.R
 DW_Server <- function(id,
                       id_ASM       = "ASM",
                       id_UD        = "UD",
@@ -2741,7 +2741,7 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   }
 
   # Required for proper reaction:
-  rsc[[id]]  = list(DW = list(checksum=state[[id]][["checksum"]]))
+  rsc[[id]]  = list(DW = list(checksum=state[["DW"]][["checksum"]]))
 
   res = list(
     isgood  = isgood,

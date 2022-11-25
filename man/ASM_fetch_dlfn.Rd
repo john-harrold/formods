@@ -7,7 +7,7 @@
 ASM_fetch_dlfn(state, extension = ".zip")
 }
 \arguments{
-\item{state}{List withe the current app state}
+\item{state}{ASM state from \code{ASM_fetch_state()}}
 
 \item{extension}{File extension for the download (default: ".zip")}
 }
@@ -17,4 +17,11 @@ character object with the download file name
 \description{
 Gets either the file name specified by the user or the default
 value if that is null
+}
+\examples{
+# Creating a state object for testing
+sess_res = ASM_test_mksession(session=list())
+state = sess_res$state
+dlfn = ASM_fetch_dlfn(state)
+dlfn
 }

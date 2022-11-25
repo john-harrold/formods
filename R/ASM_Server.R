@@ -18,6 +18,7 @@
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
+#'@example inst/test_apps/FM_compact.R
 ASM_Server <- function(id,
                       FM_yaml_file  = system.file(package = "formods",
                                                   "templates",
@@ -381,6 +382,27 @@ ASM_Server <- function(id,
 #'  \item{FM_yaml_file:} App configuration file with FM as main section.
 #'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 #'}
+#'@examples
+#' # Within shiny both session and input variables will exist, 
+#' # this creates examples here for testing purposes:
+#' sess_res = ASM_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' # Configuration files
+#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+#' MOD_yaml_file = system.file(package = "formods", "templates", "ASM.yaml")
+#'
+#' # We need to specify the ID of the ASM module
+#' id = "ASM"
+#'
+#' state = ASM_fetch_state(id           = id,
+#'                         input        = input,
+#'                         session      = session,
+#'                         FM_yaml_file = FM_yaml_file,
+#'                         MOD_yaml_file = MOD_yaml_file)
+#'
+#' state
 ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
 
   # Template for an empty dataset
@@ -541,9 +563,15 @@ ASM_init_state = function(FM_yaml_file, MOD_yaml_file, id){
 #'@title Fetch Download File Name
 #'@description Gets either the file name specified by the user or the default
 #'value if that is null
-#'@param state List withe the current app state
+#'@param state ASM state from \code{ASM_fetch_state()}
 #'@param extension File extension for the download (default: ".zip")
 #'@return character object with the download file name
+#'@examples
+#' # Creating a state object for testing
+#' sess_res = ASM_test_mksession(session=list())
+#' state = sess_res$state
+#' dlfn = ASM_fetch_dlfn(state)
+#' dlfn
 ASM_fetch_dlfn = function(state, extension=".zip"){
   save_bfn  = state[["ASM"]][["ui"]][["ui_asm_save_name"]]
   if(is.null(save_bfn )){
@@ -554,11 +582,10 @@ ASM_fetch_dlfn = function(state, extension=".zip"){
   dlfn    = paste0(save_bfn, extension)
   dlfn}
 
-#'@export
 #'@title Write State to File for Saving
 #'@description Called from download handler and used to write a saved state
 #'value if that is null
-#'@param state List withe the current app state.
+#'@param state ASM state from \code{ASM_fetch_state()}
 #'@param session Shiny session variable
 #'@param file File name to write zipped state.
 #'@return NULL
@@ -598,13 +625,13 @@ ASM_write_state = function(state, session, file){
   rpttypes = c("xlsx", "pptx", "docx")
   rptctr = 1
   for(rpttype in rpttypes){
- 
+
 
     if(system.file(package = "shinybusy") !=""){
       shinybusy::update_modal_spinner(text=
               paste0(state[["MC"]][["labels"]][["busy"]][[rpttype]], "(",rptctr, "/", length(rpttypes),")"))
     }
- 
+
     rpt_file_name = paste0("report.", rpttype)
     grres = FM_generate_report(
        state         = state,
@@ -613,7 +640,7 @@ ASM_write_state = function(state, session, file){
        file_name     = rpt_file_name,
        gen_code_only = !(switch_gen_rpts),
        rpterrors     = TRUE)
- 
+
     # Appending the report generation code
     if(grres[["isgood"]]){
       app_code[["code"]] = c(app_code[["code"]], paste0("# Generating report: ", rpttype))
@@ -622,7 +649,7 @@ ASM_write_state = function(state, session, file){
       app_code[["code"]] = c(app_code[["code"]], paste0("# ", rpttype, " not generated"))
       app_code[["code"]] = c(app_code[["code"]], paste0("# ", grres[["errmsg"]]))
     }
- 
+
     rptctr = rptctr + 1
   }
 
@@ -661,9 +688,84 @@ ASM_write_state = function(state, session, file){
 #'@description Fetches the code to generate results seen in the app
 #'@param state ASM state from \code{ASM_fetch_state()}
 #'@return NULL the ASM module does not generate code
+#'@examples
+#' # Creating a state object for testing
+#' sess_res = ASM_test_mksession(session=list())
+#' state = sess_res$state
+#' code = ASM_fetch_code(state)
 ASM_fetch_code = function(state){
 
   code = NULL
 
 code}
 
+#'@export
+#'@title Populate Session Data for Module Testing
+#'@description Populates the supplied session variable for testing.
+#'@param session Shiny session variable (in app) or a list (outside of app)
+#'@param id An ID string that corresponds with the ID used to call the modules UI elements
+#'@param id_UD An ID string that corresponds with the ID used to call the UD modules UI elements
+#'@param id_DW An ID string that corresponds with the ID used to call the DW modules UI elements
+#'@param id_FG An ID string that corresponds with the ID used to call the FG modules UI elements
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:} Boolean indicating the exit status of the function.
+#'   \item{session:} The value Shiny session variable (in app) or a list (outside of app) after initialization.
+#'   \item{input:} The value of the shiny input at the end of the session initialization.
+#'   \item{state:} App state.
+#'   \item{rsc:} The \code{react_state} components.
+#'}
+#'@examples
+#' sess_res = ASM_test_mksession(session=list())
+ASM_test_mksession = function(session, id="ASM", id_UD="UD", id_DW = "DW", id_FG="FG"){
+
+  isgood = TRUE
+  rsc    = list()
+  input  = list()
+
+  # Populating the session with FG components
+  sess_res = FG_test_mksession(session, id=id_FG, id_UD = id_UD, id_DW=id_DW)
+  if(!("ShinySession" %in% class(session))){
+    session = sess_res[["session"]]
+  }
+
+  # Pulling out the react state components
+  rsc         = sess_res$rsc
+  react_state = rsc
+
+  # YAML files for the fetch calls below
+  FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+  MOD_yaml_file = system.file(package = "formods", "templates", "ASM.yaml")
+
+  # empty input
+  input = list()
+
+  # Creating an empty state object
+  state = ASM_fetch_state(id           = id,
+                          input        = input,
+                          session      = session,
+                          FM_yaml_file = FM_yaml_file,
+                          MOD_yaml_file = MOD_yaml_file)
+
+  # This functions works both in a shiny app and outside of one
+  # if we're in a shiny app then the 'session' then the class of
+  # session will be a ShinySession. Otherwise it'll be a list if
+  # we're not in the app (ie just running test examples) then
+  # we need to set the state manually
+  if(("ShinySession" %in% class(session))){
+    FM_set_mod_state(session, id, state)
+  } else {
+    session = FM_set_mod_state(session, id, state)
+  }
+
+  # Required for proper reaction:
+  rsc[[id]]  = list(ASM = list(checksum=state[["ASM"]][["checksum"]]))
+
+  res = list(
+    isgood  = isgood,
+    session = session,
+    input   = input,
+    state   = state,
+    rsc     = rsc
+  )
+}

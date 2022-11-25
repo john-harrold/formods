@@ -19,7 +19,7 @@
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
-#'@example inst/test_apps/UD_compact.R
+#'@example inst/test_apps/FM_compact.R
 UD_Server <- function(id,
                       id_ASM       = "ASM",
                       FM_yaml_file  = system.file(package = "formods",
@@ -796,7 +796,7 @@ UD_test_mksession = function(session, id = "UD"){
   }
 
   # Required for proper reaction:
-  rsc[[id]] = list(UD = list(checksum=state[[id]][["checksum"]]))
+  rsc[[id]] = list(UD = list(checksum=state[["UD"]][["checksum"]]))
 
   res = list(
     isgood  = isgood,

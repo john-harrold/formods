@@ -1,3 +1,28 @@
+library(here)
+repo_root = here::here()
+
+#loading everything
+devtools::load_all()
+
+# creating app example
+FM_compact = system.file(package="formods", "templates", "FM_compact.R")
+
+fmapp = readLines(FM_compact)
+fmapp = c("if(interactive()){",
+          fmapp,
+          "}")
+
+FM_compact_example = file.path(repo_root, "inst", "test_apps", "FM_compact.R")
+
+fileConn=file(FM_compact_example)
+writeLines(fmapp, fileConn)
+close(fileConn)
+
+
+# building documentation
+devtools::document(roclets = c('rd', 'collate', 'namespace', 'vignette'))
+
+
 # Rebuilding the pkgdown site
 pkgdown::build_site()
 

@@ -36,31 +36,68 @@ Server function for the data wrangling module
 }
 \examples{
 if(interactive()){
-library(shiny)
-library(formods)
+# These are suggested packages
 library(shinydashboard)
+library(ggpubr)
+library(plotly)
+library(shinybusy)
+library(utils)
+library(clipr)
+
+CSS <- "
+.wrapfig {
+  float: right;
+  shape-margin: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+"
 #https://fontawesome.com/icons?from=io
 
 ui <- dashboardPage(
-  skin="red",
-  dashboardHeader(title="Data Wrangling"),
+  skin="black",
+  dashboardHeader(title="formods"),
   dashboardSidebar(
      sidebarMenu(
-       menuItem("Data Wrangling",    tabName="main",  icon=icon("table"))
+       menuItem("Source Data",     tabName="upload",      icon=icon("table")) ,
+       menuItem("Wrangle",         tabName="wrangle",     icon=icon("hat-cowboy")),
+       menuItem("Plot",            tabName="plot",        icon=icon("chart-line")),
+       menuItem("App State",       tabName="app_state",   icon=icon("archive"))
      )
   ),
   dashboardBody(
+  tags$head(
+    tags$style(HTML(CSS))
+  ),
     tabItems(
-       tabItem(tabName="main",
-        fluidRow(
-          htmlOutput(NS("DW",  "DW_ui_compact"))),
-        fluidRow(tags$br()),
-        fluidRow(
-          verbatimTextOutput("ui_state"),width=12)
-       )
-     )
-   )
- )
+       tabItem(tabName="app_state", box(title="Manage App State", htmlOutput(NS("ASM", "ui_asm_compact")))),
+       tabItem(tabName="upload",
+               box(title="Load Data", width=12,
+                 fluidRow(
+                   column(width=6,
+                     htmlOutput(NS("UD",  "UD_ui_compact"))),
+                   column(width=6,
+                       tags$p(
+                           tags$img(
+                           class = "wrapfig",
+                           src   = "https://github.com/john-harrold/formods/raw/master/man/figures/logo.png",
+                           width = 100,
+                           alt = "formods logo" ),
+                         'Formods is a set of modules and an framework for developing modules which interact and create code to replicate analyses performed within an app. To experiment download this',
+                       tags$a("test dataset", href="https://github.com/john-harrold/formods/raw/master/inst/test_data/TEST_DATA.xlsx"),
+                              'and upload it into the App using the form on the left.'))
+                 )
+               )
+               ),
+       tabItem(tabName="wrangle",
+               box(title="Transform and Create Views of Your Data", width=12,
+               htmlOutput(NS("DW",  "DW_ui_compact")))),
+       tabItem(tabName="plot",
+               box(title="Visualize Data", width=12,
+               htmlOutput(NS("FG",  "FG_ui_compact"))))
+      )
+    )
+  )
 
 # Main app server
 server <- function(input, output, session) {
@@ -68,19 +105,11 @@ server <- function(input, output, session) {
   # changes in the module state outside of the module
   react_FM = reactiveValues()
 
-  # Creating upstream data for the UD module
-  id_UD = "UD"
-  res = UD_test_mksession(session, id_UD)
-  react_FM[[id_UD]] = res[["rsc"]][[id_UD]]
-
-  # Module server
-  DW_Server(id="DW", id_UD = id_UD, react_state=react_FM)
-
-  # Current state outside of the module
-  output$ui_state  =  renderText({
-    input$input_data_file
-    uiele = paste(capture.output(str(react_FM[["DW"]])), collapse="\n")
-  uiele})
+  # Module servers
+  ASM_Server(id="ASM",                                           react_state=react_FM)
+  UD_Server( id="UD", id_ASM = "ASM",                            react_state=react_FM)
+  DW_Server( id="DW", id_ASM = "ASM",id_UD = "UD",               react_state=react_FM)
+  FG_Server( id="FG", id_ASM = "ASM",id_UD = "UD", id_DW = "DW", react_state=react_FM)
 }
 
 shinyApp(ui, server)

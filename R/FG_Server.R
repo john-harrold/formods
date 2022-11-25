@@ -17,6 +17,7 @@
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return FG Server object
+#'@example inst/test_apps/FM_compact.R
 FG_Server <- function(id,
                 FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
                 MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml"),
@@ -2893,7 +2894,7 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
   }
 
   # Required for proper reaction:
-  rsc[[id]]  = list(FG = list(checksum=state[[id]][["checksum"]]))
+  rsc[[id]]  = list(FG = list(checksum=state[["FG"]][["checksum"]]))
 
   res = list(
     isgood  = isgood,

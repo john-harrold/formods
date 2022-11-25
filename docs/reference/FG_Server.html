@@ -103,6 +103,89 @@
 <p>FG Server object</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># These are suggested packages</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://rstudio.github.io/shinydashboard/" class="external-link">shinydashboard</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rpkgs.datanovia.com/ggpubr/" class="external-link">ggpubr</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://plotly-r.com" class="external-link">plotly</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dreamRs/shinybusy" class="external-link">shinybusy</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">utils</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mdlincoln/clipr" class="external-link">clipr</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">CSS</span> <span class="op">&lt;-</span> <span class="st">"</span></span></span>
+<span class="r-in"><span><span class="st">.wrapfig {</span></span></span>
+<span class="r-in"><span><span class="st">  float: right;</span></span></span>
+<span class="r-in"><span><span class="st">  shape-margin: 20px;</span></span></span>
+<span class="r-in"><span><span class="st">  margin-right: 20px;</span></span></span>
+<span class="r-in"><span><span class="st">  margin-bottom: 20px;</span></span></span>
+<span class="r-in"><span><span class="st">}</span></span></span>
+<span class="r-in"><span><span class="st">"</span></span></span>
+<span class="r-in"><span><span class="co">#https://fontawesome.com/icons?from=io</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/dashboardPage.html" class="external-link">dashboardPage</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  skin<span class="op">=</span><span class="st">"black"</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/dashboardHeader.html" class="external-link">dashboardHeader</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"formods"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/dashboardSidebar.html" class="external-link">dashboardSidebar</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>     <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/sidebarMenu.html" class="external-link">sidebarMenu</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/sidebarMenu.html" class="external-link">menuItem</a></span><span class="op">(</span><span class="st">"Source Data"</span>,     tabName<span class="op">=</span><span class="st">"upload"</span>,      icon<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/icon.html" class="external-link">icon</a></span><span class="op">(</span><span class="st">"table"</span><span class="op">)</span><span class="op">)</span> ,</span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/sidebarMenu.html" class="external-link">menuItem</a></span><span class="op">(</span><span class="st">"Wrangle"</span>,         tabName<span class="op">=</span><span class="st">"wrangle"</span>,     icon<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/icon.html" class="external-link">icon</a></span><span class="op">(</span><span class="st">"hat-cowboy"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/sidebarMenu.html" class="external-link">menuItem</a></span><span class="op">(</span><span class="st">"Plot"</span>,            tabName<span class="op">=</span><span class="st">"plot"</span>,        icon<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/icon.html" class="external-link">icon</a></span><span class="op">(</span><span class="st">"chart-line"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/sidebarMenu.html" class="external-link">menuItem</a></span><span class="op">(</span><span class="st">"App State"</span>,       tabName<span class="op">=</span><span class="st">"app_state"</span>,   icon<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/icon.html" class="external-link">icon</a></span><span class="op">(</span><span class="st">"archive"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>     <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/dashboardBody.html" class="external-link">dashboardBody</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">tags</span><span class="op">$</span><span class="fu">head</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">tags</span><span class="op">$</span><span class="fu">style</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/HTML.html" class="external-link">HTML</a></span><span class="op">(</span><span class="va">CSS</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/tabItems.html" class="external-link">tabItems</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/tabItem.html" class="external-link">tabItem</a></span><span class="op">(</span>tabName<span class="op">=</span><span class="st">"app_state"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/box.html" class="external-link">box</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Manage App State"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/htmlOutput.html" class="external-link">htmlOutput</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="st">"ASM"</span>, <span class="st">"ui_asm_compact"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/tabItem.html" class="external-link">tabItem</a></span><span class="op">(</span>tabName<span class="op">=</span><span class="st">"upload"</span>,</span></span>
+<span class="r-in"><span>               <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/box.html" class="external-link">box</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Load Data"</span>, width<span class="op">=</span><span class="fl">12</span>,</span></span>
+<span class="r-in"><span>                 <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidRow</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>                   <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/column.html" class="external-link">column</a></span><span class="op">(</span>width<span class="op">=</span><span class="fl">6</span>,</span></span>
+<span class="r-in"><span>                     <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/htmlOutput.html" class="external-link">htmlOutput</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="st">"UD"</span>,  <span class="st">"UD_ui_compact"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                   <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/column.html" class="external-link">column</a></span><span class="op">(</span>width<span class="op">=</span><span class="fl">6</span>,</span></span>
+<span class="r-in"><span>                       <span class="va">tags</span><span class="op">$</span><span class="fu">p</span><span class="op">(</span></span></span>
+<span class="r-in"><span>                           <span class="va">tags</span><span class="op">$</span><span class="fu">img</span><span class="op">(</span></span></span>
+<span class="r-in"><span>                           class <span class="op">=</span> <span class="st">"wrapfig"</span>,</span></span>
+<span class="r-in"><span>                           src   <span class="op">=</span> <span class="st">"https://github.com/john-harrold/formods/raw/master/man/figures/logo.png"</span>,</span></span>
+<span class="r-in"><span>                           width <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                           alt <span class="op">=</span> <span class="st">"formods logo"</span> <span class="op">)</span>,</span></span>
+<span class="r-in"><span>                         <span class="st">'Formods is a set of modules and an framework for developing modules which interact and create code to replicate analyses performed within an app. To experiment download this'</span>,</span></span>
+<span class="r-in"><span>                       <span class="va">tags</span><span class="op">$</span><span class="fu">a</span><span class="op">(</span><span class="st">"test dataset"</span>, href<span class="op">=</span><span class="st">"https://github.com/john-harrold/formods/raw/master/inst/test_data/TEST_DATA.xlsx"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                              <span class="st">'and upload it into the App using the form on the left.'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                 <span class="op">)</span></span></span>
+<span class="r-in"><span>               <span class="op">)</span></span></span>
+<span class="r-in"><span>               <span class="op">)</span>,</span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/tabItem.html" class="external-link">tabItem</a></span><span class="op">(</span>tabName<span class="op">=</span><span class="st">"wrangle"</span>,</span></span>
+<span class="r-in"><span>               <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/box.html" class="external-link">box</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Transform and Create Views of Your Data"</span>, width<span class="op">=</span><span class="fl">12</span>,</span></span>
+<span class="r-in"><span>               <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/htmlOutput.html" class="external-link">htmlOutput</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="st">"DW"</span>,  <span class="st">"DW_ui_compact"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>       <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/tabItem.html" class="external-link">tabItem</a></span><span class="op">(</span>tabName<span class="op">=</span><span class="st">"plot"</span>,</span></span>
+<span class="r-in"><span>               <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/box.html" class="external-link">box</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Visualize Data"</span>, width<span class="op">=</span><span class="fl">12</span>,</span></span>
+<span class="r-in"><span>               <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/htmlOutput.html" class="external-link">htmlOutput</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="st">"FG"</span>,  <span class="st">"FG_ui_compact"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Main app server</span></span></span>
+<span class="r-in"><span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># Empty reactive object to track and react to</span></span></span>
+<span class="r-in"><span>  <span class="co"># changes in the module state outside of the module</span></span></span>
+<span class="r-in"><span>  <span class="va">react_FM</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactiveValues.html" class="external-link">reactiveValues</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># Module servers</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="ASM_Server.html">ASM_Server</a></span><span class="op">(</span>id<span class="op">=</span><span class="st">"ASM"</span>,                                           react_state<span class="op">=</span><span class="va">react_FM</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="UD_Server.html">UD_Server</a></span><span class="op">(</span> id<span class="op">=</span><span class="st">"UD"</span>, id_ASM <span class="op">=</span> <span class="st">"ASM"</span>,                            react_state<span class="op">=</span><span class="va">react_FM</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="DW_Server.html">DW_Server</a></span><span class="op">(</span> id<span class="op">=</span><span class="st">"DW"</span>, id_ASM <span class="op">=</span> <span class="st">"ASM"</span>,id_UD <span class="op">=</span> <span class="st">"UD"</span>,               react_state<span class="op">=</span><span class="va">react_FM</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">FG_Server</span><span class="op">(</span> id<span class="op">=</span><span class="st">"FG"</span>, id_ASM <span class="op">=</span> <span class="st">"ASM"</span>,id_UD <span class="op">=</span> <span class="st">"UD"</span>, id_DW <span class="op">=</span> <span class="st">"DW"</span>, react_state<span class="op">=</span><span class="va">react_FM</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

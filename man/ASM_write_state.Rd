@@ -7,7 +7,7 @@
 ASM_write_state(state, session, file)
 }
 \arguments{
-\item{state}{List withe the current app state.}
+\item{state}{ASM state from \code{ASM_fetch_state()}}
 
 \item{session}{Shiny session variable}
 

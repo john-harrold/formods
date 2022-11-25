@@ -50,7 +50,6 @@ state = FG_set_current_fig(state, current_fig)
 # force a rebuild of the current figure:
 state = FG_build( state=state, del_row = NULL, cmd = NULL)
 
-
 # To create a new empty figure you can do this:
 state = FG_new_fig(state)
 }

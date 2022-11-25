@@ -15,3 +15,9 @@ NULL the ASM module does not generate code
 \description{
 Fetches the code to generate results seen in the app
 }
+\examples{
+# Creating a state object for testing
+sess_res = ASM_test_mksession(session=list())
+state = sess_res$state
+code = ASM_fetch_code(state)
+}
