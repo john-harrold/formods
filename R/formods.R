@@ -48,7 +48,7 @@
 #'     \item{label:} Text label
 #'     \item{object:} Name of the R Object containing the data frame
 #'     \item{MOD_TYPE:} Short name of the type of module
-#'     \item{id:} Module ID 
+#'     \item{id:} Module ID
 #'     \item{checksum:} Module checksum
 #'     \item{DSchecksum:} Checksum of the dataset
 #'     \item{code:} Code to generate the dataset
@@ -60,13 +60,13 @@
 #'   following: \code{res$modules$DW$my_id}.
 #' }
 #'@examples
-#' # We need a module state and a Shiny session variable 
+#' # We need a module state and a Shiny session variable
 #' # to use this function:
 #' id="UD"
 #' sess_res = UD_test_mksession(session=list(), id=id)
 #' session = sess_res$session
 #' state   = sess_res$state
-#' ds = FM_fetch_ds(state, session) 
+#' ds = FM_fetch_ds(state, session)
 #' ds$catalog
 FM_fetch_ds = function(state, session, ids=NULL){
 
@@ -183,8 +183,8 @@ res}
 #'
 #' df$float = as.factor(df$float)
 #' # This is a factor
-#' df$float 
-#' # This is not a factor 
+#' df$float
+#' # This is not a factor
 #' unfactor(df$float)
 unfactor = function(fctobj){
   res = fctobj
@@ -437,7 +437,7 @@ res}
 #' id="UD"
 #' sess_res = UD_test_mksession(session=list(), id=id)
 #' state = sess_res$state
-#' user_dir = FM_fetch_user_files_path(state) 
+#' user_dir = FM_fetch_user_files_path(state)
 #' user_dir
 FM_fetch_user_files_path = function(state){
 
@@ -496,7 +496,9 @@ FM_le = function(state, entry){
 
   # Writing messages to the console
   if(state[["yaml"]][["FM"]][["logging"]][["console"]]){
-    cli::cli_alert(entry)
+    for(line in entry){
+      cli::cli_alert(line)
+    }
   }
 
   # Appending the optional time stamp
@@ -800,7 +802,7 @@ p_res}
 #' id="UD"
 #' sess_res = UD_test_mksession(session=list(), id=id)
 #' session = sess_res$session
-#' state = FM_fetch_mod_state(session, id) 
+#' state = FM_fetch_mod_state(session, id)
 FM_fetch_mod_state <- function(session,id){
 
   FM_ID = paste0("FM_", id)
@@ -817,7 +819,7 @@ state}
 #'@param state Module state to set.
 #'@return NULL
 #'@examples
-#' # We need a Shiny session variable and a module state 
+#' # We need a Shiny session variable and a module state
 #' # object to use this function:
 #' id="UD"
 #' sess_res = UD_test_mksession(session=list(), id=id)

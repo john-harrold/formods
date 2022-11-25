@@ -332,9 +332,9 @@ FG_Server <- function(id,
        input[["hot_fg_elements"]]
        input[["button_element_add"]]
        input[["select_current_fig"]]
-     
+
        input[["select_fg_page"]]
-     
+
        state = FG_fetch_state(id             = id,
                               input          = input,
                               session        = session,
@@ -344,16 +344,16 @@ FG_Server <- function(id,
                               id_UD          = id_UD,
                               id_DW          = id_DW,
                               react_state    = react_state)
-     
+
        current_fig = FG_fetch_current_fig(state)
-     
+
        current_fig = FG_fetch_current_fig(state)
        fobj = current_fig[["fobj"]]
-     
+
        if(current_fig[["num_pages"]] > 1){
          fobj = FG_extract_page(state, current_fig[["page"]])
        }
-     
+
        if(is.null(fobj)){
          uiele = NULL
        }else{
@@ -362,7 +362,7 @@ FG_Server <- function(id,
            height = state[["MC"]][["formatting"]][["preview"]][["height"]]
          )
        }
-     
+
        uiele})
     }
     #------------------------------------
@@ -753,8 +753,14 @@ FG_Server <- function(id,
             # Aesthetic name
             ui_aes = state[["MC"]][["elements"]][[curr_element]][["ui_aes"]][aes_idx]
             # these are the IDs for the UI elements to be generated
-            id_select = state[["MC"]][["elements"]][[curr_element]][["ui_aes_select_id"]][aes_idx]
-            id_manual = state[["MC"]][["elements"]][[curr_element]][["ui_aes_manual_id"]][aes_idx]
+            # JMH remove this
+            #id_select = state[["MC"]][["elements"]][[curr_element]][["ui_aes_select_id"]][aes_idx]
+            #id_manual = state[["MC"]][["elements"]][[curr_element]][["ui_aes_manual_id"]][aes_idx]
+
+            # JMH replace with this
+            id_select = state[["FG"]][["auto_elements"]][[curr_element]][["ui_aes_select_id"]][aes_idx]
+            id_manual = state[["FG"]][["auto_elements"]][[curr_element]][["ui_aes_manual_id"]][aes_idx]
+
 
             # Constructing the choices
             sel_names      = c()
@@ -1058,10 +1064,10 @@ FG_Server <- function(id,
       # and if the app isn't deployed
       if((system.file(package="clipr") != "") &
          !state[["yaml"]][["FM"]][["deployed"]]){
-   
+
         uiele = NULL
         current_fig = FG_fetch_current_fig(state)
-   
+
         if(is.null(current_fig[["elements_table"]])){
           uiele = "# No figure elements defined yet!"
         } else {
@@ -1231,7 +1237,7 @@ FG_Server <- function(id,
 #'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 #'}
 #'@examples
-#' # Within shiny both session and input variables will exist, 
+#' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
 #' sess_res = FG_test_mksession(session=list())
 #' session = sess_res$session
@@ -1248,10 +1254,10 @@ FG_Server <- function(id,
 #' id_DW = "DW"
 #'
 #' # Creating an empty state object
-#' state = FG_fetch_state(id              = id,           
-#'                        input           = input, 
+#' state = FG_fetch_state(id              = id,
+#'                        input           = input,
 #'                        session         = session,
-#'                        FM_yaml_file    = FM_yaml_file, 
+#'                        FM_yaml_file    = FM_yaml_file,
 #'                        MOD_yaml_file   = MOD_yaml_file,
 #'                        id_UD           = id_UD,
 #'                        id_DW           = id_DW,
@@ -1324,7 +1330,7 @@ FG_fetch_state = function(id,
     # generation state will be good. Then we just need to attach the updated
     # dataset views:
     if(state[["FG"]][["isgood"]]){
-      # JMH update the "DSV" components 
+      # JMH update the "DSV" components
       state[["FG"]][["DSV"]] = FM_fetch_ds(state, session, c(id_UD, id_DW))
 
     # state[["FG"]][["DSV"]] = FM_fetch_dsviews(
@@ -1612,7 +1618,7 @@ state}
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@return list containing an empty app state object
 #'@examples
-#' # Within shiny both session and input variables will exist, 
+#' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
 #' sess_res = FG_test_mksession(session=list())
 #' session = sess_res$session
@@ -1629,7 +1635,7 @@ state}
 #'    id_UD           = "UD",
 #'    id_DW           = "DW",
 #'    session         = session)
-#' 
+#'
 #' state
 FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session){
   state = list()
@@ -1653,6 +1659,9 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
   # configuration file.
   ui_ids = c()
 
+  # These are automatically generated elements
+  auto_elements = list()
+
   # We only do the rest if
   if(isgood){
     #---------------------------------------------
@@ -1665,8 +1674,13 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
         # Appending the IDs to the full list
         ui_ids = c(ui_ids, select_id, manual_id)
         # Saving the ids corresponding to the elements here:
-        state[["MC"]][["elements"]][[element]][["ui_aes_select_id"]] = select_id
-        state[["MC"]][["elements"]][[element]][["ui_aes_manual_id"]] = manual_id
+        # JMH remove this
+        #state[["MC"]][["elements"]][[element]][["ui_aes_select_id"]] = select_id
+        #state[["MC"]][["elements"]][[element]][["ui_aes_manual_id"]] = manual_id
+
+        # JMH replace with this
+        auto_elements[[element]][["ui_aes_select_id"]] = select_id
+        auto_elements[[element]][["ui_aes_manual_id"]] = manual_id
       }
     }
 
@@ -1698,7 +1712,8 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
     ui_ids = unique(ui_ids)
   }
 
-  state_tmp = state
+  # JMH remove this
+  #state_tmp = state
 
   # Names of button elements:
   button_counters = c(
@@ -1728,16 +1743,13 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
     ui_ids          = ui_ids,
     ui_hold         = ui_hold)
 
-  state[["MC"]] = state_tmp[["MC"]]
+  # JMH remove this
+  #state[["MC"]] = state_tmp[["MC"]]
+
 
   #---------------------------------------------
   # Finding the dataset
   DSV = FM_fetch_ds(state, session, c(id_UD, id_DW))
- #DSV = FM_fetch_dsviews(
- #  state       = state,
- #  id_UD       = id_UD,
- #  id_DW       = id_DW,
- #  react_state = react_state)
 
   # If the dataset isn't good then we need to
   # flag the whole module as not being good
@@ -1752,6 +1764,9 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
   state[["FG"]][["fig_cntr"]]      = 0
   state[["FG"]][["current_fig"]]   = NULL
   state[["FG"]][["aes_elements"]]  = aes_elements
+  # JMH replace with tis
+  # This adds the automatically created elements:
+  state[["FG"]][["auto_elements"]] = auto_elements
 
   FM_le(state, "State initialized")
 
@@ -1887,7 +1902,15 @@ fers_builder = function(state){
   fg_object_name = current_fig[["fg_object_name"]]
 
   # Pulling out the element configuration from the yaml file:
-  element_cfg = state[["MC"]][["elements"]][[element]]
+  # JMH remove this
+  #element_cfg = state[["MC"]][["elements"]][[element]]
+
+  # JMH replace with this:
+  # Pulling out the element components
+  element_cfg                       = state[["MC"]][["elements"]][[element]]
+  # JMH adding the select and manual id elements
+  element_cfg[["ui_aes_select_id"]] = state[["FG"]][["auto_elements"]][[element]][["ui_aes_select_id"]]
+  element_cfg[["ui_aes_manual_id"]] = state[["FG"]][["auto_elements"]][[element]][["ui_aes_manual_id"]]
 
   if(element%in% aes_elements){
 
@@ -1899,6 +1922,7 @@ fers_builder = function(state){
     man_comp = c()
     aes_comp = c()
     aes_req  = element_cfg[["aes_req"]]
+
     for(aes_idx in 1:length(element_cfg[["ui_aes"]])){
 
       comp_idx     = element_cfg[["ui_aes"]][aes_idx]
@@ -1909,7 +1933,6 @@ fers_builder = function(state){
       # this means it's either an aesthetic or manual specification or
       # not "", meaning nothing has been specified for it.
       if((ui[[sel_idx]] != "not_used") & (ui[[sel_idx]] != "")){
-
         if(ui[[sel_idx]] == "manual"){
           # We need to make sure that the actually input a manual value
           if(ui[[man_idx]] == ""){
@@ -2335,7 +2358,7 @@ FG_build = function(state,
   }
 
   # Code for the modules feeding into this one
-  # JMH check this code works 
+  # JMH check this code works
   code_previous   = state[["FG"]][["DSV"]][["ds"]][[current_fig[["fig_dsview"]]]][["code"]]
   # Just the code to build the figure
   code_fg_only    = paste(code_lines, collapse="\n")
@@ -2449,7 +2472,7 @@ fobj}
 #'sess_res = FG_test_mksession(session=list())
 #'state   = sess_res$state
 #'code  = FG_fetch_code(state)
-#'cat(paste(code, collapse="\n")) 
+#'cat(paste(code, collapse="\n"))
 FG_fetch_code = function(state){
   if(state[["FG"]][["isgood"]]){
     figs_code = c()
@@ -2532,10 +2555,10 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
             paste0('# Inserting figure: ', key),
                    'rpt = onbrand::report_add_doc_content(rpt,',
                    '        type     = "ggplot",',
-                   '        content  = list(', 
+                   '        content  = list(',
             paste0('          image    =  ', fg_object_name, ','),
             paste0('          key      = "', fig_id,  '",'),
-                              notes_str, 
+                              notes_str,
             paste0('          caption  = "',key,'"))'),
                    '# adding a page break',
                    'rpt = onbrand::report_add_doc_content(rpt,',
@@ -2544,12 +2567,12 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
                    ' '
             )
           }
-          
+
           if(!is.null(code_chunk)){
             # Evaluating the code created above:
             if(!gen_code_only){
               eval(parse(text=paste(code_chunk, collapse="\n"))) }
-            
+
             # Saving the code for the slide
             code = c(code, code_chunk)
           }
@@ -2599,10 +2622,10 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
               paste0('# Inserting figure ', fig_id, '(',page,'): ', key),
                      'rpt = onbrand::report_add_doc_content(rpt,',
                      '        type     = "ggplot",',
-                     '        content  = list(', 
+                     '        content  = list(',
               paste0('          image    =  ', facet_cmd, ','),
               paste0('          key      = "', fig_id,  '",'),
-                                notes_str, 
+                                notes_str,
               paste0('          caption  = "',key,'"))'),
                      '# adding a page break',
                      'rpt = onbrand::report_add_doc_content(rpt,',
@@ -2611,12 +2634,12 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
                      ' '
               )
             }
-            
+
             if(!is.null(code_chunk)){
               if(!gen_code_only){
                 # Evaluating the code created above:
                 eval(parse(text=paste(code_chunk, collapse="\n")))}
-              
+
               # Saving the code for the slide
               code = c(code, code_chunk)
             }
@@ -2679,17 +2702,17 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
   input = list()
 
   # Creating an empty state object
-  state = FG_fetch_state(id              = id,           
-                         input           = input, 
+  state = FG_fetch_state(id              = id,
+                         input           = input,
                          session         = session,
-                         FM_yaml_file    = FM_yaml_file, 
+                         FM_yaml_file    = FM_yaml_file,
                          MOD_yaml_file   = MOD_yaml_file,
                          id_ASM          = "ASM",
-                         id_UD           = id_UD,        
-                         id_DW           = id_DW,        
+                         id_UD           = id_UD,
+                         id_DW           = id_DW,
                          react_state     = react_state)
- 
- 
+
+
   #------------------------------------
   # Creating "Individual profiles by cohort" data view
   state[["FG"]][["ui"]][["text_fig_key"]]        = "Individual profiles by cohort"
@@ -2698,40 +2721,40 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
   current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
   current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
   state = FG_set_current_fig(state, current_fig)
- 
+
   # Adding the lines
   state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
   state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
   state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
   state[["FG"]][["ui"]][["select_component_color"]]     = "Cohort"
   state[["FG"]][["ui"]][["select_component_group"]]     = "ID"
- 
+
   fgb_res  = fers_builder(state)
   state = FG_build( state,
     cmd     = fgb_res[["cmd"]],
     element = fgb_res[["element"]],
     desc    = fgb_res[["desc"]])
- 
+
   # faceting by cohort
   state[["FG"]][["ui"]][["select_fg_element"]]          = "facet"
   state[["FG"]][["ui"]][["select_component_facet"]]     = "Cohort"
- 
+
   fgb_res  = fers_builder(state)
   state = FG_build( state,
     cmd     = fgb_res[["cmd"]],
     element = fgb_res[["element"]],
     desc    = fgb_res[["desc"]])
- 
+
   # setting the log scale
   state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
   state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
- 
+
   fgb_res  = fers_builder(state)
   state = FG_build( state,
     cmd     = fgb_res[["cmd"]],
     element = fgb_res[["element"]],
     desc    = fgb_res[["desc"]])
- 
+
 
 
   #------------------------------------
@@ -2744,24 +2767,24 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
   current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
   current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
   state = FG_set_current_fig(state, current_fig)
- 
+
   # Adding the lines
   state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
   state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
   state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
   state[["FG"]][["ui"]][["select_component_group"]]     = "ID"
- 
+
   fgb_res  = fers_builder(state)
   state = FG_build( state,
     cmd     = fgb_res[["cmd"]],
     element = fgb_res[["element"]],
     desc    = fgb_res[["desc"]])
- 
- 
+
+
   # setting the log scale
   state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
   state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
- 
+
   fgb_res  = fers_builder(state)
   state = FG_build( state,
     cmd     = fgb_res[["cmd"]],
@@ -2778,30 +2801,30 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
   current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
   current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
   state = FG_set_current_fig(state, current_fig)
- 
+
   # Adding the lines
   state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
   state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
   state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
   state[["FG"]][["ui"]][["select_component_group"]]     = "ID"
- 
+
   fgb_res  = fers_builder(state)
   state = FG_build( state,
     cmd     = fgb_res[["cmd"]],
     element = fgb_res[["element"]],
     desc    = fgb_res[["desc"]])
- 
- 
+
+
   # setting the log scale
   state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
   state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
- 
+
   fgb_res  = fers_builder(state)
   state = FG_build( state,
     cmd     = fgb_res[["cmd"]],
     element = fgb_res[["element"]],
     desc    = fgb_res[["desc"]])
- 
+
   #------------------------------------
   # Boxplots of parameters
   # Updating the key and data view
@@ -2812,14 +2835,14 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
   current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
   current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
   state = FG_set_current_fig(state, current_fig)
- 
+
   # Adding the boxplots
   state[["FG"]][["ui"]][["select_fg_element"]]          = "boxplot"
   state[["FG"]][["ui"]][["select_component_x"]]         = "parameter"
   state[["FG"]][["ui"]][["select_component_y"]]         = "values"
   state[["FG"]][["ui"]][["select_component_fill"]]      = "Cohort"
   state[["FG"]][["ui"]][["select_component_group"]]     = "Cohort"
- 
+
   fgb_res  = fers_builder(state)
   state = FG_build( state,
     cmd     = fgb_res[["cmd"]],
@@ -2829,15 +2852,15 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
   # setting the log scale
   state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
   state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
- 
+
   fgb_res  = fers_builder(state)
   state = FG_build( state,
     cmd     = fgb_res[["cmd"]],
     element = fgb_res[["element"]],
     desc    = fgb_res[["desc"]])
   #------------------------------------
- 
- 
+
+
 # # Creating "Parameters" data view
 # # Creates an empty new data view
 # state = DW_new_view(state)
@@ -2881,7 +2904,7 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
 # dwb_res  = dwrs_builder(state)
 # dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
 # state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
- 
+
   # This functions works both in a shiny app and outside of one
   # if we're in a shiny app then the 'session' then the class of
   # session will be a ShinySession. Otherwise it'll be a list if
