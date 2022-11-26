@@ -18,7 +18,7 @@ Sets the module state from the userdata under the specified
 id
 }
 \examples{
-# We need a Shiny session variable and a module state 
+# We need a Shiny session variable and a module state
 # object to use this function:
 id="UD"
 sess_res = UD_test_mksession(session=list(), id=id)

@@ -23,5 +23,5 @@ id
 id="UD"
 sess_res = UD_test_mksession(session=list(), id=id)
 session = sess_res$session
-state = FM_fetch_mod_state(session, id) 
+state = FM_fetch_mod_state(session, id)
 }

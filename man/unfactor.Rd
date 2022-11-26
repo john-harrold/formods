@@ -24,7 +24,7 @@ df = data.frame(
 
 df$float = as.factor(df$float)
 # This is a factor
-df$float 
-# This is not a factor 
+df$float
+# This is not a factor
 unfactor(df$float)
 }

@@ -108,6 +108,8 @@
 <span class="r-in"><span><span class="st">}</span></span></span>
 <span class="r-in"><span><span class="st">"</span></span></span>
 <span class="r-in"><span><span class="co">#https://fontawesome.com/icons?from=io</span></span></span>
+<span class="r-in"><span><span class="va">data_url</span> <span class="op">=</span> </span></span>
+<span class="r-in"><span><span class="st">"https://github.com/john-harrold/formods/raw/master/inst/test_data/TEST_DATA.xlsx"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shinydashboard/man/dashboardPage.html" class="external-link">dashboardPage</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  skin<span class="op">=</span><span class="st">"black"</span>,</span></span>
@@ -138,8 +140,10 @@
 <span class="r-in"><span>                           src   <span class="op">=</span> <span class="st">"https://github.com/john-harrold/formods/raw/master/man/figures/logo.png"</span>,</span></span>
 <span class="r-in"><span>                           width <span class="op">=</span> <span class="fl">100</span>,</span></span>
 <span class="r-in"><span>                           alt <span class="op">=</span> <span class="st">"formods logo"</span> <span class="op">)</span>,</span></span>
-<span class="r-in"><span>                         <span class="st">'Formods is a set of modules and an framework for developing modules which interact and create code to replicate analyses performed within an app. To experiment download this'</span>,</span></span>
-<span class="r-in"><span>                       <span class="va">tags</span><span class="op">$</span><span class="fu">a</span><span class="op">(</span><span class="st">"test dataset"</span>, href<span class="op">=</span><span class="st">"https://github.com/john-harrold/formods/raw/master/inst/test_data/TEST_DATA.xlsx"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                         <span class="st">'Formods is a set of modules and an framework for developing modules </span></span></span>
+<span class="r-in"><span><span class="st">                         which interact and create code to replicate analyses performed within an app. </span></span></span>
+<span class="r-in"><span><span class="st">                         To experiment download this'</span>,</span></span>
+<span class="r-in"><span>                       <span class="va">tags</span><span class="op">$</span><span class="fu">a</span><span class="op">(</span><span class="st">"test dataset"</span>, href<span class="op">=</span><span class="va">data_url</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                              <span class="st">'and upload it into the App using the form on the left.'</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>                 <span class="op">)</span></span></span>
 <span class="r-in"><span>               <span class="op">)</span></span></span>
@@ -159,6 +163,9 @@
 <span class="r-in"><span>  <span class="co"># Empty reactive object to track and react to</span></span></span>
 <span class="r-in"><span>  <span class="co"># changes in the module state outside of the module</span></span></span>
 <span class="r-in"><span>  <span class="va">react_FM</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactiveValues.html" class="external-link">reactiveValues</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co">#Populating with test data</span></span></span>
+<span class="r-in"><span>  <span class="co">#FG_test_mksession(session)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># Module servers</span></span></span>
 <span class="r-in"><span>  <span class="fu">ASM_Server</span><span class="op">(</span>id<span class="op">=</span><span class="st">"ASM"</span>,                                           react_state<span class="op">=</span><span class="va">react_FM</span><span class="op">)</span></span></span>

@@ -48,6 +48,8 @@ CSS <- "
 }
 "
 #https://fontawesome.com/icons?from=io
+data_url = 
+"https://github.com/john-harrold/formods/raw/master/inst/test_data/TEST_DATA.xlsx"
 
 ui <- dashboardPage(
   skin="black",
@@ -78,8 +80,10 @@ ui <- dashboardPage(
                            src   = "https://github.com/john-harrold/formods/raw/master/man/figures/logo.png",
                            width = 100,
                            alt = "formods logo" ),
-                         'Formods is a set of modules and an framework for developing modules which interact and create code to replicate analyses performed within an app. To experiment download this',
-                       tags$a("test dataset", href="https://github.com/john-harrold/formods/raw/master/inst/test_data/TEST_DATA.xlsx"),
+                         'Formods is a set of modules and an framework for developing modules 
+                         which interact and create code to replicate analyses performed within an app. 
+                         To experiment download this',
+                       tags$a("test dataset", href=data_url),
                               'and upload it into the App using the form on the left.'))
                  )
                )
@@ -99,6 +103,9 @@ server <- function(input, output, session) {
   # Empty reactive object to track and react to
   # changes in the module state outside of the module
   react_FM = reactiveValues()
+
+  #Populating with test data
+  #FG_test_mksession(session)
 
   # Module servers
   ASM_Server(id="ASM",                                           react_state=react_FM)

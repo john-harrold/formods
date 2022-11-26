@@ -39,7 +39,7 @@ list containing the current dataset with the following format:
     \item{label:} Text label
     \item{object:} Name of the R Object containing the data frame
     \item{MOD_TYPE:} Short name of the type of module
-    \item{id:} Module ID 
+    \item{id:} Module ID
     \item{checksum:} Module checksum
     \item{DSchecksum:} Checksum of the dataset
     \item{code:} Code to generate the dataset
@@ -57,12 +57,12 @@ was specified. For each ID, an attempt will be made to extract any datasets
 available.
 }
 \examples{
-# We need a module state and a Shiny session variable 
+# We need a module state and a Shiny session variable
 # to use this function:
 id="UD"
 sess_res = UD_test_mksession(session=list(), id=id)
 session = sess_res$session
 state   = sess_res$state
-ds = FM_fetch_ds(state, session) 
+ds = FM_fetch_ds(state, session)
 ds$catalog
 }

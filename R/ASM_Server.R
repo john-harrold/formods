@@ -116,7 +116,6 @@ ASM_Server <- function(id,
         FM_le(state, paste0("pushing app state download: ", dlfn))
         dlfn},
       content = function(file) {
-        cat("Content before fetch state \n")
         state = ASM_fetch_state(id           = id,
                                 input        = input,
                                 session      = session,

@@ -15,6 +15,8 @@ CSS <- "
 }
 "
 #https://fontawesome.com/icons?from=io
+data_url = 
+"https://github.com/john-harrold/formods/raw/master/inst/test_data/TEST_DATA.xlsx"
 
 ui <- dashboardPage(
   skin="black",
@@ -45,8 +47,10 @@ ui <- dashboardPage(
                            src   = "https://github.com/john-harrold/formods/raw/master/man/figures/logo.png",
                            width = 100,
                            alt = "formods logo" ),
-                         'Formods is a set of modules and an framework for developing modules which interact and create code to replicate analyses performed within an app. To experiment download this',
-                       tags$a("test dataset", href="https://github.com/john-harrold/formods/raw/master/inst/test_data/TEST_DATA.xlsx"),
+                         'Formods is a set of modules and an framework for developing modules 
+                         which interact and create code to replicate analyses performed within an app. 
+                         To experiment download this',
+                       tags$a("test dataset", href=data_url),
                               'and upload it into the App using the form on the left.'))
                  )
                )

@@ -65,6 +65,7 @@ For the module to work and interact with other modules, there are certain funcit
 
 - `ZZ_fetch_ds`    
 
+- `ZZ_test_mksession`    
 
 # Expected UI elements
 

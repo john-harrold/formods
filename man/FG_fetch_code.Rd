@@ -20,5 +20,5 @@ Fetches the code to generate results seen in the app
 sess_res = FG_test_mksession(session=list())
 state   = sess_res$state
 code  = FG_fetch_code(state)
-cat(paste(code, collapse="\n")) 
+cat(paste(code, collapse="\n"))
 }
