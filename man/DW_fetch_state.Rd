@@ -78,7 +78,7 @@ structure of the list is defined below.
 Merges default app options with the changes made in the UI
 }
 \examples{
-# Within shiny both session and input variables will exist, 
+# Within shiny both session and input variables will exist,
 # this creates examples here for testing purposes:
 sess_res = DW_test_mksession(session=list())
 session = sess_res$session
@@ -94,10 +94,10 @@ id    = "DW"
 id_UD = "UD"
 
 # Creating an empty state object
-state = DW_fetch_state(id              = id,           
-                       input           = input, 
+state = DW_fetch_state(id              = id,
+                       input           = input,
                        session         = session,
-                       FM_yaml_file    = FM_yaml_file, 
+                       FM_yaml_file    = FM_yaml_file,
                        MOD_yaml_file   = MOD_yaml_file,
                        id_UD           = "UD",
                        react_state     = NULL)

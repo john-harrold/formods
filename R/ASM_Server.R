@@ -625,7 +625,6 @@ ASM_write_state = function(state, session, file){
     switch_gen_rpts =  FALSE
   }
 
-
   # Clearing reports from the user directory
   rptdir = file.path(user_dir, "reports")
   if(dir.exists(rptdir)){
@@ -636,13 +635,15 @@ ASM_write_state = function(state, session, file){
   rpttypes = c("xlsx", "pptx", "docx")
   rptctr = 1
   for(rpttype in rpttypes){
-
-
     if(system.file(package = "shinybusy") !=""){
-      shinybusy::update_modal_spinner(text=
-              paste0(state[["MC"]][["labels"]][["busy"]][[rpttype]], "(",rptctr, "/", length(rpttypes),")"))
-    }
 
+      code_only_msg = ""
+      if(!switch_gen_rpts){
+        code_only_msg = " code only "
+      }
+      shinybusy::update_modal_spinner(text=
+              paste0(state[["MC"]][["labels"]][["busy"]][[rpttype]], code_only_msg, "(",rptctr, "/", length(rpttypes),")"))
+    }
     rpt_file_name = paste0("report.", rpttype)
     grres = FM_generate_report(
        state         = state,

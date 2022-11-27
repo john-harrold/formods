@@ -20,7 +20,7 @@ state with data set attached
 Attaches a dataset to the DW state supplied.
 }
 \examples{
-# Within shiny both session and input variables will exist, 
+# Within shiny both session and input variables will exist,
 # this creates examples here for testing purposes:
 sess_res = DW_test_mksession(session=list())
 session = sess_res$session

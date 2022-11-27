@@ -17,7 +17,7 @@ Takes a DW state and updates the checksum used to trigger
 downstream updates
 }
 \examples{
-# Within shiny both session and input variables will exist, 
+# Within shiny both session and input variables will exist,
 # this creates examples here for testing purposes:
 sess_res = DW_test_mksession(session=list())
 session = sess_res$session

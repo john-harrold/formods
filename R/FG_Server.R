@@ -2360,6 +2360,7 @@ FG_build = function(state,
   # Code for the modules feeding into this one
   # JMH check this code works
   code_previous   = state[["FG"]][["DSV"]][["ds"]][[current_fig[["fig_dsview"]]]][["code"]]
+
   # Just the code to build the figure
   code_fg_only    = paste(code_lines, collapse="\n")
   # All the code required to generate this module

@@ -98,22 +98,18 @@ and isgood)</p>
 <span class="r-in"><span><span class="va">code</span> <span class="op">=</span> <span class="fu">DW_fetch_code</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">code</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # Observations</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> JMH HERE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_1 = myDS</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_1 = dplyr::filter(DW_myDS_1,EVID == 0)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # 3mg SD IV</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> JMH HERE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_2 = myDS</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_2 = dplyr::filter(DW_myDS_2,EVID == 0)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_2 = dplyr::filter(DW_myDS_2,Cohort %in% c("SD 3 mg IV"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # 3mg MD SC (first dose)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> JMH HERE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_3 = myDS</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_3 = dplyr::filter(DW_myDS_3,EVID == 0)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_3 = dplyr::filter(DW_myDS_3,Cohort %in% c("MD 3 mg SC"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_3 = dplyr::filter(DW_myDS_3,DOSE_NUM == 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # Parameters</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> JMH HERE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_4 = myDS</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_4 = dplyr::group_by(DW_myDS_4,ID)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_4 = dplyr::filter(DW_myDS_4,row_number()==1)</span>

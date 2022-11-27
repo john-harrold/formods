@@ -55,17 +55,21 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">FM_le</span><span class="op">(</span><span class="va">state</span>, <span class="va">entry</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">FM_le</span><span class="op">(</span><span class="va">state</span>, <span class="va">entry</span>, escape_braces <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>state</dt>
-<dd><p>module state after yaml read</p></dd>
+<dd><p>Module state after yaml read</p></dd>
 
 
 <dt>entry</dt>
-<dd><p>text to add</p></dd>
+<dd><p>Text to add</p></dd>
+
+
+<dt>escape_braces</dt>
+<dd><p>Set to <code>TRUE</code> (default) to escape curly braces in the entry, set to <code>FALSE</code> to have the values interpreted.</p></dd>
 
 </dl></div>
 

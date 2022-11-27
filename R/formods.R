@@ -466,8 +466,9 @@ user_dir}
 #'@export
 #'@title Appends entry to log file
 #'@description Add the supplied txt and the module type to the log file
-#'@param state module state after yaml read
-#'@param entry text to add
+#'@param state Module state after yaml read
+#'@param entry Text to add
+#'@param escape_braces Set to \code{TRUE} (default) to escape curly braces in the entry, set to \code{FALSE} to have the values interpreted.
 #'@return NULL
 #'@examples
 #' # We need a module state to use this function:
@@ -475,7 +476,7 @@ user_dir}
 #' sess_res = UD_test_mksession(session=list(), id=id)
 #' state   = sess_res$state
 #' FM_le(state, "This is a message")
-FM_le = function(state, entry){
+FM_le = function(state, entry, escape_braces=TRUE){
   # pulling out the log file
   log_file = FM_fetch_log_path(state)
 
@@ -500,7 +501,11 @@ FM_le = function(state, entry){
   # Writing messages to the console
   if(state[["yaml"]][["FM"]][["logging"]][["console"]]){
     for(line in entry){
-      cli::cli_alert("{line}")
+      if(escape_braces){
+        cli::cli_alert("{line}")
+      } else {
+        cli::cli_alert(line)
+      }
     }
   }
 
@@ -1033,6 +1038,9 @@ FM_generate_report = function(state,
   #finding the report type
   rpttype = "unknown"
   rpt = NULL
+
+  # Reports will be initialized regardless gen_code_only this way the rpt
+  # object will be present for below:
   if(stringr::str_detect(file_name, ".xlsx$")){
     code = state[["yaml"]][["FM"]][["reporting"]][["content_init"]][["xlsx"]]
     eval(parse(text=paste0(code, collapse="\n")))
@@ -1049,7 +1057,6 @@ FM_generate_report = function(state,
   # Defaulting to success
   isgood = TRUE
   errmsg = ""
-
 
   # These are the allowed report types
   allowed_rpttypes = c("xlsx", "pptx", "docx")
@@ -1082,7 +1089,7 @@ FM_generate_report = function(state,
 
               # This is the function call used to append the report
               gen_rpt_res = NULL # this is to get around "no visible binding" NOTE
-              FUNC_CALL = paste0("gen_rpt_res = ", MOD_FUNC,"(state = tmp_state, rpt=rpt, rpttype=rpttype)")
+              FUNC_CALL = paste0("gen_rpt_res = ", MOD_FUNC,"(state = tmp_state, rpt=rpt, rpttype=rpttype, gen_code_only=gen_code_only)")
 
               # This will evaluate it and store the results in the gen_rpt_res
               eval(parse(text=FUNC_CALL))
@@ -1126,14 +1133,18 @@ FM_generate_report = function(state,
 
           # This is the main difference between the app and the exported code.
           # in the app we write to whichever location is specified:
-          writexl::write_xlsx(rpt_list,
-            path=file.path(file_dir, file_name))
+          if(!gen_code_only){
+            writexl::write_xlsx(rpt_list,
+              path=file.path(file_dir, file_name))
+          }
           # In the exported code we just write to the working directory:
           code = c(code, paste0('writexl::write_xlsx(rpt_list, path=file.path("reports", "report.', rpttype, '"))' ))
         }
         if(rpttype == "pptx" | rpttype=="docx"){
           # Saving the report on the app
-          onbrand::save_report(rpt, file.path(file_dir, file_name))
+          if(!gen_code_only){
+            onbrand::save_report(rpt, file.path(file_dir, file_name))
+          }
 
           # Code to save the report:
           code = c(code, paste0('onbrand::save_report(rpt, file.path("reports", "report.', rpttype,'"))'))
@@ -1203,7 +1214,6 @@ FM_generate_report = function(state,
     errmsg = errmsg,
     code   = code
   )
-
 
 res}
 

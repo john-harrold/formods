@@ -4,12 +4,14 @@
 \alias{FM_le}
 \title{Appends entry to log file}
 \usage{
-FM_le(state, entry)
+FM_le(state, entry, escape_braces = TRUE)
 }
 \arguments{
-\item{state}{module state after yaml read}
+\item{state}{Module state after yaml read}
 
-\item{entry}{text to add}
+\item{entry}{Text to add}
+
+\item{escape_braces}{Set to \code{TRUE} (default) to escape curly braces in the entry, set to \code{FALSE} to have the values interpreted.}
 }
 \description{
 Add the supplied txt and the module type to the log file

@@ -1332,7 +1332,7 @@ DW_Server <- function(id,
 #'  module in the session variable.
 #'}
 #'@examples
-#' # Within shiny both session and input variables will exist, 
+#' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
 #' sess_res = DW_test_mksession(session=list())
 #' session = sess_res$session
@@ -1348,10 +1348,10 @@ DW_Server <- function(id,
 #' id_UD = "UD"
 #'
 #' # Creating an empty state object
-#' state = DW_fetch_state(id              = id,           
-#'                        input           = input, 
+#' state = DW_fetch_state(id              = id,
+#'                        input           = input,
 #'                        session         = session,
-#'                        FM_yaml_file    = FM_yaml_file, 
+#'                        FM_yaml_file    = FM_yaml_file,
 #'                        MOD_yaml_file   = MOD_yaml_file,
 #'                        id_UD           = "UD",
 #'                        react_state     = NULL)
@@ -1717,7 +1717,7 @@ state }
 #'module (\code{NULL})
 #'@return list containing an empty DW state
 #'@examples
-#' # Within shiny both session and input variables will exist, 
+#' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
 #' sess_res = DW_test_mksession(session=list())
 #' session = sess_res$session
@@ -1733,7 +1733,7 @@ state }
 #'    id              = "DW",
 #'    id_UD           = "UD",
 #'    session         = session)
-#' 
+#'
 #' state
 DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD,session){
 
@@ -2134,8 +2134,7 @@ DW_new_view = function(state){
 
   # This contains the code to generate the input dataset
   code_previous = c(
-    "JMH HERE",
-    paste0( 
+    paste0(
            view_ds_object_name,
            " = ",
             state[["DW"]][["UD"]][["object_name"]]))
@@ -2217,7 +2216,7 @@ state}
 #'@param state DW state from \code{DW_fetch_state()}
 #'@return DW state object with the checksum updated
 #'@examples
-#' # Within shiny both session and input variables will exist, 
+#' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
 #' sess_res = DW_test_mksession(session=list())
 #' session = sess_res$session
@@ -2257,7 +2256,7 @@ state}
 #'@param session Shiny session variable
 #'@return state with data set attached
 #'@examples
-#' # Within shiny both session and input variables will exist, 
+#' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
 #' sess_res = DW_test_mksession(session=list())
 #' session = sess_res$session
@@ -2513,7 +2512,7 @@ DW_fetch_ds = function(state){
     tmp_contents      = state[["DW"]][["views"]][[dw_view]][["WDS"]]
 
     # The module code is the two chuncks pasted together
-    modcode = paste(c(tmp_code_previous, tmp_code), collapse="\n")
+    modcode = paste(c(tmp_code), collapse="\n")
     if(is.null(modcode)){
       modcode = ""
     }
