@@ -1312,17 +1312,17 @@ DW_Server <- function(id,
 #'    \item{view_cntr:}        Counter for tracking view ids, value contains the id of the last view created.
 #'    \item{views:}            List of data wrangling views. Each view has the following structure:
 #'      \itemize{
-#'        \item{isgood:} Boolean status of the data view. False if evaluation fails
-#'        \item{id: Character id (\code{view_idx})}
-#'        \item{idx: Numeric id (\code{1})}
+#'        \item{checksum:            MD5 sum of WDS}
+#'        \item{code:                Code to generate WDS from start to finish}
+#'        \item{code_dw_only:        Code for just the wrangling portion.}
+#'        \item{code_previous:       Code to load data and assign to view object.}
+#'        \item{elements_table:      Table of data wrangling elements.}
+#'        \item{id:                  Character id (\code{view_idx})}
+#'        \item{idx:                 Numeric id (\code{1})}
+#'        \item{isgood:}             Boolean status of the data view. False if evaluation fails
+#'        \item{key:                 User key (short description)}
 #'        \item{view_ds_object_name: Object name for this data view}
-#'        \item{code_previous: Code to load data and assign to view object.}
-#'        \item{key: User key (short description)}
-#'        \item{WDS: Current value of the data view with all of the successful commands in elements_table evaluated.}
-#'        \item{elements_table: Table of data wrangling elements.}
-#'        \item{checksum: MD5 sum of WDS}
-#'        \item{code: Code to generate WDS from start to finish}
-#'        \item{code_dw_only: Code for jsut the wrangling portion.}
+#'        \item{WDS:                 Current value of the data view with all of the successful commands in elements_table evaluated.}
 #'      }
 #'  }
 #'  \item{MOD_TYPE:} Character data containing the type of module \code{"DW"}
@@ -1784,7 +1784,8 @@ DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD,session){
     MT              = "DW",
     button_counters = button_counters,
     ui_ids          = ui_ids,
-    ui_hold         = ui_hold)
+    ui_hold         = ui_hold,
+    session         = session)
 
   # Adding other module-specific fields
   # Creating operator table

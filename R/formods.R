@@ -785,8 +785,13 @@ app_state}
 #'@param button_counters Vector of button UI elements that need to be tracked.
 #'@param ui_ids List of UI ids in the model.
 #'@param ui_hold Vector of UI elements that require holding.
+#'@param session Shiny session variable
 #'@return List with state initialized.
 #'@examples
+#' # Within shiny a session variable will exist, 
+#' # this creates examples here for testing purposes:
+#' sess_res = UD_test_mksession(session=list())
+#' session = sess_res$session
 #'state = FM_init_state(
 #'    FM_yaml_file  = system.file(package = "formods",
 #'                                "templates",
@@ -798,7 +803,8 @@ app_state}
 #'    MT              = "UD",
 #'    button_counters = NULL,
 #'    ui_ids          = NULL,
-#'    ui_hold         = NULL)
+#'    ui_hold         = NULL,
+#'    session         = session)
 #'
 #' state
 FM_init_state = function(
@@ -808,7 +814,8 @@ FM_init_state = function(
                       MT,
                       button_counters,
                       ui_ids,
-                      ui_hold){
+                      ui_hold, 
+                      session){
 
   state = list()
 

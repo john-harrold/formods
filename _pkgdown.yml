@@ -32,3 +32,11 @@ reference:
   - contents:
     - starts_with("FG_")
     - fers_builder
+navbar:
+  left:
+  - text: "Functions"
+    icon: fas fa-hat-wizard
+    href: reference/index.html
+  - text: "News"
+    icon: fas fa-rss
+    href: news/index.html

@@ -11,7 +11,8 @@ FM_init_state(
   MT,
   button_counters,
   ui_ids,
-  ui_hold
+  ui_hold,
+  session
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ FM_init_state(
 \item{ui_ids}{List of UI ids in the model.}
 
 \item{ui_hold}{Vector of UI elements that require holding.}
+
+\item{session}{Shiny session variable}
 }
 \value{
 List with state initialized.
@@ -36,6 +39,10 @@ List with state initialized.
 Initializes a formods state object with common elements.
 }
 \examples{
+# Within shiny a session variable will exist, 
+# this creates examples here for testing purposes:
+sess_res = UD_test_mksession(session=list())
+session = sess_res$session
 state = FM_init_state(
    FM_yaml_file  = system.file(package = "formods",
                                "templates",
@@ -47,7 +54,8 @@ state = FM_init_state(
    MT              = "UD",
    button_counters = NULL,
    ui_ids          = NULL,
-   ui_hold         = NULL)
+   ui_hold         = NULL,
+   session         = session)
 
 state
 }

@@ -15,14 +15,12 @@
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with ZZ as main section.
-#'@param yaml_section  Section of the yaml file with the module configuration (\code{"UD"})
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
 ZZ_Server <- function(id,
                       id_ASM       = NULL,
                       FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
                       MOD_yaml_file = system.file(package = "ZZDESC",  "templates", "ZZ.yaml"),
-                      yaml_section = "ZZ",
                       react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
 
@@ -156,11 +154,11 @@ ZZ_Server <- function(id,
 #'@title Fetch ZZDESC State
 #'@description Merges default app options with the changes made in the UI
 #'@param id Shiny module ID
-#'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param input Shiny input variable
 #'@param session Shiny session variable
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
+#'@param id_ASM ID string for the app state management module used to save and load app states
 #'@return list containing the current state of the app including default
 #'values from the yaml file as well as any changes made by the user. The list
 #'has the following structure:
@@ -178,7 +176,7 @@ ZZ_Server <- function(id,
 #'  \item{FM_yaml_file:} App configuration file with FM as main section.
 #'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 #'}
-ZZ_fetch_state = function(id, input, session, yaml_file, yaml_section, id_ASM, react_state){
+ZZ_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, id_ASM, react_state){
 
   # Template for an empty dataset
   #---------------------------------------------
@@ -188,7 +186,7 @@ ZZ_fetch_state = function(id, input, session, yaml_file, yaml_section, id_ASM, r
   # initialize it
   if(is.null(state)){
     # General state information
-    state = ZZ_init_state(FM_yaml_file, MOD_yaml_file, id)
+    state = ZZ_init_state(FM_yaml_file, MOD_yaml_file, id, session)
 
   }
 
@@ -223,8 +221,9 @@ ZZ_fetch_state = function(id, input, session, yaml_file, yaml_section, id_ASM, r
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id ID string for the module.
+#'@param session Shiny session variable
 #'@return list containing an empty ZZ state
-ZZ_init_state = function(FM_yaml_file, MOD_yaml_file,  id){
+ZZ_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 
 
   button_counters = c()
@@ -238,7 +237,8 @@ ZZ_init_state = function(FM_yaml_file, MOD_yaml_file,  id){
     MT              = "ZZ",
     button_counters = button_counters,
     ui_ids          = ui_ids,
-    ui_hold         = ui_hold)
+    ui_hold         = ui_hold,
+    session         = session)
 
   FM_le(state, "State initialized")
 state}

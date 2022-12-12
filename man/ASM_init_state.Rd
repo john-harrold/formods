@@ -4,7 +4,7 @@
 \alias{ASM_init_state}
 \title{Initialize ASM Module State}
 \usage{
-ASM_init_state(FM_yaml_file, MOD_yaml_file, id)
+ASM_init_state(FM_yaml_file, MOD_yaml_file, id, session)
 }
 \arguments{
 \item{FM_yaml_file}{App configuration file with FM as main section.}
@@ -12,6 +12,8 @@ ASM_init_state(FM_yaml_file, MOD_yaml_file, id)
 \item{MOD_yaml_file}{Module configuration file with MC as main section.}
 
 \item{id}{ID string for the module.}
+
+\item{session}{Shiny session variable}
 }
 \value{
 list containing an empty ASM state
@@ -20,6 +22,10 @@ list containing an empty ASM state
 Creates a list of the initialized module state
 }
 \examples{
+# Within shiny the session variable will exist,
+# this creates an example here for testing purposes:
+sess_res = ASM_test_mksession(session=list())
+session = sess_res$session
 state = ASM_init_state(
    FM_yaml_file  = system.file(package = "formods",
                                "templates",
@@ -27,6 +33,7 @@ state = ASM_init_state(
    MOD_yaml_file = system.file(package = "formods",
                                "templates",
                                "ASM.yaml"),
-   id              = "ASM")
+   id              = "ASM",
+   session         = session)
 state
 }

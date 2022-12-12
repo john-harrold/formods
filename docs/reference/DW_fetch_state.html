@@ -19,14 +19,18 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../reference/index.html">
+    <span class="fas fa fas fa-hat-wizard"></span>
+     
+    Functions
+  </a>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/included_modules.html">Included Modules</a>
-    <a class="dropdown-item" href="../articles/making_modules.html">Making Modules</a>
-  </div>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">
+    <span class="fas fa fas fa-rss"></span>
+     
+    News
+  </a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -118,17 +122,17 @@ structure of the list is defined below.</p><ul><li><p>yaml: Contents of the yaml
 <li><p>ui:               Current value of form elements in the UI</p></li>
 <li><p>ui_hold:          List of hold elements to disable updates before a full ui referesh is complete.</p></li>
 <li><p>view_cntr:        Counter for tracking view ids, value contains the id of the last view created.</p></li>
-<li><p>views:            List of data wrangling views. Each view has the following structure:</p><ul><li><p>isgood: Boolean status of the data view. False if evaluation fails</p></li>
-<li><p>id: Character id (<code>view_idx</code>)</p></li>
-<li><p>idx: Numeric id (<code>1</code>)</p></li>
+<li><p>views:            List of data wrangling views. Each view has the following structure:</p><ul><li><p>checksum:            MD5 sum of WDS</p></li>
+<li><p>code:                Code to generate WDS from start to finish</p></li>
+<li><p>code_dw_only:        Code for just the wrangling portion.</p></li>
+<li><p>code_previous:       Code to load data and assign to view object.</p></li>
+<li><p>elements_table:      Table of data wrangling elements.</p></li>
+<li><p>id:                  Character id (<code>view_idx</code>)</p></li>
+<li><p>idx:                 Numeric id (<code>1</code>)</p></li>
+<li><p>isgood:             Boolean status of the data view. False if evaluation fails</p></li>
+<li><p>key:                 User key (short description)</p></li>
 <li><p>view_ds_object_name: Object name for this data view</p></li>
-<li><p>code_previous: Code to load data and assign to view object.</p></li>
-<li><p>key: User key (short description)</p></li>
-<li><p>WDS: Current value of the data view with all of the successful commands in elements_table evaluated.</p></li>
-<li><p>elements_table: Table of data wrangling elements.</p></li>
-<li><p>checksum: MD5 sum of WDS</p></li>
-<li><p>code: Code to generate WDS from start to finish</p></li>
-<li><p>code_dw_only: Code for jsut the wrangling portion.</p></li>
+<li><p>WDS:                 Current value of the data view with all of the successful commands in elements_table evaluated.</p></li>
 </ul></li>
 </ul></li>
 <li><p>MOD_TYPE: Character data containing the type of module <code>"DW"</code></p></li>

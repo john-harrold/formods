@@ -23,8 +23,9 @@ MC:
         group:         NULL
         xintercept:    NULL
         yintercept:    NULL
-    notes:             "Optional figure notes that will be carried over and used in other elements (e.g. reporting)"
-    fig_key:           "Unique descriptive figure key used for referencing figures."
+    ph: 
+      notes:             "Optional figure notes that will be carried over and used in other elements (e.g. reporting)."
+      fig_key:           "Unique description used for referencing figures and in other elements (e.g. reporting)."
     show_code:         "Show figure generation code"
     fg_elements:       "Current figure elements"
   labels:

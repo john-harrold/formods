@@ -28,7 +28,6 @@ Imports:
   rhandsontable,
   shiny,
   shinyAce,
-  shinyBS,
   shinyWidgets,
   stats,
   stringr,
@@ -41,12 +40,13 @@ Suggests:
   knitr,
   plotly,
   clipr,
+  prompter,
   shinydashboard,
   shinybusy,
   rmarkdown,
   utils,
   testthat (>= 3.0.0),
   covr
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
 VignetteBuilder: knitr
 Config/testthat/edition: 3

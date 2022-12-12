@@ -19,14 +19,18 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../reference/index.html">
+    <span class="fas fa fas fa-hat-wizard"></span>
+     
+    Functions
+  </a>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/included_modules.html">Included Modules</a>
-    <a class="dropdown-item" href="../articles/making_modules.html">Making Modules</a>
-  </div>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">
+    <span class="fas fa fas fa-rss"></span>
+     
+    News
+  </a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -121,25 +125,27 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <li><p>ui_ids:           Vector of UI elements for the module.</p></li>
 <li><p>ui_hold:          List of hold elements to disable updates before a full ui referesh is complete.</p></li>
 <li><p>checksum:          checksum of the FG module used to detect changes in the module.</p></li>
-<li><p>aes_elements:     JMH</p></li>
-<li><p>current_fig:      JMH</p></li>
-<li><p>fig_cntr:         JMH</p></li>
-<li><p>DSV:              JMH</p></li>
-<li><p>figs:             List of figures. Each view has the following structure:</p><ul><li><p>isgood: Boolean status of the figure. False if evaluation fails.</p></li>
-<li><p>key:     Figure key acts as a title/caption (user editable)</p></li>
-<li><p>notes:   Figure notes  (user editable)</p></li>
-<li><p>id: Character id (<code>fig_idx</code>)</p></li>
-<li><p>idx: Numeric id (<code>1</code>)</p></li>
-<li><p>fig_dsview:  Name of the dataset view for the current figure
-       (also the R object name of the dataset view).</p></li>
-<li><p>checksum:    checksum of the figure used to detect changes in the figure.</p></li>
-<li><p>UD_checksum: checksum of the UD state when the figure was created.</p></li>
-<li><p>DW_checksum: checksum of DW module if data view was used.</p></li>
-<li><p>DSV_checksum:checksum of the dataset view that was used to create the figure</p></li>
+<li><p>aes_elements:     Plot elements defined by aesthetics (i.e. the X in geom_X)</p></li>
+<li><p>current_fig:      fig_id of the currently figure.</p></li>
+<li><p>fig_cntr:         Counter for figures, incremented each time a new figure is created.</p></li>
+<li><p>DSV:              Available data sets from the UD and DW modules.</p></li>
+<li><p>figs:             List of figures. Each view has the following structure:</p><ul><li><p>add_isgood:    JMH</p></li>
+<li><p>checksum:       Checksum of the figure used to detect changes in the figure.</p></li>
+<li><p>code:           Code to generate figure from start to finish.</p></li>
+<li><p>code_fg_only:   Code to just generate the figure.</p></li>
+<li><p>code_previous:  Code to load and/or wrangle the dataset.</p></li>
 <li><p>elements_table: Table of figure generation elements.</p></li>
-<li><p>code:          Code to generate figure from start to finish.</p></li>
-<li><p>code_previous: Code to load and/or wrangle the dataset.</p></li>
-<li><p>code_fg_only:  Code to just generate the figure.</p></li>
+<li><p>fg_object_name: JMH</p></li>
+<li><p>fig_dsview:     Name of the dataset view for the current figure (also the R object name of the dataset view).</p></li>
+<li><p>fobj:           JMH</p></li>
+<li><p>id:             Character id (<code>fig_idx</code>)</p></li>
+<li><p>idx:            Numeric id (<code>1</code>)</p></li>
+<li><p>isgood:        Boolean status of the figure. FALSE if evaluation/build fails.</p></li>
+<li><p>key:            Figure key acts as a title/caption (user editable)</p></li>
+<li><p>msgs:           JMH</p></li>
+<li><p>notes:          Figure notes  (user editable)</p></li>
+<li><p>num_pages:      JMH</p></li>
+<li><p>page:           JMH</p></li>
 </ul></li>
 </ul></li>
 <li><p>MOD_TYPE: Character data containing the type of module <code>"DW"</code></p></li>
@@ -173,18 +179,18 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:173ecf7d96c0bbb0962c7846df0d4bca</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: State initialized</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:91329389512102f6fab3f9986c1e5703</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:ea0759cd723691e90fac1f8e6e49910e</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:f413e385c627c5d3e4f7ac491a8696a1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:ad0282eaabb22bd3cc5bf3295d3c5248</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:869d1fd85663e7d3999c379335461f6d</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:d494d8f47401509e0c01449f5b36f32d</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:21b065f8f008b0f133284cc3af69b972</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:fa0618e5e6915053797314bdf6966ce3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:a361b3e9d4cef51a50d20f1fba24d9b4</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:a18dfa8b0f4eca153eb7fcfdcc20bfb2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:ecdbe47d307ed4894413086f6523d1d8</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:767f5e898861b3015858e9e9a7e934fc</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:80459637433d85327eb8a9f87bb7a70b</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:792b475c720ac525c79d73c99baa9714</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:0e9b73afb2a761f8cb12baeb2f2e943c</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:cdbd1b73f7db7905c35a59b07cf4e4b7</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:b6ddbbf1e2e5c74ce8403031e70c0ae4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:35acbd7fec3d43d3fd72b5c0f1215b1c</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:e8d7a0eed21946b9f135d90922d6b782</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:2f5bebb7e2412012e6aa3a7baadd98d6</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:73f8fdf73e34b864dca2023cf4c686c5</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:feaf816a0456e6d5e78fc72e117f767e</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:b0c6fbd2ec9d0a76378b7bd88ffa638a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:79bccf614db96ccca98d35ef18a8d23e</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:9e111b5603780c9de7c81d63b8bacdf1</span>
 <span class="r-in"><span><span class="va">session</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">session</span></span></span>
 <span class="r-in"><span><span class="va">input</span>   <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">input</span></span></span>
 <span class="r-in"><span></span></span>
@@ -407,11 +413,13 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$tooltips$notes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Optional figure notes that will be carried over and used in other elements (e.g. reporting)"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$tooltips$ph</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$tooltips$ph$notes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Optional figure notes that will be carried over and used in other elements (e.g. reporting)."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$tooltips$fig_key</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Unique descriptive figure key used for referencing figures."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$tooltips$ph$fig_key</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Unique description used for referencing figures and in other elements (e.g. reporting)."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MC$tooltips$show_code</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Show figure generation code"</span>
@@ -1376,7 +1384,7 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW_myDS_1"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "557ec02e37a324a9031340ccc40379f5"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "44c54b2548e1a11e5f8d487b3d08c7fc"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$code_fg_only</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG_myp_1 = ggplot2::ggplot(data=DW_myDS_1)\nFG_myp_1 = FG_myp_1 + geom_line(aes(x=TIME_DY, y=DV, color=Cohort, group=ID))\nFG_myp_1 = FG_myp_1 + ggforce::facet_wrap_paginate(vars(Cohort), nrow = 3, ncol = 4, page=1)\nFG_myp_1 = FG_myp_1 + scale_y_log10(limits=NULL)\nFG_myp_1 = FG_myp_1 + theme_light()"</span>
@@ -1437,7 +1445,7 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW_myDS_2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "4c3630bb9ec3f3a0b4d5b59188f88e3a"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1cccefff5a494d86e2b712454f4151b8"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$code_fg_only</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG_myp_2 = ggplot2::ggplot(data=DW_myDS_2)\nFG_myp_2 = FG_myp_2 + geom_line(aes(x=TIME_DY, y=DV, color=Cohort, group=ID))\nFG_myp_2 = FG_myp_2 + scale_y_log10(limits=NULL)\nFG_myp_2 = FG_myp_2 + theme_light()"</span>
@@ -1495,7 +1503,7 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW_myDS_3"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "56e63cbe9589c41de7ab2ec757709fd5"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "9acd15ad7c0d044f6976da647b315fac"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$code_fg_only</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG_myp_3 = ggplot2::ggplot(data=DW_myDS_3)\nFG_myp_3 = FG_myp_3 + geom_line(aes(x=TIME_DY, y=DV, color=Cohort, group=ID))\nFG_myp_3 = FG_myp_3 + scale_y_log10(limits=NULL)\nFG_myp_3 = FG_myp_3 + theme_light()"</span>
@@ -1553,7 +1561,7 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW_myDS_4"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "3a6e08169cddec4b5f0b228f6a3238ce"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "754c0dc8f63e4358973b6759650fd27f"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$code_fg_only</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG_myp_4 = ggplot2::ggplot(data=DW_myDS_4)\nFG_myp_4 = FG_myp_4 + geom_boxplot(aes(x=parameter, y=values, color=Cohort, group=Cohort, fill=Cohort))\nFG_myp_4 = FG_myp_4 + scale_y_log10(limits=NULL)\nFG_myp_4 = FG_myp_4 + theme_light()"</span>
@@ -1587,7 +1595,7 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "80459637433d85327eb8a9f87bb7a70b"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "9e111b5603780c9de7c81d63b8bacdf1"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$ui</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$ui$select_component_x</span>
@@ -1761,10 +1769,10 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpjXixbM/temp_libpath10e9a11e98ce3/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmph03doI/temp_libpath184402080fd13/formods/templates/formods.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpjXixbM/temp_libpath10e9a11e98ce3/formods/templates/FG.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmph03doI/temp_libpath184402080fd13/formods/templates/FG.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

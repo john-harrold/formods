@@ -43,14 +43,18 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+  <a class="nav-link" href="../reference/index.html">
+    <span class="fas fa fas fa-hat-wizard"></span>
+     
+    Functions
+  </a>
 </li>
-<li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/included_modules.html">Included Modules</a>
-    <a class="dropdown-item" href="../articles/making_modules.html">Making Modules</a>
-  </div>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">
+    <span class="fas fa fas fa-rss"></span>
+     
+    News
+  </a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -203,7 +207,7 @@ errors, and process results.</li>
 <code><a href="../reference/FM_set_notification.html">FM_set_notification()</a></code> - Within you code you can create
 notifications and attach them to a module state.</li>
 <li>
-<code><a href="../reference/FM_notify.html">FM_notify()</a></code> - Used in <code><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent()</a></code> to
+<code><a href="../reference/FM_notify.html">FM_notify()</a></code> - Used in <code><a href="https://shiny.rstudio.com/reference/shiny/latest/observeEvent.html" class="external-link">observeEvent()</a></code> to
 show notifications that have not yet been displayed.</li>
 <li><code><a href="../reference/FM_set_mod_state.html">FM_set_mod_state()</a></code></li>
 <li><code><a href="../reference/FM_fetch_mod_state.html">FM_fetch_mod_state()</a></code></li>
@@ -258,17 +262,17 @@ being shown multiple times. Next you need to setup the reactions to
 display the notifications. Here you can create a reactive expression of
 the inputs that will lead to a notification:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>    <span class="va">toNotify</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<code class="sourceCode R"><span>    <span class="va">toNotify</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">input1</span>,</span>
 <span>           <span class="va">input</span><span class="op">$</span><span class="va">input2</span><span class="op">)</span></span>
 <span>    <span class="op">}</span><span class="op">)</span></span></code></pre></div>
-<p>Next you use <code><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent()</a></code> with that reactive
+<p>Next you use <code><a href="https://shiny.rstudio.com/reference/shiny/latest/observeEvent.html" class="external-link">observeEvent()</a></code> with that reactive
 expression to trigger notifications. You need to use the fetch state
 function for that molecule to get the state object with the
 notifications. Then <code><a href="../reference/FM_notify.html">FM_notify()</a></code> will be called an any
 unprocessed notifications will be displayed:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="fu">toNotify</span><span class="op">(</span><span class="op">)</span>, <span class="op">{</span></span>
+<code class="sourceCode R"><span>    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="fu">toNotify</span><span class="op">(</span><span class="op">)</span>, <span class="op">{</span></span>
 <span>      <span class="va">state</span> <span class="op">=</span> <span class="fu">XX_fetch_state</span><span class="op">(</span>id              <span class="op">=</span> <span class="va">id</span>,</span>
 <span>                             input           <span class="op">=</span> <span class="va">input</span>,</span>
 <span>                             session         <span class="op">=</span> <span class="va">session</span>,</span>

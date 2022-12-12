@@ -10,10 +10,12 @@ FG_fetch_current_fig(state)
 \item{state}{FG state from \code{FG_fetch_state()}}
 }
 \value{
-list containing the current figure
+List containing the details of the active figure. The structure
+of this list is the same as the structure of \code{state$FG$figs} in the output of
+\code{FG_fetch_state()}.
 }
 \description{
-Takes an FG state and returns the ccurrent active figure
+Takes a FG state and returns the current active figure
 }
 \examples{
 library(formods)

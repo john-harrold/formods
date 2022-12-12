@@ -13,7 +13,7 @@ MC:
     del_dw_element: "Removed element: ===ACTION=== (===DESC===)"
   tooltips: 
     # Set to FALSE to disable tool tips for this module
-    include: TRUE
+    include:              TRUE
     show_code:            "Show data wrangling code"
     dw_elements:          "Current wrangling elements"
   labels: 

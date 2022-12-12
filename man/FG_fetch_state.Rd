@@ -51,27 +51,29 @@ structure of the list is defined below:
    \item{ui_ids:}           Vector of UI elements for the module.
    \item{ui_hold:}          List of hold elements to disable updates before a full ui referesh is complete.
    \item{checksum:          checksum of the FG module used to detect changes in the module.}
-   \item{aes_elements:}     JMH
-   \item{current_fig:}      JMH
-   \item{fig_cntr:}         JMH
-   \item{DSV:}              JMH
+   \item{aes_elements:}     Plot elements defined by aesthetics (i.e. the X in geom_X)
+   \item{current_fig:}      fig_id of the currently figure.
+   \item{fig_cntr:}         Counter for figures, incremented each time a new figure is created. 
+   \item{DSV:}              Available data sets from the UD and DW modules. 
    \item{figs:}             List of figures. Each view has the following structure:
-     \itemize{
-       \item{isgood:} Boolean status of the figure. False if evaluation fails.
-       \item{key:     Figure key acts as a title/caption (user editable)}
-       \item{notes:   Figure notes  (user editable)}
-       \item{id: Character id (\code{fig_idx})}
-       \item{idx: Numeric id (\code{1})}
-       \item{fig_dsview:  Name of the dataset view for the current figure
-       (also the R object name of the dataset view).}
-       \item{checksum:    checksum of the figure used to detect changes in the figure.}
-       \item{UD_checksum: checksum of the UD state when the figure was created.}
-       \item{DW_checksum: checksum of DW module if data view was used.}
-       \item{DSV_checksum:checksum of the dataset view that was used to create the figure }
+     \itemize{  
+       \item{add_isgood:    JMH}
+       \item{checksum:       Checksum of the figure used to detect changes in the figure.}
+       \item{code:           Code to generate figure from start to finish.}
+       \item{code_fg_only:   Code to just generate the figure.}
+       \item{code_previous:  Code to load and/or wrangle the dataset.}
        \item{elements_table: Table of figure generation elements.}
-       \item{code:          Code to generate figure from start to finish.}
-       \item{code_previous: Code to load and/or wrangle the dataset.}
-       \item{code_fg_only:  Code to just generate the figure.}
+       \item{fg_object_name: JMH}
+       \item{fig_dsview:     Name of the dataset view for the current figure (also the R object name of the dataset view).}
+       \item{fobj:           JMH}
+       \item{id:             Character id (\code{fig_idx})}
+       \item{idx:            Numeric id (\code{1})}
+       \item{isgood:}        Boolean status of the figure. FALSE if evaluation/build fails.
+       \item{key:            Figure key acts as a title/caption (user editable)}
+       \item{msgs:           JMH}
+       \item{notes:          Figure notes  (user editable)}
+       \item{num_pages:      JMH}
+       \item{page:           JMH}
      }
  }
  \item{MOD_TYPE:} Character data containing the type of module \code{"DW"}

@@ -40,7 +40,7 @@ You can install the development version from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("john-harrold/formods")
+devtools::install_github("john-harrold/formods", dependencies=TRUE)
 ```
 
 # Getting started

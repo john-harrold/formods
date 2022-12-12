@@ -1,5 +1,6 @@
 #library(formods)
 library(shinydashboard)
+library(prompter)
 #https://fontawesome.com/icons?from=io
 ui <- dashboardPage(
   skin="red",
@@ -14,6 +15,8 @@ ui <- dashboardPage(
     tabItems(
      tabItem(tabName="FG",
              fluidRow(
+               # Required for tooltips
+               prompter::use_prompt(),
                box(title="Current Figures",
                  "ui_fg_curr_figs",
                  htmlOutput(NS("FG", "ui_fg_curr_figs")), width=5),

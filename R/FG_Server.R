@@ -457,7 +457,7 @@ FG_Server <- function(id,
 
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
-        uiele = actionBttn(
+        uiele = shinyWidgets::actionBttn(
                   inputId = NS(id, "button_fig_new"),
                   label   = state[["MC"]][["labels"]][["new_fig"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
@@ -482,7 +482,7 @@ FG_Server <- function(id,
 
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
-        uiele = actionBttn(
+        uiele = shinyWidgets::actionBttn(
                   inputId = NS(id, "button_fig_save"),
                   label   = state[["MC"]][["labels"]][["save_fig"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
@@ -509,7 +509,7 @@ FG_Server <- function(id,
       uiele = NULL
       if((system.file(package="clipr") != "") &
          !state[["yaml"]][["FM"]][["deployed"]]){
-        uiele = actionBttn(
+        uiele = shinyWidgets::actionBttn(
                   inputId = NS(id, "button_fg_clip"),
                   label   = state[["MC"]][["labels"]][["clip_fig"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
@@ -535,7 +535,7 @@ FG_Server <- function(id,
 
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
-        uiele = actionBttn(
+        uiele = shinyWidgets::actionBttn(
                   inputId = NS(id, "button_fig_del"),
                   label   = state[["MC"]][["labels"]][["del_fig"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
@@ -560,7 +560,7 @@ FG_Server <- function(id,
 
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
-        uiele = actionBttn(
+        uiele = shinyWidgets::actionBttn(
                   inputId = NS(id, "button_fig_copy"),
                   label   = state[["MC"]][["labels"]][["copy_fig"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
@@ -602,17 +602,7 @@ FG_Server <- function(id,
                              label        = NULL,
                              value        = value,
                              placeholder  = state[["MC"]][["labels"]][["ph"]][["notes"]])
-        if(state[["MC"]][["tooltips"]][["include"]]){
-          if(!is.null(state[["MC"]][["tooltips"]][["notes"]])){
-            uiele = tagList(uiele,
-              shinyBS::bsPopover(NS(id,"text_fig_notes"),
-                                 title=NULL,
-                                 state[["MC"]][["tooltips"]][["notes"]],
-                                 "bottom"))
-          }
-        }
       }
-
       uiele})
     #------------------------------------
     output$ui_fg_slider_page = renderUI({
@@ -683,7 +673,7 @@ FG_Server <- function(id,
       uiele = "ui_fg_add_element_button"
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
-        uiele = actionBttn(
+        uiele = shinyWidgets::actionBttn(
                   inputId = NS(id, "button_element_add"),
                   label   = state[["MC"]][["labels"]][["add_ele"]],
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
@@ -794,14 +784,24 @@ FG_Server <- function(id,
             # to the value returned by the by the UI to the server:
             names(sel_choices) = sel_names
 
+            tmp_tI = 
+              textInput(
+                 inputId     = NS(id, id_manual),
+                 label       = NULL,
+                 placeholder = state[["MC"]][["labels"]][["ph"]][["manual"]],
+                 width       = state[["MC"]][["formatting"]][["components"]][["aes"]][["width"]])
+
             # Defining the tool tip for the manual text elements
-            manual_tool_tip = NULL
             if(state[["MC"]][["tooltips"]][["include"]]){
-              if(!is.null(state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]])){
-                manual_tool_tip =shinyBS::bsPopover(NS(id,id_manual),
-                                                    title=NULL,
-                                                    state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]],
-                                                    "bottom")
+              if(system.file(package="prompter") != ""){
+                if(!is.null(state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]])){
+                tmp_tI = prompter::add_prompt(
+                  tmp_tI,
+                  position = "bottom",
+                  size     = "medium",
+                  message   = state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]]
+                )
+                }
               }
             }
 
@@ -816,12 +816,7 @@ FG_Server <- function(id,
                     width      = state[["MC"]][["formatting"]][["components"]][["aes"]][["width"]],
                     choicesOpt = list( style = sel_style, "live-search"=TRUE)),
                   # Manual text input on the bottom
-                  textInput(
-                     inputId     = NS(id, id_manual),
-                     label       = NULL,
-                     placeholder = state[["MC"]][["labels"]][["ph"]][["manual"]],
-                     width       = state[["MC"]][["formatting"]][["components"]][["aes"]][["width"]]),
-                    manual_tool_tip
+                    tmp_tI
                 )
               )
             )
@@ -1148,7 +1143,8 @@ FG_Server <- function(id,
                                react_state    = react_state)
 
         FM_le(state, "reaction state updated")
-        react_state[[id]] = state
+        #react_state[[id]] = state
+        react_state[[id]][["FG"]][["checksum"]] = state[["FG"]][["checksum"]]
       })
     }
 
@@ -1208,27 +1204,29 @@ FG_Server <- function(id,
 #'    \item{ui_ids:}           Vector of UI elements for the module.
 #'    \item{ui_hold:}          List of hold elements to disable updates before a full ui referesh is complete.
 #'    \item{checksum:          checksum of the FG module used to detect changes in the module.}
-#'    \item{aes_elements:}     JMH
-#'    \item{current_fig:}      JMH
-#'    \item{fig_cntr:}         JMH
-#'    \item{DSV:}              JMH
+#'    \item{aes_elements:}     Plot elements defined by aesthetics (i.e. the X in geom_X)
+#'    \item{current_fig:}      fig_id of the currently figure.
+#'    \item{fig_cntr:}         Counter for figures, incremented each time a new figure is created. 
+#'    \item{DSV:}              Available data sets from the UD and DW modules. 
 #'    \item{figs:}             List of figures. Each view has the following structure:
-#'      \itemize{
-#'        \item{isgood:} Boolean status of the figure. False if evaluation fails.
-#'        \item{key:     Figure key acts as a title/caption (user editable)}
-#'        \item{notes:   Figure notes  (user editable)}
-#'        \item{id: Character id (\code{fig_idx})}
-#'        \item{idx: Numeric id (\code{1})}
-#'        \item{fig_dsview:  Name of the dataset view for the current figure
-#'        (also the R object name of the dataset view).}
-#'        \item{checksum:    checksum of the figure used to detect changes in the figure.}
-#'        \item{UD_checksum: checksum of the UD state when the figure was created.}
-#'        \item{DW_checksum: checksum of DW module if data view was used.}
-#'        \item{DSV_checksum:checksum of the dataset view that was used to create the figure }
+#'      \itemize{  
+#'        \item{add_isgood:    JMH}
+#'        \item{checksum:       Checksum of the figure used to detect changes in the figure.}
+#'        \item{code:           Code to generate figure from start to finish.}
+#'        \item{code_fg_only:   Code to just generate the figure.}
+#'        \item{code_previous:  Code to load and/or wrangle the dataset.}
 #'        \item{elements_table: Table of figure generation elements.}
-#'        \item{code:          Code to generate figure from start to finish.}
-#'        \item{code_previous: Code to load and/or wrangle the dataset.}
-#'        \item{code_fg_only:  Code to just generate the figure.}
+#'        \item{fg_object_name: JMH}
+#'        \item{fig_dsview:     Name of the dataset view for the current figure (also the R object name of the dataset view).}
+#'        \item{fobj:           JMH}
+#'        \item{id:             Character id (\code{fig_idx})}
+#'        \item{idx:            Numeric id (\code{1})}
+#'        \item{isgood:}        Boolean status of the figure. FALSE if evaluation/build fails.
+#'        \item{key:            Figure key acts as a title/caption (user editable)}
+#'        \item{msgs:           JMH}
+#'        \item{notes:          Figure notes  (user editable)}
+#'        \item{num_pages:      JMH}
+#'        \item{page:           JMH}
 #'      }
 #'  }
 #'  \item{MOD_TYPE:} Character data containing the type of module \code{"DW"}
@@ -1649,7 +1647,6 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
 
   isgood = TRUE
 
-
   # Plot elements defined by aesthetics
   aes_elements = c("line", "point", "errorbar", "hguide", "vguide", "smooth", "ribbon", "boxplot")
 
@@ -1741,7 +1738,8 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
     MT              = "FG",
     button_counters = button_counters,
     ui_ids          = ui_ids,
-    ui_hold         = ui_hold)
+    ui_hold         = ui_hold,
+    session         = session)
 
   # JMH remove this
   #state[["MC"]] = state_tmp[["MC"]]
@@ -1835,9 +1833,11 @@ state}
 
 #'@export
 #'@title Fetches Current Figure
-#'@description Takes an FG state and returns the ccurrent active figure
+#'@description Takes a FG state and returns the current active figure
 #'@param state FG state from \code{FG_fetch_state()}
-#'@return list containing the current figure
+#'@return List containing the details of the active figure. The structure
+#'of this list is the same as the structure of \code{state$FG$figs} in the output of
+#'\code{FG_fetch_state()}.
 #'@example inst/test_apps/FG_funcs.R
 FG_fetch_current_fig    = function(state){
 
@@ -1852,7 +1852,7 @@ fig}
 
 #'@export
 #'@title Sets Current Figure
-#'@description Takes an FG state and a figure list and sets that figure list
+#'@description Takes a FG state and a figure list and sets that figure list
 #'as the value for the active figure
 #'@param state FG state from \code{FG_fetch_state()}
 #'@param fig Figure list from \code{FG_fetch_current_fig}

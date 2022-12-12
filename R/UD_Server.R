@@ -305,7 +305,7 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
   # initialize it
   if(is.null(state)){
     # General state information
-    state = UD_init_state(FM_yaml_file, MOD_yaml_file, id)
+    state = UD_init_state(FM_yaml_file, MOD_yaml_file, id, session)
   }
 
   #---------------------------------------------
@@ -423,8 +423,13 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id ID string for the module.
+#'@param session Shiny session variable
 #'@return list containing an empty UD state
 #'@examples
+#' # Within shiny a session variable will exist, 
+#' # this creates one here for testing purposes:
+#' sess_res = UD_test_mksession(session=list())
+#' session = sess_res$session
 #'state = UD_init_state(
 #'    FM_yaml_file  = system.file(package = "formods",
 #'                                "templates",
@@ -432,9 +437,10 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
 #'    MOD_yaml_file = system.file(package = "formods",
 #'                                "templates",
 #'                                "UD.yaml"),
-#'    id              = "UD")
+#'    id              = "UD",
+#'    session         = session)
 #' state
-UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id){
+UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 
 
   state = FM_init_state(
@@ -444,7 +450,8 @@ UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id){
     MT              = "UD",
     button_counters = NULL,
     ui_ids          = NULL,
-    ui_hold         = NULL)
+    ui_hold         = NULL,
+    session         = session)
 
   state = UD_attach_ds(state)
 
