@@ -104,7 +104,7 @@ Say you are using the UD module to feed data into the DW module and the user goe
   dataset.
 * `code` Code to repelicate the current state of the module. 
 
-# Notifications
+# Notifications 
 
 Notifications are created using the `{shinybusy}` package and are produced with two different functions: `FM_set_notification()` and `FM_notify()`. This is done in a centralized fashion where notifications are added to the state object as user information is processed. This will set a notification called `Example Notification`. Along with that a timestamp is set:
 
@@ -140,6 +140,15 @@ be displayed:
                 session  = session)
     })
 ``` 
+
+# Suggested packages
+JMH Notes on tooltips, modals etc. go here
+
+## Notifications and Modals with `{shinybusy}`
+
+## Tooltips with `{prompter}`
+
+
 # formods state objects
 
 When you create a formods state object it can have the following fields:
@@ -156,7 +165,8 @@ When you create a formods state object it can have the following fields:
 
 ## App information in XX
 
-This field `state$XX` is relatively freeform but there are some expected elements. 
+This field `state$XX` is relatively free form but there are some expected elements. 
+JMH Add expected fields here.
 
 
 ## Configuration file

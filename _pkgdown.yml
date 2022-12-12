@@ -34,6 +34,13 @@ reference:
     - fers_builder
 navbar:
   left:
+  - text: "Tutorials"
+    icon:  fas fa-chalkboard-teacher
+    menu:
+       - text: "Included Modules"
+         href: articles/included_modules.html
+       - text: "Making Modules"
+         href: articles/making_modules.html
   - text: "Functions"
     icon: fas fa-hat-wizard
     href: reference/index.html
