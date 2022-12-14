@@ -80,6 +80,8 @@ FM:
   ui:
     # See ?actionBttn for styles
     button_style: "fill"
+    # Max size for picker inputs
+    select_size:  10
     color_green:  "#00BB8A"
     color_red:    "#FF475E"
     color_blue:   "#0088FF"

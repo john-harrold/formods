@@ -465,6 +465,21 @@ FG_Server <- function(id,
                   block   = state[["MC"]][["formatting"]][["button_fig_new"]][["block"]],
                   color   = "success",
                   icon    = icon("plus"))
+
+        if(state[["MC"]][["tooltips"]][["include"]]){
+          if(system.file(package="prompter") != ""){
+            tooltip             = state[["MC"]][["formatting"]][["button_fig_new"]][["tooltip"]]
+            tooltip_position    = state[["MC"]][["formatting"]][["button_fig_new"]][["tooltip_position"]]
+            if(!is.null(tooltip)){
+              uiele = prompter::add_prompt(
+                uiele,
+                position = tooltip_position,
+                size     = "medium",
+                message  = tooltip
+              )
+            }
+          }
+        }
       }
       uiele})
     #------------------------------------
@@ -490,6 +505,24 @@ FG_Server <- function(id,
                   block   = state[["MC"]][["formatting"]][["button_fig_save"]][["block"]],
                   color   = "primary",
                   icon    = icon("arrow-down"))
+
+
+        if(state[["MC"]][["tooltips"]][["include"]]){
+          if(system.file(package="prompter") != ""){
+            tooltip             = state[["MC"]][["formatting"]][["button_fig_save"]][["tooltip"]]
+            tooltip_position    = state[["MC"]][["formatting"]][["button_fig_save"]][["tooltip_position"]]
+            if(!is.null(tooltip)){
+              uiele = prompter::add_prompt(
+                uiele,
+                position = tooltip_position,
+                size     = "medium",
+                message  = tooltip
+              )
+            }
+          }
+        }
+
+
       }
       uiele})
     #------------------------------------
@@ -515,8 +548,24 @@ FG_Server <- function(id,
                   style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
                   size    = state[["MC"]][["formatting"]][["button_fig_clip"]][["size"]],
                   block   = state[["MC"]][["formatting"]][["button_fig_clip"]][["block"]],
+                  no_outline = FALSE,
                   color   = "royal",
                   icon    = icon("clipboard", lib="font-awesome"))
+
+        if(state[["MC"]][["tooltips"]][["include"]]){
+          if(system.file(package="prompter") != ""){
+            tooltip             = state[["MC"]][["formatting"]][["button_fig_clip"]][["tooltip"]]
+            tooltip_position    = state[["MC"]][["formatting"]][["button_fig_clip"]][["tooltip_position"]]
+            if(!is.null(tooltip)){
+              uiele = prompter::add_prompt(
+                uiele,
+                position = tooltip_position,
+                size     = "medium",
+                message  = tooltip
+              )
+            }
+          }
+        }
       }
 
       uiele})
@@ -543,6 +592,24 @@ FG_Server <- function(id,
                   block   = state[["MC"]][["formatting"]][["button_fig_del"]][["block"]],
                   color   = "danger",
                   icon    = icon("minus"))
+
+        if(state[["MC"]][["tooltips"]][["include"]]){
+          if(system.file(package="prompter") != ""){
+            tooltip             = state[["MC"]][["formatting"]][["button_fig_del"]][["tooltip"]]
+            tooltip_position    = state[["MC"]][["formatting"]][["button_fig_del"]][["tooltip_position"]]
+            if(!is.null(tooltip)){
+              uiele = prompter::add_prompt(
+                uiele,
+                position = tooltip_position,
+                size     = "medium",
+                message  = tooltip
+              )
+            }
+          }
+        }
+
+
+
       }
       uiele})
     #------------------------------------
@@ -568,6 +635,21 @@ FG_Server <- function(id,
                   block   = state[["MC"]][["formatting"]][["button_fig_copy"]][["block"]],
                   color   = "royal",
                   icon    = icon("copy"))
+
+        if(state[["MC"]][["tooltips"]][["include"]]){
+          if(system.file(package="prompter") != ""){
+            tooltip             = state[["MC"]][["formatting"]][["button_fig_copy"]][["tooltip"]]
+            tooltip_position    = state[["MC"]][["formatting"]][["button_fig_copy"]][["tooltip_position"]]
+            if(!is.null(tooltip)){
+              uiele = prompter::add_prompt(
+                uiele,
+                position = tooltip_position,
+                size     = "medium",
+                message  = tooltip
+              )
+            }
+          }
+        }
       }
       uiele})
     #------------------------------------

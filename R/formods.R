@@ -214,11 +214,28 @@ has_changed = function(ui_val     = NULL,
                        old_val    = NULL,
                        init_value = c("")){
   res = FALSE
-  # We only Sure
-  if(!is.null(ui_val)){
-    if(ui_val    != 0 & ui_val   !=init_value){
-      if(ui_val    != old_val){
-        res = TRUE
+
+  # Detecting length differences
+  if(length(ui_val) != length(old_val)){
+    res = TRUE
+  } else if((length(ui_val) == length(old_val)) & 
+             length(ui_val) > 1){
+    # here we're comparing vectors
+    if(!all(ui_val %in% old_val)){
+     res = TRUE
+    }
+  } 
+
+  # here we're comparing scalers 
+  if((length(ui_val)  == 1) & 
+     (length(old_val) == 1) &
+      !res
+     ){
+    if(!is.null(ui_val)){
+      if(ui_val    != 0 & ui_val   !=init_value){
+        if(ui_val    != old_val){
+          res = TRUE
+        }
       }
     }
   }

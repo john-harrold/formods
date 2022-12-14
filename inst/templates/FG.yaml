@@ -193,24 +193,35 @@ MC:
     button_fig_del:
       size: "sm" 
       block: TRUE
+      tooltip: "Delete the current figure."
+      tooltip_position: "right"
     button_fig_save:
       size: "sm" 
       block: TRUE
+      tooltip: "Save changes to caption, notes and data source."
+      tooltip_position: "right"
     button_fig_clip:
       size: "sm" 
       block: TRUE
+      tooltip: "Copy code to generate current figure to the clipboard."
+      tooltip_position: "right"
     button_fig_copy:
       size: "sm" 
       block: TRUE
+      tooltip: "Copy current figure to a new figure."
+      tooltip_position: "right"
     button_fig_new:
       size: "sm" 
       block: TRUE
+      tooltip: "Create a new empty figure."
+      tooltip_position: "right"
     button_fig_add:
       size: "sm" 
       block: TRUE
-    button_fig_upds:
-      size: "sm" 
-      block: TRUE
+ # JMH don't think this is being used
+ #  button_fig_upds:
+ #    size: "sm" 
+ #    block: TRUE
   # You can put any post_processing you want to apply to all figures.
   # The ggplot object will be available as the ===FGOBJ=== 
   post_processing: |-
