@@ -896,6 +896,7 @@ FG_Server <- function(id,
                     label      = state[["MC"]][["labels"]][["components"]][[ui_aes]],
                     choices    = sel_choices,
                     width      = state[["MC"]][["formatting"]][["components"]][["aes"]][["width"]],
+                    options    = list(size = state[["yaml"]][["FM"]][["ui"]][["select_size"]]),
                     choicesOpt = list( style = sel_style, "live-search"=TRUE)),
                   # Manual text input on the bottom
                     tmp_tI
@@ -915,7 +916,9 @@ FG_Server <- function(id,
               multiple   = TRUE,
               choices    = sel_choices,
               width      = state[["MC"]][["formatting"]][["components"]][["facet"]][["width"]],
-              options    = list(maxItems=2))
+              options    = list(
+                            size     = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
+                            maxItems = 2))
         } else if(curr_element == "scales") {
 
           scale_choices = c("linear", "log10", "log2")
