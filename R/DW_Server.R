@@ -442,6 +442,7 @@ DW_Server <- function(id,
                 width    = 200,
                 choices  = dscols,
                 options  = list(
+                  size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
                   title = state[["MC"]][["labels"]][["fds_rename_column"]])
               ),
               textInput(
@@ -481,6 +482,7 @@ DW_Server <- function(id,
                 choices  = dscols,
                 multiple = TRUE,
                 options  = list(
+                  size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
                   title = state[["MC"]][["labels"]][["uknown_action"]])
               )
           ))
@@ -515,6 +517,7 @@ DW_Server <- function(id,
                 choices  = dscols,
                 multiple = FALSE,
                 options  = list(
+                  size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
                   title = state[["MC"]][["labels"]][["fds_wider_names"]])
               ),
               pickerInput(
@@ -524,6 +527,7 @@ DW_Server <- function(id,
                 choices  = dscols,
                 multiple = FALSE,
                 options  = list(
+                  size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
                   title = state[["MC"]][["labels"]][["fds_wider_values"]])
               )
           ))
@@ -558,6 +562,7 @@ DW_Server <- function(id,
                 choices  = dscols,
                 multiple = TRUE,
                 options  = list(
+                  size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
                   title = state[["MC"]][["labels"]][["fds_longer_column"]])
               ),
               textInput(
@@ -607,6 +612,7 @@ DW_Server <- function(id,
                 choices  = dscols,
                 multiple = TRUE,
                 options  = list(
+                  size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
                   title = state[["MC"]][["labels"]][["uknown_action"]])
               )
           ))
@@ -690,6 +696,7 @@ DW_Server <- function(id,
           width    = 200,
           choices  = dscols,
           options  = list(
+            size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
             title = state[["MC"]][["labels"]][["fds_filter_column"]])
         )
 
