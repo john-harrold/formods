@@ -282,9 +282,10 @@ FG_Server <- function(id,
                              id_DW          = id_DW,
                              react_state    = react_state)
 
-      if(system.file(package = "shinybusy") !=""){
-       shinybusy::show_modal_spinner(text=state[["MC"]][["labels"]][["busy"]][["fig_update"]])
-      }
+      # Pausing access to the screen
+      FM_pause_screen(state   = state,
+                      message = state[["MC"]][["labels"]][["busy"]][["fig_update"]],
+                      session = session)
 
       current_fig = FG_fetch_current_fig(state)
       fobj = current_fig[["fobj"]]
@@ -312,9 +313,9 @@ FG_Server <- function(id,
       }
 
 
-      if(system.file(package = "shinybusy") !=""){
-        shinybusy::remove_modal_spinner()
-      }
+      # Removing the pause
+      FM_resume_screen(state   = state,
+                       session = session)
 
       fobj})
     #------------------------------------

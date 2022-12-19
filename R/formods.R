@@ -785,7 +785,6 @@ NULL}
 #' app_state
 FM_fetch_app_state <- function(session){
 
-
   # Fetching the app state
   app_state = session$userData[["FM"]]
 
@@ -1346,4 +1345,29 @@ FM_set_notification = function(state, notify_text, notify_id, type="info"){
 state}
 
 
+#'@export
+#'@title Starts Modal Screen Pause.
+#'@description 
+#'@param state Current module state after yaml file has been read.
+#'@param session Shiny session variable.
+#'@param message Optional message for the pause.
+#'@return NULL
+FM_pause_screen = function(state, session, message){
+  if(system.file(package = "shinybusy") !=""){
+   shinybusy::show_modal_spinner(text=message, session=session)
+  }
+}
 
+#'@export
+#'@title Starts Modal Screen Pause.
+#'@description 
+#'@param state Current module state after yaml file has been read.
+#'@param session Shiny session variable.
+#'@return NULL
+FM_resume_screen=function(state, session){
+
+  if(system.file(package = "shinybusy") !=""){
+    shinybusy::remove_modal_spinner(session = session)
+  }
+
+}
