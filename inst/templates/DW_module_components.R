@@ -14,6 +14,8 @@ ui <- dashboardPage(
     tabItems(
       tabItem(tabName="DW",
              fluidRow(
+              # Required for tooltips
+              prompter::use_prompt(),
               box(title="Data View Actions",
               div(style="display:inline-block",
               "ui_dw_views",

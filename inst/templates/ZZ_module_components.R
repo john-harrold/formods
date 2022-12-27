@@ -43,7 +43,7 @@ ui <- dashboardPage(
        fluidRow(
          box(title="Generated Code",
            "ZZ_ui_ace_code",
-           shinyAce::aceEditor(NS("ZZ", "ZZ_ui_ace_code")), width=12)),
+           shinyAce::aceEditor(NS("ZZ", "ui_zz_code")), width=12)),
        fluidRow(
          box(title="Current Module State",
            verbatimTextOutput("ui_state"),width=12))

@@ -47,6 +47,6 @@ Suggests:
   utils,
   testthat (>= 3.0.0),
   covr
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 Config/testthat/edition: 3

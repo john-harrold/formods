@@ -2,7 +2,7 @@
 % Please edit documentation in R/formods.R
 \name{FM_resume_screen}
 \alias{FM_resume_screen}
-\title{Starts Modal Screen Pause.}
+\title{Stops Modal Screen Pause}
 \usage{
 FM_resume_screen(state, session)
 }
@@ -12,5 +12,13 @@ FM_resume_screen(state, session)
 \item{session}{Shiny session variable.}
 }
 \description{
-Starts Modal Screen Pause.
+Stops Modal Screen Pause
+}
+\examples{
+# We need a module state object and Shiny session objects to use this function:
+sess_res = UD_test_mksession(session=list())
+session = sess_res$session
+state = sess_res$state
+FM_pause_screen(state, session)
+FM_resume_screen(state, session)
 }

@@ -40,7 +40,7 @@ MC:
     clip_dw:              "Code"
     ungroup_data:         "Removing current grouping"
     keep_onerow:          "Keep first row in current grouping"
-    no_dataset:           "No dataset loaded!"
+    no_dataset:           "No dataset available to wrangle. You need to load a dataset to use this module."
     no_dw_elements:       "No data wrangling elements defined yet"
     busy:
       dv_update:  "Updating data views. Please be patient..." 
@@ -122,25 +122,35 @@ MC:
     current_key:
       width: 300
     code:
-      width:  600
+      width:  800
       height: 300
     # Button sizes from actionBttn (shinyWidgets) 
     # xs,sm, md, lg.
     button_dw_del:
       size: "sm" 
       block: TRUE 
+      tooltip: "Delete the current data view."
+      tooltip_position: "right"
     button_dw_clip:
       size: "sm" 
       block: TRUE 
+      tooltip: "Copy code to generate current data view to the clipboard."
+      tooltip_position: "right"
     button_dw_save:
       size: "sm" 
       block: TRUE 
+      tooltip: "Save changes to data view name"
+      tooltip_position: "right"
     button_dw_copy:
       size: "sm" 
       block: TRUE 
+      tooltip: "Copy current data view to a new data view."
+      tooltip_position: "right"
     button_dw_new:
       size: "sm" 
       block: TRUE 
+      tooltip: "Create a new empty data view."
+      tooltip_position: "right"
     button_dw_add_element:
       size: "sm" 
       block: TRUE 

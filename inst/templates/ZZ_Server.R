@@ -54,7 +54,7 @@ ZZ_Server <- function(id,
 
       shinyAce::updateAceEditor(
         session         = session,
-        editorId        = "ZZ_ui_ace_code",
+        editorId        = "ui_zz_code",
         theme           = state[["yaml"]][["FM"]][["code"]][["theme"]],
         showLineNumbers = state[["yaml"]][["FM"]][["code"]][["showLineNumbers"]],
         readOnly        = state[["MC"]][["code"]][["readOnly"]],

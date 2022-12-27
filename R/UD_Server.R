@@ -181,7 +181,7 @@ UD_Server <- function(id,
 
       uiele_code_button = NULL
       # Creating the code button if it's enabled
-      if(state$MC$compact$code){
+      if(state[["MC"]][["compact"]][["code"]]){
         uiele_code    = tagList(shinyAce::aceEditor(
            NS(id, "ui_ud_ace_code"),
            height  = state[["MC"]][["formatting"]][["code"]][["height"]]
@@ -189,7 +189,7 @@ UD_Server <- function(id,
         uiele_code_button = tagList(
          shinyWidgets::dropdownButton(
            uiele_code,
-           inline  = FALSE,
+           inline  = TRUE,
            right   = FALSE,
            size    = "sm",
            circle  = FALSE,
@@ -200,14 +200,11 @@ UD_Server <- function(id,
         )
       }
 
-      uiele  = tagList( div(style="display:inline-block", htmlOutput(NS(id, "ui_ud_load_data"))),
-                        div(style="display:inline-block;vertical-align:top", uiele_code_button))
-
-
-      uiele = tagList(uiele,
-                      tags$br(),
-                      htmlOutput(NS(id, "ui_ud_select_sheets")),
-                      htmlOutput(NS(id, "ui_ud_text_load_result")))
+      uiele  = tagList( 
+           div(style="display:inline-block;width:100%", htmlOutput(NS(id, "ui_ud_load_data"))),
+           htmlOutput(NS(id, "ui_ud_select_sheets")),
+           div(style="display:inline-block;vertical-align:top;width:40px", uiele_code_button),
+           htmlOutput(NS(id, "ui_ud_text_load_result")))
 
       # Attaching the preview to the bottom if it's enabled
       if(state$MC$compact$preview){

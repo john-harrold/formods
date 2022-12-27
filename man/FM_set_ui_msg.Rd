@@ -4,12 +4,15 @@
 \alias{FM_set_ui_msg}
 \title{Sets Message in State from UI Processing}
 \usage{
-FM_set_ui_msg(state, msgs)
+FM_set_ui_msg(state, msgs, append = FALSE)
 }
 \arguments{
 \item{state}{formods State object.}
 
 \item{msgs}{Character vector of messages.}
+
+\item{append}{When \code{TRUE}, msgs will be appended to any current messages. When
+\code{FALSE} (default) msgs will replace any existing messaages.}
 }
 \value{
 state with ui message set.

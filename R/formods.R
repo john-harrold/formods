@@ -877,6 +877,8 @@ state}
 #'with this function.
 #'@param state formods State object.
 #'@param msgs Character vector of messages.
+#'@param append When \code{TRUE}, msgs will be appended to any current messages. When
+#'\code{FALSE} (default) msgs will replace any existing messaages. 
 #'@return state with ui message set.
 #'@examples
 #' # We need a module state object to use this function:
@@ -884,14 +886,14 @@ state}
 #' sess_res = UD_test_mksession(session=list(), id=id)
 #' state = sess_res$state
 #' state = FM_set_ui_msg(state, "Something happend.")
-FM_set_ui_msg = function(state, msgs){
+FM_set_ui_msg = function(state, msgs, append=FALSE){
 
   MT = state[["MOD_TYPE"]]
 
-  if(is.null(msgs)){
-    state[[MT]][["ui_msg"]] = NULL
+  if(append){
+    state[[MT]][["ui_msg"]] = paste(state[[MT]][["ui_msg"]], msgs, collapse="\n")
   } else {
-    state[[MT]][["ui_msg"]] = paste(msgs, collapse = "\n")
+    state[[MT]][["ui_msg"]] = paste(msgs, collapse="\n")
   }
 
 state}
@@ -1346,28 +1348,84 @@ state}
 
 
 #'@export
-#'@title Starts Modal Screen Pause.
-#'@description 
+#'@title Starts Modal Screen Pause
+#'@description Start a modal screen pause.
 #'@param state Current module state after yaml file has been read.
 #'@param session Shiny session variable.
 #'@param message Optional message for the pause.
 #'@return NULL
+#'@examples
+#' # We need a module state object and Shiny session objects to use this function:
+#' sess_res = UD_test_mksession(session=list())
+#' session = sess_res$session
+#' state = sess_res$state
+#' FM_pause_screen(state, session)
+#' FM_resume_screen(state, session)
 FM_pause_screen = function(state, session, message){
-  if(system.file(package = "shinybusy") !=""){
-   shinybusy::show_modal_spinner(text=message, session=session)
+  
+  if((any(c("ShinySession", "session_proxy") %in% class(session)))){
+    if(system.file(package = "shinybusy") !=""){
+     shinybusy::show_modal_spinner(text=message, session=session)
+    }
   }
-}
+NULL}
 
 #'@export
-#'@title Starts Modal Screen Pause.
-#'@description 
+#'@title Stops Modal Screen Pause
+#'@description  Stops Modal Screen Pause 
 #'@param state Current module state after yaml file has been read.
 #'@param session Shiny session variable.
 #'@return NULL
+#'@examples
+#' # We need a module state object and Shiny session objects to use this function:
+#' sess_res = UD_test_mksession(session=list())
+#' session = sess_res$session
+#' state = sess_res$state
+#' FM_pause_screen(state, session)
+#' FM_resume_screen(state, session)
 FM_resume_screen=function(state, session){
 
-  if(system.file(package = "shinybusy") !=""){
-    shinybusy::remove_modal_spinner(session = session)
+  if((any(c("ShinySession", "session_proxy") %in% class(session)))){
+    if(system.file(package = "shinybusy") !=""){
+      shinybusy::remove_modal_spinner(session = session)
+    }
   }
+NULL}
 
-}
+
+#'@export
+#'@title Add Tooltip to UI Element
+#'@description Adds a tool tip to a user element. 
+#'@param state Current module state after yaml file has been read.
+#'@param uiele UI element to add the toooltip to. 
+#'@param tooltip Text containing the tool tip.
+#'@param position Position of the tooltip. 
+#'@param size     size of the tooltip     
+#'@return If tooltips are enabled and the suggested packages are installed
+#'then a uiele with the tooltip added will be returned. Otherwise it will just
+#'return the original uiele unchanged. 
+#'@examples
+#'if(interactive()){
+#' # We need a module state object to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' state = sess_res$state
+#' uiele = shiny::textInput(inputId = "my input", label="example input")
+#' 
+#' uiele = FM_add_ui_tooltip(state, uiele)
+#' }
+FM_add_ui_tooltip = function(state, uiele, tooltip = "mytooltip", position="right", size="medium"){
+   if(state[["MC"]][["tooltips"]][["include"]]){
+     if(system.file(package="prompter") != ""){
+       if(!is.null(tooltip)){
+         uiele = prompter::add_prompt(
+           tags$div(style = "width: 100%;", uiele),
+           position = position,
+           size     = "medium",
+           message  = tooltip
+         )
+       }
+     }
+   }
+uiele}
+

@@ -933,6 +933,11 @@ DW_Server <- function(id,
                   block   = state[["MC"]][["formatting"]][["button_dw_new"]][["block"]],
                   color   = "success",
                   icon    = icon("plus"))
+
+        uiele = FM_add_ui_tooltip(state, uiele,
+                 tooltip     = state[["MC"]][["formatting"]][["button_dw_new"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["button_dw_new"]][["tooltip_position"]])
+
       }
       uiele})
     #------------------------------------
@@ -956,6 +961,10 @@ DW_Server <- function(id,
                   block   = state[["MC"]][["formatting"]][["button_dw_save"]][["block"]],
                   color   = "primary",
                   icon    = icon("arrow-down"))
+
+        uiele = FM_add_ui_tooltip(state, uiele,
+                 tooltip     = state[["MC"]][["formatting"]][["button_dw_save"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["button_dw_save"]][["tooltip_position"]])
       }
       uiele})
     #------------------------------------
@@ -979,6 +988,10 @@ DW_Server <- function(id,
                   block   = state[["MC"]][["formatting"]][["button_dw_copy"]][["block"]],
                   color   = "royal",
                   icon    = icon("copy"))
+
+        uiele = FM_add_ui_tooltip(state, uiele,
+                 tooltip     = state[["MC"]][["formatting"]][["button_dw_copy"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["button_dw_copy"]][["tooltip_position"]])
       }
       uiele})
     #------------------------------------
@@ -1004,6 +1017,10 @@ DW_Server <- function(id,
                   block   = state[["MC"]][["formatting"]][["button_dw_clip"]][["block"]],
                   color   = "royal",
                   icon    = icon("clipboard", lib="font-awesome"))
+
+        uiele = FM_add_ui_tooltip(state, uiele,
+                 tooltip     = state[["MC"]][["formatting"]][["button_dw_clip"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["button_dw_clip"]][["tooltip_position"]])
       }
 
       uiele})
@@ -1028,6 +1045,10 @@ DW_Server <- function(id,
                   block   = state[["MC"]][["formatting"]][["button_dw_del"]][["block"]],
                   color   = "danger",
                   icon    = icon("minus"))
+
+        uiele = FM_add_ui_tooltip(state, uiele,
+                 tooltip     = state[["MC"]][["formatting"]][["button_dw_del"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["button_dw_del"]][["tooltip_position"]])
       }
       uiele})
     #------------------------------------
@@ -1104,7 +1125,7 @@ DW_Server <- function(id,
       } else {
         uiele_code_button = NULL
         # Generating code button if enabled
-        if( state$MC$compact$code){
+        if( state[["MC"]][["compact"]][["code"]]){
           uiele_code = tagList(shinyAce::aceEditor(
             NS(id, "ui_dw_code"),
             height  = state[["MC"]][["formatting"]][["code"]][["height"]]

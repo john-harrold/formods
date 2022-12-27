@@ -78,7 +78,7 @@ MC:
       no manual value was provided.
     select_current_fig:  "Current figure"
     select_current_view: "Data from"
-    no_figures_defined:  "No figures have been defined"
+    no_figures_defined:  "No figures have been defined. There are no data sources to create figures. You need to load data and create data views to use this module."
     busy:
       fig_update:  "Updating the current figure. Please be patient..." 
   errors:
@@ -149,8 +149,8 @@ MC:
   formatting:
     # Dimensions of code snippet box
     code:
-      width:  500
-      height: 150
+      width:  800
+      height: 300
     # Dimensions of the figure preview
     # Must be numeric
     preview:    
@@ -162,7 +162,7 @@ MC:
       width:  1000
     # Dimensions of the notes text area
     notes:      
-      width:  "300px"
+      width:  "560px"
       height: "75px"
     components:
       aes:

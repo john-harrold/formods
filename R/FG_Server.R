@@ -124,7 +124,7 @@ FG_Server <- function(id,
       } else {
         uiele_code_button = NULL
         # Generating code button if enabled
-        if( state$MC$compact$code){
+        if( state[["MC"]][["compact"]][["code"]]){
           uiele_code = tagList(shinyAce::aceEditor(
             NS(id, "ui_fg_code"),
             height  = state[["MC"]][["formatting"]][["code"]][["height"]]
@@ -140,7 +140,7 @@ FG_Server <- function(id,
              width   = state[["MC"]][["formatting"]][["code"]][["width"]],
              status  = "danger btn-custom-fg",
              icon    = icon("code", lib="font-awesome"),
-             tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["show_code"]]))
+             tooltip = shinyWidgets::tooltipOptions(title = state[["MC"]][["tooltips"]][["show_code"]]))
           )
 
         }
@@ -157,7 +157,7 @@ FG_Server <- function(id,
            circle  = FALSE,
            status  = "primary btn-custom-fg",
            icon    = icon("layer-group", lib="font-awesome"),
-           tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["fg_elements"]]))
+           tooltip = shinyWidgets::tooltipOptions(title = state[["MC"]][["tooltips"]][["fg_elements"]]))
         )
 
         uiele = tagList(
@@ -249,7 +249,7 @@ FG_Server <- function(id,
           tags$br(),
           htmlOutput(NS(id, "ui_fg_new_element_row")),
           tags$br(),
-          verbatimTextOutput(NS(id, "ui_fg_msg"))
+          verbatimTextOutput(NS(id, "ui_fg_msg")) # JMH this shouldn't be here, I think? it's a repeat from above.
         )
       }
 
@@ -467,20 +467,11 @@ FG_Server <- function(id,
                   color   = "success",
                   icon    = icon("plus"))
 
-        if(state[["MC"]][["tooltips"]][["include"]]){
-          if(system.file(package="prompter") != ""){
-            tooltip             = state[["MC"]][["formatting"]][["button_fig_new"]][["tooltip"]]
-            tooltip_position    = state[["MC"]][["formatting"]][["button_fig_new"]][["tooltip_position"]]
-            if(!is.null(tooltip)){
-              uiele = prompter::add_prompt(
-                uiele,
-                position = tooltip_position,
-                size     = "medium",
-                message  = tooltip
-              )
-            }
-          }
-        }
+
+        # Optinally adding the tooltip:
+        uiele = FM_add_ui_tooltip(state, uiele,
+                 tooltip             = state[["MC"]][["formatting"]][["button_fig_new"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["button_fig_new"]][["tooltip_position"]])
       }
       uiele})
     #------------------------------------
@@ -508,21 +499,10 @@ FG_Server <- function(id,
                   icon    = icon("arrow-down"))
 
 
-        if(state[["MC"]][["tooltips"]][["include"]]){
-          if(system.file(package="prompter") != ""){
-            tooltip             = state[["MC"]][["formatting"]][["button_fig_save"]][["tooltip"]]
-            tooltip_position    = state[["MC"]][["formatting"]][["button_fig_save"]][["tooltip_position"]]
-            if(!is.null(tooltip)){
-              uiele = prompter::add_prompt(
-                uiele,
-                position = tooltip_position,
-                size     = "medium",
-                message  = tooltip
-              )
-            }
-          }
-        }
-
+        # Optinally adding the tooltip:
+        uiele = FM_add_ui_tooltip(state, uiele,
+                 tooltip     = state[["MC"]][["formatting"]][["button_fig_save"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["button_fig_save"]][["tooltip_position"]])
 
       }
       uiele})
@@ -553,20 +533,11 @@ FG_Server <- function(id,
                   color   = "royal",
                   icon    = icon("clipboard", lib="font-awesome"))
 
-        if(state[["MC"]][["tooltips"]][["include"]]){
-          if(system.file(package="prompter") != ""){
-            tooltip             = state[["MC"]][["formatting"]][["button_fig_clip"]][["tooltip"]]
-            tooltip_position    = state[["MC"]][["formatting"]][["button_fig_clip"]][["tooltip_position"]]
-            if(!is.null(tooltip)){
-              uiele = prompter::add_prompt(
-                uiele,
-                position = tooltip_position,
-                size     = "medium",
-                message  = tooltip
-              )
-            }
-          }
-        }
+        # Optinally adding the tooltip:
+        uiele = FM_add_ui_tooltip(state, uiele,
+                 tooltip     = state[["MC"]][["formatting"]][["button_fig_clip"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["button_fig_clip"]][["tooltip_position"]])
+
       }
 
       uiele})
@@ -594,21 +565,10 @@ FG_Server <- function(id,
                   color   = "danger",
                   icon    = icon("minus"))
 
-        if(state[["MC"]][["tooltips"]][["include"]]){
-          if(system.file(package="prompter") != ""){
-            tooltip             = state[["MC"]][["formatting"]][["button_fig_del"]][["tooltip"]]
-            tooltip_position    = state[["MC"]][["formatting"]][["button_fig_del"]][["tooltip_position"]]
-            if(!is.null(tooltip)){
-              uiele = prompter::add_prompt(
-                uiele,
-                position = tooltip_position,
-                size     = "medium",
-                message  = tooltip
-              )
-            }
-          }
-        }
-
+        # Optinally adding the tooltip:
+        uiele = FM_add_ui_tooltip(state, uiele,
+                 tooltip     = state[["MC"]][["formatting"]][["button_fig_del"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["button_fig_del"]][["tooltip_position"]])
 
 
       }
@@ -637,20 +597,10 @@ FG_Server <- function(id,
                   color   = "royal",
                   icon    = icon("copy"))
 
-        if(state[["MC"]][["tooltips"]][["include"]]){
-          if(system.file(package="prompter") != ""){
-            tooltip             = state[["MC"]][["formatting"]][["button_fig_copy"]][["tooltip"]]
-            tooltip_position    = state[["MC"]][["formatting"]][["button_fig_copy"]][["tooltip_position"]]
-            if(!is.null(tooltip)){
-              uiele = prompter::add_prompt(
-                uiele,
-                position = tooltip_position,
-                size     = "medium",
-                message  = tooltip
-              )
-            }
-          }
-        }
+        # Optinally adding the tooltip:
+        uiele = FM_add_ui_tooltip(state, uiele,
+                 tooltip     = state[["MC"]][["formatting"]][["button_fig_copy"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["button_fig_copy"]][["tooltip_position"]])
       }
       uiele})
     #------------------------------------
@@ -763,7 +713,7 @@ FG_Server <- function(id,
                   size    = state[["MC"]][["formatting"]][["button_fig_add"]][["size"]],
                   block   = state[["MC"]][["formatting"]][["button_fig_add"]][["block"]],
                   color   = "success",
-                  icon    = icon("plus"))
+                  icon    = icon("plus-sign", lib="glyphicon"))
       }
       uiele})
     #------------------------------------
@@ -874,19 +824,10 @@ FG_Server <- function(id,
                  placeholder = state[["MC"]][["labels"]][["ph"]][["manual"]],
                  width       = state[["MC"]][["formatting"]][["components"]][["aes"]][["width"]])
 
-            # Defining the tool tip for the manual text elements
-            if(state[["MC"]][["tooltips"]][["include"]]){
-              if(system.file(package="prompter") != ""){
-                if(!is.null(state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]])){
-                tmp_tI = prompter::add_prompt(
-                  tmp_tI,
-                  position = "bottom",
-                  size     = "medium",
-                  message   = state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]]
-                )
-                }
-              }
-            }
+            # Optinally adding the tooltip:
+            tmp_tI = FM_add_ui_tooltip(state, tmp_tI,
+                     tooltip     = state[["MC"]][["tooltips"]][["components"]][["manual"]][[ui_aes]],
+                     position    = "bottom")
 
             aes_list    = tagList(aes_list,
               div(style="display:inline-block",
@@ -2946,51 +2887,6 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
     element = fgb_res[["element"]],
     desc    = fgb_res[["desc"]])
   #------------------------------------
-
-
-# # Creating "Parameters" data view
-# # Creates an empty new data view
-# state = DW_new_view(state)
-#
-#
-# # Setting the key
-# state[["DW"]][["ui"]][["current_key"]] = "Parameters"
-# current_view = DW_fetch_current_view(state)
-# current_view[["key"]] = state[["DW"]][["ui"]][["current_key"]]
-# state = DW_set_current_view(state, current_view)
-#
-#
-# # Grouping by subject
-# state[["DW"]][["ui"]][["select_dw_element"]]         = "group"
-# state[["DW"]][["ui"]][["select_fds_group_column"]]   = "ID"
-# dwb_res  = dwrs_builder(state)
-# dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
-# state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
-#
-# # Getting the first row of each grouping
-# state[["DW"]][["ui"]][["select_dw_element"]]          = "onerow"
-# dwb_res  = dwrs_builder(state)
-# dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
-# state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
-#
-# # Selecting the columns to keep
-# state[["DW"]][["ui"]][["select_dw_element"]]          = "select"
-# state[["DW"]][["ui"]][["select_fds_select_column"]]   =
-#                  c("ID", "DOSE", "DOSE_STR", "Cohort",
-#                    "ROUTE", "ka", "CL", "Vc", "Vp", "Q")
-# dwb_res  = dwrs_builder(state)
-# dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
-# state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
-#
-#
-# # Pivot longer:
-# state[["DW"]][["ui"]][["select_dw_element"]]          = "longer"
-# state[["DW"]][["ui"]][["select_fds_longer_column"]]   = c("ka", "CL", "Vc", "Vp", "Q")
-# state[["DW"]][["ui"]][["select_fds_longer_names"]]    = "parameter"
-# state[["DW"]][["ui"]][["select_fds_longer_values"]]   = "values"
-# dwb_res  = dwrs_builder(state)
-# dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
-# state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
 
   # This functions works both in a shiny app and outside of one
   # if we're in a shiny app then the 'session' then the class of

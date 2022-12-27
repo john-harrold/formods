@@ -3,12 +3,20 @@ ZZ:
   code: # module specific code options
     readOnly: TRUE
     mode:     r
+  # Controls what is shown in the compact ui mode:
+  compact:
+    code:    TRUE 
+    clip:    TRUE 
   reporting:
     enabled: FALSE
     priority: 1
   # put different formatting options (widths, heights,
   # shinyWidgets button sizes, etc) here.
   formatting:
+    # Dimensions of code snippet box
+    code:
+      width:  800
+      height: 300
     input:
       width: 100
   labels:
