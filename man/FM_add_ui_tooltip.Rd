@@ -32,7 +32,7 @@ return the original uiele unchanged.
 Adds a tool tip to a user element.
 }
 \examples{
-interactive(
+if(interactive()){
 # We need a module state object to use this function:
 id="UD"
 sess_res = UD_test_mksession(session=list(), id=id)
@@ -40,5 +40,5 @@ state = sess_res$state
 uiele = shiny::textInput(inputId = "my input", label="example input")
 
 uiele = FM_add_ui_tooltip(state, uiele)
-)
+}
 }
