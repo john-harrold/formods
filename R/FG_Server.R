@@ -2754,8 +2754,8 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
   state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
   state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
   state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
-  state[["FG"]][["ui"]][["select_component_color"]]     = "Cohort"
-  state[["FG"]][["ui"]][["select_component_group"]]     = "ID"
+  state[["FG"]][["ui"]][["select_component_color"]]     = "CMT"
+  state[["FG"]][["ui"]][["select_component_group"]]     = "IDCMT"
 
   fgb_res  = fers_builder(state)
   state = FG_build( state,
@@ -2869,7 +2869,11 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
   state[["FG"]][["ui"]][["select_component_x"]]         = "parameter"
   state[["FG"]][["ui"]][["select_component_y"]]         = "values"
   state[["FG"]][["ui"]][["select_component_fill"]]      = "Cohort"
-  state[["FG"]][["ui"]][["select_component_group"]]     = "Cohort"
+  # The select_component* ui elements are recycled in the UI and would
+  # normally be reset to "" when a new figure element is loaded. For the
+  # purposes here we need to reset those manually. 
+  state[["FG"]][["ui"]][["select_component_group"]]     = ""
+  state[["FG"]][["ui"]][["select_component_color"]]     = ""
 
   fgb_res  = fers_builder(state)
   state = FG_build( state,
