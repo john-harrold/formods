@@ -2819,7 +2819,7 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   # Creating "PK/PD 3mg SD IV" data view
   state = DW_new_view(state)
   # Updating the key
-  state[["DW"]][["ui"]][["current_key"]] = "PK/PD 3mg SD IV"
+  state[["DW"]][["ui"]][["current_key"]] = "PK/PD 3mg SD IV w/BQL"
   current_view = DW_fetch_current_view(state)
   current_view[["key"]] = state[["DW"]][["ui"]][["current_key"]]
   state = DW_set_current_view(state, current_view)
@@ -2835,15 +2835,15 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
   state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
 
-  # Removes BQL values
-  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
-  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DV"
-  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "!="
-  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
-
-  dwb_res  = dwrs_builder(state)
-  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
-  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+ ## Removes BQL values
+ #state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+ #state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DV"
+ #state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "!="
+ #state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+ #
+ #dwb_res  = dwrs_builder(state)
+ #dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+ #state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
 
   # The cohort we want:
   state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
@@ -2859,7 +2859,7 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   # Creating "PK/PD 3mg MD SC (first dose)" data view
   state = DW_new_view(state)
   # Updating the key
-  state[["DW"]][["ui"]][["current_key"]] = "PK/PD 3mg MD SC (first dose)"
+  state[["DW"]][["ui"]][["current_key"]] = "PK/PD 3mg MD SC (first dose) w/BQL"
   current_view = DW_fetch_current_view(state)
   current_view[["key"]] = state[["DW"]][["ui"]][["current_key"]]
   state = DW_set_current_view(state, current_view)
@@ -2875,15 +2875,15 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
   state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
 
-  # Removes BQL values
-  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
-  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DV"
-  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "!="
-  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
-
-  dwb_res  = dwrs_builder(state)
-  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
-  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+ ## Removes BQL values
+ #state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+ #state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DV"
+ #state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "!="
+ #state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+ #
+ #dwb_res  = dwrs_builder(state)
+ #dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+ #state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
 
   # The cohort we want:
   state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
@@ -2900,6 +2900,46 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DOSE_NUM"
   state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
   state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 1
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+  #------------------------------------
+  # Creating "PK 3mg SD IV w/BQL" data view
+  state = DW_new_view(state)
+  # Updating the key
+  state[["DW"]][["ui"]][["current_key"]] = "PK 3mg SD IV w/BQL"
+  current_view = DW_fetch_current_view(state)
+  current_view[["key"]] = state[["DW"]][["ui"]][["current_key"]]
+  state = DW_set_current_view(state, current_view)
+
+  # Adding the filtering elements:
+  # Just the observations
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+  # The cohort we want:
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "Cohort"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "%in%"
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = "SD 3 mg IV"
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+  # The output we want:
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "CMT"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "%in%"
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = "C_ng_ml"
 
   dwb_res  = dwrs_builder(state)
   dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
