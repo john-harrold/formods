@@ -695,7 +695,7 @@ code}
 
 #'@export
 #'@title Fetch Module Datasets
-#'@description Fetches the datasets contained in the model
+#'@description Fetches the datasets contained in the module. 
 #'@param state UD state from \code{UD_fetch_state()}
 #'@return Character object vector with the lines of code
 #'@return list containing the following elements

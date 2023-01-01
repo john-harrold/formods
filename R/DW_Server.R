@@ -2484,7 +2484,7 @@ res}
 
 #'@export
 #'@title Fetch Module Datasets
-#'@description Fetches the datasets contained in the model
+#'@description Fetches the datasets contained in the module.
 #'@param state UD state from \code{UD_fetch_state()}
 #'@return Character object vector with the lines of code
 #'@return list containing the following elements
@@ -2643,6 +2643,16 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
   state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
 
+  # Removes BQL values
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DV"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "!="
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
   # creating an IDCMT column for grouping
   state[["DW"]][["ui"]][["select_dw_element"]]          = "mutate"
   state[["DW"]][["ui"]][["select_fds_mutate_column"]]   = "IDCMT"
@@ -2667,6 +2677,16 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
   state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
   state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+  # Removes BQL values
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DV"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "!="
   state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
 
   dwb_res  = dwrs_builder(state)
@@ -2707,6 +2727,16 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
   state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
   state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+  # Removes BQL values
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DV"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "!="
   state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
 
   dwb_res  = dwrs_builder(state)
@@ -2805,6 +2835,16 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
   state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
 
+  # Removes BQL values
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DV"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "!="
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
   # The cohort we want:
   state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
   state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "Cohort"
@@ -2829,6 +2869,16 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
   state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
   state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+  # Removes BQL values
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "DV"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "!="
   state[["DW"]][["ui"]][["fds_filter_rhs"]]             = 0
 
   dwb_res  = dwrs_builder(state)

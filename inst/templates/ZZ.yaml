@@ -7,8 +7,12 @@ ZZ:
   compact:
     code:    TRUE 
     clip:    TRUE 
+  # This is where you put reporting options. The expected options are shown
+  # here, but module-specific options can also be added if needed:
   reporting:
     enabled: FALSE
+    # Priority of reporting relative to other modules 
+    # (higher numbers are reported first)
     priority: 1
   # put different formatting options (widths, heights,
   # shinyWidgets button sizes, etc) here.

@@ -298,7 +298,7 @@ res}
 
 #'@export
 #'@title Fetch Module Datasets
-#'@description Fetches the datasets contained in the model
+#'@description Fetches the datasets contained in the module. 
 #'@param state ZZ state from \code{ZZ_fetch_state()}
 #'@return Character object vector with the lines of code
 #'@return list containing the following elements
