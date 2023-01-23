@@ -13,6 +13,7 @@
 
 #'@import cli
 #'@importFrom digest digest
+#'@importFrom writexl write_xlsx
 
 
 #'@export
@@ -372,7 +373,25 @@ FM_fetch_app_code = function(session){
     mods_found = list()
 
     # We start with the preamble
-    code_chunks = c(state[["yaml"]][["FM"]][["code"]][["gen_preamble"]], "\n")
+    code_chunks = c(state[["yaml"]][["FM"]][["code"]][["gen_preamble"]])
+
+    # Finding the packages used by each module and creating 
+    app_packages = c()
+    for(tmp_mod_key in names(app_state)){
+      app_packages = c(app_packages,
+        app_state[[tmp_mod_key]][["MC"]][["code"]][["packages"]])
+    }
+
+    app_packages = sort(unique(app_packages))
+    app_packages = paste0('library("',app_packages,'")')
+
+    code_chunks = c(code_chunks, app_packages, "\n")
+
+    # Creating a word reporting object to use generate elements
+    code_chunks = c("# This reporting object has the formatting  ", 
+                    "# information for table generation",
+                    state[["yaml"]][["FM"]][["reporting"]][["content_init"]][["docx"]],
+                    "\n")
 
     # This contains the modules that should generate code in the order in which the should be generated
     gen_mods = state[["yaml"]][["FM"]][["code"]][["gen_mods"]]
@@ -393,7 +412,6 @@ FM_fetch_app_code = function(session){
             if(exists(MOD_FUNC, mode="function")){
               tmp_code  = NULL
               FUNC_CALL = paste0("tmp_code = ", MOD_FUNC,"(tmp_state)")
-          
           
               eval(parse(text=FUNC_CALL))
           
@@ -867,6 +885,15 @@ FM_init_state = function(
   state[["FM_yaml_file"]]    = FM_yaml_file
   state[["MOD_yaml_file"]]   = MOD_yaml_file
 
+  # Copying yaml files to the user dir so they will be 
+  # available for export scripts
+  user_dir   = FM_fetch_user_files_path(state)
+  config_dir = file.path(user_dir, "config")
+  if(!dir.exists(config_dir)){
+    dir.create(config_dir, recursive=TRUE)
+  }
+  file.copy(FM_yaml_file,  config_dir, overwrite=TRUE)
+  file.copy(MOD_yaml_file, config_dir, overwrite=TRUE)
 
 state}
 

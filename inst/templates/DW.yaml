@@ -157,6 +157,7 @@ MC:
   code: # module specific code options
     readOnly: TRUE
     mode:     r    
+    packages: ["dplyr", "tidyr"]
   # Name of the data set after wrangling it should be different than the value
   # in the UD section
   ds_object_name: "DW_myDS"

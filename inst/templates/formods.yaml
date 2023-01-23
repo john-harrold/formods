@@ -10,17 +10,12 @@ FM:
     # File name of the R script to contain generation code
     gen_file: formods_export.R
     # This is the preamble used in script generation. It goes on the
-    # top. Feel free to add to it if you need to.
+    # top. Feel free to add to it if you need to. Note that packages should be
+    # listed in the packages section at the same level. 
     gen_preamble: |-
       # formods automated output
       # https://formods.ubiquity.tools/
       rm(list=ls())
-      library(ggplot2)
-      library(ggforce)
-      library(readxl)
-      library(readr)
-      library(dplyr)
-      library(tidyr)
     # When generating scripts to reproduce the 
     # app elements you can list the module types
     # in the order they need to be appended. For 
@@ -28,6 +23,9 @@ FM:
     # before the data wrangling (DW) modules. The 
     # text that follows will be placed before the
     # module code
+    # Each module should have a packages section that lists the packages
+    # needed for code genereated for that module. 
+    packages: ["onbrand", "writexl"]
     gen_mods:  
       UD: |-
          # Loading data

@@ -37,6 +37,7 @@ Imports:
   zip
 Suggests:
   ggpubr,
+  flextable,
   knitr,
   plotly,
   clipr,

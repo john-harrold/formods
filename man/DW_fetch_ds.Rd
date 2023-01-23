@@ -33,7 +33,7 @@ list containing the following elements
 }
 }
 \description{
-Fetches the datasets contained in the model
+Fetches the datasets contained in the module.
 }
 \examples{
 # We need a state variable

@@ -39,6 +39,7 @@ MC:
     - xls
     - xlsx
   code: # module specific code options
+    packages: ["readxl", "readr"]
     readOnly: TRUE
     mode:     r    
   # Name of the data set after being loaded

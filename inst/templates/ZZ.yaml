@@ -1,6 +1,7 @@
 # The ZZ field is a skeleton for constructing new modules
 ZZ:
   code: # module specific code options
+    packages: ["XXX"]
     readOnly: TRUE
     mode:     r
   # Controls what is shown in the compact ui mode:

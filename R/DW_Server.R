@@ -3,7 +3,6 @@
 #'@import shiny
 #'@import shinyWidgets
 #'@importFrom digest digest
-#'@importFrom readr read_csv
 #'@importFrom rlang .data
 #'@importFrom shinyAce aceEditor updateAceEditor
 #'@importFrom yaml read_yaml
@@ -1262,6 +1261,7 @@ DW_Server <- function(id,
              input$button_dw_del,
              input$button_dw_copy,
              input$button_dw_save,
+             input$hot_fg_elements,
              react_state[[id_ASM]])
       })
       # This updates the reaction state:

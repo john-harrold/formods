@@ -68,7 +68,9 @@ ui <- dashboardPage(
     tags$style(HTML(CSS))
   ),
     tabItems(
-       tabItem(tabName="app_state", box(title="Manage App State", htmlOutput(NS("ASM", "ui_asm_compact")))),
+       tabItem(tabName="app_state", 
+                 box(title="Manage App State", 
+                     htmlOutput(NS("ASM", "ui_asm_compact")))),
        tabItem(tabName="upload",
                box(title="Load Data", width=12,
                  fluidRow(
@@ -76,17 +78,17 @@ ui <- dashboardPage(
                    column(width=6,
                      htmlOutput(NS("UD",  "UD_ui_compact"))),
                    column(width=6,
-                       tags$p(
-                           tags$img(
-                           class = "wrapfig",
-                           src   = "https://github.com/john-harrold/formods/raw/master/man/figures/logo.png",
-                           width = 100,
-                           alt = "formods logo" ),
-                         'Formods is a set of modules and an framework for developing modules
-                         which interact and create code to replicate analyses performed within an app.
-                         To experiment download this',
-                       tags$a("test dataset", href=data_url),
-                              'and upload it into the App using the form on the left.'))
+       tags$p(
+           tags$img(
+           class = "wrapfig",
+           src   = "https://github.com/john-harrold/formods/raw/master/man/figures/logo.png",
+           width = 100,
+           alt = "formods logo" ),
+         'Formods is a set of modules and an framework for developing modules
+         which interact and create code to replicate analyses performed within an app.
+         To experiment download this',
+       tags$a("test dataset", href=data_url),
+              'and upload it into the App using the form on the left.'))
                  )
                )
                ),

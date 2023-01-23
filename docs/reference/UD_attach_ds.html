@@ -144,7 +144,7 @@
 <span class="r-in"><span><span class="va">id</span><span class="op">=</span><span class="st">"UD"</span></span></span>
 <span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="UD_test_mksession.html">UD_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:b4bd907af4f3e3b571027d1230bf99f1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:48559d397570afc9fba8ad9b252fa75a</span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># This is the full path to a test data file:</span></span></span>
@@ -210,7 +210,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "formods_export.R"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$gen_preamble</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# formods automated output\n# https://formods.ubiquity.tools/\nrm(list=ls())\nlibrary(ggplot2)\nlibrary(ggforce)\nlibrary(readxl)\nlibrary(readr)\nlibrary(dplyr)\nlibrary(tidyr)"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# formods automated output\n# https://formods.ubiquity.tools/\nrm(list=ls())"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$packages</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "onbrand" "writexl"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$gen_mods</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$gen_mods$UD</span>
@@ -404,6 +407,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "csv"  "tsv"  "xls"  "xlsx"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MC$code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$code$packages</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "readxl" "readr" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MC$code$readOnly</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -423,7 +429,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $UD$data_file_local</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmp5pCWoA/temp_libpathb5f1424db0f3/formods/test_data/TEST_DATA.xlsx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpxTZiOQ/temp_libpath88ae3e8b8ca6/formods/test_data/TEST_DATA.xlsx"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $UD$data_file_ext</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".xlsx"</span>
@@ -444,23 +450,23 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "myDS"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $UD$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "b4bd907af4f3e3b571027d1230bf99f1"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "48559d397570afc9fba8ad9b252fa75a"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $UD$contents</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 18,360 × 33</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       ID  TIME NTIME…¹ NTIME…² TIME_DY TIME_HR   AMT    DV RECDESC  DOSE DOSE_…³</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1  0     0         0     0         0      3<span style="color: #949494;">e</span>6    0  dose        3 3 mg   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1  0.25  0.010<span style="text-decoration: underline;">4</span>    0.25  0.010<span style="text-decoration: underline;">4</span>    0.25   0<span style="color: #949494;"> </span>  <span style="text-decoration: underline;">1</span>255  BM_ng_…     3 3 mg   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     1  0.25  0.010<span style="text-decoration: underline;">4</span>    0.25  0.010<span style="text-decoration: underline;">4</span>    0.25   0<span style="color: #949494;"> </span>   816  C_ng_ml     3 3 mg   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     1  0.5   0.020<span style="text-decoration: underline;">8</span>    0.5   0.020<span style="text-decoration: underline;">8</span>    0.5    0<span style="color: #949494;"> </span>  <span style="text-decoration: underline;">1</span>259  BM_ng_…     3 3 mg   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     1  0.5   0.020<span style="text-decoration: underline;">8</span>    0.5   0.020<span style="text-decoration: underline;">8</span>    0.5    0<span style="color: #949494;"> </span>   814. C_ng_ml     3 3 mg   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     1  1     0.041<span style="text-decoration: underline;">7</span>    1     0.041<span style="text-decoration: underline;">7</span>    1      0<span style="color: #949494;"> </span>  <span style="text-decoration: underline;">1</span>269  BM_ng_…     3 3 mg   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     1  1     0.041<span style="text-decoration: underline;">7</span>    1     0.041<span style="text-decoration: underline;">7</span>    1      0<span style="color: #949494;"> </span>   812. C_ng_ml     3 3 mg   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     1  2     0.083<span style="text-decoration: underline;">3</span>    2     0.083<span style="text-decoration: underline;">3</span>    2      0<span style="color: #949494;"> </span>  <span style="text-decoration: underline;">1</span>287  BM_ng_…     3 3 mg   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     1  2     0.083<span style="text-decoration: underline;">3</span>    2     0.083<span style="text-decoration: underline;">3</span>    2      0<span style="color: #949494;"> </span>   806. C_ng_ml     3 3 mg   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     1  4     0.167     4     0.167     4      0<span style="color: #949494;"> </span>  <span style="text-decoration: underline;">1</span>324  BM_ng_…     3 3 mg   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 18,350 more rows, 22 more variables: Cohort &lt;chr&gt;, ROUTE &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 19,080 × 33</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       ID TIME_DY TIME_HR NTIME…¹ NTIME…²  TIME   AMT    DV RECDESC  DOSE DOSE_…³</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1  0         0     0         0     0      3<span style="color: #949494;">e</span>6    0  dose        3 3 mg   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1  0         0     0         0     0      0<span style="color: #949494;"> </span>  <span style="text-decoration: underline;">1</span>250  BM_ng_…     3 3 mg   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     1  0         0     0         0     0      0<span style="color: #949494;"> </span>     0  C_ng_ml     3 3 mg   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     1  0.010<span style="text-decoration: underline;">4</span>    0.25  0.010<span style="text-decoration: underline;">4</span>    0.25  0.25   0<span style="color: #949494;"> </span>  <span style="text-decoration: underline;">1</span>255  BM_ng_…     3 3 mg   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     1  0.010<span style="text-decoration: underline;">4</span>    0.25  0.010<span style="text-decoration: underline;">4</span>    0.25  0.25   0<span style="color: #949494;"> </span>   816  C_ng_ml     3 3 mg   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     1  0.020<span style="text-decoration: underline;">8</span>    0.5   0.020<span style="text-decoration: underline;">8</span>    0.5   0.5    0<span style="color: #949494;"> </span>  <span style="text-decoration: underline;">1</span>259  BM_ng_…     3 3 mg   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     1  0.020<span style="text-decoration: underline;">8</span>    0.5   0.020<span style="text-decoration: underline;">8</span>    0.5   0.5    0<span style="color: #949494;"> </span>   814. C_ng_ml     3 3 mg   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     1  0.041<span style="text-decoration: underline;">7</span>    1     0.041<span style="text-decoration: underline;">7</span>    1     1      0<span style="color: #949494;"> </span>  <span style="text-decoration: underline;">1</span>269  BM_ng_…     3 3 mg   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     1  0.041<span style="text-decoration: underline;">7</span>    1     0.041<span style="text-decoration: underline;">7</span>    1     1      0<span style="color: #949494;"> </span>   812. C_ng_ml     3 3 mg   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     1  0.083<span style="text-decoration: underline;">3</span>    2     0.083<span style="text-decoration: underline;">3</span>    2     2      0<span style="color: #949494;"> </span>  <span style="text-decoration: underline;">1</span>287  BM_ng_…     3 3 mg   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 19,070 more rows, 22 more variables: Cohort &lt;chr&gt;, ROUTE &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   WT &lt;dbl&gt;, SUBTYPE &lt;chr&gt;, SEX &lt;chr&gt;, F1 &lt;dbl&gt;, ka &lt;dbl&gt;, CL &lt;dbl&gt;, Vc &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Vp &lt;dbl&gt;, Q &lt;dbl&gt;, BM_IC &lt;dbl&gt;, kdeg_BM &lt;dbl&gt;, Emax &lt;dbl&gt;, EC50 &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   CMT &lt;chr&gt;, DUR &lt;dbl&gt;, EVID &lt;dbl&gt;, NDose &lt;chr&gt;, DOSE_NUM &lt;dbl&gt;,</span></span>
@@ -475,10 +481,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmp5pCWoA/temp_libpathb5f1424db0f3/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpxTZiOQ/temp_libpath88ae3e8b8ca6/formods/templates/formods.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmp5pCWoA/temp_libpathb5f1424db0f3/formods/templates/UD.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpxTZiOQ/temp_libpath88ae3e8b8ca6/formods/templates/UD.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
