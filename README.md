@@ -40,8 +40,12 @@ You can install the development version from
 
 ``` r
 # install.packages("devtools")
+devtools::install_github("john-harrold/onbrand", dependencies=TRUE)
 devtools::install_github("john-harrold/formods", dependencies=TRUE)
 ```
+
+Note that because `formods` depends on `onbrand` you will need to first
+install the development version of `onbrand`.
 
 # Getting started
 
