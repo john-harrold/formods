@@ -8,6 +8,7 @@ FM_init_state(
   FM_yaml_file,
   MOD_yaml_file,
   id,
+  dep_mod_ids = c(),
   MT,
   button_counters,
   ui_ids,
@@ -21,6 +22,8 @@ FM_init_state(
 \item{MOD_yaml_file}{Module configuration file with MC as main section.}
 
 \item{id}{Shiny module ID.}
+
+\item{dep_mod_ids}{Vector of module ids this module depends on.}
 
 \item{MT}{Type of module using the short name (e.g. "UD", "FG", etc.).}
 

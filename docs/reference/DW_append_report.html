@@ -102,7 +102,7 @@ generated (<code>FALSE</code>).</p></dd>
 
 <p>list containing the following elements</p><ul><li><p>isgood:    Return status of the function.</p></li>
 <li><p>hasrptele: Boolean indicator if the module has any reportable elements.</p></li>
-<li><p>code:      Data wrangling R command.</p></li>
+<li><p>code:      Code to generate reporting elements.</p></li>
 <li><p>msgs:      Messages to be passed back to the user.</p></li>
 <li><p>rpt:       Report with any additions passed back to the user.</p></li>
 </ul></div>
@@ -172,19 +172,7 @@ generated (<code>FALSE</code>).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Description="Observations"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_1",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Description="Observations"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["sheets"]][["DW_myDS_2"]]=DW_myDS_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_2",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Description="PK 3mg SD IV"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_2",</span>
@@ -198,19 +186,7 @@ generated (<code>FALSE</code>).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Description="PK 3mg MD SC (first dose)"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_3",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Description="PK 3mg MD SC (first dose)"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["sheets"]][["DW_myDS_4"]]=DW_myDS_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_4",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Description="Parameters"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_4",</span>
@@ -224,12 +200,6 @@ generated (<code>FALSE</code>).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Description="PK/PD 3mg SD IV w/BQL"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_5",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Description="PK/PD 3mg SD IV w/BQL"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["sheets"]][["DW_myDS_6"]]=DW_myDS_6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
@@ -237,19 +207,7 @@ generated (<code>FALSE</code>).</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Description="PK/PD 3mg MD SC (first dose) w/BQL"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_6",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Description="PK/PD 3mg MD SC (first dose) w/BQL"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["sheets"]][["DW_myDS_7"]]=DW_myDS_7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_7",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Description="PK 3mg SD IV w/BQL"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_7",</span>

@@ -1810,6 +1810,7 @@ DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD,session){
     MOD_yaml_file   = MOD_yaml_file,
     id              = id,
     MT              = "DW",
+    dep_mod_ids     = c(id_UD),
     button_counters = button_counters,
     ui_ids          = ui_ids,
     ui_hold         = ui_hold,
@@ -2398,7 +2399,7 @@ code}
 #'\itemize{
 #'  \item{isgood:}    Return status of the function.
 #'  \item{hasrptele:} Boolean indicator if the module has any reportable elements.
-#'  \item{code:}      Data wrangling R command.
+#'  \item{code:}      Code to generate reporting elements. 
 #'  \item{msgs:}      Messages to be passed back to the user.
 #'  \item{rpt:}       Report with any additions passed back to the user.
 #'}
@@ -2466,7 +2467,6 @@ DW_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
         if(!gen_code_only){
           eval(parse(text=code_chunk))}
         # Appending to returned code
-        code = c(code, code_chunk)
         code = c(code, code_chunk)
       }
     }

@@ -1762,6 +1762,7 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
     FM_yaml_file    = FM_yaml_file,
     MOD_yaml_file   = MOD_yaml_file,
     id              = id,
+    dep_mod_ids     = c(id_UD, id_DW),
     MT              = "FG",
     button_counters = button_counters,
     ui_ids          = ui_ids,
@@ -2568,7 +2569,7 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
                    'rpt  = onbrand::report_add_slide(rpt,                              ',
                    '          template = "content_list",                               ',
                    '          elements = list(                                         ',
-            paste0('            title        = list( content = "', key,'",               '),
+            paste0('            title        = list( content = "', key,'",             '),
                    '                                 type    = "text"),                ',
             paste0('            content_body = list( content = ', fg_object_name, ',   '),
                    '                                 type    = "ggplot")))               '

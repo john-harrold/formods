@@ -815,6 +815,7 @@ app_state}
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id Shiny module ID.
+#'@param dep_mod_ids Vector of module ids this module depends on.
 #'@param MT Type of module using the short name (e.g. "UD", "FG", etc.).
 #'@param button_counters Vector of button UI elements that need to be tracked.
 #'@param ui_ids List of UI ids in the model.
@@ -845,6 +846,7 @@ FM_init_state = function(
                       FM_yaml_file,
                       MOD_yaml_file,
                       id,
+                      dep_mod_ids = c(),
                       MT,
                       button_counters,
                       ui_ids,
@@ -882,6 +884,7 @@ FM_init_state = function(
 
   state[["MOD_TYPE"]]        = MT
   state[["id"]]              = id
+  state[["dep_mod_ids"]]     = dep_mod_ids
   state[["FM_yaml_file"]]    = FM_yaml_file
   state[["MOD_yaml_file"]]   = MOD_yaml_file
 
@@ -1455,4 +1458,90 @@ FM_add_ui_tooltip = function(state, uiele, tooltip = "mytooltip", position="righ
      }
    }
 uiele}
+
+
+#'@export
+#'@title Fetches Dependency Information
+#'@description  For a given state and session this function will determine the
+#'module ids that are dependent as well as any packages the module elements
+#'might depend on.
+#'@param state Current module state after yaml file has been read
+#'@param session Shiny session variable
+#'@return list with the following elements:
+#' \itemize{
+#' \item{mod_ids}  Dependent module ids.
+#' \item{packages}     List of package dependencies.
+#' \item{package_code} Library commands to load packages.
+#' }
+#'@examples
+#' # We need a Shiny session object to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' session  = sess_res$session
+#' state    = sess_res$state
+#' mod_deps = FM_fetch_deps(state, session)
+FM_fetch_deps = function(state, session){
+  # determining module id dependencies
+  packages      = c()
+  package_code  = c()
+  deps_found    = c()
+  deps_to_check = c()
+  if(!is.null(state[["dep_mod_ids"]])){
+    deps_found   = state[["dep_mod_ids"]] 
+    deps_to_check = state[["dep_mod_ids"]] 
+
+    # This should determine all of the module ids the current state depends on
+    while(!is.null(deps_to_check) > 0){
+      tmp_dep = deps_to_check[1]
+      tmp_state = FM_fetch_mod_state(id=tmp_dep, session=session)
+      if(!is.null(tmp_state[["dep_mod_ids"]])){
+        # If any dependencies in the current state are new then we 
+        # add them to deps_found and deps_to_check
+        if(any(!(tmp_state[["dep_mod_ids"]] %in% deps_found))){
+          
+          # it's kind of ugly so I'm just creating a new vector 
+          # for the new dependencies. 
+          new_deps = tmp_state[["dep_mod_ids"]][!(tmp_state[["dep_mod_ids"]] %in% deps_found)]
+
+          # This appends them
+          deps_found    = c(deps_found,    new_deps)
+          deps_to_check = c(deps_to_check, new_deps)
+        }
+      }
+
+      if(length(deps_to_check) == 1){
+        deps_to_check = NULL
+      } else {
+        deps_to_check = deps_to_check[-1]
+      }
+    }
+
+    # We also add itself 
+    deps_found = sort(unique(c(deps_found, state[["id"]])))
+
+    # Now we loop through each dependency and pull out the required packages
+    if(!is.null(deps_found)){
+      for(tmp_dep in deps_found){
+        tmp_state = FM_fetch_mod_state(id=tmp_dep, session=session)
+        if(!is.null(tmp_state[["MC"]][["code"]][["packages"]])){
+          packages = c(packages, 
+            tmp_state[["MC"]][["code"]][["packages"]])
+        }
+      }
+    }
+
+    if(!is.null(packages)){
+      packages = sort(unique(packages))
+      package_code = paste0('library("', packages, '")')
+    }
+  }
+
+
+  res = list(
+    mod_ids      = deps_found, 
+    packages     = packages,
+    package_code = package_code
+  )
+ 
+res}
 
