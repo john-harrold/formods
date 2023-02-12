@@ -157,6 +157,11 @@ DW_Server <- function(id,
           uiele = "# No data wragling elements defined yet!"
         } else {
           uiele = current_view[["code"]]
+          # Adding the preamble to load necessary packages
+          mod_deps = FM_fetch_deps(state = state, session = session)
+          if("package_code" %in% names(mod_deps)){
+            uiele = paste0(c(mod_deps$package_code, "", uiele), collapse="\n")
+          }
         }
 
         shinyAce::updateAceEditor(
@@ -2223,8 +2228,10 @@ DW_set_current_view    = function(state, dw_view){
     paste(good_elements[["cmd"]], collapse="\n")
 
   # updating the all of the code:
-  codeall = c(state[["DW"]][["code_previous"]],   # Data loading code
+  codeall = c("# Loading data",
+              state[["DW"]][["code_previous"]],   # Data loading code
               dw_view[["code_previous"]],         # Copying the data object to the DW object
+              "",
               "# Data wrangling",
               good_elements[["cmd"]])
 

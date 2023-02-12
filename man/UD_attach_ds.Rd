@@ -68,20 +68,20 @@ sheet           = "DATA"
 # We will also attach the sheets along with it
 sheets = readxl::excel_sheets(data_file_local)
 
-ds_read_res = UD_ds_read(state, 
+ds_read_res = UD_ds_read(state,
   data_file_ext   = data_file_ext,
   data_file_local = data_file_local,
   data_file       = data_file,
   sheets          = sheets,
   sheet          = sheet)
 
-# This would contain the loading code that will cascade down 
-# to the other modules when generating snippets and 
+# This would contain the loading code that will cascade down
+# to the other modules when generating snippets and
 # reproducible scripts
 code = ds_read_res$code
 
-# This is the R Object name that is used internally 
-# and in generated scripts. Should be the same as in 
+# This is the R Object name that is used internally
+# and in generated scripts. Should be the same as in
 # the code above
 object_name = ds_read_res$object_name
 
@@ -95,7 +95,7 @@ state =  UD_attach_ds(
          data_file       = data_file,
          sheet           = sheet,
          sheets          = sheets,
-         code            = code, 
+         code            = code,
          object_name     = object_name,
          contents        = contents)
 

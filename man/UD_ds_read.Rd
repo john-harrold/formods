@@ -56,7 +56,7 @@ sheet            = "DATA"
 # We will also attach the sheets along with it
 sheets = readxl::excel_sheets(data_file_local)
 
-ds_read_res = UD_ds_read(state, 
+ds_read_res = UD_ds_read(state,
   data_file_ext   = data_file_ext,
   data_file_local = data_file_local,
   data_file       = data_file,

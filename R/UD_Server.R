@@ -131,12 +131,17 @@ UD_Server <- function(id,
                              FM_yaml_file  = FM_yaml_file,
                              MOD_yaml_file = MOD_yaml_file)
 
-      if(is.null(state[["UD"]][["code"]])){
-        uiele = "# No file loaded"
-      } else {
-        uiele = state[["UD"]][["code"]]
+      uiele = "# No file loaded"
+      if(!is.null(state[["UD"]][["code"]])){
+        if(state[["UD"]][["code"]]!=""){
+          uiele = state[["UD"]][["code"]]
+          # Adding the preamble to load necessary packages
+          mod_deps = FM_fetch_deps(state = state, session = session)
+          if("package_code" %in% names(mod_deps)){
+            uiele = paste0(c(mod_deps$package_code, "", uiele), collapse="\n")
+          }
+        }
       }
-
 
       shinyAce::updateAceEditor(
         session         = session,
@@ -200,7 +205,7 @@ UD_Server <- function(id,
         )
       }
 
-      uiele  = tagList( 
+      uiele  = tagList(
            div(style="display:inline-block;width:100%", htmlOutput(NS(id, "ui_ud_load_data"))),
            htmlOutput(NS(id, "ui_ud_select_sheets")),
            div(style="display:inline-block;vertical-align:top;width:40px", uiele_code_button),
@@ -281,16 +286,16 @@ UD_Server <- function(id,
 #' MOD_yaml_file = system.file(package = "formods", "templates", "UD.yaml")
 #' # This is the module id:
 #' id = "UD"
-#' # Within shiny both session and input variables will exist, 
+#' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
 #' sess_res = UD_test_mksession(session=list())
 #' session = sess_res$session
 #' input   = sess_res$input
 #' state = UD_fetch_state(
-#'            id            = id, 
-#'            input         = input, 
-#'            session       = session, 
-#'            FM_yaml_file  = FM_yaml_file,  
+#'            id            = id,
+#'            input         = input,
+#'            session       = session,
+#'            FM_yaml_file  = FM_yaml_file,
 #'            MOD_yaml_file = MOD_yaml_file )
 UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_file ){
 
@@ -423,7 +428,7 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
 #'@param session Shiny session variable
 #'@return list containing an empty UD state
 #'@examples
-#' # Within shiny a session variable will exist, 
+#' # Within shiny a session variable will exist,
 #' # this creates one here for testing purposes:
 #' sess_res = UD_test_mksession(session=list())
 #' session = sess_res$session
@@ -476,13 +481,13 @@ UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 #' id="UD"
 #' sess_res = UD_test_mksession(session=list())
 #' state = sess_res$state
-#' 
+#'
 #' # This is the full path to a test data file:
 #' data_file_local  =  system.file(package="formods", "test_data", "TEST_DATA.xlsx")
 #'
 #' # Excel file extension
 #' data_file_ext    = "xlsx"
-#' 
+#'
 #' # Base file name
 #' data_file        = "TEST_DATA.xlsx"
 #'
@@ -492,26 +497,26 @@ UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 #' # We will also attach the sheets along with it
 #' sheets = readxl::excel_sheets(data_file_local)
 #'
-#' ds_read_res = UD_ds_read(state, 
+#' ds_read_res = UD_ds_read(state,
 #'   data_file_ext   = data_file_ext,
 #'   data_file_local = data_file_local,
 #'   data_file       = data_file,
 #'   sheets          = sheets,
 #'   sheet          = sheet)
 #'
-#' # This would contain the loading code that will cascade down 
-#' # to the other modules when generating snippets and 
+#' # This would contain the loading code that will cascade down
+#' # to the other modules when generating snippets and
 #' # reproducible scripts
 #' code = ds_read_res$code
 #'
-#' # This is the R Object name that is used internally 
-#' # and in generated scripts. Should be the same as in 
+#' # This is the R Object name that is used internally
+#' # and in generated scripts. Should be the same as in
 #' # the code above
 #' object_name = ds_read_res$object_name
 #'
 #' # This is the actual dataset:
 #' contents   = ds_read_res$contents
-#' 
+#'
 #' state =  UD_attach_ds(
 #'          state,
 #'          data_file_local = data_file_local,
@@ -519,7 +524,7 @@ UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 #'          data_file       = data_file,
 #'          sheet           = sheet,
 #'          sheets          = sheets,
-#'          code            = code, 
+#'          code            = code,
 #'          object_name     = object_name,
 #'          contents        = contents)
 #'
@@ -591,13 +596,13 @@ UD_attach_ds = function(
 #' id="UD"
 #' sess_res = UD_test_mksession(session=list())
 #' state = sess_res$state
-#' 
+#'
 #' # This is the full path to a test data file:
 #' data_file_local  =  system.file(package="formods", "test_data", "TEST_DATA.xlsx")
 #'
 #' # Excel file extension
 #' data_file_ext    = "xlsx"
-#' 
+#'
 #' # Base file name
 #' data_file        = "TEST_DATA.xlsx"
 #'
@@ -607,7 +612,7 @@ UD_attach_ds = function(
 #' # We will also attach the sheets along with it
 #' sheets = readxl::excel_sheets(data_file_local)
 #'
-#' ds_read_res = UD_ds_read(state, 
+#' ds_read_res = UD_ds_read(state,
 #'   data_file_ext   = data_file_ext,
 #'   data_file_local = data_file_local,
 #'   data_file       = data_file,
@@ -695,7 +700,7 @@ code}
 
 #'@export
 #'@title Fetch Module Datasets
-#'@description Fetches the datasets contained in the module. 
+#'@description Fetches the datasets contained in the module.
 #'@param state UD state from \code{UD_fetch_state()}
 #'@return Character object vector with the lines of code
 #'@return list containing the following elements
@@ -792,7 +797,7 @@ UD_test_mksession = function(session, id = "UD"){
 
   # This functions works both in a shiny app and outside of one
   # if we're in a shiny app then the 'session' then the class of
-  # session will be a ShinySession. Otherwise it'll be a list if 
+  # session will be a ShinySession. Otherwise it'll be a list if
   # we're not in the app (ie just running test examples) then
   # we need to set the state manually
   if(!("ShinySession" %in% class(session))){

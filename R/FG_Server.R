@@ -1129,6 +1129,11 @@ FG_Server <- function(id,
         uiele = "# No figure elements defined yet!"
       } else {
         uiele = current_fig[["code"]]
+        # Adding the preamble to load necessary packages
+        mod_deps = FM_fetch_deps(state = state, session = session)
+        if("package_code" %in% names(mod_deps)){
+          uiele = paste0(c(mod_deps$package_code, "", uiele), collapse="\n")
+        }
       }
 
       shinyAce::updateAceEditor(

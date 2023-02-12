@@ -22,7 +22,7 @@ list containing an empty UD state
 Creates a list of the initialized module state
 }
 \examples{
-# Within shiny a session variable will exist, 
+# Within shiny a session variable will exist,
 # this creates one here for testing purposes:
 sess_res = UD_test_mksession(session=list())
 session = sess_res$session

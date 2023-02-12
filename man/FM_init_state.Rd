@@ -42,7 +42,7 @@ List with state initialized.
 Initializes a formods state object with common elements.
 }
 \examples{
-# Within shiny a session variable will exist, 
+# Within shiny a session variable will exist,
 # this creates examples here for testing purposes:
 sess_res = UD_test_mksession(session=list())
 session = sess_res$session
