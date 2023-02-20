@@ -16,23 +16,9 @@ FM:
       # formods automated output
       # https://formods.ubiquity.tools/
       rm(list=ls())
-    # When generating scripts to reproduce the 
-    # app elements you can list the module types
-    # in the order they need to be appended. For 
-    # example the upload data modules (UD) must go
-    # before the data wrangling (DW) modules. The 
-    # text that follows will be placed before the
-    # module code
     # Each module should have a packages section that lists the packages
     # needed for code genereated for that module. 
     packages: ["onbrand", "writexl"]
-    gen_mods:  
-      UD: |-
-         # Loading data
-      DW: |-
-         # Wrangling data
-      FG: |-
-         # Generating figures
   notifications:
     config:
       # You can put any arguments here that would be arguments for

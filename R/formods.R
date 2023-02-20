@@ -342,6 +342,7 @@ hold_status}
 #'@description Takes the current state of the app and builds a script to
 #'reproduce the analysis within the app.
 #'@param session Shiny session variable
+#'@param mod_ids Vector of module IDs and order they are needed (used for code generation).
 #'@return list with the following elements:
 #' \itemize{
 #'   \item{isgood:} Boolean indicating the whether code generation was
@@ -357,7 +358,7 @@ hold_status}
 #' session = sess_res$session
 #' app_code = FM_fetch_app_code(session)
 #' cat(app_code$code)
-FM_fetch_app_code = function(session){
+FM_fetch_app_code = function(session, mod_ids){
   isgood          = TRUE
   msgs            = c()
   code            = ""
@@ -394,10 +395,8 @@ FM_fetch_app_code = function(session){
                     state[["yaml"]][["FM"]][["reporting"]][["content_init"]][["docx"]],
                     "")
 
-    # This contains the modules that should generate code in the order in which the should be generated
-    gen_mods = state[["yaml"]][["FM"]][["code"]][["gen_mods"]]
     # Now we walk through each module type
-    for(gen_mod in names(gen_mods)){
+    for(gen_mod in mod_ids){
       # Then we walk through each state key and pull the code
       # if it matchs the value in gen_mod
       for(state_key in names(app_state)){
@@ -408,7 +407,8 @@ FM_fetch_app_code = function(session){
         if(!is.null(MOD_TYPE)){
           if(MOD_TYPE == gen_mod){
 
-            # Getting the preamble code and appending it to the top
+            # Getting the preamble code. This just collects it in 
+            # preamble_chunks and will be appended to the top down below.
             mod_deps = FM_fetch_deps(state=tmp_state, session = session)
             if("package_code" %in% names(mod_deps)){
               preamble_chunks = c(preamble_chunks, mod_deps$package_code)
@@ -426,7 +426,7 @@ FM_fetch_app_code = function(session){
               if(!is.null(tmp_code)){
                 # This adds a header the first time a module type is encountered
                 if(!(MOD_TYPE %in% names(mods_found))){
-                  code_chunks = c(code_chunks,  gen_mods[[gen_mod]])
+                  code_chunks = c(code_chunks,   tmp_state[["MC"]][["code"]][["preamble"]])
                   mods_found[[MOD_TYPE]] = TRUE
                 }
                 code_chunks = c(code_chunks, tmp_code, "")
@@ -1139,6 +1139,7 @@ FM_generate_report = function(state,
       # lowest:
       priorities = rev(unique(sort(mod_rpt_info[["priority"]])))
       # Now we walk through the priorities
+      FM_le(state, paste0("  Generating report: ", rpttype))
       for(tmp_priority in priorities){
         tmp_info = dplyr::filter(mod_rpt_info, .data[["priority"]] == tmp_priority)
         # next we walk through each row in the current priority level
@@ -1152,7 +1153,7 @@ FM_generate_report = function(state,
 
             if(exists(MOD_FUNC, mode="function")){
 
-              FM_le(state, paste0("  appending report for module:", tmp_MOD_TYPE, " id:", tmp_id, " priority:", tmp_priority))
+              FM_le(state, paste0("    appending report for module:", tmp_MOD_TYPE, " id:", tmp_id, " priority:", tmp_priority))
 
               # We need the module state:
               tmp_state = FM_fetch_mod_state(session, tmp_id)

@@ -36,8 +36,8 @@ ui <- dashboardPage(
     tags$style(HTML(CSS))
   ),
     tabItems(
-       tabItem(tabName="app_state", 
-                 box(title="Manage App State", 
+       tabItem(tabName="app_state",
+                 box(title="Manage App State",
                      htmlOutput(NS("ASM", "ui_asm_compact")))),
        tabItem(tabName="upload",
                box(title="Load Data", width=12,
@@ -76,14 +76,21 @@ server <- function(input, output, session) {
   # changes in the module state outside of the module
   react_FM = reactiveValues()
 
+  # This is the list of module ids used for reproducable script generation. The
+  # order here is important.
+  mod_ids = c("UD", "DW", "FG")
+
   #Populating with test data
   #FG_test_mksession(session)
-
   # Module servers
-  ASM_Server(id="ASM",                                           react_state=react_FM)
-  UD_Server( id="UD", id_ASM = "ASM",                            react_state=react_FM)
-  DW_Server( id="DW", id_ASM = "ASM",id_UD = "UD",               react_state=react_FM)
-  FG_Server( id="FG", id_ASM = "ASM",id_UD = "UD", id_DW = "DW", react_state=react_FM)
+  ASM_Server(id="ASM",
+             react_state=react_FM, mod_ids = mod_ids)
+  UD_Server( id="UD", id_ASM = "ASM",
+             react_state=react_FM)
+  DW_Server( id="DW", id_ASM = "ASM",id_UD = "UD",
+             react_state=react_FM)
+  FG_Server( id="FG", id_ASM = "ASM",id_UD = "UD", id_DW = "DW",
+             react_state=react_FM)
 }
 
 shinyApp(ui, server)

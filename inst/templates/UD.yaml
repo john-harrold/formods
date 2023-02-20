@@ -42,5 +42,9 @@ MC:
     packages: ["readxl", "readr"]
     readOnly: TRUE
     mode:     r    
+    # The preamble goes before the section of generated code for this module
+    # in the export script that is generated on save.
+    preamble: |- 
+      # Loading data
   # Name of the data set after being loaded
   ds_object_name: "myDS"

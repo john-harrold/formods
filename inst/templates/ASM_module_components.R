@@ -74,8 +74,12 @@ server <- function(input, output, session) {
   # changes in the module state outside of the module
   react_FM = reactiveValues()
 
+  # This is the list of module ids used for reproducable script generation. The
+  # order here is important.
+  mod_ids = c("UD", "DW", "FG")
+
   # Module server
-  ASM_Server(id="ASM", react_state=react_FM)
+  ASM_Server(id="ASM", react_state=react_FM, mod_ids=mod_ids)
 
   # Current state outside of the module
   output$ui_state  =  renderText({

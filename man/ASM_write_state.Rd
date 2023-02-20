@@ -4,7 +4,7 @@
 \alias{ASM_write_state}
 \title{Write State to File for Saving}
 \usage{
-ASM_write_state(state, session, file)
+ASM_write_state(state, session, file, mod_ids)
 }
 \arguments{
 \item{state}{ASM state from \code{ASM_fetch_state()}}
@@ -12,6 +12,8 @@ ASM_write_state(state, session, file)
 \item{session}{Shiny session variable}
 
 \item{file}{File name to write zipped state.}
+
+\item{mod_ids}{Vector of module IDs and order they are needed (used for code generation).}
 }
 \description{
 Called from download handler and used to write a saved state

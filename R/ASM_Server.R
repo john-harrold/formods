@@ -17,6 +17,7 @@
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
+#'@param mod_ids Vector of module IDs and order they are needed (used for code generation).
 #'@return UD Server object
 #'@example inst/test_apps/FM_compact.R
 ASM_Server <- function(id,
@@ -26,7 +27,8 @@ ASM_Server <- function(id,
                       MOD_yaml_file = system.file(package = "formods",
                                                   "templates",
                                                   "ASM.yaml"),
-                      react_state  = NULL) {
+                      react_state  = NULL,
+                      mod_ids) {
   moduleServer(id, function(input, output, session) {
 
     #------------------------------------
@@ -127,10 +129,11 @@ ASM_Server <- function(id,
 
         # Runing in a tryCatch enviornment to trap errors otherwise
         # they are lost. If it fails we log them.
-        tcres = FM_tc("ws_res = ASM_write_state(state, session, file)",
+        tcres = FM_tc("ws_res = ASM_write_state(state, session, file, mod_ids)",
                       list(state   = state,
                            session = session,
-                           file    = file),
+                           file    = file,
+                           mod_ids = mod_ids),
                       c("ws_res"))
 
         if(!tcres$isgood){
@@ -602,17 +605,21 @@ ASM_fetch_dlfn = function(state, extension=".zip"){
   dlfn    = paste0(save_bfn, extension)
   dlfn}
 
+#'@export
 #'@title Write State to File for Saving
 #'@description Called from download handler and used to write a saved state
 #'value if that is null
 #'@param state ASM state from \code{ASM_fetch_state()}
 #'@param session Shiny session variable
 #'@param file File name to write zipped state.
+#'@param mod_ids Vector of module IDs and order they are needed (used for code generation).
 #'@return NULL
-ASM_write_state = function(state, session, file){
+ASM_write_state = function(state, session, file, mod_ids){
 
-  if(system.file(package = "shinybusy") !=""){
-    shinybusy::show_modal_spinner(text=state[["MC"]][["labels"]][["busy"]][["saving_state"]])
+  if((any(c("ShinySession", "session_proxy") %in% class(session)))){
+    if(system.file(package = "shinybusy") !=""){
+      shinybusy::show_modal_spinner(text=state[["MC"]][["labels"]][["busy"]][["saving_state"]])
+    }
   }
 
 
@@ -626,7 +633,7 @@ ASM_write_state = function(state, session, file){
   app_state = FM_fetch_app_state(session)
 
   # Pulling out the reproducable app code
-  app_code = FM_fetch_app_code(session)
+  app_code = FM_fetch_app_code(session=session, mod_ids = mod_ids)
 
   # Generating reports
   switch_gen_rpts = state[["ASM"]][["ui"]][["switch_gen_rpts"]]
@@ -650,8 +657,10 @@ ASM_write_state = function(state, session, file){
       if(!switch_gen_rpts){
         code_only_msg = " code only "
       }
-      shinybusy::update_modal_spinner(text=
-              paste0(state[["MC"]][["labels"]][["busy"]][[rpttype]], code_only_msg, "(",rptctr, "/", length(rpttypes),")"))
+      if((any(c("ShinySession", "session_proxy") %in% class(session)))){
+        shinybusy::update_modal_spinner(text=
+                paste0(state[["MC"]][["labels"]][["busy"]][[rpttype]], code_only_msg, "(",rptctr, "/", length(rpttypes),")"))
+      }
     }
     rpt_file_name = paste0("report.", rpttype)
     grres = FM_generate_report(
@@ -691,8 +700,10 @@ ASM_write_state = function(state, session, file){
   saveRDS(app_state, file.path(user_dir, "fmas.rds"))
 
 
-  if(system.file(package = "shinybusy") !=""){
-    shinybusy::remove_modal_spinner()
+  if((any(c("ShinySession", "session_proxy") %in% class(session)))){
+    if(system.file(package = "shinybusy") !=""){
+      shinybusy::remove_modal_spinner()
+    }
   }
 
   # Zipping everything up into an archive

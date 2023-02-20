@@ -73,7 +73,7 @@ value if that is null</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ASM_write_state</span><span class="op">(</span><span class="va">state</span>, <span class="va">session</span>, <span class="va">file</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ASM_write_state</span><span class="op">(</span><span class="va">state</span>, <span class="va">session</span>, <span class="va">file</span>, <span class="va">mod_ids</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -88,6 +88,10 @@ value if that is null</p>
 
 <dt>file</dt>
 <dd><p>File name to write zipped state.</p></dd>
+
+
+<dt>mod_ids</dt>
+<dd><p>Vector of module IDs and order they are needed (used for code generation).</p></dd>
 
 </dl></div>
 

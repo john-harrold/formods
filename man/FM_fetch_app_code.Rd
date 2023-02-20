@@ -4,10 +4,12 @@
 \alias{FM_fetch_app_code}
 \title{Fetches the code to reproduce analysis}
 \usage{
-FM_fetch_app_code(session)
+FM_fetch_app_code(session, mod_ids)
 }
 \arguments{
 \item{session}{Shiny session variable}
+
+\item{mod_ids}{Vector of module IDs and order they are needed (used for code generation).}
 }
 \value{
 list with the following elements:

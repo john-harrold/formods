@@ -2386,7 +2386,8 @@ DW_fetch_code = function(state){
       codes=c(codes,
               paste0("# ", state[["DW"]][["views"]][[view_id]][["key"]]),
               state[["DW"]][["views"]][[view_id]][["code_previous"]],
-              state[["DW"]][["views"]][[view_id]][["code_dw_only"]])
+              state[["DW"]][["views"]][[view_id]][["code_dw_only"]],
+              "")
     }
     code = paste(codes, collapse="\n")
   }
