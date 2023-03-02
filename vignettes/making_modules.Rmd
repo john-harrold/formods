@@ -56,16 +56,31 @@ You can rename the `ZZ` portion of the files with the module short name you're u
 
 For the module to work and interact with other modules, there are certain funcitons that are expected. 
 
-- `ZZ_Server`  
-- `ZZ_init_state`  
-- `ZZ_fetch_state`  
+- `ZZ_Server` Shiny server function.
+- `ZZ_init_state` Creates an empty the formods state for the module. 
+- `ZZ_fetch_state` Each module has a function to fetch the state. Within this function there should be no interactivity. Any access of the elements to the Shiny input should be isolated. Based on differences between the input elements (current state of the app) and the stored app state can be used to trigger different things.
 - `ZZ_fetch_code` This takes as it's first argument the module state. When called with only this argument it should return a character object containing all of the code needed to generate the elements of this module represented in the app. You can assume that any modules this one depends on will be defined previously. For example the `FG` module will return only that code associated with generating figures. It will be appended to the code from the `UD` and `DW` modules that define loading the dataset and creation of the data views. For modules where no code is generated (e.g. `ASM`) just return `NULL`.
-
 - `ZZ_append_report`    
+- `ZZ_fetch_ds` If a module provides data sets to be used in other modules you need to create this function. It should return at least the following:
+  - `hasds` Boolean variable indicating if the modules currently has any exportable datasets.
+  - `isgood` General return status of the funciton. Set to FALSE if any errors were encoutered.
+  - `msgs` A character vector of any messages to pass back to the user. 
+  - `ds` A module can provide multiple datasets. This is a list with the following elements for each dataset:
+    - `label` Text label for the dataset
+    - `MOD_TYPE` Short name for the type of module.
+    - `id` module ID.
+    - `DS` Dataframe containing the actual dataset.
+    - `DSMETA` Metadata describing DS.
+    - `code` Complete code to build dataset.
+    - `checksum` Module checksum.
+    - `DSchecksum` Dataset checksum.
+- `ZZ_test_mksession` When testing outside of Shiny it is useful to have a prepopulated session, intput, etc objects with actual data. Each module shoudl have a `test_mksession` function that populates these objects with useful data. If your module depends on a different module, you can use the `test_mksession` for the modyou yours depends on. For example the data wrangling module depends on the upload data module. So the `DW_test_mksession` function uses `UD_test_mksession` internally to load the test dataset and then builds on top of that. The function should return the following: 
+  - `isgood` Boolean indicating the exit status of the function.
+  - `session` The value Shiny session variable (in app) or a list (outside of app) after initialization.
+  - `input` The value of the shiny input at the end of the session initialization.
+  - `state` App state.
+  - `rsc` The `react_state` components.
 
-- `ZZ_fetch_ds`    
-
-- `ZZ_test_mksession`    
 
 # Expected UI elements
 
@@ -92,17 +107,14 @@ Say you are using the UD module to feed data into the DW module and the user goe
 
 ## Module state and reacting to changes
 
- `react_state[[id_UD]][["DS"]][["checksum"]]`
+Changes in module states are detected with the `react_state` object. For a given module of type `"XX"` with a module id of `"ID"` you would detect changes by reacting to `react_state[["ID"]]` and looking for changes in the checksum element below:
 
-* `isgood` A boolean variable to indicate the general state of the module. 
+ `react_state[["ID"]][["XX"]][["checksum"]]`
+ 
+
 * `checksum` A checksum that can be used to detect changes in this module. For
   example in the UD module this will change if the uploaded file or the sheet
   selected from a currently uplo:waded file changes. 
-* `code_previous` Carries over the code from other modules the current one
-  depends on. For ecample the DW module would depend on the UD model to load
-  the data. So `code_previous` here would contain the code to load the
-  dataset.
-* `code` Code to repelicate the current state of the module. 
 
 # Notifications 
 
@@ -141,13 +153,26 @@ be displayed:
     })
 ``` 
 
-# Suggested packages
-JMH Notes on tooltips, modals etc. go here
+# Adding tooltips 
 
-## Notifications and Modals with `{shinybusy}`
+Tooltips are created interally using the suggested `{prompter}` package. To add a tool tip to a ui element you would use the `FM_add_ui_tooltip()` function. For example to add the tool tip, `You need to type harder!` to a text input you would do the following:
 
-## Tooltips with `{prompter}`
+```r
+uiele = shiny::textInput(
+          inputId = "some_text", 
+          label   = "You need to type harder!")
+uiele = FM_add_ui_tooltip(state, uiele)
+```
 
+# Pausing the screen
+
+To pause the screen the `{shinybusy}` package is also used. This is controlled with two functions: `FM_pause_screen()` is used to pause the screen and/or update the pause message, 
+and `FM_resume_screen()` is used end the pause and resume interaction with the user.
+
+```r
+FM_pause_screen(state, session)
+FM_resume_screen(state, session)
+```
 
 # formods state objects
 

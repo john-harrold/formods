@@ -53,10 +53,10 @@ structure of the list is defined below:
    \item{checksum:          checksum of the FG module used to detect changes in the module.}
    \item{aes_elements:}     Plot elements defined by aesthetics (i.e. the X in geom_X)
    \item{current_fig:}      fig_id of the currently figure.
-   \item{fig_cntr:}         Counter for figures, incremented each time a new figure is created. 
-   \item{DSV:}              Available data sets from the UD and DW modules. 
+   \item{fig_cntr:}         Counter for figures, incremented each time a new figure is created.
+   \item{DSV:}              Available data sets from the UD and DW modules.
    \item{figs:}             List of figures. Each view has the following structure:
-     \itemize{  
+     \itemize{
        \item{add_isgood:    JMH}
        \item{checksum:       Checksum of the figure used to detect changes in the figure.}
        \item{code:           Code to generate figure from start to finish.}

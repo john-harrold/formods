@@ -22,7 +22,7 @@ list containing the following elements
 \itemize{
  \item{isgood:}    Return status of the function.
  \item{hasrptele:} Boolean indicator if the module has any reportable elements.
- \item{code:}      Code to generate reporting elements. 
+ \item{code:}      Code to generate reporting elements.
  \item{msgs:}      Messages to be passed back to the user.
  \item{rpt:}       Report with any additions passed back to the user.
 }

@@ -438,6 +438,14 @@ DW_Server <- function(id,
         WDS = DW_fetch_current_view(state)[["WDS"]]
         # Columns in that dataset
         dscols = names(WDS)
+
+        # Pulling out column formatting information.
+        hfmt        = FM_fetch_data_format(WDS, state)
+        sel_subtext = as.vector(unlist( hfmt[["col_subtext"]]))
+        sel_style   = rep("", length(dscols))
+
+
+
         uiele = tagList(
           div(style = "display: flex;",
               pickerInput(
@@ -445,7 +453,10 @@ DW_Server <- function(id,
                 label    = NULL,
                 width    = 200,
                 choices  = dscols,
-                options  = list(
+                choicesOpt =list(
+                  style   = sel_style,
+                  subtext = sel_subtext),
+                      options  = list(
                   size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
                   title = state[["MC"]][["labels"]][["fds_rename_column"]])
               ),
@@ -477,6 +488,12 @@ DW_Server <- function(id,
         WDS = DW_fetch_current_view(state)[["WDS"]]
         # Columns in that dataset
         dscols = names(WDS)
+
+        # Pulling out column formatting information.
+        hfmt        = FM_fetch_data_format(WDS, state)
+        sel_subtext = as.vector(unlist( hfmt[["col_subtext"]]))
+        sel_style   = rep("", length(dscols))
+
         uiele = tagList(
           div(style = "display: flex;",
               pickerInput(
@@ -484,6 +501,9 @@ DW_Server <- function(id,
                 label    = NULL,
                 width    = 200,
                 choices  = dscols,
+                choicesOpt =list(
+                  style   = sel_style,
+                  subtext = sel_subtext),
                 multiple = TRUE,
                 options  = list(
                   size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
@@ -512,6 +532,12 @@ DW_Server <- function(id,
         WDS = DW_fetch_current_view(state)[["WDS"]]
         # Columns in that dataset
         dscols = names(WDS)
+
+        # Pulling out column formatting information.
+        hfmt        = FM_fetch_data_format(WDS, state)
+        sel_subtext = as.vector(unlist( hfmt[["col_subtext"]]))
+        sel_style   = rep("", length(dscols))
+
         uiele = tagList(
           div(style = "display: flex;",
               pickerInput(
@@ -519,6 +545,9 @@ DW_Server <- function(id,
                 label    = NULL,
                 width    = 200,
                 choices  = dscols,
+                choicesOpt =list(
+                  style   = sel_style,
+                  subtext = sel_subtext),
                 multiple = FALSE,
                 options  = list(
                   size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
@@ -529,6 +558,9 @@ DW_Server <- function(id,
                 label    = NULL,
                 width    = 200,
                 choices  = dscols,
+                choicesOpt =list(
+                  style   = sel_style,
+                  subtext = sel_subtext),
                 multiple = FALSE,
                 options  = list(
                   size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
@@ -557,6 +589,12 @@ DW_Server <- function(id,
         WDS = DW_fetch_current_view(state)[["WDS"]]
         # Columns in that dataset
         dscols = names(WDS)
+
+        # Pulling out column formatting information.
+        hfmt        = FM_fetch_data_format(WDS, state)
+        sel_subtext = as.vector(unlist( hfmt[["col_subtext"]]))
+        sel_style   = rep("", length(dscols))
+
         uiele = tagList(
           div(style = "display: flex;",
               pickerInput(
@@ -564,6 +602,9 @@ DW_Server <- function(id,
                 label    = NULL,
                 width    = 200,
                 choices  = dscols,
+                choicesOpt =list(
+                  style   = sel_style,
+                  subtext = sel_subtext),
                 multiple = TRUE,
                 options  = list(
                   size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
@@ -589,7 +630,6 @@ DW_Server <- function(id,
       uiele
     })
     #------------------------------------
-    #------------------------------------
     output$ui_dw_fds_select = renderUI({
       req(input$select_dw_element)
       state = DW_fetch_state(id              = id,
@@ -607,6 +647,12 @@ DW_Server <- function(id,
         WDS = DW_fetch_current_view(state)[["WDS"]]
         # Columns in that dataset
         dscols = names(WDS)
+
+        # Pulling out column formatting information.
+        hfmt        = FM_fetch_data_format(WDS, state)
+        sel_subtext = as.vector(unlist( hfmt[["col_subtext"]]))
+        sel_style   = rep("", length(dscols))
+
         uiele = tagList(
           div(style = "display: flex;",
               pickerInput(
@@ -614,6 +660,9 @@ DW_Server <- function(id,
                 label    = NULL,
                 width    = 200,
                 choices  = dscols,
+                choicesOpt =list(
+                  style   = sel_style,
+                  subtext = sel_subtext),
                 multiple = TRUE,
                 options  = list(
                   size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
@@ -694,16 +743,23 @@ DW_Server <- function(id,
         # Columns in that dataset
         dscols = names(WDS)
 
+        # Pulling out column formatting information.
+        hfmt        = FM_fetch_data_format(WDS, state)
+        sel_subtext = as.vector(unlist( hfmt[["col_subtext"]]))
+        sel_style   = rep("", length(dscols))
+
         uiele = pickerInput(
           inputId  = NS(id, "select_fds_filter_column"),
           label    = NULL,
           width    = 200,
           choices  = dscols,
+          choicesOpt =list(
+            style   = sel_style,
+            subtext = sel_subtext),
           options  = list(
             size  = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
             title = state[["MC"]][["labels"]][["fds_filter_column"]])
         )
-
       }
       uiele
     })
@@ -1094,10 +1150,14 @@ DW_Server <- function(id,
        df = data.frame("No_Data"= state[["MC"]][["labels"]][["no_dataset"]])
      }
 
+     # Pulling out column header formatting information.
+     hfmt = FM_fetch_data_format(df, state)
+
      uiele = rhandsontable::rhandsontable(
        df,
-       width  = state[["MC"]][["formatting"]][["preview"]][["width"]],
-       height = state[["MC"]][["formatting"]][["preview"]][["height"]],
+       width      = state[["MC"]][["formatting"]][["preview"]][["width"]],
+       height     = state[["MC"]][["formatting"]][["preview"]][["height"]],
+       colHeaders = as.vector(unlist(hfmt[["col_heads"]])),
        rowHeaders = NULL
        )
 
@@ -2407,7 +2467,7 @@ code}
 #'\itemize{
 #'  \item{isgood:}    Return status of the function.
 #'  \item{hasrptele:} Boolean indicator if the module has any reportable elements.
-#'  \item{code:}      Code to generate reporting elements. 
+#'  \item{code:}      Code to generate reporting elements.
 #'  \item{msgs:}      Messages to be passed back to the user.
 #'  \item{rpt:}       Report with any additions passed back to the user.
 #'}

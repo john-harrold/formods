@@ -70,9 +70,40 @@ FM:
     color_red:    "#FF475E"
     color_blue:   "#0088FF"
     color_purple: "#bd2cf4"
+
+  data_meta:
+    # This controls the overall format of headers and the select subtext for
+    # data frames with the following placeholders surrouned by ===:
+    # COLOR  - font color
+    # NAME   - colum name
+    # LABEL  - type label
+    # RANGE  - this depends on the nature of the data in the column:
+    #        - If there are between 1 and 3 values then those values are shown.
+    #        - If there are more than 3 values then the min and max are show.
+    data_header:  "<span style='color:===COLOR==='><b>===NAME===</b><br/><font size='-3'>===LABEL===</font></span>"
+    subtext:      "===LABEL===: ===RANGE==="
+    # Separator when showing more than three in a column. For exmaple if you
+    # had a dataset with 1,2,3,4,5,6 and many_sep was ",...," then it would
+    # appear as "1,...,6"
+    many_sep: ",⋅⋅⋅," 
+    # This controls the differences for different data types. Take the output
+    # of typeof(df$colname) and put an entry for that output here. 
+    data_types:
+      character:   
+        color:    "#DD4B39"
+        label:    "text"
+      double:         
+        color:    "#3C8DBC"
+        label:    "num"
+      integer:        
+        color:    "#3C8DBC"
+        label:    "num"
+      other:          
+        color:    "black"
+        label:    "other"
   labels:
     # JMH remove this once the datset stuff has been moved over
-    default_ds:         "Original data set"
+    default_ds:   "Original data set"
   user_files:
     use_tmpdir:     TRUE
   logging:

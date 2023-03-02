@@ -765,6 +765,8 @@ FG_Server <- function(id,
       # JMH check the columns are being pulled
       fig_dscols = names(state[["FG"]][["DSV"]][["ds"]][[current_fig[["fig_dsview"]]]][["DS"]])
 
+      tmp_dsview = state[["FG"]][["DSV"]][["ds"]][[current_fig[["fig_dsview"]]]][["DS"]]
+
       uiele = NULL
       if(state[["FG"]][["isgood"]]){
 
@@ -772,6 +774,12 @@ FG_Server <- function(id,
         # consistently
         if(curr_element %in% aes_elements){
           aes_list = tagList()
+
+          # Pulling out column header formatting information.
+          hfmt = FM_fetch_data_format(
+           state[["FG"]][["DSV"]][["ds"]][[current_fig[["fig_dsview"]]]][["DS"]],
+           state)
+
           for(aes_idx in 1:length(state[["MC"]][["elements"]][[curr_element]][["ui_aes"]])){
             # Aesthetic name
             ui_aes = state[["MC"]][["elements"]][[curr_element]][["ui_aes"]][aes_idx]
@@ -789,12 +797,14 @@ FG_Server <- function(id,
             sel_names      = c()
             sel_choices    = c()
             sel_style      = c()
+            sel_subtext    = c()
 
             # Making the first option Not Used if the aesthetic isn't
             # required:
             if(!ui_aes %in% state[["MC"]][["elements"]][[curr_element]][["aes_req"]]){
               sel_names      = c(sel_names  , state[["MC"]][["labels"]][["not_used"]])
               sel_choices    = c(sel_choices, "not_used")
+              sel_subtext    = c(sel_subtext, "")
               sel_style      = c(sel_style,
                   paste0("background: ", state[["yaml"]][["FM"]][["ui"]][["color_red"]] ,"; color: white;"))
             }
@@ -803,10 +813,12 @@ FG_Server <- function(id,
             sel_names   = c(sel_names  , fig_dscols)
             sel_choices = c(sel_choices, fig_dscols)
             sel_style   = c(sel_style  , rep("", length(fig_dscols)))
+            sel_subtext = c(sel_subtext, as.vector(unlist( hfmt[["col_subtext"]])))
 
             # Adding manual option
             sel_names      = c(sel_names  , state[["MC"]][["labels"]][["manual"]])
             sel_choices    = c(sel_choices, 'manual')
+            sel_subtext    = c(sel_subtext, "")
             sel_style      = c(sel_style,
                 paste0("background: ", state[["yaml"]][["FM"]][["ui"]][["color_blue"]] ,"; color: white;"))
 
@@ -817,7 +829,7 @@ FG_Server <- function(id,
             # to the value returned by the by the UI to the server:
             names(sel_choices) = sel_names
 
-            tmp_tI = 
+            tmp_tI =
               textInput(
                  inputId     = NS(id, id_manual),
                  label       = NULL,
@@ -839,7 +851,9 @@ FG_Server <- function(id,
                     choices    = sel_choices,
                     width      = state[["MC"]][["formatting"]][["components"]][["aes"]][["width"]],
                     options    = list(size = state[["yaml"]][["FM"]][["ui"]][["select_size"]]),
-                    choicesOpt = list( style = sel_style, "live-search"=TRUE)),
+                    choicesOpt = list( style   = sel_style,
+                                       subtext = sel_subtext,
+                                      "live-search"=TRUE)),
                   # Manual text input on the bottom
                     tmp_tI
                 )
@@ -1238,10 +1252,10 @@ FG_Server <- function(id,
 #'    \item{checksum:          checksum of the FG module used to detect changes in the module.}
 #'    \item{aes_elements:}     Plot elements defined by aesthetics (i.e. the X in geom_X)
 #'    \item{current_fig:}      fig_id of the currently figure.
-#'    \item{fig_cntr:}         Counter for figures, incremented each time a new figure is created. 
-#'    \item{DSV:}              Available data sets from the UD and DW modules. 
+#'    \item{fig_cntr:}         Counter for figures, incremented each time a new figure is created.
+#'    \item{DSV:}              Available data sets from the UD and DW modules.
 #'    \item{figs:}             List of figures. Each view has the following structure:
-#'      \itemize{  
+#'      \itemize{
 #'        \item{add_isgood:    JMH}
 #'        \item{checksum:       Checksum of the figure used to detect changes in the figure.}
 #'        \item{code:           Code to generate figure from start to finish.}
@@ -2877,7 +2891,7 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
   state[["FG"]][["ui"]][["select_component_fill"]]      = "Cohort"
   # The select_component* ui elements are recycled in the UI and would
   # normally be reset to "" when a new figure element is loaded. For the
-  # purposes here we need to reset those manually. 
+  # purposes here we need to reset those manually.
   state[["FG"]][["ui"]][["select_component_group"]]     = ""
   state[["FG"]][["ui"]][["select_component_color"]]     = ""
 

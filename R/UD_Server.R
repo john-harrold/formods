@@ -169,9 +169,14 @@ UD_Server <- function(id,
                              MOD_yaml_file = MOD_yaml_file)
 
       if(is.data.frame(state[["UD"]][["contents"]])){
+
+        # Pulling out column header formatting information.
+        hfmt = FM_fetch_data_format(state[["UD"]][["contents"]], state)
+
         uiele = rhandsontable::rhandsontable(state[["UD"]][["contents"]],
-                                             width  = state[["MC"]][["formatting"]][["preview"]][["width"]],
-                                             height = state[["MC"]][["formatting"]][["preview"]][["height"]])
+                                             colHeaders = as.vector(unlist(hfmt[["col_heads"]])),
+                                             width      = state[["MC"]][["formatting"]][["preview"]][["width"]],
+                                             height     = state[["MC"]][["formatting"]][["preview"]][["height"]])
       } else {uiele=NULL}
       uiele})
     #------------------------------------

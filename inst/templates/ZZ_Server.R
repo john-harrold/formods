@@ -351,3 +351,44 @@ ZZ_fetch_ds = function(state){
              msgs   = msgs,
              ds     = ds)
 res}
+
+#'@export
+#'@title Populate Session Data for Module Testing
+#'@description Populates the supplied session variable for testing.
+#'@param session Shiny session variable (in app) or a list (outside of app)
+#'@param id An ID string that corresponds with the ID used to call the modules UI elements
+#'@param id_UD An ID string that corresponds with the ID used to call the UD modules UI elements
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:} Boolean indicating the exit status of the function.
+#'   \item{session:} The value Shiny session variable (in app) or a list (outside of app) after initialization.
+#'   \item{input:} The value of the shiny input at the end of the session initialization.
+#'   \item{state:} App state.
+#'   \item{rsc:} The \code{react_state} components.
+#'}
+#'@examples
+#' sess_res = ZZ_test_mksession(session=list())
+ZZ_test_mksession = function(session, id = "ZZ", id_UD="UD"){
+
+  isgood = TRUE
+  rsc    = list()
+  input  = list()
+
+  # Populating the session with UD components
+  sess_res = UD_test_mksession(session, id = id_UD)
+  if(!("ShinySession" %in% class(session))){
+    session = sess_res[["session"]]
+  }
+
+  # Pulling out the react state components
+  rsc         = sess_res$rsc
+  react_state = rsc
+
+  res = list(
+    isgood  = isgood,
+    session = session,
+    input   = input,
+    state   = state,
+    rsc     = rsc
+  )
+}

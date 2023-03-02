@@ -407,7 +407,7 @@ FM_fetch_app_code = function(session, mod_ids){
         if(!is.null(MOD_TYPE)){
           if(MOD_TYPE == gen_mod){
 
-            # Getting the preamble code. This just collects it in 
+            # Getting the preamble code. This just collects it in
             # preamble_chunks and will be appended to the top down below.
             mod_deps = FM_fetch_deps(state=tmp_state, session = session)
             if("package_code" %in% names(mod_deps)){
@@ -443,7 +443,7 @@ FM_fetch_app_code = function(session, mod_ids){
     msgs   = "No modules found"
   }
 
-  # If there are preamble elements we prepend 
+  # If there are preamble elements we prepend
   # those to the code_chunks
   if(!is.null(preamble_chunks)){
     preamble_chunks = sort(unique(preamble_chunks))
@@ -1415,6 +1415,86 @@ FM_pause_screen = function(state, session, message){
     }
   }
 NULL}
+
+#'@export
+#'@title Creates Formatting for Datasets
+#'@description Takes a data frame and information in the site configureation
+#'to produce formatting information to make it easier for the user to see data
+#'type information. 
+#'@param df Raw dataframe to be built into an rhandsontable.
+#'@param state Current module state after yaml file has been read.
+#'@return list with the following elements:
+#' \itemize{
+#'   \item{col_heads:} Vector of formatting information for column headers to be
+#'   use with rhandsontable.
+#' }
+#'@examples
+#' # We need a module state object to use this function:
+#' sess_res = UD_test_mksession(session=list())
+#' state = sess_res$state
+#'
+#' data_file_local =  system.file(package="formods", "test_data", "TEST_DATA.xlsx")
+#' sheet           = "DATA"
+#'
+#' df = readxl::read_excel(path=data_file_local, sheet=sheet)
+#'
+#' FM_fetch_data_format(df, state)
+FM_fetch_data_format = function(df, state){
+  col_heads   = list()
+  col_subtext = list()
+  col_info    = list()
+  for(cname in names(df)){
+
+    # This pulls out the current column type (numeric, character, etc)
+    ctype = typeof(df[[cname]])
+
+    cfactor = is.factor(df[[cname]])
+
+    # These are the unique sorted column elements
+    col_ele = sort(unique(df[[cname]]))
+    if(length(col_ele) > 3){
+      crange = paste0(col_ele[1],
+                      state[["yaml"]][["FM"]][["data_meta"]][["many_sep"]],
+                      col_ele[length(col_ele)])
+    } else {
+      crange = paste0(col_ele, collapse=", ")
+    }
+
+    # If column type has not been defined then we default to "other"
+    if(!(ctype %in% names(state[["yaml"]][["FM"]][["data_meta"]][["data_types"]]))){
+      ctype = "other"
+    }
+
+    ccolor = state[["yaml"]][["FM"]][["data_meta"]][["data_types"]][[ctype]][["color"]]
+    clab   = state[["yaml"]][["FM"]][["data_meta"]][["data_types"]][[ctype]][["label"]]
+
+    # Building the header:
+    new_span = state[["yaml"]][["FM"]][["data_meta"]][["data_header"]]
+    new_span = stringr::str_replace_all(new_span, "===COLOR===",  ccolor)
+    new_span = stringr::str_replace_all(new_span, "===NAME===",   cname)  
+    new_span = stringr::str_replace_all(new_span, "===LABEL===",  clab)   
+    new_span = stringr::str_replace_all(new_span, "===RANGE===",  crange)   
+
+    # Building the subtext
+    new_sub = state[["yaml"]][["FM"]][["data_meta"]][["subtext"]]
+    new_sub = stringr::str_replace_all(new_sub, "===COLOR===",  ccolor)
+    new_sub = stringr::str_replace_all(new_sub, "===NAME===",   cname)  
+    new_sub = stringr::str_replace_all(new_sub, "===LABEL===",  clab)   
+    new_sub = stringr::str_replace_all(new_sub, "===RANGE===",  crange)   
+
+    # Stores the column information to be returned to the user
+    col_heads[[cname]]            = new_span
+    col_subtext[[cname]]          = new_sub
+
+    col_info[[cname]][["color"]]  = ccolor
+    col_info[[cname]][["label"]]  = clab  
+    col_info[[cname]][["factor"]] = cfactor
+  }
+  res = list(col_heads   = col_heads,
+             col_subtext = col_subtext,
+             col_info    = col_info)
+res}
+
 
 #'@export
 #'@title Stops Modal Screen Pause

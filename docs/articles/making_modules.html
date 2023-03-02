@@ -173,10 +173,19 @@ would go into <code>inst/templates</code>.</p>
 <p>For the module to work and interact with other modules, there are
 certain funcitons that are expected.</p>
 <ul>
-<li><p><code>ZZ_Server</code><br></p></li>
-<li><p><code>ZZ_init_state</code><br></p></li>
-<li><p><code>ZZ_fetch_state</code><br></p></li>
-<li><p><code>ZZ_fetch_code</code> This takes as it’s first argument the
+<li>
+<code>ZZ_Server</code> Shiny server function.</li>
+<li>
+<code>ZZ_init_state</code> Creates an empty the formods state for
+the module.</li>
+<li>
+<code>ZZ_fetch_state</code> Each module has a function to fetch the
+state. Within this function there should be no interactivity. Any access
+of the elements to the Shiny input should be isolated. Based on
+differences between the input elements (current state of the app) and
+the stored app state can be used to trigger different things.</li>
+<li>
+<code>ZZ_fetch_code</code> This takes as it’s first argument the
 module state. When called with only this argument it should return a
 character object containing all of the code needed to generate the
 elements of this module represented in the app. You can assume that any
@@ -185,11 +194,75 @@ modules this one depends on will be defined previously. For example the
 generating figures. It will be appended to the code from the
 <code>UD</code> and <code>DW</code> modules that define loading the
 dataset and creation of the data views. For modules where no code is
-generated (e.g. <code>ASM</code>) just return
-<code>NULL</code>.</p></li>
-<li><p><code>ZZ_append_report</code></p></li>
-<li><p><code>ZZ_fetch_ds</code></p></li>
-<li><p><code>ZZ_test_mksession</code></p></li>
+generated (e.g. <code>ASM</code>) just return <code>NULL</code>.</li>
+<li>
+<code>ZZ_append_report</code><br>
+</li>
+<li>
+<code>ZZ_fetch_ds</code> If a module provides data sets to be used
+in other modules you need to create this function. It should return at
+least the following:
+<ul>
+<li>
+<code>hasds</code> Boolean variable indicating if the modules
+currently has any exportable datasets.</li>
+<li>
+<code>isgood</code> General return status of the funciton. Set to
+FALSE if any errors were encoutered.</li>
+<li>
+<code>msgs</code> A character vector of any messages to pass back to
+the user.</li>
+<li>
+<code>ds</code> A module can provide multiple datasets. This is a
+list with the following elements for each dataset:
+<ul>
+<li>
+<code>label</code> Text label for the dataset</li>
+<li>
+<code>MOD_TYPE</code> Short name for the type of module.</li>
+<li>
+<code>id</code> module ID.</li>
+<li>
+<code>DS</code> Dataframe containing the actual dataset.</li>
+<li>
+<code>DSMETA</code> Metadata describing DS.</li>
+<li>
+<code>code</code> Complete code to build dataset.</li>
+<li>
+<code>checksum</code> Module checksum.</li>
+<li>
+<code>DSchecksum</code> Dataset checksum.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<code>ZZ_test_mksession</code> When testing outside of Shiny it is
+useful to have a prepopulated session, intput, etc objects with actual
+data. Each module shoudl have a <code>test_mksession</code> function
+that populates these objects with useful data. If your module depends on
+a different module, you can use the <code>test_mksession</code> for the
+modyou yours depends on. For example the data wrangling module depends
+on the upload data module. So the <code>DW_test_mksession</code>
+function uses <code>UD_test_mksession</code> internally to load the test
+dataset and then builds on top of that. The function should return the
+following:
+<ul>
+<li>
+<code>isgood</code> Boolean indicating the exit status of the
+function.</li>
+<li>
+<code>session</code> The value Shiny session variable (in app) or a
+list (outside of app) after initialization.</li>
+<li>
+<code>input</code> The value of the shiny input at the end of the
+session initialization.</li>
+<li>
+<code>state</code> App state.</li>
+<li>
+<code>rsc</code> The <code>react_state</code> components.</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section level2">
@@ -235,24 +308,18 @@ as tell your larger app that something has changed.</p>
 <div class="section level3">
 <h3 id="module-state-and-reacting-to-changes">Module state and reacting to changes<a class="anchor" aria-label="anchor" href="#module-state-and-reacting-to-changes"></a>
 </h3>
-<p><code>react_state[[id_UD]][["DS"]][["checksum"]]</code></p>
+<p>Changes in module states are detected with the
+<code>react_state</code> object. For a given module of type
+<code>"XX"</code> with a module id of <code>"ID"</code> you would detect
+changes by reacting to <code>react_state[["ID"]]</code> and looking for
+changes in the checksum element below:</p>
+<p><code>react_state[["ID"]][["XX"]][["checksum"]]</code></p>
 <ul>
-<li>
-<code>isgood</code> A boolean variable to indicate the general state
-of the module.</li>
 <li>
 <code>checksum</code> A checksum that can be used to detect changes
 in this module. For example in the UD module this will change if the
 uploaded file or the sheet selected from a currently uplo:waded file
 changes.</li>
-<li>
-<code>code_previous</code> Carries over the code from other modules
-the current one depends on. For ecample the DW module would depend on
-the UD model to load the data. So <code>code_previous</code> here would
-contain the code to load the dataset.</li>
-<li>
-<code>code</code> Code to repelicate the current state of the
-module.</li>
 </ul>
 </div>
 </div>
@@ -298,17 +365,30 @@ unprocessed notifications will be displayed:</p>
 <span>    <span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="suggested-packages">Suggested packages<a class="anchor" aria-label="anchor" href="#suggested-packages"></a>
+<h2 id="adding-tooltips">Adding tooltips<a class="anchor" aria-label="anchor" href="#adding-tooltips"></a>
 </h2>
-<p>JMH Notes on tooltips, modals etc. go here</p>
-<div class="section level3">
-<h3 id="notifications-and-modals-with-shinybusy">Notifications and Modals with <code>{shinybusy}</code><a class="anchor" aria-label="anchor" href="#notifications-and-modals-with-shinybusy"></a>
-</h3>
+<p>Tooltips are created interally using the suggested
+<a href="https://github.com/etiennebacher/prompter" class="external-link">prompter</a> package. To add a tool tip to a ui element you
+would use the <code><a href="../reference/FM_add_ui_tooltip.html">FM_add_ui_tooltip()</a></code> function. For example to
+add the tool tip, <code>You need to type harder!</code> to a text input
+you would do the following:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">uiele</span> <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textInput.html" class="external-link">textInput</a></span><span class="op">(</span></span>
+<span>          inputId <span class="op">=</span> <span class="st">"some_text"</span>, </span>
+<span>          label   <span class="op">=</span> <span class="st">"You need to type harder!"</span><span class="op">)</span></span>
+<span><span class="va">uiele</span> <span class="op">=</span> <span class="fu"><a href="../reference/FM_add_ui_tooltip.html">FM_add_ui_tooltip</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">uiele</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="tooltips-with-prompter">Tooltips with <code>{prompter}</code><a class="anchor" aria-label="anchor" href="#tooltips-with-prompter"></a>
-</h3>
-</div>
+<div class="section level2">
+<h2 id="pausing-the-screen">Pausing the screen<a class="anchor" aria-label="anchor" href="#pausing-the-screen"></a>
+</h2>
+<p>To pause the screen the <a href="https://github.com/dreamRs/shinybusy" class="external-link">shinybusy</a> package is also
+used. This is controlled with two functions:
+<code><a href="../reference/FM_pause_screen.html">FM_pause_screen()</a></code> is used to pause the screen and/or update
+the pause message, and <code><a href="../reference/FM_resume_screen.html">FM_resume_screen()</a></code> is used end the
+pause and resume interaction with the user.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/FM_pause_screen.html">FM_pause_screen</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">session</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/FM_resume_screen.html">FM_resume_screen</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">session</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="formods-state-objects">formods state objects<a class="anchor" aria-label="anchor" href="#formods-state-objects"></a>
