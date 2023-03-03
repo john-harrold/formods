@@ -33,5 +33,11 @@ sheet           = "DATA"
 
 df = readxl::read_excel(path=data_file_local, sheet=sheet)
 
-FM_fetch_data_format(df, state)
+hfmt = FM_fetch_data_format(df, state)
+
+# Column header formatting
+as.vector(unlist( hfmt[["col_heads"]]))
+
+# Column select subtext
+as.vector(unlist( hfmt[["col_subtext"]]))
 }

@@ -110,574 +110,63 @@ type information.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">=</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_excel</a></span><span class="op">(</span>path<span class="op">=</span><span class="va">data_file_local</span>, sheet<span class="op">=</span><span class="va">sheet</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">FM_fetch_data_format</span><span class="op">(</span><span class="va">df</span>, <span class="va">state</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;ID&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$TIME_DY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;TIME_DY&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$TIME_HR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;TIME_HR&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$NTIME_DY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;NTIME_DY&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$NTIME_HR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;NTIME_HR&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$TIME</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;TIME&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$AMT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;AMT&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$DV</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;DV&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$RECDESC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;RECDESC&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$DOSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;DOSE&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$DOSE_STR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;DOSE_STR&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$Cohort</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;Cohort&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$ROUTE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;ROUTE&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$WT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;WT&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$SUBTYPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;SUBTYPE&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$SEX</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;SEX&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$F1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;F1&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$ka</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;ka&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;CL&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$Vc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;Vc&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$Vp</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;Vp&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$Q</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;Q&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$BM_IC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;BM_IC&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$kdeg_BM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;kdeg_BM&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$Emax</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;Emax&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$EC50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;EC50&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$CMT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;CMT&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$DUR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;DUR&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$EVID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;EVID&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$NDose</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;NDose&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$DOSE_NUM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;DOSE_NUM&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$SUBTYPE_ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;SUBTYPE_ID&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_heads$SEX_ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;SEX_ID&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 1,⋅⋅⋅,360"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$TIME_DY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0,⋅⋅⋅,84"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$TIME_HR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0,⋅⋅⋅,2016"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$NTIME_DY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0,⋅⋅⋅,42"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$NTIME_HR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0,⋅⋅⋅,1008"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$TIME</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0,⋅⋅⋅,2016"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$AMT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0,⋅⋅⋅,5e+08"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$DV</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0,⋅⋅⋅,473500"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$RECDESC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text: BM_ng_ml, C_ng_ml, dose"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$DOSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 3,⋅⋅⋅,500"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$DOSE_STR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text: 10 mg,⋅⋅⋅,500 mg"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$Cohort</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text: MD 10 mg IV,⋅⋅⋅,SD 500 mg IV"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$ROUTE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text: IV, SC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$WT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 49.6,⋅⋅⋅,109"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$SUBTYPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text: HV, PT"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$SEX</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text: Female, Male"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$F1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0.744"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$ka</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0.0349,⋅⋅⋅,2.55"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0.0758,⋅⋅⋅,0.454"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$Vc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 1.41,⋅⋅⋅,12.7"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$Vp</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 1.23,⋅⋅⋅,7.44"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$Q</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0.0402,⋅⋅⋅,7.53"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$BM_IC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 543,⋅⋅⋅,2190"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$kdeg_BM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0.1"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$Emax</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 44,⋅⋅⋅,287"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$EC50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 300"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$CMT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text: Ac,⋅⋅⋅,C_ng_ml"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$DUR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$EVID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0, 1"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$NDose</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text: MD, SD"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$DOSE_NUM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 1,⋅⋅⋅,4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$SUBTYPE_ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0, 1"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_subtext$SEX_ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num: 0, 1"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$ID$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$ID$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$ID$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$TIME_DY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$TIME_DY$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$TIME_DY$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$TIME_DY$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$TIME_HR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$TIME_HR$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$TIME_HR$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$TIME_HR$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$NTIME_DY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$NTIME_DY$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$NTIME_DY$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$NTIME_DY$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$NTIME_HR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$NTIME_HR$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$NTIME_HR$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$NTIME_HR$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$TIME</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$TIME$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$TIME$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$TIME$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$AMT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$AMT$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$AMT$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$AMT$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DV</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DV$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DV$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DV$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$RECDESC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$RECDESC$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#DD4B39"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$RECDESC$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$RECDESC$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DOSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DOSE$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DOSE$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DOSE$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DOSE_STR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DOSE_STR$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#DD4B39"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DOSE_STR$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DOSE_STR$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Cohort</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Cohort$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#DD4B39"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Cohort$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Cohort$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$ROUTE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$ROUTE$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#DD4B39"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$ROUTE$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$ROUTE$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$WT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$WT$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$WT$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$WT$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SUBTYPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SUBTYPE$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#DD4B39"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SUBTYPE$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SUBTYPE$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SEX</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SEX$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#DD4B39"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SEX$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SEX$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$F1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$F1$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$F1$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$F1$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$ka</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$ka$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$ka$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$ka$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$CL$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$CL$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$CL$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Vc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Vc$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Vc$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Vc$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Vp</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Vp$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Vp$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Vp$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Q</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Q$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Q$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Q$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$BM_IC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$BM_IC$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$BM_IC$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$BM_IC$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$kdeg_BM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$kdeg_BM$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$kdeg_BM$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$kdeg_BM$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Emax</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Emax$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Emax$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$Emax$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$EC50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$EC50$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$EC50$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$EC50$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$CMT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$CMT$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#DD4B39"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$CMT$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$CMT$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DUR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DUR$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DUR$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DUR$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$EVID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$EVID$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$EVID$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$EVID$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$NDose</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$NDose$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#DD4B39"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$NDose$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$NDose$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DOSE_NUM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DOSE_NUM$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DOSE_NUM$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$DOSE_NUM$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SUBTYPE_ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SUBTYPE_ID$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SUBTYPE_ID$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SUBTYPE_ID$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SEX_ID</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SEX_ID$color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SEX_ID$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info$SEX_ID$factor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">hfmt</span> <span class="op">=</span> <span class="fu">FM_fetch_data_format</span><span class="op">(</span><span class="va">df</span>, <span class="va">state</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Column header formatting</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span> <span class="va">hfmt</span><span class="op">[[</span><span class="st">"col_heads"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;ID&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;TIME_DY&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;TIME_HR&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;NTIME_DY&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;NTIME_HR&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;TIME&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;AMT&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;DV&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;RECDESC&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;DOSE&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;DOSE_STR&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;Cohort&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;ROUTE&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;WT&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;SUBTYPE&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;SEX&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;F1&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;ka&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;CL&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [20] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;Vc&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;Vp&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;Q&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [23] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;BM_IC&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [24] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;kdeg_BM&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;Emax&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;EC50&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [27] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;CMT&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [28] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;DUR&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;EVID&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [30] "&lt;span style='color:#DD4B39'&gt;&lt;b&gt;NDose&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;text&lt;/font&gt;&lt;/span&gt;"    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;DOSE_NUM&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [32] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;SUBTYPE_ID&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [33] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;SEX_ID&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"    </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Column select subtext</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span> <span class="va">hfmt</span><span class="op">[[</span><span class="st">"col_subtext"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "num: 1,⋅⋅⋅,360"                     "num: 0,⋅⋅⋅,84"                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "num: 0,⋅⋅⋅,2016"                    "num: 0,⋅⋅⋅,42"                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "num: 0,⋅⋅⋅,1008"                    "num: 0,⋅⋅⋅,2016"                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "num: 0,⋅⋅⋅,5e+08"                   "num: 0,⋅⋅⋅,473500"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "text: BM_ng_ml, C_ng_ml, dose"      "num: 3,⋅⋅⋅,500"                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11] "text: 10 mg,⋅⋅⋅,500 mg"             "text: MD 10 mg IV,⋅⋅⋅,SD 500 mg IV"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] "text: IV, SC"                       "num: 49.6,⋅⋅⋅,109"                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] "text: HV, PT"                       "text: Female, Male"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17] "num: 0.744"                         "num: 0.0349,⋅⋅⋅,2.55"              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] "num: 0.0758,⋅⋅⋅,0.454"              "num: 1.41,⋅⋅⋅,12.7"                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21] "num: 1.23,⋅⋅⋅,7.44"                 "num: 0.0402,⋅⋅⋅,7.53"              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [23] "num: 543,⋅⋅⋅,2190"                  "num: 0.1"                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] "num: 44,⋅⋅⋅,287"                    "num: 300"                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [27] "text: Ac,⋅⋅⋅,C_ng_ml"               "num: 0"                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] "num: 0, 1"                          "text: MD, SD"                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31] "num: 1,⋅⋅⋅,4"                       "num: 0, 1"                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [33] "num: 0, 1"                         </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
