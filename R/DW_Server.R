@@ -825,7 +825,7 @@ DW_Server <- function(id,
 
           filter_col = state[["DW"]][["ui"]][["select_fds_filter_column"]]
 
-          choices  = sort(unique(unfactor((WDS[[filter_col]]))))
+          choices  = FM_pretty_sort(unique(unfactor((WDS[[filter_col]]))))
 
           # We process factors different than
           if(!is.numeric(WDS[[filter_col]])){

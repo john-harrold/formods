@@ -1,6 +1,5 @@
 ---
 title: "Included Modules"
-output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Included Modules}
   %\VignetteEngine{knitr::rmarkdown}

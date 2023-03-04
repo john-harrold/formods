@@ -36,18 +36,19 @@ Imports:
   yaml,
   zip
 Suggests:
-  ggpubr,
+  clipr,
+  covr,
   flextable,
+  ggpubr,
+  gtools,
   knitr,
   plotly,
-  clipr,
   prompter,
+  rmarkdown,
   shinydashboard,
   shinybusy,
-  rmarkdown,
-  utils,
   testthat (>= 3.0.0),
-  covr
+  utils
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 Config/testthat/edition: 3

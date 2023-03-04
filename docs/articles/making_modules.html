@@ -88,8 +88,9 @@
 
 
 
-
-<div class="row">
+<script src="making_modules_files/htmlwidgets-1.6.1/htmlwidgets.js"></script><link href="making_modules_files/handsontable-6.2.2/handsontable.full.min.css" rel="stylesheet">
+<script src="making_modules_files/handsontable-6.2.2/handsontable.full.min.js"></script><script src="making_modules_files/handsontable-6.2.2/all.min.js"></script><script src="making_modules_files/numbro.languages-2.0.6/languages.min.js"></script><script src="making_modules_files/chroma-1.3.3/chroma.min.js"></script><script src="making_modules_files/sparkline-2.1.2/jquery.sparkline.min.js"></script><link href="making_modules_files/rhandsontable-0.3.7/rhandsontable.css" rel="stylesheet">
+<script src="making_modules_files/rhandsontable-binding-0.3.8/rhandsontable.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Making Modules</h1>
             
@@ -273,32 +274,6 @@ session initialization.</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="helper-functions-in-formods">Helper functions in formods<a class="anchor" aria-label="anchor" href="#helper-functions-in-formods"></a>
-</h2>
-<ul>
-<li>
-<code><a href="../reference/FM_le.html">FM_le()</a></code> - Creates log entries (<code>le</code>) that
-are displayed in the console.</li>
-<li>
-<code><a href="../reference/FM_tc.html">FM_tc()</a></code> - This can be used to evaluate code, trap
-errors, and process results.</li>
-<li><code><a href="../reference/has_changed.html">has_changed()</a></code></li>
-<li><code><a href="../reference/set_hold.html">set_hold()</a></code></li>
-<li><code><a href="../reference/fetch_hold.html">fetch_hold()</a></code></li>
-<li><code><a href="../reference/remove_hold.html">remove_hold()</a></code></li>
-<li><code><a href="../reference/FM_init_state.html">FM_init_state()</a></code></li>
-<li>
-<code><a href="../reference/FM_set_notification.html">FM_set_notification()</a></code> - Within you code you can create
-notifications and attach them to a module state.</li>
-<li>
-<code><a href="../reference/FM_notify.html">FM_notify()</a></code> - Used in <code><a href="https://shiny.rstudio.com/reference/shiny/latest/observeEvent.html" class="external-link">observeEvent()</a></code> to
-show notifications that have not yet been displayed.</li>
-<li><code><a href="../reference/FM_set_mod_state.html">FM_set_mod_state()</a></code></li>
-<li><code><a href="../reference/FM_fetch_mod_state.html">FM_fetch_mod_state()</a></code></li>
-<li><code><a href="../reference/FM_set_ui_msg.html">FM_set_ui_msg()</a></code></li>
-</ul>
-</div>
-<div class="section level2">
 <h2 id="module-interaction">Module interaction<a class="anchor" aria-label="anchor" href="#module-interaction"></a>
 </h2>
 <p>Say you are using the UD module to feed data into the DW module and
@@ -324,8 +299,170 @@ changes.</li>
 </div>
 </div>
 <div class="section level2">
-<h2 id="notifications">Notifications<a class="anchor" aria-label="anchor" href="#notifications"></a>
+<h2 id="helper-functions-in-formods">Helper functions in formods<a class="anchor" aria-label="anchor" href="#helper-functions-in-formods"></a>
 </h2>
+<ul>
+<li>
+<code><a href="../reference/FM_le.html">FM_le()</a></code> - Creates log entries (<code>le</code>) that
+are displayed in the console.</li>
+<li>
+<code><a href="../reference/FM_tc.html">FM_tc()</a></code> - This can be used to evaluate code, trap
+errors, and process results.</li>
+<li><code><a href="../reference/has_changed.html">has_changed()</a></code></li>
+<li>
+<code><a href="../reference/set_hold.html">set_hold()</a></code> - Used to set a hold on one or more UI
+elements. This prevents internal updating of that UI element based on
+the current value in the App.</li>
+<li>
+<code><a href="../reference/fetch_hold.html">fetch_hold()</a></code> - This will retrieve the hold status of a
+UI element.</li>
+<li>
+<code><a href="../reference/remove_hold.html">remove_hold()</a></code> - This will remove any holds set on a UI
+element.</li>
+<li>
+<code><a href="../reference/FM_add_ui_tooltip.html">FM_add_ui_tooltip()</a></code> - Attaches a tooltip to a UI
+element.</li>
+<li>
+<code><a href="../reference/FM_init_state.html">FM_init_state()</a></code> - Called at the top of your module
+state initialization function to create a skeleton of a module state
+that you can then build upon.</li>
+<li>
+<code><a href="../reference/FM_set_notification.html">FM_set_notification()</a></code> - Within you code you can create
+notifications and attach them to a module state.</li>
+<li>
+<code><a href="../reference/FM_notify.html">FM_notify()</a></code> - Used in <code><a href="https://shiny.rstudio.com/reference/shiny/latest/observeEvent.html" class="external-link">observeEvent()</a></code> to
+show notifications that have not yet been displayed.</li>
+<li><code><a href="../reference/FM_set_mod_state.html">FM_set_mod_state()</a></code></li>
+<li><code><a href="../reference/FM_fetch_mod_state.html">FM_fetch_mod_state()</a></code></li>
+<li><code><a href="../reference/FM_set_ui_msg.html">FM_set_ui_msg()</a></code></li>
+<li>
+<code><a href="../reference/FM_pretty_sort.html">FM_pretty_sort()</a></code> - Used as a general sorting function
+that will try to make the sorted results prettier.</li>
+<li>
+<code><a href="../reference/FM_pause_screen.html">FM_pause_screen()</a></code> - Pauses the screen when doing
+something on the server side that takes a while.</li>
+<li>
+<code><a href="../reference/FM_resume_screen.html">FM_resume_screen()</a></code> - Resumes activity (unpauses the
+screen) when you’re done with the pause.</li>
+<li>
+<code><a href="../reference/FM_fetch_data_format.html">FM_fetch_data_format()</a></code> - Creates formatting information
+for display for a given data frame.</li>
+</ul>
+<p>The examples below require a Shiny session variable and a formods
+state object. Here we create some examples and other objects needed to
+demonstrate the functions below.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://formods.ubiquity.tools/" class="external-link">formods</a></span><span class="op">)</span></span>
+<span><span class="co"># This creates the state and session objects</span></span>
+<span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="../reference/UD_test_mksession.html">UD_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; → UD: State initialized</span></span>
+<span><span class="co">#&gt; → UD: module checksum updated:48559d397570afc9fba8ad9b252fa75a</span></span>
+<span><span class="va">state</span>    <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span>
+<span><span class="va">session</span>  <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">session</span></span>
+<span></span>
+<span><span class="co"># Here we load an example dataset into the df object.</span></span>
+<span><span class="va">data_file_local</span> <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"test_data"</span>, <span class="st">"TEST_DATA.xlsx"</span><span class="op">)</span></span>
+<span><span class="va">sheet</span>           <span class="op">=</span> <span class="st">"DATA"</span></span>
+<span></span>
+<span><span class="va">df</span> <span class="op">=</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_excel</a></span><span class="op">(</span>path<span class="op">=</span><span class="va">data_file_local</span>, sheet<span class="op">=</span><span class="va">sheet</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="setting-holds-on-ui-elements">Setting holds on UI elements<a class="anchor" aria-label="anchor" href="#setting-holds-on-ui-elements"></a>
+</h3>
+<p>The mechanics of the fetch state functions mean that each time a
+fetch state is called, all of the UI elements in the App are pulled and
+placed in the app state. This generally works well with some exceptions.
+The main exception is when you want to have a UI element that changes
+another UI element. Say for example you have a selection box with a UI
+id of <code>my_selection</code>. You want that selection to alter a text
+input with an id of <code>my_text</code>. However if you just poll the
+ui elements you may update <code>my_text</code> based on changes to
+<code>my_selection</code> then have those overwritten by the current
+value of <code>my_text</code>. To prevent this, you need to do two
+things:</p>
+<ul>
+<li>When processing <code>my_selection</code> you need to set a hold on
+<code>my_text</code> (done with <code><a href="../reference/set_hold.html">set_hold()</a></code>).</li>
+<li>When processing <code>my_text</code> you need to do that <em>only if
+there is no hold set</em>. This is checked with
+<code><a href="../reference/fetch_hold.html">fetch_hold()</a></code>
+</li>
+</ul>
+<p>Lastly you need to remove the hold. This is done after the UI has
+refreshed with the new text value populated in to <code>my_text</code>
+(with the appropriate reactions set). This is done with an observeEvent
+that is triggered after everything else (with a priority of -100
+below):</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">remove_hold_listen</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">my_selection</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="fu">remove_hold_listen</span><span class="op">(</span><span class="op">)</span>, <span class="op">{</span></span>
+<span>  <span class="co"># Once the UI has been regenerated we</span></span>
+<span>  <span class="co"># remove any holds for this module</span></span>
+<span>  <span class="va">state</span> <span class="op">=</span> <span class="fu">XX_fetch_state</span><span class="op">(</span>id              <span class="op">=</span> <span class="va">id</span>,</span>
+<span>                         input           <span class="op">=</span> <span class="va">input</span>,</span>
+<span>                         session         <span class="op">=</span> <span class="va">session</span>,</span>
+<span>                         FM_yaml_file    <span class="op">=</span> <span class="va">FM_yaml_file</span>,</span>
+<span>                         MOD_yaml_file   <span class="op">=</span> <span class="va">MOD_yaml_file</span>,</span>
+<span>                         react_state     <span class="op">=</span> <span class="va">react_state</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="../reference/FM_le.html">FM_le</a></span><span class="op">(</span><span class="va">state</span>, <span class="st">"removing holds"</span><span class="op">)</span></span>
+<span>  <span class="co"># Removing all holds</span></span>
+<span>  <span class="kw">for</span><span class="op">(</span><span class="va">hname</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">state</span><span class="op">[[</span><span class="st">"XX"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"ui_hold"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="fu"><a href="../reference/remove_hold.html">remove_hold</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">session</span>, <span class="va">hname</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span>, priority <span class="op">=</span> <span class="op">-</span><span class="fl">100</span><span class="op">)</span></span></code></pre></div>
+<p>The <code>remove_hold_listen</code> object should contain all of the
+inputs that are… holdable?</p>
+</div>
+<div class="section level3">
+<h3 id="dataframe-formatting-information">Dataframe formatting information<a class="anchor" aria-label="anchor" href="#dataframe-formatting-information"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hfmt</span> <span class="op">=</span> <span class="fu"><a href="../reference/FM_fetch_data_format.html">FM_fetch_data_format</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">state</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Descriptive headers </span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span> <span class="va">hfmt</span><span class="op">[[</span><span class="st">"col_heads"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;ID&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"      </span></span>
+<span><span class="co">#&gt; [2] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;TIME_DY&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;" </span></span>
+<span><span class="co">#&gt; [3] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;TIME_HR&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;" </span></span>
+<span><span class="co">#&gt; [4] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;NTIME_DY&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span></span>
+<span><span class="co">#&gt; [5] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;NTIME_HR&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span></span>
+<span><span class="co">#&gt; [6] "&lt;span style='color:#3C8DBC'&gt;&lt;b&gt;TIME&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;num&lt;/font&gt;&lt;/span&gt;"</span></span>
+<span></span>
+<span><span class="co"># Subtext</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span> <span class="va">hfmt</span><span class="op">[[</span><span class="st">"col_subtext"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "num: 1,⋅⋅⋅,360"  "num: 0,⋅⋅⋅,84"   "num: 0,⋅⋅⋅,2016" "num: 0,⋅⋅⋅,42"  </span></span>
+<span><span class="co">#&gt; [5] "num: 0,⋅⋅⋅,1008" "num: 0,⋅⋅⋅,2016"</span></span></code></pre></div>
+<p>The custom headers can be used with the <a href="http://jrowen.github.io/rhandsontable/" class="external-link">rhandsontable</a>
+package.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hot</span> <span class="op">=</span> <span class="fu">rhandsontable</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rhandsontable/man/rhandsontable.html" class="external-link">rhandsontable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>,</span>
+<span>  width      <span class="op">=</span> <span class="st">"100%"</span>,</span>
+<span>  height     <span class="op">=</span> <span class="st">"100%"</span>,</span>
+<span>  colHeaders <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">hfmt</span><span class="op">[[</span><span class="st">"col_heads"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  rowHeaders <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div id="htmlwidget-a0363ab5ca578cf070fc" style="width:100%;height:100%;" class="rhandsontable html-widget "></div>
+<script type="application/json" data-for="htmlwidget-a0363ab5ca578cf070fc">{"x":{"data":[{"ID":1,"TIME_DY":0,"TIME_HR":0,"NTIME_DY":0,"NTIME_HR":0,"TIME":0,"AMT":3000000,"DV":0,"RECDESC":"dose","DOSE":3,"DOSE_STR":"3 mg","Cohort":"SD 3 mg IV","ROUTE":"IV","WT":67.9,"SUBTYPE":"PT","SEX":"Female","F1":0.744,"ka":0.449,"CL":0.25,"Vc":3.67,"Vp":3.77,"Q":0.325,"BM_IC":1250,"kdeg_BM":0.1,"Emax":190,"EC50":300,"CMT":"Ac","DUR":0,"EVID":1,"NDose":"SD","DOSE_NUM":1,"SUBTYPE_ID":1,"SEX_ID":1},{"ID":1,"TIME_DY":0,"TIME_HR":0,"NTIME_DY":0,"NTIME_HR":0,"TIME":0,"AMT":0,"DV":1250,"RECDESC":"BM_ng_ml","DOSE":3,"DOSE_STR":"3 mg","Cohort":"SD 3 mg IV","ROUTE":"IV","WT":67.9,"SUBTYPE":"PT","SEX":"Female","F1":0.744,"ka":0.449,"CL":0.25,"Vc":3.67,"Vp":3.77,"Q":0.325,"BM_IC":1250,"kdeg_BM":0.1,"Emax":190,"EC50":300,"CMT":"BM_ng_ml","DUR":0,"EVID":0,"NDose":"SD","DOSE_NUM":1,"SUBTYPE_ID":1,"SEX_ID":1},{"ID":1,"TIME_DY":0,"TIME_HR":0,"NTIME_DY":0,"NTIME_HR":0,"TIME":0,"AMT":0,"DV":0,"RECDESC":"C_ng_ml","DOSE":3,"DOSE_STR":"3 mg","Cohort":"SD 3 mg IV","ROUTE":"IV","WT":67.9,"SUBTYPE":"PT","SEX":"Female","F1":0.744,"ka":0.449,"CL":0.25,"Vc":3.67,"Vp":3.77,"Q":0.325,"BM_IC":1250,"kdeg_BM":0.1,"Emax":190,"EC50":300,"CMT":"C_ng_ml","DUR":0,"EVID":0,"NDose":"SD","DOSE_NUM":1,"SUBTYPE_ID":1,"SEX_ID":1},{"ID":1,"TIME_DY":0.0104,"TIME_HR":0.25,"NTIME_DY":0.0104,"NTIME_HR":0.25,"TIME":0.25,"AMT":0,"DV":1255,"RECDESC":"BM_ng_ml","DOSE":3,"DOSE_STR":"3 mg","Cohort":"SD 3 mg IV","ROUTE":"IV","WT":67.9,"SUBTYPE":"PT","SEX":"Female","F1":0.744,"ka":0.449,"CL":0.25,"Vc":3.67,"Vp":3.77,"Q":0.325,"BM_IC":1250,"kdeg_BM":0.1,"Emax":190,"EC50":300,"CMT":"BM_ng_ml","DUR":0,"EVID":0,"NDose":"SD","DOSE_NUM":1,"SUBTYPE_ID":1,"SEX_ID":1},{"ID":1,"TIME_DY":0.0104,"TIME_HR":0.25,"NTIME_DY":0.0104,"NTIME_HR":0.25,"TIME":0.25,"AMT":0,"DV":816,"RECDESC":"C_ng_ml","DOSE":3,"DOSE_STR":"3 mg","Cohort":"SD 3 mg IV","ROUTE":"IV","WT":67.9,"SUBTYPE":"PT","SEX":"Female","F1":0.744,"ka":0.449,"CL":0.25,"Vc":3.67,"Vp":3.77,"Q":0.325,"BM_IC":1250,"kdeg_BM":0.1,"Emax":190,"EC50":300,"CMT":"C_ng_ml","DUR":0,"EVID":0,"NDose":"SD","DOSE_NUM":1,"SUBTYPE_ID":1,"SEX_ID":1},{"ID":1,"TIME_DY":0.0208,"TIME_HR":0.5,"NTIME_DY":0.0208,"NTIME_HR":0.5,"TIME":0.5,"AMT":0,"DV":1259,"RECDESC":"BM_ng_ml","DOSE":3,"DOSE_STR":"3 mg","Cohort":"SD 3 mg IV","ROUTE":"IV","WT":67.9,"SUBTYPE":"PT","SEX":"Female","F1":0.744,"ka":0.449,"CL":0.25,"Vc":3.67,"Vp":3.77,"Q":0.325,"BM_IC":1250,"kdeg_BM":0.1,"Emax":190,"EC50":300,"CMT":"BM_ng_ml","DUR":0,"EVID":0,"NDose":"SD","DOSE_NUM":1,"SUBTYPE_ID":1,"SEX_ID":1}],"rClass":["tbl_df","tbl","data.frame"],"rColClasses":{"ID":"numeric","TIME_DY":"numeric","TIME_HR":"numeric","NTIME_DY":"numeric","NTIME_HR":"numeric","TIME":"numeric","AMT":"numeric","DV":"numeric","RECDESC":"character","DOSE":"numeric","DOSE_STR":"character","Cohort":"character","ROUTE":"character","WT":"numeric","SUBTYPE":"character","SEX":"character","F1":"numeric","ka":"numeric","CL":"numeric","Vc":"numeric","Vp":"numeric","Q":"numeric","BM_IC":"numeric","kdeg_BM":"numeric","Emax":"numeric","EC50":"numeric","CMT":"character","DUR":"numeric","EVID":"numeric","NDose":"character","DOSE_NUM":"numeric","SUBTYPE_ID":"numeric","SEX_ID":"numeric"},"rColnames":["ID","TIME_DY","TIME_HR","NTIME_DY","NTIME_HR","TIME","AMT","DV","RECDESC","DOSE","DOSE_STR","Cohort","ROUTE","WT","SUBTYPE","SEX","F1","ka","CL","Vc","Vp","Q","BM_IC","kdeg_BM","Emax","EC50","CMT","DUR","EVID","NDose","DOSE_NUM","SUBTYPE_ID","SEX_ID"],"rColHeaders":["ID","TIME_DY","TIME_HR","NTIME_DY","NTIME_HR","TIME","AMT","DV","RECDESC","DOSE","DOSE_STR","Cohort","ROUTE","WT","SUBTYPE","SEX","F1","ka","CL","Vc","Vp","Q","BM_IC","kdeg_BM","Emax","EC50","CMT","DUR","EVID","NDose","DOSE_NUM","SUBTYPE_ID","SEX_ID"],"rRowHeaders":null,"rDataDim":[6,33],"selectCallback":false,"colHeaders":["<span style='color:#3C8DBC'><b>ID<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>TIME_DY<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>TIME_HR<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>NTIME_DY<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>NTIME_HR<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>TIME<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>AMT<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>DV<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#DD4B39'><b>RECDESC<\/b><br/><font size='-3'>text<\/font><\/span>","<span style='color:#3C8DBC'><b>DOSE<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#DD4B39'><b>DOSE_STR<\/b><br/><font size='-3'>text<\/font><\/span>","<span style='color:#DD4B39'><b>Cohort<\/b><br/><font size='-3'>text<\/font><\/span>","<span style='color:#DD4B39'><b>ROUTE<\/b><br/><font size='-3'>text<\/font><\/span>","<span style='color:#3C8DBC'><b>WT<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#DD4B39'><b>SUBTYPE<\/b><br/><font size='-3'>text<\/font><\/span>","<span style='color:#DD4B39'><b>SEX<\/b><br/><font size='-3'>text<\/font><\/span>","<span style='color:#3C8DBC'><b>F1<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>ka<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>CL<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>Vc<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>Vp<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>Q<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>BM_IC<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>kdeg_BM<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>Emax<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>EC50<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#DD4B39'><b>CMT<\/b><br/><font size='-3'>text<\/font><\/span>","<span style='color:#3C8DBC'><b>DUR<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>EVID<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#DD4B39'><b>NDose<\/b><br/><font size='-3'>text<\/font><\/span>","<span style='color:#3C8DBC'><b>DOSE_NUM<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>SUBTYPE_ID<\/b><br/><font size='-3'>num<\/font><\/span>","<span style='color:#3C8DBC'><b>SEX_ID<\/b><br/><font size='-3'>num<\/font><\/span>"],"rowHeaders":null,"columns":[{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"text","renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"text","renderer":"customRenderer","default":null},{"type":"text","renderer":"customRenderer","default":null},{"type":"text","renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"text","renderer":"customRenderer","default":null},{"type":"text","renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"text","renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"text","renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null},{"type":"numeric","numericFormat":{"pattern":"0.00"},"renderer":"customRenderer","default":null}],"width":"100%","height":"100%","debug":0,"search":false,"stretchH":"none","comments":false,"contextMenu":{"items":{"row_above":[],"row_below":[],"remove_row":[],"hsep3":{"name":"---------"},"undo":[],"redo":[],"hsep4":{"name":"---------"},"alignment":[]}}},"evals":["columns.0.renderer","columns.1.renderer","columns.2.renderer","columns.3.renderer","columns.4.renderer","columns.5.renderer","columns.6.renderer","columns.7.renderer","columns.8.renderer","columns.9.renderer","columns.10.renderer","columns.11.renderer","columns.12.renderer","columns.13.renderer","columns.14.renderer","columns.15.renderer","columns.16.renderer","columns.17.renderer","columns.18.renderer","columns.19.renderer","columns.20.renderer","columns.21.renderer","columns.22.renderer","columns.23.renderer","columns.24.renderer","columns.25.renderer","columns.26.renderer","columns.27.renderer","columns.28.renderer","columns.29.renderer","columns.30.renderer","columns.31.renderer","columns.32.renderer"],"jsHooks":[]}</script><p>To add subtext to a selection widget in Shiny you need to use the
+<a href="https://github.com/dreamRs/shinyWidgets" class="external-link">shinyWidgets</a> package.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sel_subtext</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span> <span class="va">hfmt</span><span class="op">[[</span><span class="st">"col_subtext"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dreamRs/shinyWidgets" class="external-link">shinyWidgets</a></span><span class="op">)</span></span>
+<span><span class="fu">shinyWidgets</span><span class="fu">::</span><span class="fu"><a href="https://dreamrs.github.io/shinyWidgets/reference/pickerInput.html" class="external-link">pickerInput</a></span><span class="op">(</span></span>
+<span>    inputId    <span class="op">=</span> <span class="st">"select_example"</span>,</span>
+<span>    choices    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>,</span>
+<span>    label      <span class="op">=</span> <span class="st">"Select with subtext"</span>,</span>
+<span>    choicesOpt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>subtext <span class="op">=</span> <span class="va">sel_subtext</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>To alter the formats shown here you need to edit the
+<code>formods.yaml</code> configuration file and look at the
+<code>FM</code><span class="math inline">\(\rightarrow\)</span><code>data_meta</code>
+section.</p>
+</div>
+<div class="section level3">
+<h3 id="notifications">Notifications<a class="anchor" aria-label="anchor" href="#notifications"></a>
+</h3>
 <p>Notifications are created using the <a href="https://github.com/dreamRs/shinybusy" class="external-link">shinybusy</a> package
 and are produced with two different functions:
 <code><a href="../reference/FM_set_notification.html">FM_set_notification()</a></code> and <code><a href="../reference/FM_notify.html">FM_notify()</a></code>. This is
@@ -333,13 +470,13 @@ done in a centralized fashion where notifications are added to the state
 object as user information is processed. This will set a notification
 called <code>Example Notification</code>. Along with that a timestamp is
 set:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>   <span class="va">state</span> <span class="op">=</span> <span class="fu"><a href="../reference/FM_set_notification.html">FM_set_notification</a></span><span class="op">(</span><span class="va">state</span>, <span class="st">"Something happened"</span>, <span class="st">"Example Notification"</span><span class="op">)</span></span></code></pre></div>
 <p>That timestamp is used to track and prevent the notification from
 being shown multiple times. Next you need to setup the reactions to
 display the notifications. Here you can create a reactive expression of
 the inputs that will lead to a notification:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">toNotify</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/reactive.html" class="external-link">reactive</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">input1</span>,</span>
 <span>           <span class="va">input</span><span class="op">$</span><span class="va">input2</span><span class="op">)</span></span>
@@ -349,7 +486,7 @@ expression to trigger notifications. You need to use the fetch state
 function for that molecule to get the state object with the
 notifications. Then <code><a href="../reference/FM_notify.html">FM_notify()</a></code> will be called an any
 unprocessed notifications will be displayed:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="fu">toNotify</span><span class="op">(</span><span class="op">)</span>, <span class="op">{</span></span>
 <span>      <span class="va">state</span> <span class="op">=</span> <span class="fu">XX_fetch_state</span><span class="op">(</span>id              <span class="op">=</span> <span class="va">id</span>,</span>
 <span>                             input           <span class="op">=</span> <span class="va">input</span>,</span>
@@ -364,31 +501,32 @@ unprocessed notifications will be displayed:</p>
 <span>                session  <span class="op">=</span> <span class="va">session</span><span class="op">)</span></span>
 <span>    <span class="op">}</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="adding-tooltips">Adding tooltips<a class="anchor" aria-label="anchor" href="#adding-tooltips"></a>
-</h2>
+<div class="section level3">
+<h3 id="adding-tooltips">Adding tooltips<a class="anchor" aria-label="anchor" href="#adding-tooltips"></a>
+</h3>
 <p>Tooltips are created interally using the suggested
 <a href="https://github.com/etiennebacher/prompter" class="external-link">prompter</a> package. To add a tool tip to a ui element you
 would use the <code><a href="../reference/FM_add_ui_tooltip.html">FM_add_ui_tooltip()</a></code> function. For example to
 add the tool tip, <code>You need to type harder!</code> to a text input
 you would do the following:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">uiele</span> <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textInput.html" class="external-link">textInput</a></span><span class="op">(</span></span>
 <span>          inputId <span class="op">=</span> <span class="st">"some_text"</span>, </span>
 <span>          label   <span class="op">=</span> <span class="st">"You need to type harder!"</span><span class="op">)</span></span>
 <span><span class="va">uiele</span> <span class="op">=</span> <span class="fu"><a href="../reference/FM_add_ui_tooltip.html">FM_add_ui_tooltip</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">uiele</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="pausing-the-screen">Pausing the screen<a class="anchor" aria-label="anchor" href="#pausing-the-screen"></a>
-</h2>
+<div class="section level3">
+<h3 id="pausing-the-screen">Pausing the screen<a class="anchor" aria-label="anchor" href="#pausing-the-screen"></a>
+</h3>
 <p>To pause the screen the <a href="https://github.com/dreamRs/shinybusy" class="external-link">shinybusy</a> package is also
 used. This is controlled with two functions:
 <code><a href="../reference/FM_pause_screen.html">FM_pause_screen()</a></code> is used to pause the screen and/or update
 the pause message, and <code><a href="../reference/FM_resume_screen.html">FM_resume_screen()</a></code> is used end the
 pause and resume interaction with the user.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/FM_pause_screen.html">FM_pause_screen</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">session</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/FM_resume_screen.html">FM_resume_screen</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">session</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="formods-state-objects">formods state objects<a class="anchor" aria-label="anchor" href="#formods-state-objects"></a>

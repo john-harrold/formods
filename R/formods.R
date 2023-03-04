@@ -1417,7 +1417,7 @@ FM_pause_screen = function(state, session, message){
 NULL}
 
 #'@export
-#'@title Creates Formatting for Datasets
+#'@title Creates Formatting Information for Datasets
 #'@description Takes a data frame and information in the site configureation
 #'to produce formatting information to make it easier for the user to see data
 #'type information. 
@@ -1425,8 +1425,10 @@ NULL}
 #'@param state Current module state after yaml file has been read.
 #'@return list with the following elements:
 #' \itemize{
-#'   \item{col_heads:} Vector of formatting information for column headers to be
-#'   use with rhandsontable.
+#'   \item{col_heads:} List (element for each column) of formatting 
+#'    information for column  headers to be  use with rhandsontable.
+#'   \item{col_subtext:} List (element for each column) of subtext to 
+#'    be displayed in selections using `pickerInput` from the `shinyWidgets` package.
 #' }
 #'@examples
 #' # We need a module state object to use this function:
@@ -1441,10 +1443,10 @@ NULL}
 #' hfmt = FM_fetch_data_format(df, state)
 #'
 #' # Column header formatting
-#' as.vector(unlist( hfmt[["col_heads"]]))
+#' head(as.vector(unlist( hfmt[["col_heads"]])))
 #' 
 #' # Column select subtext
-#' as.vector(unlist( hfmt[["col_subtext"]]))
+#' head(as.vector(unlist( hfmt[["col_subtext"]])))
 FM_fetch_data_format = function(df, state){
   col_heads   = list()
   col_subtext = list()
@@ -1457,7 +1459,7 @@ FM_fetch_data_format = function(df, state){
     cfactor = is.factor(df[[cname]])
 
     # These are the unique sorted column elements
-    col_ele = sort(unique(df[[cname]]))
+    col_ele = FM_pretty_sort(unique(df[[cname]]))
     if(length(col_ele) > 3){
       crange = paste0(col_ele[1],
                       state[["yaml"]][["FM"]][["data_meta"]][["many_sep"]],
@@ -1645,4 +1647,39 @@ FM_fetch_deps = function(state, session){
   )
 
 res}
+
+
+#'@export
+#'@title Centralized Sorting Function
+#'@description  When displaying information in a pull down this function can
+#'be used to sort those options. 
+#'@param unsrt_data Unsorted data.
+#'@return sorted data
+#'@examples
+#' # This is the full path to a test data file:
+#' data_file_local  =  system.file(package="formods", "test_data", "TEST_DATA.xlsx")
+#' # Excel files need a sheet specification:
+#' sheet           = "DATA"
+#' # We will also attach the sheets along with it
+#' df = readxl::read_excel(path=data_file_local, sheet=sheet)
+#' # Regular sorting:
+#' sort(unique(df$Cohort))
+#' FM_pretty_sort(unique(df$Cohort))
+FM_pretty_sort = function(unsrt_data){
+  res = unsrt_data
+  use_normal_sort = TRUE
+  if(system.file(package="gtools") != ""){
+    if(is.character(res)){
+      res = gtools::mixedsort(res)
+      use_normal_sort = FALSE
+    }
+  }
+
+  if(use_normal_sort){
+    res = sort(res)
+  }
+
+res}
+
+
 

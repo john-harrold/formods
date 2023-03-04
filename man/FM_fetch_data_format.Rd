@@ -2,7 +2,7 @@
 % Please edit documentation in R/formods.R
 \name{FM_fetch_data_format}
 \alias{FM_fetch_data_format}
-\title{Creates Formatting for Datasets}
+\title{Creates Formatting Information for Datasets}
 \usage{
 FM_fetch_data_format(df, state)
 }
@@ -14,8 +14,10 @@ FM_fetch_data_format(df, state)
 \value{
 list with the following elements:
 \itemize{
-  \item{col_heads:} Vector of formatting information for column headers to be
-  use with rhandsontable.
+  \item{col_heads:} List (element for each column) of formatting 
+   information for column  headers to be  use with rhandsontable.
+  \item{col_subtext:} List (element for each column) of subtext to 
+   be displayed in selections using `pickerInput` from the `shinyWidgets` package.
 }
 }
 \description{
@@ -36,8 +38,8 @@ df = readxl::read_excel(path=data_file_local, sheet=sheet)
 hfmt = FM_fetch_data_format(df, state)
 
 # Column header formatting
-as.vector(unlist( hfmt[["col_heads"]]))
+head(as.vector(unlist( hfmt[["col_heads"]])))
 
 # Column select subtext
-as.vector(unlist( hfmt[["col_subtext"]]))
+head(as.vector(unlist( hfmt[["col_subtext"]])))
 }

@@ -3,8 +3,11 @@ title: "Making Modules"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Making Modules}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r, include = FALSE}
@@ -14,27 +17,33 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Introduction
 
-# Introduction 
+This vignette will provide an overview of the formods framework for
+creating reproducable modules that interact with each other. Each module
+has its own namespace that is mantained by using a module short name as
+a prefix for functions. For example the figure generation module uses
+`FG`. If you want to create a module, please submit an issue at the
+[formods github
+repository](https://github.com/john-harrold/formods/issues) with the
+following information:
 
-This vignette will provide an overview of the formods framework for creating reproducable modules that interact with each other. Each module has its own namespace that is mantained by using a module short name as a prefix for functions. For example the figure generation module uses `FG`. If you want to create a module, please submit an issue at the
-[formods github repository](https://github.com/john-harrold/formods/issues) with the following information:
-
-* The short name you intend to use 
-* A brief description of the module
-* A list of modules it depends on
+-   The short name you intend to use
+-   A brief description of the module
+-   A list of modules it depends on
 
 ## Current modules
 
-* ASM - [App State Management](https://formods.ubiquity.tools)
-* DW - [Data Wrangling](https://formods.ubiquity.tools)
-* FG - [Figure Generation](https://formods.ubiquity.tools)
-* FM - [Formods](https://formods.ubiquity.tools)
-* UD - [Upload Data](https://formods.ubiquity.tools)
+-   ASM - [App State Management](https://formods.ubiquity.tools)
+-   DW - [Data Wrangling](https://formods.ubiquity.tools)
+-   FG - [Figure Generation](https://formods.ubiquity.tools)
+-   FM - [Formods](https://formods.ubiquity.tools)
+-   UD - [Upload Data](https://formods.ubiquity.tools)
 
 The current modules are in development:
 
-* NCA - [Non-Compartmental Analysis](https://github.com/john-harrold/ruminate)
+-   NCA - [Non-Compartmental
+    Analysis](https://github.com/john-harrold/ruminate)
 
 # formods framework
 
@@ -44,100 +53,254 @@ To get started you can make a copy of some example files:
 file.copy(system.file(package="formods", "templates", "ZZ_module_components.R"), "ZZ_module_components.R")
 file.copy(system.file(package="formods", "templates", "ZZ_Server.R"), "ZZ_Server.R")
 file.copy(system.file(package="formods", "templates", "ZZ.yaml"), "ZZ.yaml")
-``` 
+```
 
-- `ZZ_module_components.R` - An app that can be used for testing the module and highlighting the different UI elements that are used within the module. 
-- `ZZ_Server.R`: A bare bones file containing the expected functions and their minimal inputs.
-- `ZZ.yaml`: This module configuration file contains the the minimal elements expected, but you can add your own fields to suit your modules needs. 
+-   `ZZ_module_components.R` - An app that can be used for testing the
+    module and highlighting the different UI elements that are used
+    within the module.
+-   `ZZ_Server.R`: A bare bones file containing the expected functions
+    and their minimal inputs.
+-   `ZZ.yaml`: This module configuration file contains the the minimal
+    elements expected, but you can add your own fields to suit your
+    modules needs.
 
-You can rename the `ZZ` portion of the files with the module short name you're using. The `ZZ_Server.R` would go in the `R` directory in your package and the other two files would go into `inst/templates`.
+You can rename the `ZZ` portion of the files with the module short name
+you're using. The `ZZ_Server.R` would go in the `R` directory in your
+package and the other two files would go into `inst/templates`.
 
 # Expected functions
 
-For the module to work and interact with other modules, there are certain funcitons that are expected. 
+For the module to work and interact with other modules, there are
+certain funcitons that are expected.
 
-- `ZZ_Server` Shiny server function.
-- `ZZ_init_state` Creates an empty the formods state for the module. 
-- `ZZ_fetch_state` Each module has a function to fetch the state. Within this function there should be no interactivity. Any access of the elements to the Shiny input should be isolated. Based on differences between the input elements (current state of the app) and the stored app state can be used to trigger different things.
-- `ZZ_fetch_code` This takes as it's first argument the module state. When called with only this argument it should return a character object containing all of the code needed to generate the elements of this module represented in the app. You can assume that any modules this one depends on will be defined previously. For example the `FG` module will return only that code associated with generating figures. It will be appended to the code from the `UD` and `DW` modules that define loading the dataset and creation of the data views. For modules where no code is generated (e.g. `ASM`) just return `NULL`.
-- `ZZ_append_report`    
-- `ZZ_fetch_ds` If a module provides data sets to be used in other modules you need to create this function. It should return at least the following:
-  - `hasds` Boolean variable indicating if the modules currently has any exportable datasets.
-  - `isgood` General return status of the funciton. Set to FALSE if any errors were encoutered.
-  - `msgs` A character vector of any messages to pass back to the user. 
-  - `ds` A module can provide multiple datasets. This is a list with the following elements for each dataset:
-    - `label` Text label for the dataset
-    - `MOD_TYPE` Short name for the type of module.
-    - `id` module ID.
-    - `DS` Dataframe containing the actual dataset.
-    - `DSMETA` Metadata describing DS.
-    - `code` Complete code to build dataset.
-    - `checksum` Module checksum.
-    - `DSchecksum` Dataset checksum.
-- `ZZ_test_mksession` When testing outside of Shiny it is useful to have a prepopulated session, intput, etc objects with actual data. Each module shoudl have a `test_mksession` function that populates these objects with useful data. If your module depends on a different module, you can use the `test_mksession` for the modyou yours depends on. For example the data wrangling module depends on the upload data module. So the `DW_test_mksession` function uses `UD_test_mksession` internally to load the test dataset and then builds on top of that. The function should return the following: 
-  - `isgood` Boolean indicating the exit status of the function.
-  - `session` The value Shiny session variable (in app) or a list (outside of app) after initialization.
-  - `input` The value of the shiny input at the end of the session initialization.
-  - `state` App state.
-  - `rsc` The `react_state` components.
-
+-   `ZZ_Server` Shiny server function.
+-   `ZZ_init_state` Creates an empty the formods state for the module.
+-   `ZZ_fetch_state` Each module has a function to fetch the state.
+    Within this function there should be no interactivity. Any access of
+    the elements to the Shiny input should be isolated. Based on
+    differences between the input elements (current state of the app)
+    and the stored app state can be used to trigger different things.
+-   `ZZ_fetch_code` This takes as it's first argument the module state.
+    When called with only this argument it should return a character
+    object containing all of the code needed to generate the elements of
+    this module represented in the app. You can assume that any modules
+    this one depends on will be defined previously. For example the `FG`
+    module will return only that code associated with generating
+    figures. It will be appended to the code from the `UD` and `DW`
+    modules that define loading the dataset and creation of the data
+    views. For modules where no code is generated (e.g. `ASM`) just
+    return `NULL`.
+-   `ZZ_append_report`\
+-   `ZZ_fetch_ds` If a module provides data sets to be used in other
+    modules you need to create this function. It should return at least
+    the following:
+    -   `hasds` Boolean variable indicating if the modules currently has
+        any exportable datasets.
+    -   `isgood` General return status of the funciton. Set to FALSE if
+        any errors were encoutered.
+    -   `msgs` A character vector of any messages to pass back to the
+        user.
+    -   `ds` A module can provide multiple datasets. This is a list with
+        the following elements for each dataset:
+        -   `label` Text label for the dataset
+        -   `MOD_TYPE` Short name for the type of module.
+        -   `id` module ID.
+        -   `DS` Dataframe containing the actual dataset.
+        -   `DSMETA` Metadata describing DS.
+        -   `code` Complete code to build dataset.
+        -   `checksum` Module checksum.
+        -   `DSchecksum` Dataset checksum.
+-   `ZZ_test_mksession` When testing outside of Shiny it is useful to
+    have a prepopulated session, intput, etc objects with actual data.
+    Each module shoudl have a `test_mksession` function that populates
+    these objects with useful data. If your module depends on a
+    different module, you can use the `test_mksession` for the modyou
+    yours depends on. For example the data wrangling module depends on
+    the upload data module. So the `DW_test_mksession` function uses
+    `UD_test_mksession` internally to load the test dataset and then
+    builds on top of that. The function should return the following:
+    -   `isgood` Boolean indicating the exit status of the function.
+    -   `session` The value Shiny session variable (in app) or a list
+        (outside of app) after initialization.
+    -   `input` The value of the shiny input at the end of the session
+        initialization.
+    -   `state` App state.
+    -   `rsc` The `react_state` components.
 
 # Expected UI elements
 
-- `ui_zz_compact` 
-
-# Helper functions in formods
-
-- `FM_le()` - Creates log entries (`le`) that are displayed in the console.
-- `FM_tc()` - This can be used to evaluate code, trap errors, and process results.
-- `has_changed()`
-- `set_hold()`
-- `fetch_hold()`
-- `remove_hold()`
-- `FM_init_state()`
-- `FM_set_notification()` - Within you code you can create notifications and attach them to a module state.
-- `FM_notify()` - Used in `observeEvent()` to show notifications that have not yet been displayed. 
-- `FM_set_mod_state()`
-- `FM_fetch_mod_state()`
-- `FM_set_ui_msg()`
+-   `ui_zz_compact`
 
 # Module interaction
 
-Say you are using the UD module to feed data into the DW module and the user goes back to the upload form and uploads a different data set. This will need to trigger a reset of the Data Wrangling module as well as tell your larger app that something has changed. 
+Say you are using the UD module to feed data into the DW module and the
+user goes back to the upload form and uploads a different data set. This
+will need to trigger a reset of the Data Wrangling module as well as
+tell your larger app that something has changed.
 
 ## Module state and reacting to changes
 
-Changes in module states are detected with the `react_state` object. For a given module of type `"XX"` with a module id of `"ID"` you would detect changes by reacting to `react_state[["ID"]]` and looking for changes in the checksum element below:
+Changes in module states are detected with the `react_state` object. For
+a given module of type `"XX"` with a module id of `"ID"` you would
+detect changes by reacting to `react_state[["ID"]]` and looking for
+changes in the checksum element below:
 
- `react_state[["ID"]][["XX"]][["checksum"]]`
- 
+`react_state[["ID"]][["XX"]][["checksum"]]`
 
-* `checksum` A checksum that can be used to detect changes in this module. For
-  example in the UD module this will change if the uploaded file or the sheet
-  selected from a currently uplo:waded file changes. 
+-   `checksum` A checksum that can be used to detect changes in this
+    module. For example in the UD module this will change if the
+    uploaded file or the sheet selected from a currently uplo:waded file
+    changes.
 
-# Notifications 
+# Helper functions in formods
 
-Notifications are created using the `{shinybusy}` package and are produced with two different functions: `FM_set_notification()` and `FM_notify()`. This is done in a centralized fashion where notifications are added to the state object as user information is processed. This will set a notification called `Example Notification`. Along with that a timestamp is set:
+-   `FM_le()` - Creates log entries (`le`) that are displayed in the
+    console.
+-   `FM_tc()` - This can be used to evaluate code, trap errors, and
+    process results.
+-   `has_changed()`
+-   `set_hold()` - Used to set a hold on one or more UI elements. This prevents internal updating of that UI element based on the current value in the App. 
+-   `fetch_hold()` - This will retrieve the hold status of a UI element.
+-   `remove_hold()` - This will remove any holds set on a UI element.
+-   `FM_add_ui_tooltip()` - Attaches a tooltip to a UI element.
+-   `FM_init_state()` - Called at the top of your module state initialization function to create a skeleton of a module state that you can then build upon. 
+-   `FM_set_notification()` - Within you code you can create
+    notifications and attach them to a module state.
+-   `FM_notify()` - Used in `observeEvent()` to show notifications that
+    have not yet been displayed.
+-   `FM_set_mod_state()`
+-   `FM_fetch_mod_state()`
+-   `FM_set_ui_msg()`
+-   `FM_pretty_sort()` - Used as a general sorting function that will try to make the sorted results prettier. 
+-   `FM_pause_screen()` - Pauses the screen when doing something on the server side that takes a while.
+-   `FM_resume_screen()` - Resumes activity (unpauses the screen) when you're done with the pause.
+-   `FM_fetch_data_format()` - Creates formatting information for display for a given data frame. 
+
+The examples below require a Shiny session variable and a formods state object. Here we create some examples and other objects needed to demonstrate the functions below.
+
+```{r}
+library(formods)
+# This creates the state and session objects
+sess_res = UD_test_mksession(session=list())
+state    = sess_res$state
+session  = sess_res$session
+
+# Here we load an example dataset into the df object.
+data_file_local =  system.file(package="formods", "test_data", "TEST_DATA.xlsx")
+sheet           = "DATA"
+
+df = readxl::read_excel(path=data_file_local, sheet=sheet)
+```
+
+
+## Setting holds on UI elements
+
+The mechanics of the fetch state functions mean that each time a fetch state is called, all of the UI elements in the App are pulled and placed in the app state. This generally works well with some exceptions. The main exception is when you want to have a UI element that changes another UI element. Say for example you have a selection box with a UI id of `my_selection`. You want that selection to alter a text input with an id of `my_text`. However if you just poll the ui elements you may update `my_text` based on changes to `my_selection` then have those overwritten by the current value of `my_text`. To prevent this, you need to do two things:
+
+- When processing `my_selection` you need to set a hold on `my_text` (done with `set_hold()`).
+- When processing `my_text` you need to do that *only if there is no hold set*. This is checked with `fetch_hold()`
+
+Lastly you need to remove the hold. This is done after the UI has refreshed with the new text value populated in to `my_text` (with the appropriate reactions set). This is done with an observeEvent that is triggered after everything else (with a priority of -100 below):
 
 ```r
+remove_hold_listen  <- reactive({
+  list(input$my_selection)
+})
+observeEvent(remove_hold_listen(), {
+  # Once the UI has been regenerated we
+  # remove any holds for this module
+  state = XX_fetch_state(id              = id,
+                         input           = input,
+                         session         = session,
+                         FM_yaml_file    = FM_yaml_file,
+                         MOD_yaml_file   = MOD_yaml_file,
+                         react_state     = react_state)
+
+  FM_le(state, "removing holds")
+  # Removing all holds
+  for(hname in names(state[["XX"]][["ui_hold"]])){
+    remove_hold(state, session, hname)
+  }
+}, priority = -100)
+```
+
+The `remove_hold_listen` object should contain all of the inputs that are... holdable?
+
+## Dataframe formatting information 
+
+```{r}
+hfmt = FM_fetch_data_format(df, state)
+
+# Descriptive headers 
+head(as.vector(unlist( hfmt[["col_heads"]])))
+
+# Subtext
+head(as.vector(unlist( hfmt[["col_subtext"]])))
+```
+
+The custom headers can be used with the `{rhandsontable}` package.
+
+```{r}
+hot = rhandsontable::rhandsontable(
+  head(df),
+  width      = "100%",
+  height     = "100%",
+  colHeaders = as.vector(unlist(hfmt[["col_heads"]])),
+  rowHeaders = NULL
+  )
+```
+```{r, echo=FALSE}
+hot
+```
+
+To add subtext to a selection widget in Shiny you need to use the `{shinyWidgets}` package. 
+
+```r
+sel_subtext = as.vector(unlist( hfmt[["col_subtext"]]))
+library(shinyWidgets)
+shinyWidgets::pickerInput(
+    inputId    = "select_example",
+    choices    = names(df),
+    label      = "Select with subtext",
+    choicesOpt = list(subtext = sel_subtext))
+```
+
+To alter the formats shown here you need to edit the `formods.yaml` configuration file and look at the `FM`$\rightarrow$`data_meta` section. 
+
+
+
+## Notifications
+
+Notifications are created using the `{shinybusy}` package and are
+produced with two different functions: `FM_set_notification()` and
+`FM_notify()`. This is done in a centralized fashion where notifications
+are added to the state object as user information is processed. This
+will set a notification called `Example Notification`. Along with that a
+timestamp is set:
+
+``` r
    state = FM_set_notification(state, "Something happened", "Example Notification")
-``` 
-That timestamp is used to track and prevent the notification from being shown multiple times. Next you need to setup the reactions to display the notifications. 
-Here you can create a reactive expression of the inputs that will lead to a
-notification:
+```
 
-```r
+That timestamp is used to track and prevent the notification from being
+shown multiple times. Next you need to setup the reactions to display
+the notifications. Here you can create a reactive expression of the
+inputs that will lead to a notification:
+
+``` r
     toNotify <- reactive({
       list(input$input1,
            input$input2)
     })
-``` 
+```
 
-Next you use `observeEvent()` with that reactive expression to trigger notifications. You need to use the fetch state function for that molecule to get the state object with the notifications. Then `FM_notify()` will be called an any unprocessed notifications will 
-be displayed:
+Next you use `observeEvent()` with that reactive expression to trigger
+notifications. You need to use the fetch state function for that
+molecule to get the state object with the notifications. Then
+`FM_notify()` will be called an any unprocessed notifications will be
+displayed:
 
-```r
+``` r
     observeEvent(toNotify(), {
       state = XX_fetch_state(id              = id,
                              input           = input,
@@ -151,25 +314,30 @@ be displayed:
       FM_notify(state    = state,
                 session  = session)
     })
-``` 
+```
 
-# Adding tooltips 
+## Adding tooltips
 
-Tooltips are created interally using the suggested `{prompter}` package. To add a tool tip to a ui element you would use the `FM_add_ui_tooltip()` function. For example to add the tool tip, `You need to type harder!` to a text input you would do the following:
+Tooltips are created interally using the suggested `{prompter}` package.
+To add a tool tip to a ui element you would use the
+`FM_add_ui_tooltip()` function. For example to add the tool tip,
+`You need to type harder!` to a text input you would do the following:
 
-```r
+``` r
 uiele = shiny::textInput(
           inputId = "some_text", 
           label   = "You need to type harder!")
 uiele = FM_add_ui_tooltip(state, uiele)
 ```
 
-# Pausing the screen
+## Pausing the screen
 
-To pause the screen the `{shinybusy}` package is also used. This is controlled with two functions: `FM_pause_screen()` is used to pause the screen and/or update the pause message, 
-and `FM_resume_screen()` is used end the pause and resume interaction with the user.
+To pause the screen the `{shinybusy}` package is also used. This is
+controlled with two functions: `FM_pause_screen()` is used to pause the
+screen and/or update the pause message, and `FM_resume_screen()` is used
+end the pause and resume interaction with the user.
 
-```r
+``` r
 FM_pause_screen(state, session)
 FM_resume_screen(state, session)
 ```
@@ -178,23 +346,25 @@ FM_resume_screen(state, session)
 
 When you create a formods state object it can have the following fields:
 
-* `yaml`- Contents of the formods configuration file          
-* `MC` - Contents of the module configuration file           
-* `XX` - XX here is the short name of the current module (found in `MOD_TYPE` below), this is where you would store any app information (see below).
-* `MOD_TYPE` - Short name of the module      
-* `id` - ID of the module           
-* `FM_yaml_file` - formods configuration file
-* `MOD_yaml_file` - Module configuration file
-* `notifications` - Contains notifications set by the user through `FM_set_notification()`
-
+-   `yaml`- Contents of the formods configuration file\
+-   `MC` - Contents of the module configuration file\
+-   `XX` - XX here is the short name of the current module (found in
+    `MOD_TYPE` below), this is where you would store any app information
+    (see below).
+-   `MOD_TYPE` - Short name of the module\
+-   `id` - ID of the module\
+-   `FM_yaml_file` - formods configuration file
+-   `MOD_yaml_file` - Module configuration file
+-   `notifications` - Contains notifications set by the user through
+    `FM_set_notification()`
 
 ## App information in XX
 
-This field `state$XX` is relatively free form but there are some expected elements. 
-JMH Add expected fields here.
-
+This field `state$XX` is relatively free form but there are some
+expected elements. JMH Add expected fields here.
 
 ## Configuration file
+
 ```{css, echo=FALSE}
 .scroll-100 {
   max-height: 100px;
@@ -202,8 +372,6 @@ JMH Add expected fields here.
   background-color: inherit;
 }
 ```
-
-
 
 # YAML configuration files {.tabset}
 
