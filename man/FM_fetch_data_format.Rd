@@ -14,9 +14,9 @@ FM_fetch_data_format(df, state)
 \value{
 list with the following elements:
 \itemize{
-  \item{col_heads:} List (element for each column) of formatting 
+  \item{col_heads:} List (element for each column) of formatting
    information for column  headers to be  use with rhandsontable.
-  \item{col_subtext:} List (element for each column) of subtext to 
+  \item{col_subtext:} List (element for each column) of subtext to
    be displayed in selections using `pickerInput` from the `shinyWidgets` package.
 }
 }

@@ -346,17 +346,16 @@ FM_resume_screen(state, session)
 
 When you create a formods state object it can have the following fields:
 
--   `yaml`- Contents of the formods configuration file\
--   `MC` - Contents of the module configuration file\
--   `XX` - XX here is the short name of the current module (found in
-    `MOD_TYPE` below), this is where you would store any app information
+-   `yaml`- Contents of the formods configuration file.
+-   `MC` - Contents of the module configuration file.
+-   `XX` - XX here is the short name of the current module. 
+    `MOD_TYPE` below), this is where you would store any app information.
     (see below).
--   `MOD_TYPE` - Short name of the module\
--   `id` - ID of the module\
--   `FM_yaml_file` - formods configuration file
--   `MOD_yaml_file` - Module configuration file
--   `notifications` - Contains notifications set by the user through
-    `FM_set_notification()`
+-   `MOD_TYPE` - Short name of the module.
+-   `id` - ID of the module.
+-   `FM_yaml_file` - formods configuration file.
+-   `MOD_yaml_file` - Module configuration file.
+-   `notifications` - Contains notifications set by the user through `FM_set_notification()`.
 
 ## App information in XX
 

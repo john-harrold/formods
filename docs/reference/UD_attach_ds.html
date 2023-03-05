@@ -143,6 +143,15 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># We need a module state object to use this function:</span></span></span>
 <span class="r-in"><span><span class="va">id</span><span class="op">=</span><span class="st">"UD"</span></span></span>
 <span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="UD_test_mksession.html">UD_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:48559d397570afc9fba8ad9b252fa75a</span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
@@ -196,6 +205,40 @@
 <span class="r-in"><span><span class="va">state</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include$files</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include$files[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include$files[[1]]$file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include$files[[1]]$file$source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(system.file(package=\"onbrand\"), \"templates\", \"report.docx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include$files[[1]]$file$dest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(\"config\",\"report.docx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include$files[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include$files[[2]]$file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include$files[[2]]$file$source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(system.file(package=\"onbrand\"), \"templates\", \"report.pptx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include$files[[2]]$file$dest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(\"config\",\"report.pptx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include$files[[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include$files[[3]]$file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include$files[[3]]$file$source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(system.file(package=\"onbrand\"), \"templates\", \"report.yaml\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$include$files[[3]]$file$dest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(\"config\",\"report.yaml\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$deployed</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -273,10 +316,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rpt = list(summary = NULL,\n           sheets  = list())"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$content_init$docx</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rpt  = onbrand::read_template(\n  template = file.path(system.file(package=\"onbrand\"), \"templates\", \"report.docx\"),\n  mapping  = file.path(system.file(package=\"onbrand\"), \"templates\", \"report.yaml\"))"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rpt  = onbrand::read_template(\n  template = file.path(\"config\", \"report.docx\"),\n  mapping  = file.path(\"config\", \"report.yaml\"))"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$content_init$pptx</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rpt  = onbrand::read_template(\n  template = file.path(system.file(package=\"onbrand\"), \"templates\", \"report.pptx\"),\n  mapping  = file.path(system.file(package=\"onbrand\"), \"templates\", \"report.yaml\"))"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rpt  = onbrand::read_template(\n  template = file.path(\"config\", \"report.pptx\"),\n  mapping  = file.path(\"config\", \"report.yaml\"))"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -466,7 +509,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $UD$data_file_local</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmp8kGvib/temp_libpathb852343fe26b/formods/test_data/TEST_DATA.xlsx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmp8kGvib/temp_libpathb8527d6662e5/formods/test_data/TEST_DATA.xlsx"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $UD$data_file_ext</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".xlsx"</span>
@@ -518,10 +561,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmp8kGvib/temp_libpathb852343fe26b/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmp8kGvib/temp_libpathb8527d6662e5/formods/templates/formods.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmp8kGvib/temp_libpathb852343fe26b/formods/templates/UD.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmp8kGvib/temp_libpathb8527d6662e5/formods/templates/UD.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

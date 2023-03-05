@@ -73,13 +73,17 @@ reproduce the analysis within the app.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">FM_fetch_app_code</span><span class="op">(</span><span class="va">session</span>, <span class="va">mod_ids</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">FM_fetch_app_code</span><span class="op">(</span><span class="va">session</span>, <span class="va">state</span>, <span class="va">mod_ids</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>session</dt>
 <dd><p>Shiny session variable</p></dd>
+
+
+<dt>state</dt>
+<dd><p>module state after yaml read</p></dd>
 
 
 <dt>mod_ids</dt>
@@ -102,11 +106,21 @@ reproduce the analysis within the app.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># We need a Shiny session object to use this function:</span></span></span>
 <span class="r-in"><span><span class="va">id</span><span class="op">=</span><span class="st">"UD"</span></span></span>
 <span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="UD_test_mksession.html">UD_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, id<span class="op">=</span><span class="va">id</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:48559d397570afc9fba8ad9b252fa75a</span>
 <span class="r-in"><span><span class="va">session</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">session</span></span></span>
-<span class="r-in"><span><span class="va">app_code</span> <span class="op">=</span> <span class="fu">FM_fetch_app_code</span><span class="op">(</span><span class="va">session</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in FM_fetch_app_code(session):</span> argument "mod_ids" is missing, with no default</span>
+<span class="r-in"><span><span class="va">state</span>   <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
+<span class="r-in"><span><span class="va">app_code</span> <span class="op">=</span> <span class="fu">FM_fetch_app_code</span><span class="op">(</span>session<span class="op">=</span><span class="va">session</span>, state<span class="op">=</span><span class="va">state</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in FM_fetch_app_code(session = session, state = state):</span> argument "mod_ids" is missing, with no default</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">app_code</span><span class="op">$</span><span class="va">code</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in cat(app_code$code):</span> object 'app_code' not found</span>
 </code></pre></div>

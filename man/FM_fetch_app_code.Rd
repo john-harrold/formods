@@ -4,10 +4,12 @@
 \alias{FM_fetch_app_code}
 \title{Fetches the code to reproduce analysis}
 \usage{
-FM_fetch_app_code(session, mod_ids)
+FM_fetch_app_code(session, state, mod_ids)
 }
 \arguments{
 \item{session}{Shiny session variable}
+
+\item{state}{module state after yaml read}
 
 \item{mod_ids}{Vector of module IDs and order they are needed (used for code generation).}
 }
@@ -30,6 +32,7 @@ reproduce the analysis within the app.
 id="UD"
 sess_res = UD_test_mksession(session=list(), id=id)
 session = sess_res$session
-app_code = FM_fetch_app_code(session)
+state   = sess_res$state
+app_code = FM_fetch_app_code(session=session, state=state)
 cat(app_code$code)
 }

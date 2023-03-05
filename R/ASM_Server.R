@@ -633,7 +633,7 @@ ASM_write_state = function(state, session, file, mod_ids){
   app_state = FM_fetch_app_state(session)
 
   # Pulling out the reproducable app code
-  app_code = FM_fetch_app_code(session=session, mod_ids = mod_ids)
+  app_code = FM_fetch_app_code(session=session, state = state, mod_ids = mod_ids)
 
   # Generating reports
   switch_gen_rpts = state[["ASM"]][["ui"]][["switch_gen_rpts"]]

@@ -342,6 +342,7 @@ hold_status}
 #'@description Takes the current state of the app and builds a script to
 #'reproduce the analysis within the app.
 #'@param session Shiny session variable
+#'@param state module state after yaml read
 #'@param mod_ids Vector of module IDs and order they are needed (used for code generation).
 #'@return list with the following elements:
 #' \itemize{
@@ -356,9 +357,10 @@ hold_status}
 #' id="UD"
 #' sess_res = UD_test_mksession(session=list(), id=id)
 #' session = sess_res$session
-#' app_code = FM_fetch_app_code(session)
+#' state   = sess_res$state
+#' app_code = FM_fetch_app_code(session=session, state=state)
 #' cat(app_code$code)
-FM_fetch_app_code = function(session, mod_ids){
+FM_fetch_app_code = function(session, state, mod_ids){
   isgood          = TRUE
   msgs            = c()
   code            = ""
@@ -368,9 +370,6 @@ FM_fetch_app_code = function(session, mod_ids){
   app_state = FM_fetch_app_state(session)
 
   if(length(names(app_state))>0){
-    # Pulling out the generation options from the first app state
-    state_key = names(app_state)[1]
-    state = app_state[[state_key]]
 
     mods_found = list()
 
@@ -913,8 +912,115 @@ FM_init_state = function(
   file.copy(FM_yaml_file,  config_dir, overwrite=TRUE)
   file.copy(MOD_yaml_file, config_dir, overwrite=TRUE)
 
+
+  FM_proc_include(state, session)
+
 state}
 
+#'@export
+#'@title Sets Message in State from UI Processing
+#'@description Any errors that need to be passed back to the user can be set
+#'with this function.
+#'@param state formods State object.
+#'@param session Shiny session variable.
+#'@return NULL
+#'@examples
+#' # We need a module state object to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' state = sess_res$state
+#' session = sess_res$session
+#' FM_procs_include(state, session)
+FM_proc_include = function(state, session){
+  # pulling out the user directory and defining the config direcotry
+  user_dir   = FM_fetch_user_files_path(state)
+
+  #--------------------------------------------------------
+  # First we process the formods general includes
+  # Going through the include files:
+  proc_include = FALSE
+  if(is.null(session$userData[["FM"]][["proc_include"]][["formods"]])){
+    proc_include = TRUE
+  } else if(!session$userData[["FM"]][["proc_include"]][["formods"]]){
+    proc_include = TRUE
+  }
+
+  if(proc_include){
+    if(!is.null(state[["yaml"]][["FM"]][["include"]][["files"]])){
+      for(fidx in 1:length(state[["yaml"]][["FM"]][["include"]][["files"]])){
+        fsource = state[["yaml"]][["FM"]][["include"]][["files"]][[fidx]][["file"]][["source"]]
+        tc_src_res = FM_tc(cmd=paste0("fpath = ", fsource), tc_env = list(), capture = "fpath")
+        fdest   = state[["yaml"]][["FM"]][["include"]][["files"]][[fidx]][["file"]][["dest"]]
+        tc_dst_res = FM_tc(cmd=paste0("fpath = ", fdest), tc_env = list(), capture = "fpath")
+        proc_curr_file = TRUE
+        if(!tc_src_res[["isgood"]]){
+          proc_curr_file = FALSE
+          FM_le(state, paste0("Could not include: ", fsource))
+          FM_le(state, tc_src_res[["msgs"]])
+        }
+        if(!tc_dst_res[["isgood"]]){
+          proc_curr_file = FALSE
+          FM_le(state, paste0("Could not include: ", fdest))
+          FM_le(state, tc_dst_res[["msgs"]])
+        }
+
+        if(proc_curr_file){
+          FM_le(state, "including file")
+          FM_le(state, paste0("  source: ", fsource))
+          FM_le(state, paste0("  dest:   ", fdest))
+          fc_res = file.copy(
+             from      = tc_src_res[["capture"]][["fpath"]],
+             to        = file.path(user_dir, tc_dst_res[["capture"]][["fpath"]]),
+             overwrite = TRUE)
+        }
+      }
+    }
+  }
+
+  # Setting the bit to prevent multiple includes
+  session$userData[["FM"]][["proc_include"]][["formods"]] = TRUE
+  #--------------------------------------------------------
+  MOD_ID = state[["id"]]
+  proc_include = FALSE
+  if(is.null(session$userData[["FM"]][["proc_include"]][[MOD_ID]])){
+    proc_include = TRUE
+  } else if(!session$userData[["FM"]][["proc_include"]][[MOD_ID]]){
+    proc_include = TRUE
+  }
+  if(proc_include){
+    if(!is.null(state[["yaml"]][["MC"]][["include"]][["files"]])){
+      for(fidx in 1:length(state[["yaml"]][["MC"]][["include"]][["files"]])){
+        fsource = state[["yaml"]][["MC"]][["include"]][["files"]][[fidx]][["file"]][["source"]]
+        tc_src_res = FM_tc(cmd=paste0("fpath = ", fsource), tc_env = list(), capture = "fpath")
+        fdest   = state[["yaml"]][["MC"]][["include"]][["files"]][[fidx]][["file"]][["dest"]]
+        tc_dst_res = FM_tc(cmd=paste0("fpath = ", fdest), tc_env = list(), capture = "fpath")
+        proc_curr_file = TRUE
+        if(!tc_src_res[["isgood"]]){
+          proc_curr_file = FALSE
+          FM_le(state, paste0("Could not include: ", fsource))
+          FM_le(state, tc_src_res[["msgs"]])
+        }
+        if(!tc_dst_res[["isgood"]]){
+          proc_curr_file = FALSE
+          FM_le(state, paste0("Could not include: ", fdest))
+          FM_le(state, tc_dst_res[["msgs"]])
+        }
+
+        if(proc_curr_file){
+          FM_le(state, "including file")
+          FM_le(state, paste0("  source: ", fsource))
+          FM_le(state, paste0("  dest:   ", fdest))
+          fc_res = file.copy(
+             from      = tc_src_res[["capture"]][["fpath"]],
+             to        = file.path(user_dir, tc_dst_res[["capture"]][["fpath"]]),
+             overwrite = TRUE)
+        }
+      }
+    }
+  }
+
+  session$userData[["FM"]][["proc_include"]][[MOD_ID]] = TRUE
+}
 
 #'@export
 #'@title Sets Message in State from UI Processing
@@ -1082,6 +1188,10 @@ FM_generate_report = function(state,
   app_state    = FM_fetch_app_state(session)
   mod_rpt_info = NULL
 
+  # Changing the working directory to the user directory
+  current_dir = getwd()
+  user_dir    = FM_fetch_user_files_path(state)
+  setwd(user_dir)
   # This will hold the reporting code
   code = c()
 
@@ -1280,11 +1390,14 @@ FM_generate_report = function(state,
     }
   }
 
+  # Changing the working directory back to the current directory
+  setwd(current_dir)
   res = list(
     isgood = isgood,
     errmsg = errmsg,
     code   = code
   )
+
 
 res}
 
@@ -1420,14 +1533,14 @@ NULL}
 #'@title Creates Formatting Information for Datasets
 #'@description Takes a data frame and information in the site configureation
 #'to produce formatting information to make it easier for the user to see data
-#'type information. 
+#'type information.
 #'@param df Raw dataframe to be built into an rhandsontable.
 #'@param state Current module state after yaml file has been read.
 #'@return list with the following elements:
 #' \itemize{
-#'   \item{col_heads:} List (element for each column) of formatting 
+#'   \item{col_heads:} List (element for each column) of formatting
 #'    information for column  headers to be  use with rhandsontable.
-#'   \item{col_subtext:} List (element for each column) of subtext to 
+#'   \item{col_subtext:} List (element for each column) of subtext to
 #'    be displayed in selections using `pickerInput` from the `shinyWidgets` package.
 #' }
 #'@examples
@@ -1444,7 +1557,7 @@ NULL}
 #'
 #' # Column header formatting
 #' head(as.vector(unlist( hfmt[["col_heads"]])))
-#' 
+#'
 #' # Column select subtext
 #' head(as.vector(unlist( hfmt[["col_subtext"]])))
 FM_fetch_data_format = function(df, state){
@@ -1479,23 +1592,23 @@ FM_fetch_data_format = function(df, state){
     # Building the header:
     new_span = state[["yaml"]][["FM"]][["data_meta"]][["data_header"]]
     new_span = stringr::str_replace_all(new_span, "===COLOR===",  ccolor)
-    new_span = stringr::str_replace_all(new_span, "===NAME===",   cname)  
-    new_span = stringr::str_replace_all(new_span, "===LABEL===",  clab)   
-    new_span = stringr::str_replace_all(new_span, "===RANGE===",  crange)   
+    new_span = stringr::str_replace_all(new_span, "===NAME===",   cname)
+    new_span = stringr::str_replace_all(new_span, "===LABEL===",  clab)
+    new_span = stringr::str_replace_all(new_span, "===RANGE===",  crange)
 
     # Building the subtext
     new_sub = state[["yaml"]][["FM"]][["data_meta"]][["subtext"]]
     new_sub = stringr::str_replace_all(new_sub, "===COLOR===",  ccolor)
-    new_sub = stringr::str_replace_all(new_sub, "===NAME===",   cname)  
-    new_sub = stringr::str_replace_all(new_sub, "===LABEL===",  clab)   
-    new_sub = stringr::str_replace_all(new_sub, "===RANGE===",  crange)   
+    new_sub = stringr::str_replace_all(new_sub, "===NAME===",   cname)
+    new_sub = stringr::str_replace_all(new_sub, "===LABEL===",  clab)
+    new_sub = stringr::str_replace_all(new_sub, "===RANGE===",  crange)
 
     # Stores the column information to be returned to the user
     col_heads[[cname]]            = new_span
     col_subtext[[cname]]          = new_sub
 
     col_info[[cname]][["color"]]  = ccolor
-    col_info[[cname]][["label"]]  = clab  
+    col_info[[cname]][["label"]]  = clab
     col_info[[cname]][["factor"]] = cfactor
   }
   res = list(col_heads   = col_heads,
@@ -1652,7 +1765,7 @@ res}
 #'@export
 #'@title Centralized Sorting Function
 #'@description  When displaying information in a pull down this function can
-#'be used to sort those options. 
+#'be used to sort those options.
 #'@param unsrt_data Unsorted data.
 #'@return sorted data
 #'@examples

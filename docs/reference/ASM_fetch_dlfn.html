@@ -97,8 +97,26 @@ value if that is null</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Creating a state object for testing</span></span></span>
 <span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="ASM_test_mksession.html">ASM_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:48559d397570afc9fba8ad9b252fa75a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: State initialized</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:5a6adb8be080914162e848e04fb61f85</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:a5d1d3b8a436befcfa119b5d72d3697b</span>
@@ -132,20 +150,38 @@ value if that is null</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:7d55b640df1207dcdc56a10c9b8d8b87</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:8d91f192ea994a133c8e2fbb7ce7c11a</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:d5c81022154ffb7347d7a30d66a38f60</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: State initialized</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:a77ad23e318409eb0b536b8e2bd9f54b</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:1ac7bb41ad51b663b829606e70c8b3a2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:39a95c323697f5890844e50b3449372a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:28a09ab5bad532dd790ec897a38894b7</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:87af272e755459189a8f07e4b9e931fe</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:2bd16d59d2d3b276ffb8dca76b26f644</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:ad215815cf73baa77308fa1a098743fa</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:192900c86317050c3480c6ce3990a7e7</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:f015e734640325746a574d60443b8a78</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:bad286edc32f05aefb12153b43bae4e0</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:43cb323caf413e614b50b391b8be2a59</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:35a0d237533b1439a7e926648da04b9d</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:5afd2addc78c714e3e59e2b357237a13</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:c41bbe7736ce1b2a0f73ad9e3fe3b309</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:c3b45f033518f298444c81c1788513c6</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:8f2b40e0ed789e9fe821ba9d9a1de1c3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:53fc2ba49a3924f6ddf1a04cb957740c</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:d72ace8aeb34762d3597e746c5bd0155</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:94e5f0f7acf6a0c499e17397188ea359</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:2d324420ffe661c22da414b499904439</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:72ec504e267f7a0eaeaaabd86d925fd8</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:da1ab698ea93a7d602be330e7f41e35b</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:1394f0a33b98be80cf2883ec30da3f4c</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:5ae14b29882af7678eb72acd3e121e80</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:6854ae50881174d43ebe83fca0f1142b</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: State initialized</span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-in"><span><span class="va">dlfn</span> <span class="op">=</span> <span class="fu">ASM_fetch_dlfn</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>

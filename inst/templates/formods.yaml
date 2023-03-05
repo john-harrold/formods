@@ -1,6 +1,17 @@
 # https://www.glyphicons.com/sets/basic/
 #General formods (FM) configuration across modules
 FM: 
+  include:
+    files:
+    - file:
+        source: 'file.path(system.file(package="onbrand"), "templates", "report.docx")'
+        dest:   'file.path("config","report.docx")'
+    - file:
+        source: 'file.path(system.file(package="onbrand"), "templates", "report.pptx")'
+        dest:   'file.path("config","report.pptx")'
+    - file:
+        source: 'file.path(system.file(package="onbrand"), "templates", "report.yaml")'
+        dest:   'file.path("config","report.yaml")'
   # Some features (e.g. copy to clipboard) don't work when deployed
   deployed: FALSE
   #General code options for the modules
@@ -48,19 +59,22 @@ FM:
     # use custom onbrand templates. The main thing is that you create an
     # object called rpt with the appropriate template type in it. You can
     # also do any preprocessing here as well such as adding default content or
-    # doing any placeholder assignments you might want to use.
+    # doing any placeholder assignments you might want to use. The paths can
+    # be absolute paths. If relative paths are used they will be relative to
+    # the user directory (either the temp formods directory running in shiny
+    # or the top level of the zip file structure when saving the app state).
     content_init:
       xlsx: |-
            rpt = list(summary = NULL,
                       sheets  = list())
       docx: |-
            rpt  = onbrand::read_template(
-             template = file.path(system.file(package="onbrand"), "templates", "report.docx"),
-             mapping  = file.path(system.file(package="onbrand"), "templates", "report.yaml"))
+             template = file.path("config", "report.docx"),
+             mapping  = file.path("config", "report.yaml"))
       pptx: |-
            rpt  = onbrand::read_template(
-             template = file.path(system.file(package="onbrand"), "templates", "report.pptx"),
-             mapping  = file.path(system.file(package="onbrand"), "templates", "report.yaml"))
+             template = file.path("config", "report.pptx"),
+             mapping  = file.path("config", "report.yaml"))
   ui:
     # See ?actionBttn for styles
     button_style: "fill"
