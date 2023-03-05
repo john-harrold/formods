@@ -354,18 +354,19 @@ hold_status}
 #' }
 #'@examples
 #' # We need a Shiny session object to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = DW_test_mksession(session=list())
 #' session = sess_res$session
 #' state   = sess_res$state
-#' app_code = FM_fetch_app_code(session=session, state=state)
+#' app_code = FM_fetch_app_code(session = session, 
+#'                              state   = state,
+#'                              mod_ids = c("UD", "DW"))
 #' cat(app_code$code)
 FM_fetch_app_code = function(session, state, mod_ids){
   isgood          = TRUE
   msgs            = c()
   code            = ""
   code_chunks     = c()
-  preamble_chunks = c()
+  #preamble_chunks = c()
 
   app_state = FM_fetch_app_state(session)
 
@@ -389,7 +390,8 @@ FM_fetch_app_code = function(session, state, mod_ids){
     code_chunks = c(code_chunks, app_packages, "\n")
 
     # Creating a word reporting object to use generate elements
-    code_chunks = c("# This reporting object has the formatting  ",
+    code_chunks = c(code_chunks,
+                    "# This reporting object has the formatting  ",
                     "# information for table generation",
                     state[["yaml"]][["FM"]][["reporting"]][["content_init"]][["docx"]],
                     "")
@@ -406,12 +408,12 @@ FM_fetch_app_code = function(session, state, mod_ids){
         if(!is.null(MOD_TYPE)){
           if(MOD_TYPE == gen_mod){
 
-            # Getting the preamble code. This just collects it in
-            # preamble_chunks and will be appended to the top down below.
-            mod_deps = FM_fetch_deps(state=tmp_state, session = session)
-            if("package_code" %in% names(mod_deps)){
-              preamble_chunks = c(preamble_chunks, mod_deps$package_code)
-            }
+           ## Getting the preamble code. This just collects it in
+           ## preamble_chunks and will be appended to the top down below.
+           #mod_deps = FM_fetch_deps(state=tmp_state, session = session)
+           #if("package_code" %in% names(mod_deps)){
+           #  preamble_chunks = c(preamble_chunks, mod_deps$package_code)
+           #}
 
             MOD_FUNC  = paste0(MOD_TYPE, "_fetch_code")
             # We make sure the code generation function exists
@@ -442,12 +444,12 @@ FM_fetch_app_code = function(session, state, mod_ids){
     msgs   = "No modules found"
   }
 
-  # If there are preamble elements we prepend
-  # those to the code_chunks
-  if(!is.null(preamble_chunks)){
-    preamble_chunks = sort(unique(preamble_chunks))
-    code_chunks = c(preamble_chunks, "", code_chunks)
-  }
+ ## If there are preamble elements we prepend
+ ## those to the code_chunks
+ #if(!is.null(preamble_chunks)){
+ #  preamble_chunks = sort(unique(preamble_chunks))
+ #  code_chunks = c(preamble_chunks, "", code_chunks)
+ #}
 
   code = paste(code_chunks, collapse="\n")
 
@@ -1796,3 +1798,49 @@ res}
 
 
 
+#'@export
+#'@title Create RStudio Formatted Comments
+#'@description Takes a character string and builds a comment so it will be
+#'formatted as a section at the specified level in RStudio
+#'@param comment_str Character object.
+#'@param level Integer (1 (default),2, or 3) indicating the section level of the comment.
+#'@return Formatted comment.
+#'@examples
+#' FM_build_comment(1, "This is a level 1 header")
+#'
+#' FM_build_comment(2, paste0(rep("Long string repeated.", 5), collapse=" "))
+#'
+FM_build_comment  = function(level=1, comment_str){
+  max_len = 75
+  res = paste0("# ", comment_str, " ")
+  # Level 3 sections have 2 extra has tags
+  if(level == 3){
+    res = paste0("##",res)
+  }
+
+  # If we have a really long string we need to truncate it:
+  if(nchar(res) >= max_len){
+    res = paste0(substr(res, 1,max_len-6), " ")
+  }
+
+  # Calculating the padding length:
+  pad_len = max_len - nchar(res)
+
+  # The individual padding characters
+  if(level == 1){
+    pad_str = "-"
+  }else if(level == 2){
+    pad_str = "="
+  }else if(level == 3){
+    pad_str = "#"
+  }else{
+    pad_str = " "
+  }
+
+  # Expanding the padding out:
+  pad_str = paste0(rep(pad_str, pad_len), collapse="")
+
+  # Putting it all together. 
+  res =  paste0(res, pad_str)
+
+res}

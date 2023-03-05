@@ -24,7 +24,7 @@ FM:
     # top. Feel free to add to it if you need to. Note that packages should be
     # listed in the packages section at the same level. 
     gen_preamble: |-
-      # formods automated output
+      # formods automated output ------------------------------------------------
       # https://formods.ubiquity.tools/
       rm(list=ls())
     # Each module should have a packages section that lists the packages

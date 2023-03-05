@@ -2444,7 +2444,7 @@ DW_fetch_code = function(state){
     # code = state[[""]][["code"]]
     for(view_id in names(state[["DW"]][["views"]])){
       codes=c(codes,
-              paste0("# ", state[["DW"]][["views"]][[view_id]][["key"]]),
+              FM_build_comment(2, state[["DW"]][["views"]][[view_id]][["key"]]),
               state[["DW"]][["views"]][[view_id]][["code_previous"]],
               state[["DW"]][["views"]][[view_id]][["code_dw_only"]],
               "")

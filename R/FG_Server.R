@@ -2526,7 +2526,7 @@ FG_fetch_code = function(state){
     figs_code = c()
     for(fid in names(state[["FG"]][["figs"]])){
       figs_code = c(figs_code,
-                    paste0("# ", state[["FG"]][["figs"]][[fid]][["key"]]),
+                    FM_build_comment(2, state[["FG"]][["figs"]][[fid]][["key"]]),
                     state[["FG"]][["figs"]][[fid]][["code_fg_only"]])
     }
     code = paste(figs_code, collapse="\n")

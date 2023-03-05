@@ -29,10 +29,11 @@ reproduce the analysis within the app.
 }
 \examples{
 # We need a Shiny session object to use this function:
-id="UD"
-sess_res = UD_test_mksession(session=list(), id=id)
+sess_res = DW_test_mksession(session=list())
 session = sess_res$session
 state   = sess_res$state
-app_code = FM_fetch_app_code(session=session, state=state)
+app_code = FM_fetch_app_code(session = session, 
+                             state   = state,
+                             mod_ids = c("UD", "DW"))
 cat(app_code$code)
 }

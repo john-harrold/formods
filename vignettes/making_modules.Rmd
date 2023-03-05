@@ -162,6 +162,7 @@ changes in the checksum element below:
 -   `set_hold()` - Used to set a hold on one or more UI elements. This prevents internal updating of that UI element based on the current value in the App. 
 -   `fetch_hold()` - This will retrieve the hold status of a UI element.
 -   `remove_hold()` - This will remove any holds set on a UI element.
+-   'FM_build_comment()' - This creates comments from strings so they will form sections when viewed in RStudio.
 -   `FM_add_ui_tooltip()` - Attaches a tooltip to a UI element.
 -   `FM_init_state()` - Called at the top of your module state initialization function to create a skeleton of a module state that you can then build upon. 
 -   `FM_set_notification()` - Within you code you can create

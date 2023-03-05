@@ -104,8 +104,7 @@ reproduce the analysis within the app.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># We need a Shiny session object to use this function:</span></span></span>
-<span class="r-in"><span><span class="va">id</span><span class="op">=</span><span class="st">"UD"</span></span></span>
-<span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="UD_test_mksession.html">UD_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, id<span class="op">=</span><span class="va">id</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="DW_test_mksession.html">DW_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.docx")</span>
@@ -117,12 +116,118 @@ reproduce the analysis within the app.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:48559d397570afc9fba8ad9b252fa75a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:5a6adb8be080914162e848e04fb61f85</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:a5d1d3b8a436befcfa119b5d72d3697b</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:48d9e35c3f568c7a6f72914538d4ecd4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:680bde3fe602684945b93dda69abc020</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:1f571c6eabb372eff6c1ef806344b2e4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:a1632ef431da47f98334a9281270a3fd</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:518e56af743d086ea4b1b6070bf70472</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:460fd6e3a4a46f56f17bde8ff4ef5c01</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:12335ca5ced95462c2ed1df919a72d15</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:0794933dac491313b32ca4bbfd996641</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:75abe1a1cfc787fc68049b40c9e5749e</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:070868f0125fd16b3e648dc05be84cd0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:1da012ee43c59bf8bedc7376511d179e</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:6dfd06414929a762cc4f07d6d428289b</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:83f7106b33c98e7650432749c16d7a36</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:32652abd1996af932cbdf304cc509bd0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:dfa171056875bc474e03e0c911ace2b6</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:5d4dfb7affd116c593a856034804aa04</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:f47016aa2630055e8a1ae44ab79cabd2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:46cc2c9503359a39be98c3c0b889851a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:58ed3ad9e797e77eba05a2576b78e50f</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:aaf6ebcd2be24f05cd9b4776ef042986</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:afbbf99a8ed5f01191217b8370603a9d</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:086f760681a2b47a9a1dfd572f876fcd</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:8c045cb5e0fe9bd74e84d87d3c6725b5</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:779a7d3c81e58ea4c8a756c2e422fee0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:104438a337e6617c4504477506e90863</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:1bd57823c76715ccceab0be02ed7a79e</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:8b901fc11d897dd27c774accf0eb7097</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:7d55b640df1207dcdc56a10c9b8d8b87</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:8d91f192ea994a133c8e2fbb7ce7c11a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:d5c81022154ffb7347d7a30d66a38f60</span>
 <span class="r-in"><span><span class="va">session</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">session</span></span></span>
 <span class="r-in"><span><span class="va">state</span>   <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
-<span class="r-in"><span><span class="va">app_code</span> <span class="op">=</span> <span class="fu">FM_fetch_app_code</span><span class="op">(</span>session<span class="op">=</span><span class="va">session</span>, state<span class="op">=</span><span class="va">state</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in FM_fetch_app_code(session = session, state = state):</span> argument "mod_ids" is missing, with no default</span>
+<span class="r-in"><span><span class="va">app_code</span> <span class="op">=</span> <span class="fu">FM_fetch_app_code</span><span class="op">(</span>session <span class="op">=</span> <span class="va">session</span>, </span></span>
+<span class="r-in"><span>                             state   <span class="op">=</span> <span class="va">state</span>,</span></span>
+<span class="r-in"><span>                             mod_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UD"</span>, <span class="st">"DW"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">app_code</span><span class="op">$</span><span class="va">code</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in cat(app_code$code):</span> object 'app_code' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # formods automated output ------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # https://formods.ubiquity.tools/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rm(list=ls())</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> library("dplyr")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> library("readr")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> library("readxl")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> library("tidyr")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # This reporting object has the formatting  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # information for table generation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> rpt  = onbrand::read_template(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   template = file.path("config", "report.docx"),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mapping  = file.path("config", "report.yaml"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # Loading data ------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> myDS = readxl::read_excel(path="TEST_DATA.xlsx", sheet="DATA")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # Data wrangling ----------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # Observations ============================================================</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_1 = myDS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_1 = dplyr::filter(DW_myDS_1,EVID == 0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_1 = dplyr::filter(DW_myDS_1,DV != 0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_1 = dplyr::mutate(DW_myDS_1,IDCMT = paste0(ID, ', ', CMT))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # PK 3mg SD IV ============================================================</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_2 = myDS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_2 = dplyr::filter(DW_myDS_2,EVID == 0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_2 = dplyr::filter(DW_myDS_2,DV != 0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_2 = dplyr::filter(DW_myDS_2,Cohort %in% c("SD 3 mg IV"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_2 = dplyr::filter(DW_myDS_2,CMT %in% c("C_ng_ml"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # PK 3mg MD SC (first dose) ===============================================</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_3 = myDS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_3 = dplyr::filter(DW_myDS_3,EVID == 0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_3 = dplyr::filter(DW_myDS_3,DV != 0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_3 = dplyr::filter(DW_myDS_3,Cohort %in% c("MD 3 mg SC"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_3 = dplyr::filter(DW_myDS_3,DOSE_NUM == 1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_3 = dplyr::filter(DW_myDS_3,CMT %in% c("C_ng_ml"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # Parameters ==============================================================</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_4 = myDS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_4 = dplyr::group_by(DW_myDS_4,ID)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_4 = dplyr::filter(DW_myDS_4,row_number()==1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_4 = dplyr::select(DW_myDS_4,ID, DOSE, DOSE_STR, Cohort, ROUTE, ka, CL, Vc, Vp, Q)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_4 = tidyr::pivot_longer(DW_myDS_4, cols      = c("ka", "CL", "Vc", "Vp", "Q"), names_to  = "parameter", values_to = "values")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # PK/PD 3mg SD IV w/BQL ===================================================</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_5 = myDS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_5 = dplyr::filter(DW_myDS_5,EVID == 0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_5 = dplyr::filter(DW_myDS_5,Cohort %in% c("SD 3 mg IV"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # PK/PD 3mg MD SC (first dose) w/BQL ======================================</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_6 = myDS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_6 = dplyr::filter(DW_myDS_6,EVID == 0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_6 = dplyr::filter(DW_myDS_6,Cohort %in% c("MD 3 mg SC"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_6 = dplyr::filter(DW_myDS_6,DOSE_NUM == 1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # PK 3mg SD IV w/BQL ======================================================</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_7 = myDS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_7 = dplyr::filter(DW_myDS_7,EVID == 0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_7 = dplyr::filter(DW_myDS_7,Cohort %in% c("SD 3 mg IV"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DW_myDS_7 = dplyr::filter(DW_myDS_7,CMT %in% c("C_ng_ml"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

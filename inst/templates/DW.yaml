@@ -161,7 +161,7 @@ MC:
     # The preamble goes before the section of generated code for this module
     # in the export script that is generated on save.
     preamble: |- 
-      # Data wrangling 
+      # Data wrangling ----------------------------------------------------------
   # Name of the data set after wrangling it should be different than the value
   # in the UD section
   ds_object_name: "DW_myDS"

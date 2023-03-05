@@ -230,4 +230,4 @@ MC:
     # The preamble goes before the section of generated code for this module
     # in the export script that is generated on save.
     preamble: |- 
-      # Generating figures 
+      # Generating figures ------------------------------------------------------

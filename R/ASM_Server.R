@@ -125,7 +125,6 @@ ASM_Server <- function(id,
                                 session      = session,
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
-        #ASM_write_state(state, session, file)
 
         # Runing in a tryCatch enviornment to trap errors otherwise
         # they are lost. If it fails we log them.
@@ -632,7 +631,7 @@ ASM_write_state = function(state, session, file, mod_ids){
   # Pulling out the app state
   app_state = FM_fetch_app_state(session)
 
-  # Pulling out the reproducable app code
+  # Pulling out the reproducible app code
   app_code = FM_fetch_app_code(session=session, state = state, mod_ids = mod_ids)
 
   # Generating reports
