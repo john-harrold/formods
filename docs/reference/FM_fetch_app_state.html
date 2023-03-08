@@ -153,7 +153,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$code$gen_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "formods_export.R"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "run_analysis.R"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$code$gen_preamble</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# formods automated output ------------------------------------------------\n# https://formods.ubiquity.tools/\nrm(list=ls())"</span>
@@ -388,7 +388,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$code</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$code$packages</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "readxl" "readr" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "readxl"  "readr"   "janitor"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$code$readOnly</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
@@ -403,6 +403,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$ds_object_name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "myDS"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$clean_data</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Make sure you put whatever packages you use here in the packages section\n# above.\n#\n# contents - data frame containing the loaded dataset.\n# code     - code used to load the dataset you need to append any cleaning\n#            code you generate  here.\n# object_name - Name of the dataset object used in generated code.\n#\n# Set this field to NULL if no cleaning should be done\nif(system.file(package=\"janitor\") != \"\"){\n  contents = janitor::clean_names(contents, case=\"none\")\n  code = paste0(code, '\\n', object_name, ' = janitor::clean_names(', object_name,', case=\"none\")')\n}"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$isgood</span>
@@ -412,7 +415,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;em&gt;File loaded.&lt;/em&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$data_file_local</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T//RtmprbyeJu/FM/TEST_DATA.xlsx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T//RtmpFUN9WE/FM/TEST_DATA.xlsx"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$data_file_ext</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "xlsx"</span>
@@ -427,7 +430,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DATA" "DDT" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "myDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "myDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$object_name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "myDS"</span>
@@ -464,10 +467,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$FM_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpaQnLvV/temp_libpath4c1f4c26985/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmpu9dCGc/temp_libpath681843653169/formods/templates/formods.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MOD_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpaQnLvV/temp_libpath4c1f4c26985/formods/templates/UD.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmpu9dCGc/temp_libpath681843653169/formods/templates/UD.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>

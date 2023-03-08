@@ -675,6 +675,27 @@ UD_ds_read = function(state,
     isgood   = TRUE
   }
 
+  # If there is code cleaning in the configuration file we try to run it here
+  if(!is.null(state[["MC"]][["clean_data"]])){
+    # Attempting to clean the code
+    tcres = FM_tc(
+      cmd     = state[["MC"]][["clean_data"]],
+      tc_env  = list(
+       contents    = contents, 
+       code        = code,
+       object_name = object_name),
+      capture = c("code", "contents"))
+
+    # Here we process the results of the cleaning
+    if(tcres[["isgood"]]){
+      code     = tcres[["capture"]][["code"]]
+      contents = tcres[["capture"]][["contents"]]
+    } else {
+      FM_le(state, "clean_data failed")
+      FM_le(state, tcres[["msgs"]])
+    }
+  }
+
   res = list(contents    = contents,
              object_name = object_name,
              isgood      = isgood,

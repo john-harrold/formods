@@ -235,7 +235,7 @@ module (<code>NULL</code>)</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$gen_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "formods_export.R"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "run_analysis.R"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$code$gen_preamble</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# formods automated output ------------------------------------------------\n# https://formods.ubiquity.tools/\nrm(list=ls())"</span>
@@ -935,7 +935,7 @@ module (<code>NULL</code>)</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $DW$code_previous</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "myDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "myDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $DW$views</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $DW$views$view_1</span>
@@ -1009,10 +1009,10 @@ module (<code>NULL</code>)</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpaQnLvV/temp_libpath4c1f4c26985/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmpu9dCGc/temp_libpath681843653169/formods/templates/formods.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpaQnLvV/temp_libpath4c1f4c26985/formods/templates/DW.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmpu9dCGc/temp_libpath681843653169/formods/templates/DW.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

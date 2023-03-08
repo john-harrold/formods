@@ -39,7 +39,7 @@ MC:
     - xls
     - xlsx
   code: # module specific code options
-    packages: ["readxl", "readr"]
+    packages: ["readxl", "readr", "janitor"]
     readOnly: TRUE
     mode:     r    
     # The preamble goes before the section of generated code for this module
@@ -48,3 +48,19 @@ MC:
       # Loading data ------------------------------------------------------------
   # Name of the data set after being loaded
   ds_object_name: "myDS"
+  # This is the automated data cleaning code. You can customize it however you
+  # like. You need 
+  clean_data: |-
+    # Make sure you put whatever packages you use here in the packages section
+    # above.
+    #
+    # contents - data frame containing the loaded dataset.
+    # code     - code used to load the dataset you need to append any cleaning
+    #            code you generate  here.
+    # object_name - Name of the dataset object used in generated code.
+    #
+    # Set this field to NULL if no cleaning should be done
+    if(system.file(package="janitor") != ""){
+      contents = janitor::clean_names(contents, case="none")
+      code = paste0(code, '\n', object_name, ' = janitor::clean_names(', object_name,', case="none")')
+    }

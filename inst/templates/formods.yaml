@@ -19,7 +19,7 @@ FM:
     theme:           "vibrant_ink"    
     showLineNumbers: TRUE
     # File name of the R script to contain generation code
-    gen_file: formods_export.R
+    gen_file: run_analysis.R   
     # This is the preamble used in script generation. It goes on the
     # top. Feel free to add to it if you need to. Note that packages should be
     # listed in the packages section at the same level. 
