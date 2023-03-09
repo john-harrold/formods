@@ -23,7 +23,10 @@ ui <- dashboardPage(
        fluidRow(
          box(title="Upload",
            "ui_ud_load_data",
-           htmlOutput(NS("UD", "ui_ud_load_data"))),
+           htmlOutput(NS("UD", "ui_ud_load_data")),
+           "ui_ud_clean",
+           htmlOutput(NS("UD", "ui_ud_clean"))
+           ),
          box(title="Select Sheet for Excel Files",
            "ui_ud_select_sheets",
            htmlOutput(NS("UD", "ui_ud_select_sheets")))),

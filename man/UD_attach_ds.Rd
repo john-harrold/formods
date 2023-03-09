@@ -6,6 +6,7 @@
 \usage{
 UD_attach_ds(
   state,
+  clean = NULL,
   isgood = TRUE,
   load_msg = NULL,
   data_file_local = NULL,

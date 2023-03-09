@@ -9,9 +9,10 @@ MC:
   labels:
     default_ds:         "Original data set"
     upload_button: "Select file"
-    tab_main:      "Upload File"
+    tab_main:      "Upload file"
     tab_code:      "Code"
-    tab_preview:   "Data Preview"
+    tab_preview:   "Data preview"
+    switch_clean:  "Clean column names on upload"
     # In the following you can use placeholder for the follwing:
     # ===EXT===        Uploaded file extension
     # ===FILE===       Loaded file name
@@ -31,6 +32,9 @@ MC:
     code:
       width:  500
       height: 150
+    switch_clean:
+      tooltip: "Strange characters in column names can cause problems. When switched on, this will clean up the column headers and fix those that might break things."
+      tooltip_position: "bottom"
   # The app supports csv, tsv, xls and xlsx. You can remove those you don't
   # want to use
   allowed_extensions: 
@@ -50,17 +54,36 @@ MC:
   ds_object_name: "myDS"
   # This is the automated data cleaning code. You can customize it however you
   # like. You need 
-  clean_data: |-
-    # Make sure you put whatever packages you use here in the packages section
-    # above.
+  clean_data: 
+    # To turn on cleaning but don't allow the user to change it:   
+    #   enabled: FALSE
+    #   default: TRUE
     #
-    # contents - data frame containing the loaded dataset.
-    # code     - code used to load the dataset you need to append any cleaning
-    #            code you generate  here.
-    # object_name - Name of the dataset object used in generated code.
+    # To completely disable cleaning
+    #   enabled: FALSE
+    #   default: FALSE
     #
-    # Set this field to NULL if no cleaning should be done
-    if(system.file(package="janitor") != ""){
-      contents = janitor::clean_names(contents, case="none")
-      code = paste0(code, '\n', object_name, ' = janitor::clean_names(', object_name,', case="none")')
-    }
+    # To allow the user to select cleanng and have it on by default
+    #   enabled: TRUE 
+    #   default: TRUE 
+    #
+    # To allow the user to select cleanng and have it off by default
+    #   enabled: TRUE 
+    #   default: TRUE 
+    #
+    # This enables the UI portion
+    enabled: TRUE
+    # This sets the default for cleaning
+    default: TRUE
+    code: |-
+      # Make sure you put whatever packages you use here in the packages section
+      # above.
+      #
+      # contents - data frame containing the loaded dataset.
+      # code     - code used to load the dataset you need to append any cleaning
+      #            code you generate  here.
+      # object_name - Name of the dataset object used in generated code.
+      if(system.file(package="janitor") != ""){
+        contents = janitor::clean_names(contents, case="none")
+        code = paste0(code, '\n', object_name, ' = janitor::clean_names(', object_name,', case="none")')
+      }

@@ -52,6 +52,35 @@ UD_Server <- function(id,
                     accept = state[["MC"]][["allowed_extensions"]]))
       uiele})
     #------------------------------------
+    # Clean switch
+    output$ui_ud_clean = renderUI({
+      state = UD_fetch_state(id            = id,
+                             id_ASM        = id_ASM,
+                             input         = input,
+                             session       = session,
+                             FM_yaml_file  = FM_yaml_file,
+                             MOD_yaml_file = MOD_yaml_file)
+
+      uiele = NULL
+      if(state[["MC"]][["clean_data"]][["enabled"]]){
+        uiele =
+        shinyWidgets::materialSwitch(
+           inputId = NS(id, "switch_clean"),
+           label   = state[["MC"]][["labels"]][["switch_clean"]],
+           value   = state[["UD"]][["clean"]],
+           status  = "success"
+        )
+
+      uiele = FM_add_ui_tooltip(state, uiele,
+              tooltip     = state[["MC"]][["formatting"]][["switch_clean"]][["tooltip"]],
+              position    = state[["MC"]][["formatting"]][["switch_clean"]][["tooltip_position"]])
+
+      }
+
+
+
+      uiele})
+    #------------------------------------
     # If the user has uploaded an excel file this will
     # allow them to select the sheets:
     output$ui_ud_select_sheets =  renderUI({
@@ -212,6 +241,7 @@ UD_Server <- function(id,
 
       uiele  = tagList(
            div(style="display:inline-block;width:100%", htmlOutput(NS(id, "ui_ud_load_data"))),
+           htmlOutput(NS(id, "ui_ud_clean")),
            htmlOutput(NS(id, "ui_ud_select_sheets")),
            div(style="display:inline-block;vertical-align:top;width:40px", uiele_code_button),
            htmlOutput(NS(id, "ui_ud_text_load_result")))
@@ -315,6 +345,10 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
     state = UD_init_state(FM_yaml_file, MOD_yaml_file, id, session)
   }
 
+  clean_ds = state[["MC"]][["clean_data"]][["default"]]
+  if(!is.null(isolate(input$switch_clean))){
+     clean_ds =   isolate(input$switch_clean)
+  }
   #---------------------------------------------
   # Here we update the state based on user input
   # Loadinng the data file
@@ -343,26 +377,28 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
       if(data_file_ext %in% c("xls", "xlsx")){
         sheets = readxl::excel_sheets(data_file_local_form)
       }
-      # If we have an allowed file type and nothing loaded before then we load
-      # the file:
-      if(is.null(state[["UD"]][["data_file_local"]])){
-        load_data = TRUE
-      } else{
-        # If there is already a file loaded we need to see
-        # if there are any changes. For example if the sheet
-        # name has changed.
-        # This is triggered when a new file has been uploaded
-        if(state[["UD"]][["data_file_local"]] != data_file_local){
-          load_data = TRUE
-        } else if(!is.null(sheet)){
-          # This should be triggered when the sheet has changed
-          if(is.null(state[["UD"]][["sheet"]] )){
-            load_data = TRUE
-          } else if(sheet !=  state[["UD"]][["sheet"]]){
-            load_data = TRUE
-          }
-        }
-      }
+      load_data = TRUE
+
+     # # If we have an allowed file type and nothing loaded before then we load
+     # # the file:
+     # if(is.null(state[["UD"]][["data_file_local"]])){
+     #   load_data = TRUE
+     # } else{
+     #   # If there is already a file loaded we need to see
+     #   # if there are any changes. For example if the sheet
+     #   # name has changed.
+     #   # This is triggered when a new file has been uploaded
+     #   if(state[["UD"]][["data_file_local"]] != data_file_local){
+     #     load_data = TRUE
+     #   } else if(!is.null(sheet)){
+     #     # This should be triggered when the sheet has changed
+     #     if(is.null(state[["UD"]][["sheet"]] )){
+     #       load_data = TRUE
+     #     } else if(sheet !=  state[["UD"]][["sheet"]]){
+     #       load_data = TRUE
+     #     }
+     #   }
+     # }
     } else {
       # pulling out the template:
       load_msg = state[["MC"]][["labels"]][["msg_bad_extension"]]
@@ -392,6 +428,7 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
       # Storing all the elements in the state
       state = UD_attach_ds(
                 state,
+                clean           = clean_ds,
                 data_file_local = data_file_local        ,
                 data_file_ext   = data_file_ext          ,
                 data_file       = data_file              ,
@@ -409,7 +446,8 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
     # We clear the data and set the dataset to bad to prevent showing the old
     # dataset that is no longer relevant.
     if(clear_data){
-      state = UD_attach_ds(state)
+      state = UD_attach_ds(state,
+                clean = clean_ds)
     }
 
     # Picking up any loading messages that were defined
@@ -460,7 +498,11 @@ UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
     ui_hold         = NULL,
     session         = session)
 
-  state = UD_attach_ds(state)
+  # Assigning the default clean option
+  clean_ds =   state[["MC"]][["clean_data"]][["default"]]
+
+  state = UD_attach_ds(state,
+            clean = clean_ds)
 
 
   FM_le(state, "State initialized")
@@ -536,6 +578,7 @@ UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 #' state
 UD_attach_ds = function(
          state,
+         clean           = NULL,
          isgood          = TRUE,
          load_msg        = NULL,
          data_file_local = NULL,
@@ -547,8 +590,9 @@ UD_attach_ds = function(
          object_name     = NULL,
          contents        = NULL){
 
-  # Calculating the checksum
-  checksum        = digest::digest(contents, algo=c("md5"))
+  # Calculating the checksum we include both the contents as well as the clean
+  # state:
+  checksum = digest::digest(c(contents,  state[["UD"]][["clean"]], algo=c("md5")))
 
   if(is.null(object_name)){
   # getting the object name:
@@ -568,6 +612,7 @@ UD_attach_ds = function(
 
   state[["UD"]] =
     list(isgood          = isgood         ,
+         clean           = clean          ,
          load_msg        = load_msg       ,
          data_file_local = data_file_local,
          data_file_ext   = data_file_ext  ,
@@ -676,23 +721,26 @@ UD_ds_read = function(state,
   }
 
   # If there is code cleaning in the configuration file we try to run it here
-  if(!is.null(state[["MC"]][["clean_data"]])){
-    # Attempting to clean the code
-    tcres = FM_tc(
-      cmd     = state[["MC"]][["clean_data"]],
-      tc_env  = list(
-       contents    = contents, 
-       code        = code,
-       object_name = object_name),
-      capture = c("code", "contents"))
+  if(!is.null(state[["MC"]][["clean_data"]][["code"]])){
+    # We only do that if cleaning is selected
+    if(state[["UD"]][["clean"]]){
+      # Attempting to clean the code
+      tcres = FM_tc(
+        cmd     = state[["MC"]][["clean_data"]][["code"]],
+        tc_env  = list(
+          contents    = contents,
+          code        = code,
+          object_name = object_name),
+        capture = c("code", "contents"))
 
-    # Here we process the results of the cleaning
-    if(tcres[["isgood"]]){
-      code     = tcres[["capture"]][["code"]]
-      contents = tcres[["capture"]][["contents"]]
-    } else {
-      FM_le(state, "clean_data failed")
-      FM_le(state, tcres[["msgs"]])
+      # Here we process the results of the cleaning
+      if(tcres[["isgood"]]){
+        code     = tcres[["capture"]][["code"]]
+        contents = tcres[["capture"]][["contents"]]
+      } else {
+        FM_le(state, "clean_data failed")
+        FM_le(state, tcres[["msgs"]])
+      }
     }
   }
 
