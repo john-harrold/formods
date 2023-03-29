@@ -375,9 +375,9 @@ expected elements. JMH Add expected fields here.
 
 # YAML configuration files {.tabset}
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, eval=TRUE, class.output="scroll-100", comment=''}
-#yaml= file.path(system.file(package="formods"), "templates", "formods.yaml")
-#cat(readLines(file.path(system.file(package="formods"), "templates", "formods.yaml")), sep="\n")
+```{r echo=FALSE, message=FALSE, warning=FALSE, eval=TRUE, class.output=".scroll-100", comment=''}
+yaml= file.path(system.file(package="formods"), "templates", "formods.yaml")
+cat(readLines(file.path(system.file(package="formods"), "templates", "formods.yaml")), sep="\n")
 
 #library(shiny)
 #library(shinyAce)

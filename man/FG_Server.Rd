@@ -45,6 +45,7 @@ library(shinybusy)
 library(prompter)
 library(utils)
 library(clipr)
+library(formods)
 
 CSS <- "
 .wrapfig {
@@ -121,13 +122,13 @@ server <- function(input, output, session) {
   #Populating with test data
   #FG_test_mksession(session)
   # Module servers
-  ASM_Server(id="ASM",
+  formods::ASM_Server(id="ASM",
              react_state=react_FM, mod_ids = mod_ids)
-  UD_Server( id="UD", id_ASM = "ASM",
+  formods::UD_Server( id="UD", id_ASM = "ASM",
              react_state=react_FM)
-  DW_Server( id="DW", id_ASM = "ASM",id_UD = "UD",
+  formods::DW_Server( id="DW", id_ASM = "ASM",id_UD = "UD",
              react_state=react_FM)
-  FG_Server( id="FG", id_ASM = "ASM",id_UD = "UD", id_DW = "DW",
+  formods::FG_Server( id="FG", id_ASM = "ASM",id_UD = "UD", id_DW = "DW",
              react_state=react_FM)
 }
 
