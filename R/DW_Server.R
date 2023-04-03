@@ -18,6 +18,7 @@
 #'the name of the list element in react_state where the data set is stored.
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with DW as main section.
+#'@param deployed Boolean variable indicating whether the app is deployed or not.
 #'@param react_state Variable passed to server to allow reaction outside of
 #'module (\code{NULL})
 #'@return DW Server object
@@ -31,6 +32,7 @@ DW_Server <- function(id,
                       MOD_yaml_file = system.file(package = "formods",
                                                   "templates",
                                                   "DW.yaml"),
+                      deployed     = FALSE,
                       react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
 
@@ -188,7 +190,7 @@ DW_Server <- function(id,
       # This is all conditional on the whether clipr is installed $
       # and if the app isn't deployed
       if((system.file(package="clipr") != "") &
-         !state[["yaml"]][["FM"]][["deployed"]]){
+         !deployed){
 
 
         if(state[["DW"]][["UD"]][["isgood"]]){
@@ -1068,7 +1070,7 @@ DW_Server <- function(id,
       # This is a suggest, so we only generate this button conditionally
       uiele = NULL
       if((system.file(package="clipr") != "") &
-         !state[["yaml"]][["FM"]][["deployed"]]){
+         !deployed){
         uiele = actionBttn(
                   inputId = NS(id, "button_dw_clip"),
                   label   = state[["MC"]][["labels"]][["clip_dw"]],

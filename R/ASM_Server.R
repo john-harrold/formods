@@ -16,6 +16,7 @@
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
+#'@param deployed Boolean variable indicating whether the app is deployed or not.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@param mod_ids Vector of module IDs and order they are needed (used for code generation).
 #'@return UD Server object
@@ -27,6 +28,7 @@ ASM_Server <- function(id,
                       MOD_yaml_file = system.file(package = "formods",
                                                   "templates",
                                                   "ASM.yaml"),
+                      deployed     = FALSE,
                       react_state  = NULL,
                       mod_ids) {
   moduleServer(id, function(input, output, session) {

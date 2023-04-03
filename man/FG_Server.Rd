@@ -11,6 +11,7 @@ FG_Server(
   id_ASM = "ASM",
   id_UD = "UD",
   id_DW = "DW",
+  deployed = FALSE,
   react_state = NULL
 )
 }
@@ -26,6 +27,8 @@ FG_Server(
 \item{id_UD}{ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.}
 
 \item{id_DW}{ID string for the data wrangling module to process any uploaded data}
+
+\item{deployed}{Boolean variable indicating whether the app is deployed or not.}
 
 \item{react_state}{Variable passed to server to allow reaction outside of module (\code{NULL})}
 }
@@ -55,6 +58,12 @@ CSS <- "
   margin-bottom: 20px;
 }
 "
+
+# Default to not deployed
+if(!exists("deployed")){
+  deployed = FALSE
+}
+
 #https://fontawesome.com/icons?from=io
 data_url =
 "https://github.com/john-harrold/formods/raw/master/inst/test_data/TEST_DATA.xlsx"
@@ -115,7 +124,7 @@ server <- function(input, output, session) {
   # changes in the module state outside of the module
   react_FM = reactiveValues()
 
-  # This is the list of module ids used for reproducable script generation. The
+  # This is the list of module ids used for reproducible script generation. The
   # order here is important.
   mod_ids = c("UD", "DW", "FG")
 
@@ -123,13 +132,17 @@ server <- function(input, output, session) {
   #FG_test_mksession(session)
   # Module servers
   formods::ASM_Server(id="ASM",
-             react_state=react_FM, mod_ids = mod_ids)
+             deployed    = deployed,
+             react_state = react_FM, mod_ids = mod_ids)
   formods::UD_Server( id="UD", id_ASM = "ASM",
-             react_state=react_FM)
+             deployed    = deployed,
+             react_state = react_FM)
   formods::DW_Server( id="DW", id_ASM = "ASM",id_UD = "UD",
-             react_state=react_FM)
+             deployed    = deployed,
+             react_state = react_FM)
   formods::FG_Server( id="FG", id_ASM = "ASM",id_UD = "UD", id_DW = "DW",
-             react_state=react_FM)
+             deployed    = deployed,
+             react_state = react_FM)
 }
 
 shinyApp(ui, server)

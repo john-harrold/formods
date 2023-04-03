@@ -15,13 +15,15 @@
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with ZZ as main section.
+#'@param deployed Boolean variable indicating whether the app is deployed or not.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
 ZZ_Server <- function(id,
-                      id_ASM       = NULL,
-                      FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
-                      MOD_yaml_file = system.file(package = "ZZDESC",  "templates", "ZZ.yaml"),
-                      react_state  = NULL) {
+               id_ASM        = NULL,
+               FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
+               MOD_yaml_file = system.file(package = "ZZDESC",  "templates", "ZZ.yaml"),
+               deployed      = FALSE,
+               react_state   = NULL) {
   moduleServer(id, function(input, output, session) {
 
 

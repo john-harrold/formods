@@ -15,6 +15,7 @@
 #'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
 #'@param id_DW  ID string for the data wrangling module to process any uploaded data
+#'@param deployed Boolean variable indicating whether the app is deployed or not.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return FG Server object
 #'@example inst/test_apps/FM_compact.R
@@ -24,6 +25,7 @@ FG_Server <- function(id,
                 id_ASM        = "ASM",
                 id_UD         = "UD",
                 id_DW         = "DW",
+                deployed      = FALSE,
                 react_state   = NULL) {
   moduleServer(id, function(input, output, session) {
 
@@ -522,7 +524,7 @@ FG_Server <- function(id,
       # This is a suggest, so we only generate this button conditionally
       uiele = NULL
       if((system.file(package="clipr") != "") &
-         !state[["yaml"]][["FM"]][["deployed"]]){
+         !deployed){
         uiele = shinyWidgets::actionBttn(
                   inputId = NS(id, "button_fg_clip"),
                   label   = state[["MC"]][["labels"]][["clip_fig"]],
@@ -1099,7 +1101,7 @@ FG_Server <- function(id,
       # This is all conditional on the whether clipr is installed $
       # and if the app isn't deployed
       if((system.file(package="clipr") != "") &
-         !state[["yaml"]][["FM"]][["deployed"]]){
+         !deployed){
 
         uiele = NULL
         current_fig = FG_fetch_current_fig(state)

@@ -17,6 +17,7 @@
 #'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
+#'@param deployed Boolean variable indicating whether the app is deployed or not.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
 #'@example inst/test_apps/FM_compact.R
@@ -28,6 +29,7 @@ UD_Server <- function(id,
                       MOD_yaml_file = system.file(package = "formods",
                                                   "templates",
                                                   "UD.yaml"),
+                      deployed     = FALSE,
                       react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
 

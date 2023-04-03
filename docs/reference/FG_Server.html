@@ -77,6 +77,7 @@
 <span>  id_ASM <span class="op">=</span> <span class="st">"ASM"</span>,</span>
 <span>  id_UD <span class="op">=</span> <span class="st">"UD"</span>,</span>
 <span>  id_DW <span class="op">=</span> <span class="st">"DW"</span>,</span>
+<span>  deployed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  react_state <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -105,6 +106,10 @@
 
 <dt>id_DW</dt>
 <dd><p>ID string for the data wrangling module to process any uploaded data</p></dd>
+
+
+<dt>deployed</dt>
+<dd><p>Boolean variable indicating whether the app is deployed or not.</p></dd>
 
 
 <dt>react_state</dt>
@@ -139,6 +144,12 @@
 <span class="r-in"><span><span class="st">  margin-bottom: 20px;</span></span></span>
 <span class="r-in"><span><span class="st">}</span></span></span>
 <span class="r-in"><span><span class="st">"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Default to not deployed</span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists</a></span><span class="op">(</span><span class="st">"deployed"</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">deployed</span> <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#https://fontawesome.com/icons?from=io</span></span></span>
 <span class="r-in"><span><span class="va">data_url</span> <span class="op">=</span></span></span>
 <span class="r-in"><span><span class="st">"https://github.com/john-harrold/formods/raw/master/inst/test_data/TEST_DATA.xlsx"</span></span></span>
@@ -199,7 +210,7 @@
 <span class="r-in"><span>  <span class="co"># changes in the module state outside of the module</span></span></span>
 <span class="r-in"><span>  <span class="va">react_FM</span> <span class="op">=</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/reactiveValues.html" class="external-link">reactiveValues</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co"># This is the list of module ids used for reproducable script generation. The</span></span></span>
+<span class="r-in"><span>  <span class="co"># This is the list of module ids used for reproducible script generation. The</span></span></span>
 <span class="r-in"><span>  <span class="co"># order here is important.</span></span></span>
 <span class="r-in"><span>  <span class="va">mod_ids</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UD"</span>, <span class="st">"DW"</span>, <span class="st">"FG"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -207,13 +218,17 @@
 <span class="r-in"><span>  <span class="co">#FG_test_mksession(session)</span></span></span>
 <span class="r-in"><span>  <span class="co"># Module servers</span></span></span>
 <span class="r-in"><span>  <span class="fu">formods</span><span class="fu">::</span><span class="fu"><a href="ASM_Server.html">ASM_Server</a></span><span class="op">(</span>id<span class="op">=</span><span class="st">"ASM"</span>,</span></span>
-<span class="r-in"><span>             react_state<span class="op">=</span><span class="va">react_FM</span>, mod_ids <span class="op">=</span> <span class="va">mod_ids</span><span class="op">)</span></span></span>
+<span class="r-in"><span>             deployed    <span class="op">=</span> <span class="va">deployed</span>,</span></span>
+<span class="r-in"><span>             react_state <span class="op">=</span> <span class="va">react_FM</span>, mod_ids <span class="op">=</span> <span class="va">mod_ids</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">formods</span><span class="fu">::</span><span class="fu"><a href="UD_Server.html">UD_Server</a></span><span class="op">(</span> id<span class="op">=</span><span class="st">"UD"</span>, id_ASM <span class="op">=</span> <span class="st">"ASM"</span>,</span></span>
-<span class="r-in"><span>             react_state<span class="op">=</span><span class="va">react_FM</span><span class="op">)</span></span></span>
+<span class="r-in"><span>             deployed    <span class="op">=</span> <span class="va">deployed</span>,</span></span>
+<span class="r-in"><span>             react_state <span class="op">=</span> <span class="va">react_FM</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">formods</span><span class="fu">::</span><span class="fu"><a href="DW_Server.html">DW_Server</a></span><span class="op">(</span> id<span class="op">=</span><span class="st">"DW"</span>, id_ASM <span class="op">=</span> <span class="st">"ASM"</span>,id_UD <span class="op">=</span> <span class="st">"UD"</span>,</span></span>
-<span class="r-in"><span>             react_state<span class="op">=</span><span class="va">react_FM</span><span class="op">)</span></span></span>
+<span class="r-in"><span>             deployed    <span class="op">=</span> <span class="va">deployed</span>,</span></span>
+<span class="r-in"><span>             react_state <span class="op">=</span> <span class="va">react_FM</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">formods</span><span class="fu">::</span><span class="fu">FG_Server</span><span class="op">(</span> id<span class="op">=</span><span class="st">"FG"</span>, id_ASM <span class="op">=</span> <span class="st">"ASM"</span>,id_UD <span class="op">=</span> <span class="st">"UD"</span>, id_DW <span class="op">=</span> <span class="st">"DW"</span>,</span></span>
-<span class="r-in"><span>             react_state<span class="op">=</span><span class="va">react_FM</span><span class="op">)</span></span></span>
+<span class="r-in"><span>             deployed    <span class="op">=</span> <span class="va">deployed</span>,</span></span>
+<span class="r-in"><span>             react_state <span class="op">=</span> <span class="va">react_FM</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></span>
