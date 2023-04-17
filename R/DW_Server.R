@@ -3014,6 +3014,35 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   dwb_res  = dwrs_builder(state)
   dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
   state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+  #------------------------------------
+  # Creating "PKPD 3mg MD IV w/BQL w/dosing" data view
+  state = DW_new_view(state)
+  # Updating the key
+  state[["DW"]][["ui"]][["current_key"]] = "PK 3mg SD IV w/BQL w/dosing"
+  current_view = DW_fetch_current_view(state)
+  current_view[["key"]] = state[["DW"]][["ui"]][["current_key"]]
+  state = DW_set_current_view(state, current_view)
+
+  # Adding the filtering elements:
+  # The cohort we want:
+  state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+  state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "Cohort"
+  state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "%in%"
+  state[["DW"]][["ui"]][["fds_filter_rhs"]]             = "MD 3 mg IV"
+
+  dwb_res  = dwrs_builder(state)
+  dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+  state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+
+# # The output we want:
+# state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
+# state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "CMT"
+# state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "%in%"
+# state[["DW"]][["ui"]][["fds_filter_rhs"]]             = "C_ng_ml"
+#
+# dwb_res  = dwrs_builder(state)
+# dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+# state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
 
   # This functions works both in a shiny app and outside of one
   # if we're in a shiny app then the 'session' then the class of
