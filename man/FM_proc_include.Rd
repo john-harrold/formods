@@ -21,5 +21,5 @@ id="UD"
 sess_res = UD_test_mksession(session=list(), id=id)
 state = sess_res$state
 session = sess_res$session
-FM_procs_include(state, session)
+FM_proc_include(state, session)
 }

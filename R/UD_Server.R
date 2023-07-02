@@ -514,6 +514,7 @@ UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 #'@title Attach Data Set to UD State
 #'@description Attaches a dataset to the UD state supplied.
 #'@param state UD state module.
+#'@param clean  Boolean switch to determine if the headers in the loaded dataset was cleaned. 
 #'@param isgood Boolean object indicating if the file was successfully loaded.
 #'@param load_msg Text message indicated the success or any problems encountered when uploading the file.
 #'@param data_file_local Full path to the data file on the server.

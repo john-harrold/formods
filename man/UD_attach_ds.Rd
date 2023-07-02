@@ -22,6 +22,8 @@ UD_attach_ds(
 \arguments{
 \item{state}{UD state module.}
 
+\item{clean}{Boolean switch to determine if the headers in the loaded dataset was cleaned.}
+
 \item{isgood}{Boolean object indicating if the file was successfully loaded.}
 
 \item{load_msg}{Text message indicated the success or any problems encountered when uploading the file.}
