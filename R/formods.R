@@ -357,7 +357,7 @@ hold_status}
 #' sess_res = DW_test_mksession(session=list())
 #' session = sess_res$session
 #' state   = sess_res$state
-#' app_code = FM_fetch_app_code(session = session, 
+#' app_code = FM_fetch_app_code(session = session,
 #'                              state   = state,
 #'                              mod_ids = c("UD", "DW"))
 #' cat(app_code$code)
@@ -1840,7 +1840,22 @@ FM_build_comment  = function(level=1, comment_str){
   # Expanding the padding out:
   pad_str = paste0(rep(pad_str, pad_len), collapse="")
 
-  # Putting it all together. 
+  # Putting it all together.
   res =  paste0(res, pad_str)
+
+res}
+
+#'@export
+#'@title Creates Icon Link
+#'@description Creates a link to a Shiny icon
+#'@param href URL to link to.
+#'@param target New tab name.
+#'@param icon_name Name of icon to use (arguemnt to shiny::icon, default: "circle-info")
+#'@return A list with a shiny.tag class that can be converted into an HTML string via as.character() and saved to a file with save_html()
+#'@examples
+#' icon_link(href="https://formods.ubiquity.tools")
+icon_link = function(href, target="_blank", icon_name="circle-info"){
+
+  res = tags$a(href=href, target=target, shiny::icon(icon_name))
 
 res}

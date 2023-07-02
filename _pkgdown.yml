@@ -12,10 +12,11 @@ reference:
   - contents:
     - autocast
     - starts_with("FM_")
-    - has_changed
-    - set_hold
     - fetch_hold
+    - has_changed
+    - icon_link
     - remove_hold
+    - set_hold
     - unfactor
   - title: "Upload Data (UD)"
   - contents:
