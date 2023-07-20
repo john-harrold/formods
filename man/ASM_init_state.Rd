@@ -24,7 +24,7 @@ Creates a list of the initialized module state
 \examples{
 # Within shiny the session variable will exist,
 # this creates an example here for testing purposes:
-sess_res = ASM_test_mksession(session=list())
+sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
 session = sess_res$session
 state = ASM_init_state(
    FM_yaml_file  = system.file(package = "formods",

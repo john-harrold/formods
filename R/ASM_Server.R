@@ -402,7 +402,7 @@ ASM_Server <- function(id,
 #'@examples
 #' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
-#' sess_res = ASM_test_mksession(session=list())
+#' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
 #' session = sess_res$session
 #' input   = sess_res$input
 #'
@@ -534,7 +534,7 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
 #'@examples
 #' # Within shiny the session variable will exist,
 #' # this creates an example here for testing purposes:
-#' sess_res = ASM_test_mksession(session=list())
+#' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
 #' session = sess_res$session
 #'state = ASM_init_state(
 #'    FM_yaml_file  = system.file(package = "formods",
@@ -592,7 +592,7 @@ ASM_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
 #'@return character object with the download file name
 #'@examples
 #' # Creating a state object for testing
-#' sess_res = ASM_test_mksession(session=list())
+#' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
 #' state = sess_res$state
 #' dlfn = ASM_fetch_dlfn(state)
 #' dlfn
@@ -723,7 +723,7 @@ ASM_write_state = function(state, session, file, mod_ids){
 #'@return NULL the ASM module does not generate code
 #'@examples
 #' # Creating a state object for testing
-#' sess_res = ASM_test_mksession(session=list())
+#' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
 #' state = sess_res$state
 #' code = ASM_fetch_code(state)
 ASM_fetch_code = function(state){
@@ -740,6 +740,7 @@ code}
 #'@param id_UD An ID string that corresponds with the ID used to call the UD modules UI elements
 #'@param id_DW An ID string that corresponds with the ID used to call the DW modules UI elements
 #'@param id_FG An ID string that corresponds with the ID used to call the FG modules UI elements
+#'@param full_session  Boolean to indicate if the full test session should be created (default \code{TRUE}).
 #'@return list with the following elements
 #' \itemize{
 #'   \item{isgood:} Boolean indicating the exit status of the function.
@@ -749,15 +750,15 @@ code}
 #'   \item{rsc:} The \code{react_state} components.
 #'}
 #'@examples
-#' sess_res = ASM_test_mksession(session=list())
-ASM_test_mksession = function(session, id="ASM", id_UD="UD", id_DW = "DW", id_FG="FG"){
+#' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
+ASM_test_mksession = function(session, id="ASM", id_UD="UD", id_DW = "DW", id_FG="FG", full_session=TRUE){
 
   isgood = TRUE
   rsc    = list()
   input  = list()
 
   # Populating the session with FG components
-  sess_res = FG_test_mksession(session, id=id_FG, id_UD = id_UD, id_DW=id_DW)
+  sess_res = FG_test_mksession(session, id=id_FG, id_UD = id_UD, id_DW=id_DW, full_session=full_session)
   if(!("ShinySession" %in% class(session))){
     session = sess_res[["session"]]
   }
