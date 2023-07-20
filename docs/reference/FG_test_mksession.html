@@ -70,7 +70,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">FG_test_mksession</span><span class="op">(</span><span class="va">session</span>, id <span class="op">=</span> <span class="st">"FG"</span>, id_UD <span class="op">=</span> <span class="st">"UD"</span>, id_DW <span class="op">=</span> <span class="st">"DW"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">FG_test_mksession</span><span class="op">(</span></span>
+<span>  <span class="va">session</span>,</span>
+<span>  id <span class="op">=</span> <span class="st">"FG"</span>,</span>
+<span>  id_UD <span class="op">=</span> <span class="st">"UD"</span>,</span>
+<span>  id_DW <span class="op">=</span> <span class="st">"DW"</span>,</span>
+<span>  full_session <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -90,6 +96,10 @@
 <dt>id_DW</dt>
 <dd><p>An ID string that corresponds with the ID used to call the DW modules UI elements</p></dd>
 
+
+<dt>full_session</dt>
+<dd><p>Boolean to indicate if the full test session should be created (default <code>TRUE</code>).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -104,7 +114,7 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu">FG_test_mksession</span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu">FG_test_mksession</span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, full_session<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.docx")</span>
@@ -171,18 +181,9 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: State initialized</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:6201bcc0b3e82efebe08bebaf28a96de</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:31886376f3b699f823442e6f0b8a4ad5</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:ccf4122186cabdf2c7f213a87445ddf2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:266a703cbcf886439c90849cbff6fd4f</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:435b4215ca440f8a514a9041859dd1a5</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:f722dd351fa02bad57825e242cd32e29</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:7c62ce865dabb01d0653cf2259cce0c9</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:e673db893a939af872b99a94f37fcb87</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:8719d7a130e403adeb0b0df80dba3500</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:f7fc41159365428f29b77a8f5800214c</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:4f9106bceb26dfda45ebeabe525d5097</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:de60111c32ce374587e09f433b9d5287</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:7e481a71a3f444c944aae95d2f49b06a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:16a60b2fd8e5d2a297a7f9d8def30b48</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:5162eb775941cbfe32bf8a7bbd38ac84</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:077a1d78b1eff228dba8789092d208bb</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

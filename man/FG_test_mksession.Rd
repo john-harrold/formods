@@ -4,7 +4,13 @@
 \alias{FG_test_mksession}
 \title{Populate Session Data for Module Testing}
 \usage{
-FG_test_mksession(session, id = "FG", id_UD = "UD", id_DW = "DW")
+FG_test_mksession(
+  session,
+  id = "FG",
+  id_UD = "UD",
+  id_DW = "DW",
+  full_session = TRUE
+)
 }
 \arguments{
 \item{session}{Shiny session variable (in app) or a list (outside of app)}
@@ -14,6 +20,8 @@ FG_test_mksession(session, id = "FG", id_UD = "UD", id_DW = "DW")
 \item{id_UD}{An ID string that corresponds with the ID used to call the UD modules UI elements}
 
 \item{id_DW}{An ID string that corresponds with the ID used to call the DW modules UI elements}
+
+\item{full_session}{Boolean to indicate if the full test session should be created (default \code{TRUE}).}
 }
 \value{
 list with the following elements
@@ -29,5 +37,5 @@ list with the following elements
 Populates the supplied session variable for testing.
 }
 \examples{
-sess_res = FG_test_mksession(session=list())
+sess_res = FG_test_mksession(session=list(), full_session=FALSE)
 }

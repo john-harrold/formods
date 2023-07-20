@@ -17,7 +17,7 @@ Fetches the code to generate results seen in the app
 }
 \examples{
 # This will create a populated FG state object:
-sess_res = FG_test_mksession(session=list())
+sess_res = FG_test_mksession(session=list(), full_session=FALSE)
 state   = sess_res$state
 code  = FG_fetch_code(state)
 cat(paste(code, collapse="\n"))

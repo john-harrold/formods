@@ -122,7 +122,7 @@ new figure or force a rebuild after a dataset update.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://formods.ubiquity.tools/" class="external-link">formods</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Within shiny both session and input variables will exist, </span></span></span>
 <span class="r-in"><span><span class="co"># this creates examples here for testing purposes:</span></span></span>
-<span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="FG_test_mksession.html">FG_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="FG_test_mksession.html">FG_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, full_session<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.docx")</span>
@@ -189,18 +189,9 @@ new figure or force a rebuild after a dataset update.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: State initialized</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:6201bcc0b3e82efebe08bebaf28a96de</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:31886376f3b699f823442e6f0b8a4ad5</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:ccf4122186cabdf2c7f213a87445ddf2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:266a703cbcf886439c90849cbff6fd4f</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:435b4215ca440f8a514a9041859dd1a5</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:f722dd351fa02bad57825e242cd32e29</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:7c62ce865dabb01d0653cf2259cce0c9</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:e673db893a939af872b99a94f37fcb87</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:8719d7a130e403adeb0b0df80dba3500</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:f7fc41159365428f29b77a8f5800214c</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:4f9106bceb26dfda45ebeabe525d5097</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:de60111c32ce374587e09f433b9d5287</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:7e481a71a3f444c944aae95d2f49b06a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:16a60b2fd8e5d2a297a7f9d8def30b48</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:5162eb775941cbfe32bf8a7bbd38ac84</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:077a1d78b1eff228dba8789092d208bb</span>
 <span class="r-in"><span><span class="va">session</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">session</span></span></span>
 <span class="r-in"><span><span class="va">input</span>   <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">input</span></span></span>
 <span class="r-in"><span></span></span>
@@ -227,11 +218,11 @@ new figure or force a rebuild after a dataset update.</p></dd>
 <span class="r-in"><span><span class="co"># If you made any changes to the actual figure, this will </span></span></span>
 <span class="r-in"><span><span class="co"># force a rebuild of the current figure:</span></span></span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="fu">FG_build</span><span class="op">(</span> state<span class="op">=</span><span class="va">state</span>, del_row <span class="op">=</span> <span class="cn">NULL</span>, cmd <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:e286161de44f8c8ac7cd2691f06e8cb8</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:8937817fcb0a255b8083b5ff382f34db</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># To create a new empty figure you can do this:</span></span></span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="fu"><a href="FG_new_fig.html">FG_new_fig</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:23ef71221072f90115d32e08b7909018</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:3903405af7d29237f242d7db1342e15c</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

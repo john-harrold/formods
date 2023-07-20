@@ -21,7 +21,7 @@ Used to extract the specified page from the current figure.
 library(formods)
 # Within shiny both session and input variables will exist, 
 # this creates examples here for testing purposes:
-sess_res = FG_test_mksession(session=list())
+sess_res = FG_test_mksession(session=list(), full_session=FALSE)
 session = sess_res$session
 input   = sess_res$input
 

@@ -2443,9 +2443,9 @@ state}
 #'@return state with checksum updated.
 #'@examples
 #'# This will create a populated FG state object:
-#'sess_res = FG_test_mksession(session=list())
-#'state   = sess_res$state
-#'state = FG_update_checksum(state)
+#' sess_res = FG_test_mksession(session=list(), full_session=FALSE)
+#' state   = sess_res$state
+#' state = FG_update_checksum(state)
 FG_update_checksum = function(state){
 
   fig_checksums = c()
@@ -2515,7 +2515,7 @@ fobj}
 #'@return Character object vector with the lines of code
 #'@examples
 #'# This will create a populated FG state object:
-#'sess_res = FG_test_mksession(session=list())
+#'sess_res = FG_test_mksession(session=list(), full_session=FALSE)
 #'state   = sess_res$state
 #'code  = FG_fetch_code(state)
 #'cat(paste(code, collapse="\n"))
@@ -2714,6 +2714,7 @@ res}
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
 #'@param id_UD An ID string that corresponds with the ID used to call the UD modules UI elements
 #'@param id_DW An ID string that corresponds with the ID used to call the DW modules UI elements
+#'@param full_session  Boolean to indicate if the full test session should be created (default \code{TRUE}).
 #'@return list with the following elements
 #' \itemize{
 #'   \item{isgood:} Boolean indicating the exit status of the function.
@@ -2723,8 +2724,8 @@ res}
 #'   \item{rsc:} The \code{react_state} components.
 #'}
 #'@examples
-#' sess_res = FG_test_mksession(session=list())
-FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
+#' sess_res = FG_test_mksession(session=list(), full_session=FALSE)
+FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW", full_session=TRUE){
 
   isgood = TRUE
   rsc    = NULL
@@ -2803,112 +2804,114 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW"){
 
 
 
-  #------------------------------------
-  # Plotting the 3 mg SD IV cohort
-  # Updating the key and data view
-  state = FG_new_fig(state)
-  state[["FG"]][["ui"]][["text_fig_key"]]        = "3 mg SD IV"
-  state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_2"
-  current_fig = FG_fetch_current_fig(state)
-  current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
-  current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
-  state = FG_set_current_fig(state, current_fig)
-
-  # Adding the lines
-  state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
-  state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
-  state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
-  state[["FG"]][["ui"]][["select_component_group"]]     = "ID"
-
-  fgb_res  = fers_builder(state)
-  state = FG_build( state,
-    cmd     = fgb_res[["cmd"]],
-    element = fgb_res[["element"]],
-    desc    = fgb_res[["desc"]])
-
-
-  # setting the log scale
-  state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
-  state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
-
-  fgb_res  = fers_builder(state)
-  state = FG_build( state,
-    cmd     = fgb_res[["cmd"]],
-    element = fgb_res[["element"]],
-    desc    = fgb_res[["desc"]])
-
-  #------------------------------------
-  # Plotting the 3 mg MD SC first dose cohort
-  # Updating the key and data view
-  state = FG_new_fig(state)
-  state[["FG"]][["ui"]][["text_fig_key"]]        = "3 mg SC first dose"
-  state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_3"
-  current_fig = FG_fetch_current_fig(state)
-  current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
-  current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
-  state = FG_set_current_fig(state, current_fig)
-
-  # Adding the lines
-  state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
-  state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
-  state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
-  state[["FG"]][["ui"]][["select_component_group"]]     = "ID"
-
-  fgb_res  = fers_builder(state)
-  state = FG_build( state,
-    cmd     = fgb_res[["cmd"]],
-    element = fgb_res[["element"]],
-    desc    = fgb_res[["desc"]])
-
-
-  # setting the log scale
-  state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
-  state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
-
-  fgb_res  = fers_builder(state)
-  state = FG_build( state,
-    cmd     = fgb_res[["cmd"]],
-    element = fgb_res[["element"]],
-    desc    = fgb_res[["desc"]])
-
-  #------------------------------------
-  # Boxplots of parameters
-  # Updating the key and data view
-  state = FG_new_fig(state)
-  state[["FG"]][["ui"]][["text_fig_key"]]        = "Parameter distribution by Cohort"
-  state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_4"
-  current_fig = FG_fetch_current_fig(state)
-  current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
-  current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
-  state = FG_set_current_fig(state, current_fig)
-
-  # Adding the boxplots
-  state[["FG"]][["ui"]][["select_fg_element"]]          = "boxplot"
-  state[["FG"]][["ui"]][["select_component_x"]]         = "parameter"
-  state[["FG"]][["ui"]][["select_component_y"]]         = "values"
-  state[["FG"]][["ui"]][["select_component_fill"]]      = "Cohort"
-  # The select_component* ui elements are recycled in the UI and would
-  # normally be reset to "" when a new figure element is loaded. For the
-  # purposes here we need to reset those manually.
-  state[["FG"]][["ui"]][["select_component_group"]]     = ""
-  state[["FG"]][["ui"]][["select_component_color"]]     = ""
-
-  fgb_res  = fers_builder(state)
-  state = FG_build( state,
-    cmd     = fgb_res[["cmd"]],
-    element = fgb_res[["element"]],
-    desc    = fgb_res[["desc"]])
-
-  # setting the log scale
-  state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
-  state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
-
-  fgb_res  = fers_builder(state)
-  state = FG_build( state,
-    cmd     = fgb_res[["cmd"]],
-    element = fgb_res[["element"]],
-    desc    = fgb_res[["desc"]])
-  #------------------------------------
+  if(full_session){
+    #------------------------------------
+    # Plotting the 3 mg SD IV cohort
+    # Updating the key and data view
+    state = FG_new_fig(state)
+    state[["FG"]][["ui"]][["text_fig_key"]]        = "3 mg SD IV"
+    state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_2"
+    current_fig = FG_fetch_current_fig(state)
+    current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
+    current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
+    state = FG_set_current_fig(state, current_fig)
+    
+    # Adding the lines
+    state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
+    state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
+    state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
+    state[["FG"]][["ui"]][["select_component_group"]]     = "ID"
+    
+    fgb_res  = fers_builder(state)
+    state = FG_build( state,
+      cmd     = fgb_res[["cmd"]],
+      element = fgb_res[["element"]],
+      desc    = fgb_res[["desc"]])
+    
+    
+    # setting the log scale
+    state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
+    state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
+    
+    fgb_res  = fers_builder(state)
+    state = FG_build( state,
+      cmd     = fgb_res[["cmd"]],
+      element = fgb_res[["element"]],
+      desc    = fgb_res[["desc"]])
+    
+    #------------------------------------
+    # Plotting the 3 mg MD SC first dose cohort
+    # Updating the key and data view
+    state = FG_new_fig(state)
+    state[["FG"]][["ui"]][["text_fig_key"]]        = "3 mg SC first dose"
+    state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_3"
+    current_fig = FG_fetch_current_fig(state)
+    current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
+    current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
+    state = FG_set_current_fig(state, current_fig)
+    
+    # Adding the lines
+    state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
+    state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
+    state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
+    state[["FG"]][["ui"]][["select_component_group"]]     = "ID"
+    
+    fgb_res  = fers_builder(state)
+    state = FG_build( state,
+      cmd     = fgb_res[["cmd"]],
+      element = fgb_res[["element"]],
+      desc    = fgb_res[["desc"]])
+    
+    
+    # setting the log scale
+    state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
+    state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
+    
+    fgb_res  = fers_builder(state)
+    state = FG_build( state,
+      cmd     = fgb_res[["cmd"]],
+      element = fgb_res[["element"]],
+      desc    = fgb_res[["desc"]])
+    
+    #------------------------------------
+    # Boxplots of parameters
+    # Updating the key and data view
+    state = FG_new_fig(state)
+    state[["FG"]][["ui"]][["text_fig_key"]]        = "Parameter distribution by Cohort"
+    state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_4"
+    current_fig = FG_fetch_current_fig(state)
+    current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
+    current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
+    state = FG_set_current_fig(state, current_fig)
+    
+    # Adding the boxplots
+    state[["FG"]][["ui"]][["select_fg_element"]]          = "boxplot"
+    state[["FG"]][["ui"]][["select_component_x"]]         = "parameter"
+    state[["FG"]][["ui"]][["select_component_y"]]         = "values"
+    state[["FG"]][["ui"]][["select_component_fill"]]      = "Cohort"
+    # The select_component* ui elements are recycled in the UI and would
+    # normally be reset to "" when a new figure element is loaded. For the
+    # purposes here we need to reset those manually.
+    state[["FG"]][["ui"]][["select_component_group"]]     = ""
+    state[["FG"]][["ui"]][["select_component_color"]]     = ""
+    
+    fgb_res  = fers_builder(state)
+    state = FG_build( state,
+      cmd     = fgb_res[["cmd"]],
+      element = fgb_res[["element"]],
+      desc    = fgb_res[["desc"]])
+    
+    # setting the log scale
+    state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
+    state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
+    
+    fgb_res  = fers_builder(state)
+    state = FG_build( state,
+      cmd     = fgb_res[["cmd"]],
+      element = fgb_res[["element"]],
+      desc    = fgb_res[["desc"]])
+    #------------------------------------
+  }
 
   # This functions works both in a shiny app and outside of one
   # if we're in a shiny app then the 'session' then the class of
