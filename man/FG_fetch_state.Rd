@@ -86,12 +86,6 @@ structure of the list is defined below:
 Merges default app options with the changes made in the UI
 }
 \examples{
-# Within shiny both session and input variables will exist,
-# this creates examples here for testing purposes:
-sess_res = FG_test_mksession(session=list())
-session = sess_res$session
-input   = sess_res$input
-
 # Configuration files
 FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
 MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml")
@@ -101,6 +95,10 @@ MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml")
 id    = "FG"
 id_UD = "UD"
 id_DW = "DW"
+
+# These would be the Shiny input and session variables
+input   = list()
+session = list()
 
 # Creating an empty state object
 state = FG_fetch_state(id              = id,

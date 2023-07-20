@@ -27,11 +27,11 @@ MC:
   formatting:
     # Dimensions of the table preview in pixels
     preview:    
-      width:  500
-      height: 400
+      width:  800
+      height: 500
     code:
       width:  500
-      height: 150
+      height: 200
     switch_clean:
       tooltip: "Strange characters in column names can cause problems. When switched on, this will clean up the column headers and fix those that might break things."
       tooltip_position: "bottom"

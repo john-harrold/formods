@@ -314,6 +314,7 @@ state}
 #'@param state module state with all of the current ui elements populated
 #'@param inputId The input ID of the UI element that was put on hold
 #'@return Boolean value with the hold status
+#'@example inst/test_apps/FM_holds.R
 fetch_hold = function(state, inputId=NULL){
 
   hold_status = NULL

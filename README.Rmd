@@ -51,7 +51,6 @@ Note that because `formods` depends on `onbrand` you will need to first install 
 
 # Getting started
 
-
 ``` r 
 library(shiny)
 library(formods)

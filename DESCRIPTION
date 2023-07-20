@@ -1,6 +1,6 @@
 Package: formods
 Type: Package
-Title: Shiny Modules For General Tasks
+Title: Shiny Modules for General Tasks
 Version: 0.1.0
 Authors@R: c(person("John", "Harrold",
                     role    = c("aut", "cre"),
@@ -21,7 +21,7 @@ Imports:
   dplyr,
   ggforce,
   ggplot2,
-  onbrand,
+  onbrand (>= 1.0.3),
   readr,
   readxl,
   rlang,

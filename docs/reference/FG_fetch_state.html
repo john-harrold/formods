@@ -167,91 +167,7 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Within shiny both session and input variables will exist,</span></span></span>
-<span class="r-in"><span><span class="co"># this creates examples here for testing purposes:</span></span></span>
-<span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="FG_test_mksession.html">FG_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:897d952fecbc804999396a96f9df4b20</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: State initialized</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:5b0f0b05ee3ac7336a74c564bb6efdad</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:65801ab4b3c645aabf7edf91fc2f0d2c</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:7fb2dd3b16b1780c4c24f64d658dd7c7</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:5ab04ea00be44c0040695a4ed6243c90</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:960db107cfe9db93578f79f0ae6283e2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:f0b5d122dcb04f207cba233253b61c4b</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:189ed77a84bd9fcdd7b26abff8bea34a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:669ec77d50652669cd3fcfd949469b37</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:dd6cafa0be3b6b195d230a11e9f07f9f</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:5c2022c376ca8f56b839347156559890</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:43640500a04674debd8e2399056c384a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:f81c45ac1ef4e7b43153d8c8eaf7aed6</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:207cde891d98e20c4afbb7fb5fb0aba2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:0a673e81c01cbbf33533dd65d6baf9e3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:af3f3aefd0115ed9dfdd4d6ef9d5182f</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:b0ccaee21e859322df0bf79d00c4b347</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:2d3d6e9e38be6dea813b2d4d679e34b5</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:2b60dd49b48a4e65200dc7241ad270e3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:3c92f397181a4fcdbdf2bd7dd7425e77</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:92b81d7573def603649370b87c123b55</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:9210264aabc0339e832b0c6bcfda32af</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:fe62fde1e7e738a1a35c479de9d5007b</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:ff3edcd4c1e58c96ea2707361916ffbc</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:b6cdfcef0432c5d9b1fa2bd46122ffa2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:4fa4283f1fd8fd6cf6e6e7df0669723a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:cf3e139cef554b2d09dca619ee6aff41</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:a9154d91a9e4b5d21f9585a6f68dd083</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:4b5c6ad66658ddfa92d10ae1b0b7afa8</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:591ac875a490b66a1fa7f4e7d4ba1c62</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:afa3ca309cc3e6a48f542f4e8eadd54a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:5c918dd4f53a4f1e56115abb09c4f332</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:159ddf8c8cd26b178dfda5434bbecfa1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:8bb3c97e700998f2f73353189bd07831</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:a1eceffec3ff7d9f9961683b3d07088b</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: State initialized</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:6201bcc0b3e82efebe08bebaf28a96de</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:35492612449d2c29eb6d4c29dfb58ff2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:ccaa27f90c1fdb6fbb2ca517026699ee</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:9a1b37fcb639f32a40c45ef2165f1870</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:ca39cf5cf0b880399645643f77fe6de8</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:b1fd55bbff0cd5832dbba5b7b6b96976</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:9c85d6bb1d95e51801e2d597a9ab6bee</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:aab7eb0370c75b8f7bf74c629e87cdfb</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:74736faedc68c2c3bd198fdd8949d872</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:6a349943a9bcbfc08eb852d6e36647ff</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:e3e96c7f6daf3ef1cbab42c5fa1543f6</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:8213f87aee841e6f25172e37fba62ab5</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:a545e926ce0cc3e170f98f05278cbcf1</span>
-<span class="r-in"><span><span class="va">session</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">session</span></span></span>
-<span class="r-in"><span><span class="va">input</span>   <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">input</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Configuration files</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Configuration files</span></span></span>
 <span class="r-in"><span><span class="va">FM_yaml_file</span>  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"formods.yaml"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">MOD_yaml_file</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"formods"</span>, <span class="st">"templates"</span>, <span class="st">"FG.yaml"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -260,6 +176,10 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-in"><span><span class="va">id</span>    <span class="op">=</span> <span class="st">"FG"</span></span></span>
 <span class="r-in"><span><span class="va">id_UD</span> <span class="op">=</span> <span class="st">"UD"</span></span></span>
 <span class="r-in"><span><span class="va">id_DW</span> <span class="op">=</span> <span class="st">"DW"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># These would be the Shiny input and session variables</span></span></span>
+<span class="r-in"><span><span class="va">input</span>   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">session</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Creating an empty state object</span></span></span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="fu">FG_fetch_state</span><span class="op">(</span>id              <span class="op">=</span> <span class="va">id</span>,</span></span>
@@ -270,6 +190,17 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-in"><span>                       id_UD           <span class="op">=</span> <span class="va">id_UD</span>,</span></span>
 <span class="r-in"><span>                       id_DW           <span class="op">=</span> <span class="va">id_DW</span>,</span></span>
 <span class="r-in"><span>                       react_state     <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: figure page change detected</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">state</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml</span>
@@ -1136,456 +1067,27 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-out co"><span class="r-pr">#&gt;</span> [53] "select_component_yscale"          "select_fg_element"               </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$isgood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$isgood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$hasds</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$catalog</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                label    object MOD_TYPE id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  Original data set      myDS       UD UD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                       Observations DW_myDS_1       DW DW</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                       PK 3mg SD IV DW_myDS_2       DW DW</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          PK 3mg MD SC (first dose) DW_myDS_3       DW DW</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                         Parameters DW_myDS_4       DW DW</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6              PK/PD 3mg SD IV w/BQL DW_myDS_5       DW DW</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7 PK/PD 3mg MD SC (first dose) w/BQL DW_myDS_6       DW DW</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                 PK 3mg SD IV w/BQL DW_myDS_7       DW DW</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9        PK 3mg SD IV w/BQL w/dosing DW_myDS_8       DW DW</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           checksum                       DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 897d952fecbc804999396a96f9df4b20 897d952fecbc804999396a96f9df4b20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 a1eceffec3ff7d9f9961683b3d07088b cb29ad3409843925da16295fa345c326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 a1eceffec3ff7d9f9961683b3d07088b 5d4cc8acd24c561e39dd4c44c9be500e</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 a1eceffec3ff7d9f9961683b3d07088b c6b602ca14709080d7149350f51f7e8c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 a1eceffec3ff7d9f9961683b3d07088b 24cd058c982ef9a016c4ecdc3191ed00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 a1eceffec3ff7d9f9961683b3d07088b e983eb3141e34f59e6e3262ef436f534</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7 a1eceffec3ff7d9f9961683b3d07088b f118294a4123d818049797b2fd186006</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 a1eceffec3ff7d9f9961683b3d07088b ab5246b6f6a91ce255ec054b4647886e</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9 a1eceffec3ff7d9f9961683b3d07088b 8fec3cb83af2b75cda446b742acbf362</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                                                                                                                                                                                                                                                                                                                                                                                          myDS = readxl::read_excel(path="TEST_DATA.xlsx", sheet="DATA")\nmyDS = janitor::clean_names(myDS, case="none")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                                                                                                                                                  # Loading data\nmyDS = readxl::read_excel(path="TEST_DATA.xlsx", sheet="DATA")\nmyDS = janitor::clean_names(myDS, case="none")\nDW_myDS_1 = myDS\n\n# Data wrangling\nDW_myDS_1 = dplyr::filter(DW_myDS_1,EVID == 0)\nDW_myDS_1 = dplyr::filter(DW_myDS_1,DV != 0)\nDW_myDS_1 = dplyr::mutate(DW_myDS_1,IDCMT = paste0(ID, ', ', CMT))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                                                                                        # Loading data\nmyDS = readxl::read_excel(path="TEST_DATA.xlsx", sheet="DATA")\nmyDS = janitor::clean_names(myDS, case="none")\nDW_myDS_2 = myDS\n\n# Data wrangling\nDW_myDS_2 = dplyr::filter(DW_myDS_2,EVID == 0)\nDW_myDS_2 = dplyr::filter(DW_myDS_2,DV != 0)\nDW_myDS_2 = dplyr::filter(DW_myDS_2,Cohort %in% c("SD 3 mg IV"))\nDW_myDS_2 = dplyr::filter(DW_myDS_2,CMT %in% c("C_ng_ml"))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                                    # Loading data\nmyDS = readxl::read_excel(path="TEST_DATA.xlsx", sheet="DATA")\nmyDS = janitor::clean_names(myDS, case="none")\nDW_myDS_3 = myDS\n\n# Data wrangling\nDW_myDS_3 = dplyr::filter(DW_myDS_3,EVID == 0)\nDW_myDS_3 = dplyr::filter(DW_myDS_3,DV != 0)\nDW_myDS_3 = dplyr::filter(DW_myDS_3,Cohort %in% c("MD 3 mg SC"))\nDW_myDS_3 = dplyr::filter(DW_myDS_3,DOSE_NUM == 1)\nDW_myDS_3 = dplyr::filter(DW_myDS_3,CMT %in% c("C_ng_ml"))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 # Loading data\nmyDS = readxl::read_excel(path="TEST_DATA.xlsx", sheet="DATA")\nmyDS = janitor::clean_names(myDS, case="none")\nDW_myDS_4 = myDS\n\n# Data wrangling\nDW_myDS_4 = dplyr::group_by(DW_myDS_4,ID)\nDW_myDS_4 = dplyr::filter(DW_myDS_4,row_number()==1)\nDW_myDS_4 = dplyr::select(DW_myDS_4,ID, DOSE, DOSE_STR, Cohort, ROUTE, ka, CL, Vc, Vp, Q)\nDW_myDS_4 = tidyr::pivot_longer(DW_myDS_4, cols      = c("ka", "CL", "Vc", "Vp", "Q"), names_to  = "parameter", values_to = "values")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                                                                                                                                                                                                  # Loading data\nmyDS = readxl::read_excel(path="TEST_DATA.xlsx", sheet="DATA")\nmyDS = janitor::clean_names(myDS, case="none")\nDW_myDS_5 = myDS\n\n# Data wrangling\nDW_myDS_5 = dplyr::filter(DW_myDS_5,EVID == 0)\nDW_myDS_5 = dplyr::filter(DW_myDS_5,Cohort %in% c("SD 3 mg IV"))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                                                                                                                                              # Loading data\nmyDS = readxl::read_excel(path="TEST_DATA.xlsx", sheet="DATA")\nmyDS = janitor::clean_names(myDS, case="none")\nDW_myDS_6 = myDS\n\n# Data wrangling\nDW_myDS_6 = dplyr::filter(DW_myDS_6,EVID == 0)\nDW_myDS_6 = dplyr::filter(DW_myDS_6,Cohort %in% c("MD 3 mg SC"))\nDW_myDS_6 = dplyr::filter(DW_myDS_6,DOSE_NUM == 1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8                                                                                                                                                      # Loading data\nmyDS = readxl::read_excel(path="TEST_DATA.xlsx", sheet="DATA")\nmyDS = janitor::clean_names(myDS, case="none")\nDW_myDS_7 = myDS\n\n# Data wrangling\nDW_myDS_7 = dplyr::filter(DW_myDS_7,EVID == 0)\nDW_myDS_7 = dplyr::filter(DW_myDS_7,Cohort %in% c("SD 3 mg IV"))\nDW_myDS_7 = dplyr::filter(DW_myDS_7,CMT %in% c("C_ng_ml"))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                                                                                                                                                                                                                                                  # Loading data\nmyDS = readxl::read_excel(path="TEST_DATA.xlsx", sheet="DATA")\nmyDS = janitor::clean_names(myDS, case="none")\nDW_myDS_8 = myDS\n\n# Data wrangling\nDW_myDS_8 = dplyr::filter(DW_myDS_8,Cohort %in% c("MD 3 mg IV"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$modules</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$modules$UD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$modules$UD$UD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "897d952fecbc804999396a96f9df4b20"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$modules$DW</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$modules$DW$DW</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a1eceffec3ff7d9f9961683b3d07088b"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$myDS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$myDS$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Original data set"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$myDS$MOD_TYPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$myDS$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$myDS$DS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10,680 × 33</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       ID TIME_DY TIME_HR NTIME_DY NTIME_HR  TIME     AMT    DV RECDESC     DOSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1       0       0        0        0     0 3<span style="text-decoration: underline;">000</span>000    0  dose     3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1       0       0        0        0     0       0 <span style="text-decoration: underline;">1</span>250  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     1       0       0        0        0     0       0    0  C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     1       1      24        1       24    24       0 <span style="text-decoration: underline;">1</span>647  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     1       1      24        1       24    24       0  690. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     1       2      48        2       48    48       0 <span style="text-decoration: underline;">1</span>947  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     1       2      48        2       48    48       0  588. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     1       3      72        3       72    72       0 <span style="text-decoration: underline;">2</span>170  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     1       3      72        3       72    72       0  506. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     1       4      96        4       96    96       0 <span style="text-decoration: underline;">2</span>332  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 10,670 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 23 more variables: DOSE_STR &lt;chr&gt;, Cohort &lt;chr&gt;, ROUTE &lt;chr&gt;, WT &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SUBTYPE &lt;chr&gt;, SEX &lt;chr&gt;, F1 &lt;dbl&gt;, ka &lt;dbl&gt;, CL &lt;dbl&gt;, Vc &lt;dbl&gt;, Vp &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Q &lt;dbl&gt;, BM_IC &lt;dbl&gt;, kdeg_BM &lt;dbl&gt;, Emax &lt;dbl&gt;, EC50 &lt;dbl&gt;, CMT &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   DUR &lt;dbl&gt;, EVID &lt;dbl&gt;, NDose &lt;chr&gt;, DOSE_NUM &lt;dbl&gt;, SUBTYPE_ID &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SEX_ID &lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$myDS$DSMETA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$myDS$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "myDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$myDS$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "897d952fecbc804999396a96f9df4b20"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$myDS$DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "897d952fecbc804999396a96f9df4b20"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_1$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Observations"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_1$MOD_TYPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_1$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_1$DS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9,240 × 34</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       ID TIME_DY TIME_HR NTIME_DY NTIME_HR  TIME   AMT    DV RECDESC     DOSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1       0       0        0        0     0     0 <span style="text-decoration: underline;">1</span>250  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1       1      24        1       24    24     0 <span style="text-decoration: underline;">1</span>647  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     1       1      24        1       24    24     0  690. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     1       2      48        2       48    48     0 <span style="text-decoration: underline;">1</span>947  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     1       2      48        2       48    48     0  588. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     1       3      72        3       72    72     0 <span style="text-decoration: underline;">2</span>170  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     1       3      72        3       72    72     0  506. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     1       4      96        4       96    96     0 <span style="text-decoration: underline;">2</span>332  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     1       4      96        4       96    96     0  438. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     1       7     168        7      168   168     0 <span style="text-decoration: underline;">2</span>576  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 9,230 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 24 more variables: DOSE_STR &lt;chr&gt;, Cohort &lt;chr&gt;, ROUTE &lt;chr&gt;, WT &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SUBTYPE &lt;chr&gt;, SEX &lt;chr&gt;, F1 &lt;dbl&gt;, ka &lt;dbl&gt;, CL &lt;dbl&gt;, Vc &lt;dbl&gt;, Vp &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Q &lt;dbl&gt;, BM_IC &lt;dbl&gt;, kdeg_BM &lt;dbl&gt;, Emax &lt;dbl&gt;, EC50 &lt;dbl&gt;, CMT &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   DUR &lt;dbl&gt;, EVID &lt;dbl&gt;, NDose &lt;chr&gt;, DOSE_NUM &lt;dbl&gt;, SUBTYPE_ID &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SEX_ID &lt;dbl&gt;, IDCMT &lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_1$DSMETA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_1$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_1 = myDS\n\n# Data wrangling\nDW_myDS_1 = dplyr::filter(DW_myDS_1,EVID == 0)\nDW_myDS_1 = dplyr::filter(DW_myDS_1,DV != 0)\nDW_myDS_1 = dplyr::mutate(DW_myDS_1,IDCMT = paste0(ID, ', ', CMT))"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_1$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a1eceffec3ff7d9f9961683b3d07088b"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_1$DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "cb29ad3409843925da16295fa345c326"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_2$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "PK 3mg SD IV"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_2$MOD_TYPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_2$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_2$DS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 180 × 33</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       ID TIME_DY TIME_HR NTIME_DY NTIME_HR  TIME   AMT    DV RECDESC    DOSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1       1      24        1       24    24     0 690.  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1       2      48        2       48    48     0 588.  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     1       3      72        3       72    72     0 506.  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     1       4      96        4       96    96     0 438.  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     1       7     168        7      168   168     0 303.  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     1      21     504       21      504   504     0 123.  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     1      28     672       28      672   672     0  95.5 C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     1      35     840       35      840   840     0  75.8 C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     1      42    <span style="text-decoration: underline;">1</span>008       42     <span style="text-decoration: underline;">1</span>008  <span style="text-decoration: underline;">1</span>008     0  60.6 C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     2       1      24        1       24    24     0 750.  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 170 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 23 more variables: DOSE_STR &lt;chr&gt;, Cohort &lt;chr&gt;, ROUTE &lt;chr&gt;, WT &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SUBTYPE &lt;chr&gt;, SEX &lt;chr&gt;, F1 &lt;dbl&gt;, ka &lt;dbl&gt;, CL &lt;dbl&gt;, Vc &lt;dbl&gt;, Vp &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Q &lt;dbl&gt;, BM_IC &lt;dbl&gt;, kdeg_BM &lt;dbl&gt;, Emax &lt;dbl&gt;, EC50 &lt;dbl&gt;, CMT &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   DUR &lt;dbl&gt;, EVID &lt;dbl&gt;, NDose &lt;chr&gt;, DOSE_NUM &lt;dbl&gt;, SUBTYPE_ID &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SEX_ID &lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_2$DSMETA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_2$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_2 = myDS\n\n# Data wrangling\nDW_myDS_2 = dplyr::filter(DW_myDS_2,EVID == 0)\nDW_myDS_2 = dplyr::filter(DW_myDS_2,DV != 0)\nDW_myDS_2 = dplyr::filter(DW_myDS_2,Cohort %in% c(\"SD 3 mg IV\"))\nDW_myDS_2 = dplyr::filter(DW_myDS_2,CMT %in% c(\"C_ng_ml\"))"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_2$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a1eceffec3ff7d9f9961683b3d07088b"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_2$DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "5d4cc8acd24c561e39dd4c44c9be500e"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_3$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "PK 3mg MD SC (first dose)"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_3$MOD_TYPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_3$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_3$DS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 × 33</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       ID TIME_DY TIME_HR NTIME_DY NTIME_HR  TIME   AMT    DV RECDESC    DOSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>   241       1      24        1       24    24     0  250. C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>   241       2      48        2       48    48     0  305. C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>   241       3      72        3       72    72     0  317. C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>   241       4      96        4       96    96     0  315. C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>   241       7     168        7      168   168     0  291. C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>   242       1      24        1       24    24     0  126  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>   242       2      48        2       48    48     0  199. C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>   242       3      72        3       72    72     0  245. C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>   242       4      96        4       96    96     0  274. C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>   242       7     168        7      168   168     0  314. C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 90 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 23 more variables: DOSE_STR &lt;chr&gt;, Cohort &lt;chr&gt;, ROUTE &lt;chr&gt;, WT &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SUBTYPE &lt;chr&gt;, SEX &lt;chr&gt;, F1 &lt;dbl&gt;, ka &lt;dbl&gt;, CL &lt;dbl&gt;, Vc &lt;dbl&gt;, Vp &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Q &lt;dbl&gt;, BM_IC &lt;dbl&gt;, kdeg_BM &lt;dbl&gt;, Emax &lt;dbl&gt;, EC50 &lt;dbl&gt;, CMT &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   DUR &lt;dbl&gt;, EVID &lt;dbl&gt;, NDose &lt;chr&gt;, DOSE_NUM &lt;dbl&gt;, SUBTYPE_ID &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SEX_ID &lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_3$DSMETA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_3$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_3 = myDS\n\n# Data wrangling\nDW_myDS_3 = dplyr::filter(DW_myDS_3,EVID == 0)\nDW_myDS_3 = dplyr::filter(DW_myDS_3,DV != 0)\nDW_myDS_3 = dplyr::filter(DW_myDS_3,Cohort %in% c(\"MD 3 mg SC\"))\nDW_myDS_3 = dplyr::filter(DW_myDS_3,DOSE_NUM == 1)\nDW_myDS_3 = dplyr::filter(DW_myDS_3,CMT %in% c(\"C_ng_ml\"))"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_3$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a1eceffec3ff7d9f9961683b3d07088b"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_3$DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "c6b602ca14709080d7149350f51f7e8c"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_4$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Parameters"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_4$MOD_TYPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_4$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_4$DS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,800 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   ID [360]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       ID    DOSE DOSE_STR Cohort     ROUTE parameter values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1 3<span style="text-decoration: underline;">000</span>000 3 mg     SD 3 mg IV IV    ka         0.449</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1 3<span style="text-decoration: underline;">000</span>000 3 mg     SD 3 mg IV IV    CL         0.25 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     1 3<span style="text-decoration: underline;">000</span>000 3 mg     SD 3 mg IV IV    Vc         3.67 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     1 3<span style="text-decoration: underline;">000</span>000 3 mg     SD 3 mg IV IV    Vp         3.77 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     1 3<span style="text-decoration: underline;">000</span>000 3 mg     SD 3 mg IV IV    Q          0.325</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     2 3<span style="text-decoration: underline;">000</span>000 3 mg     SD 3 mg IV IV    ka         0.408</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     2 3<span style="text-decoration: underline;">000</span>000 3 mg     SD 3 mg IV IV    CL         0.148</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     2 3<span style="text-decoration: underline;">000</span>000 3 mg     SD 3 mg IV IV    Vc         2.43 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     2 3<span style="text-decoration: underline;">000</span>000 3 mg     SD 3 mg IV IV    Vp         2.84 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     2 3<span style="text-decoration: underline;">000</span>000 3 mg     SD 3 mg IV IV    Q          1.31 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1,790 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_4$DSMETA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_4$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_4 = myDS\n\n# Data wrangling\nDW_myDS_4 = dplyr::group_by(DW_myDS_4,ID)\nDW_myDS_4 = dplyr::filter(DW_myDS_4,row_number()==1)\nDW_myDS_4 = dplyr::select(DW_myDS_4,ID, DOSE, DOSE_STR, Cohort, ROUTE, ka, CL, Vc, Vp, Q)\nDW_myDS_4 = tidyr::pivot_longer(DW_myDS_4, cols      = c(\"ka\", \"CL\", \"Vc\", \"Vp\", \"Q\"), names_to  = \"parameter\", values_to = \"values\")"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_4$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a1eceffec3ff7d9f9961683b3d07088b"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_4$DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "24cd058c982ef9a016c4ecdc3191ed00"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_5$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "PK/PD 3mg SD IV w/BQL"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_5$MOD_TYPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_5$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_5$DS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 400 × 33</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       ID TIME_DY TIME_HR NTIME_DY NTIME_HR  TIME   AMT    DV RECDESC     DOSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1       0       0        0        0     0     0 <span style="text-decoration: underline;">1</span>250  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1       0       0        0        0     0     0    0  C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     1       1      24        1       24    24     0 <span style="text-decoration: underline;">1</span>647  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     1       1      24        1       24    24     0  690. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     1       2      48        2       48    48     0 <span style="text-decoration: underline;">1</span>947  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     1       2      48        2       48    48     0  588. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     1       3      72        3       72    72     0 <span style="text-decoration: underline;">2</span>170  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     1       3      72        3       72    72     0  506. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     1       4      96        4       96    96     0 <span style="text-decoration: underline;">2</span>332  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     1       4      96        4       96    96     0  438. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 390 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 23 more variables: DOSE_STR &lt;chr&gt;, Cohort &lt;chr&gt;, ROUTE &lt;chr&gt;, WT &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SUBTYPE &lt;chr&gt;, SEX &lt;chr&gt;, F1 &lt;dbl&gt;, ka &lt;dbl&gt;, CL &lt;dbl&gt;, Vc &lt;dbl&gt;, Vp &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Q &lt;dbl&gt;, BM_IC &lt;dbl&gt;, kdeg_BM &lt;dbl&gt;, Emax &lt;dbl&gt;, EC50 &lt;dbl&gt;, CMT &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   DUR &lt;dbl&gt;, EVID &lt;dbl&gt;, NDose &lt;chr&gt;, DOSE_NUM &lt;dbl&gt;, SUBTYPE_ID &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SEX_ID &lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_5$DSMETA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_5$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_5 = myDS\n\n# Data wrangling\nDW_myDS_5 = dplyr::filter(DW_myDS_5,EVID == 0)\nDW_myDS_5 = dplyr::filter(DW_myDS_5,Cohort %in% c(\"SD 3 mg IV\"))"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_5$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a1eceffec3ff7d9f9961683b3d07088b"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_5$DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "e983eb3141e34f59e6e3262ef436f534"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_6$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "PK/PD 3mg MD SC (first dose) w/BQL"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_6$MOD_TYPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_6$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_6$DS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 240 × 33</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       ID TIME_DY TIME_HR NTIME_DY NTIME_HR  TIME   AMT    DV RECDESC     DOSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>   241       0       0        0        0     0     0 <span style="text-decoration: underline;">1</span>030  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>   241       0       0        0        0     0     0    0  C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>   241       1      24        1       24    24     0 <span style="text-decoration: underline;">1</span>070  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>   241       1      24        1       24    24     0  250. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>   241       2      48        2       48    48     0 <span style="text-decoration: underline;">1</span>138  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>   241       2      48        2       48    48     0  305. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>   241       3      72        3       72    72     0 <span style="text-decoration: underline;">1</span>207  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>   241       3      72        3       72    72     0  317. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>   241       4      96        4       96    96     0 <span style="text-decoration: underline;">1</span>270  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>   241       4      96        4       96    96     0  315. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 230 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 23 more variables: DOSE_STR &lt;chr&gt;, Cohort &lt;chr&gt;, ROUTE &lt;chr&gt;, WT &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SUBTYPE &lt;chr&gt;, SEX &lt;chr&gt;, F1 &lt;dbl&gt;, ka &lt;dbl&gt;, CL &lt;dbl&gt;, Vc &lt;dbl&gt;, Vp &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Q &lt;dbl&gt;, BM_IC &lt;dbl&gt;, kdeg_BM &lt;dbl&gt;, Emax &lt;dbl&gt;, EC50 &lt;dbl&gt;, CMT &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   DUR &lt;dbl&gt;, EVID &lt;dbl&gt;, NDose &lt;chr&gt;, DOSE_NUM &lt;dbl&gt;, SUBTYPE_ID &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SEX_ID &lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_6$DSMETA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_6$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_6 = myDS\n\n# Data wrangling\nDW_myDS_6 = dplyr::filter(DW_myDS_6,EVID == 0)\nDW_myDS_6 = dplyr::filter(DW_myDS_6,Cohort %in% c(\"MD 3 mg SC\"))\nDW_myDS_6 = dplyr::filter(DW_myDS_6,DOSE_NUM == 1)"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_6$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a1eceffec3ff7d9f9961683b3d07088b"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_6$DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "f118294a4123d818049797b2fd186006"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_7$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "PK 3mg SD IV w/BQL"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_7$MOD_TYPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_7$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_7$DS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 200 × 33</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       ID TIME_DY TIME_HR NTIME_DY NTIME_HR  TIME   AMT    DV RECDESC    DOSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1       0       0        0        0     0     0   0   C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1       1      24        1       24    24     0 690.  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     1       2      48        2       48    48     0 588.  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     1       3      72        3       72    72     0 506.  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     1       4      96        4       96    96     0 438.  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     1       7     168        7      168   168     0 303.  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     1      21     504       21      504   504     0 123.  C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     1      28     672       28      672   672     0  95.5 C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     1      35     840       35      840   840     0  75.8 C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     1      42    <span style="text-decoration: underline;">1</span>008       42     <span style="text-decoration: underline;">1</span>008  <span style="text-decoration: underline;">1</span>008     0  60.6 C_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 190 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 23 more variables: DOSE_STR &lt;chr&gt;, Cohort &lt;chr&gt;, ROUTE &lt;chr&gt;, WT &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SUBTYPE &lt;chr&gt;, SEX &lt;chr&gt;, F1 &lt;dbl&gt;, ka &lt;dbl&gt;, CL &lt;dbl&gt;, Vc &lt;dbl&gt;, Vp &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Q &lt;dbl&gt;, BM_IC &lt;dbl&gt;, kdeg_BM &lt;dbl&gt;, Emax &lt;dbl&gt;, EC50 &lt;dbl&gt;, CMT &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   DUR &lt;dbl&gt;, EVID &lt;dbl&gt;, NDose &lt;chr&gt;, DOSE_NUM &lt;dbl&gt;, SUBTYPE_ID &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SEX_ID &lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_7$DSMETA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_7$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_7 = myDS\n\n# Data wrangling\nDW_myDS_7 = dplyr::filter(DW_myDS_7,EVID == 0)\nDW_myDS_7 = dplyr::filter(DW_myDS_7,Cohort %in% c(\"SD 3 mg IV\"))\nDW_myDS_7 = dplyr::filter(DW_myDS_7,CMT %in% c(\"C_ng_ml\"))"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_7$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a1eceffec3ff7d9f9961683b3d07088b"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_7$DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ab5246b6f6a91ce255ec054b4647886e"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_8$label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "PK 3mg SD IV w/BQL w/dosing"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_8$MOD_TYPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_8$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_8$DS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 680 × 33</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       ID TIME_DY TIME_HR NTIME_DY NTIME_HR  TIME     AMT    DV RECDESC     DOSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>   121       0       0        0        0     0 3<span style="text-decoration: underline;">000</span>000    0  dose     3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>   121       0       0        0        0     0       0 <span style="text-decoration: underline;">1</span>380  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>   121       0       0        0        0     0       0    0  C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>   121       1      24        1       24    24       0 <span style="text-decoration: underline;">1</span>665  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>   121       1      24        1       24    24       0  536. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>   121       2      48        2       48    48       0 <span style="text-decoration: underline;">1</span>852  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>   121       2      48        2       48    48       0  420. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>   121       3      72        3       72    72       0 <span style="text-decoration: underline;">1</span>981  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>   121       3      72        3       72    72       0  353. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>   121       4      96        4       96    96       0 <span style="text-decoration: underline;">2</span>075  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 670 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 23 more variables: DOSE_STR &lt;chr&gt;, Cohort &lt;chr&gt;, ROUTE &lt;chr&gt;, WT &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SUBTYPE &lt;chr&gt;, SEX &lt;chr&gt;, F1 &lt;dbl&gt;, ka &lt;dbl&gt;, CL &lt;dbl&gt;, Vc &lt;dbl&gt;, Vp &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Q &lt;dbl&gt;, BM_IC &lt;dbl&gt;, kdeg_BM &lt;dbl&gt;, Emax &lt;dbl&gt;, EC50 &lt;dbl&gt;, CMT &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   DUR &lt;dbl&gt;, EVID &lt;dbl&gt;, NDose &lt;chr&gt;, DOSE_NUM &lt;dbl&gt;, SUBTYPE_ID &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SEX_ID &lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_8$DSMETA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_8$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_8 = myDS\n\n# Data wrangling\nDW_myDS_8 = dplyr::filter(DW_myDS_8,Cohort %in% c(\"MD 3 mg IV\"))"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_8$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a1eceffec3ff7d9f9961683b3d07088b"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$DSV$ds$DW_myDS_8$DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "8fec3cb83af2b75cda446b742acbf362"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$fig_cntr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$aes_elements</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "line"     "point"    "errorbar" "hguide"   "vguide"   "smooth"   "ribbon"  </span>
@@ -1708,249 +1210,6 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-out co"><span class="r-pr">#&gt;</span> [15] "text_component_alpha_manual"   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$current_fig</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Fig_4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$key</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Individual profiles by cohort"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Fig_1"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$idx</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$page</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$num_pages</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$fg_object_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG_myp_1"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$fobj</span>
-<span class="r-plt img"><img src="FG_fetch_state-1.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$fig_dsview</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW_myDS_1"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "4f5170da3643757a485f3d5667f592b4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$code_fg_only</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG_myp_1 = ggplot2::ggplot(data=DW_myDS_1)\nFG_myp_1 = FG_myp_1 + geom_line(aes(x=TIME_DY, y=DV, color=CMT, group=IDCMT))\nFG_myp_1 = FG_myp_1 + ggforce::facet_wrap_paginate(vars(Cohort), nrow = 3, ncol = 4, page=1)\nFG_myp_1 = FG_myp_1 + scale_y_log10(limits=NULL)\nFG_myp_1 = FG_myp_1 + ggplot2::theme_light()"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$code_previous</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_1 = myDS\n\n# Data wrangling\nDW_myDS_1 = dplyr::filter(DW_myDS_1,EVID == 0)\nDW_myDS_1 = dplyr::filter(DW_myDS_1,DV != 0)\nDW_myDS_1 = dplyr::mutate(DW_myDS_1,IDCMT = paste0(ID, ', ', CMT))"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_1 = myDS\n\n# Data wrangling\nDW_myDS_1 = dplyr::filter(DW_myDS_1,EVID == 0)\nDW_myDS_1 = dplyr::filter(DW_myDS_1,DV != 0)\nDW_myDS_1 = dplyr::mutate(DW_myDS_1,IDCMT = paste0(ID, ', ', CMT))\n\n# Figure Generation\nFG_myp_1 = ggplot2::ggplot(data=DW_myDS_1)\nFG_myp_1 = FG_myp_1 + geom_line(aes(x=TIME_DY, y=DV, color=CMT, group=IDCMT))\nFG_myp_1 = FG_myp_1 + ggforce::facet_wrap_paginate(vars(Cohort), nrow = 3, ncol = 4, page=1)\nFG_myp_1 = FG_myp_1 + scale_y_log10(limits=NULL)\nFG_myp_1 = FG_myp_1 + ggplot2::theme_light()"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$notes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$isgood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$add_isgood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_1$elements_table</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Element</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    line</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   facet</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  scales</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                            cmd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                FG_myp_1 = FG_myp_1 + geom_line(aes(x=TIME_DY, y=DV, color=CMT, group=IDCMT))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 FG_myp_1 = FG_myp_1 + ggforce::facet_wrap_paginate(vars(Cohort), nrow = 3, ncol = 4, page=1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                             FG_myp_1 = FG_myp_1 + scale_y_log10(limits=NULL)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                               Description  Status Delete</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 x:TIME_DY, y:DV, color:CMT, group:IDCMT Success  FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                                  Cohort Success  FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                           y-scale:log10 Success  FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$key</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "3 mg SD IV"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Fig_2"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$idx</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$page</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$num_pages</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$fg_object_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG_myp_2"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$fobj</span>
-<span class="r-plt img"><img src="FG_fetch_state-2.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$fig_dsview</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW_myDS_2"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "43794b6a93ff30d196e568c89bc318d0"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$code_fg_only</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG_myp_2 = ggplot2::ggplot(data=DW_myDS_2)\nFG_myp_2 = FG_myp_2 + geom_line(aes(x=TIME_DY, y=DV, color=CMT, group=ID))\nFG_myp_2 = FG_myp_2 + scale_y_log10(limits=NULL)\nFG_myp_2 = FG_myp_2 + ggplot2::theme_light()"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$code_previous</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_2 = myDS\n\n# Data wrangling\nDW_myDS_2 = dplyr::filter(DW_myDS_2,EVID == 0)\nDW_myDS_2 = dplyr::filter(DW_myDS_2,DV != 0)\nDW_myDS_2 = dplyr::filter(DW_myDS_2,Cohort %in% c(\"SD 3 mg IV\"))\nDW_myDS_2 = dplyr::filter(DW_myDS_2,CMT %in% c(\"C_ng_ml\"))"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_2 = myDS\n\n# Data wrangling\nDW_myDS_2 = dplyr::filter(DW_myDS_2,EVID == 0)\nDW_myDS_2 = dplyr::filter(DW_myDS_2,DV != 0)\nDW_myDS_2 = dplyr::filter(DW_myDS_2,Cohort %in% c(\"SD 3 mg IV\"))\nDW_myDS_2 = dplyr::filter(DW_myDS_2,CMT %in% c(\"C_ng_ml\"))\n\n# Figure Generation\nFG_myp_2 = ggplot2::ggplot(data=DW_myDS_2)\nFG_myp_2 = FG_myp_2 + geom_line(aes(x=TIME_DY, y=DV, color=CMT, group=ID))\nFG_myp_2 = FG_myp_2 + scale_y_log10(limits=NULL)\nFG_myp_2 = FG_myp_2 + ggplot2::theme_light()"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$notes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$isgood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$add_isgood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_2$elements_table</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Element</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    line</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  scales</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                          cmd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 FG_myp_2 = FG_myp_2 + geom_line(aes(x=TIME_DY, y=DV, color=CMT, group=ID))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                           FG_myp_2 = FG_myp_2 + scale_y_log10(limits=NULL)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                            Description  Status Delete</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 x:TIME_DY, y:DV, color:CMT, group:ID Success  FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                        y-scale:log10 Success  FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$key</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "3 mg SC first dose"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Fig_3"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$idx</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$page</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$num_pages</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$fg_object_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG_myp_3"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$fobj</span>
-<span class="r-plt img"><img src="FG_fetch_state-3.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$fig_dsview</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW_myDS_3"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "887f65ec0f0d34f39152f8c64ca4ca3b"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$code_fg_only</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG_myp_3 = ggplot2::ggplot(data=DW_myDS_3)\nFG_myp_3 = FG_myp_3 + geom_line(aes(x=TIME_DY, y=DV, color=CMT, group=ID))\nFG_myp_3 = FG_myp_3 + scale_y_log10(limits=NULL)\nFG_myp_3 = FG_myp_3 + ggplot2::theme_light()"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$code_previous</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_3 = myDS\n\n# Data wrangling\nDW_myDS_3 = dplyr::filter(DW_myDS_3,EVID == 0)\nDW_myDS_3 = dplyr::filter(DW_myDS_3,DV != 0)\nDW_myDS_3 = dplyr::filter(DW_myDS_3,Cohort %in% c(\"MD 3 mg SC\"))\nDW_myDS_3 = dplyr::filter(DW_myDS_3,DOSE_NUM == 1)\nDW_myDS_3 = dplyr::filter(DW_myDS_3,CMT %in% c(\"C_ng_ml\"))"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_3 = myDS\n\n# Data wrangling\nDW_myDS_3 = dplyr::filter(DW_myDS_3,EVID == 0)\nDW_myDS_3 = dplyr::filter(DW_myDS_3,DV != 0)\nDW_myDS_3 = dplyr::filter(DW_myDS_3,Cohort %in% c(\"MD 3 mg SC\"))\nDW_myDS_3 = dplyr::filter(DW_myDS_3,DOSE_NUM == 1)\nDW_myDS_3 = dplyr::filter(DW_myDS_3,CMT %in% c(\"C_ng_ml\"))\n\n# Figure Generation\nFG_myp_3 = ggplot2::ggplot(data=DW_myDS_3)\nFG_myp_3 = FG_myp_3 + geom_line(aes(x=TIME_DY, y=DV, color=CMT, group=ID))\nFG_myp_3 = FG_myp_3 + scale_y_log10(limits=NULL)\nFG_myp_3 = FG_myp_3 + ggplot2::theme_light()"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$notes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$isgood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$add_isgood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_3$elements_table</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Element</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    line</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  scales</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                          cmd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 FG_myp_3 = FG_myp_3 + geom_line(aes(x=TIME_DY, y=DV, color=CMT, group=ID))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                           FG_myp_3 = FG_myp_3 + scale_y_log10(limits=NULL)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                            Description  Status Delete</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 x:TIME_DY, y:DV, color:CMT, group:ID Success  FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                        y-scale:log10 Success  FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$key</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Parameter distribution by Cohort"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Fig_4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$idx</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$page</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$num_pages</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$fg_object_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG_myp_4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$fobj</span>
-<span class="r-plt img"><img src="FG_fetch_state-4.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$fig_dsview</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DW_myDS_4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "9af67dec98dcbc321fa79c7de1f0a6f7"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$code_fg_only</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG_myp_4 = ggplot2::ggplot(data=DW_myDS_4)\nFG_myp_4 = FG_myp_4 + geom_boxplot(aes(x=parameter, y=values, fill=Cohort))\nFG_myp_4 = FG_myp_4 + scale_y_log10(limits=NULL)\nFG_myp_4 = FG_myp_4 + ggplot2::theme_light()"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$code_previous</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_4 = myDS\n\n# Data wrangling\nDW_myDS_4 = dplyr::group_by(DW_myDS_4,ID)\nDW_myDS_4 = dplyr::filter(DW_myDS_4,row_number()==1)\nDW_myDS_4 = dplyr::select(DW_myDS_4,ID, DOSE, DOSE_STR, Cohort, ROUTE, ka, CL, Vc, Vp, Q)\nDW_myDS_4 = tidyr::pivot_longer(DW_myDS_4, cols      = c(\"ka\", \"CL\", \"Vc\", \"Vp\", \"Q\"), names_to  = \"parameter\", values_to = \"values\")"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$code</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data\nmyDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")\nDW_myDS_4 = myDS\n\n# Data wrangling\nDW_myDS_4 = dplyr::group_by(DW_myDS_4,ID)\nDW_myDS_4 = dplyr::filter(DW_myDS_4,row_number()==1)\nDW_myDS_4 = dplyr::select(DW_myDS_4,ID, DOSE, DOSE_STR, Cohort, ROUTE, ka, CL, Vc, Vp, Q)\nDW_myDS_4 = tidyr::pivot_longer(DW_myDS_4, cols      = c(\"ka\", \"CL\", \"Vc\", \"Vp\", \"Q\"), names_to  = \"parameter\", values_to = \"values\")\n\n# Figure Generation\nFG_myp_4 = ggplot2::ggplot(data=DW_myDS_4)\nFG_myp_4 = FG_myp_4 + geom_boxplot(aes(x=parameter, y=values, fill=Cohort))\nFG_myp_4 = FG_myp_4 + scale_y_log10(limits=NULL)\nFG_myp_4 = FG_myp_4 + ggplot2::theme_light()"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$notes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$isgood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$add_isgood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs$Fig_4$elements_table</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Element</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 boxplot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  scales</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                           cmd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 FG_myp_4 = FG_myp_4 + geom_boxplot(aes(x=parameter, y=values, fill=Cohort))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                            FG_myp_4 = FG_myp_4 + scale_y_log10(limits=NULL)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          Description  Status Delete</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 x:parameter, y:values, fill:Cohort Success  FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                      y-scale:log10 Success  FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a545e926ce0cc3e170f98f05278cbcf1"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$ui</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FG$ui$select_component_x</span>
@@ -2116,6 +1375,16 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$current_fig</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FG$figs[[1]]$page</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_TYPE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FG"</span>
@@ -2127,10 +1396,10 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD" "DW"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpUvXGDH/temp_libpath4c477ee48878/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpvquDJk/temp_libpath9b8e6a6758ae/formods/templates/formods.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpUvXGDH/temp_libpath4c477ee48878/formods/templates/FG.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpvquDJk/temp_libpath9b8e6a6758ae/formods/templates/FG.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

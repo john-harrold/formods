@@ -26,11 +26,9 @@ list containing an empty app state object
 Creates a list of the initialized module state
 }
 \examples{
-# Within shiny both session and input variables will exist,
-# this creates examples here for testing purposes:
-sess_res = FG_test_mksession(session=list())
-session = sess_res$session
-input   = sess_res$input
+# These would be the Shiny input and session variables
+input   = list()
+session = list()
 
 state = FG_init_state(
    FM_yaml_file  = system.file(package = "formods",

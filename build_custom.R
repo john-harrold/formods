@@ -18,10 +18,8 @@ fileConn=file(FM_compact_example)
 writeLines(fmapp, fileConn)
 close(fileConn)
 
-
 # building documentation
 devtools::document(roclets = c('rd', 'collate', 'namespace', 'vignette'))
-
 
 # Rebuilding the pkgdown site
 pkgdown::build_site()
@@ -46,4 +44,3 @@ for(htd in htds){
   write(htd_lines, file=fn, append=FALSE)
 
 }
-
