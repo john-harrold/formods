@@ -19,3 +19,27 @@ ASM_write_state(state, session, file, mod_ids)
 Called from download handler and used to write a saved state
 value if that is null
 }
+\examples{
+# Within shiny both session and input variables will exist,
+# this creates examples here for testing purposes:
+sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
+session = sess_res$session
+input   = sess_res$input
+
+# Configuration files
+FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+MOD_yaml_file = system.file(package = "formods", "templates", "ASM.yaml")
+
+# We need to specify the ID of the ASM module
+id = "ASM"
+
+state = ASM_fetch_state(id           = id,
+                        input        = input,
+                        session      = session,
+                        FM_yaml_file = FM_yaml_file,
+                        MOD_yaml_file = MOD_yaml_file)
+
+ASM_write_state(state, session, 
+                file    = tempfile(fileext=".zip"), 
+                mod_ids = c("UD"))
+}

@@ -32,7 +32,6 @@ Takes the current state of the app and appends data views to an
 xlsx report object.
 }
 \examples{
-
 # We need a state object to use below
 sess_res = DW_test_mksession(session=list())
 state = sess_res$state

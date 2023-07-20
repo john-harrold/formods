@@ -615,6 +615,29 @@ ASM_fetch_dlfn = function(state, extension=".zip"){
 #'@param file File name to write zipped state.
 #'@param mod_ids Vector of module IDs and order they are needed (used for code generation).
 #'@return NULL
+#'@examples
+#' # Within shiny both session and input variables will exist,
+#' # this creates examples here for testing purposes:
+#' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' # Configuration files
+#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+#' MOD_yaml_file = system.file(package = "formods", "templates", "ASM.yaml")
+#'
+#' # We need to specify the ID of the ASM module
+#' id = "ASM"
+#'
+#' state = ASM_fetch_state(id           = id,
+#'                         input        = input,
+#'                         session      = session,
+#'                         FM_yaml_file = FM_yaml_file,
+#'                         MOD_yaml_file = MOD_yaml_file)
+#'
+#' ASM_write_state(state, session, 
+#'                 file    = tempfile(fileext=".zip"), 
+#'                 mod_ids = c("UD"))
 ASM_write_state = function(state, session, file, mod_ids){
 
   if((any(c("ShinySession", "session_proxy") %in% class(session)))){

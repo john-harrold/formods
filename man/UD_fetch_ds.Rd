@@ -35,3 +35,23 @@ list containing the following elements
 \description{
 Fetches the datasets contained in the module.
 }
+\examples{
+# YAML configuration files from the package:
+FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+MOD_yaml_file = system.file(package = "formods", "templates", "UD.yaml")
+# This is the module id:
+id = "UD"
+# Within shiny both session and input variables will exist,
+# this creates examples here for testing purposes:
+sess_res = UD_test_mksession(session=list())
+session = sess_res$session
+input   = sess_res$input
+state = UD_fetch_state(
+           id            = id,
+           input         = input,
+           session       = session,
+           FM_yaml_file  = FM_yaml_file,
+           MOD_yaml_file = MOD_yaml_file )
+  
+ ds_res = UD_fetch_ds(state) 
+}

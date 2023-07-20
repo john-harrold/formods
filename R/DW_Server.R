@@ -2475,7 +2475,6 @@ code}
 #'}
 #'
 #'@examples
-#'
 #'# We need a state object to use below
 #'sess_res = DW_test_mksession(session=list())
 #'state = sess_res$state

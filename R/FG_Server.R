@@ -1929,6 +1929,10 @@ state}
 #'  \item{desc:}   Verbose description of the element
 #'  \item{msgs:}   Messages to be passed back to the user
 #'}
+#'@examples
+#' sess_res = FG_test_mksession(session=list(), full_session=FALSE)
+#' state = sess_res$state
+#' fb_res = fers_builder(state)
 fers_builder = function(state){
 
   isgood = TRUE
@@ -2551,6 +2555,26 @@ code}
 #'  \item{rpt:}       Report with any additions passed back to the user.
 #'}
 #'@seealso \code{\link{FM_generate_report}}
+#'@examples
+#' sess_res = FG_test_mksession(session=list(), full_session=FALSE)
+#' state = sess_res$state
+#' # This will read in the default PowerPoint report template 
+#' rpt = 
+#' onbrand::read_template(
+#'  template = system.file(package="onbrand","templates","report.pptx"),
+#'  mapping  = system.file(package="onbrand","templates","report.yaml"))
+#'
+#' rpt_res = 
+#' FG_append_report(state   = state,    rpt = rpt,
+#'                  rpttype = "pptx", gen_code_only=TRUE)
+#'
+#' # Shows if report elements are present
+#' rpt_res$hasrptele
+#'
+#' # Code chunk to generate report element
+#' cat(paste(rpt_res$code, collapse="\n"))
+#'
+#'
 FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
 
   isgood    = TRUE
