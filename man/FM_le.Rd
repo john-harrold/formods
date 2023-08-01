@@ -4,7 +4,7 @@
 \alias{FM_le}
 \title{Appends entry to log file}
 \usage{
-FM_le(state, entry, escape_braces = TRUE)
+FM_le(state, entry, escape_braces = TRUE, entry_type = "alert")
 }
 \arguments{
 \item{state}{Module state after yaml read}
@@ -12,6 +12,8 @@ FM_le(state, entry, escape_braces = TRUE)
 \item{entry}{Text to add}
 
 \item{escape_braces}{Set to \code{TRUE} (default) to escape curly braces in the entry, set to \code{FALSE} to have the values interpreted.}
+
+\item{entry_type}{Set to either "alert"(default), "danger", "info", "success", or "warning"}
 }
 \description{
 Add the supplied txt and the module type to the log file
@@ -21,5 +23,9 @@ Add the supplied txt and the module type to the log file
 id="UD"
 sess_res = UD_test_mksession(session=list(), id=id)
 state   = sess_res$state
-FM_le(state, "This is a message")
+FM_le(state, "This is a normal  message")
+FM_le(state, "This is a danger  message", entry_type="danger")
+FM_le(state, "This is a info    message", entry_type="info")
+FM_le(state, "This is a success message", entry_type="success")
+FM_le(state, "This is a warning message", entry_type="warning")
 }

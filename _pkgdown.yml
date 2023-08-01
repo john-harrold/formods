@@ -13,6 +13,7 @@ reference:
     - autocast
     - starts_with("FM_")
     - fetch_hold
+    - fetch_package_version
     - has_changed
     - icon_link
     - remove_hold

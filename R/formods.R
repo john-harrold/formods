@@ -296,7 +296,10 @@ set_hold = function(state, inputId=NULL){
       state[[MOD_TYPE]][["ui_hold"]][[inputId]] = TRUE
     }else{
       # here we set the hold for a single inputId
-      cli::cli_alert_danger(paste0("Unable to set hold for unknown inputId: ", inputId))
+      FM_le(state     = state, 
+            entry     = paste0("Unable to set hold for unknown inputId: ", inputId),
+            entry_type="danger")
+      #cli::cli_alert_danger(paste0("Unable to set hold for unknown inputId: ", inputId))
       isgood = FALSE
     }
   }
@@ -526,14 +529,19 @@ user_dir}
 #'@param state Module state after yaml read
 #'@param entry Text to add
 #'@param escape_braces Set to \code{TRUE} (default) to escape curly braces in the entry, set to \code{FALSE} to have the values interpreted.
+#'@param entry_type  Set to either "alert"(default), "danger", "info", "success", or "warning"
 #'@return NULL
 #'@examples
 #' # We need a module state to use this function:
 #' id="UD"
 #' sess_res = UD_test_mksession(session=list(), id=id)
 #' state   = sess_res$state
-#' FM_le(state, "This is a message")
-FM_le = function(state, entry, escape_braces=TRUE){
+#' FM_le(state, "This is a normal  message")
+#' FM_le(state, "This is a danger  message", entry_type="danger")
+#' FM_le(state, "This is a info    message", entry_type="info")
+#' FM_le(state, "This is a success message", entry_type="success")
+#' FM_le(state, "This is a warning message", entry_type="warning")
+FM_le = function(state, entry, escape_braces=TRUE, entry_type="alert"){
   # pulling out the log file
   log_file = FM_fetch_log_path(state)
 
@@ -558,10 +566,33 @@ FM_le = function(state, entry, escape_braces=TRUE){
   # Writing messages to the console
   if(state[["yaml"]][["FM"]][["logging"]][["console"]]){
     for(line in entry){
-      if(escape_braces){
-        cli::cli_alert("{line}")
+      # This will conditionally show the entry if the cli packages is present:
+      if(system.file(package="cli") != ""){
+        if(escape_braces){
+          if(entry_type=="alert"){
+            cli::cli_alert("{line}") }
+          if(entry_type=="danger"){
+            cli::cli_alert_danger("{line}") }
+          if(entry_type=="warning"){
+            cli::cli_alert_warning("{line}") }
+          if(entry_type=="info"){
+            cli::cli_alert_info("{line}") }
+          if(entry_type=="success"){
+            cli::cli_alert_success("{line}") }
+        } else {
+          if(entry_type=="alert"){
+            cli::cli_alert(line)}
+          if(entry_type=="danger"){
+            cli::cli_alert_danger(line)}
+          if(entry_type=="warning"){
+            cli::cli_alert_warning(line)}
+          if(entry_type=="info"){
+            cli::cli_alert_info(line)}
+          if(entry_type=="success"){
+            cli::cli_alert_success(line)}
+        }
       } else {
-        cli::cli_alert(line)
+        message(line)
       }
     }
   }
@@ -799,8 +830,13 @@ FM_set_app_state <- function(session, app_state, set_holds = TRUE){
       }
     }
   } else {
-    cli::cli_alert("FM_set_app_state()")
-    cli::cli_alert("Unable to find ASM state.")
+    if(system.file(package="cli") != ""){
+      cli::cli_alert("FM_set_app_state()")
+      cli::cli_alert("Unable to find ASM state.")
+    } else {
+      message("FM_set_app_state()")
+      message("Unable to find ASM state.")
+    }
   }
 
 
@@ -1865,3 +1901,51 @@ icon_link = function(href, target="_blank", icon_name="circle-info"){
   res = tags$a(href=href, target=target, shiny::icon(icon_name))
 
 res}
+
+#'@export
+#'@title Fetches the Current Version of Pacakge
+#'@description The specified package version is extracted and returned. This
+#'can simply be the version installed from CRAN or if a development version
+#'from GitHub is used details from that will be returned.
+#'@param pkgname Name of package
+#'@return String with the version information
+#'@examples
+#' # This package should exist
+#' fetch_package_version('digest')
+#'
+#' # This package should not exist
+#' fetch_package_version('bad package name')
+fetch_package_version = function(pkgname){
+  isgood       = TRUE
+  version      = "NA"
+  version_verb = "NA"
+  msgs    = c()
+
+  if(system.file(package="devtools")!=""){
+    all_pkgs  = devtools::session_info()
+    found_idx = all_pkgs$packages$package == pkgname
+    if(any(found_idx)){
+      pkg_row      = all_pkgs$packages[found_idx,] 
+      version      = pkg_row[["loadedversion"]]
+      version_verb = pkg_row[["loadedversion"]]
+      version_verb = paste0(version_verb, " (", pkg_row[["date"]])
+      version_verb = paste0(version_verb, ", ",  pkg_row$source)
+      version_verb = paste0(version_verb, ")")
+    } else {
+      isgood       = FALSE
+      msgs         = paste0("The package: ", pkgname, " was not found. You may need to load it first.")
+    }
+
+  } else {
+    isgood       = FALSE
+    version_verb = "devtools required"
+    msgs         = "devtools was not found"
+  }
+
+  res = list(isgood       = isgood,
+             msgs         = msgs,
+             version_verb = version_verb,
+             version      = version)
+res}
+
+
