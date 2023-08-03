@@ -352,6 +352,57 @@ ASM_Server <- function(id,
  #
  #  })
     #------------------------------------
+    output$ui_asm_sys_detials  = renderUI({
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+      uiele = "System Details"
+    })
+    #------------------------------------
+    # fileReaderData must be defined outside of the outputs below so it
+    # will react properly
+    # This is the path to the log file
+    state = ASM_fetch_state(id           = id,
+                            input        = input,
+                            session      = session,
+                            FM_yaml_file = FM_yaml_file,
+                            MOD_yaml_file = MOD_yaml_file)
+    log_file = FM_fetch_log_path(state)
+    fileReaderData <- shiny::reactiveFileReader(500, session, log_file, readLines)
+    # Shows the rolling log
+    output$ui_asm_sys_log  = renderText({
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+
+      # Read the text, and make it a consistent number of lines so
+      # that the output box doesn't grow in height.
+      text               =  fileReaderData()
+      max_n              =  state[["MC"]][["show_log"]]
+      if(length(text) > max_n){
+        n_start = length(text)-max_n+1
+        n_stop  = length(text)
+        text=text[c(n_start:n_stop)]
+      }
+      text[is.na(text)]  = ""
+      uiele = paste(text, collapse = '\n')
+ 
+    uiele})
+
+#     cfg=gui_fetch_cfg(session)
+# output$text_user_log <- renderText({
+#   # Read the text, and make it a consistent number of lines so
+#   # that the output box doesn't grow in height.
+#   text <- fileReaderData()
+#   length(text) <- cfg$gui$user_log_length
+#   text[is.na(text)] <- ""
+#   paste(text, collapse = '\n')
+# })
+    #------------------------------------
     if(!is.null(react_state)){
       # Here we list the ui inputs that will result in a state change:
       toListen <- reactive({
@@ -635,8 +686,8 @@ ASM_fetch_dlfn = function(state, extension=".zip"){
 #'                         FM_yaml_file = FM_yaml_file,
 #'                         MOD_yaml_file = MOD_yaml_file)
 #'
-#' ASM_write_state(state, session, 
-#'                 file    = tempfile(fileext=".zip"), 
+#' ASM_write_state(state, session,
+#'                 file    = tempfile(fileext=".zip"),
 #'                 mod_ids = c("UD"))
 ASM_write_state = function(state, session, file, mod_ids){
 

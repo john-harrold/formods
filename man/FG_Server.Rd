@@ -76,7 +76,8 @@ ui <- dashboardPage(
        menuItem("Source Data",     tabName="upload",      icon=icon("table")) ,
        menuItem("Wrangle",         tabName="wrangle",     icon=icon("hat-cowboy")),
        menuItem("Plot",            tabName="plot",        icon=icon("chart-line")),
-       menuItem("App State",       tabName="app_state",   icon=icon("archive"))
+       menuItem("App State",       tabName="app_state",   icon=icon("archive")),
+       menuItem("App Info",        tabName="sysinfo",     icon=icon("book-medical"))
      )
   ),
   dashboardBody(
@@ -113,7 +114,24 @@ ui <- dashboardPage(
                htmlOutput(NS("DW",  "DW_ui_compact")))),
        tabItem(tabName="plot",
                box(title="Visualize Data", width=12,
-               htmlOutput(NS("FG",  "FG_ui_compact"))))
+               htmlOutput(NS("FG",  "FG_ui_compact")))),
+       tabItem(tabName="sysinfo",
+               box(title="System Details", width=12,
+               shinydashboard::tabBox(
+                 width = 12,
+                 title = NULL,
+                 shiny::tabPanel(id="sys_details",
+                          title=tagList(shiny::icon("ghost"),
+                                        "Deployment Details"),
+                 htmlOutput(NS("ASM", "ui_asm_sys_detials"))
+                 ),
+                 shiny::tabPanel(id="sys_log",
+                          title=tagList(shiny::icon("clipboard-list"),
+                                        "App Log"),
+                 verbatimTextOutput(NS("ASM", "ui_asm_sys_log"))
+                 )
+                 )
+               ))
       )
     )
   )

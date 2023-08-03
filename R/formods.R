@@ -550,7 +550,7 @@ FM_le = function(state, entry, escape_braces=TRUE, entry_type="alert"){
   # If the log file does not exist we initalize it
   if(!file.exists(log_file)){
     file.create(log_file)
-    write("for mods log init", file=log_file, append=TRUE)
+    write("formods log init", file=log_file, append=TRUE)
   }
 
   # module type

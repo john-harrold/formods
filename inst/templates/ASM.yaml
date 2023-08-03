@@ -3,6 +3,8 @@ MC:
   code: # module specific code options
     readOnly: TRUE
     mode:     r    
+  # Number of lines in the log to show in the verbatim output
+  show_log: 50
   reporting: # There's no reporting for the ASM module
     enabled: FALSE
     priority: 1

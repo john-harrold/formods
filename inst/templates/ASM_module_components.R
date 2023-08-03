@@ -61,7 +61,17 @@ ui <- dashboardPage(
      #     shinyAce::aceEditor(NS("ASM", "ui_asm_ace_code")), width=12)),
        fluidRow(
          box(title="Current Module State",
-           verbatimTextOutput("ui_state"),width=12))
+           verbatimTextOutput("ui_state"),width=12)),
+       fluidRow(
+         box(title="System Details",
+           "ui_asm_sys_details",
+           htmlOutput(NS("ASM", "ui_asm_sys_detials"))
+         ),
+         box(title="Load",
+           "ui_asm_sys_log",
+           verbatimTextOutput(NS("ASM", "ui_asm_sys_log"))
+         )
+         )
        ),
        tabItem(tabName="other", "Here you can put other elements of your App")
       )

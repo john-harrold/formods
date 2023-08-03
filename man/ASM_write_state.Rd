@@ -39,7 +39,7 @@ state = ASM_fetch_state(id           = id,
                         FM_yaml_file = FM_yaml_file,
                         MOD_yaml_file = MOD_yaml_file)
 
-ASM_write_state(state, session, 
-                file    = tempfile(fileext=".zip"), 
+ASM_write_state(state, session,
+                file    = tempfile(fileext=".zip"),
                 mod_ids = c("UD"))
 }
