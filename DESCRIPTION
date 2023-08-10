@@ -39,6 +39,7 @@ Suggests:
   clipr,
   covr,
   devtools,
+  DT,
   flextable,
   ggpubr,
   gtools,

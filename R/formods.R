@@ -296,7 +296,7 @@ set_hold = function(state, inputId=NULL){
       state[[MOD_TYPE]][["ui_hold"]][[inputId]] = TRUE
     }else{
       # here we set the hold for a single inputId
-      FM_le(state     = state, 
+      FM_le(state     = state,
             entry     = paste0("Unable to set hold for unknown inputId: ", inputId),
             entry_type="danger")
       #cli::cli_alert_danger(paste0("Unable to set hold for unknown inputId: ", inputId))
@@ -846,6 +846,114 @@ FM_set_app_state <- function(session, app_state, set_holds = TRUE){
 
 NULL}
 
+
+
+#'@export
+#'@title Fetches Informaiton About the App
+#'@description Returns diagnostic information about the app
+#'@param session Shiny session variable.
+#'@return List with information about the app with the following structure
+#' \itemize{
+#'   \item{uiele:} System information as UI elements to be used in shiny apps.
+#'   \item{msgs:}  System information as text to be used in a report/terminal.
+#'   \item{si_paclages} Dataframe with currently used packages.
+#' }
+#'@examples
+#' # We need a Shiny session object to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' session = sess_res$session
+#' app_info  = FM_fetch_app_info(session)
+#' app_info$msgs 
+FM_fetch_app_info <- function(session){
+  msgs        = c()
+  uiele       = NULL
+  si_packages = NULL
+
+  # The devtools package is needed for some information we want to find out if
+  # it's here and create a message if it's not
+  if(system.file(package="devtools") == ""){
+    found_devtools = FALSE
+    tmp_msg = "The devtools package was not found, some app information will not be reported."
+    msgs =  c(msgs, tmp_msg)
+    uiele = tagList(uiele, tags$em(tmp_msg))
+  } else {
+    found_devtools = TRUE
+  }
+
+  if(system.file(package="DT") == ""){
+    found_DT   = FALSE
+    tmp_msg    = "The DT package was not found, some app information will not be reported."
+    msgs =  c(msgs, tmp_msg)
+    uiele = tagList(uiele, tags$em(tmp_msg))
+  } else {
+    found_DT = TRUE
+  }
+
+
+  # Adding modules
+  app_state = FM_fetch_app_state(session)
+  if(length(names(app_state))>0){
+    uiele = tagList(uiele, tags$h3("Modules"))
+    msgs  = c(msgs, "Modules")
+  }
+
+  for(MODDATA in names(app_state)){
+
+    # This pulls out the current module state:
+    state   = FM_fetch_mod_state(session = session, id =app_state[[MODDATA]][["id"]])
+
+    if(!is.null(state)){
+      tmp_msg = paste0("ID: ",state[["id"]])
+      uiele   = tagList(uiele, tags$h4(tmp_msg))
+      msgs    = c(msgs, tmp_msg)
+      
+      tmp_msg = paste0("type: ",state[["MOD_TYPE"]])
+      uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
+      msgs    = c(msgs, tmp_msg)
+      
+      tmp_msg = paste0("FM_yaml_file: ",state[["FM_yaml_file"]])
+      uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
+      msgs    = c(msgs, tmp_msg)
+      
+      tmp_msg = paste0("MOD_yaml_file: ",state[["MOD_yaml_file"]])
+      uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
+      msgs    = c(msgs, tmp_msg)
+
+      tmp_msg = paste0("User files: ",FM_fetch_user_files_path(state))
+      uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
+      msgs    = c(msgs, tmp_msg)
+
+      tmp_msg = paste0("Log file: ",FM_fetch_log_path(state))
+      uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
+      msgs    = c(msgs, tmp_msg)
+      
+      # Finding the package dependencies of the current module
+      deps = FM_fetch_deps(state=state, session=session )
+      if(length(deps[["packages"]]) > 0){
+        tmp_msg = paste0("Package dependencies: ", paste0(deps[["packages"]], collapse=', '))
+        uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
+        msgs    = c(msgs, tmp_msg)
+      }
+    }
+  }
+
+  if(found_devtools){
+    si          =  devtools::session_info()
+    si_packages = si$packages
+    msgs = c(msgs, as.character(si_packages))
+    if(found_DT){
+      uiele = tagList(uiele, tags$h3("Packages"))
+      uiele   = tagList(uiele,DT::datatable(si_packages))
+    }
+  }
+
+
+  res = list(uiele       = uiele,
+             msgs        = msgs,
+             si_packages = si_packages)
+
+res}
 
 #'@export
 #'@title Fetches the App State
@@ -1925,7 +2033,7 @@ fetch_package_version = function(pkgname){
     all_pkgs  = devtools::session_info()
     found_idx = all_pkgs$packages$package == pkgname
     if(any(found_idx)){
-      pkg_row      = all_pkgs$packages[found_idx,] 
+      pkg_row      = all_pkgs$packages[found_idx,]
       version      = pkg_row[["loadedversion"]]
       version_verb = pkg_row[["loadedversion"]]
       version_verb = paste0(version_verb, " (", pkg_row[["date"]])

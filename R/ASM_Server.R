@@ -358,8 +358,11 @@ ASM_Server <- function(id,
                               session      = session,
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
-      uiele = "System Details"
-    })
+      app_info = FM_fetch_app_info(session)
+
+      uiele = app_info[["uiele"]]
+      
+    uiele})
     #------------------------------------
     # fileReaderData must be defined outside of the outputs below so it
     # will react properly
