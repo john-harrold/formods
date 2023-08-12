@@ -20,6 +20,7 @@ Called from download handler and used to write a saved state
 value if that is null
 }
 \examples{
+\donttest{
 # Within shiny both session and input variables will exist,
 # this creates examples here for testing purposes:
 sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
@@ -42,4 +43,5 @@ state = ASM_fetch_state(id           = id,
 ASM_write_state(state, session,
                 file    = tempfile(fileext=".zip"),
                 mod_ids = c("UD"))
+}
 }

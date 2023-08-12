@@ -670,6 +670,7 @@ ASM_fetch_dlfn = function(state, extension=".zip"){
 #'@param mod_ids Vector of module IDs and order they are needed (used for code generation).
 #'@return NULL
 #'@examples
+#' \donttest{
 #' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
 #' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
@@ -692,6 +693,7 @@ ASM_fetch_dlfn = function(state, extension=".zip"){
 #' ASM_write_state(state, session,
 #'                 file    = tempfile(fileext=".zip"),
 #'                 mod_ids = c("UD"))
+#' }
 ASM_write_state = function(state, session, file, mod_ids){
 
   if((any(c("ShinySession", "session_proxy") %in% class(session)))){
@@ -728,18 +730,23 @@ ASM_write_state = function(state, session, file, mod_ids){
 
   rpttypes = c("xlsx", "pptx", "docx")
   rptctr = 1
+
+  code_only_msg = ""
+  if(!switch_gen_rpts){
+    code_only_msg = " code only "
+    FM_le(state, "Generating reports (code only)")
+  } else {
+    FM_le(state, "Generating reports")
+  }
+
   for(rpttype in rpttypes){
     if(system.file(package = "shinybusy") !=""){
-
-      code_only_msg = ""
-      if(!switch_gen_rpts){
-        code_only_msg = " code only "
-      }
       if((any(c("ShinySession", "session_proxy") %in% class(session)))){
         shinybusy::update_modal_spinner(text=
                 paste0(state[["MC"]][["labels"]][["busy"]][[rpttype]], code_only_msg, "(",rptctr, "/", length(rpttypes),")"))
       }
     }
+
     rpt_file_name = paste0("report.", rpttype)
     grres = FM_generate_report(
        state         = state,
@@ -872,6 +879,9 @@ ASM_test_mksession = function(session, id="ASM", id_UD="UD", id_DW = "DW", id_FG
   # Required for proper reaction:
   rsc[[id]]  = list(ASM = list(checksum=state[["ASM"]][["checksum"]]))
 
+  # Defaults to not generating the reports and only the code when saving:
+  state[["ASM"]][["ui"]][["switch_gen_rpts"]] = FALSE
+
   res = list(
     isgood  = isgood,
     session = session,
@@ -879,4 +889,4 @@ ASM_test_mksession = function(session, id="ASM", id_UD="UD", id_DW = "DW", id_FG
     state   = state,
     rsc     = rsc
   )
-}
+res}

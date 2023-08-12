@@ -149,3 +149,6 @@ If you are running RStudio on a server (through a web browser) and you receive t
 `413 Request Entity too large.`
 
 The problem lies in the NGINX server. This is a proxy server being used by RStudio. And the issue is a limit on the maximum upload size in the NGINX server. The solution is to edit the configuration file (something like `/etc/nginx/nginx.conf`) and set the option `client_mx_body_size` to something more reasonable.
+
+## Disconnected from the server
+
