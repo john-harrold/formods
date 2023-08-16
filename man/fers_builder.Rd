@@ -7,7 +7,7 @@
 fers_builder(state)
 }
 \arguments{
-\item{state}{FG state from \code{FG_fetch_state()}}
+\item{FG}{state from \code{FG_fetch_state()}}
 }
 \value{
 list containing the following elements

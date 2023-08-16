@@ -10,7 +10,7 @@ ASM_fetch_code(state)
 \item{state}{ASM state from \code{ASM_fetch_state()}}
 }
 \value{
-NULL the ASM module does not generate code
+The ASM module does not generate code
 }
 \description{
 Fetches the code to generate results seen in the app

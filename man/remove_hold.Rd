@@ -13,6 +13,9 @@ remove_hold(state, session, inputId)
 
 \item{inputId}{The input ID of the UI element that was put on hold}
 }
+\value{
+No return value, called to remove holds.
+}
 \description{
 When some buttons are clicked they will change the state of the
 system, but other UI components will not detect that change correctly. So those

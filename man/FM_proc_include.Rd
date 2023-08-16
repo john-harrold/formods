@@ -11,6 +11,9 @@ FM_proc_include(state, session)
 
 \item{session}{Shiny session variable.}
 }
+\value{
+No return value, sets message in supplied session variable.
+}
 \description{
 Any errors that need to be passed back to the user can be set
 with this function.

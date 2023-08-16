@@ -11,6 +11,9 @@ FM_resume_screen(state, session)
 
 \item{session}{Shiny session variable.}
 }
+\value{
+No return value, called to disable screen pause.
+}
 \description{
 Stops Modal Screen Pause
 }

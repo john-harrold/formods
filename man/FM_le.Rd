@@ -15,6 +15,9 @@ FM_le(state, entry, escape_braces = TRUE, entry_type = "alert")
 
 \item{entry_type}{Set to either "alert"(default), "danger", "info", "success", or "warning"}
 }
+\value{
+Boolean value indicating success (\code{TRUE}) or failure (\code{FALSE}).
+}
 \description{
 Add the supplied txt and the module type to the log file
 }

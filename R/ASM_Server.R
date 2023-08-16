@@ -668,7 +668,7 @@ ASM_fetch_dlfn = function(state, extension=".zip"){
 #'@param session Shiny session variable
 #'@param file File name to write zipped state.
 #'@param mod_ids Vector of module IDs and order they are needed (used for code generation).
-#'@return NULL
+#'@return This function only writes the state and has no return value.
 #'@examples
 #' \donttest{
 #' # Within shiny both session and input variables will exist,
@@ -804,7 +804,7 @@ ASM_write_state = function(state, session, file, mod_ids){
 #'@title Fetch Module Code
 #'@description Fetches the code to generate results seen in the app
 #'@param state ASM state from \code{ASM_fetch_state()}
-#'@return NULL the ASM module does not generate code
+#'@return The ASM module does not generate code
 #'@examples
 #' # Creating a state object for testing
 #' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)

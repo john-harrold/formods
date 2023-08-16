@@ -13,6 +13,9 @@ FM_set_mod_state(session, id, state)
 
 \item{state}{Module state to set.}
 }
+\value{
+Session variable with the module state set.
+}
 \description{
 Sets the module state from the userdata under the specified
 id

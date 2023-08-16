@@ -251,7 +251,7 @@ res}
 #'@param state module state with all of the current ui elements populated
 #'@param session Shiny session variable
 #'@param inputId The input ID of the UI element that was put on hold
-#'@return NULL
+#'@return No return value, called to remove holds.
 #'@example inst/test_apps/FM_holds.R
 remove_hold = function(state, session, inputId){
 
@@ -530,7 +530,7 @@ user_dir}
 #'@param entry Text to add
 #'@param escape_braces Set to \code{TRUE} (default) to escape curly braces in the entry, set to \code{FALSE} to have the values interpreted.
 #'@param entry_type  Set to either "alert"(default), "danger", "info", "success", or "warning"
-#'@return NULL
+#'@return Boolean value indicating success (\code{TRUE}) or failure (\code{FALSE}).
 #'@examples
 #' # We need a module state to use this function:
 #' id="UD"
@@ -725,7 +725,7 @@ state}
 #'@param session Shiny session variable
 #'@param id ID string for the module.
 #'@param state Module state to set.
-#'@return NULL
+#'@return Session variable with the module state set.
 #'@examples
 #' # We need a Shiny session variable and a module state
 #' # object to use this function:
@@ -749,7 +749,7 @@ session}
 #'@param app_state Loaded app state.
 #'@param set_holds If TRUE (default) the holds will be set for all of the
 #' modules present in the app state.
-#'@return NULL
+#'@return No return value, just updates the app state in the session variable. 
 #'@examples
 #' # We need a Shiny session object to use this function:
 #' id="UD"
@@ -1075,7 +1075,7 @@ state}
 #'with this function.
 #'@param state formods State object.
 #'@param session Shiny session variable.
-#'@return NULL
+#'@return No return value, sets message in supplied session variable. 
 #'@examples
 #' # We need a module state object to use this function:
 #' id="UD"
@@ -1344,6 +1344,8 @@ FM_generate_report = function(state,
   current_dir = getwd()
   user_dir    = FM_fetch_user_files_path(state)
   setwd(user_dir)
+  on.exit(setwd(current_dir))
+
   # This will hold the reporting code
   code = c()
 
@@ -1664,7 +1666,7 @@ state}
 #'@param state Current module state after yaml file has been read.
 #'@param session Shiny session variable.
 #'@param message Optional message for the pause.
-#'@return NULL
+#'@return Pauses the screen and has no return value.
 #'@examples
 #' # We need a module state object and Shiny session objects to use this function:
 #' sess_res = UD_test_mksession(session=list())
@@ -1774,7 +1776,7 @@ res}
 #'@description  Stops Modal Screen Pause
 #'@param state Current module state after yaml file has been read.
 #'@param session Shiny session variable.
-#'@return NULL
+#'@return No return value, called to disable screen pause.
 #'@examples
 #' # We need a module state object and Shiny session objects to use this function:
 #' sess_res = UD_test_mksession(session=list())

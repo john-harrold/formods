@@ -14,6 +14,9 @@ FM_set_app_state(session, app_state, set_holds = TRUE)
 \item{set_holds}{If TRUE (default) the holds will be set for all of the
 modules present in the app state.}
 }
+\value{
+No return value, just updates the app state in the session variable.
+}
 \description{
 Takes a loaded app state and overwrites the current app state
 }

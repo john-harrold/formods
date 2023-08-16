@@ -13,6 +13,9 @@ FM_pause_screen(state, session, message)
 
 \item{message}{Optional message for the pause.}
 }
+\value{
+Pauses the screen and has no return value.
+}
 \description{
 Start a modal screen pause.
 }

@@ -15,6 +15,9 @@ ASM_write_state(state, session, file, mod_ids)
 
 \item{mod_ids}{Vector of module IDs and order they are needed (used for code generation).}
 }
+\value{
+This function only writes the state and has no return value.
+}
 \description{
 Called from download handler and used to write a saved state
 value if that is null

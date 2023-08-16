@@ -1920,7 +1920,7 @@ state}
 #'@description Takes the current ui elements and constructs the appropriate
 #'ggplot commands forom the user input. The plot commands assume the existance
 #'of a ggplot object \code{p}.
-#'@param state FG state from \code{FG_fetch_state()}
+#'@param FG state from \code{FG_fetch_state()}
 #'@return list containing the following elements
 #'\itemize{
 #'  \item{isgood:} Return status of the function.
