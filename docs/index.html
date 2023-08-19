@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="index.html">formods</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,23 +93,25 @@
 </div>
 <!-- badges: start -->
 <!---
-[![version](https://www.r-pkg.org/badges/version/formods)](https://CRAN.R-project.org/package=formods)
 --->
 
-<p>Shiny apps can often make use of the same key elements, <a href="https://formods.ubiquity.tools" class="external-link">formods</a> provides modules for common tasks (data upload, wragling data, figure genration and saving the app state). These modules can react and interact as well as generate code to create reproducable analyses. {formods} also defines a framework for creating reactive modules. The vignettes outline how to use these modules as well as how to create other modules within this framework.</p>
+<p>Shiny apps can often make use of the same key elements, <a href="https://formods.ubiquity.tools" class="external-link">formods</a> provides modules for common tasks (data upload, wragling data, figure genration and saving the app state). These modules can react and interact as well as generate code to create reproducable analyses. formods also defines a framework for creating reactive modules. The vignettes outline how to use these modules as well as how to create other modules within this framework.</p>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
-<!---
-You can install the released version of ``formods`` from [CRAN](https://cran.r-project.org/package=formods) with:
-
-``` r
-install.packages("formods")
-```
---->
-<p>You can install the development version from <a href="https://github.com/john-harrold/formods" class="external-link">GitHub</a> with:</p>
+<div class="section level2">
+<h2 id="from-cran">From CRAN<a class="anchor" aria-label="anchor" href="#from-cran"></a>
+</h2>
+<p>You can install the released version of formods from <a href="https://cran.r-project.org/package=formods" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"formods"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
+</h2>
+<p>You can install the development version from <a href="https://github.com/john-harrold/formods" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Installing devtools if it's not already installed</span></span>
 <span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"devtools"</span><span class="op">)</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span> </span>
@@ -118,10 +120,11 @@ install.packages("formods")
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"john-harrold/formods"</span>, dependencies<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Note that because <code>formods</code> depends on <code>onbrand</code> you will need to first install the development version of <code>onbrand</code>.</p>
 </div>
+</div>
 <div class="section level1">
 <h1 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h1>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://formods.ubiquity.tools/" class="external-link">formods</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"templates"</span>,<span class="st">"FM_compact.R"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -130,6 +133,7 @@ install.packages("formods")
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=formods" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/john-harrold/formods/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/john-harrold/formods/issues" class="external-link">Report a bug</a></li>
 </ul>
@@ -162,6 +166,7 @@ install.packages("formods")
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=formods" class="external-link"><img src="https://www.r-pkg.org/badges/version/formods" alt="version"></a></li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: Experimental"></a></li>
 <li><a href="https://app.codecov.io/gh/john-harrold/formods?branch=master" class="external-link"><img src="https://codecov.io/gh/john-harrold/formods/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>

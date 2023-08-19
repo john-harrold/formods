@@ -5,9 +5,9 @@
 
 <!-- badges: start -->
 <!---
-[![version](https://www.r-pkg.org/badges/version/formods)](https://CRAN.R-project.org/package=formods)
 --->
 
+[![version](https://www.r-pkg.org/badges/version/formods)](https://CRAN.R-project.org/package=formods)
 ![cranlogs](https://cranlogs.r-pkg.org/badges/formods)
 ![Active](https://www.repostatus.org/badges/latest/active.svg)
 [![Lifecycle:
@@ -21,19 +21,20 @@ Shiny apps can often make use of the same key elements,
 [formods](https://formods.ubiquity.tools) provides modules for common
 tasks (data upload, wragling data, figure genration and saving the app
 state). These modules can react and interact as well as generate code to
-create reproducable analyses. {formods} also defines a framework for
+create reproducable analyses. formods also defines a framework for
 creating reactive modules. The vignettes outline how to use these
 modules as well as how to create other modules within this framework.
 
 # Installation
 
-<!---
-You can install the released version of ``formods`` from [CRAN](https://cran.r-project.org/package=formods) with:
+## From CRAN
+You can install the released version of formods from [CRAN](https://cran.r-project.org/package=formods) with:
 
 ``` r
 install.packages("formods")
 ```
---->
+
+## Development version
 
 You can install the development version from
 [GitHub](https://github.com/john-harrold/formods) with:
