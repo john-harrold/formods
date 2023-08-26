@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 <!---
+[![Codecov test coverage](https://codecov.io/gh/john-harrold/formods/branch/master/graph/badge.svg)](https://app.codecov.io/gh/john-harrold/formods?branch=master)
 --->
 
 [![version](https://www.r-pkg.org/badges/version/formods)](https://CRAN.R-project.org/package=formods)
@@ -12,8 +13,6 @@
 ![Active](https://www.repostatus.org/badges/latest/active.svg)
 [![Lifecycle:
 Experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
-[![Codecov test
-coverage](https://codecov.io/gh/john-harrold/formods/branch/master/graph/badge.svg)](https://app.codecov.io/gh/john-harrold/formods?branch=master)
 [![R-CMD-check](https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
