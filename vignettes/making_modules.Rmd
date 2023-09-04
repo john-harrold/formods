@@ -42,8 +42,8 @@ following information:
 
 The current modules are in development:
 
--   NCA - [Non-Compartmental
-    Analysis](https://github.com/john-harrold/ruminate)
+-   NCA - [Non-Compartmental Analysis](https://github.com/john-harrold/ruminate)
+-   MDL - [ODE-Based Model Development](https://github.com/john-harrold/ruminate)
 
 # formods framework
 

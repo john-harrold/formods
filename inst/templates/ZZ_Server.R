@@ -19,7 +19,6 @@
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
 ZZ_Server <- function(id,
-               id_ASM        = NULL,
                FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
                MOD_yaml_file = system.file(package = "ZZDESC",  "templates", "ZZ.yaml"),
                deployed      = FALSE,
@@ -44,7 +43,6 @@ ZZ_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       if(is.null(state[["ZZ"]][["code"]])){
@@ -73,7 +71,6 @@ ZZ_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       uiele = state[["ZZ"]][["ui_msg"]]
@@ -91,7 +88,6 @@ ZZ_Server <- function(id,
    #                         session         = session,
    #                         FM_yaml_file    = FM_yaml_file,
    #                         MOD_yaml_file   = MOD_yaml_file,
-   #                         id_UD           = id_UD,
    #                         react_state     = react_state)
    #
    #  # Triggering optional notifications
@@ -115,7 +111,6 @@ ZZ_Server <- function(id,
    #                         session         = session,
    #                         FM_yaml_file    = FM_yaml_file,
    #                         MOD_yaml_file   = MOD_yaml_file,
-   #                         id_UD           = id_UD,
    #                         react_state     = react_state)
    #
    #    FM_le(state, "reaction state updated")
@@ -137,7 +132,6 @@ ZZ_Server <- function(id,
 #                            session         = session,
 #                            FM_yaml_file    = FM_yaml_file,
 #                            MOD_yaml_file   = MOD_yaml_file,
-#                            id_UD           = id_UD,
 #                            react_state     = react_state)
 #
 #     FM_le(state, "removing holds")
@@ -160,7 +154,6 @@ ZZ_Server <- function(id,
 #'@param session Shiny session variable
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
-#'@param id_ASM ID string for the app state management module used to save and load app states
 #'@return list containing the current state of the app including default
 #'values from the yaml file as well as any changes made by the user. The list
 #'has the following structure:
@@ -178,7 +171,7 @@ ZZ_Server <- function(id,
 #'  \item{FM_yaml_file:} App configuration file with FM as main section.
 #'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 #'}
-ZZ_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, id_ASM, react_state){
+ZZ_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react_state){
 
   # Template for an empty dataset
   #---------------------------------------------

@@ -25,18 +25,6 @@ ui <- dashboardPage(
              it easy to see the behavior.",
            width=12)),
        fluidRow(
-         box(title="Save",
-           "ASM_ui_save_name",
-           htmlOutput(NS("ASM", "ASM_ui_save_name")),
-           "ASM_ui_save_input",
-           htmlOutput(NS("ASM", "ASM_ui_save_button"))
-         ),
-         box(title="Load",
-           "ASM_ui_load_state",
-           htmlOutput(NS("ASM", "ASM_ui_load_state"))
-         )
-         ),
-       fluidRow(
          box(title="Messages",
            "ui_zz_msg",
            verbatimTextOutput(NS("ZZ", "ui_zz_msg")), width=12)),

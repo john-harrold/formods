@@ -85,6 +85,16 @@ And you can run this example and see how the modules interact as well:
 runApp(system.file(package="formods", "templates", "FM_compact.R"))
 ```
 
+### Deployment
+To deploy your App you need to create an App file with the appropriate `ui` and `server` functions called `App.R`. This will create one for you:
+
+``` r
+file.copy(from = system.file(package="formods", "templates", "FM_compact.R"),
+          to   = "App.R")
+```
+
+There are certain aspects of the app that behave differently when deployed. To do that you need to indicate that the app is deployed. You can do this in two ways. This is done by setting the `deployed` argument to each of the server functions to `TRUE`.
+
 ### Server functions
 
 Each module has a server function that uses the shortname followed by an underscore as the prefix. For example the server function named using the convention: `XX_Server()`. Where `XX` is the module short name. For example the server function for the upload data module is `UD_Server()`. At a minimum the server will take the module ID, a configuration file for the formods package, the module configuration file, and reactive object called `react_state`. The `react_state` object is used to link reactions between the modules.
@@ -138,6 +148,7 @@ Provides
 The FG module provides an interface to `ggplot` and allows the user to select from both the original data set from the UD module as well as the data views created in the DW module. The user here can create multiple figures.
 
 Provides 
+
 * Reporting of figures (PowerPoint and Word)
 
 # Known Issues
