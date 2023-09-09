@@ -2141,7 +2141,7 @@ mod_files}
 #'@description If you are developing a package within a repository (i.e. git)
 #'and want to create a new formods module this function will
 #'create the template files for you and install them in the correct location.
-#'@param MN   Module short name
+#'@param SN   Module short name
 #'@param Module_Name  Module long name
 #'@param package Name of package that will contain the module
 #'@param element What you would call the thing the module provides for example

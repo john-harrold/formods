@@ -14,6 +14,8 @@ use_formods(
 )
 }
 \arguments{
+\item{SN}{Module short name}
+
 \item{Module_Name}{Module long name}
 
 \item{package}{Name of package that will contain the module}
@@ -24,8 +26,6 @@ the FG module provides "figures", the DW module provides "data views"}
 \item{overwrite}{Boolean to indicate if you should ovewrite files}
 
 \item{repo_root}{Root of the repository.}
-
-\item{MN}{Module short name}
 }
 \value{
 Same as the return value for new_module_template()
