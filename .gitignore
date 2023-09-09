@@ -9,3 +9,5 @@ tmp/
 vignettes/*.R
 vignettes/*.html
 inst/doc
+R/NM_Server.R
+inst/templates/NM*

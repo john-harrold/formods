@@ -7,12 +7,14 @@
 #'@title ===ZZ_NAME=== State Server
 #'@description Server function for the ===ZZ_NAME===  Shiny Module
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
+#'@param id_ASM ID string for the app state managment module used to save and load app states
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param deployed Boolean variable indicating whether the app is deployed or not.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
 ===ZZ===_Server <- function(id,
+               id_ASM        = "ASM",
                FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
                MOD_yaml_file = system.file(package = "===PKG===",  "templates", "===ZZ===.yaml"),
                deployed      = FALSE,

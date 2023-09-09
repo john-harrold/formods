@@ -100,7 +100,7 @@ server <- function(input, output, session) {
   res = UD_test_mksession(session, id_UD)
   react_FM[[id_UD]] = res[["rsc"]][[id_UD]]
 
-  ===ZZ===_Server(id="===ZZ===", react_state=react_FM)
+  DW_Server(id="DW", react_state=react_FM)
 
   # Current state outside of the module
   output$ui_state  =  renderText({

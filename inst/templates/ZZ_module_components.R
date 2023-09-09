@@ -79,7 +79,7 @@ server <- function(input, output, session) {
   react_FM = reactiveValues()
 
   # Module server
-  ===ZZ===_Server(id="===ZZ===", react_state=react_FM)
+  ===ZZ===_Server(id="===ZZ===", id_ASM = "ASM", react_state=react_FM)
 
   # Current state outside of the module
   output$ui_state  =  renderText({
