@@ -11,7 +11,7 @@ ui <- dashboardPage(
   dashboardHeader(title="===ZZ=== Module Template"),
   dashboardSidebar(
      sidebarMenu(
-       menuItem("Module Pieces",    tabName="appstate",  icon=icon("archive")) ,
+       menuItem("Module UI Components",    tabName="appstate",  icon=icon("archive")) ,
        menuItem("Other",  tabName="other", icon=icon("archive"))
      )
   ),

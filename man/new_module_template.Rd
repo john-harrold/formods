@@ -13,6 +13,8 @@ new_module_template(
 )
 }
 \arguments{
+\item{SN}{Module short name}
+
 \item{Module_Name}{Module long name}
 
 \item{package}{Name of package that will contain the module}
@@ -21,8 +23,6 @@ new_module_template(
 the FG module provides "figures", the DW module provides "data views".}
 
 \item{file_dir}{Directory to save file}
-
-\item{MN}{Module short name}
 }
 \value{
 list with the following elements:

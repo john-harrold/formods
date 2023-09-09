@@ -2063,7 +2063,7 @@ res}
 #'@title Makes Template Files for formods New Module
 #'@description If you want to create a new formods module this function will
 #'create the template files for you.
-#'@param MN   Module short name
+#'@param SN   Module short name
 #'@param Module_Name  Module long name
 #'@param package Name of package that will contain the module
 #'@param element What you would call the thing the module provides for example
@@ -2085,9 +2085,9 @@ res}
 #' new_module_template()
 #'
 new_module_template = function(
-  SN          = "NM", 
-  Module_Name = "New Module", 
-  package     = "pkgname", 
+  SN          = "NM",
+  Module_Name = "New Module",
+  package     = "pkgname",
   element     = "analysis",
   file_dir    = tempdir()){
 
@@ -2106,7 +2106,7 @@ new_module_template = function(
     ZZ      = SN,
     zz      = tolower(SN),
     ZZ_NAME = Module_Name,
-    ELEMENT = element,    
+    ELEMENT = element,
     PKG     = package  )
 
 
@@ -2133,3 +2133,74 @@ new_module_template = function(
     write(lines, file=dest_full, append=FALSE)
   }
 mod_files}
+
+
+
+#'@export
+#'@title Create Module Templates in a Package Repository
+#'@description If you are developing a package within a repository (i.e. git)
+#'and want to create a new formods module this function will
+#'create the template files for you and install them in the correct location.
+#'@param MN   Module short name
+#'@param Module_Name  Module long name
+#'@param package Name of package that will contain the module
+#'@param element What you would call the thing the module provides for example
+#'the FG module provides "figures", the DW module provides "data views"
+#'@param overwrite Boolean to indicate if you should ovewrite files
+#'@param repo_root Root of the repository.
+#'@return Same as the return value for new_module_template()
+#'@examples
+#' if(FALSE){
+#'   use_formods()
+#' }
+use_formods = function(
+  SN          = "NM",
+  Module_Name = "New Module",
+  package     = "pkgname",
+  element     = "analysis",
+  overwrite   = FALSE,
+  repo_root   = NULL){
+
+
+  if(is.null(repo_root)){
+    if(system.file(package="here") == ""){
+      message("The repo_root is not specified and the here package is not installed.")
+      message("You need to either specify the repo_root or install the hear package.")
+      stop("use_formod()")
+     } else{
+       repo_root = here::here()
+    }
+  }
+
+  # Making sure the installation directories exist
+  R_dir        = file.path(repo_root, "R")
+  if(!dir.exists(R_dir)){
+    dir.create(R_dir, recursive=TRUE)
+  }
+  template_dir = file.path(repo_root, "inst", "templates")
+  if(!dir.exists(template_dir)){
+    dir.create(template_dir, recursive=TRUE)
+  }
+
+
+  # Creating the new template files in the temp directory
+  nmr = new_module_template(
+          SN          = SN,
+          Module_Name = Module_Name,
+          package  = package,
+          element  = element,
+          file_dir = tempdir())
+
+  tmp_server = file.path(here::here(), "R", nmr[["server"]][["dest"]])
+  tmp_yaml   = file.path(here::here(), "inst", "templates", nmr[["yaml"]][["dest"]])
+  tmp_mc     = file.path(here::here(), "inst", "templates", nmr[["mc"]][["dest"]])
+
+  message("Creating module files:")
+  message(paste0(" - ", tmp_server))
+  message(paste0(" - ", tmp_yaml))
+  message(paste0(" - ", tmp_mc))
+
+  file.copy(from = nmr[["server"]][["dest_full"]], to = tmp_server, overwrite =  overwrite)
+  file.copy(from = nmr[["yaml"]][["dest_full"]],   to = tmp_yaml,   overwrite =  overwrite)
+  file.copy(from = nmr[["mc"]][["dest_full"]],     to = tmp_mc,     overwrite =  overwrite)
+nmr}

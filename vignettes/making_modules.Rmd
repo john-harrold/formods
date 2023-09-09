@@ -47,28 +47,23 @@ The current modules are in development:
 
 # formods framework
 
-To get started you need to create some template files. The example below assumes you are creating this module for a package called `mypackage`. Say that this module is used to produce `widgets`, the short name is `MM` which stands for `My Module`:
+To get started you need to create some template files. The example below assumes you are creating this module for a package called `mypackage` and that you are running this command in a git repository. Say that this module is used to produce `widgets`, the short name is `MM` which stands for `My Module`:
 
 ``` r
-new_module_template(file_dir    = ".", 
-                    SN          = "MM",
-                    Module_Name = "My Module",
-                    element     = "widgets", 
-                    package     = "mypackage")
+use_formods(SN          = "MM",
+            Module_Name = "My Module",
+            element     = "widgets", 
+            package     = "mypackage")
 ```
 
 -   `MM_module_components.R` - An app that can be used for testing the
     module and highlighting the different UI elements that are used
-    within the module. This should be placed in `inst/templates`.
+    within the module (found in  `inst/templates`).
 -   `MM_Server.R`: A bare bones file containing the expected functions
-    and their minimal inputs. This should be places in `R`.
+    and their minimal inputs. (found in `R`).
 -   `MM.yaml`: This module configuration file contains the the minimal
     elements expected, but you can add your own fields to suit your
-    modules needs. THis shoudl be placed in `inst/templates`.
-
-You can rename the `MM` portion of the files with the module short name
-you're using. The `MM_Server.R` would go in the `R` directory in your
-package and the other two files would go into `inst/templates`.
+    modules needs (found in `inst/templates`).
 
 # Expected functions
 
