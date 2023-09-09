@@ -3,24 +3,18 @@
 #'@importFrom digest digest
 #'@importFrom shinyAce aceEditor updateAceEditor
 
-
-# JMH
-# Load state notes:
-# - Replace current state with loaded state
-# - Change button values to current or zero
-
 #'@export
-#'@title ZZDESC State Server
-#'@description Server function for the ZZDESC  Shiny Module
+#'@title ===ZZ_NAME=== State Server
+#'@description Server function for the ===ZZ_NAME===  Shiny Module
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
 #'@param FM_yaml_file App configuration file with FM as main section.
-#'@param MOD_yaml_file  Module configuration file with ZZ as main section.
+#'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param deployed Boolean variable indicating whether the app is deployed or not.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
-ZZ_Server <- function(id,
+===ZZ===_Server <- function(id,
                FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
-               MOD_yaml_file = system.file(package = "ZZDESC",  "templates", "ZZ.yaml"),
+               MOD_yaml_file = system.file(package = "===PKG===",  "templates", "===ZZ===.yaml"),
                deployed      = FALSE,
                react_state   = NULL) {
   moduleServer(id, function(input, output, session) {
@@ -28,7 +22,7 @@ ZZ_Server <- function(id,
 
     #------------------------------------
     # Create ui outputs here:
-    output$ZZ_ui_element = renderUI({
+    output$===ZZ===_ui_element = renderUI({
       uiele = NULL
       uiele})
 
@@ -38,23 +32,23 @@ ZZ_Server <- function(id,
       # Reacting to file changes
       input$input_data_file
       input$input_select_sheet
-      state = ZZ_fetch_state(id              = id,
+      state = ===ZZ===_fetch_state(id              = id,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
                              react_state     = react_state)
 
-      if(is.null(state[["ZZ"]][["code"]])){
-        uiele = "# No file loaded"
+      if(is.null(state[["===ZZ==="]][["code"]])){
+        uiele = "# No code to generate"
       } else {
-        uiele = state[["ZZ"]][["code"]]
+        uiele = state[["===ZZ==="]][["code"]]
       }
 
 
       shinyAce::updateAceEditor(
         session         = session,
-        editorId        = "ui_zz_code",
+        editorId        = "ui_===zz===_code",
         theme           = state[["yaml"]][["FM"]][["code"]][["theme"]],
         showLineNumbers = state[["yaml"]][["FM"]][["code"]][["showLineNumbers"]],
         readOnly        = state[["MC"]][["code"]][["readOnly"]],
@@ -63,17 +57,141 @@ ZZ_Server <- function(id,
 
     })
     #------------------------------------
-    # User messages:
-    output$ui_asm_msg = renderText({
-      input[["button_state_save"]]
-      state = ZZ_fetch_state(id              = id,
+    # Side buttons:
+    # new
+    output$ui_===zz===_new_btn = renderUI({
+      state = ===ZZ===_fetch_state(id              = id,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
                              react_state     = react_state)
 
-      uiele = state[["ZZ"]][["ui_msg"]]
+      uiele = shinyWidgets::actionBttn(
+        inputId = NS(id, "button_clk_new"),
+        label   = state[["MC"]][["labels"]][["new_btn"]],
+        style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+        size    = state[["MC"]][["formatting"]][["button_clk_new"]][["size"]],
+        block   = state[["MC"]][["formatting"]][["button_clk_new"]][["block"]],
+        color   = "success",
+        icon    = icon("plus"))
+
+      # Optinally adding the tooltip:
+      uiele = formods::FM_add_ui_tooltip(state, uiele,
+                                         tooltip     = state[["MC"]][["formatting"]][["button_clk_new"]][["tooltip"]],
+                                         position    = state[["MC"]][["formatting"]][["button_clk_new"]][["tooltip_position"]])
+
+      uiele})
+
+    #------------------------------------
+    # Save
+    output$ui_===zz===_save_btn = renderUI({
+      state = ===ZZ===_fetch_state(id        = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
+
+      uiele = shinyWidgets::actionBttn(
+                inputId = NS(id, "button_clk_save"),
+                label   = state[["MC"]][["labels"]][["save_btn"]],
+                style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                size    = state[["MC"]][["formatting"]][["button_clk_save"]][["size"]],
+                block   = state[["MC"]][["formatting"]][["button_clk_save"]][["block"]],
+                color   = "primary",
+                icon    = icon("arrow-down"))
+
+      # Optinally adding the tooltip:
+      uiele = formods::FM_add_ui_tooltip(state, uiele,
+               tooltip     = state[["MC"]][["formatting"]][["button_clk_save"]][["tooltip"]],
+               position    = state[["MC"]][["formatting"]][["button_clk_save"]][["tooltip_position"]])
+
+      uiele})
+    #------------------------------------
+    # clip code
+    output$ui_===zz===_clip_code = renderUI({
+      state = ===ZZ===_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
+      uiele = NULL
+      if((system.file(package="clipr") != "") & !deployed){
+        uiele = shinyWidgets::actionBttn(
+                  inputId = NS(id, "button_clk_clip"),
+                  label   = state[["MC"]][["labels"]][["clip_btn"]],
+                  style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                  size    = state[["MC"]][["formatting"]][["button_clk_clip"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["button_clk_clip"]][["block"]],
+                  color   = "royal",
+                  icon    = icon("clipboard", lib="font-awesome"))
+        # Optinally adding the tooltip:
+        uiele = formods::FM_add_ui_tooltip(state, uiele,
+                 tooltip             = state[["MC"]][["formatting"]][["button_clk_clip"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["button_clk_clip"]][["tooltip_position"]])
+      }
+      uiele})
+    #------------------------------------
+    # delete
+    output$ui_===zz===_del_btn   = renderUI({
+      state = ===ZZ===_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
+      uiele = shinyWidgets::actionBttn(
+                inputId = NS(id, "button_clk_del"),
+                label   = state[["MC"]][["labels"]][["del_btn"]],
+                style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                size    = state[["MC"]][["formatting"]][["button_clk_del"]][["size"]],
+                block   = state[["MC"]][["formatting"]][["button_clk_del"]][["block"]],
+                color   = "danger",
+                icon    = icon("minus"))
+
+      # Optinally adding the tooltip:
+      uiele = formods::FM_add_ui_tooltip(state, uiele,
+               tooltip     = state[["MC"]][["formatting"]][["button_clk_del"]][["tooltip"]],
+               position    = state[["MC"]][["formatting"]][["button_clk_del"]][["tooltip_position"]])
+      uiele})
+    #------------------------------------
+    # copy
+    output$ui_===zz===_copy_btn   = renderUI({
+      state = ===ZZ===_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
+
+      uiele = shinyWidgets::actionBttn(
+                inputId = NS(id, "button_clk_copy"),
+                label   = state[["MC"]][["labels"]][["copy_btn"]],
+                style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                size    = state[["MC"]][["formatting"]][["button_clk_copy"]][["size"]],
+                block   = state[["MC"]][["formatting"]][["button_clk_copy"]][["block"]],
+                color   = "royal",
+                icon    = icon("copy"))
+
+      # Optinally adding the tooltip:
+      uiele = formods::FM_add_ui_tooltip(state, uiele,
+               tooltip             = state[["MC"]][["formatting"]][["button_clk_copy"]][["tooltip"]],
+               position    = state[["MC"]][["formatting"]][["button_clk_copy"]][["tooltip_position"]])
+      uiele})
+    #------------------------------------
+    # User messages:
+    output$ui_===zz===_msg = renderText({
+      input[["button_state_save"]]
+      state = ===ZZ===_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
+
+      uiele = state[["===ZZ==="]][["ui_msg"]]
 
       uiele})
     #------------------------------------
@@ -83,7 +201,7 @@ ZZ_Server <- function(id,
    #       input$B)
    #})
    #observeEvent(toNotify(), {
-   #  state = ZZ_fetch_state(id              = id,
+   #  state = ===ZZ===_fetch_state(id              = id,
    #                         input           = input,
    #                         session         = session,
    #                         FM_yaml_file    = FM_yaml_file,
@@ -106,7 +224,7 @@ ZZ_Server <- function(id,
    #  })
    #  # This updates the reaction state:
    #  observeEvent(toListen(), {
-   #  state = ZZ_fetch_state(id              = id,
+   #  state = ===ZZ===_fetch_state(id              = id,
    #                         input           = input,
    #                         session         = session,
    #                         FM_yaml_file    = FM_yaml_file,
@@ -127,7 +245,7 @@ ZZ_Server <- function(id,
 #   observeEvent(remove_hold_listen(), {
 #     # Once the UI has been regenerated we
 #     # remove any holds for this module
-#     state = ZZ_fetch_state(id              = id,
+#     state = ===ZZ===_fetch_state(id              = id,
 #                            input           = input,
 #                            session         = session,
 #                            FM_yaml_file    = FM_yaml_file,
@@ -136,7 +254,7 @@ ZZ_Server <- function(id,
 #
 #     FM_le(state, "removing holds")
 #     # Removing all holds
-#     for(hname in names(state[["ZZ"]][["ui_hold"]])){
+#     for(hname in names(state[["===ZZ==="]][["ui_hold"]])){
 #       remove_hold(state, session, hname)
 #     }
 #   }, priority = -100)
@@ -147,7 +265,7 @@ ZZ_Server <- function(id,
 }
 
 #'@export
-#'@title Fetch ZZDESC State
+#'@title Fetch ===ZZ_NAME=== State
 #'@description Merges default app options with the changes made in the UI
 #'@param id Shiny module ID
 #'@param input Shiny input variable
@@ -160,18 +278,18 @@ ZZ_Server <- function(id,
 #' \itemize{
 #' \item{yaml:} Full contents of the supplied yaml file.
 #' \item{MC:} Module components of the yaml file.
-#' \item{ZZ:}
+#' \item{===ZZ===:}
 #' \itemize{
 #'   \item{isgood:} Boolean object indicating if the file was successfully loaded.
 #'   \item{checksum:} This is an MD5 sum of the contents element and can be
 #'   used to detect changes in the state.
 #' }
-#'  \item{MOD_TYPE:} Character data containing the type of module \code{"ZZ"}
+#'  \item{MOD_TYPE:} Character data containing the type of module \code{"===ZZ==="}
 #'  \item{id:} Character data containing the module id module in the session variable.
 #'  \item{FM_yaml_file:} App configuration file with FM as main section.
 #'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
 #'}
-ZZ_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react_state){
+===ZZ===_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react_state){
 
   # Template for an empty dataset
   #---------------------------------------------
@@ -181,17 +299,17 @@ ZZ_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react
   # initialize it
   if(is.null(state)){
     # General state information
-    state = ZZ_init_state(FM_yaml_file, MOD_yaml_file, id, session)
+    state = ===ZZ===_init_state(FM_yaml_file, MOD_yaml_file, id, session)
 
   }
 
   #---------------------------------------------
   # Here we update the state based on user input
-  for(ui_name in state[["ZZ"]][["ui_ids"]]){
+  for(ui_name in state[["===ZZ==="]][["ui_ids"]]){
     if(!is.null(isolate(input[[ui_name]]))){
-       state[["ZZ"]][["ui"]][[ui_name]] = isolate(input[[ui_name]])
+       state[["===ZZ==="]][["ui"]][[ui_name]] = isolate(input[[ui_name]])
      } else {
-       state[["ZZ"]][["ui"]][[ui_name]] = ""
+       state[["===ZZ==="]][["ui"]][[ui_name]] = ""
      }
    }
    msgs = c()
@@ -211,14 +329,14 @@ ZZ_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react
   state}
 
 #'@export
-#'@title Initialize ZZ Module State
+#'@title Initialize ===ZZ=== Module State
 #'@description Creates a list of the initialized module state
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id ID string for the module.
 #'@param session Shiny session variable
-#'@return list containing an empty ZZ state
-ZZ_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
+#'@return list containing an empty ===ZZ=== state
+===ZZ===_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 
 
   button_counters = c()
@@ -229,7 +347,7 @@ ZZ_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
     FM_yaml_file    = FM_yaml_file,
     MOD_yaml_file   = MOD_yaml_file,
     id              = id,
-    MT              = "ZZ",
+    MT              = "===ZZ===",
     button_counters = button_counters,
     ui_ids          = ui_ids,
     ui_hold         = ui_hold,
@@ -241,9 +359,9 @@ state}
 #'@export
 #'@title Fetch Module Code
 #'@description Fetches the code to generate results seen in the app
-#'@param state ZZ state from \code{ZZ_fetch_state()}
+#'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
 #'@return Character object vector with the lines of code
-ZZ_fetch_code = function(state){
+===ZZ===_fetch_code = function(state){
 
   code = NULL
 
@@ -252,7 +370,7 @@ code}
 #'@export
 #'@title Append Report Elements
 #'@description Description
-#'@param state ZZ state from \code{ZZ_fetch_state()}
+#'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
 #'@param rpt Report with the current content of the report which will be appended to in
 #'this function. For details on the structure see the documentation for \code{\link{formods::FM_generate_report}}.
 #'@param rpttype Type of report to generate (supported "xlsx", "pptx", "docx").
@@ -267,7 +385,7 @@ code}
 #'  \item{rpt:}       Report with any additions passed back to the user.
 #'}
 #'@seealso \code{\link{formods::FM_generate_report}}
-ZZ_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
+===ZZ===_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
 
   isgood    = TRUE
   hasrptele = FALSE
@@ -275,7 +393,7 @@ ZZ_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
   msgs      = c()
 
 
-  # The ZZ module only supports the following report types:
+  # The ===ZZ=== module only supports the following report types:
   supported_rpttypes = c("xlsx", "pptx", "docx")
 
   if(rpttype %in% supported_rpttypes){
@@ -294,7 +412,7 @@ res}
 #'@export
 #'@title Fetch Module Datasets
 #'@description Fetches the datasets contained in the module. 
-#'@param state ZZ state from \code{ZZ_fetch_state()}
+#'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
 #'@return Character object vector with the lines of code
 #'@return list containing the following elements
 #'\itemize{
@@ -314,7 +432,7 @@ res}
 #'    \item{DSchecksum: Dataset checksum.}
 #'  }
 #'}
-ZZ_fetch_ds = function(state){
+===ZZ===_fetch_ds = function(state){
   hasds  = FALSE
   isgood = TRUE
   msgs   = c()
@@ -332,7 +450,7 @@ ZZ_fetch_ds = function(state){
 
   # This prevents returning a dataset if this is triggered before data has
   # been loaded
-  if(state[["ZZ"]][["isgood"]]){
+  if(state[["===ZZ==="]][["isgood"]]){
 
     # Fill in the DS creation stuff here
     isgood = FALSE
@@ -362,8 +480,8 @@ res}
 #'   \item{rsc:} The \code{react_state} components.
 #'}
 #'@examples
-#' sess_res = ZZ_test_mksession(session=list())
-ZZ_test_mksession = function(session, id = "ZZ", id_UD="UD"){
+#' sess_res = ===ZZ===_test_mksession(session=list())
+===ZZ===_test_mksession = function(session, id = "===ZZ===", id_UD="UD"){
 
   isgood = TRUE
   rsc    = list()

@@ -1,5 +1,7 @@
 library(here)
 repo_root = here::here()
+setwd(repo_root)
+
 
 #loading everything
 devtools::load_all()

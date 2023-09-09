@@ -8,30 +8,61 @@ load_all()
 
 ui <- dashboardPage(
   skin="red",
-  dashboardHeader(title="ZZ Module Template"),
+  dashboardHeader(title="===ZZ=== Module Template"),
   dashboardSidebar(
      sidebarMenu(
-       menuItem("Save/Load",    tabName="appstate",  icon=icon("archive")) ,
+       menuItem("Module Pieces",    tabName="appstate",  icon=icon("archive")) ,
        menuItem("Other",  tabName="other", icon=icon("archive"))
      )
   ),
   dashboardBody(
     tabItems(
        tabItem(tabName="appstate",
+       # Required for tooltips
+       prompter::use_prompt(),
        fluidRow(
-         box(title="Example",
-             "This app demonstrates how to use the app state manager
+         box(title=NULL,
+             "This app demonstrates how to use the ===ZZ===
              module with each ui component isolated to make
              it easy to see the behavior.",
-           width=12)),
+        fluidRow(
+          box(title="Analysis Actions",
+              div(style="display:inline-block",
+                  "ui_===zz===_new_btn",
+                  htmlOutput(NS("===ZZ===", "ui_===zz===_new_btn"))),
+              div(style="display:inline-block",
+                  "ui_===zz===_save_btn",
+                  htmlOutput(NS("===ZZ===", "ui_===zz===_save_btn"))),
+              div(style="display:inline-block",
+                  "ui_===zz===_clip_code",
+                  htmlOutput(NS("===ZZ===", "ui_===zz===_clip_code")) ),
+              div(style="display:inline-block",
+                  "ui_===zz===_del_btn",
+                  htmlOutput(NS("===ZZ===", "ui_===zz===_del_btn"))),
+              div(style="display:inline-block",
+                  "ui_===zz===_copy_btn",
+                  htmlOutput(NS("===ZZ===", "ui_===zz===_copy_btn"))),
+              width = 12)
+        ),
+       width=12)),
+       fluidRow(
+         box(title="Element 1",
+           "===ZZ===_ui_ele1",
+           htmlOutput(NS("===ZZ===", "===ZZ===_ui_ele1")),
+         ),
+         box(title="Element 2",
+           "===ZZ===_ui_ele1",
+           htmlOutput(NS("===ZZ===", "===ZZ===_ui_ele2"))
+         )
+         ),
        fluidRow(
          box(title="Messages",
-           "ui_zz_msg",
-           verbatimTextOutput(NS("ZZ", "ui_zz_msg")), width=12)),
+           "ui_===zz===_msg",
+           verbatimTextOutput(NS("===ZZ===", "ui_===zz===_msg")), width=12)),
        fluidRow(
          box(title="Generated Code",
-           "ZZ_ui_ace_code",
-           shinyAce::aceEditor(NS("ZZ", "ui_zz_code")), width=12)),
+           "===ZZ===_ui_ace_code",
+           shinyAce::aceEditor(NS("===ZZ===", "ui_===zz===_code")), width=12)),
        fluidRow(
          box(title="Current Module State",
            verbatimTextOutput("ui_state"),width=12))
@@ -48,11 +79,11 @@ server <- function(input, output, session) {
   react_FM = reactiveValues()
 
   # Module server
-  ZZ_Server(id="ZZ", react_state=react_FM)
+  ===ZZ===_Server(id="===ZZ===", react_state=react_FM)
 
   # Current state outside of the module
   output$ui_state  =  renderText({
-    uiele = paste(capture.output(str(react_FM[["ZZ"]])), collapse="\n")
+    uiele = paste(capture.output(str(react_FM[["===ZZ==="]])), collapse="\n")
   uiele})
 }
 

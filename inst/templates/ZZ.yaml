@@ -1,5 +1,5 @@
-# The ZZ field is a skeleton for constructing new modules
-ZZ:
+# The MC field is a skeleton for constructing new modules
+MC:
 # The include section is optional. You can use this section to copy files 
 # from the directory where you are running the app to the user directory to be
 # used in the app and when saved. The source and dest options can be a path
@@ -36,9 +36,42 @@ ZZ:
       width:  800
       height: 300
     input:
+    button_clk_run:
+      size: "sm"
+      block: TRUE
+    button_clk_del:
+      size: "sm"
+      block: TRUE
+      tooltip: "Delete the current ===ELEMENT===."
+      tooltip_position: "right"
+    button_clk_save:
+      size: "sm"
+      block: TRUE
+      tooltip: "Save the name for the current ===ELEMENT===."
+      tooltip_position: "right"
+    button_clk_clip:
+      size: "sm"
+      block: TRUE
+      tooltip: "Copy the code to generate the current ===ELEMENT=== to the clipboard."
+      tooltip_position: "right"
+    button_clk_copy:
+      size: "sm"
+      block: TRUE
+      tooltip: "Make a copy of the current ===ELEMENT===."
+      tooltip_position: "right"
+    button_clk_new:
+      size: "sm"
+      block: TRUE
+      tooltip: "Create a new ===ELEMENT===."
+      tooltip_position: "right"
       width: 100
   labels:
     input_label: "This is the text for a label"
+    save_btn:     "Save"
+    clip_btn:     "Code" 
+    copy_btn:     "Copy"
+    del_btn:      "Delete"
+    new_btn:      "New"
   errors:
     bad_input: "Input error message"
   tooltips:

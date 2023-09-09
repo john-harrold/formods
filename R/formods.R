@@ -749,7 +749,7 @@ session}
 #'@param app_state Loaded app state.
 #'@param set_holds If TRUE (default) the holds will be set for all of the
 #' modules present in the app state.
-#'@return No return value, just updates the app state in the session variable. 
+#'@return No return value, just updates the app state in the session variable.
 #'@examples
 #' # We need a Shiny session object to use this function:
 #' id="UD"
@@ -864,7 +864,7 @@ NULL}
 #' sess_res = UD_test_mksession(session=list(), id=id)
 #' session = sess_res$session
 #' app_info  = FM_fetch_app_info(session)
-#' app_info$msgs 
+#' app_info$msgs
 FM_fetch_app_info <- function(session){
   msgs        = c()
   uiele       = NULL
@@ -907,15 +907,15 @@ FM_fetch_app_info <- function(session){
       tmp_msg = paste0("ID: ",state[["id"]])
       uiele   = tagList(uiele, tags$h4(tmp_msg))
       msgs    = c(msgs, tmp_msg)
-      
+
       tmp_msg = paste0("type: ",state[["MOD_TYPE"]])
       uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
       msgs    = c(msgs, tmp_msg)
-      
+
       tmp_msg = paste0("FM_yaml_file: ",state[["FM_yaml_file"]])
       uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
       msgs    = c(msgs, tmp_msg)
-      
+
       tmp_msg = paste0("MOD_yaml_file: ",state[["MOD_yaml_file"]])
       uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
       msgs    = c(msgs, tmp_msg)
@@ -927,7 +927,7 @@ FM_fetch_app_info <- function(session){
       tmp_msg = paste0("Log file: ",FM_fetch_log_path(state))
       uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
       msgs    = c(msgs, tmp_msg)
-      
+
       # Finding the package dependencies of the current module
       deps = FM_fetch_deps(state=state, session=session )
       if(length(deps[["packages"]]) > 0){
@@ -1075,7 +1075,7 @@ state}
 #'with this function.
 #'@param state formods State object.
 #'@param session Shiny session variable.
-#'@return No return value, sets message in supplied session variable. 
+#'@return No return value, sets message in supplied session variable.
 #'@examples
 #' # We need a module state object to use this function:
 #' id="UD"
@@ -2059,3 +2059,77 @@ fetch_package_version = function(pkgname){
 res}
 
 
+#'@export
+#'@title Makes Template Files for formods New Module
+#'@description If you want to create a new formods module this function will
+#'create the template files for you.
+#'@param MN   Module short name
+#'@param Module_Name  Module long name
+#'@param package Name of package that will contain the module
+#'@param element What you would call the thing the module provides for example
+#'the FG module provides "figures", the DW module provides "data views".
+#'@param file_dir Directory to save file
+#'@return list with the following elements:
+#' \itemize{
+#' \item{mc:}     Model components.
+#' \item{server:} Server.R file.
+#' \item{yaml:}   Yaml configureation file.
+#' }
+#' Each of these is a list with paths to the respective files:
+#' \itemize{
+#' \item{source:}     Template source.
+#' \item{dest:}       Destination file name.
+#' \item{dest_full:}  Full path to the destination file name.
+#' }
+#'@examples
+#' new_module_template()
+#'
+new_module_template = function(
+  SN          = "NM", 
+  Module_Name = "New Module", 
+  package     = "pkgname", 
+  element     = "analysis",
+  file_dir    = tempdir()){
+
+  # Source and destination files:
+  mod_files = list(
+    mc     = list(source = system.file(package="formods", "templates", "ZZ_module_components.R"),
+                  dest   = paste0(SN, "_module_components.R")),
+    server = list(source = system.file(package="formods", "templates", "ZZ_Server.R"),
+                  dest   = paste0(SN, "_Server.R")),
+    yaml   = list(source = system.file(package="formods", "templates", "ZZ.yaml"),
+                  dest   = paste0(SN, ".yaml"))
+  )
+
+  # Placeholder substitutions
+  ph_subs = list(
+    ZZ      = SN,
+    zz      = tolower(SN),
+    ZZ_NAME = Module_Name,
+    ELEMENT = element,    
+    PKG     = package  )
+
+
+
+  # We walk through each file
+  for(mod_file in names(mod_files)){
+    # Reads the contents of the source file into a character vector:
+    source  = mod_files[[mod_file]][["source"]]
+    lines   = readLines(source)
+
+    # This will apply all the substituations listed above:
+    for(ph_sub   in names(ph_subs)){
+      st_find    = paste0("===", ph_sub,"===")
+      st_replace = ph_subs[[ph_sub]]
+
+      lines = stringr::str_replace_all(lines, st_find,  st_replace)
+    }
+
+    dest          = mod_files[[mod_file]][["dest"]]
+    dest_full     = file.path(file_dir, dest)
+    mod_files[[mod_file]][["dest_full"]] = dest_full
+
+    # This should save the new templates with the substitutions applied:
+    write(lines, file=dest_full, append=FALSE)
+  }
+mod_files}

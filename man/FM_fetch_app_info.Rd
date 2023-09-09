@@ -26,5 +26,5 @@ id="UD"
 sess_res = UD_test_mksession(session=list(), id=id)
 session = sess_res$session
 app_info  = FM_fetch_app_info(session)
-app_info$msgs 
+app_info$msgs
 }
