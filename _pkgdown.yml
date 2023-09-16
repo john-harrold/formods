@@ -16,6 +16,7 @@ reference:
     - fetch_package_version
     - has_changed
     - icon_link
+    - is_installed
     - new_module_template
     - remove_hold
     - set_hold

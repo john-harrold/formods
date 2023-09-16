@@ -1,5 +1,6 @@
 # The MC field is a skeleton for constructing new modules
 MC:
+  element_object_name: "===ZZ===_obj"
 # The include section is optional. You can use this section to copy files 
 # from the directory where you are running the app to the user directory to be
 # used in the app and when saved. The source and dest options can be a path
@@ -35,6 +36,13 @@ MC:
     code:
       width:  800
       height: 300
+    current_element:
+      width:  "200px"
+    element_name:
+      width:  "200px"
+    preview:
+      width:  "800px"
+      height: "500px"
     input:
     button_clk_run:
       size: "sm"
@@ -66,7 +74,8 @@ MC:
       tooltip_position: "right"
       width: 100
   labels:
-    input_label: "This is the text for a label"
+    current_element: NULL # "Select ===ELEMENT==="
+    element_name :   NULL # "===ELEMENT=== name"
     save_btn:     "Save"
     clip_btn:     "Code" 
     copy_btn:     "Copy"
@@ -77,5 +86,7 @@ MC:
   tooltips:
     # Set to FALSE to disable tool tips for this module
     include: TRUE
+    elements: "Show ===ELEMENT=== components"
+    show_code: "Show ===ELEMENT=== code" 
     components:
       input_tip: "My tool tip"

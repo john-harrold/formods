@@ -237,7 +237,7 @@ UD_Server <- function(id,
            width   = state[["MC"]][["formatting"]][["code"]][["width"]],
            status  = "danger",
            icon    = icon("code", lib="font-awesome"),
-           tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["show_code"]]))
+           tooltip = shinyWidgets::tooltipOptions(title = state[["MC"]][["tooltips"]][["show_code"]]))
         )
       }
 

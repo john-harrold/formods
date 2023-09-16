@@ -37,6 +37,6 @@ create the template files for you and install them in the correct location.
 }
 \examples{
 if(FALSE){
-  use_formods()
+  use_formods(repo_root=tempdir())
 }
 }

@@ -2058,6 +2058,25 @@ fetch_package_version = function(pkgname){
              version      = version)
 res}
 
+#'@export
+#'@title Determines if a Package is Installed   
+#'@description Determines if the specified package is installed.
+#'@param pkgname Name of package
+#'@return Logical indicating if the packages is installed or not
+#'@examples
+#' # This package should exist
+#' is_installed('digest')
+#'
+#' # This package should not exist
+#' is_installed('bad package name')
+is_installed = function(pkgname){
+
+  res = TRUE
+  if(system.file(package = pkgname) == ""){
+    res = FALSE
+  }
+
+res}
 
 #'@export
 #'@title Makes Template Files for formods New Module
@@ -2151,7 +2170,7 @@ mod_files}
 #'@return Same as the return value for new_module_template()
 #'@examples
 #' if(FALSE){
-#'   use_formods()
+#'   use_formods(repo_root=tempdir())
 #' }
 use_formods = function(
   SN          = "NM",

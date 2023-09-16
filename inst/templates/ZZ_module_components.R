@@ -1,9 +1,6 @@
 #library(formods)
 library(shinydashboard)
 
-library(devtools)
-load_all()
-
 #https://fontawesome.com/icons?from=io
 
 ui <- dashboardPage(
@@ -11,8 +8,8 @@ ui <- dashboardPage(
   dashboardHeader(title="===ZZ=== Module Template"),
   dashboardSidebar(
      sidebarMenu(
-       menuItem("Module UI Components",    tabName="appstate",  icon=icon("archive")) ,
-       menuItem("Other",  tabName="other", icon=icon("archive"))
+       menuItem("Module UI Components",    tabName="appstate",  icon=icon("archive")),
+       menuItem("Compact View",  tabName="compact", icon=icon("archive"))
      )
   ),
   dashboardBody(
@@ -46,13 +43,15 @@ ui <- dashboardPage(
         ),
        width=12)),
        fluidRow(
-         box(title="Element 1",
-           "===ZZ===_ui_ele1",
-           htmlOutput(NS("===ZZ===", "===ZZ===_ui_ele1")),
+         box(title="Select current element",
+           "===ZZ===_ui_select_element",
+           htmlOutput(NS("===ZZ===", "===ZZ===_ui_select_element")),
+           "===ZZ===_ui_text_element_name",
+           htmlOutput(NS("===ZZ===", "===ZZ===_ui_text_element_name")),
          ),
-         box(title="Element 2",
-           "===ZZ===_ui_ele1",
-           htmlOutput(NS("===ZZ===", "===ZZ===_ui_ele2"))
+         box(title="Element",
+           "===ZZ===_ui_element",
+           htmlOutput(NS("===ZZ===", "===ZZ===_ui_element"))
          )
          ),
        fluidRow(
@@ -61,13 +60,15 @@ ui <- dashboardPage(
            verbatimTextOutput(NS("===ZZ===", "ui_===zz===_msg")), width=12)),
        fluidRow(
          box(title="Generated Code",
-           "===ZZ===_ui_ace_code",
+           "ui_===zz===_code",
            shinyAce::aceEditor(NS("===ZZ===", "ui_===zz===_code")), width=12)),
        fluidRow(
          box(title="Current Module State",
            verbatimTextOutput("ui_state"),width=12))
        ),
-       tabItem(tabName="other", "Here you can put other elements of your App")
+       tabItem(tabName="compact",
+          "ui_===zz===_compact",
+          htmlOutput(NS("===ZZ===", "ui_===zz===_compact")))
       )
     )
   )

@@ -13,6 +13,8 @@
 #'@param deployed Boolean variable indicating whether the app is deployed or not.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
+#'@examples
+#' NOTE: you will need to create a server example
 ===ZZ===_Server <- function(id,
                id_ASM        = "ASM",
                FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
@@ -23,17 +25,78 @@
 
 
     #------------------------------------
+    # Select the active ===ELEMENT===
+    output$===ZZ===_ui_select_element = renderUI({
+      input$button_clk_save
+      input$button_clk_del
+      input$button_clk_copy
+      input$button_clk_new
+      input$current_element
+      state = ===ZZ===_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
+      choices = list()
+      for(element_id in names(state[["===ZZ==="]][["elements"]])){
+        choices[[ state[["===ZZ==="]][["elements"]][[element_id]][["ui"]][["element_name"]] ]] = element_id
+      }
+
+      uiele =
+      shinyWidgets::pickerInput(
+        selected   = state[["===ZZ==="]][["current_element"]],
+        inputId    = NS(id, "element_selection"),
+        label      = state[["MC"]][["labels"]][["current_element"]],
+        choices    = choices,
+        width      = state[["MC"]][["formatting"]][["current_element"]][["width"]])
+
+      uiele})
+    #------------------------------------
+    # Current ===ELEMENT=== name:    
+    output$===ZZ===_ui_text_element_name = renderUI({
+      input$button_clk_save
+      input$button_clk_del
+      input$button_clk_copy
+      input$button_clk_new
+      input$element_selection
+      state = ===ZZ===_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
+
+      current_ele = ===ZZ===_fetch_current_element(state)
+
+      uiele =
+      textInput(
+        inputId     = NS(id, "element_name"),
+        label       = NULL,
+        width       = state[["MC"]][["formatting"]][["element_name"]][["width"]] ,
+        value       = current_ele[["ui"]][["element_name"]],
+        placeholder = state[["MC"]][["labels"]][["element_name"]]
+      )
+      
+      uiele})
+
+
+    #------------------------------------
     # Create ui outputs here:
     output$===ZZ===_ui_element = renderUI({
-      uiele = NULL
+      state = ===ZZ===_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
+      uiele = "UI Element"
       uiele})
 
     #------------------------------------
     # Generated data reading code
     observe({
       # Reacting to file changes
-      input$input_data_file
-      input$input_select_sheet
       state = ===ZZ===_fetch_state(id              = id,
                              input           = input,
                              session         = session,
@@ -185,7 +248,6 @@
     #------------------------------------
     # User messages:
     output$ui_===zz===_msg = renderText({
-      input[["button_state_save"]]
       state = ===ZZ===_fetch_state(id              = id,
                              input           = input,
                              session         = session,
@@ -196,71 +258,128 @@
       uiele = state[["===ZZ==="]][["ui_msg"]]
 
       uiele})
+    # Creates the ui for the compact view of the module
     #------------------------------------
-    # This can be used to trigger notifications
-   #toNotify <- reactive({
-   #  list(input$A,
-   #       input$B)
-   #})
-   #observeEvent(toNotify(), {
-   #  state = ===ZZ===_fetch_state(id              = id,
-   #                         input           = input,
-   #                         session         = session,
-   #                         FM_yaml_file    = FM_yaml_file,
-   #                         MOD_yaml_file   = MOD_yaml_file,
-   #                         react_state     = react_state)
-   #
-   #  # Triggering optional notifications
-   #  notify_res =
-   #  FM_notify(state   = state,
-   #            session = session)
-   #})
+    # Compact ui
+    output$ui_===zz===_compact  =  renderUI({
+      state = ===ZZ===_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
+
+
+      uiele_code_button = NULL
+      # Generating code button if enabled
+      if( state[["MC"]][["compact"]][["code"]]){
+        uiele_code = tagList(shinyAce::aceEditor(
+          NS(id, "ui_===zz===_code"),
+          height  = state[["MC"]][["formatting"]][["code"]][["height"]]
+          ))
+
+        uiele_code_button = tagList(
+         shinyWidgets::dropdownButton(
+           uiele_code,
+           inline  = FALSE,
+           right   = TRUE ,
+           size    = "sm",
+           circle  = FALSE,
+           width   = state[["MC"]][["formatting"]][["code"]][["width"]],
+           status  = "danger btn-custom-===zz===",
+           icon    = icon("code", lib="font-awesome"),
+           tooltip = shinyWidgets::tooltipOptions(title = state[["MC"]][["tooltips"]][["show_code"]]))
+        )
+
+      }
+
+      # Button with ===ZZ=== elements table
+      uiele_===zz===_elements_button = NULL
+     # Uncomment this if your ===ELEMENT=== has a components table
+     #uiele_===zz===_elements = rhandsontable::rHandsontableOutput(NS(id, "hot_===zz===_elements"))
+     #uiele_===zz===_elements_button = tagList(
+     # shinyWidgets::dropdownButton(
+     #   uiele_===zz===_elements,
+     #   inline  = FALSE,
+     #   right   = TRUE ,
+     #   size    = "sm",
+     #   circle  = FALSE,
+     #   status  = "primary btn-custom-===zz===",
+     #   icon    = icon("layer-group", lib="font-awesome"),
+     #   tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["elements"]]))
+     #)
+
+      uiele = tagList(
+        div(style="display:inline-block", "Place ===ELEMENT=== name, attributes and inputs here."),
+        tags$br(),
+        div(style="display:inline-block", htmlOutput(NS(id, "ui_===zz===_msg")))
+      )
+
+      # We only show the clip button if it's enabled
+      uiele_clip_button = NULL
+      if(state[["MC"]][["compact"]][["clip"]]){
+        uiele_clip_button = htmlOutput(NS(id, "ui_===zz===_clip_code"))
+      }
+
+      uiele_buttons_right = tagList(
+               tags$style(".btn-custom-===zz=== {width: 100px;}"),
+               div(style="display:inline-block;vertical-align:top;height:100px",
+               uiele_===zz===_elements_button,
+               uiele_code_button,
+               uiele_clip_button,
+               htmlOutput(NS(id, "ui_===zz===_save_btn")),
+               htmlOutput(NS(id, "ui_===zz===_copy_btn")),
+               htmlOutput(NS(id, "ui_===zz===_del_btn")),
+               htmlOutput(NS(id, "ui_===zz===_new_btn"))
+               ))
+
+      # Appending the preview
+      div_style = paste0("display:inline-block;vertical-align:top;", 
+        "width:",   state[["MC"]][["formatting"]][["preview"]][["width"]],  ";",
+        "height: ", state[["MC"]][["formatting"]][["preview"]][["height"]])
+      uiele_preview = div(style=div_style,
+                          "Place your module ===ELEMENT=== preview here.")
+      uiele = tagList(
+        uiele,
+        uiele_preview,
+        uiele_buttons_right,
+        tags$br()
+      )
+
+
+      uiele = tagList( uiele,
+        tags$br(),
+        "Place module construction elements here."
+      )
+      uiele
+    })
+
     #------------------------------------
     # Creating reaction if a variable has been specified
-   #if(!is.null(react_state)){
-   #  # Here we list the ui inputs that will result in a state change:
-   #  toListen <- reactive({
-   #    list(
-   #         input$A # list inputs to react to here
-   #        )
-   #  })
-   #  # This updates the reaction state:
-   #  observeEvent(toListen(), {
-   #  state = ===ZZ===_fetch_state(id              = id,
-   #                         input           = input,
-   #                         session         = session,
-   #                         FM_yaml_file    = FM_yaml_file,
-   #                         MOD_yaml_file   = MOD_yaml_file,
-   #                         react_state     = react_state)
-   #
-   #    FM_le(state, "reaction state updated")
-   #    react_state[[id]] = state
-   #  })
-   #}
-    #------------------------------------
-#   # Removing holds
-#   remove_hold_listen  <- reactive({
-#     list(
-#          input$A # List inputs to trigger hold removal
-#         )
-#   })
-#   observeEvent(remove_hold_listen(), {
-#     # Once the UI has been regenerated we
-#     # remove any holds for this module
-#     state = ===ZZ===_fetch_state(id              = id,
-#                            input           = input,
-#                            session         = session,
-#                            FM_yaml_file    = FM_yaml_file,
-#                            MOD_yaml_file   = MOD_yaml_file,
-#                            react_state     = react_state)
-#
-#     FM_le(state, "removing holds")
-#     # Removing all holds
-#     for(hname in names(state[["===ZZ==="]][["ui_hold"]])){
-#       remove_hold(state, session, hname)
-#     }
-#   }, priority = -100)
-#   #------------------------------------
+    if(!is.null(react_state)){
+      # Here we list the ui inputs that will result in a state change:
+      toListen <- reactive({
+        list(
+           # react_state[[id_ASM]])
+             input$button_clk_new,
+             input$button_clk_del,
+             input$button_clk_copy,
+             input$button_clk_save)
+      })
+      # This updates the reaction state:
+      observeEvent(toListen(), {
+        state = ===ZZ===_fetch_state(id        = id,
+                               input           = input,
+                               session         = session,
+                               FM_yaml_file    = FM_yaml_file,
+                               MOD_yaml_file   = MOD_yaml_file,
+                               react_state     = react_state)
+
+        FM_le(state, "reaction state updated")
+        #react_state[[id]] = state
+        react_state[[id]][["===ZZ==="]][["checksum"]] = state[["===ZZ==="]][["checksum"]]
+      }, priority=99)
+    }
 
 
   })
@@ -290,6 +409,24 @@
 #'  \item{id:} Character data containing the module id module in the session variable.
 #'  \item{FM_yaml_file:} App configuration file with FM as main section.
 #'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
+#'@examples
+#' # Within shiny both session and input variables will exist,
+#' # this creates examples here for testing purposes:
+#' sess_res = ===ZZ===_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' # Configuration files
+#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+#' MOD_yaml_file = system.file(package = "===PKG===", "templates", "===ZZ===.yaml")
+#'
+#' # Creating an empty state object
+#' state = ===ZZ===_fetch_state(id              = "===ZZ===",
+#'                        input           = input,
+#'                        session         = session,
+#'                        FM_yaml_file    = FM_yaml_file,
+#'                        MOD_yaml_file   = MOD_yaml_file,
+#'                        react_state     = NULL)
 #'}
 ===ZZ===_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react_state){
 
@@ -302,7 +439,6 @@
   if(is.null(state)){
     # General state information
     state = ===ZZ===_init_state(FM_yaml_file, MOD_yaml_file, id, session)
-
   }
 
   #---------------------------------------------
@@ -311,14 +447,137 @@
     if(!is.null(isolate(input[[ui_name]]))){
        state[["===ZZ==="]][["ui"]][[ui_name]] = isolate(input[[ui_name]])
      } else {
-       state[["===ZZ==="]][["ui"]][[ui_name]] = ""
+       if(ui_name %in% names(state[["===ZZ==="]][["button_counters"]])){
+         state[["===ZZ==="]][["ui"]][[ui_name]] = 0
+       } else {
+         state[["===ZZ==="]][["ui"]][[ui_name]] = ""
+       
+         # initializing the previous ui values as well:
+         if(is.null(state[["===ZZ==="]][["ui_prev"]][[ui_name]])){
+           state[["===ZZ==="]][["ui_old"]][[ui_name]] = state[["===ZZ==="]][["ui"]][[ui_name]]
+         }
+       }
      }
    }
    msgs = c()
 
   #---------------------------------------------
-  # Here we react to changes between the UI and the current state
+  # Now we sync the ui in the state with the button click 
+  # tracking or current element. This ensures that every 
+  # time the state is fetched all of the components of 
+  # the current element are in sync.
 
+  # This is a list of ui changes that were detected and 
+  # can be used to trigger different actions below:
+  changed_uis = c()
+
+  # We need to pull out the current element for updating:
+  current_ele = ===ZZ===_fetch_current_element(state)
+  # There are scenarios where you wouldn't want to do this. Like when
+  # switching elements in the ui. You would need to add some logic to 
+  # only update below conditionally.
+
+  for(ui_name in state[["===ZZ==="]][["ui_ids"]]){
+    if(!fetch_hold(state, ui_name)){
+      if(ui_name %in% names(state[["===ZZ==="]][["button_counters"]])){
+        # Button changes are compared to the button click tracking values
+        change_detected = 
+          has_changed(ui_val  = state[["===ZZ==="]][["ui"]][[ui_name]],
+                      old_val = state[["===ZZ==="]][["button_counters"]][[ui_name]])
+        if(change_detected){
+          formods::FM_le(state, paste0("button click: ", ui_name, " = ", state[["===ZZ==="]][["ui"]][[ui_name]]))
+
+          # Saving the change:
+          state[["===ZZ==="]][["button_counters"]][[ui_name]] =
+            state[["===ZZ==="]][["ui"]][[ui_name]]        
+
+          # logging the changed ui name:
+          changed_uis = c(changed_uis, ui_name)
+        }
+      }else{
+        change_detected = 
+          has_changed(ui_val  = state[["===ZZ==="]][["ui"]][[ui_name]],
+                      old_val = state[["===ZZ==="]][["ui_old"]][[ui_name]])
+        if(change_detected){
+          formods::FM_le(state, paste0("setting ===ELEMENT=== : ", ui_name, " = ", paste(state[["===ZZ==="]][["ui"]][[ui_name]], collapse=", ")))
+        
+          # Saving the change:
+          state[["===ZZ==="]][["ui_old"]][[ui_name]] = state[["===ZZ==="]][["ui"]][[ui_name]]
+        
+          # logging the changed ui name:
+          changed_uis = c(changed_uis, ui_name)
+
+          # This also updates the current element if that ui_name is part of
+          # an element
+          if(ui_name %in% state[["===ZZ==="]][["ui_ele"]]){
+            current_ele[["ui"]][[ui_name]] = state[["===ZZ==="]][["ui"]][[ui_name]]
+          }
+        }
+      }
+    }
+  }
+  # Updating the element with any changes:
+  state = ===ZZ===_set_current_element(
+    state   = state,
+    element = current_ele)
+  #---------------------------------------------
+  # Here we react to changes between the UI and the current state
+  # save ===ELEMENT===
+  if("button_clk_save" %in% changed_uis){
+    FM_le(state, "save ===ELEMENT===")
+    current_ele = ===ZZ===_fetch_current_element(state)
+
+    current_ele[["ui"]][["element_name"]] = 
+      state[["===ZZ==="]][["ui"]][["element_name"]]
+
+    state = ===ZZ===_set_current_element(
+      state   = state,
+      element = current_ele)
+  }
+  #---------------------------------------------
+  # clip ===ELEMENT===
+  if("button_clk_clip" %in% changed_uis){
+    FM_le(state, "clip ===ELEMENT===")
+  }
+  #---------------------------------------------
+  # copy ===ELEMENT===
+  if("button_clk_copy" %in% changed_uis){
+    FM_le(state, "copy ===ELEMENT===")
+
+    # First we pull out the current element:
+    old_ele = ===ZZ===_fetch_current_element(state)
+
+    # Now we create a new element and make it the current element
+    state   = ===ZZ===_new_element(state)
+    new_ele = ===ZZ===_fetch_current_element(state)
+
+    # We keep the new name:
+    old_ele[["ui"]][["element_name"]] = new_ele[["ui"]][["element_name"]] 
+
+    # NOTE: You may need to add other code here 
+    # to change other aspects about the old element
+    # that is being copied.
+
+    state = ===ZZ===_set_current_element(
+      state   = state,
+      element = old_ele)
+  }
+  #---------------------------------------------
+  # del ===ELEMENT===
+  if("button_clk_del" %in% changed_uis){
+    FM_le(state, "delete ===ELEMENT===")
+    state = ===ZZ===_del_current_element(state)
+  }
+  #---------------------------------------------
+  # new ===ELEMENT===
+  if("button_clk_new" %in% changed_uis){
+    FM_le(state, "new ===ELEMENT===")
+    state = ===ZZ===_new_element(state)
+  }
+  if("element_selection" %in% changed_uis){
+    state[["===ZZ==="]][["current_element"]] =
+       state[["===ZZ==="]][["ui"]][["element_selection"]]
+  }
   #---------------------------------------------
   # Passing any messages back to the user
   state = FM_set_ui_msg(state, msgs)
@@ -338,12 +597,45 @@
 #'@param id ID string for the module.
 #'@param session Shiny session variable
 #'@return list containing an empty ===ZZ=== state
+#'@examples
+#' # Within shiny both session and input variables will exist,
+#' # this creates examples here for testing purposes:
+#' sess_res = ===ZZ===_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' state = ===ZZ===_init_state(
+#'    FM_yaml_file  = system.file(package = "formods",
+#'                                "templates",
+#'                                "formods.yaml"),
+#'    MOD_yaml_file = system.file(package = "===PKG===",
+#'                                "templates",
+#'                                "===ZZ===.yaml"),
+#'    id              = "===ZZ===",
+#'    session         = session)
+#'
+#' state
 ===ZZ===_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 
 
-  button_counters = c()
-  ui_ids          = c()
-  ui_hold         = c()
+  button_counters = c("button_clk_save",
+                      "button_clk_clip",
+                      "button_clk_del",
+                      "button_clk_copy",
+                      "button_clk_new")
+
+  # This contains all of the relevant ui_ids in the module
+  ui_ids          = c(button_counters,
+                      "element_selection",
+                    # "current_element",
+                      "element_name")
+
+  # These are the module ui elements that are associated with 
+  # the current element
+  ui_ele          = c()
+
+  # Making all the ui_ids holdable
+  ui_hold         = ui_ids
 
   state = FM_init_state(
     FM_yaml_file    = FM_yaml_file,
@@ -355,6 +647,21 @@
     ui_hold         = ui_hold,
     session         = session)
 
+
+  # Storing the ui_ids for the elements 
+  state[["===ZZ==="]][["ui_ele"]]               = ui_ele
+
+  # This tracks elements for the module
+  state[["===ZZ==="]][["code_previous"]]        = NULL
+  state[["===ZZ==="]][["elements"]]             = NULL
+  state[["===ZZ==="]][["current_element"]]      = NULL
+  state[["===ZZ==="]][["element_cntr"]]         = 0
+
+
+
+  # Creating a default element:
+  state = ===ZZ===_new_element(state)
+  
   FM_le(state, "State initialized")
 state}
 
@@ -363,6 +670,14 @@ state}
 #'@description Fetches the code to generate results seen in the app
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
 #'@return Character object vector with the lines of code
+#'@examples
+#' # We need a module state:
+#' sess_res = ===ZZ===_test_mksession(session=list())
+#' state = sess_res$state
+#'
+#' code = ===ZZ===_fetch_code(state)
+#'
+#' cat(code)
 ===ZZ===_fetch_code = function(state){
 
   code = NULL
@@ -412,7 +727,7 @@ code}
 res}
 
 #'@export
-#'@title Fetch Module Datasets
+#'@title Fetch ===ZZ_NAME=== Module Datasets
 #'@description Fetches the datasets contained in the module. 
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
 #'@return Character object vector with the lines of code
@@ -434,6 +749,14 @@ res}
 #'    \item{DSchecksum: Dataset checksum.}
 #'  }
 #'}
+#'@examples
+#' # We need a module state:
+#' sess_res = ===ZZ===_test_mksession(session=list())
+#' state = sess_res$state
+#'
+#' ds = ===ZZ===_fetch_ds(state)
+#'
+#' ds
 ===ZZ===_fetch_ds = function(state){
   hasds  = FALSE
   isgood = TRUE
@@ -472,7 +795,6 @@ res}
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
-#'@param id_UD An ID string that corresponds with the ID used to call the UD modules UI elements
 #'@return list with the following elements
 #' \itemize{
 #'   \item{isgood:} Boolean indicating the exit status of the function.
@@ -483,21 +805,23 @@ res}
 #'}
 #'@examples
 #' sess_res = ===ZZ===_test_mksession(session=list())
-===ZZ===_test_mksession = function(session, id = "===ZZ===", id_UD="UD"){
+===ZZ===_test_mksession = function(session, id = "===ZZ==="){
 
   isgood = TRUE
   rsc    = list()
   input  = list()
 
-  # Populating the session with UD components
-  sess_res = UD_test_mksession(session, id = id_UD)
-  if(!("ShinySession" %in% class(session))){
-    session = sess_res[["session"]]
-  }
-
-  # Pulling out the react state components
-  rsc         = sess_res$rsc
-  react_state = rsc
+  # Configuration files
+  FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+  MOD_yaml_file = system.file(package = "===PKG===", "templates", "===ZZ===.yaml")
+ 
+  # Creating an empty state object
+  state = ===ZZ===_fetch_state(id              = "===ZZ===",
+                         input           = input,
+                         session         = session,
+                         FM_yaml_file    = FM_yaml_file,
+                         MOD_yaml_file   = MOD_yaml_file,
+                         react_state     = NULL)
 
   res = list(
     isgood  = isgood,
@@ -507,3 +831,247 @@ res}
     rsc     = rsc
   )
 }
+
+#'@export
+#'@title New ===Module_Name=== ===ELEMENT===
+#'@description Appends a new empty ===ELEMENT=== to the ===ZZ=== state object
+#'and makes this new ===ELEMENT=== the active ===ELEMENT===.
+#'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
+#'@return ===ZZ== state object containing a new ===ELEMENT=== and that
+#'===ELEMENT=== is set as the current active ===ELEMENT===. See the help for
+#'\code{===ZZ===_fetch_state()} for ===ELEMENT== format.
+#'@examples
+#' sess_res = ===ZZ===_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' # Configuration files
+#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+#' MOD_yaml_file = system.file(package = "===PKG===", "templates", "===ZZ===.yaml")
+#'
+#' # Creating an empty state object
+#' state = ===ZZ===_fetch_state(id              = "===ZZ===",
+#'                        input           = input,
+#'                        session         = session,
+#'                        FM_yaml_file    = FM_yaml_file,
+#'                        MOD_yaml_file   = MOD_yaml_file,
+#'                        react_state     = NULL)
+#'
+#' # Creates a new empty element
+#' state = ===ZZ===_new_element(state)
+#'
+#' # Delete the current element
+#' state = ===ZZ===_del_current_element(state)
+#'
+#' # Fetch a list of the current element
+#' element = ===ZZ===_fetch_current_element(state)
+#'
+#' # You can modify the element
+#' element[["name"]] = "A more descriptive name"
+#'
+#' # You can now place element back in the state
+#' state = ===ZZ===_set_current_element(state, element)                                   
+===ZZ===_new_element = function(state){
+
+  # Incrementing the element counter
+  state[["===ZZ==="]][["element_cntr"]] = state[["===ZZ==="]][["element_cntr"]] + 1
+
+  # Creating a default element ID
+  element_id = paste0("element_", state[["===ZZ==="]][["element_cntr"]])
+
+  # Creating the object name for this element
+  element_ds_object_name = paste0(state[["MC"]][["element_object_name"]],
+                          "_", state[["===ZZ==="]][["element_cntr"]])
+  # Default for a new element:
+  element_def =
+    list(
+         # internal use only
+         isgood                 = TRUE,
+         # This will hold the ui values for the current element
+         ui                     = list(
+           element_name  = paste0("===ELEMENT=== ", state[["===ZZ==="]][["element_cntr"]])
+           ),
+         id                     = element_id,
+         idx                    = state[["===ZZ==="]][["element_cntr"]],
+         element_ds_object_name = element_ds_object_name,
+         code_previous          = NULL,
+         # user facing          
+         # This is used if you build the element in a layering method sort of
+         # like how the ggplot figures in the FG module builds using different
+         # ggplot commands (layers). 
+         elements_table         = NULL,
+         # Generated on save    
+         checksum               = NULL,
+         code                   = NULL,
+         code_dw_only           = NULL)
+
+
+  # This contains the code to generate the input dataset
+  code_previous = c(
+    paste0(
+           element_ds_object_name,
+           " = ",
+            state[["===ZZ==="]][["UD"]][["object_name"]]))
+  element_def[["code_previous"]] = code_previous
+
+  # Dropping the new element into the state
+  state[["===ZZ==="]][["elements"]][[element_id]] = element_def
+  # Setting the new element as current
+  state[["===ZZ==="]][["current_element"]]     = element_id
+
+state}
+
+
+#'@export
+#'@title Fetches Current ===ELEMENT===
+#'@description Takes a ===ZZ=== state and returns the current active
+#'===ELEMENT===
+#'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
+#'@return List containing the details of the active data view. The structure
+#'of this list is the same as the structure of \code{state$===ZZ===$elements} in the output of
+#'\code{===ZZ===_fetch_state()}.
+#'@examples
+#' sess_res = ===ZZ===_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' # Configuration files
+#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+#' MOD_yaml_file = system.file(package = "===PKG===", "templates", "===ZZ===.yaml")
+#'
+#' # Creating an empty state object
+#' state = ===ZZ===_fetch_state(id              = "===ZZ===",
+#'                        input           = input,
+#'                        session         = session,
+#'                        FM_yaml_file    = FM_yaml_file,
+#'                        MOD_yaml_file   = MOD_yaml_file,
+#'                        react_state     = NULL)
+#'
+#' # Creates a new empty element
+#' state = ===ZZ===_new_element(state)
+#'
+#' # Delete the current element
+#' state = ===ZZ===_del_current_element(state)
+#'
+#' # Fetch a list of the current element
+#' element = ===ZZ===_fetch_current_element(state)
+#'
+#' # You can modify the element
+#' element[["name"]] = "A more descriptive name"
+#'
+#' # You can now place element back in the state
+#' state = ===ZZ===_set_current_element(state, element)                                   
+===ZZ===_fetch_current_element    = function(state){
+
+  element_id = state[["===ZZ==="]][["current_element"]]
+
+  current_element = state[["===ZZ==="]][["elements"]][[element_id]]
+
+current_element}
+
+
+#'@export
+#'@title Sets the Value for the  Current ===ELEMENT===
+#'@description Takes a ===ZZ=== state and returns the current active
+#'===ELEMENT===
+#'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
+#'@param element Element list from \code{===ZZ===_fetch_current_element()}
+#'@return ===ZZ== state object with the current ===ELEMENT=== set using the
+#'supplied value. 
+#'@examples
+#' sess_res = ===ZZ===_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' # Configuration files
+#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+#' MOD_yaml_file = system.file(package = "===PKG===", "templates", "===ZZ===.yaml")
+#'
+#' # Creating an empty state object
+#' state = ===ZZ===_fetch_state(id              = "===ZZ===",
+#'                        input           = input,
+#'                        session         = session,
+#'                        FM_yaml_file    = FM_yaml_file,
+#'                        MOD_yaml_file   = MOD_yaml_file,
+#'                        react_state     = NULL)
+#'
+#' # Creates a new empty element
+#' state = ===ZZ===_new_element(state)
+#'
+#' # Delete the current element
+#' state = ===ZZ===_del_current_element(state)
+#'
+#' # Fetch a list of the current element
+#' element = ===ZZ===_fetch_current_element(state)
+#'
+#' # You can modify the element
+#' element[["name"]] = "A more descriptive name"
+#'
+#' # You can now place element back in the state
+#' state = ===ZZ===_set_current_element(state, element)                                   
+===ZZ===_set_current_element    = function(state, element){
+
+  element_id = state[["===ZZ==="]][["current_element"]]
+
+  state[["===ZZ==="]][["elements"]][[element_id]] = element
+
+state}
+
+#'@export
+#'@title Deletes Current ===ELEMENT===
+#'@description Takes a ===ZZ=== state and deletes the current ===ELEMENT===. 
+#'If that is the last element, then a new default will be added. 
+#'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
+#'@return ===ZZ== state object with the current ===ELEMENT=== deleted. 
+#'@examples
+#' sess_res = ===ZZ===_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' # Configuration files
+#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+#' MOD_yaml_file = system.file(package = "===PKG===", "templates", "===ZZ===.yaml")
+#'
+#' # Creating an empty state object
+#' state = ===ZZ===_fetch_state(id              = "===ZZ===",
+#'                        input           = input,
+#'                        session         = session,
+#'                        FM_yaml_file    = FM_yaml_file,
+#'                        MOD_yaml_file   = MOD_yaml_file,
+#'                        react_state     = NULL)
+#'
+#' # Creates a new empty element
+#' state = ===ZZ===_new_element(state)
+#'
+#' # Delete the current element
+#' state = ===ZZ===_del_current_element(state)
+#'
+#' # Fetch a list of the current element
+#' element = ===ZZ===_fetch_current_element(state)
+#'
+#' # You can modify the element
+#' element[["name"]] = "A more descriptive name"
+#'
+#' # You can now place element back in the state
+#' state = ===ZZ===_set_current_element(state, element)                                   
+===ZZ===_del_current_element    = function(state){
+
+  # We need the current element and corresponding ID
+  current_element = ===ZZ===_fetch_current_element(state)
+  element_id = current_element[["id"]]
+
+  # This deletes the current element ID
+  state[["===ZZ==="]][["elements"]][[element_id]] = NULL
+
+  if(length(names(state[["===ZZ==="]][["elements"]])) == 0){
+    # This is triggered when we've deleted the last element, 
+    # So now we will create a new one that will be active:
+    state = ===ZZ===_new_element(state)
+  } else {
+    # If there is at least one left, we pull off the first 
+    # one and make that active: 
+    element_id = names(state[["===ZZ==="]][["elements"]])[1]
+    state[["===ZZ==="]][["current_element"]] = element_id
+  }
+
+state}

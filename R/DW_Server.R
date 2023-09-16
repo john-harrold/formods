@@ -1207,7 +1207,7 @@ DW_Server <- function(id,
              width   = state[["MC"]][["formatting"]][["code"]][["width"]],
              status  = "danger btn-custom-dw",
              icon    = icon("code", lib="font-awesome"),
-             tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["show_code"]]))
+             tooltip = shinyWidgets::tooltipOptions(title = state[["MC"]][["tooltips"]][["show_code"]]))
           )
 
         }
@@ -1224,7 +1224,7 @@ DW_Server <- function(id,
            #width   = state[["MC"]][["formatting"]][["dw_elements"]][["width"]],
            status  = "primary btn-custom-dw",
            icon    = icon("layer-group", lib="font-awesome"),
-           tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["dw_elements"]]))
+           tooltip = shinyWidgets::tooltipOptions(title = state[["MC"]][["tooltips"]][["dw_elements"]]))
         )
 
         uiele = tagList(
