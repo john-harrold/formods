@@ -409,6 +409,7 @@
 #'  \item{id:} Character data containing the module id module in the session variable.
 #'  \item{FM_yaml_file:} App configuration file with FM as main section.
 #'  \item{MOD_yaml_file:}  Module configuration file with MC as main section.
+#'}
 #'@examples
 #' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
@@ -427,7 +428,6 @@
 #'                        FM_yaml_file    = FM_yaml_file,
 #'                        MOD_yaml_file   = MOD_yaml_file,
 #'                        react_state     = NULL)
-#'}
 ===ZZ===_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react_state){
 
   # Template for an empty dataset
