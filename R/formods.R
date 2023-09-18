@@ -2059,7 +2059,7 @@ fetch_package_version = function(pkgname){
 res}
 
 #'@export
-#'@title Determines if a Package is Installed   
+#'@title Determines if a Package is Installed
 #'@description Determines if the specified package is installed.
 #'@param pkgname Name of package
 #'@return Logical indicating if the packages is installed or not
@@ -2165,7 +2165,7 @@ mod_files}
 #'@param package Name of package that will contain the module
 #'@param element What you would call the thing the module provides for example
 #'the FG module provides "figures", the DW module provides "data views"
-#'@param overwrite Boolean to indicate if you should ovewrite files
+#'@param overwrite Boolean to indicate if you should overwrite files
 #'@param repo_root Root of the repository.
 #'@return Same as the return value for new_module_template()
 #'@examples

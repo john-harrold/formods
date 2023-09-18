@@ -23,7 +23,7 @@ use_formods(
 \item{element}{What you would call the thing the module provides for example
 the FG module provides "figures", the DW module provides "data views"}
 
-\item{overwrite}{Boolean to indicate if you should ovewrite files}
+\item{overwrite}{Boolean to indicate if you should overwrite files}
 
 \item{repo_root}{Root of the repository.}
 }

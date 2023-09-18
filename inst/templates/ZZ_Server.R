@@ -31,7 +31,6 @@
       input$button_clk_del
       input$button_clk_copy
       input$button_clk_new
-      input$current_element
       state = ===ZZ===_fetch_state(id              = id,
                              input           = input,
                              session         = session,
@@ -55,10 +54,6 @@
     #------------------------------------
     # Current ===ELEMENT=== name:    
     output$===ZZ===_ui_text_element_name = renderUI({
-      input$button_clk_save
-      input$button_clk_del
-      input$button_clk_copy
-      input$button_clk_new
       input$element_selection
       state = ===ZZ===_fetch_state(id              = id,
                              input           = input,
@@ -381,6 +376,35 @@
       }, priority=99)
     }
 
+    #------------------------------------
+    # Removing holds
+    remove_hold_listen  <- reactive({
+        list(
+           # react_state[[id_ASM]])
+           # input$button_clk_new,
+           # input$button_clk_del,
+           # input$button_clk_copy,
+           # input$button_clk_save,
+             input$element_selection
+           # input$current_element
+           )
+      })
+    observeEvent(remove_hold_listen(), {
+      # Once the UI has been regenerated we
+      # remove any holds for this module
+      state = ===ZZ===_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
+
+      FM_le(state, "removing holds")
+      # Removing all holds
+      for(hname in names(state[["===ZZ==="]][["ui_hold"]])){
+        remove_hold(state, session, hname)
+      }
+    }, priority = -100)
 
   })
 }
@@ -436,6 +460,7 @@
   state = FM_fetch_mod_state(session, id)
   # If the state has not yet been defined then we
   # initialize it
+
   if(is.null(state)){
     # General state information
     state = ===ZZ===_init_state(FM_yaml_file, MOD_yaml_file, id, session)
@@ -551,8 +576,17 @@
     state   = ===ZZ===_new_element(state)
     new_ele = ===ZZ===_fetch_current_element(state)
 
-    # We keep the new name:
-    old_ele[["ui"]][["element_name"]] = new_ele[["ui"]][["element_name"]] 
+
+    # This is a list of UI elements to skip when copying:
+    ui_copy_skip = c("element_name")
+
+    # Here we copy all the ui elements from old to new skipping those flagged
+    # for skipping.
+    for(tmp_ui_name in names(new_ele[["ui"]])){
+      if(!(tmp_ui_name %in% ui_copy_skip)){
+        new_ele[["ui"]][[tmp_ui_name]]  = old_ele[["ui"]][[tmp_ui_name]] 
+      }
+    }
 
     # NOTE: You may need to add other code here 
     # to change other aspects about the old element
@@ -560,7 +594,7 @@
 
     state = ===ZZ===_set_current_element(
       state   = state,
-      element = old_ele)
+      element = new_ele)
   }
   #---------------------------------------------
   # del ===ELEMENT===
@@ -574,9 +608,14 @@
     FM_le(state, "new ===ELEMENT===")
     state = ===ZZ===_new_element(state)
   }
+  #---------------------------------------------
+  # selected ===ELEMENT=== changed
   if("element_selection" %in% changed_uis){
     state[["===ZZ==="]][["current_element"]] =
        state[["===ZZ==="]][["ui"]][["element_selection"]]
+
+    # Setting the hold for all the other UI elements
+    state = set_hold(state)
   }
   #---------------------------------------------
   # Passing any messages back to the user
