@@ -1,3 +1,4 @@
+rm(list=ls())
 library(here)
 repo_root = here::here()
 setwd(repo_root)

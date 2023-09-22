@@ -375,7 +375,31 @@
         react_state[[id]][["===ZZ==="]][["checksum"]] = state[["===ZZ==="]][["checksum"]]
       }, priority=99)
     }
+    #------------------------------------
+    # This can be used to trigger notifications
+    # You need to add reactive inputs here when those 
+    # inputs can trigger a notification. 
+    toNotify <- reactive({
+      list(
+       input$button_clk_save,
+       input$button_clk_copy,
+       input$button_clk_del,
+       input$button_clk_new
+      )
+    })
+    observeEvent(toNotify(), {
+      state = ===ZZ===_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
 
+      # Triggering optional notifications
+      notify_res = formods::FM_notify(
+        state   = state,
+        session = session)
+    })
     #------------------------------------
     # Removing holds
     remove_hold_listen  <- reactive({
@@ -919,8 +943,8 @@ res}
   element_id = paste0("element_", state[["===ZZ==="]][["element_cntr"]])
 
   # Creating the object name for this element
-  element_ds_object_name = paste0(state[["MC"]][["element_object_name"]],
-                          "_", state[["===ZZ==="]][["element_cntr"]])
+  element_object_name = paste0(state[["MC"]][["element_object_name"]],
+                       "_", state[["===ZZ==="]][["element_cntr"]])
   # Default for a new element:
   element_def =
     list(
@@ -932,7 +956,7 @@ res}
            ),
          id                     = element_id,
          idx                    = state[["===ZZ==="]][["element_cntr"]],
-         element_ds_object_name = element_ds_object_name,
+         element_object_name    = element_object_name,
          code_previous          = NULL,
          # user facing          
          # This is used if you build the element in a layering method sort of
@@ -945,12 +969,9 @@ res}
          code_dw_only           = NULL)
 
 
-  # This contains the code to generate the input dataset
-  code_previous = c(
-    paste0(
-           element_ds_object_name,
-           " = ",
-            state[["===ZZ==="]][["UD"]][["object_name"]]))
+  # This contains the code to generate inputs for the current element (e.g.
+  # datasets that are needed).
+  code_previous = ""
   element_def[["code_previous"]] = code_previous
 
   # Dropping the new element into the state
