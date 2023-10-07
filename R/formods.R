@@ -17,6 +17,39 @@
 
 
 #'@export
+#'@title Fetches models from modules in the app
+#'@description  Loops through each specified module ID or all modules if no ID
+#'was specified. For each ID, an attempt will be made to extract any models
+#'available.
+#'@param state Current module state after yaml file has been read
+#'@param session Shiny session variable
+#'@param ids  Vector of ID strings for the modules containing models or
+#'NULL for all modules with models available.
+#'@return list containing the current dataset with the following format:
+#' JMH
+#' \itemize{
+#'   \item{isgood:} Boolean indicating the whether a dataset was found
+#'   (\code{FALSE})
+#'   \item{catalog:} Dataframe containing the a tabular catalog of the
+#'   models found.
+#'   \itemize{
+#'     \item{label:} Text label
+#'   }
+#'   \item{modules:} List with an entry for each module..
+#' }
+#'@examples
+#' # We need a module state and a Shiny session variable
+#' # to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' session = sess_res$session
+#' state   = sess_res$state
+#' mdl = FM_fetch_mdl(state, session)
+#' mdl$catalog
+FM_fetch_mdl = function(state, session, ids=NULL){
+}
+
+#'@export
 #'@title Fetches data sets from modules in the app
 #'@description  Loops through each specified module ID or all modules if no ID
 #'was specified. For each ID, an attempt will be made to extract any datasets
@@ -854,9 +887,11 @@ NULL}
 #'@param session Shiny session variable.
 #'@return List with information about the app with the following structure
 #' \itemize{
-#'   \item{uiele:} System information as UI elements to be used in shiny apps.
+#'   \item{uiele:} All system information as UI elements to be used in shiny apps.
+#'   \item{uiele_packages:} UI element for installed packages to be used in shiny apps.
+#'   \item{uiele_modules: } UI element for loaded formods modules to be used in shiny apps.
 #'   \item{msgs:}  System information as text to be used in a report/terminal.
-#'   \item{si_paclages} Dataframe with currently used packages.
+#'   \item{si_packages} Dataframe with currently used packages.
 #' }
 #'@examples
 #' # We need a Shiny session object to use this function:
@@ -866,9 +901,11 @@ NULL}
 #' app_info  = FM_fetch_app_info(session)
 #' app_info$msgs
 FM_fetch_app_info <- function(session){
-  msgs        = c()
-  uiele       = NULL
-  si_packages = NULL
+  msgs            = c()
+  uiele           = NULL
+  uiele_packages  = NULL
+  uiele_modules   = NULL
+  si_packages     = NULL
 
   # The devtools package is needed for some information we want to find out if
   # it's here and create a message if it's not
@@ -905,53 +942,58 @@ FM_fetch_app_info <- function(session){
 
     if(!is.null(state)){
       tmp_msg = paste0("ID: ",state[["id"]])
-      uiele   = tagList(uiele, tags$h4(tmp_msg))
+      uiele_modules   = tagList(uiele_modules, tags$h4(tmp_msg))
       msgs    = c(msgs, tmp_msg)
 
       tmp_msg = paste0("type: ",state[["MOD_TYPE"]])
-      uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
+      uiele_modules   = tagList(uiele_modules,tags$ul(tags$li(tmp_msg)))
       msgs    = c(msgs, tmp_msg)
 
       tmp_msg = paste0("FM_yaml_file: ",state[["FM_yaml_file"]])
-      uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
+      uiele_modules   = tagList(uiele_modules,tags$ul(tags$li(tmp_msg)))
       msgs    = c(msgs, tmp_msg)
 
       tmp_msg = paste0("MOD_yaml_file: ",state[["MOD_yaml_file"]])
-      uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
+      uiele_modules   = tagList(uiele_modules,tags$ul(tags$li(tmp_msg)))
       msgs    = c(msgs, tmp_msg)
 
       tmp_msg = paste0("User files: ",FM_fetch_user_files_path(state))
-      uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
+      uiele_modules   = tagList(uiele_modules,tags$ul(tags$li(tmp_msg)))
       msgs    = c(msgs, tmp_msg)
 
       tmp_msg = paste0("Log file: ",FM_fetch_log_path(state))
-      uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
+      uiele_modules   = tagList(uiele_modules,tags$ul(tags$li(tmp_msg)))
       msgs    = c(msgs, tmp_msg)
 
       # Finding the package dependencies of the current module
       deps = FM_fetch_deps(state=state, session=session )
       if(length(deps[["packages"]]) > 0){
         tmp_msg = paste0("Package dependencies: ", paste0(deps[["packages"]], collapse=', '))
-        uiele   = tagList(uiele,tags$ul(tags$li(tmp_msg)))
+        uiele_modules   = tagList(uiele_modules,tags$ul(tags$li(tmp_msg)))
         msgs    = c(msgs, tmp_msg)
       }
     }
   }
-
+ 
+  uiele = tagList(uiele, uiele_modules)
+ 
   if(found_devtools){
     si          =  devtools::session_info()
     si_packages = si$packages
     msgs = c(msgs, as.character(si_packages))
     if(found_DT){
-      uiele = tagList(uiele, tags$h3("Packages"))
-      uiele   = tagList(uiele,DT::datatable(si_packages))
+      uiele            = tagList(uiele, tags$h3("Packages"))
+      uiele            = tagList(uiele,DT::datatable(si_packages))
+      uiele_packages   = DT::datatable(si_packages)
     }
   }
 
 
-  res = list(uiele       = uiele,
-             msgs        = msgs,
-             si_packages = si_packages)
+  res = list(uiele          = uiele,
+             uiele_packages = uiele_packages,
+             uiele_modules  = uiele_modules ,
+             msgs           = msgs,
+             si_packages    = si_packages)
 
 res}
 
@@ -984,7 +1026,7 @@ app_state}
 #'@param dep_mod_ids Vector of module ids this module depends on.
 #'@param MT Type of module using the short name (e.g. "UD", "FG", etc.).
 #'@param button_counters Vector of button UI elements that need to be tracked.
-#'@param ui_ids List of UI ids in the model.
+#'@param ui_ids List of UI ids in the module.
 #'@param ui_hold Vector of UI elements that require holding.
 #'@param session Shiny session variable
 #'@return List with state initialized.
@@ -2090,7 +2132,7 @@ res}
 #'@param file_dir Directory to save file
 #'@return list with the following elements:
 #' \itemize{
-#' \item{mc:}     Model components.
+#' \item{mc:}     Module components.
 #' \item{server:} Server.R file.
 #' \item{yaml:}   Yaml configureation file.
 #' }

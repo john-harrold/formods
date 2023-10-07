@@ -27,7 +27,7 @@ the FG module provides "figures", the DW module provides "data views".}
 \value{
 list with the following elements:
 \itemize{
-\item{mc:}     Model components.
+\item{mc:}     Module components.
 \item{server:} Server.R file.
 \item{yaml:}   Yaml configureation file.
 }

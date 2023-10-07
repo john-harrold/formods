@@ -79,10 +79,15 @@ ui <- dashboardPage(
                shinydashboard::tabBox(
                  width = 12,
                  title = NULL,
-                 shiny::tabPanel(id="sys_details",
+                 shiny::tabPanel(id="sys_modules",
                           title=tagList(shiny::icon("ghost"),
-                                        "Deployment Details"),
-                 htmlOutput(NS("ASM", "ui_asm_sys_detials"))
+                                        "Modules"),
+                 htmlOutput(NS("ASM", "ui_asm_sys_modules"))
+                 ),
+                 shiny::tabPanel(id="sys_packages",
+                          title=tagList(shiny::icon("ghost"),
+                                        "Packages"),
+                 htmlOutput(NS("ASM", "ui_asm_sys_packages"))
                  ),
                  shiny::tabPanel(id="sys_log",
                           title=tagList(shiny::icon("clipboard-list"),
@@ -106,7 +111,7 @@ server <- function(input, output, session) {
   mod_ids = c("UD", "DW", "FG")
 
   #Populating with test data
-  #FG_test_mksession(session)
+  FG_test_mksession(session)
   # Module servers
   formods::ASM_Server(id="ASM",
              deployed    = deployed,

@@ -29,7 +29,7 @@ FM_init_state(
 
 \item{button_counters}{Vector of button UI elements that need to be tracked.}
 
-\item{ui_ids}{List of UI ids in the model.}
+\item{ui_ids}{List of UI ids in the module.}
 
 \item{ui_hold}{Vector of UI elements that require holding.}
 

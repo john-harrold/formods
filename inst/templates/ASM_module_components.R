@@ -64,8 +64,10 @@ ui <- dashboardPage(
            verbatimTextOutput("ui_state"),width=12)),
        fluidRow(
          box(title="System Details",
-           "ui_asm_sys_details",
-           htmlOutput(NS("ASM", "ui_asm_sys_detials"))
+           "ui_asm_sys_modules",
+           htmlOutput(NS("ASM", "ui_asm_sys_modules")),
+           "ui_asm_sys_packages", 
+           htmlOutput(NS("ASM", "ui_asm_sys_packages"))
          ),
          box(title="Load",
            "ui_asm_sys_log",

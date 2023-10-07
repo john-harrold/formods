@@ -1268,7 +1268,6 @@ DW_Server <- function(id,
           uiele,
           uiele_buttons_left)
 
-
         # Appending the preview
         uiele_preview = NULL
         if( state$MC$compact$preview){
@@ -1277,6 +1276,9 @@ DW_Server <- function(id,
               rhandsontable::rHandsontableOutput(NS(id, "hot_data_preview")))
           uiele = tagList(
             uiele,
+            tags$br(),
+            verbatimTextOutput(NS(id, "ui_dw_msg")),
+            tags$br(),
             uiele_preview,
             uiele_buttons_right,
             tags$br()
@@ -1290,9 +1292,7 @@ DW_Server <- function(id,
           div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_add_element_button"))),
           div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_select"))),
           tags$br(),
-          htmlOutput(NS(id, "ui_dw_new_element_row")),
-          tags$br(),
-          verbatimTextOutput(NS(id, "ui_dw_msg"))
+          htmlOutput(NS(id, "ui_dw_new_element_row"))
         )
       }
 

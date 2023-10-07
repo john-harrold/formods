@@ -352,7 +352,7 @@ ASM_Server <- function(id,
  #
  #  })
     #------------------------------------
-    output$ui_asm_sys_detials  = renderUI({
+    output$ui_asm_sys_modules  = renderUI({
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
@@ -360,7 +360,19 @@ ASM_Server <- function(id,
                               MOD_yaml_file = MOD_yaml_file)
       app_info = FM_fetch_app_info(session)
 
-      uiele = app_info[["uiele"]]
+      uiele = app_info[["uiele_modules"]]
+      
+    uiele})
+    #------------------------------------
+    output$ui_asm_sys_packages = renderUI({
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+      app_info = FM_fetch_app_info(session)
+
+      uiele = app_info[["uiele_packages"]]
       
     uiele})
     #------------------------------------

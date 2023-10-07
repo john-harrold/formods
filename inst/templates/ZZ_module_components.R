@@ -67,8 +67,8 @@ ui <- dashboardPage(
            verbatimTextOutput("ui_state"),width=12))
        ),
        tabItem(tabName="compact",
-          "ui_===zz===_compact",
-          htmlOutput(NS("===ZZ===", "ui_===zz===_compact")))
+          "===ZZ===_ui_compact",
+          htmlOutput(NS("===ZZ===", "===ZZ===_ui_compact")))
       )
     )
   )

@@ -32,6 +32,7 @@
       input$button_clk_copy
       input$button_clk_new
       state = ===ZZ===_fetch_state(id              = id,
+                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -56,6 +57,7 @@
     output$===ZZ===_ui_text_element_name = renderUI({
       input$element_selection
       state = ===ZZ===_fetch_state(id              = id,
+                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -80,6 +82,7 @@
     # Create ui outputs here:
     output$===ZZ===_ui_element = renderUI({
       state = ===ZZ===_fetch_state(id              = id,
+                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -93,6 +96,7 @@
     observe({
       # Reacting to file changes
       state = ===ZZ===_fetch_state(id              = id,
+                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -121,6 +125,7 @@
     # new
     output$ui_===zz===_new_btn = renderUI({
       state = ===ZZ===_fetch_state(id              = id,
+                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -147,6 +152,7 @@
     # Save
     output$ui_===zz===_save_btn = renderUI({
       state = ===ZZ===_fetch_state(id        = id,
+                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -172,6 +178,7 @@
     # clip code
     output$ui_===zz===_clip_code = renderUI({
       state = ===ZZ===_fetch_state(id              = id,
+                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -197,6 +204,7 @@
     # delete
     output$ui_===zz===_del_btn   = renderUI({
       state = ===ZZ===_fetch_state(id              = id,
+                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -220,6 +228,7 @@
     # copy
     output$ui_===zz===_copy_btn   = renderUI({
       state = ===ZZ===_fetch_state(id              = id,
+                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -244,6 +253,7 @@
     # User messages:
     output$ui_===zz===_msg = renderText({
       state = ===ZZ===_fetch_state(id              = id,
+                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -256,8 +266,9 @@
     # Creates the ui for the compact view of the module
     #------------------------------------
     # Compact ui
-    output$ui_===zz===_compact  =  renderUI({
+    output$===ZZ===_ui_compact  =  renderUI({
       state = ===ZZ===_fetch_state(id              = id,
+                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -364,6 +375,7 @@
       # This updates the reaction state:
       observeEvent(toListen(), {
         state = ===ZZ===_fetch_state(id        = id,
+                               id_ASM          = id_ASM,
                                input           = input,
                                session         = session,
                                FM_yaml_file    = FM_yaml_file,
@@ -389,6 +401,7 @@
     })
     observeEvent(toNotify(), {
       state = ===ZZ===_fetch_state(id              = id,
+                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -417,6 +430,7 @@
       # Once the UI has been regenerated we
       # remove any holds for this module
       state = ===ZZ===_fetch_state(id              = id,
+                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -437,6 +451,7 @@
 #'@title Fetch ===ZZ_NAME=== State
 #'@description Merges default app options with the changes made in the UI
 #'@param id Shiny module ID
+#'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param input Shiny input variable
 #'@param session Shiny session variable
 #'@param FM_yaml_file App configuration file with FM as main section.
@@ -471,12 +486,13 @@
 #'
 #' # Creating an empty state object
 #' state = ===ZZ===_fetch_state(id              = "===ZZ===",
+#'                        id_ASM          = "ASM",
 #'                        input           = input,
 #'                        session         = session,
 #'                        FM_yaml_file    = FM_yaml_file,
 #'                        MOD_yaml_file   = MOD_yaml_file,
 #'                        react_state     = NULL)
-===ZZ===_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react_state){
+===ZZ===_fetch_state = function(id, id_ASM, input, session, FM_yaml_file, MOD_yaml_file, react_state){
 
   # Template for an empty dataset
   #---------------------------------------------
@@ -643,7 +659,12 @@
   }
   #---------------------------------------------
   # Passing any messages back to the user
-  state = FM_set_ui_msg(state, msgs)
+  # NOTE: this only occurs when ui changes have been detected you may need to
+  # add additional logic for a given module
+  if(!is.null(changed_uis)){
+    state = FM_set_ui_msg(state, msgs)
+  }
+  
 
   #---------------------------------------------
   # Saving the state
@@ -704,6 +725,8 @@
     FM_yaml_file    = FM_yaml_file,
     MOD_yaml_file   = MOD_yaml_file,
     id              = id,
+    # Add module dependencies here
+    dep_mod_ids     = NULL,
     MT              = "===ZZ===",
     button_counters = button_counters,
     ui_ids          = ui_ids,
@@ -962,11 +985,20 @@ res}
          # This is used if you build the element in a layering method sort of
          # like how the ggplot figures in the FG module builds using different
          # ggplot commands (layers). 
-         elements_table         = NULL,
+         components_table       = NULL,
          # Generated on save    
          checksum               = NULL,
-         code                   = NULL,
-         code_dw_only           = NULL)
+         # code is the code to generate the element by itself. It assumes
+         # any other module code, library calls, etc will be present before
+         # this is run. It is used to generate the reproducible script on
+         # export.
+         code                   = NULL, 
+         # code_ele_only is meant to stand alone and be run to regenerate the
+         # element by itself. It should contain any library calls and module
+         # components that the current module and element depend on. It is
+         # what you see in the code pull down for the current element in the
+         # UI
+         code_ele_only          = NULL)
 
 
   # This contains the code to generate inputs for the current element (e.g.
