@@ -2,7 +2,7 @@
 % Please edit documentation in R/formods.R
 \name{FM_le}
 \alias{FM_le}
-\title{Appends entry to log file}
+\title{Adds Message to Log File and Displays it to the Console}
 \usage{
 FM_le(state, entry, escape_braces = TRUE, entry_type = "alert")
 }
@@ -19,7 +19,8 @@ FM_le(state, entry, escape_braces = TRUE, entry_type = "alert")
 Boolean value indicating success (\code{TRUE}) or failure (\code{FALSE}).
 }
 \description{
-Add the supplied txt and the module type to the log file
+Add the supplied txt and the module type to the log file and
+display it to the console.
 }
 \examples{
 # We need a module state to use this function:

@@ -2,7 +2,7 @@
 % Please edit documentation in R/formods.R
 \name{FM_fetch_ds}
 \alias{FM_fetch_ds}
-\title{Fetches data sets from modules in the app}
+\title{Fetches Datasets from Modules in the App}
 \usage{
 FM_fetch_ds(state, session, ids = NULL)
 }

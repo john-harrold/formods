@@ -53,7 +53,7 @@
 
       uiele})
     #------------------------------------
-    # Current ===ELEMENT=== name:    
+    # Current ===ELEMENT=== name:
     output$===ZZ===_ui_text_element_name = renderUI({
       input$element_selection
       state = ===ZZ===_fetch_state(id              = id,
@@ -74,7 +74,7 @@
         value       = current_ele[["ui"]][["element_name"]],
         placeholder = state[["MC"]][["labels"]][["element_name"]]
       )
-      
+
       uiele})
 
 
@@ -340,7 +340,7 @@
                ))
 
       # Appending the preview
-      div_style = paste0("display:inline-block;vertical-align:top;", 
+      div_style = paste0("display:inline-block;vertical-align:top;",
         "width:",   state[["MC"]][["formatting"]][["preview"]][["width"]],  ";",
         "height: ", state[["MC"]][["formatting"]][["preview"]][["height"]])
       uiele_preview = div(style=div_style,
@@ -389,8 +389,8 @@
     }
     #------------------------------------
     # This can be used to trigger notifications
-    # You need to add reactive inputs here when those 
-    # inputs can trigger a notification. 
+    # You need to add reactive inputs here when those
+    # inputs can trigger a notification.
     toNotify <- reactive({
       list(
        input$button_clk_save,
@@ -516,7 +516,7 @@
          state[["===ZZ==="]][["ui"]][[ui_name]] = 0
        } else {
          state[["===ZZ==="]][["ui"]][[ui_name]] = ""
-       
+
          # initializing the previous ui values as well:
          if(is.null(state[["===ZZ==="]][["ui_prev"]][[ui_name]])){
            state[["===ZZ==="]][["ui_old"]][[ui_name]] = state[["===ZZ==="]][["ui"]][[ui_name]]
@@ -527,26 +527,26 @@
    msgs = c()
 
   #---------------------------------------------
-  # Now we sync the ui in the state with the button click 
-  # tracking or current element. This ensures that every 
-  # time the state is fetched all of the components of 
+  # Now we sync the ui in the state with the button click
+  # tracking or current element. This ensures that every
+  # time the state is fetched all of the components of
   # the current element are in sync.
 
-  # This is a list of ui changes that were detected and 
+  # This is a list of ui changes that were detected and
   # can be used to trigger different actions below:
   changed_uis = c()
 
   # We need to pull out the current element for updating:
   current_ele = ===ZZ===_fetch_current_element(state)
   # There are scenarios where you wouldn't want to do this. Like when
-  # switching elements in the ui. You would need to add some logic to 
+  # switching elements in the ui. You would need to add some logic to
   # only update below conditionally.
 
   for(ui_name in state[["===ZZ==="]][["ui_ids"]]){
     if(!fetch_hold(state, ui_name)){
       if(ui_name %in% names(state[["===ZZ==="]][["button_counters"]])){
         # Button changes are compared to the button click tracking values
-        change_detected = 
+        change_detected =
           has_changed(ui_val  = state[["===ZZ==="]][["ui"]][[ui_name]],
                       old_val = state[["===ZZ==="]][["button_counters"]][[ui_name]])
         if(change_detected){
@@ -554,21 +554,21 @@
 
           # Saving the change:
           state[["===ZZ==="]][["button_counters"]][[ui_name]] =
-            state[["===ZZ==="]][["ui"]][[ui_name]]        
+            state[["===ZZ==="]][["ui"]][[ui_name]]
 
           # logging the changed ui name:
           changed_uis = c(changed_uis, ui_name)
         }
       }else{
-        change_detected = 
+        change_detected =
           has_changed(ui_val  = state[["===ZZ==="]][["ui"]][[ui_name]],
                       old_val = state[["===ZZ==="]][["ui_old"]][[ui_name]])
         if(change_detected){
           formods::FM_le(state, paste0("setting ===ELEMENT=== : ", ui_name, " = ", paste(state[["===ZZ==="]][["ui"]][[ui_name]], collapse=", ")))
-        
+
           # Saving the change:
           state[["===ZZ==="]][["ui_old"]][[ui_name]] = state[["===ZZ==="]][["ui"]][[ui_name]]
-        
+
           # logging the changed ui name:
           changed_uis = c(changed_uis, ui_name)
 
@@ -592,7 +592,7 @@
     FM_le(state, "save ===ELEMENT===")
     current_ele = ===ZZ===_fetch_current_element(state)
 
-    current_ele[["ui"]][["element_name"]] = 
+    current_ele[["ui"]][["element_name"]] =
       state[["===ZZ==="]][["ui"]][["element_name"]]
 
     state = ===ZZ===_set_current_element(
@@ -624,11 +624,11 @@
     # for skipping.
     for(tmp_ui_name in names(new_ele[["ui"]])){
       if(!(tmp_ui_name %in% ui_copy_skip)){
-        new_ele[["ui"]][[tmp_ui_name]]  = old_ele[["ui"]][[tmp_ui_name]] 
+        new_ele[["ui"]][[tmp_ui_name]]  = old_ele[["ui"]][[tmp_ui_name]]
       }
     }
 
-    # NOTE: You may need to add other code here 
+    # NOTE: You may need to add other code here
     # to change other aspects about the old element
     # that is being copied.
 
@@ -664,7 +664,7 @@
   if(!is.null(changed_uis)){
     state = FM_set_ui_msg(state, msgs)
   }
-  
+
 
   #---------------------------------------------
   # Saving the state
@@ -714,9 +714,12 @@
                     # "current_element",
                       "element_name")
 
-  # These are the module ui elements that are associated with 
+  # These are the module ui elements that are associated with
   # the current element
   ui_ele          = c()
+
+  # This adds the ui_ele ids to the list of ui_ids
+  ui_ids = c(ui_ids, ui_ele)
 
   # Making all the ui_ids holdable
   ui_hold         = ui_ids
@@ -734,7 +737,7 @@
     session         = session)
 
 
-  # Storing the ui_ids for the elements 
+  # Storing the ui_ids for the elements
   state[["===ZZ==="]][["ui_ele"]]               = ui_ele
 
   # This tracks elements for the module
@@ -743,11 +746,12 @@
   state[["===ZZ==="]][["current_element"]]      = NULL
   state[["===ZZ==="]][["element_cntr"]]         = 0
 
-
-
   # Creating a default element:
   state = ===ZZ===_new_element(state)
-  
+
+  # initializing the module checksum:
+  state = ===ZZ===_update_checksum(state)
+
   FM_le(state, "State initialized")
 state}
 
@@ -783,7 +787,7 @@ code}
 #'\itemize{
 #'  \item{isgood:}    Return status of the function.
 #'  \item{hasrptele:} Boolean indicator if the module has any reportable elements.
-#'  \item{code:}      Code to generate reporting elements. 
+#'  \item{code:}      Code to generate reporting elements.
 #'  \item{msgs:}      Messages to be passed back to the user.
 #'  \item{rpt:}       Report with any additions passed back to the user.
 #'}
@@ -814,7 +818,7 @@ res}
 
 #'@export
 #'@title Fetch ===ZZ_NAME=== Module Datasets
-#'@description Fetches the datasets contained in the module. 
+#'@description Fetches the datasets contained in the module.
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
 #'@return Character object vector with the lines of code
 #'@return list containing the following elements
@@ -877,6 +881,129 @@ res}
 res}
 
 #'@export
+#'@title Fetch ===ZZ_NAME=== Module Models
+#'@description Fetches the models contained in the module.
+#'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
+#'@return list containing the following elements
+#'\itemize{
+#'  \item{isgood:}    Return status of the function.
+#'  \item{hasmdl:}    Boolean indicator if the module has any models
+#'  \item{msgs:}      Messages to be passed back to the user.
+#'  \item{mdl:}       List with models. Each list element has the name of
+#'  the R-object for that dataset. Each element has the following structure:
+#'  \itemize{
+#'    \item{label:}      Text label for the model (e.g. one-compartment model).
+#'    \item{MOD_TYPE:}   Type of module.
+#'    \item{id:}         Module ID.
+#'    \item{rx_obj:}     The rxode2 object name that holds the model.
+#'    \item{fcn_def:}    Text to define the model
+#'    \item{MDLMETA:}    Notes about the model.
+#'    \item{code:}       Code to generate the model.
+#'    \item{checksum:}   Module checksum.
+#'    \item{MDLchecksum:} Model checksum.
+#'  }
+#'}
+#'@examples
+#' # We need a module state:
+#' sess_res = ===ZZ===_test_mksession(session=list(), full_session=FALSE)
+#' state = sess_res$state
+#'
+#' mdls = ===ZZ===_fetch_mdl(state)
+#'
+#' names(mdls)
+===ZZ===_fetch_mdl = function(state){
+
+  # JMH update later
+  hasmdl  = FALSE
+  isgood = TRUE
+  msgs   = c()
+  mdl    = list()
+
+  # This prevents returning a dataset if this is triggered before data has
+  # been loaded
+  if(state[["===ZZ==="]][["isgood"]]){
+
+    # Checksum for the module
+    m_checksum = state[["===ZZ==="]][["checksum"]]
+    elements = names(state[["===ZZ==="]][["elements"]])
+    if(!is.null(elements)){
+      # We have at least 1 model
+      hasmdl = TRUE
+      for(element in elements){
+        # current element
+        ce = state[["===ZZ==="]][["elements"]][[element]]
+        ce_checksum = ce[["checksum"]]
+
+
+        # NOTE: You need to populate teh NULL pieces below:
+        mdl[[ ce[["rx_obj_name"]] ]] =
+          list(label       = ce[["ui"]][["element_name"]],
+               MOD_TYPE    = "===ZZ===",
+               id          = state[["id"]],
+               rx_obj      = NULL, #
+               fcn_def     = NULL, #
+               MDLMETA     = NULL, #
+               code        = NULL, #
+               checksum    = m_checksum,
+               MDLchecksum = ce_checksum)
+      }
+    }
+
+  } else {
+    isgood = FALSE
+    msgs = c(msgs, "Bad ===ZZ=== state")
+  }
+
+  res = list(hasmdl  = hasmdl,
+             isgood = isgood,
+             msgs   = msgs,
+             mdl    = mdl)
+  res}
+
+
+# JMH Add module checksum template
+# JMH Add element checksum template
+
+#'@export
+#'@title Updates ===ZZ=== Module Checksum
+#'@description Takes a ===ZZ=== state and updates the checksum used to trigger
+#'downstream updates
+#'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
+#'@return ===ZZ=== state object with the checksum updated
+#'@examples
+#' # Within shiny both session and input variables will exist,
+#' # this creates examples here for testing purposes:
+#' sess_res = ===ZZ===_test_mksession(session=list())
+#' session = sess_res$session
+#' input   = sess_res$input
+#'
+#' # We also need a state variable
+#' state = sess_res$state
+#'
+#' state = ===ZZ===_update_checksum(state)
+===ZZ===_update_checksum     = function(state){
+
+  # checksum string
+  chk_str = ""
+
+  # We'll concatinate all the individual checksums together
+  # and create a checksum of those:
+  view_ids = names(state[["===ZZ==="]][["elements"]])
+  for(view_id in view_ids){
+    # We trigger updates when the dataframe changes:
+    chk_str = paste0(chk_str, ":", state[["===ZZ==="]][["elements"]][[view_id]][["checksum"]])
+
+    # We also trigger updates when the key has changed as well:
+    chk_str = paste0(chk_str, ":", state[["===ZZ==="]][["elements"]][[view_id]][["key"]])
+  }
+
+  state[["===ZZ==="]][["checksum"]] = digest::digest(chk_str, algo=c("md5"))
+  FM_le(state, paste0("module checksum updated:", state[["===ZZ==="]][["checksum"]]))
+
+state}
+
+
+#'@export
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
@@ -900,7 +1027,7 @@ res}
   # Configuration files
   FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
   MOD_yaml_file = system.file(package = "===PKG===", "templates", "===ZZ===.yaml")
- 
+
   # Creating an empty state object
   state = ===ZZ===_fetch_state(id              = "===ZZ===",
                          input           = input,
@@ -923,7 +1050,7 @@ res}
 #'@description Appends a new empty ===ELEMENT=== to the ===ZZ=== state object
 #'and makes this new ===ELEMENT=== the active ===ELEMENT===.
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
-#'@return ===ZZ== state object containing a new ===ELEMENT=== and that
+#'@return ===ZZ=== state object containing a new ===ELEMENT=== and that
 #'===ELEMENT=== is set as the current active ===ELEMENT===. See the help for
 #'\code{===ZZ===_fetch_state()} for ===ELEMENT== format.
 #'@examples
@@ -956,7 +1083,7 @@ res}
 #' element[["name"]] = "A more descriptive name"
 #'
 #' # You can now place element back in the state
-#' state = ===ZZ===_set_current_element(state, element)                                   
+#' state = ===ZZ===_set_current_element(state, element)
 ===ZZ===_new_element = function(state){
 
   # Incrementing the element counter
@@ -981,18 +1108,18 @@ res}
          idx                    = state[["===ZZ==="]][["element_cntr"]],
          element_object_name    = element_object_name,
          code_previous          = NULL,
-         # user facing          
+         # user facing
          # This is used if you build the element in a layering method sort of
          # like how the ggplot figures in the FG module builds using different
-         # ggplot commands (layers). 
+         # ggplot commands (layers).
          components_table       = NULL,
-         # Generated on save    
+         # Generated on save
          checksum               = NULL,
          # code is the code to generate the element by itself. It assumes
          # any other module code, library calls, etc will be present before
          # this is run. It is used to generate the reproducible script on
          # export.
-         code                   = NULL, 
+         code                   = NULL,
          # code_ele_only is meant to stand alone and be run to regenerate the
          # element by itself. It should contain any library calls and module
          # components that the current module and element depend on. It is
@@ -1008,6 +1135,11 @@ res}
 
   # Dropping the new element into the state
   state[["===ZZ==="]][["elements"]][[element_id]] = element_def
+
+
+  # updating the checksum for the current element
+  state[["===ZZ==="]][["elements"]][[element_id]][["checksum"]] = digest::digest(element_def, algo=c("md5"))
+
   # Setting the new element as current
   state[["===ZZ==="]][["current_element"]]     = element_id
 
@@ -1052,7 +1184,7 @@ state}
 #' element[["name"]] = "A more descriptive name"
 #'
 #' # You can now place element back in the state
-#' state = ===ZZ===_set_current_element(state, element)                                   
+#' state = ===ZZ===_set_current_element(state, element)
 ===ZZ===_fetch_current_element    = function(state){
 
   element_id = state[["===ZZ==="]][["current_element"]]
@@ -1068,8 +1200,8 @@ current_element}
 #'===ELEMENT===
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
 #'@param element Element list from \code{===ZZ===_fetch_current_element()}
-#'@return ===ZZ== state object with the current ===ELEMENT=== set using the
-#'supplied value. 
+#'@return ===ZZ=== state object with the current ===ELEMENT=== set using the
+#'supplied value.
 #'@examples
 #' sess_res = ===ZZ===_test_mksession(session=list())
 #' session = sess_res$session
@@ -1100,21 +1232,30 @@ current_element}
 #' element[["name"]] = "A more descriptive name"
 #'
 #' # You can now place element back in the state
-#' state = ===ZZ===_set_current_element(state, element)                                   
+#' state = ===ZZ===_set_current_element(state, element)
 ===ZZ===_set_current_element    = function(state, element){
 
   element_id = state[["===ZZ==="]][["current_element"]]
 
+  # updating the checksum for the current element
+  tmp_ele = element
+  tmp_ele[["checksum"]]  = ""
+  element[["checksum"]]  = digest::digest(tmp_ele, algo=c("md5"))
+
+  # this updates the current element
   state[["===ZZ==="]][["elements"]][[element_id]] = element
+
+  # This will update the checksum for the module
+  state = ===ZZ===_update_checksum(state)
 
 state}
 
 #'@export
 #'@title Deletes Current ===ELEMENT===
-#'@description Takes a ===ZZ=== state and deletes the current ===ELEMENT===. 
-#'If that is the last element, then a new default will be added. 
+#'@description Takes a ===ZZ=== state and deletes the current ===ELEMENT===.
+#'If that is the last element, then a new default will be added.
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
-#'@return ===ZZ== state object with the current ===ELEMENT=== deleted. 
+#'@return ===ZZ=== state object with the current ===ELEMENT=== deleted.
 #'@examples
 #' sess_res = ===ZZ===_test_mksession(session=list())
 #' session = sess_res$session
@@ -1145,7 +1286,7 @@ state}
 #' element[["name"]] = "A more descriptive name"
 #'
 #' # You can now place element back in the state
-#' state = ===ZZ===_set_current_element(state, element)                                   
+#' state = ===ZZ===_set_current_element(state, element)
 ===ZZ===_del_current_element    = function(state){
 
   # We need the current element and corresponding ID
@@ -1156,12 +1297,12 @@ state}
   state[["===ZZ==="]][["elements"]][[element_id]] = NULL
 
   if(length(names(state[["===ZZ==="]][["elements"]])) == 0){
-    # This is triggered when we've deleted the last element, 
+    # This is triggered when we've deleted the last element,
     # So now we will create a new one that will be active:
     state = ===ZZ===_new_element(state)
   } else {
-    # If there is at least one left, we pull off the first 
-    # one and make that active: 
+    # If there is at least one left, we pull off the first
+    # one and make that active:
     element_id = names(state[["===ZZ==="]][["elements"]])[1]
     state[["===ZZ==="]][["current_element"]] = element_id
   }

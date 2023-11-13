@@ -41,7 +41,7 @@ following information:
 -   UD - [Upload Data](https://formods.ubiquity.tools)
 -   MC - This is a reserved word
 
-The current modules are in development:
+The current modules in development:
 
 -   NCA - [Non-Compartmental Analysis](https://github.com/john-harrold/ruminate)
 -   MB - [Model Builder](https://github.com/john-harrold/ruminate)
@@ -226,9 +226,11 @@ observeEvent(remove_hold_listen(), {
 }, priority = -100)
 ```
 
-The `remove_hold_listen` object should contain all of the inputs that are... holdable?
+The `remove_hold_listen` object should contain all of the inputs that create holds.
 
 ## Dataframe formatting information 
+
+If you want to tables and pulldown menues based on the types of data in each column you can use the `FM_fetch_data_format()` function. 
 
 ```{r}
 hfmt = FM_fetch_data_format(df, state)

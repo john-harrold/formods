@@ -2,7 +2,7 @@
 % Please edit documentation in R/formods.R
 \name{FM_fetch_app_code}
 \alias{FM_fetch_app_code}
-\title{Fetches the code to reproduce analysis}
+\title{Fetches the Code to Reproduce Analysis}
 \usage{
 FM_fetch_app_code(session, state, mod_ids)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/formods.R
 \name{FM_fetch_log_path}
 \alias{FM_fetch_log_path}
-\title{Fetches the path to the log file}
+\title{Fetches the Path to the Log File}
 \usage{
 FM_fetch_log_path(state)
 }

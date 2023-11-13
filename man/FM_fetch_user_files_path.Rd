@@ -2,7 +2,7 @@
 % Please edit documentation in R/formods.R
 \name{FM_fetch_user_files_path}
 \alias{FM_fetch_user_files_path}
-\title{Fetches the path to the user files}
+\title{Fetches the Path to the User Files}
 \usage{
 FM_fetch_user_files_path(state)
 }
@@ -13,7 +13,7 @@ FM_fetch_user_files_path(state)
 Character string with the path to the log file.
 }
 \description{
-Use this to get the path to the formods log file
+Use this to get the path to the temporary directory where formods stores user files.
 }
 \examples{
 # We need a state object to use this function:

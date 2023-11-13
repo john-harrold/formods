@@ -17,7 +17,7 @@
 
 
 #'@export
-#'@title Fetches models from modules in the app
+#'@title Fetches Models from Modules in the App
 #'@description  Loops through each specified module ID or all modules if no ID
 #'was specified. For each ID, an attempt will be made to extract any models
 #'available.
@@ -50,7 +50,7 @@ FM_fetch_mdl = function(state, session, ids=NULL){
 }
 
 #'@export
-#'@title Fetches data sets from modules in the app
+#'@title Fetches Datasets from Modules in the App
 #'@description  Loops through each specified module ID or all modules if no ID
 #'was specified. For each ID, an attempt will be made to extract any datasets
 #'available.
@@ -375,7 +375,7 @@ fetch_hold = function(state, inputId=NULL){
 hold_status}
 
 #'@export
-#'@title Fetches the code to reproduce analysis
+#'@title Fetches the Code to Reproduce Analysis
 #'@description Takes the current state of the app and builds a script to
 #'reproduce the analysis within the app.
 #'@param session Shiny session variable
@@ -496,7 +496,7 @@ FM_fetch_app_code = function(session, state, mod_ids){
 res}
 
 #'@export
-#'@title Fetches the path to the log file
+#'@title Fetches the Path to the Log File
 #'@description Use this to get the path to the formods log file
 #'@param state module state after yaml read
 #'@return Character string with the path to the log file.
@@ -524,8 +524,8 @@ FM_fetch_log_path = function(state){
 res}
 
 #'@export
-#'@title Fetches the path to the user files
-#'@description Use this to get the path to the formods log file
+#'@title Fetches the Path to the User Files
+#'@description Use this to get the path to the temporary directory where formods stores user files.
 #'@param state module state after yaml read
 #'@return Character string with the path to the log file.
 #'@examples
@@ -557,8 +557,9 @@ FM_fetch_user_files_path = function(state){
 user_dir}
 
 #'@export
-#'@title Appends entry to log file
-#'@description Add the supplied txt and the module type to the log file
+#'@title Adds Message to Log File and Displays it to the Console
+#'@description Add the supplied txt and the module type to the log file and
+#'display it to the console. 
 #'@param state Module state after yaml read
 #'@param entry Text to add
 #'@param escape_braces Set to \code{TRUE} (default) to escape curly braces in the entry, set to \code{FALSE} to have the values interpreted.

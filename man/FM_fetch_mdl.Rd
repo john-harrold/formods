@@ -2,7 +2,7 @@
 % Please edit documentation in R/formods.R
 \name{FM_fetch_mdl}
 \alias{FM_fetch_mdl}
-\title{Fetches models from modules in the app}
+\title{Fetches Models from Modules in the App}
 \usage{
 FM_fetch_mdl(state, session, ids = NULL)
 }
