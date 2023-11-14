@@ -988,17 +988,23 @@ res}
 
   # We'll concatinate all the individual checksums together
   # and create a checksum of those:
-  view_ids = names(state[["===ZZ==="]][["elements"]])
-  for(view_id in view_ids){
+  element_ids = names(state[["===ZZ==="]][["elements"]])
+  for(element_id in element_ids){
     # We trigger updates when the dataframe changes:
-    chk_str = paste0(chk_str, ":", state[["===ZZ==="]][["elements"]][[view_id]][["checksum"]])
+    chk_str = paste0(chk_str, ":", state[["===ZZ==="]][["elements"]][[element_id]][["checksum"]])
 
     # We also trigger updates when the key has changed as well:
-    chk_str = paste0(chk_str, ":", state[["===ZZ==="]][["elements"]][[view_id]][["key"]])
+    chk_str = paste0(chk_str, ":", state[["===ZZ==="]][["elements"]][[element_id]][["key"]])
   }
 
-  state[["===ZZ==="]][["checksum"]] = digest::digest(chk_str, algo=c("md5"))
-  FM_le(state, paste0("module checksum updated:", state[["===ZZ==="]][["checksum"]]))
+  # This prevents messaging when no change has been made to the module.
+  old_chk = state[["===ZZ==="]][["checksum"]]
+  new_chk = digest::digest(chk_str, algo=c("md5"))
+
+  if(has_changed(old_chk, new_chk)){
+    state[["===ZZ==="]][["checksum"]] = digest::digest(chk_str, algo=c("md5"))
+    FM_le(state, paste0("module checksum updated:", state[["===ZZ==="]][["checksum"]]))
+  }
 
 state}
 
