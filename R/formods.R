@@ -1006,7 +1006,24 @@ FM_fetch_app_info <- function(session){
 
 
   if(found_DT){
-    uiele_options    = DT::datatable(si_options)
+    tmp_si_options = si_options
+    tmp_si_options[["value"]] = str_replace_all(
+      tmp_si_options[["value"]], 
+      pattern     = "\n", 
+      replacement = "<BR/>")
+    tmp_si_options[["value"]] = str_replace_all(
+      tmp_si_options[["value"]], 
+      pattern = " ", 
+      replacement = "&nbsp;")
+    tmp_si_options[["value"]] = paste0(
+      "<TT>",
+      tmp_si_options[["value"]], 
+      "<TT>" ) 
+    tmp_si_options[["option"]] = paste0(
+      "<TT>",
+      tmp_si_options[["option"]], 
+      "<TT>" ) 
+    uiele_options = DT::datatable(tmp_si_options, escape=FALSE)
   }
 
   res = list(uiele          = uiele,
