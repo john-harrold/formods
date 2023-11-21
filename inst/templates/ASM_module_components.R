@@ -66,13 +66,13 @@ ui <- dashboardPage(
          box(title="System Details",
            "ui_asm_sys_modules",
            htmlOutput(NS("ASM", "ui_asm_sys_modules")),
-           "ui_asm_sys_packages", 
-           htmlOutput(NS("ASM", "ui_asm_sys_packages"))
-         ),
-         box(title="Load",
+           "ui_asm_sys_packages",
+           htmlOutput(NS("ASM", "ui_asm_sys_packages")),
+           "ui_asm_sys_options",
+           htmlOutput(NS("ASM", "ui_asm_sys_options")),
            "ui_asm_sys_log",
-           verbatimTextOutput(NS("ASM", "ui_asm_sys_log"))
-         )
+           verbatimTextOutput(NS("ASM", "ui_asm_sys_log")),
+         width=12)
          )
        ),
        tabItem(tabName="other", "Here you can put other elements of your App")

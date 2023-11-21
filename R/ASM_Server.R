@@ -376,6 +376,18 @@ ASM_Server <- function(id,
       
     uiele})
     #------------------------------------
+    output$ui_asm_sys_options = renderUI({
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+      app_info = FM_fetch_app_info(session)
+
+      uiele = app_info[["uiele_options"]]
+      
+    uiele})
+    #------------------------------------
     # fileReaderData must be defined outside of the outputs below so it
     # will react properly
     # This is the path to the log file

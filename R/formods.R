@@ -559,7 +559,7 @@ user_dir}
 #'@export
 #'@title Adds Message to Log File and Displays it to the Console
 #'@description Add the supplied txt and the module type to the log file and
-#'display it to the console. 
+#'display it to the console.
 #'@param state Module state after yaml read
 #'@param entry Text to add
 #'@param escape_braces Set to \code{TRUE} (default) to escape curly braces in the entry, set to \code{FALSE} to have the values interpreted.
@@ -890,9 +890,11 @@ NULL}
 #' \itemize{
 #'   \item{uiele:} All system information as UI elements to be used in shiny apps.
 #'   \item{uiele_packages:} UI element for installed packages to be used in shiny apps.
+#'   \item{uiele_options:}  UI element for current options.
 #'   \item{uiele_modules: } UI element for loaded formods modules to be used in shiny apps.
 #'   \item{msgs:}  System information as text to be used in a report/terminal.
 #'   \item{si_packages} Dataframe with currently used packages.
+#'   \item{si_options} Dataframe with current options
 #' }
 #'@examples
 #' # We need a Shiny session object to use this function:
@@ -975,9 +977,9 @@ FM_fetch_app_info <- function(session){
       }
     }
   }
- 
+
   uiele = tagList(uiele, uiele_modules)
- 
+
   if(found_devtools){
     si          =  devtools::session_info()
     si_packages = si$packages
@@ -989,11 +991,30 @@ FM_fetch_app_info <- function(session){
     }
   }
 
+  si_opt_list   = options()
+  si_options    = NULL
+  uiele_options = NULL
+  for(oname in names(si_opt_list)){
+
+    value  = deparse(si_opt_list[[oname]])
+    value  = paste0(value, collapse = "\n")
+    si_options  =
+      rbind(si_options,
+        data.frame(option = oname,
+                   value  = value ))
+  }
+
+
+  if(found_DT){
+    uiele_options    = DT::datatable(si_options)
+  }
 
   res = list(uiele          = uiele,
              uiele_packages = uiele_packages,
              uiele_modules  = uiele_modules ,
+             uiele_options  = uiele_options ,
              msgs           = msgs,
+             si_options     = si_options,
              si_packages    = si_packages)
 
 res}

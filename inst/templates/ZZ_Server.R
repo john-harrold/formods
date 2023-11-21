@@ -564,7 +564,7 @@
           has_changed(ui_val  = state[["===ZZ==="]][["ui"]][[ui_name]],
                       old_val = state[["===ZZ==="]][["ui_old"]][[ui_name]])
         if(change_detected){
-          formods::FM_le(state, paste0("setting ===ELEMENT=== : ", ui_name, " = ", paste(state[["===ZZ==="]][["ui"]][[ui_name]], collapse=", ")))
+          formods::FM_le(state, paste0("setting ===ELEMENT===: ", ui_name, " = ", paste(state[["===ZZ==="]][["ui"]][[ui_name]], collapse=", ")))
 
           # Saving the change:
           state[["===ZZ==="]][["ui_old"]][[ui_name]] = state[["===ZZ==="]][["ui"]][[ui_name]]

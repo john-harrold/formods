@@ -134,6 +134,11 @@ ui <- dashboardPage(
                           title=tagList(shiny::icon("clipboard-list"),
                                         "App Log"),
                  verbatimTextOutput(NS("ASM", "ui_asm_sys_log"))
+                 ),
+                 shiny::tabPanel(id="sys_options",
+                          title=tagList(shiny::icon("sliders"),
+                                        "R Options"),
+                 htmlOutput(NS("ASM", "ui_asm_sys_options"))
                  )
                  )
                ))
