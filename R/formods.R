@@ -600,34 +600,37 @@ FM_le = function(state, entry, escape_braces=TRUE, entry_type="alert"){
   # Writing messages to the console
   if(state[["yaml"]][["FM"]][["logging"]][["console"]]){
     for(line in entry){
+      FM_message(line=line,
+                 escape_braces=escape_braces, 
+                 entry_type=entry_type) 
       # This will conditionally show the entry if the cli packages is present:
-      if(system.file(package="cli") != ""){
-        if(escape_braces){
-          if(entry_type=="alert"){
-            cli::cli_alert("{line}") }
-          if(entry_type=="danger"){
-            cli::cli_alert_danger("{line}") }
-          if(entry_type=="warning"){
-            cli::cli_alert_warning("{line}") }
-          if(entry_type=="info"){
-            cli::cli_alert_info("{line}") }
-          if(entry_type=="success"){
-            cli::cli_alert_success("{line}") }
-        } else {
-          if(entry_type=="alert"){
-            cli::cli_alert(line)}
-          if(entry_type=="danger"){
-            cli::cli_alert_danger(line)}
-          if(entry_type=="warning"){
-            cli::cli_alert_warning(line)}
-          if(entry_type=="info"){
-            cli::cli_alert_info(line)}
-          if(entry_type=="success"){
-            cli::cli_alert_success(line)}
-        }
-      } else {
-        message(line)
-      }
+     #if(system.file(package="cli") != ""){
+     #  if(escape_braces){
+     #    if(entry_type=="alert"){
+     #      cli::cli_alert("{line}") }
+     #    if(entry_type=="danger"){
+     #      cli::cli_alert_danger("{line}") }
+     #    if(entry_type=="warning"){
+     #      cli::cli_alert_warning("{line}") }
+     #    if(entry_type=="info"){
+     #      cli::cli_alert_info("{line}") }
+     #    if(entry_type=="success"){
+     #      cli::cli_alert_success("{line}") }
+     #  } else {
+     #    if(entry_type=="alert"){
+     #      cli::cli_alert(line)}
+     #    if(entry_type=="danger"){
+     #      cli::cli_alert_danger(line)}
+     #    if(entry_type=="warning"){
+     #      cli::cli_alert_warning(line)}
+     #    if(entry_type=="info"){
+     #      cli::cli_alert_info(line)}
+     #    if(entry_type=="success"){
+     #      cli::cli_alert_success(line)}
+     #  }
+     #} else {
+     #  message(line)
+     #}
     }
   }
 
@@ -644,7 +647,49 @@ FM_le = function(state, entry, escape_braces=TRUE, entry_type="alert"){
 
 isgood}
 
-
+#'@export
+#'@title Show Message to User
+#'@description Writes a message to the console depending on whether cli is
+#'installed or not.
+#'@param line  Text to display
+#'@param escape_braces Set to \code{TRUE} (default) to escape curly braces in the entry, set to \code{FALSE} to have the values interpreted.
+#'@param entry_type  Set to either "alert"(default), "danger", "info", "success", or "warning"
+#'@return Returns NULL
+#'@examples
+#' mr = FM_message("This is a normal  message")
+#' mr = FM_message("This is a danger  message", entry_type="danger")
+#' mr = FM_message("This is a info    message", entry_type="info")
+#' mr = FM_message("This is a success message", entry_type="success")
+#' mr = FM_message("This is a warning message", entry_type="warning")
+FM_message = function(line, escape_braces=TRUE, entry_type="alert"){
+  if(system.file(package="cli") != ""){
+    if(escape_braces){
+      if(entry_type=="alert"){
+        cli::cli_alert("{line}") }
+      if(entry_type=="danger"){
+        cli::cli_alert_danger("{line}") }
+      if(entry_type=="warning"){
+        cli::cli_alert_warning("{line}") }
+      if(entry_type=="info"){
+        cli::cli_alert_info("{line}") }
+      if(entry_type=="success"){
+        cli::cli_alert_success("{line}") }
+    } else {
+      if(entry_type=="alert"){
+        cli::cli_alert(line)}
+      if(entry_type=="danger"){
+        cli::cli_alert_danger(line)}
+      if(entry_type=="warning"){
+        cli::cli_alert_warning(line)}
+      if(entry_type=="info"){
+        cli::cli_alert_info(line)}
+      if(entry_type=="success"){
+        cli::cli_alert_success(line)}
+    }
+  } else {
+    message(line)
+  }
+NULL}
 
 #'@export
 #'@title Run Try/Catch and Process Results
@@ -864,13 +909,15 @@ FM_set_app_state <- function(session, app_state, set_holds = TRUE){
       }
     }
   } else {
-    if(system.file(package="cli") != ""){
-      cli::cli_alert("FM_set_app_state()")
-      cli::cli_alert("Unable to find ASM state.")
-    } else {
-      message("FM_set_app_state()")
-      message("Unable to find ASM state.")
-    }
+    FM_message(line="FM_set_app_state()")
+    FM_message(line="Unable to find ASM state.")
+   #if(system.file(package="cli") != ""){
+   #  cli::cli_alert("FM_set_app_state()")
+   #  cli::cli_alert("Unable to find ASM state.")
+   #} else {
+   #  message("FM_set_app_state()")
+   #  message("Unable to find ASM state.")
+   #}
   }
 
 

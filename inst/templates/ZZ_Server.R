@@ -456,6 +456,7 @@
 #'@param session Shiny session variable
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
+#'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return list containing the current state of the app including default
 #'values from the yaml file as well as any changes made by the user. The list
 #'has the following structure:
@@ -776,10 +777,11 @@ code}
 
 #'@export
 #'@title Append Report Elements
-#'@description Description
+#'@description Appends report elements to a formods report.
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
 #'@param rpt Report with the current content of the report which will be appended to in
-#'this function. For details on the structure see the documentation for \code{\link{formods::FM_generate_report}}.
+#'this function. For details on the structure see the documentation for 
+#' \code{\link[onbrand]{template_details}}
 #'@param rpttype Type of report to generate (supported "xlsx", "pptx", "docx").
 #'@param gen_code_only Boolean value indicating that only code should be
 #'generated (\code{FALSE}).
@@ -791,7 +793,7 @@ code}
 #'  \item{msgs:}      Messages to be passed back to the user.
 #'  \item{rpt:}       Report with any additions passed back to the user.
 #'}
-#'@seealso \code{\link{formods::FM_generate_report}}
+#'@seealso \code{\link[formods]{FM_generate_report}}
 ===ZZ===_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
 
   isgood    = TRUE
@@ -1014,6 +1016,7 @@ state}
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
+#'@param full_session  Boolean to indicate if the full test session should be created (default \code{TRUE}).
 #'@return list with the following elements
 #' \itemize{
 #'   \item{isgood:} Boolean indicating the exit status of the function.
@@ -1024,7 +1027,7 @@ state}
 #'}
 #'@examples
 #' sess_res = ===ZZ===_test_mksession(session=list())
-===ZZ===_test_mksession = function(session, id = "===ZZ==="){
+===ZZ===_test_mksession = function(session, id = "===ZZ===", full_session=TRUE){
 
   isgood = TRUE
   rsc    = list()
