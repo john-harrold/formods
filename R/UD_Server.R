@@ -368,7 +368,7 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
     data_file_local = file.path(FM_fetch_user_files_path(state), data_file)
 
     # Copying the temporary form file to the user directory
-    file.copy(data_file_local_form, data_file_local)
+    file.copy(data_file_local_form, data_file_local, overwrite=TRUE)
 
     allowed_extensions = state[["MC"]][["allowed_extensions"]]
     # determining if we need to load data
@@ -380,27 +380,6 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
         sheets = readxl::excel_sheets(data_file_local_form)
       }
       load_data = TRUE
-
-     # # If we have an allowed file type and nothing loaded before then we load
-     # # the file:
-     # if(is.null(state[["UD"]][["data_file_local"]])){
-     #   load_data = TRUE
-     # } else{
-     #   # If there is already a file loaded we need to see
-     #   # if there are any changes. For example if the sheet
-     #   # name has changed.
-     #   # This is triggered when a new file has been uploaded
-     #   if(state[["UD"]][["data_file_local"]] != data_file_local){
-     #     load_data = TRUE
-     #   } else if(!is.null(sheet)){
-     #     # This should be triggered when the sheet has changed
-     #     if(is.null(state[["UD"]][["sheet"]] )){
-     #       load_data = TRUE
-     #     } else if(sheet !=  state[["UD"]][["sheet"]]){
-     #       load_data = TRUE
-     #     }
-     #   }
-     # }
     } else {
       # pulling out the template:
       load_msg = state[["MC"]][["labels"]][["msg_bad_extension"]]

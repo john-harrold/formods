@@ -1,3 +1,7 @@
+# formods 0.1.3
+
+* Fixed bug preventing the same file name from being uploaded.
+
 # formods 0.1.2
 
 * development version
