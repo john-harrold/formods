@@ -544,9 +544,9 @@ FM_fetch_user_files_path = function(state){
   }
 
   if(use_tmpdir){
-    user_dir = file.path(tempdir(), "FM")
+    user_dir = file.path(tempdir(), state[["shiny_token"]], "FM")
   } else{
-    user_dir = file.path(getwd(), "FM")
+    user_dir = file.path(getwd(), state[["shiny_token"]], "FM")
   }
 
   # Making sure the directory exits
@@ -601,8 +601,8 @@ FM_le = function(state, entry, escape_braces=TRUE, entry_type="alert"){
   if(state[["yaml"]][["FM"]][["logging"]][["console"]]){
     for(line in entry){
       FM_message(line=line,
-                 escape_braces=escape_braces, 
-                 entry_type=entry_type) 
+                 escape_braces=escape_braces,
+                 entry_type=entry_type)
       # This will conditionally show the entry if the cli packages is present:
      #if(system.file(package="cli") != ""){
      #  if(escape_braces){
@@ -1055,21 +1055,21 @@ FM_fetch_app_info <- function(session){
   if(found_DT){
     tmp_si_options = si_options
     tmp_si_options[["value"]] = str_replace_all(
-      tmp_si_options[["value"]], 
-      pattern     = "\n", 
+      tmp_si_options[["value"]],
+      pattern     = "\n",
       replacement = "<BR/>")
     tmp_si_options[["value"]] = str_replace_all(
-      tmp_si_options[["value"]], 
-      pattern = " ", 
+      tmp_si_options[["value"]],
+      pattern = " ",
       replacement = "&nbsp;")
     tmp_si_options[["value"]] = paste0(
       "<TT>",
-      tmp_si_options[["value"]], 
-      "<TT>" ) 
+      tmp_si_options[["value"]],
+      "<TT>" )
     tmp_si_options[["option"]] = paste0(
       "<TT>",
-      tmp_si_options[["option"]], 
-      "<TT>" ) 
+      tmp_si_options[["option"]],
+      "<TT>" )
     uiele_options = DT::datatable(tmp_si_options, escape=FALSE)
   }
 
@@ -1181,6 +1181,15 @@ FM_init_state = function(
   state[["dep_mod_ids"]]     = dep_mod_ids
   state[["FM_yaml_file"]]    = FM_yaml_file
   state[["MOD_yaml_file"]]   = MOD_yaml_file
+
+  # If we're not in a shiny environment then 
+  # the token will ne NULL otherwise it will
+  # be a checksum
+  if(is.null(session$token)){
+    state[["shiny_token"]]     = "non_shiny"
+  } else {
+    state[["shiny_token"]]     = session$token
+  }
 
   # Copying yaml files to the user dir so they will be
   # available for export scripts
