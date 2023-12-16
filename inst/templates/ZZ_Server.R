@@ -716,7 +716,8 @@
   # the current element
   ui_ele          = c("element_name")
 
-  # This contains all of the relevant ui_ids in the module
+  # This contains all of the relevant ui_ids in the module. You need to append 
+  # ui_ids that are outside of the current element here as well.
   ui_ids          = c(button_counters,
                       ui_ele,
                      "element_selection")
