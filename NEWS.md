@@ -1,10 +1,10 @@
-# formods 0.1.3
+# formods 0.1.3 (development version)
 
 * Fixed bug preventing the same file name from being uploaded.
+* Fixed bug where user files were stored in the same location for different sessions
 
 # formods 0.1.2
 
-* development version
 * Added `new_module_template()` to create new module templates and `use_formods()` 
 to automatically add the files to a package. 
 * Updated app info in ASM to split up the uiele into diferent components. 

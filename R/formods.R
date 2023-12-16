@@ -276,6 +276,48 @@ has_changed = function(ui_val     = NULL,
 res}
 
 #'@export
+#'@title Detect if a UI element has updated
+#'@description Takes a UI element value and an older value and determines if
+#'it has been modified
+#'@param ui_val     Current value from the UI.
+#'@param old_val    Last value of of the element.
+#'defined.
+#'@return Boolean result of the comparison
+#'@examples
+#' changed_true  = has_updated(ui_val = "a", old_val = "")
+#' changed_true
+#' changed_false = has_updated(ui_val = "a", old_val = "a")
+#' changed_false
+has_updated = function(ui_val     = NULL,
+                       old_val    = NULL){
+  res = FALSE
+
+  # Detecting length differences
+  if(length(ui_val) != length(old_val)){
+    res = TRUE
+  } else if((length(ui_val) == length(old_val)) &
+             length(ui_val) > 1){
+    # here we're comparing vectors
+    if(!all(ui_val %in% old_val)){
+     res = TRUE
+    }
+  } else {
+    # here we're comparing scalers
+    if((length(ui_val)  == 1) &
+       (length(old_val) == 1)){
+      if(ui_val != old_val){
+        res = TRUE
+        #message(paste0("old_val: ", old_val))
+        #message(paste0("ui_val: ",  ui_val))
+      }
+    } else {
+      message("Unknown scenario has_updated:")
+      message(paste0("old_val: ", old_val))
+      message(paste0("ui_val: ",  ui_val ))
+    }
+  }
+res}
+#'@export
 #'@title Removes Hold on UI Element
 #'@description When some buttons are clicked they will change the state of the
 #'system, but other UI components will not detect that change correctly. So those
@@ -662,7 +704,7 @@ isgood}
 #' mr = FM_message("This is a success message", entry_type="success")
 #' mr = FM_message("This is a warning message", entry_type="warning")
 FM_message = function(line, escape_braces=TRUE, entry_type="alert"){
-  if(system.file(package="cli") != ""){
+  if(is_installed("cli") != ""){
     if(escape_braces){
       if(entry_type=="alert"){
         cli::cli_alert("{line}") }
@@ -674,6 +716,12 @@ FM_message = function(line, escape_braces=TRUE, entry_type="alert"){
         cli::cli_alert_info("{line}") }
       if(entry_type=="success"){
         cli::cli_alert_success("{line}") }
+      if(entry_type=="h1"){
+        cli::cli_h1("{line}") }
+      if(entry_type=="h2"){
+        cli::cli_h2("{line}") }
+      if(entry_type=="h3"){
+        cli::cli_h3("{line}") }
     } else {
       if(entry_type=="alert"){
         cli::cli_alert(line)}
@@ -685,6 +733,12 @@ FM_message = function(line, escape_braces=TRUE, entry_type="alert"){
         cli::cli_alert_info(line)}
       if(entry_type=="success"){
         cli::cli_alert_success(line)}
+      if(entry_type=="h1"){
+        cli::cli_h1(line)}
+      if(entry_type=="h2"){
+        cli::cli_h2(line)}
+      if(entry_type=="h3"){
+        cli::cli_h3(line)}
     }
   } else {
     message(line)
@@ -1171,6 +1225,11 @@ FM_init_state = function(
   # This holds all the ui IDs from the interface
   state[[MT]][["ui_ids"]]    = ui_ids
 
+ ## This tracks if the ui_id has been initialized or not:
+ #for(tmp_ui_id in ui_ids){
+ #  state[[MT]][["ui_ids_init"]][[tmp_ui_id]] = FALSE
+ #}
+
   # Messaging passed back to the user
   state[[MT]][["ui_msg"]]    = NULL
 
@@ -1182,7 +1241,7 @@ FM_init_state = function(
   state[["FM_yaml_file"]]    = FM_yaml_file
   state[["MOD_yaml_file"]]   = MOD_yaml_file
 
-  # If we're not in a shiny environment then 
+  # If we're not in a shiny environment then
   # the token will ne NULL otherwise it will
   # be a checksum
   if(is.null(session$token)){
@@ -2209,7 +2268,7 @@ res}
 is_installed = function(pkgname){
 
   res = TRUE
-  if(system.file(package = pkgname) == ""){
+  if(!requireNamespace(pkgname, quietly=TRUE)){
     res = FALSE
   }
 

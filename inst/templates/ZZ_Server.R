@@ -517,11 +517,11 @@
          state[["===ZZ==="]][["ui"]][[ui_name]] = 0
        } else {
          state[["===ZZ==="]][["ui"]][[ui_name]] = ""
+       }
 
-         # initializing the previous ui values as well:
-         if(is.null(state[["===ZZ==="]][["ui_prev"]][[ui_name]])){
-           state[["===ZZ==="]][["ui_old"]][[ui_name]] = state[["===ZZ==="]][["ui"]][[ui_name]]
-         }
+       # initializing the previous ui values as well:
+       if(is.null(state[["===ZZ==="]][["ui_old"]][[ui_name]])){
+         state[["===ZZ==="]][["ui_old"]][[ui_name]] = state[["===ZZ==="]][["ui"]][[ui_name]]
        }
      }
    }
@@ -550,6 +550,7 @@
         change_detected =
           has_changed(ui_val  = state[["===ZZ==="]][["ui"]][[ui_name]],
                       old_val = state[["===ZZ==="]][["button_counters"]][[ui_name]])
+
         if(change_detected){
           formods::FM_le(state, paste0("button click: ", ui_name, " = ", state[["===ZZ==="]][["ui"]][[ui_name]]))
 
@@ -564,6 +565,7 @@
         change_detected =
           has_changed(ui_val  = state[["===ZZ==="]][["ui"]][[ui_name]],
                       old_val = state[["===ZZ==="]][["ui_old"]][[ui_name]])
+
         if(change_detected){
           formods::FM_le(state, paste0("setting ===ELEMENT===: ", ui_name, " = ", paste(state[["===ZZ==="]][["ui"]][[ui_name]], collapse=", ")))
 
@@ -709,18 +711,15 @@
                       "button_clk_copy",
                       "button_clk_new")
 
-  # This contains all of the relevant ui_ids in the module
-  ui_ids          = c(button_counters,
-                      "element_selection",
-                    # "current_element",
-                      "element_name")
 
   # These are the module ui elements that are associated with
   # the current element
-  ui_ele          = c()
+  ui_ele          = c("element_name")
 
-  # This adds the ui_ele ids to the list of ui_ids
-  ui_ids = c(ui_ids, ui_ele)
+  # This contains all of the relevant ui_ids in the module
+  ui_ids          = c(button_counters,
+                      ui_ele,
+                     "element_selection")
 
   # Making all the ui_ids holdable
   ui_hold         = ui_ids
@@ -736,7 +735,6 @@
     ui_ids          = ui_ids,
     ui_hold         = ui_hold,
     session         = session)
-
 
   # Storing the ui_ids for the elements
   state[["===ZZ==="]][["ui_ele"]]               = ui_ele
@@ -992,19 +990,18 @@ res}
   # and create a checksum of those:
   element_ids = names(state[["===ZZ==="]][["elements"]])
   for(element_id in element_ids){
-    # We trigger updates when the dataframe changes:
+    # We trigger updates when the element changes:
     chk_str = paste0(chk_str, ":", state[["===ZZ==="]][["elements"]][[element_id]][["checksum"]])
 
-    # We also trigger updates when the key has changed as well:
-    chk_str = paste0(chk_str, ":", state[["===ZZ==="]][["elements"]][[element_id]][["key"]])
+    #JMH add element_name here?
   }
 
   # This prevents messaging when no change has been made to the module.
   old_chk = state[["===ZZ==="]][["checksum"]]
   new_chk = digest::digest(chk_str, algo=c("md5"))
 
-  if(has_changed(old_chk, new_chk)){
-    state[["===ZZ==="]][["checksum"]] = digest::digest(chk_str, algo=c("md5"))
+  if(has_updated(old_chk, new_chk)){
+    state[["===ZZ==="]][["checksum"]] = new_chk 
     FM_le(state, paste0("module checksum updated:", state[["===ZZ==="]][["checksum"]]))
   }
 
@@ -1249,7 +1246,11 @@ current_element}
   # updating the checksum for the current element
   tmp_ele = element
   tmp_ele[["checksum"]]  = ""
-  element[["checksum"]]  = digest::digest(tmp_ele, algo=c("md5"))
+  tmp_checksum  = digest::digest(tmp_ele, algo=c("md5"))
+  if(has_updated(element[["checksum"]], tmp_checksum)){
+    FM_le(state, paste0("===ELEMENT=== checksum updated: ", tmp_checksum))
+    element[["checksum"]]  = tmp_checksum
+  }
 
   # this updates the current element
   state[["===ZZ==="]][["elements"]][[element_id]] = element
