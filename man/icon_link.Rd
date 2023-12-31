@@ -14,7 +14,7 @@ icon_link(href, target = "_blank", icon_name = "circle-info")
 \item{icon_name}{Name of icon to use (arguemnt to shiny::icon, default: "circle-info")}
 }
 \value{
-A list with a shiny.tag class that can be converted into an HTML string via as.character() and saved to a file with save_html()
+A list with a shiny.tag class that can be converted into an HTML string via as.character() and saved to a file with save_html(). Note if href is \code{NULL} then \code{NULL} is returned.
 }
 \description{
 Creates a link to a Shiny icon

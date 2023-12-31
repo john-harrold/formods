@@ -14,40 +14,32 @@
 #'@import cli
 #'@importFrom digest digest
 #'@importFrom writexl write_xlsx
+.onLoad <- function(libname, pkgname){
 
+  #------------------------------------
+  # Checking for rxpackages
+  # If all the suggested packages are found this will be true:
+  suggested_found = TRUE
+  mr = FM_message("Loading formods", entry_type="h1")
 
-#'@export
-#'@title Fetches Models from Modules in the App
-#'@description  Loops through each specified module ID or all modules if no ID
-#'was specified. For each ID, an attempt will be made to extract any models
-#'available.
-#'@param state Current module state after yaml file has been read
-#'@param session Shiny session variable
-#'@param ids  Vector of ID strings for the modules containing models or
-#'NULL for all modules with models available.
-#'@return list containing the current dataset with the following format:
-#' JMH
-#' \itemize{
-#'   \item{isgood:} Boolean indicating the whether a dataset was found
-#'   (\code{FALSE})
-#'   \item{catalog:} Dataframe containing the a tabular catalog of the
-#'   models found.
-#'   \itemize{
-#'     \item{label:} Text label
-#'   }
-#'   \item{modules:} List with an entry for each module..
-#' }
-#'@examples
-#' # We need a module state and a Shiny session variable
-#' # to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
-#' session = sess_res$session
-#' state   = sess_res$state
-#' mdl = FM_fetch_mdl(state, session)
-#' mdl$catalog
-FM_fetch_mdl = function(state, session, ids=NULL){
+  mr = FM_message("Checking for suggested packages", entry_type="h2")
+
+    pkgs = c(
+      "clipr",       "devtools",  "DT",
+      "flextable",   "ggpubr",    "gtools",
+      "here",        "janitor",   "plotly",
+      "prompter",    "shinybusy", "shinydashboard")
+    for(pkg in pkgs){
+      if(!requireNamespace(pkg, quietly=TRUE)){
+        mr = FM_message(paste0("missing ", pkg), entry_type="danger")
+      } else {
+        mr = FM_message(paste0("found ", pkg), entry_type="success")
+      }
+    }
 }
+
+
+
 
 #'@export
 #'@title Fetches Datasets from Modules in the App
@@ -317,6 +309,7 @@ has_updated = function(ui_val     = NULL,
     }
   }
 res}
+
 #'@export
 #'@title Removes Hold on UI Element
 #'@description When some buttons are clicked they will change the state of the
@@ -695,7 +688,7 @@ isgood}
 #'installed or not.
 #'@param line  Text to display
 #'@param escape_braces Set to \code{TRUE} (default) to escape curly braces in the entry, set to \code{FALSE} to have the values interpreted.
-#'@param entry_type  Set to either "alert"(default), "danger", "info", "success", or "warning"
+#'@param entry_type  Set to either "alert"(default), "danger", "info", "success", "warning", "h1", "h2", or "h3"
 #'@return Returns NULL
 #'@examples
 #' mr = FM_message("This is a normal  message")
@@ -703,6 +696,9 @@ isgood}
 #' mr = FM_message("This is a info    message", entry_type="info")
 #' mr = FM_message("This is a success message", entry_type="success")
 #' mr = FM_message("This is a warning message", entry_type="warning")
+#' mr = FM_message("This is an H1 header",      entry_type="h1")
+#' mr = FM_message("This is an H2 header",      entry_type="h2")
+#' mr = FM_message("This is an H3 header",      entry_type="h3")
 FM_message = function(line, escape_braces=TRUE, entry_type="alert"){
   if(is_installed("cli") != ""){
     if(escape_braces){
@@ -2199,12 +2195,16 @@ res}
 #'@param href URL to link to.
 #'@param target New tab name.
 #'@param icon_name Name of icon to use (arguemnt to shiny::icon, default: "circle-info")
-#'@return A list with a shiny.tag class that can be converted into an HTML string via as.character() and saved to a file with save_html()
+#'@return A list with a shiny.tag class that can be converted into an HTML string via as.character() and saved to a file with save_html(). Note if href is \code{NULL} then \code{NULL} is returned.
 #'@examples
 #' icon_link(href="https://formods.ubiquity.tools")
 icon_link = function(href, target="_blank", icon_name="circle-info"){
 
-  res = tags$a(href=href, target=target, shiny::icon(icon_name))
+  res = NULL
+
+  if(!is.null(href)){
+    res = tags$a(href=href, target=target, shiny::icon(icon_name))
+  }
 
 res}
 
@@ -2419,3 +2419,118 @@ use_formods = function(
   file.copy(from = nmr[["yaml"]][["dest_full"]],   to = tmp_yaml,   overwrite =  overwrite)
   file.copy(from = nmr[["mc"]][["dest_full"]],     to = tmp_mc,     overwrite =  overwrite)
 nmr}
+
+
+#'@export
+#'@title Fetches Models from Modules in the App
+#'@description  Loops through each specified module ID or all modules if no ID
+#'was specified. For each ID, an attempt will be made to extract any models
+#'available.
+#'@param state Current module state after yaml file has been read
+#'@param session Shiny session variable
+#'@param ids  Vector of ID strings for the modules containing models or
+#'NULL for all modules with models available.
+#'@return list containing the current dataset with the following format:
+#' \itemize{
+#'    \item{isgood:} General logical indicator of successfully.
+#'    \item{hasmdl:} Logical indicating if at least one model was found.
+#'    \item{modules:} List of module checksums.
+#'    \item{mdl:} Result of XX_fetch_mdl, see  \code{vignette("making_modules", package = "formods")}
+#'   \item{catalog:} Dataframe containing the a tabular catalog of the
+#'   models found.
+#'   \itemize{
+#'     \item{label:}  Text label for the model.
+#'     \item{object :}  Name of the object that contains the compiled rxode2 model. 
+#'     \item{MOD_TYPE:}  Type of {'formods'} module the model came from. 
+#'     \item{id:} Source {'formods'} Module ID.
+#'     \item{checksum:} Checksum of the module where the model came from.
+#'     \item{MDLchecksum:} Checksum of the model.
+#'     \item{code:}  Code to generate the model.
+#'   }
+#' }
+#'@examples
+#' # We need a module state and a Shiny session variable
+#' # to use this function:
+#' id="UD"
+#' sess_res = UD_test_mksession(session=list(), id=id)
+#' session = sess_res$session
+#' state   = sess_res$state
+#' mdl = FM_fetch_mdl(state, session)
+#' mdl$catalog
+FM_fetch_mdl = function(state, session, ids=NULL){
+
+
+  hasmdl  = FALSE
+  isgood  = TRUE
+  modules = list()
+  catalog = NULL
+  msgs    = c()
+  mdl     = list()
+
+
+  # If we're null then we walk through the session variable and pull out all
+  # the IDs to be used below
+  if(is.null(ids)){
+    # Pulling out the app state:
+    app_state = FM_fetch_app_state(session)
+    for(mod_state in names(app_state)){
+      ids = c(ids, app_state[[mod_state]]$id)
+    }
+  }
+
+  # Walking through each module id and attempting to extract models
+  for(tmp_id in ids){
+
+    # pulling out the current module state and creating the
+    # name of the model fetching function for that module
+    tmp_state    = FM_fetch_mod_state(session, tmp_id)
+    tmp_MOD_TYPE = tmp_state[["MOD_TYPE"]]
+    MOD_FUNC     = paste0(tmp_MOD_TYPE, "_fetch_mdl")
+
+    # If that module has a mdl fetching function then we try to fetch it:
+    if(exists(MOD_FUNC, mode="function")){
+#
+#     # Function call used to fetch a dataset
+      fetch_res = NULL
+      FUNC_CALL = paste0("fetch_res = ", MOD_FUNC,"(state = tmp_state)")
+      eval(parse(text=FUNC_CALL))
+
+      if(fetch_res[["hasmdl"]]){
+        # We've found at least one model
+        hasmdl = TRUE
+        mdl = c(mdl, fetch_res[["mdl"]])
+      }
+    }
+  }
+
+  if(hasmdl){
+    # Creating catalog and modules elements:
+    for(mdlname in names(mdl)){
+      catalog = rbind(
+      catalog,
+      data.frame(
+        label       = mdl[[mdlname]][["label"]],
+        object      = mdlname,
+        MOD_TYPE    = mdl[[mdlname]][["MOD_TYPE"]],
+        id          = mdl[[mdlname]][["id"]],
+        checksum    = mdl[[mdlname]][["checksum"]],
+        MDLchecksum = mdl[[mdlname]][["MDLchecksum"]],
+        code        = mdl[[mdlname]][["code"]])
+      )
+
+      modules[[ mdl[[mdlname]][["MOD_TYPE"]]]  ][[ mdl[[mdlname]][["id"]] ]] = mdl[[mdlname]][["checksum"]]
+    }
+  } else {
+    isgood = FALSE
+  }
+
+  # Packing everything up to be returned to the user
+  res = list(isgood  = isgood,
+             hasmdl  = hasmdl,
+             catalog = catalog,
+             modules = modules,
+             mdl     = mdl)
+
+
+res}
+

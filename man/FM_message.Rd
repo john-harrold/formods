@@ -11,7 +11,7 @@ FM_message(line, escape_braces = TRUE, entry_type = "alert")
 
 \item{escape_braces}{Set to \code{TRUE} (default) to escape curly braces in the entry, set to \code{FALSE} to have the values interpreted.}
 
-\item{entry_type}{Set to either "alert"(default), "danger", "info", "success", or "warning"}
+\item{entry_type}{Set to either "alert"(default), "danger", "info", "success", "warning", "h1", "h2", or "h3"}
 }
 \value{
 Returns NULL
@@ -26,4 +26,7 @@ mr = FM_message("This is a danger  message", entry_type="danger")
 mr = FM_message("This is a info    message", entry_type="info")
 mr = FM_message("This is a success message", entry_type="success")
 mr = FM_message("This is a warning message", entry_type="warning")
+mr = FM_message("This is an H1 header",      entry_type="h1")
+mr = FM_message("This is an H2 header",      entry_type="h2")
+mr = FM_message("This is an H3 header",      entry_type="h3")
 }

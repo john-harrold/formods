@@ -16,16 +16,22 @@ NULL for all modules with models available.}
 }
 \value{
 list containing the current dataset with the following format:
-JMH
 \itemize{
-  \item{isgood:} Boolean indicating the whether a dataset was found
-  (\code{FALSE})
+   \item{isgood:} General logical indicator of successfully.
+   \item{hasmdl:} Logical indicating if at least one model was found.
+   \item{modules:} List of module checksums.
+   \item{mdl:} Result of XX_fetch_mdl, see  \code{vignette("making_modules", package = "formods")}
   \item{catalog:} Dataframe containing the a tabular catalog of the
   models found.
   \itemize{
-    \item{label:} Text label
+    \item{label:}  Text label for the model.
+    \item{object :}  Name of the object that contains the compiled rxode2 model. 
+    \item{MOD_TYPE:}  Type of {'formods'} module the model came from. 
+    \item{id:} Source {'formods'} Module ID.
+    \item{checksum:} Checksum of the module where the model came from.
+    \item{MDLchecksum:} Checksum of the model.
+    \item{code:}  Code to generate the model.
   }
-  \item{modules:} List with an entry for each module..
 }
 }
 \description{

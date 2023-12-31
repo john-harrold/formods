@@ -1,4 +1,8 @@
-# formods 0.1.3 (development version)
+# formods 0.1.4 (development version)
+
+* Added h1, h2 and h3 to `FM_message()`
+
+# formods 0.1.3 
 
 * Fixed bug preventing the same file name from being uploaded.
 * Fixed bug where user files were stored in the same location for different sessions

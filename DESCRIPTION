@@ -49,8 +49,8 @@ Suggests:
   plotly,
   prompter,
   rmarkdown,
-  shinydashboard,
   shinybusy,
+  shinydashboard,
   testthat (>= 3.0.0),
   utils
 RoxygenNote: 7.2.3
