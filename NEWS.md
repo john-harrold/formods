@@ -1,6 +1,9 @@
 # formods 0.1.4 (development version)
 
 * Added h1, h2 and h3 to `FM_message()`
+* Added `FM_fetch_mdl()`
+* The `icon_link()` functino can handle NULL input
+* Added `has_updated()`
 
 # formods 0.1.3 
 

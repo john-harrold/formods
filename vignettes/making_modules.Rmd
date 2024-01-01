@@ -107,6 +107,26 @@ The module template will create a standard set of functions for you. The `MM` be
         -   `code` Complete code to build dataset.
         -   `checksum` Module checksum.
         -   `DSchecksum` Dataset checksum.
+-   `MM_fetch_mdl` If a module provides data sets to be used in other
+    modules you need to create this function. It should return at least
+    the following:
+    -   `hasmdl` Boolean variable indicating if the modules currently has
+        any exportable models.
+    -   `isgood` General return status of the funciton. Set to FALSE if
+        any errors were encountered. 
+    -   `msgs` A character vector of any messages to pass back to the
+        user.
+    -   `mdl` A module can provide multiple models. This is a list with
+        the following elements for each model:
+        -   `label` Text label for the model. 
+        -   `MOD_TYPE` Short name for the type of module.
+        -   `id` module ID.
+        -   `rx_obj` The rxode2 object name that holds the model. 
+        -   `fcn_def` Text to define the model
+        -   `DSMETA` Verbose metadata describing model.
+        -   `code` Complete code to build the model.
+        -   `checksum` Checksum of the module the model came from.
+        -   `DSchecksum` Checksum of the model.
 -   `MM_test_mksession` When testing outside of Shiny it is useful to
     have a prepopulated session, intput, etc objects with actual data.
     Each module shoudl have a `test_mksession` function that populates

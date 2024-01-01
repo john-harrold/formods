@@ -2435,7 +2435,7 @@ nmr}
 #'    \item{isgood:} General logical indicator of successfully.
 #'    \item{hasmdl:} Logical indicating if at least one model was found.
 #'    \item{modules:} List of module checksums.
-#'    \item{mdl:} Result of XX_fetch_mdl, see  \code{vignette("making_modules", package = "formods")}
+#'    \item{mdl:} Result of MM_fetch_mdl, see  \code{vignette("making_modules", package = "formods")}
 #'   \item{catalog:} Dataframe containing the a tabular catalog of the
 #'   models found.
 #'   \itemize{
