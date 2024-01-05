@@ -480,13 +480,6 @@ FM_fetch_app_code = function(session, state, mod_ids){
         if(!is.null(MOD_TYPE)){
           if(MOD_TYPE == gen_mod){
 
-           ## Getting the preamble code. This just collects it in
-           ## preamble_chunks and will be appended to the top down below.
-           #mod_deps = FM_fetch_deps(state=tmp_state, session = session)
-           #if("package_code" %in% names(mod_deps)){
-           #  preamble_chunks = c(preamble_chunks, mod_deps$package_code)
-           #}
-
             MOD_FUNC  = paste0(MOD_TYPE, "_fetch_code")
             # We make sure the code generation function exists
             # and if it does we generate the code for that module
@@ -1220,11 +1213,6 @@ FM_init_state = function(
 
   # This holds all the ui IDs from the interface
   state[[MT]][["ui_ids"]]    = ui_ids
-
- ## This tracks if the ui_id has been initialized or not:
- #for(tmp_ui_id in ui_ids){
- #  state[[MT]][["ui_ids_init"]][[tmp_ui_id]] = FALSE
- #}
 
   # Messaging passed back to the user
   state[[MT]][["ui_msg"]]    = NULL

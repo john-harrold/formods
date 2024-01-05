@@ -414,6 +414,29 @@
         session = session)
     })
     #------------------------------------
+    # Copying element code to the clipboard
+    observeEvent(input$button_clk_clip, {
+      state = ===ZZ===_fetch_state(id              = id,
+                             id_ASM          = id_ASM,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
+
+      # This is all conditional on the whether clipr is installed $
+      # and if the app isn't deployed
+      if((system.file(package="clipr") != "") &
+         !deployed){
+
+          # Pulling out the current element
+          current_ele = ===ZZ===_fetch_current_element(state)
+          uiele = current_ele[["code"]]
+
+          clipr::write_clip(uiele)
+        }
+    })
+    #------------------------------------
     # Removing holds
     remove_hold_listen  <- reactive({
         list(
@@ -716,7 +739,7 @@
   # the current element
   ui_ele          = c("element_name")
 
-  # This contains all of the relevant ui_ids in the module. You need to append 
+  # This contains all of the relevant ui_ids in the module. You need to append
   # ui_ids that are outside of the current element here as well.
   ui_ids          = c(button_counters,
                       ui_ele,
@@ -779,7 +802,7 @@ code}
 #'@description Appends report elements to a formods report.
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
 #'@param rpt Report with the current content of the report which will be appended to in
-#'this function. For details on the structure see the documentation for 
+#'this function. For details on the structure see the documentation for
 #' \code{\link[onbrand]{template_details}}
 #'@param rpttype Type of report to generate (supported "xlsx", "pptx", "docx").
 #'@param gen_code_only Boolean value indicating that only code should be
@@ -897,7 +920,7 @@ res}
 #'    \item{MOD_TYPE:}   Type of module.
 #'    \item{id:}         Module ID.
 #'    \item{rx_obj:}     The rxode2 object name that holds the model.
-#'    \item{fcn_def:}    Text to define the model
+#'    \item{fcn_def:}    Text to define the model.
 #'    \item{MDLMETA:}    Notes about the model.
 #'    \item{code:}       Code to generate the model.
 #'    \item{checksum:}   Module checksum.
@@ -1002,8 +1025,8 @@ res}
   new_chk = digest::digest(chk_str, algo=c("md5"))
 
   if(has_updated(old_chk, new_chk)){
-    state[["===ZZ==="]][["checksum"]] = new_chk 
-    FM_le(state, paste0("module checksum updated:", state[["===ZZ==="]][["checksum"]]))
+    state[["===ZZ==="]][["checksum"]] = new_chk
+    FM_le(state, paste0("module checksum updated: ", state[["===ZZ==="]][["checksum"]]))
   }
 
 state}
@@ -1247,6 +1270,7 @@ current_element}
   # updating the checksum for the current element
   tmp_ele = element
   tmp_ele[["checksum"]]  = ""
+
   tmp_checksum  = digest::digest(tmp_ele, algo=c("md5"))
   if(has_updated(element[["checksum"]], tmp_checksum)){
     FM_le(state, paste0("===ELEMENT=== checksum updated: ", tmp_checksum))

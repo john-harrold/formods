@@ -1,5 +1,7 @@
 #library(formods)
 library(shinydashboard)
+library(prompter)
+library(clipr)
 
 #https://fontawesome.com/icons?from=io
 

@@ -121,7 +121,8 @@ The module template will create a standard set of functions for you. The `MM` be
         -   `label` Text label for the model. 
         -   `MOD_TYPE` Short name for the type of module.
         -   `id` module ID.
-        -   `rx_obj` The rxode2 object name that holds the model. 
+        -   `rx_obj` The rxode2 object that holds the model. 
+        -   `rx_obj_name` The rxode2 object name in generated code.
         -   `fcn_def` Text to define the model
         -   `DSMETA` Verbose metadata describing model.
         -   `code` Complete code to build the model.
