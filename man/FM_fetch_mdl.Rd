@@ -25,8 +25,8 @@ list containing the current dataset with the following format:
   models found.
   \itemize{
     \item{label:}  Text label for the model.
-    \item{object :}  Name of the object that contains the compiled rxode2 model. 
-    \item{MOD_TYPE:}  Type of {'formods'} module the model came from. 
+    \item{object :}  Name of the object that contains the compiled rxode2 model.
+    \item{MOD_TYPE:}  Type of {'formods'} module the model came from.
     \item{id:} Source {'formods'} Module ID.
     \item{checksum:} Checksum of the module where the model came from.
     \item{MDLchecksum:} Checksum of the model.

@@ -181,8 +181,8 @@ autocast = function(ui_input, quote_char=TRUE){
 
 
   ui_input_num = as.numeric(as.character(ui_input))
-
-  if(any(is.na(ui_input_num))){
+                                # NULL returns numeric length zero
+  if(any(is.na(ui_input_num)) | (length(ui_input_num) == 0)){
     res = as.character(ui_input)
     if(quote_char){
       res = paste0('"', res, '"')
@@ -309,7 +309,6 @@ has_updated = function(ui_val     = NULL,
     }
   }
 res}
-
 #'@export
 #'@title Removes Hold on UI Element
 #'@description When some buttons are clicked they will change the state of the
@@ -479,6 +478,13 @@ FM_fetch_app_code = function(session, state, mod_ids){
         MOD_TYPE  = tmp_state[["MOD_TYPE"]]
         if(!is.null(MOD_TYPE)){
           if(MOD_TYPE == gen_mod){
+
+           ## Getting the preamble code. This just collects it in
+           ## preamble_chunks and will be appended to the top down below.
+           #mod_deps = FM_fetch_deps(state=tmp_state, session = session)
+           #if("package_code" %in% names(mod_deps)){
+           #  preamble_chunks = c(preamble_chunks, mod_deps$package_code)
+           #}
 
             MOD_FUNC  = paste0(MOD_TYPE, "_fetch_code")
             # We make sure the code generation function exists
@@ -1213,6 +1219,11 @@ FM_init_state = function(
 
   # This holds all the ui IDs from the interface
   state[[MT]][["ui_ids"]]    = ui_ids
+
+ ## This tracks if the ui_id has been initialized or not:
+ #for(tmp_ui_id in ui_ids){
+ #  state[[MT]][["ui_ids_init"]][[tmp_ui_id]] = FALSE
+ #}
 
   # Messaging passed back to the user
   state[[MT]][["ui_msg"]]    = NULL
@@ -2408,7 +2419,6 @@ use_formods = function(
   file.copy(from = nmr[["mc"]][["dest_full"]],     to = tmp_mc,     overwrite =  overwrite)
 nmr}
 
-
 #'@export
 #'@title Fetches Models from Modules in the App
 #'@description  Loops through each specified module ID or all modules if no ID
@@ -2428,8 +2438,8 @@ nmr}
 #'   models found.
 #'   \itemize{
 #'     \item{label:}  Text label for the model.
-#'     \item{object :}  Name of the object that contains the compiled rxode2 model. 
-#'     \item{MOD_TYPE:}  Type of {'formods'} module the model came from. 
+#'     \item{object :}  Name of the object that contains the compiled rxode2 model.
+#'     \item{MOD_TYPE:}  Type of {'formods'} module the model came from.
 #'     \item{id:} Source {'formods'} Module ID.
 #'     \item{checksum:} Checksum of the module where the model came from.
 #'     \item{MDLchecksum:} Checksum of the model.
@@ -2477,8 +2487,8 @@ FM_fetch_mdl = function(state, session, ids=NULL){
 
     # If that module has a mdl fetching function then we try to fetch it:
     if(exists(MOD_FUNC, mode="function")){
-#
-#     # Function call used to fetch a dataset
+      #
+      #     # Function call used to fetch a dataset
       fetch_res = NULL
       FUNC_CALL = paste0("fetch_res = ", MOD_FUNC,"(state = tmp_state)")
       eval(parse(text=FUNC_CALL))
@@ -2495,15 +2505,15 @@ FM_fetch_mdl = function(state, session, ids=NULL){
     # Creating catalog and modules elements:
     for(mdlname in names(mdl)){
       catalog = rbind(
-      catalog,
-      data.frame(
-        label       = mdl[[mdlname]][["label"]],
-        object      = mdlname,
-        MOD_TYPE    = mdl[[mdlname]][["MOD_TYPE"]],
-        id          = mdl[[mdlname]][["id"]],
-        checksum    = mdl[[mdlname]][["checksum"]],
-        MDLchecksum = mdl[[mdlname]][["MDLchecksum"]],
-        code        = mdl[[mdlname]][["code"]])
+        catalog,
+        data.frame(
+          label       = mdl[[mdlname]][["label"]],
+          object      = mdlname,
+          MOD_TYPE    = mdl[[mdlname]][["MOD_TYPE"]],
+          id          = mdl[[mdlname]][["id"]],
+          checksum    = mdl[[mdlname]][["checksum"]],
+          MDLchecksum = mdl[[mdlname]][["MDLchecksum"]],
+          code        = mdl[[mdlname]][["code"]])
       )
 
       modules[[ mdl[[mdlname]][["MOD_TYPE"]]]  ][[ mdl[[mdlname]][["id"]] ]] = mdl[[mdlname]][["checksum"]]
@@ -2520,5 +2530,39 @@ FM_fetch_mdl = function(state, session, ids=NULL){
              mdl     = mdl)
 
 
-res}
+  res}
 
+#'@export
+#'@title Implementation of the \code{linspace} Function from Matlab
+#'@description Creates a vector of n elements equally spaced apart.
+#'
+#'@param a initial number
+#'@param b final number
+#'@param n number of elements  (integer >= 2)
+#'
+#'@return vector of numbers from \code{a} to \code{b} with
+#'\code{n} linearly spaced apart
+#'@examples
+#' linspace(0,100, 20)
+linspace = function(a, b, n=100){
+   isgood = TRUE
+
+   n = as.integer(n)
+
+   if(!is.integer(n)){
+     isgood = FALSE }
+
+   if(n < 2){
+     isgood = FALSE }
+
+   if(!isgood){
+     message("#> linspace error:")
+     message("#> n should be a positive integer >= 2 ")
+     message("#> defaulting to 100")
+     n = 100
+   }
+
+   step = (b-a)/(n-1)
+   return(seq(a,b,step))
+
+}

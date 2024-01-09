@@ -18,6 +18,7 @@ reference:
     - has_updated
     - icon_link
     - is_installed
+    - linspace
     - new_module_template
     - remove_hold
     - set_hold
