@@ -776,6 +776,13 @@
   state = ===ZZ===_update_checksum(state)
 
   FM_le(state, "State initialized")
+
+  # Saving the state (must be done before FM_fetch_deps below)
+  FM_set_mod_state(session=session, id=id, state=state)
+
+  # Setting the module dependencies
+  state[["===ZZ==="]][["mod_deps"]] = FM_fetch_deps(state, session)
+
 state}
 
 #'@export
@@ -783,14 +790,7 @@ state}
 #'@description Fetches the code to generate results seen in the app
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
 #'@return Character object vector with the lines of code
-#'@examples
-#' # We need a module state:
-#' sess_res = ===ZZ===_test_mksession(session=list())
-#' state = sess_res$state
-#'
-#' code = ===ZZ===_fetch_code(state)
-#'
-#' cat(code)
+#'@example inst/test_apps/===ZZ===_funcs.R
 ===ZZ===_fetch_code = function(state){
 
   code = NULL
@@ -994,17 +994,7 @@ res}
 #'downstream updates
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
 #'@return ===ZZ=== state object with the checksum updated
-#'@examples
-#' # Within shiny both session and input variables will exist,
-#' # this creates examples here for testing purposes:
-#' sess_res = ===ZZ===_test_mksession(session=list())
-#' session = sess_res$session
-#' input   = sess_res$input
-#'
-#' # We also need a state variable
-#' state = sess_res$state
-#'
-#' state = ===ZZ===_update_checksum(state)
+#'@example inst/test_apps/===ZZ===_funcs.R
 ===ZZ===_update_checksum     = function(state){
 
   # checksum string
@@ -1083,37 +1073,7 @@ state}
 #'@return ===ZZ=== state object containing a new ===ELEMENT=== and that
 #'===ELEMENT=== is set as the current active ===ELEMENT===. See the help for
 #'\code{===ZZ===_fetch_state()} for ===ELEMENT== format.
-#'@examples
-#' sess_res = ===ZZ===_test_mksession(session=list())
-#' session = sess_res$session
-#' input   = sess_res$input
-#'
-#' # Configuration files
-#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
-#' MOD_yaml_file = system.file(package = "===PKG===", "templates", "===ZZ===.yaml")
-#'
-#' # Creating an empty state object
-#' state = ===ZZ===_fetch_state(id              = "===ZZ===",
-#'                        input           = input,
-#'                        session         = session,
-#'                        FM_yaml_file    = FM_yaml_file,
-#'                        MOD_yaml_file   = MOD_yaml_file,
-#'                        react_state     = NULL)
-#'
-#' # Creates a new empty element
-#' state = ===ZZ===_new_element(state)
-#'
-#' # Delete the current element
-#' state = ===ZZ===_del_current_element(state)
-#'
-#' # Fetch a list of the current element
-#' element = ===ZZ===_fetch_current_element(state)
-#'
-#' # You can modify the element
-#' element[["name"]] = "A more descriptive name"
-#'
-#' # You can now place element back in the state
-#' state = ===ZZ===_set_current_element(state, element)
+#'@example inst/test_apps/===ZZ===_funcs.R
 ===ZZ===_new_element = function(state){
 
   # Incrementing the element counter
@@ -1130,13 +1090,16 @@ state}
     list(
          # internal use only
          isgood                 = TRUE,
+         # This will hold object names used in generated code
+         objs                   = list(
+           element_object_name    = element_object_name
+         ),
          # This will hold the ui values for the current element
          ui                     = list(
            element_name  = paste0("===ELEMENT=== ", state[["===ZZ==="]][["element_cntr"]])
            ),
          id                     = element_id,
          idx                    = state[["===ZZ==="]][["element_cntr"]],
-         element_object_name    = element_object_name,
          code_previous          = NULL,
          # user facing
          # This is used if you build the element in a layering method sort of
@@ -1184,37 +1147,7 @@ state}
 #'@return List containing the details of the active data view. The structure
 #'of this list is the same as the structure of \code{state$===ZZ===$elements} in the output of
 #'\code{===ZZ===_fetch_state()}.
-#'@examples
-#' sess_res = ===ZZ===_test_mksession(session=list())
-#' session = sess_res$session
-#' input   = sess_res$input
-#'
-#' # Configuration files
-#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
-#' MOD_yaml_file = system.file(package = "===PKG===", "templates", "===ZZ===.yaml")
-#'
-#' # Creating an empty state object
-#' state = ===ZZ===_fetch_state(id              = "===ZZ===",
-#'                        input           = input,
-#'                        session         = session,
-#'                        FM_yaml_file    = FM_yaml_file,
-#'                        MOD_yaml_file   = MOD_yaml_file,
-#'                        react_state     = NULL)
-#'
-#' # Creates a new empty element
-#' state = ===ZZ===_new_element(state)
-#'
-#' # Delete the current element
-#' state = ===ZZ===_del_current_element(state)
-#'
-#' # Fetch a list of the current element
-#' element = ===ZZ===_fetch_current_element(state)
-#'
-#' # You can modify the element
-#' element[["name"]] = "A more descriptive name"
-#'
-#' # You can now place element back in the state
-#' state = ===ZZ===_set_current_element(state, element)
+#'@example inst/test_apps/===ZZ===_funcs.R
 ===ZZ===_fetch_current_element    = function(state){
 
   element_id = state[["===ZZ==="]][["current_element"]]
@@ -1232,37 +1165,7 @@ current_element}
 #'@param element Element list from \code{===ZZ===_fetch_current_element()}
 #'@return ===ZZ=== state object with the current ===ELEMENT=== set using the
 #'supplied value.
-#'@examples
-#' sess_res = ===ZZ===_test_mksession(session=list())
-#' session = sess_res$session
-#' input   = sess_res$input
-#'
-#' # Configuration files
-#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
-#' MOD_yaml_file = system.file(package = "===PKG===", "templates", "===ZZ===.yaml")
-#'
-#' # Creating an empty state object
-#' state = ===ZZ===_fetch_state(id              = "===ZZ===",
-#'                        input           = input,
-#'                        session         = session,
-#'                        FM_yaml_file    = FM_yaml_file,
-#'                        MOD_yaml_file   = MOD_yaml_file,
-#'                        react_state     = NULL)
-#'
-#' # Creates a new empty element
-#' state = ===ZZ===_new_element(state)
-#'
-#' # Delete the current element
-#' state = ===ZZ===_del_current_element(state)
-#'
-#' # Fetch a list of the current element
-#' element = ===ZZ===_fetch_current_element(state)
-#'
-#' # You can modify the element
-#' element[["name"]] = "A more descriptive name"
-#'
-#' # You can now place element back in the state
-#' state = ===ZZ===_set_current_element(state, element)
+#'@example inst/test_apps/===ZZ===_funcs.R
 ===ZZ===_set_current_element    = function(state, element){
 
   element_id = state[["===ZZ==="]][["current_element"]]
@@ -1291,37 +1194,7 @@ state}
 #'If that is the last element, then a new default will be added.
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
 #'@return ===ZZ=== state object with the current ===ELEMENT=== deleted.
-#'@examples
-#' sess_res = ===ZZ===_test_mksession(session=list())
-#' session = sess_res$session
-#' input   = sess_res$input
-#'
-#' # Configuration files
-#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
-#' MOD_yaml_file = system.file(package = "===PKG===", "templates", "===ZZ===.yaml")
-#'
-#' # Creating an empty state object
-#' state = ===ZZ===_fetch_state(id              = "===ZZ===",
-#'                        input           = input,
-#'                        session         = session,
-#'                        FM_yaml_file    = FM_yaml_file,
-#'                        MOD_yaml_file   = MOD_yaml_file,
-#'                        react_state     = NULL)
-#'
-#' # Creates a new empty element
-#' state = ===ZZ===_new_element(state)
-#'
-#' # Delete the current element
-#' state = ===ZZ===_del_current_element(state)
-#'
-#' # Fetch a list of the current element
-#' element = ===ZZ===_fetch_current_element(state)
-#'
-#' # You can modify the element
-#' element[["name"]] = "A more descriptive name"
-#'
-#' # You can now place element back in the state
-#' state = ===ZZ===_set_current_element(state, element)
+#'@example inst/test_apps/===ZZ===_funcs.R
 ===ZZ===_del_current_element    = function(state){
 
   # We need the current element and corresponding ID

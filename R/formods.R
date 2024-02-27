@@ -2312,7 +2312,9 @@ new_module_template = function(
     server = list(source = system.file(package="formods", "templates", "ZZ_Server.R"),
                   dest   = paste0(SN, "_Server.R")),
     yaml   = list(source = system.file(package="formods", "templates", "ZZ.yaml"),
-                  dest   = paste0(SN, ".yaml"))
+                  dest   = paste0(SN, ".yaml")),
+    funcs  = list(source = system.file(package="formods", "templates", "ZZ_funcs.R"),
+                  dest   = paste0(SN, "_funcs.R"))
   )
 
   # Placeholder substitutions
@@ -2405,18 +2407,21 @@ use_formods = function(
           element  = element,
           file_dir = tempdir())
 
-  tmp_server = file.path(here::here(), "R", nmr[["server"]][["dest"]])
+  tmp_server = file.path(here::here(), "R",                 nmr[["server"]][["dest"]])
   tmp_yaml   = file.path(here::here(), "inst", "templates", nmr[["yaml"]][["dest"]])
   tmp_mc     = file.path(here::here(), "inst", "templates", nmr[["mc"]][["dest"]])
+  tmp_funcs  = file.path(here::here(), "inst", "test_apps", nmr[["funcs"]][["dest"]])
 
   message("Creating module files:")
   message(paste0(" - ", tmp_server))
   message(paste0(" - ", tmp_yaml))
   message(paste0(" - ", tmp_mc))
+  message(paste0(" - ", tmp_funcs))
 
-  file.copy(from = nmr[["server"]][["dest_full"]], to = tmp_server, overwrite =  overwrite)
-  file.copy(from = nmr[["yaml"]][["dest_full"]],   to = tmp_yaml,   overwrite =  overwrite)
-  file.copy(from = nmr[["mc"]][["dest_full"]],     to = tmp_mc,     overwrite =  overwrite)
+  file.copy(from = nmr[["server"]][["dest_full"]],  to = tmp_server,  overwrite =  overwrite)
+  file.copy(from = nmr[["yaml"]][["dest_full"]],    to = tmp_yaml,    overwrite =  overwrite)
+  file.copy(from = nmr[["mc"]][["dest_full"]],      to = tmp_mc,      overwrite =  overwrite)
+  file.copy(from = nmr[["funcs"]][["dest_full"]],   to = tmp_funcs,   overwrite =  overwrite)
 nmr}
 
 #'@export
