@@ -65,6 +65,10 @@ use_formods(SN          = "MM",
 -   `MM.yaml`: This module configuration file contains the the minimal
     elements expected, but you can add your own fields to suit your
     modules needs (found in `inst/templates`).
+-   `MM_funcs.R`: This script contains example code for the different elements 
+    of the module that can be used in the function examples and also to quickly 
+    test the different module functions while you develop them 
+    (found in `inst/test_apps`).
 
 # Expected functions
 

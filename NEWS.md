@@ -1,10 +1,12 @@
 # formods 0.1.4 (development version)
 
-* Added h1, h2 and h3 to `FM_message()`
-* Added `FM_fetch_mdl()`
-* The `icon_link()` function can handle NULL input
-* Added `has_updated()`
-* Added copy to clipboard functionality to the ZZ_Server.R template
+* Added h1, h2 and h3 to `FM_message()`.
+* Added `FM_fetch_mdl()`.
+* The `icon_link()` function can handle NULL input.
+* Added `has_updated()`.
+* Added copy to clipboard functionality to the ZZ_Server.R template.
+* Added `NULL` support for `autocast()`.
+* Abstracted function examples in module template out into a separate file (inst/templates/ZZ_funcs.R)
 
 # formods 0.1.3 
 

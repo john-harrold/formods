@@ -4,8 +4,10 @@ MC:
 # The include section is optional. You can use this section to copy files 
 # from the directory where you are running the app to the user directory to be
 # used in the app and when saved. The source and dest options can be a path
-# command like below or a double
-# quoted string: '"/path/to/file"'
+# command like below or a double  quoted string: 
+#
+# '"/path/to/file"'
+#
 # The dest should be relative to user directory (think the root of the zip
 # file that is exported). See formods.yaml for examples. 
 #
@@ -15,7 +17,7 @@ MC:
 #       source: 'file.path(system.file(package="onbrand"), "templates", "report.docx")'
 #       dest:   'file.path("config","report.docx")'
   code: # module specific code options
-    packages: ["XXX"]
+    packages: ["XXX"] # Set to NULL if there are no package dependencies
     readOnly: TRUE
     mode:     r
   # Controls what is shown in the compact ui mode:

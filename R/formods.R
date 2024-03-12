@@ -2381,7 +2381,7 @@ use_formods = function(
   if(is.null(repo_root)){
     if(system.file(package="here") == ""){
       message("The repo_root is not specified and the here package is not installed.")
-      message("You need to either specify the repo_root or install the hear package.")
+      message("You need to either specify the repo_root or install the here package.")
       stop("use_formod()")
      } else{
        repo_root = here::here()
@@ -2398,6 +2398,10 @@ use_formods = function(
     dir.create(template_dir, recursive=TRUE)
   }
 
+  test_apps_dir = file.path(repo_root, "inst", "test_apps")
+  if(!dir.exists(test_apps_dir)){
+    dir.create(test_apps_dir, recursive=TRUE)
+  }
 
   # Creating the new template files in the temp directory
   nmr = new_module_template(
@@ -2407,10 +2411,10 @@ use_formods = function(
           element  = element,
           file_dir = tempdir())
 
-  tmp_server = file.path(here::here(), "R",                 nmr[["server"]][["dest"]])
-  tmp_yaml   = file.path(here::here(), "inst", "templates", nmr[["yaml"]][["dest"]])
-  tmp_mc     = file.path(here::here(), "inst", "templates", nmr[["mc"]][["dest"]])
-  tmp_funcs  = file.path(here::here(), "inst", "test_apps", nmr[["funcs"]][["dest"]])
+  tmp_server = file.path(repo_root, "R",                 nmr[["server"]][["dest"]])
+  tmp_yaml   = file.path(repo_root, "inst", "templates", nmr[["yaml"]][["dest"]])
+  tmp_mc     = file.path(repo_root, "inst", "templates", nmr[["mc"]][["dest"]])
+  tmp_funcs  = file.path(repo_root, "inst", "test_apps", nmr[["funcs"]][["dest"]])
 
   message("Creating module files:")
   message(paste0(" - ", tmp_server))

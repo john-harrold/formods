@@ -2,8 +2,8 @@
 % Please edit documentation in R/formods.R
 \docType{package}
 \name{formods}
-\alias{formods}
 \alias{formods-package}
+\alias{formods}
 \title{formods: Shiny modules for common tasks.}
 \description{
 Shiny apps can often make use of the same key elements, this package
