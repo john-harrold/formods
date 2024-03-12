@@ -20,9 +20,8 @@
   # Checking for rxpackages
   # If all the suggested packages are found this will be true:
   suggested_found = TRUE
-  mr = FM_message("Loading formods", entry_type="h1")
-
-  mr = FM_message("Checking for suggested packages", entry_type="h2")
+# mr = FM_message("Loading formods", entry_type="h1")
+# mr = FM_message("Checking for suggested packages", entry_type="h2")
 
     pkgs = c(
       "clipr",       "devtools",  "DT",
@@ -31,9 +30,9 @@
       "prompter",    "shinybusy", "shinydashboard")
     for(pkg in pkgs){
       if(!requireNamespace(pkg, quietly=TRUE)){
-        mr = FM_message(paste0("missing ", pkg), entry_type="danger")
+#       mr = FM_message(paste0("missing ", pkg), entry_type="danger")
       } else {
-        mr = FM_message(paste0("found ", pkg), entry_type="success")
+#       mr = FM_message(paste0("found ", pkg), entry_type="success")
       }
     }
 }
@@ -2448,8 +2447,8 @@ nmr}
 #'   \itemize{
 #'     \item{label:}  Text label for the model.
 #'     \item{object :}  Name of the object that contains the compiled rxode2 model.
-#'     \item{MOD_TYPE:}  Type of {'formods'} module the model came from.
-#'     \item{id:} Source {'formods'} Module ID.
+#'     \item{MOD_TYPE:}  Type of 'formods' module the model came from.
+#'     \item{id:} Source 'formods' Module ID.
 #'     \item{checksum:} Checksum of the module where the model came from.
 #'     \item{MDLchecksum:} Checksum of the model.
 #'     \item{code:}  Code to generate the model.
