@@ -866,7 +866,7 @@ ASM_test_mksession = function(session, id="ASM", id_UD="UD", id_DW = "DW", full_
 
   # Populating the session with DW components
   #sess_res = FG_test_mksession(session, id=id_FG, id_UD = id_UD, id_DW=id_DW, full_session=full_session)
-  sess_res = DW_test_mksession(session=list, id=id_DW, id_UD=id_UD)
+  sess_res = DW_test_mksession(session, id=id_DW, id_UD=id_UD)
   if(!("ShinySession" %in% class(session))){
     session = sess_res[["session"]]
   }
