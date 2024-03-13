@@ -361,7 +361,7 @@ ASM_Server <- function(id,
       app_info = FM_fetch_app_info(session)
 
       uiele = app_info[["uiele_modules"]]
-      
+
     uiele})
     #------------------------------------
     output$ui_asm_sys_packages = renderUI({
@@ -373,7 +373,7 @@ ASM_Server <- function(id,
       app_info = FM_fetch_app_info(session)
 
       uiele = app_info[["uiele_packages"]]
-      
+
     uiele})
     #------------------------------------
     output$ui_asm_sys_options = renderUI({
@@ -385,7 +385,7 @@ ASM_Server <- function(id,
       app_info = FM_fetch_app_info(session)
 
       uiele = app_info[["uiele_options"]]
-      
+
     uiele})
     #------------------------------------
     # fileReaderData must be defined outside of the outputs below so it
@@ -417,7 +417,7 @@ ASM_Server <- function(id,
       }
       text[is.na(text)]  = ""
       uiele = paste(text, collapse = '\n')
- 
+
     uiele})
 
 #     cfg=gui_fetch_cfg(session)
@@ -847,7 +847,6 @@ code}
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
 #'@param id_UD An ID string that corresponds with the ID used to call the UD modules UI elements
 #'@param id_DW An ID string that corresponds with the ID used to call the DW modules UI elements
-#'@param id_FG An ID string that corresponds with the ID used to call the FG modules UI elements
 #'@param full_session  Boolean to indicate if the full test session should be created (default \code{TRUE}).
 #'@return list with the following elements
 #' \itemize{
@@ -859,14 +858,15 @@ code}
 #'}
 #'@examples
 #' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
-ASM_test_mksession = function(session, id="ASM", id_UD="UD", id_DW = "DW", id_FG="FG", full_session=TRUE){
+ASM_test_mksession = function(session, id="ASM", id_UD="UD", id_DW = "DW", full_session=TRUE){
 
   isgood = TRUE
   rsc    = list()
   input  = list()
 
-  # Populating the session with FG components
-  sess_res = FG_test_mksession(session, id=id_FG, id_UD = id_UD, id_DW=id_DW, full_session=full_session)
+  # Populating the session with DW components
+  #sess_res = FG_test_mksession(session, id=id_FG, id_UD = id_UD, id_DW=id_DW, full_session=full_session)
+  sess_res = DW_test_mksession(session=list, id=id_DW, id_UD=id_UD)
   if(!("ShinySession" %in% class(session))){
     session = sess_res[["session"]]
   }

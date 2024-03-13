@@ -9,7 +9,6 @@ ASM_test_mksession(
   id = "ASM",
   id_UD = "UD",
   id_DW = "DW",
-  id_FG = "FG",
   full_session = TRUE
 )
 }
@@ -21,8 +20,6 @@ ASM_test_mksession(
 \item{id_UD}{An ID string that corresponds with the ID used to call the UD modules UI elements}
 
 \item{id_DW}{An ID string that corresponds with the ID used to call the DW modules UI elements}
-
-\item{id_FG}{An ID string that corresponds with the ID used to call the FG modules UI elements}
 
 \item{full_session}{Boolean to indicate if the full test session should be created (default \code{TRUE}).}
 }

@@ -1,5 +1,6 @@
 # Within shiny both session and input variables will exist,
 # this creates examples here for testing purposes:
+if(interactive()){
 sess_res = FG_test_mksession(session=list(), full_session=FALSE)
 session = sess_res$session
 input   = sess_res$input
@@ -27,3 +28,4 @@ rpt_res$isgood
 
 # This is the underlying code that was used to generate the report
 cat(paste0(rpt_res$code, collapse="\n"))
+}
