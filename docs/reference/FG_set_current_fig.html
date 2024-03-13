@@ -95,79 +95,11 @@ as the value for the active figure</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://formods.ubiquity.tools/" class="external-link">formods</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># Within shiny both session and input variables will exist, </span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://formods.ubiquity.tools/" class="external-link">formods</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Within shiny both session and input variables will exist,</span></span></span>
 <span class="r-in"><span><span class="co"># this creates examples here for testing purposes:</span></span></span>
 <span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="FG_test_mksession.html">FG_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, full_session<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:897d952fecbc804999396a96f9df4b20</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: State initialized</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:5b0f0b05ee3ac7336a74c564bb6efdad</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:65801ab4b3c645aabf7edf91fc2f0d2c</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:7fb2dd3b16b1780c4c24f64d658dd7c7</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:5ab04ea00be44c0040695a4ed6243c90</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:960db107cfe9db93578f79f0ae6283e2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:f0b5d122dcb04f207cba233253b61c4b</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:189ed77a84bd9fcdd7b26abff8bea34a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:669ec77d50652669cd3fcfd949469b37</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:dd6cafa0be3b6b195d230a11e9f07f9f</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:5c2022c376ca8f56b839347156559890</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:43640500a04674debd8e2399056c384a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:f81c45ac1ef4e7b43153d8c8eaf7aed6</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:207cde891d98e20c4afbb7fb5fb0aba2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:0a673e81c01cbbf33533dd65d6baf9e3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:af3f3aefd0115ed9dfdd4d6ef9d5182f</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:b0ccaee21e859322df0bf79d00c4b347</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:2d3d6e9e38be6dea813b2d4d679e34b5</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:2b60dd49b48a4e65200dc7241ad270e3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:3c92f397181a4fcdbdf2bd7dd7425e77</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:92b81d7573def603649370b87c123b55</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:9210264aabc0339e832b0c6bcfda32af</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:fe62fde1e7e738a1a35c479de9d5007b</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:ff3edcd4c1e58c96ea2707361916ffbc</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:b6cdfcef0432c5d9b1fa2bd46122ffa2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:4fa4283f1fd8fd6cf6e6e7df0669723a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:cf3e139cef554b2d09dca619ee6aff41</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:a9154d91a9e4b5d21f9585a6f68dd083</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:4b5c6ad66658ddfa92d10ae1b0b7afa8</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:591ac875a490b66a1fa7f4e7d4ba1c62</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:afa3ca309cc3e6a48f542f4e8eadd54a</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:5c918dd4f53a4f1e56115abb09c4f332</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:159ddf8c8cd26b178dfda5434bbecfa1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:8bb3c97e700998f2f73353189bd07831</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:a1eceffec3ff7d9f9961683b3d07088b</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: State initialized</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:49305b1f42ca13ff15881186db5740a2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:569e517694d2b4f35ddb004141c37597</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:2c034cfa5098469e4e58f39ae91174a6</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:82b9b5ab42c94f7437b0c055f11be5c8</span>
 <span class="r-in"><span><span class="va">session</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">session</span></span></span>
 <span class="r-in"><span><span class="va">input</span>   <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">input</span></span></span>
 <span class="r-in"><span></span></span>
@@ -191,14 +123,13 @@ as the value for the active figure</p>
 <span class="r-in"><span><span class="co"># Once you're done you can put it back into the state:</span></span></span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="fu">FG_set_current_fig</span><span class="op">(</span><span class="va">state</span>, <span class="va">current_fig</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># If you made any changes to the actual figure, this will </span></span></span>
+<span class="r-in"><span><span class="co"># If you made any changes to the actual figure, this will</span></span></span>
 <span class="r-in"><span><span class="co"># force a rebuild of the current figure:</span></span></span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="fu"><a href="FG_build.html">FG_build</a></span><span class="op">(</span> state<span class="op">=</span><span class="va">state</span>, del_row <span class="op">=</span> <span class="cn">NULL</span>, cmd <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:43f973779fa3fd548d7033188ad2f913</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># To create a new empty figure you can do this:</span></span></span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="fu"><a href="FG_new_fig.html">FG_new_fig</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:5e253686510424b0d12d459e760eca2b</span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

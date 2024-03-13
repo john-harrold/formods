@@ -18,8 +18,9 @@ ggplot object with the specified page.
 Used to extract the specified page from the current figure.
 }
 \examples{
+if(interactive()){
 library(formods)
-# Within shiny both session and input variables will exist, 
+# Within shiny both session and input variables will exist,
 # this creates examples here for testing purposes:
 sess_res = FG_test_mksession(session=list(), full_session=FALSE)
 session = sess_res$session
@@ -45,10 +46,11 @@ current_fig$key = "Individual profiles by cohort (multiple pages)"
 # Once you're done you can put it back into the state:
 state = FG_set_current_fig(state, current_fig)
 
-# If you made any changes to the actual figure, this will 
+# If you made any changes to the actual figure, this will
 # force a rebuild of the current figure:
 state = FG_build( state=state, del_row = NULL, cmd = NULL)
 
 # To create a new empty figure you can do this:
 state = FG_new_fig(state)
+}
 }
