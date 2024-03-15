@@ -14,6 +14,7 @@ reference:
     - starts_with("FM_")
     - fetch_hold
     - fetch_package_version
+    - formods_check
     - has_changed
     - has_updated
     - icon_link

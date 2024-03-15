@@ -17,26 +17,85 @@
 .onLoad <- function(libname, pkgname){
 
   #------------------------------------
+  # If all the suggested packages are found this will be true:
+  suggested_found = TRUE
+  packageStartupMessage("Loading formods")
+
+  fcres = formods_check(verbose = FALSE)
+  if(!fcres[["all_found"]]){
+    packageStartupMessage("Missing suggested packages")
+    for(pkg in fcres[["missing_pkgs"]]){
+      packageStartupMessage(paste0(" - ",pkg))
+    }
+  }
+}
+
+#'@export
+#'@title Checks 'formods' Dependencies
+#'@description  Looks at the suggests and Loops through each specified module ID or all modules if no ID
+#'was specified. For each ID, an attempt will be made to extract any datasets
+#'available.
+#'@param verbose Logical indicating if messages should be displayed
+#'@return List with the following elements:
+#' \itemize{
+#'   \item{all_found:}    Boolean indicating if all packages were found
+#'   \item{found_pkgs:}   Character vector of found packages
+#'   \item{missing_pkgs:} Character vector of missing packages
+#'}
+#'@examples
+#' fcres = formods_check()
+formods_check <- function(verbose=TRUE){
+
+  #------------------------------------
   # Checking for rxpackages
   # If all the suggested packages are found this will be true:
   suggested_found = TRUE
-# mr = FM_message("Loading formods", entry_type="h1")
-# mr = FM_message("Checking for suggested packages", entry_type="h2")
+  if(verbose){
+    mr = FM_message("Checking formods for suggested packages", entry_type="h1")
+  }
 
-    pkgs = c(
-      "clipr",       "devtools",  "DT",
-      "flextable",   "ggpubr",    "gtools",
-      "here",        "janitor",   "plotly",
-      "prompter",    "shinybusy", "shinydashboard")
-    for(pkg in pkgs){
-      if(!requireNamespace(pkg, quietly=TRUE)){
-#       mr = FM_message(paste0("missing ", pkg), entry_type="danger")
-      } else {
-#       mr = FM_message(paste0("found ", pkg), entry_type="success")
+  pkgs = c(
+    "clipr",
+    "covr",
+    "devtools",
+    "DT",
+    "flextable",
+    "ggpubr",
+    "gtools",
+    "here",
+    "janitor",
+    "knitr",
+    "plotly",
+    "prompter",
+    "rmarkdown",
+    "shinybusy",
+    "shinydashboard",
+    "testthat",
+    "utils")
+
+  pkg_found   = c()
+  pkg_missing =  c()
+  for(pkg in pkgs){
+    if(!requireNamespace(pkg, quietly=TRUE)){
+      if(verbose){
+        mr = FM_message(paste0("missing ", pkg), entry_type="danger")
       }
+      pkg_missing = c(pkg_missing, pkg)
+      suggested_found = FALSE
+    } else {
+      if(verbose){
+        mr = FM_message(paste0("found ", pkg), entry_type="success")
+      }
+      pkg_found   = c(pkg_found  , pkg)
     }
-}
+  }
 
+  res = list(
+    all_found     = suggested_found,
+    found_pkgs    = pkg_found,
+    missing_pkgs  = pkg_missing
+  )
+res}
 
 
 
