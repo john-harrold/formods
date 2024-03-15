@@ -14,7 +14,7 @@
 #'@import cli
 #'@importFrom digest digest
 #'@importFrom writexl write_xlsx
-.onLoad <- function(libname, pkgname){
+.onAttach <- function(libname, pkgname){
 
   #------------------------------------
   # If all the suggested packages are found this will be true:
