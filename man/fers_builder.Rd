@@ -25,7 +25,9 @@ ggplot commands forom the user input. The plot commands assume the existance
 of a ggplot object \code{p}.
 }
 \examples{
+\donttest{
 sess_res = FG_test_mksession(session=list(), full_session=FALSE)
 state = sess_res$state
 fb_res = fers_builder(state)
+}
 }

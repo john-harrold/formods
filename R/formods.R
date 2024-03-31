@@ -31,10 +31,8 @@
 }
 
 #'@export
-#'@title Checks 'formods' Dependencies
-#'@description  Looks at the suggests and Loops through each specified module ID or all modules if no ID
-#'was specified. For each ID, an attempt will be made to extract any datasets
-#'available.
+#'@title Checks `formods` Dependencies
+#'@description  Looks at the suggested dependencies and checks to make sure
 #'@param verbose Logical indicating if messages should be displayed
 #'@return List with the following elements:
 #' \itemize{
@@ -2506,8 +2504,8 @@ nmr}
 #'   \itemize{
 #'     \item{label:}  Text label for the model.
 #'     \item{object :}  Name of the object that contains the compiled rxode2 model.
-#'     \item{MOD_TYPE:}  Type of 'formods' module the model came from.
-#'     \item{id:} Source 'formods' Module ID.
+#'     \item{MOD_TYPE:}  Type of `formods` module the model came from.
+#'     \item{id:} Source `formods` Module ID.
 #'     \item{checksum:} Checksum of the module where the model came from.
 #'     \item{MDLchecksum:} Checksum of the model.
 #'     \item{code:}  Code to generate the model.

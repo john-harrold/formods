@@ -95,6 +95,7 @@ were any changes to the figures within it.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># This will create a populated FG state object:</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="FG_test_mksession.html">FG_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, full_session<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
@@ -162,12 +163,13 @@ were any changes to the figures within it.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   dest:   file.path("config","report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: State initialized</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:49305b1f42ca13ff15881186db5740a2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:34525113f34748349fe4a1a088869267</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:feae371f54fde9d2ac864c41388d29a6</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:c6e2ddd22e5b18523e892c10d3d7f5bd</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:49bffd3a21e8231607291ede4e379aeb</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:a02c0c9416b568c49d6cf2aeefac776c</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:ade8879aec13d0bd978632c2ba51cffe</span>
 <span class="r-in"><span><span class="va">state</span>   <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="fu">FG_update_checksum</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:c6e2ddd22e5b18523e892c10d3d7f5bd</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:ade8879aec13d0bd978632c2ba51cffe</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

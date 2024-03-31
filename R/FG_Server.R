@@ -1930,9 +1930,11 @@ state}
 #'  \item{msgs:}   Messages to be passed back to the user
 #'}
 #'@examples
+#'\donttest{
 #' sess_res = FG_test_mksession(session=list(), full_session=FALSE)
 #' state = sess_res$state
 #' fb_res = fers_builder(state)
+#'}
 fers_builder = function(state){
 
   isgood = TRUE
@@ -2447,9 +2449,11 @@ state}
 #'@return state with checksum updated.
 #'@examples
 #'# This will create a populated FG state object:
+#'\donttest{
 #' sess_res = FG_test_mksession(session=list(), full_session=FALSE)
 #' state   = sess_res$state
 #' state = FG_update_checksum(state)
+#'}
 FG_update_checksum = function(state){
 
   fig_checksums = c()

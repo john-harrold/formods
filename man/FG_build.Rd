@@ -38,7 +38,7 @@ elements table has a row flagged for deletion, it will be deleted. If the
 cmd input is not NULL it will attempt to append that element to the figure.
 }
 \examples{
-if(interactive()){
+\donttest{
 library(formods)
 # Within shiny both session and input variables will exist,
 # this creates examples here for testing purposes:

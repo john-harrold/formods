@@ -7,6 +7,8 @@
 * Added copy to clipboard functionality to the ZZ_Server.R template.
 * Added `NULL` support for `autocast()`.
 * Abstracted function examples in module template out into a separate file (inst/templates/ZZ_funcs.R)
+* Added interface to fetch models from FM modules.
+* Added modals to individual report generation buttons.
 
 # formods 0.1.3 
 

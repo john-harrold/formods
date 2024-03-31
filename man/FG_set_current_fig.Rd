@@ -19,7 +19,7 @@ Takes a FG state and a figure list and sets that figure list
 as the value for the active figure
 }
 \examples{
-if(interactive()){
+\donttest{
 library(formods)
 # Within shiny both session and input variables will exist,
 # this creates examples here for testing purposes:

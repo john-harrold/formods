@@ -2,7 +2,7 @@
 % Please edit documentation in R/formods.R
 \name{formods_check}
 \alias{formods_check}
-\title{Checks 'formods' Dependencies}
+\title{Checks `formods` Dependencies}
 \usage{
 formods_check(verbose = TRUE)
 }
@@ -18,9 +18,7 @@ List with the following elements:
 }
 }
 \description{
-Looks at the suggests and Loops through each specified module ID or all modules if no ID
-was specified. For each ID, an attempt will be made to extract any datasets
-available.
+Looks at the suggested dependencies and checks to make sure
 }
 \examples{
 fcres = formods_check()

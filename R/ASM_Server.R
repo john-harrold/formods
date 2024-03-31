@@ -177,11 +177,17 @@ ASM_Server <- function(id,
                                 session      = session,
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
+        FM_pause_screen(state   = state,
+                        message = state[["MC"]][["labels"]][["busy"]][["pptx"]],
+                        session = session)
         rpt_res =
         FM_generate_report(state     = state,
                            session   = session,
                            file_dir  = dirname(file),
                            file_name = basename(file))
+
+        FM_resume_screen(state   = state,
+                         session = session)
         }
     )
     #------------------------------------
@@ -202,11 +208,16 @@ ASM_Server <- function(id,
                                 session      = session,
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
+        FM_pause_screen(state   = state,
+                        message = state[["MC"]][["labels"]][["busy"]][["docx"]],
+                        session = session)
         rpt_res =
         FM_generate_report(state     = state,
                            session   = session,
                            file_dir  = dirname(file),
                            file_name = basename(file))
+        FM_resume_screen(state   = state,
+                         session = session)
         }
     )
       uiele})
@@ -228,11 +239,16 @@ ASM_Server <- function(id,
                                 session      = session,
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
+        FM_pause_screen(state   = state,
+                        message = state[["MC"]][["labels"]][["busy"]][["xlsx"]],
+                        session = session)
         rpt_res =
         FM_generate_report(state     = state,
                            session   = session,
                            file_dir  = dirname(file),
                            file_name = basename(file))
+        FM_resume_screen(state   = state,
+                         session = session)
         }
     )
     #------------------------------------

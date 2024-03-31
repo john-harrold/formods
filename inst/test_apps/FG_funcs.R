@@ -1,4 +1,4 @@
-if(interactive()){
+\donttest{
 library(formods)
 # Within shiny both session and input variables will exist,
 # this creates examples here for testing purposes:

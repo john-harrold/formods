@@ -18,7 +18,7 @@ of this list is the same as the structure of \code{state$FG$figs} in the output 
 Takes a FG state and returns the current active figure
 }
 \examples{
-if(interactive()){
+\donttest{
 library(formods)
 # Within shiny both session and input variables will exist,
 # this creates examples here for testing purposes:

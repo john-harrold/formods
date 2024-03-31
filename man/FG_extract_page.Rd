@@ -18,7 +18,7 @@ ggplot object with the specified page.
 Used to extract the specified page from the current figure.
 }
 \examples{
-if(interactive()){
+\donttest{
 library(formods)
 # Within shiny both session and input variables will exist,
 # this creates examples here for testing purposes:
