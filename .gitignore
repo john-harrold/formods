@@ -11,3 +11,5 @@ vignettes/*.html
 inst/doc
 R/NM_Server.R
 inst/templates/NM*
+docs
+_pkgdown_backup.yml
