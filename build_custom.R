@@ -21,11 +21,17 @@ fileConn=file(FM_compact_example)
 writeLines(fmapp, fileConn)
 close(fileConn)
 
+if(file.exists("docs")){
+  unlink("docs", recursive = TRUE)
+}
+
 # building documentation
 devtools::document(roclets = c('rd', 'collate', 'namespace', 'vignette'))
 
 # Rebuilding the pkgdown site
 pkgdown::build_site()
+
+file.copy("CNAME", "docs/CNAME")
 
 # # Fixing any broken image references
 # art_dir = file.path("docs", "articles")
