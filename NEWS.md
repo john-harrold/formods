@@ -9,6 +9,7 @@
 * Abstracted function examples in module template out into a separate file (inst/templates/ZZ_funcs.R)
 * Added interface to fetch models from FM modules.
 * Added modals to individual report generation buttons.
+* Fixed bug preventing FG module from working in shiny 1.8.1
 
 # formods 0.1.3 
 

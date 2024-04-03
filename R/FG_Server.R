@@ -249,9 +249,10 @@ FG_Server <- function(id,
           div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_add_element_button"))),
           div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_select"))),
           tags$br(),
-          htmlOutput(NS(id, "ui_fg_new_element_row")),
-          tags$br(),
-          verbatimTextOutput(NS(id, "ui_fg_msg")) # JMH this shouldn't be here, I think? it's a repeat from above.
+          htmlOutput(NS(id, "ui_fg_new_element_row")
+         #tags$br(),
+         #verbatimTextOutput(NS(id, "ui_fg_msg")
+          ) # JMH this shouldn't be here, I think? it's a repeat from above.
         )
       }
 

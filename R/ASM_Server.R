@@ -35,7 +35,7 @@ ASM_Server <- function(id,
 
     #------------------------------------
     # Create ui outputs here:
-    output$ui_asm_save_name  = renderUI({
+    output$ui_asm_save_name_text  = renderUI({
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
@@ -70,22 +70,22 @@ ASM_Server <- function(id,
     #------------------------------------
     output$ui_asm_compact  =  renderUI({
       uiele = tagList(
-           htmlOutput(NS("ASM", "ui_asm_save_name")),
-           htmlOutput(NS("ASM", "ui_asm_switch_gen_rpts")),
-           htmlOutput(NS("ASM", "ui_asm_save_button")),
+           htmlOutput(NS(id, "ui_asm_save_name_text")),
+           htmlOutput(NS(id, "ui_asm_switch_gen_rpts")),
+           htmlOutput(NS(id, "ui_asm_save_button")),
            tags$br(),
            div(style="text-align:center",
              div(style="display:inline-block;width:32%",
-             htmlOutput(NS("ASM", "ui_asm_rpt_pptx"))),
+             htmlOutput(NS(id, "ui_asm_rpt_pptx"))),
              div(style="display:inline-block;width:32%",
-             htmlOutput(NS("ASM", "ui_asm_rpt_docx"))),
+             htmlOutput(NS(id, "ui_asm_rpt_docx"))),
              div(style="display:inline-block;width:32%",
-             htmlOutput(NS("ASM", "ui_asm_rpt_xlsx"))),
+             htmlOutput(NS(id, "ui_asm_rpt_xlsx"))),
            ),
            tags$br(),
            tags$br(),
-           htmlOutput(NS("ASM", "ui_asm_load_state")),
-           verbatimTextOutput(NS("ASM", "ui_asm_msg"))
+           htmlOutput(NS(id, "ui_asm_load_state")),
+           verbatimTextOutput(NS(id, "ui_asm_msg"))
       )
 
       uiele})
