@@ -1349,7 +1349,9 @@ DW_Server <- function(id,
 
     # Removing holds
     remove_hold_listen  <- reactive({
-      list(input$select_dw_views)
+      list(
+           react_state[[id_ASM]],
+           input$select_dw_views)
     })
     observeEvent(remove_hold_listen(), {
       # Once the UI has been regenerated we

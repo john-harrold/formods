@@ -1199,7 +1199,8 @@ FG_Server <- function(id,
 
     # Removing holds
     remove_hold_listen  <- reactive({
-      list(input$select_current_fig,
+      list(react_state[[id_ASM]],
+           input$select_current_fig,
            input$select_current_view)
     })
     observeEvent(remove_hold_listen(), {

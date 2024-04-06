@@ -1016,13 +1016,6 @@ FM_set_app_state <- function(session, app_state, set_holds = TRUE){
   } else {
     FM_message(line="FM_set_app_state()")
     FM_message(line="Unable to find ASM state.")
-   #if(system.file(package="cli") != ""){
-   #  cli::cli_alert("FM_set_app_state()")
-   #  cli::cli_alert("Unable to find ASM state.")
-   #} else {
-   #  message("FM_set_app_state()")
-   #  message("Unable to find ASM state.")
-   #}
   }
 
 
