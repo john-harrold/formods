@@ -1218,3 +1218,27 @@ state}
   }
 
 state}
+
+
+#'@export
+#'@title Processes State After Loading
+#'@description When loading a saved analysis, this will process the state
+#'object to account for differences that may apply between servers.
+#'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
+#'@param session Shiny session variable
+#'@return State object with updates made to the state object
+#'@examples
+#' sess_res = ===ZZ===_test_mksession(session=list())
+#' session = sess_res$session
+#' state   = sess_res$state
+#' state = ===ZZ===_onload(state, session)
+===ZZ===_onload     = function(state, session){
+
+  # Put any post processing you would use after loading here. If you do not 
+  # have any you can leave this function as a passthrough for the state object
+  # or just delete it.
+
+state}
+
+
+

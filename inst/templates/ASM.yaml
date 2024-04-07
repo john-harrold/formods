@@ -41,13 +41,16 @@ MC:
     ui_asm_rpt_xlsx:        "xlsx"  
     ui_asm_rpt_pptx:        "pptx"     
     ui_asm_rpt_docx:        "docx"
+    load_success:           "Analysis loaded"
     busy:
-      saving_state:      "Saving app state"
+      loading_state:      "Loading analysis"
+      saving_state:      "Saving analysis"
       xlsx:              "Generating report: Excel"
       docx:              "Generating report: Word"
       pptx:              "Generating report: PowerPoint"
   errors:
-    bad_input: "Input error message"
+    bad_input:   "Input error message"
+    load_failed: "Failed to load analysis"
   tooltips: 
     # Set to FALSE to disable tool tips for this module
     include: TRUE

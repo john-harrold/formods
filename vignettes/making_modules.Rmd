@@ -132,6 +132,13 @@ The module template will create a standard set of functions for you. The `MM` be
         -   `code` Complete code to build the model.
         -   `checksum` Checksum of the module the model came from.
         -   `DSchecksum` Checksum of the model.
+-   `MM_onload` The ASM module provides the ability to load a previous analysis. 
+     Some elements of the module state may need to be changed on load. For example
+     if you have compiled binary data in state, and the underlying libraries can 
+     change over time, you can use this function to recompile when the analysis 
+     is loaded. This function is optional and the template example can be 
+     deleted if you do not  need it. The default in the template should just pass
+     the state back unchanged.
 -   `MM_test_mksession` When testing outside of Shiny it is useful to
     have a prepopulated session, intput, etc objects with actual data.
     Each module shoudl have a `test_mksession` function that populates
