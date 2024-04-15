@@ -312,13 +312,13 @@
      #   circle  = FALSE,
      #   status  = "primary btn-custom-===zz===",
      #   icon    = icon("layer-group", lib="font-awesome"),
-     #   tooltip = tooltipOptions(title = state[["MC"]][["tooltips"]][["elements"]]))
+     #   tooltip = shinyWidgets::tooltipOptions(title = state[["MC"]][["tooltips"]][["elements"]]))
      #)
 
       uiele = tagList(
         div(style="display:inline-block", "Place ===ELEMENT=== name, attributes and inputs here."),
         tags$br(),
-        div(style="display:inline-block", htmlOutput(NS(id, "ui_===zz===_msg")))
+        div(style="display:inline-block", verbatimTextOutput(NS(id, "ui_===zz===_msg")))
       )
 
       # We only show the clip button if it's enabled
@@ -438,7 +438,7 @@
     })
     #------------------------------------
     # Removing holds
-    # The react_state[[id_ASM]] is required in order to 
+    # The react_state[[id_ASM]] is required in order to
     # load analyses using the application state manager
     remove_hold_listen  <- reactive({
         list(
@@ -1234,7 +1234,7 @@ state}
 #' state = ===ZZ===_onload(state, session)
 ===ZZ===_onload     = function(state, session){
 
-  # Put any post processing you would use after loading here. If you do not 
+  # Put any post processing you would use after loading here. If you do not
   # have any you can leave this function as a passthrough for the state object
   # or just delete it.
 

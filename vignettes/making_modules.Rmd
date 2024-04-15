@@ -111,7 +111,7 @@ The module template will create a standard set of functions for you. The `MM` be
         -   `code` Complete code to build dataset.
         -   `checksum` Module checksum.
         -   `DSchecksum` Dataset checksum.
--   `MM_fetch_mdl` If a module provides data sets to be used in other
+-   `MM_fetch_mdl` If a module provides ODE models to be used in other
     modules you need to create this function. It should return at least
     the following:
     -   `hasmdl` Boolean variable indicating if the modules currently has
