@@ -1538,6 +1538,8 @@ FM_fetch_current_mods = function(){
 #'@param session Shiny session variable
 #'@param file_dir  path to the location where the file should be written.
 #'@param file_name base_filename (acceptable extensions are xlsx, docx, or pptx).
+#'@param ph List containing placeholders used when generating Word documents
+#'(e.g., \code{ph = list(HEADERRIGHT = "My text"}).
 #'@param gen_code_only Boolean value indicating that only code should be
 #'generated (\code{FALSE}).
 #'@param rpterrors Boolean variable to generate reports with errors.
@@ -1570,6 +1572,7 @@ FM_generate_report = function(state,
                               session,
                               file_dir ,
                               file_name,
+                              ph = list(), 
                               gen_code_only = FALSE,
                               rpterrors = TRUE){
 
@@ -1715,6 +1718,47 @@ FM_generate_report = function(state,
           # In the exported code we just write to the working directory:
           code = c(code, paste0('writexl::write_xlsx(rpt_list, path=file.path("reports", "report.', rpttype, '"))' ))
         }
+
+        # Adding placeholder substitution to Word documents
+        if(rpttype=="docx"){
+
+          if(length(state[["yaml"]][["FM"]][["reporting"]][["phs"]]) >0){
+            code = c(code, "# Adding placeholder information")
+          }
+
+
+          for(phidx in 1:length(state[["yaml"]][["FM"]][["reporting"]][["phs"]])){
+            cph = state[["yaml"]][["FM"]][["reporting"]][["phs"]][[phidx]]
+            tmp_name     = cph[["name"]]
+            tmp_location = cph[["location"]]
+            tmp_value    = cph[["value"]]
+
+            # This will overwrite the defaults with any user specified values:
+            if(tmp_name %in% names(ph)){
+              tmp_value = ph[[tmp_name]]
+            }
+
+            # Code to 
+            code_chunk = c(                                         
+              paste0('rpt  = onbrand::report_add_doc_content(rpt,                '), 
+              paste0('  type     = "ph",                                         '),
+              paste0('  content  = list(name     = ',deparse(tmp_name),     ',   '),
+              paste0('                  location = ',deparse(tmp_location), ',   '),
+              paste0('                  value    = ',deparse(tmp_value),    '))  '),
+              ""
+            )
+
+            # Evaluating th eplaceholders if we're actually generating the
+            # report
+            if(!gen_code_only){
+              eval(parse(text=paste0(code_chunk,collapse="\n")))
+            }
+
+            # Appending it to the code
+            code = c(code, code_chunk)
+          }
+        }
+
         if(rpttype == "pptx" | rpttype=="docx"){
           # Saving the report on the app
           if(!gen_code_only){
@@ -1724,7 +1768,6 @@ FM_generate_report = function(state,
           # Code to save the report:
           code = c(code, paste0('onbrand::save_report(rpt, file.path("reports", "report.', rpttype,'"))'))
         }
-
       }
     } else{
       isgood = FALSE

@@ -75,6 +75,33 @@ FM:
            rpt  = onbrand::read_template(
              template = file.path("config", "report.pptx"),
              mapping  = file.path("config", "report.yaml"))
+    # Word template can contain placeholders. This is where you can put the
+    # default values for placeholders. There are some nuances associated with
+    # creating placeholders and you should see the documentation about them in
+    # the onbrand package to better understand that:
+    #
+    #   https://onbrand.ubiquity.tools/articles/Creating_Templated_Office_Workflows.html#placeholder-text
+    #
+    # Each element below contains the placeholder used and should contain a
+    # location and a value. For example the default document contains a header
+    # placeholder in the upper right that looks like:
+    #
+    #  ===HEADERRIGHT===
+    # The placeholder below is HEADERRIGHT, the location is header and by
+    # default we will replace it with nothing.
+    #
+    # These defaults can be overwritten in the save section.
+    #
+    phs: 
+      - name:      "HEADERRIGHT"
+        location:  "header"
+        value:     ""
+      - name:      "HEADERLEFT"
+        location:  "header"
+        value:     ""
+      - name:      "FOOTERLEFT"
+        location:  "footer"
+        value:     ""
   ui:
     # See ?actionBttn for styles
     button_style: "fill"

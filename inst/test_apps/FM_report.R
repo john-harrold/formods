@@ -14,13 +14,14 @@ file_dir = tempdir()
 
 # This is the file name that determines the type of report to write:
 file_name = "my_report.pptx"
+#file_name = "my_report.docx"
 
 rpt_res =
 FM_generate_report(state         = state,
                    session       = session,
                    file_dir      = file_dir,
                    file_name     = file_name,
-                   gen_code_only = TRUE,
+                   gen_code_only = TRUE, 
                    rpterrors     = TRUE)
 
 # This contains the exit status of the report generation

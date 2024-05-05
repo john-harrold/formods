@@ -1561,6 +1561,18 @@ FG_fetch_state = function(id,
     if(state[["FG"]][["ui"]][["text_fig_key"]] != ""){
       # Resetting the key
       current_fig[["key"]] = state[["FG"]][["ui"]][["text_fig_key"]]
+
+      # If the key is equal to the current ID we assign it to the name of the
+      # source dataset
+      if(current_fig[["key"]] == current_fig[["id"]]){
+
+        fig_dsview = state[["FG"]][["ui"]][["select_current_view"]]
+        if(!is.null(state[["FG"]][["DSV"]][["ds"]][[ fig_dsview ]][["label"]])){
+          if(state[["FG"]][["DSV"]][["ds"]][[ fig_dsview ]][["label"]] != ""){
+            current_fig[["key"]] =  state[["FG"]][["DSV"]][["ds"]][[ fig_dsview ]][["label"]]
+          }
+        }
+      }
     } else {
       # returning an error
       msgs = c(msgs,

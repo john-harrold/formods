@@ -9,6 +9,7 @@ FM_generate_report(
   session,
   file_dir,
   file_name,
+  ph = list(),
   gen_code_only = FALSE,
   rpterrors = TRUE
 )
@@ -21,6 +22,9 @@ FM_generate_report(
 \item{file_dir}{path to the location where the file should be written.}
 
 \item{file_name}{base_filename (acceptable extensions are xlsx, docx, or pptx).}
+
+\item{ph}{List containing placeholders used when generating Word documents
+(e.g., \code{ph = list(HEADERRIGHT = "My text"}).}
 
 \item{gen_code_only}{Boolean value indicating that only code should be
 generated (\code{FALSE}).}
@@ -74,13 +78,14 @@ file_dir = tempdir()
 
 # This is the file name that determines the type of report to write:
 file_name = "my_report.pptx"
+#file_name = "my_report.docx"
 
 rpt_res =
 FM_generate_report(state         = state,
                    session       = session,
                    file_dir      = file_dir,
                    file_name     = file_name,
-                   gen_code_only = TRUE,
+                   gen_code_only = TRUE, 
                    rpterrors     = TRUE)
 
 # This contains the exit status of the report generation
