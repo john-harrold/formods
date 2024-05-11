@@ -1,7 +1,13 @@
 # https://www.glyphicons.com/sets/basic/
 #General formods (FM) configuration across modules
-FM: 
+FM:
   include:
+    # This is where you can put files to include files in the working directory
+    # of the app. For the files listed below you shouldn't change the 'dest'
+    # portion but you can change the source to use custom report templates.
+    # If relative paths are used they will be relative to
+    # the user directory (either the temp formods directory running in shiny
+    # or the top level of the zip file structure when saving the app state).
     files:
     - file:
         source: 'file.path(system.file(package="onbrand"), "templates", "report.docx")'
@@ -15,20 +21,20 @@ FM:
   # Some features (e.g. copy to clipboard) don't work when deployed
   deployed: FALSE
   #General code options for the modules
-  code: 
-    theme:           "vibrant_ink"    
+  code:
+    theme:           "vibrant_ink"
     showLineNumbers: TRUE
     # File name of the R script to contain generation code
-    gen_file: run_analysis.R   
+    gen_file: run_analysis.R
     # This is the preamble used in script generation. It goes on the
     # top. Feel free to add to it if you need to. Note that packages should be
-    # listed in the packages section at the same level. 
+    # listed in the packages section at the same level.
     gen_preamble: |-
       # formods automated output ------------------------------------------------
       # https://formods.ubiquity.tools/
       rm(list=ls())
     # Each module should have a packages section that lists the packages
-    # needed for code genereated for that module. 
+    # needed for code genereated for that module.
     packages: ["onbrand", "writexl"]
   notifications:
     config:
@@ -50,19 +56,13 @@ FM:
         useFontAwesome: FALSE
         useIcon:        FALSE
         background:     "#f0ac4d"
-  reporting: 
+  reporting:
     # enabled here controls reporting for the app. Individual modules can be
     # controlled in their respective configuration files
     enabled: TRUE
     # The content_init section is used to initialize reports. You shouldn't
     # change the xlsx rpt but the docx and pptx rpt can be altered to
-    # use custom onbrand templates. The main thing is that you create an
-    # object called rpt with the appropriate template type in it. You can
-    # also do any preprocessing here as well such as adding default content or
-    # doing any placeholder assignments you might want to use. The paths can
-    # be absolute paths. If relative paths are used they will be relative to
-    # the user directory (either the temp formods directory running in shiny
-    # or the top level of the zip file structure when saving the app state).
+    # preprocess reports if you need to such as adding default.
     content_init:
       xlsx: |-
            rpt = list(summary = NULL,
@@ -92,7 +92,7 @@ FM:
     #
     # These defaults can be overwritten in the save section.
     #
-    phs: 
+    phs:
       - name:      "HEADERRIGHT"
         location:  "header"
         value:     ""
@@ -126,20 +126,20 @@ FM:
     # Separator when showing more than three in a column. For exmaple if you
     # had a dataset with 1,2,3,4,5,6 and many_sep was ",...," then it would
     # appear as "1,...,6"
-    many_sep: ",⋅⋅⋅," 
+    many_sep: ",⋅⋅⋅,"
     # This controls the differences for different data types. Take the output
-    # of typeof(df$colname) and put an entry for that output here. 
+    # of typeof(df$colname) and put an entry for that output here.
     data_types:
-      character:   
+      character:
         color:    "#DD4B39"
         label:    "text"
-      double:         
+      double:
         color:    "#3C8DBC"
         label:    "num"
-      integer:        
+      integer:
         color:    "#3C8DBC"
         label:    "num"
-      other:          
+      other:
         color:    "black"
         label:    "other"
   labels:

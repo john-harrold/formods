@@ -1572,7 +1572,7 @@ FM_generate_report = function(state,
                               session,
                               file_dir ,
                               file_name,
-                              ph = list(), 
+                              ph = list(),
                               gen_code_only = FALSE,
                               rpterrors = TRUE){
 
@@ -1670,9 +1670,23 @@ FM_generate_report = function(state,
               FUNC_CALL = paste0("gen_rpt_res = ", MOD_FUNC,"(state = tmp_state, rpt=rpt, rpttype=rpttype, gen_code_only=gen_code_only)")
 
               # This will evaluate it and store the results in the gen_rpt_res
-              eval(parse(text=FUNC_CALL))
+              #eval(parse(text=FUNC_CALL))
+              tcres = FM_tc(
+                cmd    = FUNC_CALL,
+                tc_env = list(tmp_state     = tmp_state,
+                              gen_code_only = gen_code_only,
+                              rpt           = rpt,
+                              rpttype       = rpttype),
+                capture = c("gen_rpt_res"))
 
-              # JMH check gen_rpt_res$isgood for failure and add contengencies for failure
+              if(tcres[["isgood"]]){
+                gen_rpt_res = tcres[["capture"]][["gen_rpt_res"]]
+              } else {
+                gen_rpt_res = list(hasrptele = FALSE)
+                FM_le(state,"FM_report() failure")
+                FM_le(state,paste0("  - Module function: ", MOD_FUNC))
+                FM_le(state,tcres[["msgs"]])
+              }
 
               # If reporting elements have been found
               if(gen_rpt_res[["hasrptele"]]){
@@ -1738,9 +1752,9 @@ FM_generate_report = function(state,
               tmp_value = ph[[tmp_name]]
             }
 
-            # Code to 
-            code_chunk = c(                                         
-              paste0('rpt  = onbrand::report_add_doc_content(rpt,                '), 
+            # Code to
+            code_chunk = c(
+              paste0('rpt  = onbrand::report_add_doc_content(rpt,                '),
               paste0('  type     = "ph",                                         '),
               paste0('  content  = list(name     = ',deparse(tmp_name),     ',   '),
               paste0('                  location = ',deparse(tmp_location), ',   '),
@@ -1826,6 +1840,7 @@ FM_generate_report = function(state,
       }
     }
   }
+
 
   # Changing the working directory back to the current directory
   setwd(current_dir)
