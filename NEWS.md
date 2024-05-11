@@ -3,6 +3,8 @@
 * Fixes issues with loading analyses breaking the app.
 * Added modals and notifications to  loading analyses.
 * Added the ability to create XX_onload() functions to give modules the ability to update the state when loading a saved analysis.
+* Fixed `FG_append_report()` to account for when there are no reportable elements present.
+* Added code to capture errors in `FM_generate_report()`.
 
 # formods 0.1.4
 
