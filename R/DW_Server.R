@@ -1329,6 +1329,7 @@ DW_Server <- function(id,
              input$button_dw_copy,
              input$button_dw_save,
              input$hot_fg_elements,
+             input$hot_dw_elements,
              react_state[[id_ASM]])
       })
       # This updates the reaction state:
@@ -2610,6 +2611,7 @@ DW_fetch_ds = function(state){
     tmp_key           = state[["DW"]][["views"]][[dw_view]][["key"]]
     tmp_code_previous = state[["DW"]][["views"]][[dw_view]][["code_previous"]]
     tmp_contents      = state[["DW"]][["views"]][[dw_view]][["WDS"]]
+    tmp_et            = state[["DW"]][["views"]][[dw_view]][["elements_table"]]
 
     # The module code is the two chuncks pasted together
     modcode = paste(c(tmp_code), collapse="\n")
@@ -2623,6 +2625,7 @@ DW_fetch_ds = function(state){
     # If the view is complete we append it to the ds list
     if(!is.null(tmp_checksum)    &
        !is.null(tmp_object_name) &
+       !is.null(tmp_et)          &
        !is.null(tmp_contents)){
 
       TMPDS = NEWDS

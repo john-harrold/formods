@@ -106,8 +106,9 @@ FG_Server <- function(id,
     output$FG_ui_compact  =  renderUI({
 
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_DW]]
+   # JMH data views fix
+   #  react_state[[id_UD]]
+   #  react_state[[id_DW]]
       react_state[[id_ASM]]
       state = FG_fetch_state(id             = id,
                              input          = input,
@@ -1021,6 +1022,7 @@ FG_Server <- function(id,
                              id_UD          = id_UD,
                              id_DW          = id_DW,
                              react_state    = react_state)
+
       choicesOpt = NULL
       uiele =
         shinyWidgets::pickerInput(
@@ -1376,14 +1378,7 @@ FG_fetch_state = function(id,
     # generation state will be good. Then we just need to attach the updated
     # dataset views:
     if(state[["FG"]][["isgood"]]){
-      # JMH update the "DSV" components
       state[["FG"]][["DSV"]] = FM_fetch_ds(state, session, c(id_UD, id_DW))
-
-    # state[["FG"]][["DSV"]] = FM_fetch_dsviews(
-    #   state       = state,
-    #   id_UD       = id_UD,
-    #   id_DW       = id_DW,
-    #   react_state = react_state)
     } else {
       # If there is no dataset loaded the figure generation state will be bad
       # (isgood is FALSE). Then we need to reinitialize the module:
@@ -1394,6 +1389,12 @@ FG_fetch_state = function(id,
                             id_DW           = id_DW,
                             session         = session)
     }
+
+
+    # Forcing a figure rebuild when a database change has been detected
+    # JMH should we loop through all figures and rebuild them all?
+    state = FG_build( state=state, del_row = NULL, cmd = NULL)
+
   }
   #---------------------------------------------
   # Here we update the state based on user input
@@ -2208,249 +2209,252 @@ FG_build = function(state,
 
   # Pulling out the current figure
   current_fig = FG_fetch_current_fig(state)
-  msgs        = c()
 
-  # Defining the dataset locally:
-  # JMH check assignments below:
-  ds_object_name = current_fig[["fig_dsview"]]
-  assign(ds_object_name,
-         state[["FG"]][["DSV"]][["ds"]][[ds_object_name]][["DS"]])
-
-  # Pulling out the figure object name:
-  fg_object_name = current_fig[["fg_object_name"]]
-
-  # Initializing the figure object
-  assign(fg_object_name, NULL)
-
-  # These will be used to flag any failures below:
-  isgood     = TRUE
-  add_isgood = TRUE
-
-  # The figure code is initialized with the code init:
-  code_init = paste0(fg_object_name, " = ggplot2::ggplot(data=", ds_object_name,")")
-
-  # The figure code lines start with this:
-  code_lines = code_init
-
-  # This is the elements table
-  curr_ET = current_fig[["elements_table"]]
-
-  # Here we process row deletions
-  if(!is.null(curr_ET) & !is.null(del_row)){
-    # Removing the specified row from the elements table:
-    curr_ET = curr_ET[-c(del_row), ]
-
-    # If there was only one row and we deleted it we need
-    # to set the elements table to NULL
-    if(nrow(curr_ET) ==0){
-      curr_ET = NULL
-    }
-  }
-
-
-  # Certain elements can only be used once in a figure. When these already
-  # exist in a figure and are added again by the user we replace the last
-  # instance of the element with the new one. Here the dupe_replace vector
-  # lists the element types to force that replacement. All other element types
-  # will just be layered on top of the current figure.
-  dupe_replace = c("facet", "label", "scales")
-  dupe_found   = FALSE
-
-  if(isgood){
-
-    # First we create the code to initialize the
-    # figure
-    eval(parse(text=code_init))
-
-    # Process current elements
-    if(!is.null(curr_ET)){
-      for(row_idx in 1:nrow(curr_ET)){
-
-        # This is triggered when the element being added is already present
-        # and it is a "duplicate"
-        if((element %in% dupe_replace) &
-           (element == curr_ET[row_idx, ][["Element"]])){
-
-          # We flag that we found a duplicate:
-          dupe_found = TRUE
-          # Then we replace the cmd and Description elements of the old row
-          # with the new one:
-          curr_ET[row_idx, ][["cmd"]]         = cmd
-          curr_ET[row_idx, ][["Description"]] = desc
-          msgs = c(msgs,
-            stringr::str_replace_all(
-              state[["MC"]][["errors"]][["only_one_element"]],
-              "===ELEMENT===",
-               element))
-        }
-
-        # Now we either add the previous element or the new one if a
-        # dupliacate was found:
-        if(isgood){
-          tc_env  = list()
-          tc_env[[fg_object_name]] = get(fg_object_name)
-          tcres = FM_tc(
-             cmd     = curr_ET[row_idx, ]$cmd,
-             tc_env  = tc_env,
-             capture = c(fg_object_name))
-
-          if(tcres[["isgood"]]){
-            # If the try catch was successful we extract the updated plot object
-            assign(fg_object_name, tcres[["capture"]][[fg_object_name]])
-
-            # Mark the row as success
-            curr_ET[row_idx, ][["Status"]] = "Success"
-
-            # Saving the command for the code block
-            code_lines = c(code_lines,  curr_ET[row_idx, ]$cmd)
-
-          } else {
-            # Otherwise we set the figure to a failed state:
-            isgood = FALSE
-            # Then we mark this row as failure
-            curr_ET[row_idx, ][["Status"]] = "Failure"
-            # Append any messages as well
-            msgs = c(msgs, tcres[["msgs"]])
-          }
-        }  else {
-          # If we ran into evaluation issues above we
-          # mark the others as Not Run
-          curr_ET[row_idx, ][["Status"]] = "Not Run"
-        }
+  if(!is.null(current_fig)){
+    msgs        = c()
+   
+    # Defining the dataset locally:
+    # JMH check assignments below:
+    ds_object_name = current_fig[["fig_dsview"]]
+    assign(ds_object_name,
+           state[["FG"]][["DSV"]][["ds"]][[ds_object_name]][["DS"]])
+   
+    # Pulling out the figure object name:
+    fg_object_name = current_fig[["fg_object_name"]]
+   
+    # Initializing the figure object
+    assign(fg_object_name, NULL)
+   
+    # These will be used to flag any failures below:
+    isgood     = TRUE
+    add_isgood = TRUE
+   
+    # The figure code is initialized with the code init:
+    code_init = paste0(fg_object_name, " = ggplot2::ggplot(data=", ds_object_name,")")
+   
+    # The figure code lines start with this:
+    code_lines = code_init
+   
+    # This is the elements table
+    curr_ET = current_fig[["elements_table"]]
+   
+    # Here we process row deletions
+    if(!is.null(curr_ET) & !is.null(del_row)){
+      # Removing the specified row from the elements table:
+      curr_ET = curr_ET[-c(del_row), ]
+   
+      # If there was only one row and we deleted it we need
+      # to set the elements table to NULL
+      if(nrow(curr_ET) ==0){
+        curr_ET = NULL
       }
     }
-
-    # Adding any new elements
-    if(add_isgood){
-      if(!is.null(cmd)){
-        # We only run the new element if a duplicate wasn't found. If it was
-        # found it should have been run in line with the elements above.
-        if(!dupe_found){
-          # Defining the environment for the try/catch
-          tc_env  = list()
-          tc_env[[fg_object_name]] = get(fg_object_name)
-          tcres = FM_tc(
-             cmd     = cmd,
-             tc_env  = tc_env,
-             capture = c(fg_object_name))
-
-          if(tcres[["isgood"]]){
-            # If the try catch was successful we extract the updated plot object
-            assign(fg_object_name, tcres[["capture"]][[fg_object_name]])
-            # Then we add the new row to the event table
-            curr_ET = rbind(curr_ET,
-                  data.frame(Element     = element,
-                             cmd         = cmd,
-                             Description = desc,
-                             Status      = "Success",
-                             Delete      = FALSE))
-            # Saveing the command for the code block
-            code_lines = c(code_lines, cmd)
-          } else {
-            # Otherwise we mark the add_isgood as false
-            add_isgood = FALSE
-            # Append any messages as well
-            msgs = c(msgs, tcres[["msgs"]])
+   
+   
+    # Certain elements can only be used once in a figure. When these already
+    # exist in a figure and are added again by the user we replace the last
+    # instance of the element with the new one. Here the dupe_replace vector
+    # lists the element types to force that replacement. All other element types
+    # will just be layered on top of the current figure.
+    dupe_replace = c("facet", "label", "scales")
+    dupe_found   = FALSE
+   
+    if(isgood){
+   
+      # First we create the code to initialize the
+      # figure
+      eval(parse(text=code_init))
+   
+      # Process current elements
+      if(!is.null(curr_ET)){
+        for(row_idx in 1:nrow(curr_ET)){
+   
+          # This is triggered when the element being added is already present
+          # and it is a "duplicate"
+          if((element %in% dupe_replace) &
+             (element == curr_ET[row_idx, ][["Element"]])){
+   
+            # We flag that we found a duplicate:
+            dupe_found = TRUE
+            # Then we replace the cmd and Description elements of the old row
+            # with the new one:
+            curr_ET[row_idx, ][["cmd"]]         = cmd
+            curr_ET[row_idx, ][["Description"]] = desc
+            msgs = c(msgs,
+              stringr::str_replace_all(
+                state[["MC"]][["errors"]][["only_one_element"]],
+                "===ELEMENT===",
+                 element))
+          }
+   
+          # Now we either add the previous element or the new one if a
+          # dupliacate was found:
+          if(isgood){
+            tc_env  = list()
+            tc_env[[fg_object_name]] = get(fg_object_name)
+            tcres = FM_tc(
+               cmd     = curr_ET[row_idx, ]$cmd,
+               tc_env  = tc_env,
+               capture = c(fg_object_name))
+   
+            if(tcres[["isgood"]]){
+              # If the try catch was successful we extract the updated plot object
+              assign(fg_object_name, tcres[["capture"]][[fg_object_name]])
+   
+              # Mark the row as success
+              curr_ET[row_idx, ][["Status"]] = "Success"
+   
+              # Saving the command for the code block
+              code_lines = c(code_lines,  curr_ET[row_idx, ]$cmd)
+   
+            } else {
+              # Otherwise we set the figure to a failed state:
+              isgood = FALSE
+              # Then we mark this row as failure
+              curr_ET[row_idx, ][["Status"]] = "Failure"
+              # Append any messages as well
+              msgs = c(msgs, tcres[["msgs"]])
+            }
+          }  else {
+            # If we ran into evaluation issues above we
+            # mark the others as Not Run
+            curr_ET[row_idx, ][["Status"]] = "Not Run"
           }
         }
       }
-    }
-
-    # If there is no elements table and the plot command is null then we don't
-    # have a figure to generate yet so we just add a message to the user:
-    if(is.null(curr_ET) & is.null(cmd)) {
-      assign(fg_object_name,
-             FM_mk_error_fig(state[["MC"]][["labels"]][["no_fig_elements"]]))
-    }
-
-    # Lastly we apply any post processing
-    if(!is.null(state[["MC"]][["post_processing"]])){
-      # Pulling out the post processing code:
-      ppstr = state[["MC"]][["post_processing"]]
-      # Replacing figure object placeholders with the correct figure object
-      ppstr = stringr::str_replace_all(
-        string=ppstr,
-        pattern = "===FGOBJ===",
-        replacement = fg_object_name)
-      # Running the post processing:
-      eval(parse(text=ppstr))
-
-      # Saving the code
-      code_lines = c(code_lines, ppstr)
-    }
-
-
-    # Now we force a build of the figure to capture errors that only occur
-    # when a build has been forced:
-    tc_env  = list()
-    tc_env[[fg_object_name]] = get(fg_object_name)
-    ggb_cmd = paste0("ggb_res = ggplot2::ggplot_build(", fg_object_name, ")")
-    tcres = FM_tc(
-       cmd     = ggb_cmd,
-       tc_env  = tc_env,
-       capture = c("ggb_res"))
-    if(!tcres[["isgood"]]){
-      if(is.null(cmd)){
-
-        # If cmd is null then we're just processing the figure like normal:
-        isgood = FALSE
-      } else {
-        # Otherwise we're trying to add an element to it
-        add_isgood = FALSE
+   
+      # Adding any new elements
+      if(add_isgood){
+        if(!is.null(cmd)){
+          # We only run the new element if a duplicate wasn't found. If it was
+          # found it should have been run in line with the elements above.
+          if(!dupe_found){
+            # Defining the environment for the try/catch
+            tc_env  = list()
+            tc_env[[fg_object_name]] = get(fg_object_name)
+            tcres = FM_tc(
+               cmd     = cmd,
+               tc_env  = tc_env,
+               capture = c(fg_object_name))
+   
+            if(tcres[["isgood"]]){
+              # If the try catch was successful we extract the updated plot object
+              assign(fg_object_name, tcres[["capture"]][[fg_object_name]])
+              # Then we add the new row to the event table
+              curr_ET = rbind(curr_ET,
+                    data.frame(Element     = element,
+                               cmd         = cmd,
+                               Description = desc,
+                               Status      = "Success",
+                               Delete      = FALSE))
+              # Saveing the command for the code block
+              code_lines = c(code_lines, cmd)
+            } else {
+              # Otherwise we mark the add_isgood as false
+              add_isgood = FALSE
+              # Append any messages as well
+              msgs = c(msgs, tcres[["msgs"]])
+            }
+          }
+        }
       }
-      # Appending the messages:
-      msgs = c(msgs, tcres[["msgs"]])
-
+   
+      # If there is no elements table and the plot command is null then we don't
+      # have a figure to generate yet so we just add a message to the user:
+      if(is.null(curr_ET) & is.null(cmd)) {
+        assign(fg_object_name,
+               FM_mk_error_fig(state[["MC"]][["labels"]][["no_fig_elements"]]))
+      }
+   
+      # Lastly we apply any post processing
+      if(!is.null(state[["MC"]][["post_processing"]])){
+        # Pulling out the post processing code:
+        ppstr = state[["MC"]][["post_processing"]]
+        # Replacing figure object placeholders with the correct figure object
+        ppstr = stringr::str_replace_all(
+          string=ppstr,
+          pattern = "===FGOBJ===",
+          replacement = fg_object_name)
+        # Running the post processing:
+        eval(parse(text=ppstr))
+   
+        # Saving the code
+        code_lines = c(code_lines, ppstr)
+      }
+   
+   
+      # Now we force a build of the figure to capture errors that only occur
+      # when a build has been forced:
+      tc_env  = list()
+      tc_env[[fg_object_name]] = get(fg_object_name)
+      ggb_cmd = paste0("ggb_res = ggplot2::ggplot_build(", fg_object_name, ")")
+      tcres = FM_tc(
+         cmd     = ggb_cmd,
+         tc_env  = tc_env,
+         capture = c("ggb_res"))
+      if(!tcres[["isgood"]]){
+        if(is.null(cmd)){
+   
+          # If cmd is null then we're just processing the figure like normal:
+          isgood = FALSE
+        } else {
+          # Otherwise we're trying to add an element to it
+          add_isgood = FALSE
+        }
+        # Appending the messages:
+        msgs = c(msgs, tcres[["msgs"]])
+   
+      }
+   
     }
-
-  }
-
-  # By default there is one page. The only way to have more than one is if
-  # faceting has been chosen. In that case one of the ggforce pageinate
-  # functions would have been used. So we go through a series of checks to
-  # see if that's true. Finally If one of the figure Elements is facet then
-  # we see if there is more than one page.
-  num_pages = 1
-  if( is.ggplot(get(fg_object_name))){
-    if(!is.null(curr_ET)){
-      if(any("facet" %in% curr_ET[["Element"]])){
-        num_pages = ggforce::n_pages(get(fg_object_name))
-        if(is.null(num_pages)){
-          num_pages = 1
+   
+    # By default there is one page. The only way to have more than one is if
+    # faceting has been chosen. In that case one of the ggforce pageinate
+    # functions would have been used. So we go through a series of checks to
+    # see if that's true. Finally If one of the figure Elements is facet then
+    # we see if there is more than one page.
+    num_pages = 1
+    if( is.ggplot(get(fg_object_name))){
+      if(!is.null(curr_ET)){
+        if(any("facet" %in% curr_ET[["Element"]])){
+          num_pages = ggforce::n_pages(get(fg_object_name))
+          if(is.null(num_pages)){
+            num_pages = 1
+          }
         }
       }
     }
+   
+    # Code for the modules feeding into this one
+    # JMH check this code works
+    code_previous   = state[["FG"]][["DSV"]][["ds"]][[current_fig[["fig_dsview"]]]][["code"]]
+   
+    # Just the code to build the figure
+    code_fg_only    = paste(code_lines, collapse="\n")
+    # All the code required to generate this module
+    code            = paste(c(code_previous,
+                              "",
+                              "# Figure Generation",
+                              code_fg_only), collapse="\n")
+   
+    # Updating figure with the components above
+    current_fig[["num_pages"]]        = num_pages
+    current_fig[["msgs"]]             = msgs
+    current_fig[["code_previous"]]    = code_previous
+    current_fig[["code_fg_only"]]     = code_fg_only
+    current_fig[["code"]]             = code
+    current_fig[["isgood"]]           = isgood
+    current_fig[["add_isgood"]]       = add_isgood
+    current_fig[["fobj"]]             = get(fg_object_name)
+    current_fig[["elements_table"]]   = curr_ET
+    current_fig[["checksum"]]         = digest::digest(get(fg_object_name), algo=c("md5"))
+   
+    # updating the current figure with the changes above
+    state = FG_set_current_fig(state, current_fig)
+   
+    # updating the module checksum
+    state = FG_update_checksum(state)
   }
-
-  # Code for the modules feeding into this one
-  # JMH check this code works
-  code_previous   = state[["FG"]][["DSV"]][["ds"]][[current_fig[["fig_dsview"]]]][["code"]]
-
-  # Just the code to build the figure
-  code_fg_only    = paste(code_lines, collapse="\n")
-  # All the code required to generate this module
-  code            = paste(c(code_previous,
-                            "",
-                            "# Figure Generation",
-                            code_fg_only), collapse="\n")
-
-  # Updating figure with the components above
-  current_fig[["num_pages"]]        = num_pages
-  current_fig[["msgs"]]             = msgs
-  current_fig[["code_previous"]]    = code_previous
-  current_fig[["code_fg_only"]]     = code_fg_only
-  current_fig[["code"]]             = code
-  current_fig[["isgood"]]           = isgood
-  current_fig[["add_isgood"]]       = add_isgood
-  current_fig[["fobj"]]             = get(fg_object_name)
-  current_fig[["elements_table"]]   = curr_ET
-  current_fig[["checksum"]]         = digest::digest(get(fg_object_name), algo=c("md5"))
-
-  # updating the current figure with the changes above
-  state = FG_set_current_fig(state, current_fig)
-
-  # updating the module checksum
-  state = FG_update_checksum(state)
 
 state}
 
