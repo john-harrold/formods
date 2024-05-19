@@ -1342,6 +1342,7 @@ FG_fetch_state = function(id,
 
   # detecting changes in the datasets
   UPDATE_DS = FALSE
+  # Changes in uploaded dataset
   if("checksum" %in% names(isolate(react_state[[id_UD]][["UD"]]))){
     if(!is.null(isolate(react_state[[id_UD]][["UD"]][["checksum"]]))){
       if(is.null(state[["FG"]][["DSV"]][["modules"]][["UD"]][[id_UD]])){
@@ -1357,6 +1358,7 @@ FG_fetch_state = function(id,
     }
   }
 
+  # Changes in data views from data wrangling module
   if("checksum" %in% names(isolate(react_state[[id_DW]][["DW"]]))){
     if(!is.null(isolate(react_state[[id_DW]][["DW"]][["checksum"]]))){
       if(isolate(react_state[[id_DW]][["DW"]][["hasds"]])){
