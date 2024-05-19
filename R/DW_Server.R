@@ -3079,8 +3079,8 @@ DW_test_mksession = function(session, id = "DW", id_UD="UD"){
   }
 
   # Required for proper reaction:
-  rsc[[id]]  = list(DW = list(checksum=state[["DW"]][["checksum"]]),
-                    hasds = TRUE)
+  rsc[[id]]  = list(DW = list(checksum=state[["DW"]][["checksum"]],
+                              hasds = TRUE))
 
   res = list(
     isgood  = isgood,
