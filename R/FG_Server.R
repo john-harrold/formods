@@ -1370,6 +1370,12 @@ FG_fetch_state = function(id,
           # uploaded dataset in DW then we force a reset as well:
           UPDATE_DS = TRUE
         }
+      } else {
+        # If there is no dataset but there was one once before we also
+        # trigger a dataset update:
+        if(!is.null(state[["FG"]][["DSV"]][["modules"]][["DW"]][[id_DW]])){
+          UPDATE_DS = TRUE
+        }
       }
     }
   }
@@ -1383,11 +1389,6 @@ FG_fetch_state = function(id,
 
   if(UPDATE_DS){
     FM_le(state, "Updating DS")
-  # FM_le(state, "-----------------------------------")
-  # FM_le(state, paste0("UD: ", isolate(react_state[[id_UD]][["UD"]]), " source"))
-  # FM_le(state, paste0("UD: ", state[["FG"]][["DSV"]][["modules"]][["UD"]][[id_UD]], " current"))
-  # FM_le(state, paste0("DW: ", isolate(react_state[[id_DW]][["DW"]][["checksum"]]), " source"))
-  # FM_le(state, paste0("DW: ", state[["FG"]][["DSV"]][["modules"]][["DW"]][[id_DW]], " current"))
     # If the module initializes and there is a dataset then the figure
     # generation state will be good. Then we just need to attach the updated
     # dataset views:

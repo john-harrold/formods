@@ -1,5 +1,7 @@
 # formods 0.1.6 (development version)
 
+* Fixed (finallly) the issue where the dataset sources in the FG module are not updating properly
+
 # formods 0.1.5
 
 * Fixes issues with loading analyses breaking the app.
