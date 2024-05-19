@@ -1359,21 +1359,35 @@ FG_fetch_state = function(id,
 
   if("checksum" %in% names(isolate(react_state[[id_DW]][["DW"]]))){
     if(!is.null(isolate(react_state[[id_DW]][["DW"]][["checksum"]]))){
-      if(is.null(state[["FG"]][["DSV"]][["modules"]][["DW"]][[id_DW]])){
-        # If the DW checksum isn't NULL but the stored value in DSV is then we
-        # need to update the dataset
-        UPDATE_DS = TRUE
-      } else if(isolate(react_state[[id_DW]][["DW"]][["checksum"]]) !=
-                state[["FG"]][["DSV"]][["modules"]][["DW"]][[id_DW]]){
-        # If the stored checksum in DSV is different than the currently
-        # uploaded dataset in DW then we force a reset as well:
-        UPDATE_DS = TRUE
+      if(isolate(react_state[[id_DW]][["DW"]][["hasds"]])){
+        if(is.null(state[["FG"]][["DSV"]][["modules"]][["DW"]][[id_DW]])){
+          # If the DW checksum isn't NULL but the stored value in DSV is then we
+          # need to update the dataset
+          UPDATE_DS = TRUE
+        } else if(isolate(react_state[[id_DW]][["DW"]][["checksum"]]) !=
+                  state[["FG"]][["DSV"]][["modules"]][["DW"]][[id_DW]]){
+          # If the stored checksum in DSV is different than the currently
+          # uploaded dataset in DW then we force a reset as well:
+          UPDATE_DS = TRUE
+        }
       }
     }
   }
 
+ #message(" IN FG_fetch_state()")
+ #message(paste0("UPDATE_DS: ", UPDATE_DS))
+ #message(paste0("UD: ", isolate(react_state[[id_UD]][["UD"]]),                " source" ))
+ #message(paste0("UD: ", state[["FG"]][["DSV"]][["modules"]][["UD"]][[id_UD]], " current"))
+ #message(paste0("DW: ", isolate(react_state[[id_DW]][["DW"]][["checksum"]]),  " source" ))
+ #message(paste0("DW: ", state[["FG"]][["DSV"]][["modules"]][["DW"]][[id_DW]], " current"))
+
   if(UPDATE_DS){
     FM_le(state, "Updating DS")
+  # FM_le(state, "-----------------------------------")
+  # FM_le(state, paste0("UD: ", isolate(react_state[[id_UD]][["UD"]]), " source"))
+  # FM_le(state, paste0("UD: ", state[["FG"]][["DSV"]][["modules"]][["UD"]][[id_UD]], " current"))
+  # FM_le(state, paste0("DW: ", isolate(react_state[[id_DW]][["DW"]][["checksum"]]), " source"))
+  # FM_le(state, paste0("DW: ", state[["FG"]][["DSV"]][["modules"]][["DW"]][[id_DW]], " current"))
     # If the module initializes and there is a dataset then the figure
     # generation state will be good. Then we just need to attach the updated
     # dataset views:
@@ -1394,7 +1408,6 @@ FG_fetch_state = function(id,
     # Forcing a figure rebuild when a database change has been detected
     # JMH should we loop through all figures and rebuild them all?
     state = FG_build( state=state, del_row = NULL, cmd = NULL)
-
   }
   #---------------------------------------------
   # Here we update the state based on user input

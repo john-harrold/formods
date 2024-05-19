@@ -1343,7 +1343,25 @@ DW_Server <- function(id,
                                react_state     = react_state)
 
         FM_le(state, "reaction state updated")
-        #react_state[[id]] = state
+
+        # Checking if there are exportable datasets:
+        hasds = FALSE
+        dw_views    = names(state[["DW"]][["views"]])
+        for(dw_view in dw_views){
+          tmp_checksum      = state[["DW"]][["views"]][[dw_view]][["checksum"]]
+          tmp_object_name   = state[["DW"]][["views"]][[dw_view]][["view_ds_object_name"]]
+          tmp_contents      = state[["DW"]][["views"]][[dw_view]][["WDS"]]
+          tmp_et            = state[["DW"]][["views"]][[dw_view]][["elements_table"]]
+          if(!is.null(tmp_checksum)    &
+             !is.null(tmp_object_name) &
+             !is.null(tmp_et)          &
+             !is.null(tmp_contents)){
+             hasds = TRUE
+          }
+        }
+        react_state[[id]][["DW"]][["hasds"]]    = hasds
+
+        # Module checksum
         react_state[[id]][["DW"]][["checksum"]] = state[["DW"]][["checksum"]]
       }, priority=99)
     }
@@ -1600,6 +1618,7 @@ DW_fetch_state = function(id,                    input,     session,
               # Saving the NEW_ET over the elements_table in the state
               current_view[["elements_table"]]  = NEW_ET
               state = DW_set_current_view(state, current_view)
+              FM_le(state, "wrangling element deleted")
             }
           }
         }
