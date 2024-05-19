@@ -1,4 +1,6 @@
-# formods 0.1.5 (development version)
+# formods 0.1.6 (development version)
+
+# formods 0.1.5
 
 * Fixes issues with loading analyses breaking the app.
 * Added modals and notifications to  loading analyses.
