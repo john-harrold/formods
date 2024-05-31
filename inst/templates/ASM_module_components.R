@@ -26,6 +26,7 @@ ui <- dashboardPage(
            width=12)),
        fluidRow(
          box(title="Save",
+           prompter::use_prompt(),
            "ui_asm_save_name",
            htmlOutput(NS("ASM", "ui_asm_save_name")),
            "ui_asm_switch_gen_rpts",
@@ -49,6 +50,9 @@ ui <- dashboardPage(
            div(style="display:inline-block",
            "ui_asm_rpt_docx",
            htmlOutput(NS("ASM", "ui_asm_rpt_docx"))) ,
+           tags$br(),
+           "ui_asm_rpt_docx_ph",
+           htmlOutput(NS("ASM", "ui_asm_rpt_docx_ph")) ,
            width=12)),
        fluidRow(
          box(title="Messages",

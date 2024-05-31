@@ -35,6 +35,8 @@ MC:
     ui_asm_save_name_ph:    "my_analysis"
     ui_asm_switch_gen_rpts: "Generate reports when saving."
     save_state:             "Save"
+    gen_rpt_header:         "Generate Reports"
+    gen_rpt_docx_ph:        "Word Report Paceholders"
     input_load_state:       "Load Analysis"
     upload_button:          "Load"
     upload_placeholder:     "Select analysis file" 

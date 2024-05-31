@@ -1,7 +1,7 @@
 Package: formods
 Type: Package
 Title: 'Shiny' Modules for General Tasks
-Version: 0.1.6
+Version: 0.1.7
 Authors@R: c(person("John", "Harrold",
                     role    = c("aut", "cre"),
                     email   = "john.m.harrold@gmail.com",

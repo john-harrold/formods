@@ -69,11 +69,30 @@ ASM_Server <- function(id,
       uiele})
     #------------------------------------
     output$ui_asm_compact  =  renderUI({
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+
+
+      docx_ph_uiele  =  NULL
+      if(length(state[["ASM"]][["ph_uis"]]) > 0){
+        docx_ph_uiele  =  tagList(
+             tags$br(),
+             tags$b(state[["MC"]][["labels"]][["gen_rpt_docx_ph"]]),
+             div(style="text-align:center",
+               htmlOutput(NS(id, "ui_asm_rpt_docx_ph"))
+             ))
+      }
+
       uiele = tagList(
            htmlOutput(NS(id, "ui_asm_save_name_text")),
            htmlOutput(NS(id, "ui_asm_switch_gen_rpts")),
            htmlOutput(NS(id, "ui_asm_save_button")),
            tags$br(),
+           htmlOutput(NS(id, "ui_asm_load_state")),
+           tags$b(state[["MC"]][["labels"]][["gen_rpt_header"]]),
            div(style="text-align:center",
              div(style="display:inline-block;width:32%",
              htmlOutput(NS(id, "ui_asm_rpt_pptx"))),
@@ -82,9 +101,8 @@ ASM_Server <- function(id,
              div(style="display:inline-block;width:32%",
              htmlOutput(NS(id, "ui_asm_rpt_xlsx"))),
            ),
+           docx_ph_uiele,
            tags$br(),
-           tags$br(),
-           htmlOutput(NS(id, "ui_asm_load_state")),
            verbatimTextOutput(NS(id, "ui_asm_msg"))
       )
 
@@ -211,9 +229,22 @@ ASM_Server <- function(id,
         FM_pause_screen(state   = state,
                         message = state[["MC"]][["labels"]][["busy"]][["docx"]],
                         session = session)
+        # Creating placeholder list to overwrite defaults in the yaml file
+        # with values from the ui
+        ph = list()
+        if(length(state[["ASM"]][["ph_uis"]]) > 0){
+          for(ph_ui in names(state[["ASM"]][["ph_uis"]])){
+            ph_value = state[["ASM"]][["ui"]][[ph_ui]]
+            if(!is.null(ph_value)){
+              ph_name = state[["ASM"]][["ph_uis"]][[ph_ui]][["name"]]
+              ph[[ph_name]] = ph_value
+            }
+          }
+        }
         rpt_res =
         FM_generate_report(state     = state,
                            session   = session,
+                           ph        = ph,
                            file_dir  = dirname(file),
                            file_name = basename(file))
         FM_resume_screen(state   = state,
@@ -335,6 +366,40 @@ ASM_Server <- function(id,
                     block    = state[["MC"]][["formatting"]][["button_rpt_docx"]][["block"]],
                     color    = "primary",
                     icon     = icon("arrow-down"))
+        }
+      }
+      uiele})
+    # rpt docx
+    output$ui_asm_rpt_docx_ph  = renderUI({
+      #req(input$X)
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+
+      uiele = NULL
+      if(state[["ASM"]][["isgood"]]){
+        if( length(state[["ASM"]][["ph_uis"]]) > 0){
+          for(ph_ui in names(state[["ASM"]][["ph_uis"]])){
+            tmp_uiele =
+              textInput(
+                inputId     = NS(id, ph_ui),
+                width = state[["yaml"]][["FM"]][["reporting"]][["phs_formatting"]][["width"]],
+                label = NULL,
+                placeholder = state[["ASM"]][["ph_uis"]][[ph_ui]][["name"]],
+                value = state[["ASM"]][["ui"]][[ph_ui]])
+
+            if(is.character( state[["ASM"]][["ph_uis"]][[ph_ui]][["tooltip"]])){
+              tmp_uiele = FM_add_ui_tooltip(
+                state    = state,
+                uiele    = tmp_uiele,
+                tooltip  = state[["ASM"]][["ph_uis"]][[ph_ui]][["tooltip"]],
+                position = state[["yaml"]][["FM"]][["reporting"]][["phs_formatting"]][["tt_position"]],
+                size     = state[["yaml"]][["FM"]][["reporting"]][["phs_formatting"]][["tt_size"]])
+            }
+            uiele = tagList(uiele, tags$div(tmp_uiele))
+          }
         }
       }
       uiele})
@@ -650,7 +715,7 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
               # current module:
               tmp_MOD_TYPE = tmp_state[["MOD_TYPE"]]
               MOD_FUNC     = paste0(tmp_MOD_TYPE, "_onload")
-              
+
               if(exists(MOD_FUNC, mode="function")){
                 FM_le(state, paste0("  Processing ", MOD_FUNC, "() for module id: ", tmp_state[["id"]]))
                 # If there is we update the state and put it back in the
@@ -685,23 +750,23 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
       FM_resume_screen(state   = state,
                        session = session)
 
-     
+
 
     }
 
     # Setting notifications for the user
     if(ls_isgood){
       state = FM_set_notification(
-        state       = state, 
+        state       = state,
         notify_text =  state[["MC"]][["labels"]][["load_success"]],
-        notify_id   = "ASM load failed", 
+        notify_id   = "ASM load failed",
         type        = "success")
 
     } else {
       state = FM_set_notification(
-        state       = state, 
+        state       = state,
         notify_text =  state[["MC"]][["errors"]][["load_failed"]],
-        notify_id   = "ASM load failed", 
+        notify_id   = "ASM load failed",
         type        = "failure")
     }
 
@@ -758,6 +823,22 @@ ASM_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
    "switch_gen_rpts"
     )
 
+
+  # Reading in the yaml file to get the names of the placeholders
+  formods_yaml =   yaml::read_yaml(FM_yaml_file)
+
+  ph_uis = list()
+  if(!is.null(formods_yaml[["FM"]][["reporting"]][["phs"]])){
+    for(ph_idx in 1:length(formods_yaml[["FM"]][["reporting"]][["phs"]])){
+      ph_ui = paste0("ui_asm_docx_ph_", formods_yaml[["FM"]][["reporting"]][["phs"]][[ph_idx]][["name"]])
+      ph_uis[[ph_ui]]             = formods_yaml[["FM"]][["reporting"]][["phs"]][[ph_idx]]
+      ph_uis[[ph_ui]][["ph_idx"]] = ph_idx
+    }
+  }
+
+  # Adding the placeholder uis to the uis for the module
+  ui_ids = c(ui_ids, names(ph_uis))
+
   ui_hold         = c()
 
   state = FM_init_state(
@@ -773,6 +854,18 @@ ASM_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
 
   # Default checksum is NULL:
   state[["ASM"]][["checksum"]] = digest::digest(NULL, algo=c("md5"))
+
+  # Saving the placeholder information
+  state[["ASM"]][["ph_uis"]] = ph_uis
+
+  # Saving the values in the ui portion of the state
+  state[["ASM"]][["ui"]] = list()
+
+  if(!is.null(formods_yaml[["FM"]][["reporting"]][["phs"]])){
+    for(ph_ui  in names(ph_uis)){
+      state[["ASM"]][["ui"]][[ph_ui]] = ph_uis[[ph_ui]][["value"]]
+    }
+  }
 
   FM_le(state, "State initialized")
   state}

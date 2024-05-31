@@ -1,4 +1,9 @@
-# formods 0.1.6 (development version)
+# formods 0.1.7 (development version)
+
+* Added word placeholders to the UI so the user can change them when generating reports/saving the app state.
+
+
+# formods 0.1.6 
 
 * Fixed (finallly) the issue where the dataset sources in the FG module are not updating properly
 

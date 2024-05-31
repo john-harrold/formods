@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">formods</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -321,7 +321,7 @@ has the following structure:</p><ul><li><p>yaml: Full contents of the supplied y
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs[[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs[[1]]$name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HEADERRIGHT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HEADERLEFT"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs[[1]]$location</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "header"</span>
@@ -329,16 +329,22 @@ has the following structure:</p><ul><li><p>yaml: Full contents of the supplied y
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs[[1]]$value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs[[1]]$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left header text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs[[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs[[2]]$name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HEADERLEFT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HEADERRIGHT"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs[[2]]$location</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "header"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs[[2]]$value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs[[2]]$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "right header text"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs[[3]]</span>
@@ -351,6 +357,20 @@ has the following structure:</p><ul><li><p>yaml: Full contents of the supplied y
 <span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs[[3]]$value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs[[3]]$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left footer text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs_formatting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs_formatting$width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "100%"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs_formatting$tt_position</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $yaml$FM$reporting$phs_formatting$tt_size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "medium"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -539,6 +559,12 @@ has the following structure:</p><ul><li><p>yaml: Full contents of the supplied y
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$save_state</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Save"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$gen_rpt_header</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Generate Reports"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$gen_rpt_docx_ph</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Word Report Paceholders"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$input_load_state</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Load Analysis"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -616,8 +642,11 @@ has the following structure:</p><ul><li><p>yaml: Full contents of the supplied y
 <span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ui_ids</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "button_state_save" "button_rpt_xlsx"   "button_rpt_docx"  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4] "button_rpt_pptx"   "ui_asm_save_name"  "switch_gen_rpts"  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "button_state_save"          "button_rpt_xlsx"           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "button_rpt_docx"            "button_rpt_pptx"           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "ui_asm_save_name"           "switch_gen_rpts"           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7] "ui_asm_docx_ph_HEADERLEFT"  "ui_asm_docx_ph_HEADERRIGHT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [9] "ui_asm_docx_ph_FOOTERLEFT" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$isgood</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
@@ -625,7 +654,69 @@ has the following structure:</p><ul><li><p>yaml: Full contents of the supplied y
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$checksum</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "f9e884084b84794d762a535f3facec85"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_HEADERLEFT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_HEADERLEFT$name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HEADERLEFT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_HEADERLEFT$location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "header"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_HEADERLEFT$value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_HEADERLEFT$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left header text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_HEADERLEFT$ph_idx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_HEADERRIGHT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_HEADERRIGHT$name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HEADERRIGHT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_HEADERRIGHT$location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "header"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_HEADERRIGHT$value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_HEADERRIGHT$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "right header text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_HEADERRIGHT$ph_idx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_FOOTERLEFT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_FOOTERLEFT$name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FOOTERLEFT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_FOOTERLEFT$location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "footer"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_FOOTERLEFT$value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_FOOTERLEFT$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left footer text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ph_uis$ui_asm_docx_ph_FOOTERLEFT$ph_idx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ui</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ui$ui_asm_docx_ph_HEADERLEFT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ui$ui_asm_docx_ph_HEADERRIGHT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ui$ui_asm_docx_ph_FOOTERLEFT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ASM$ui$button_state_save</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -653,10 +744,10 @@ has the following structure:</p><ul><li><p>yaml: Full contents of the supplied y
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ASM"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmp39iCwB/temp_libpath5f3113aee68c/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpEfG5in/temp_libpath6d4076dedebf/formods/templates/formods.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/Rtmp39iCwB/temp_libpath5f3113aee68c/formods/templates/ASM.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/l9/6pm7xq5j1hn6l00zrs22j6mc0000gn/T/RtmpEfG5in/temp_libpath6d4076dedebf/formods/templates/ASM.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $shiny_token</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "non_shiny"</span>

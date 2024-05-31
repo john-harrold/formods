@@ -88,20 +88,29 @@ FM:
     #
     #  ===HEADERRIGHT===
     # The placeholder below is HEADERRIGHT, the location is header and by
-    # default we will replace it with nothing.
+    # default we will replace it with nothing. Placeholder text can have no
+    # spaces. 
     #
-    # These defaults can be overwritten in the save section.
+    # These defaults can be overwritten in the save section. If your template
+    # has no placeholders you can comment out the entire phs section.
     #
     phs:
-      - name:      "HEADERRIGHT"
-        location:  "header"
-        value:     ""
       - name:      "HEADERLEFT"
         location:  "header"
         value:     ""
+        tooltip:   "left header text"
+      - name:      "HEADERRIGHT"
+        location:  "header"
+        value:     ""
+        tooltip:   "right header text"
       - name:      "FOOTERLEFT"
         location:  "footer"
         value:     ""
+        tooltip:   "left footer text"
+    phs_formatting: 
+      width:       "100%"
+      tt_position: "left"
+      tt_size:     "medium"
   ui:
     # See ?actionBttn for styles
     button_style: "fill"
