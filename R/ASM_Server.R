@@ -371,6 +371,7 @@ ASM_Server <- function(id,
       uiele})
     # rpt docx
     output$ui_asm_rpt_docx_ph  = renderUI({
+      react_state[[id]]
       #req(input$X)
       state = ASM_fetch_state(id           = id,
                               input        = input,
@@ -547,7 +548,26 @@ ASM_Server <- function(id,
     FM_notify(state = state,
      session     = session)
   })
-
+    #------------------------------------
+    # Removing holds
+    remove_hold_listen  <- reactive({
+      list(react_state[[id]])
+    })
+    observeEvent(remove_hold_listen(), {
+      # Once the UI has been regenerated we
+      # remove any holds for this module
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+      formods::FM_le(state, "removing holds")
+      # Removing all holds
+      for(hname in names(state[["ASM"]][["ui_hold"]])){
+        remove_hold(state, session, hname)
+      }
+    }, priority = -100)
+    #------------------------------------
   })
 
 }
@@ -614,7 +634,9 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
   # Here we update the state based on user input
   for(ui_name in state[["ASM"]][["ui_ids"]]){
     if(!is.null(isolate(input[[ui_name]]))){
-       state[["ASM"]][["ui"]][[ui_name]] = isolate(input[[ui_name]])
+      if(!fetch_hold(state, ui_name)){
+        state[["ASM"]][["ui"]][[ui_name]] = isolate(input[[ui_name]])
+       }
      } else {
        state[["ASM"]][["ui"]][[ui_name]] = ""
      }
@@ -781,6 +803,18 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
 
   # Returning the state
   state}
+
+#'@export
+#'@title Updates ASM After State Load
+#'@description Creates a list of the initialized module state
+#'@param state ASM state object
+#'@param session Shiny session variable
+#'@return ASM state object
+ASM_onload  = function(state, session){
+  for(ph_ui in names(state[["ASM"]][["ph_uis"]])){
+    updateTextInput(session, inputId=ph_ui, value=state[["ASM"]][["ui"]][[ph_ui]])
+  }
+state}
 
 #'@export
 #'@title Initialize ASM Module State

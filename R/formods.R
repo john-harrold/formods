@@ -1018,7 +1018,6 @@ FM_set_app_state <- function(session, app_state, set_holds = TRUE){
     FM_message(line="Unable to find ASM state.")
   }
 
-
   # Replacing the app state in session:
   session$userData[["FM"]] = app_state
 
