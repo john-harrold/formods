@@ -77,6 +77,10 @@ MC:
       The plot element component ===COMP=== was specified manually but 
       no manual value was provided.
     select_current_fig:  "Current figure"
+    select_component_facet: "Columns to facet by"
+    facet_scales:            "Scale axes"
+    facet_dims_nrow:         "Rows"
+    facet_dims_ncol:         "Columns"
     select_current_view: "Data from"
     no_figures_defined:  "No figures have been defined. There are no data sources to create figures. You need to load data and create data views to use this module."
     busy:
@@ -84,7 +88,7 @@ MC:
   errors:
     element_not_added:    "Unable to add the data figure element:"
     current_key_empty:    "The figure description field cannot be empty."
-    only_one_element:     "Only one element of ===ELEMENT=== type is allowed. The old ===ELEMENT=== will be replaced."
+    only_one_element:     "Only one ===ELEMENT=== type element is allowed. The old ===ELEMENT=== will be replaced."
   elements:
     # For each element below you should only modify the choice and subtext
     # elements
@@ -159,7 +163,9 @@ MC:
     #If you make the slider width = preview it will
     # span the bottom of the figure
     select_fg_page:    
-      width:  1000
+      tooltip: "Select the figure page to view."
+      tooltip_position: "bottom"
+      width:  150  
     # Dimensions of the notes text area
     notes:      
       width:  "560px"
@@ -168,7 +174,42 @@ MC:
       aes:
         width: "100px"
       facet:
+        tooltip: "Select one or more columns/variables to facet by."
+        tooltip_position: "right"
         width: "200px"
+      facet_scales:
+        tooltip: "How should axes be scaled?"
+        tooltip_position: "right"
+        width: "200px"
+        default: "fixed"
+        choices:
+          fixed:
+            choice: "Fixed"
+            subtext: "Same x- and y-axis for each facet"
+          free:
+            choice: "Free"
+            subtext: "Independent x- and y-axis for each facet"
+          free_x:
+            choice: "Free x-axis"
+            subtext: "Independent x-axis for each facet"
+          free_y:
+            choice: "Free y-axis"
+            subtext: "Independent y-axis for each facet"
+      facet_dims:   
+        ncol: 
+          tooltip: "Number of columns"
+          tooltip_position: "right"
+          subtext: "Number of columns"
+          width: "75px"
+          default: 4
+          choices: [ 1,2,3,4,5,6]
+        nrow: 
+          tooltip: "Number of rows"
+          tooltip_position: "right"
+          subtext: "Number of rows"
+          width: "75px"
+          default: 3
+          choices: [ 1,2,3,4,5,6]
       label:
         width: "150px"
       axscale:
@@ -183,11 +224,6 @@ MC:
     fg_elements:    
       width:  600
       height: 200
-    # When faceting is selected (wrapping or grid) the result will be
-    # paginated according to the dimensions below:
-    faceting:  
-      nrow:  3
-      ncol:  4
     # Button sizes from actionBttn (shinyWidgets) 
     # xs,sm, md, lg.
     button_fig_del:

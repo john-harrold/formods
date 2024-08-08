@@ -75,9 +75,9 @@ ui <- dashboardPage(
                  "ui_fg_preview_plotly",
                  plotly::plotlyOutput(NS("FG", "ui_fg_preview_plotly"), width="1000px", height="600px"), width=12)),
              fluidRow(
-               box(title="Multipage Slider",
-                 "ui_fg_slider_page",
-                 htmlOutput(NS("FG", "ui_fg_slider_page")), width=12)),
+               box(title="Multipage selection",
+                 "ui_fg_select_page",
+                 htmlOutput(NS("FG", "ui_fg_select_page")), width=12)),
              fluidRow(
                box(title="Current Elements",
                  "hot_fg_elements",
@@ -116,7 +116,8 @@ server <- function(input, output, session) {
 
   # Creating upstream data for the DW module
   id_DW = "DW"
-  res = DW_test_mksession(session)
+  #res = DW_test_mksession(session)
+  res = FG_test_mksession(session)
   react_FM[[id_DW]] = res[["rsc"]][[id_DW]]
   react_FM[[id_UD]] = res[["rsc"]][[id_UD]]
 

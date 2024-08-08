@@ -242,7 +242,7 @@ FG_Server <- function(id,
             uiele_preview,
             uiele_buttons_right,
             tags$br(),
-            htmlOutput(NS("FG", "ui_fg_slider_page"))
+            htmlOutput(NS("FG", "ui_fg_select_page"))
           )
 
         uiele = tagList( uiele,
@@ -251,9 +251,7 @@ FG_Server <- function(id,
           div(style="display:inline-block", htmlOutput(NS(id, "ui_fg_select"))),
           tags$br(),
           htmlOutput(NS(id, "ui_fg_new_element_row")
-         #tags$br(),
-         #verbatimTextOutput(NS(id, "ui_fg_msg")
-          ) # JMH this shouldn't be here, I think? it's a repeat from above.
+          )
         )
       }
 
@@ -642,7 +640,7 @@ FG_Server <- function(id,
       }
       uiele})
     #------------------------------------
-    output$ui_fg_slider_page = renderUI({
+    output$ui_fg_select_page = renderUI({
       react_state[[id_UD]]
       react_state[[id_DW]]
       react_state[[id_ASM]]
@@ -681,15 +679,24 @@ FG_Server <- function(id,
 
         pages = c(1:current_fig[["num_pages"]])
         uiele =
-           sliderTextInput(
+           pickerInput(
              inputId  = NS(id, "select_fg_page"),
-             label    = NULL,
              width    = state[["MC"]][["formatting"]][["select_fg_page"]][["width"]],
-             grid     = TRUE,
              selected = current_page,
-             choices  = pages
-           )
+             label    = NULL,
+             choices  = pages)
+          #sliderTextInput(
+          #  inputId  = NS(id, "select_fg_page"),
+          #  label    = NULL,
+          #  width    = state[["MC"]][["formatting"]][["select_fg_page"]][["width"]],
+          #  grid     = TRUE,
+          #  selected = current_page,
+          #  choices  = pages
+          #)
 
+        uiele  = FM_add_ui_tooltip(state, uiele,
+                 tooltip     = state[["MC"]][["formatting"]][["select_fg_page"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["select_fg_page"]][["tooltip_position"]])
       }
 
       uiele})
@@ -869,16 +876,91 @@ FG_Server <- function(id,
 
           sel_choices = fig_dscols
 
-          uiele =
+          #-------------------------------------------
+          # Building out the facet variables/columns ui
+          uiele_vars  =
             pickerInput(
               inputId    = NS(id, "select_component_facet"),
-              label      = NULL,
+              label      = state[["MC"]][["labels"]][["select_component_facet"]],
               multiple   = TRUE,
               choices    = sel_choices,
               width      = state[["MC"]][["formatting"]][["components"]][["facet"]][["width"]],
               options    = list(
                             size     = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
                             maxItems = 2))
+
+          uiele_vars   = FM_add_ui_tooltip(state, div(uiele_vars) ,
+                   tooltip     = state[["MC"]][["formatting"]][["components"]][["facet"]][["tooltip"]],
+                   position    = state[["MC"]][["formatting"]][["components"]][["facet"]][["tooltip_position"]])
+
+
+          #-------------------------------------------
+          # Building out the facet scale ui
+          subtext = c()
+          cnames  = c()
+          choices = c()
+          for(choice in names(state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["choices"]])){
+            choices = c(choices, choice)
+            subtext = c(subtext, state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["choices"]][[choice]][["subtext"]])
+            cnames  = c(cnames,  state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["choices"]][[choice]][["choice"]])
+          }
+          choicesOpt = list(
+            subtext = subtext )
+          names(choices) = cnames
+
+          uiele_scale =
+            pickerInput(
+              inputId    = NS(id, "select_component_facet_scales"),
+              label      = state[["MC"]][["labels"]][["facet_scales"]],
+              multiple   = FALSE,
+              selected   = state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["default"]],
+              choicesOpt = choicesOpt,
+              choices    = choices,
+              width      = state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["width"]])
+            # options    = list(
+            #               size     = state[["yaml"]][["FM"]][["ui"]][["select_size"]],
+            #               maxItems = 2))
+            #
+          uiele_scale  = FM_add_ui_tooltip(state, div(uiele_scale),
+                   tooltip     = state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["tooltip"]],
+                   position    = state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["tooltip_position"]])
+
+
+          #-------------------------------------------
+          # Numer of rows
+          uiele_nrow =
+            pickerInput(
+              inputId    = NS(id, "select_component_facet_nrow"),
+              label      = state[["MC"]][["labels"]][["facet_dims_nrow"]],
+              multiple   = FALSE,
+              selected   = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["nrow"]][["default"]],
+              choices    = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["nrow"]][["choices"]],
+              width      = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["nrow"]][["width"]])
+
+          uiele_nrow   = FM_add_ui_tooltip(state, div(uiele_nrow),
+                   tooltip     = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["nrow"]][["tooltip"]],
+                   position    = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["nrow"]][["tooltip_position"]])
+          #-------------------------------------------
+          # Numer of cols
+          uiele_ncol =
+            pickerInput(
+              inputId    = NS(id, "select_component_facet_ncol"),
+              label      = state[["MC"]][["labels"]][["facet_dims_ncol"]],
+              multiple   = FALSE,
+              selected   = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["ncol"]][["default"]],
+              choices    = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["ncol"]][["choices"]],
+              width      = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["ncol"]][["width"]])
+
+          uiele_ncol  = FM_add_ui_tooltip(state, div(uiele_ncol),
+                   tooltip     = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["ncol"]][["tooltip"]],
+                   position    = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["ncol"]][["tooltip_position"]])
+
+          # Combining them together
+          uiele = tagList( div(style="display:inline-block", uiele_vars),
+                           div(style="display:inline-block", uiele_nrow),
+                           div(style="display:inline-block", uiele_ncol),
+                           div(style="display:inline-block", uiele_scale))
+
         } else if(curr_element == "scales") {
 
           scale_choices = c("linear", "log10", "log2")
@@ -1775,6 +1857,9 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
       "select_current_fig",
       "select_current_view",
       "select_component_facet",
+      "select_component_facet_scales",
+      "select_component_facet_nrow",
+      "select_component_facet_ncol",
       "select_component_xscale",
       "select_component_yscale",
       "select_fg_element")
@@ -2065,17 +2150,42 @@ fers_builder = function(state){
       msgs = c(msgs, state[["MC"]][["labels"]][["msg_bad_facet"]])
 
     } else {
+
+      # Getting the facet scales
+      if(ui[["select_component_facet_scales"]] %in% names(state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["choices"]])){
+        facet_scales = ui[["select_component_facet_scales"]]
+      } else {
+        facet_scales = state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["default"]]
+        msgs = c(msgs, "Unable to determine facet scales from ui using default")
+      }
+
+
+      # Number of rows
+      if(ui[["select_component_facet_nrow"]] %in% state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["nrow"]][["choices"]]){
+        facet_nrow =  ui[["select_component_facet_nrow"]]
+      } else {
+        facet_nrow = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["nrow"]][["default"]] 
+      }
+
+      # Number of columns
+      if(ui[["select_component_facet_ncol"]] %in% state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["ncol"]][["choices"]]){
+        facet_ncol =  ui[["select_component_facet_ncol"]]
+      } else {
+        facet_ncol = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["ncol"]][["default"]] 
+      }
+
       # The faceting command will depend on the number of columns selected
       if(length(ui[["select_component_facet"]]) == 2){
-        state[["MC"]][["formatting"]][["faceting"]][["cols"]]
+
         cmd = paste0(
                      fg_object_name , " = ", fg_object_name, " + ",
                      "ggforce::facet_grid_paginate(",
                      ui[["select_component_facet"]][1],
                      "~",
                      ui[["select_component_facet"]][2],
-                     ", nrow = ", state[["MC"]][["formatting"]][["faceting"]][["nrow"]],
-                     ", ncol = ", state[["MC"]][["formatting"]][["faceting"]][["ncol"]],
+                     ", scales = ", deparse(facet_scales),
+                     ", nrow = ", facet_nrow,
+                     ", ncol = ", facet_ncol,
                      ", page=1",
                      ")")
 
@@ -2085,17 +2195,12 @@ fers_builder = function(state){
                      "ggforce::facet_wrap_paginate(vars(",
                      paste0(ui[["select_component_facet"]], collapse=", ")
                      , ")",
-                     ", nrow = ", state[["MC"]][["formatting"]][["faceting"]][["nrow"]],
-                     ", ncol = ", state[["MC"]][["formatting"]][["faceting"]][["ncol"]],
+                     ", scales = ", deparse(facet_scales),
+                     ", nrow = ", facet_nrow,
+                     ", ncol = ", facet_ncol,
                      ", page=1",
                      ")")
 
-      # cmd = paste0(
-      #              fg_object_name , " = ", fg_object_name, " + ",
-      #              "facet_wrap(vars(",
-      #              paste0(ui[["select_component_facet"]], collapse=", ")
-      #              , "))")
-      #
       }
 
       desc = paste0(ui[["select_component_facet"]], collapse= ", ")
@@ -2228,45 +2333,45 @@ FG_build = function(state,
 
   if(!is.null(current_fig)){
     msgs        = c()
-   
+
     # Defining the dataset locally:
     # JMH check assignments below:
     ds_object_name = current_fig[["fig_dsview"]]
     assign(ds_object_name,
            state[["FG"]][["DSV"]][["ds"]][[ds_object_name]][["DS"]])
-   
+
     # Pulling out the figure object name:
     fg_object_name = current_fig[["fg_object_name"]]
-   
+
     # Initializing the figure object
     assign(fg_object_name, NULL)
-   
+
     # These will be used to flag any failures below:
     isgood     = TRUE
     add_isgood = TRUE
-   
+
     # The figure code is initialized with the code init:
     code_init = paste0(fg_object_name, " = ggplot2::ggplot(data=", ds_object_name,")")
-   
+
     # The figure code lines start with this:
     code_lines = code_init
-   
+
     # This is the elements table
     curr_ET = current_fig[["elements_table"]]
-   
+
     # Here we process row deletions
     if(!is.null(curr_ET) & !is.null(del_row)){
       # Removing the specified row from the elements table:
       curr_ET = curr_ET[-c(del_row), ]
-   
+
       # If there was only one row and we deleted it we need
       # to set the elements table to NULL
       if(nrow(curr_ET) ==0){
         curr_ET = NULL
       }
     }
-   
-   
+
+
     # Certain elements can only be used once in a figure. When these already
     # exist in a figure and are added again by the user we replace the last
     # instance of the element with the new one. Here the dupe_replace vector
@@ -2274,22 +2379,22 @@ FG_build = function(state,
     # will just be layered on top of the current figure.
     dupe_replace = c("facet", "label", "scales")
     dupe_found   = FALSE
-   
+
     if(isgood){
-   
+
       # First we create the code to initialize the
       # figure
       eval(parse(text=code_init))
-   
+
       # Process current elements
       if(!is.null(curr_ET)){
         for(row_idx in 1:nrow(curr_ET)){
-   
+
           # This is triggered when the element being added is already present
           # and it is a "duplicate"
           if((element %in% dupe_replace) &
              (element == curr_ET[row_idx, ][["Element"]])){
-   
+
             # We flag that we found a duplicate:
             dupe_found = TRUE
             # Then we replace the cmd and Description elements of the old row
@@ -2302,7 +2407,7 @@ FG_build = function(state,
                 "===ELEMENT===",
                  element))
           }
-   
+
           # Now we either add the previous element or the new one if a
           # dupliacate was found:
           if(isgood){
@@ -2312,17 +2417,17 @@ FG_build = function(state,
                cmd     = curr_ET[row_idx, ]$cmd,
                tc_env  = tc_env,
                capture = c(fg_object_name))
-   
+
             if(tcres[["isgood"]]){
               # If the try catch was successful we extract the updated plot object
               assign(fg_object_name, tcres[["capture"]][[fg_object_name]])
-   
+
               # Mark the row as success
               curr_ET[row_idx, ][["Status"]] = "Success"
-   
+
               # Saving the command for the code block
               code_lines = c(code_lines,  curr_ET[row_idx, ]$cmd)
-   
+
             } else {
               # Otherwise we set the figure to a failed state:
               isgood = FALSE
@@ -2338,7 +2443,7 @@ FG_build = function(state,
           }
         }
       }
-   
+
       # Adding any new elements
       if(add_isgood){
         if(!is.null(cmd)){
@@ -2352,7 +2457,7 @@ FG_build = function(state,
                cmd     = cmd,
                tc_env  = tc_env,
                capture = c(fg_object_name))
-   
+
             if(tcres[["isgood"]]){
               # If the try catch was successful we extract the updated plot object
               assign(fg_object_name, tcres[["capture"]][[fg_object_name]])
@@ -2374,14 +2479,14 @@ FG_build = function(state,
           }
         }
       }
-   
+
       # If there is no elements table and the plot command is null then we don't
       # have a figure to generate yet so we just add a message to the user:
       if(is.null(curr_ET) & is.null(cmd)) {
         assign(fg_object_name,
                FM_mk_error_fig(state[["MC"]][["labels"]][["no_fig_elements"]]))
       }
-   
+
       # Lastly we apply any post processing
       if(!is.null(state[["MC"]][["post_processing"]])){
         # Pulling out the post processing code:
@@ -2393,12 +2498,12 @@ FG_build = function(state,
           replacement = fg_object_name)
         # Running the post processing:
         eval(parse(text=ppstr))
-   
+
         # Saving the code
         code_lines = c(code_lines, ppstr)
       }
-   
-   
+
+
       # Now we force a build of the figure to capture errors that only occur
       # when a build has been forced:
       tc_env  = list()
@@ -2410,7 +2515,7 @@ FG_build = function(state,
          capture = c("ggb_res"))
       if(!tcres[["isgood"]]){
         if(is.null(cmd)){
-   
+
           # If cmd is null then we're just processing the figure like normal:
           isgood = FALSE
         } else {
@@ -2419,11 +2524,11 @@ FG_build = function(state,
         }
         # Appending the messages:
         msgs = c(msgs, tcres[["msgs"]])
-   
+
       }
-   
+
     }
-   
+
     # By default there is one page. The only way to have more than one is if
     # faceting has been chosen. In that case one of the ggforce pageinate
     # functions would have been used. So we go through a series of checks to
@@ -2440,11 +2545,11 @@ FG_build = function(state,
         }
       }
     }
-   
+
     # Code for the modules feeding into this one
     # JMH check this code works
     code_previous   = state[["FG"]][["DSV"]][["ds"]][[current_fig[["fig_dsview"]]]][["code"]]
-   
+
     # Just the code to build the figure
     code_fg_only    = paste(code_lines, collapse="\n")
     # All the code required to generate this module
@@ -2452,7 +2557,7 @@ FG_build = function(state,
                               "",
                               "# Figure Generation",
                               code_fg_only), collapse="\n")
-   
+
     # Updating figure with the components above
     current_fig[["num_pages"]]        = num_pages
     current_fig[["msgs"]]             = msgs
@@ -2464,10 +2569,10 @@ FG_build = function(state,
     current_fig[["fobj"]]             = get(fg_object_name)
     current_fig[["elements_table"]]   = curr_ET
     current_fig[["checksum"]]         = digest::digest(get(fg_object_name), algo=c("md5"))
-   
+
     # updating the current figure with the changes above
     state = FG_set_current_fig(state, current_fig)
-   
+
     # updating the module checksum
     state = FG_update_checksum(state)
   }
@@ -2851,8 +2956,11 @@ FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW", full_se
     desc    = fgb_res[["desc"]])
 
   # faceting by cohort
-  state[["FG"]][["ui"]][["select_fg_element"]]          = "facet"
-  state[["FG"]][["ui"]][["select_component_facet"]]     = "Cohort"
+  state[["FG"]][["ui"]][["select_fg_element"]]                = "facet"
+  state[["FG"]][["ui"]][["select_component_facet"]]           = "Cohort"
+  state[["FG"]][["ui"]][["select_component_facet_scales"]]    = state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["default"]]
+  state[["FG"]][["ui"]][["select_component_facet_nrow"]]      = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["nrow"]][["default"]] 
+  state[["FG"]][["ui"]][["select_component_facet_ncol"]]      = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["ncol"]][["default"]] 
 
   fgb_res  = fers_builder(state)
   state = FG_build( state,

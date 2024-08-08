@@ -156,7 +156,7 @@ server <- function(input, output, session) {
   mod_ids = c("UD", "DW", "FG")
 
   #Populating with test data
-# FG_test_mksession(session)
+  FG_test_mksession(session)
   # Module servers
   formods::ASM_Server(id="ASM",
              deployed    = deployed,

@@ -27,6 +27,9 @@
     for(pkg in fcres[["missing_pkgs"]]){
       packageStartupMessage(paste0(" - ",pkg))
     }
+    packageStartupMessage("")
+    packageStartupMessage("Install with the following:")
+    packageStartupMessage(paste0('install.packages(c("', paste0(fcres[["missing_pkgs"]], collapse='", "'), '"))'))
   }
 }
 
