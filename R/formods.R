@@ -333,6 +333,10 @@ res}
 #'@param ui_val     Current value from the UI.
 #'@param old_val    Last value of of the element.
 #'defined.
+#'@param init_val List of values to skip. These are values expected to be
+#'assigned on initialization. For buttons it may be 0. For others it may be
+#'"".
+#'be ignored, otherwise 0 will be included.
 #'@return Boolean result of the comparison
 #'@examples
 #' changed_true  = has_updated(ui_val = "a", old_val = "")
@@ -340,7 +344,8 @@ res}
 #' changed_false = has_updated(ui_val = "a", old_val = "a")
 #' changed_false
 has_updated = function(ui_val     = NULL,
-                       old_val    = NULL){
+                       old_val    = NULL,
+                       init_val   = NULL){
   res = FALSE
 
   # Detecting length differences
@@ -353,18 +358,29 @@ has_updated = function(ui_val     = NULL,
      res = TRUE
     }
   } else {
-    # here we're comparing scalers
-    if((length(ui_val)  == 1) &
-       (length(old_val) == 1)){
-      if(ui_val != old_val){
-        res = TRUE
-        #message(paste0("old_val: ", old_val))
-        #message(paste0("ui_val: ",  ui_val))
+
+    # Here were checking the value against the init values
+    init_pass = TRUE
+    if(!is.null(init_val)){
+      if(ui_val %in% init_val){
+        init_pass = FALSE
       }
-    } else {
-      message("Unknown scenario has_updated:")
-      message(paste0("old_val: ", old_val))
-      message(paste0("ui_val: ",  ui_val ))
+    }
+    # Here we continue checking if we pass the init
+    if(init_pass){
+      # here we're comparing scalers
+      if((length(ui_val)  == 1) &
+         (length(old_val) == 1)){
+        if(ui_val != old_val){
+          res = TRUE
+          #message(paste0("old_val: ", old_val))
+          #message(paste0("ui_val: ",  ui_val))
+        }
+      } else {
+        message("Unknown scenario has_updated:")
+        message(paste0("old_val: ", old_val))
+        message(paste0("ui_val: ",  ui_val ))
+      }
     }
   }
 res}

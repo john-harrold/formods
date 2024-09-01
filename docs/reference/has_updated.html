@@ -73,7 +73,7 @@ it has been modified</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">has_updated</span><span class="op">(</span>ui_val <span class="op">=</span> <span class="cn">NULL</span>, old_val <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">has_updated</span><span class="op">(</span>ui_val <span class="op">=</span> <span class="cn">NULL</span>, old_val <span class="op">=</span> <span class="cn">NULL</span>, init_val <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -85,6 +85,13 @@ it has been modified</p>
 <dt>old_val</dt>
 <dd><p>Last value of of the element.
 defined.</p></dd>
+
+
+<dt>init_val</dt>
+<dd><p>List of values to skip. These are values expected to be
+assigned on initialization. For buttons it may be 0. For others it may be
+"".
+be ignored, otherwise 0 will be included.</p></dd>
 
 </dl></div>
     <div class="section level2">

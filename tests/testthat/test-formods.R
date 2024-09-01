@@ -17,6 +17,11 @@ test_that("FM -- formods support functions ", {
   expect_false(has_changed(ui_val = c(1, 2, 3),  old_val=c(1,2,3)  ))
   expect_true( has_changed(ui_val = c(1, 2, 3),  old_val=c(1,2,4)  ))
 
+  expect_true( has_updated(ui_val = 0,           old_val=2         ))
+  expect_true( has_updated(ui_val = "",          old_val=2         ))
+  expect_false(has_updated(ui_val = 0,           old_val=2,        init_val=c(0, "") ))
+  expect_false(has_updated(ui_val = "",          old_val=2,        init_val=c(0, "") ))
+
   expect_true(autocast(1)                      == 1)
   expect_true(autocast('1')                    == 1)
   expect_true(autocast(NA)                     == '"NA"')

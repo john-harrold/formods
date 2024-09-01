@@ -4,13 +4,18 @@
 \alias{has_updated}
 \title{Detect if a UI element has updated}
 \usage{
-has_updated(ui_val = NULL, old_val = NULL)
+has_updated(ui_val = NULL, old_val = NULL, init_val = NULL)
 }
 \arguments{
 \item{ui_val}{Current value from the UI.}
 
 \item{old_val}{Last value of of the element.
 defined.}
+
+\item{init_val}{List of values to skip. These are values expected to be
+assigned on initialization. For buttons it may be 0. For others it may be
+"".
+be ignored, otherwise 0 will be included.}
 }
 \value{
 Boolean result of the comparison

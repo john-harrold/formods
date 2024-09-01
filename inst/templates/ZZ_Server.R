@@ -573,8 +573,9 @@
       if(ui_name %in% names(state[["===ZZ==="]][["button_counters"]])){
         # Button changes are compared to the button click tracking values
         change_detected =
-          has_changed(ui_val  = state[["===ZZ==="]][["ui"]][[ui_name]],
-                      old_val = state[["===ZZ==="]][["button_counters"]][[ui_name]])
+          has_updated(ui_val   = state[["===ZZ==="]][["ui"]][[ui_name]],
+                      old_val  = state[["===ZZ==="]][["button_counters"]][[ui_name]],
+                      init_val = c("", "0"))
 
         if(change_detected){
           formods::FM_le(state, paste0("button click: ", ui_name, " = ", state[["===ZZ==="]][["ui"]][[ui_name]]))
@@ -588,9 +589,9 @@
         }
       }else{
         change_detected =
-          has_changed(ui_val  = state[["===ZZ==="]][["ui"]][[ui_name]],
-                      old_val = state[["===ZZ==="]][["ui_old"]][[ui_name]])
-
+          has_updated(ui_val   = state[["===ZZ==="]][["ui"]][[ui_name]],
+                      old_val  = state[["===ZZ==="]][["ui_old"]][[ui_name]],
+                      init_val = c(""))
         if(change_detected){
           formods::FM_le(state, paste0("setting ===ELEMENT===: ", ui_name, " = ", paste(state[["===ZZ==="]][["ui"]][[ui_name]], collapse=", ")))
 

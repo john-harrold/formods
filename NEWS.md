@@ -1,7 +1,8 @@
 # formods 0.1.7 (development version)
 
 * Added word placeholders to the UI so the user can change them when generating reports/saving the app state.
-
+* Fixed issue with `has_updated()` where zero values from ui inputs were not taking effect because of a special case with buttons. This requires an `is_button=TRUE` argument for buttons.  
+* Updated the `ZZ_Server.R` template to use `has_updated()`
 
 # formods 0.1.6 
 
