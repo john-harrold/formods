@@ -2,7 +2,7 @@
 % Please edit documentation in R/formods.R
 \name{has_changed}
 \alias{has_changed}
-\title{Detect if a UI element has changed}
+\title{Depreciated: Detect if a UI element has changed}
 \usage{
 has_changed(ui_val = NULL, old_val = NULL, init_value = c(""))
 }
@@ -18,7 +18,7 @@ defined.}
 Boolean result of the comparison
 }
 \description{
-Takes a UI element value and an older value and determines if
+Depreciated please use has_updated instead: Takes a UI element value and an older value and determines if
 it has been modified
 }
 \examples{

@@ -14,8 +14,7 @@ defined.}
 
 \item{init_val}{List of values to skip. These are values expected to be
 assigned on initialization. For buttons it may be 0. For others it may be
-"".
-be ignored, otherwise 0 will be included.}
+"".}
 }
 \value{
 Boolean result of the comparison
