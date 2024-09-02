@@ -282,8 +282,8 @@ res}
 
 
 #'@export
-#'@title Detect if a UI element has changed
-#'@description Takes a UI element value and an older value and determines if
+#'@title Depreciated: Detect if a UI element has changed
+#'@description Depreciated please use has_updated instead: Takes a UI element value and an older value and determines if
 #'it has been modified
 #'@param ui_val     Current value from the UI.
 #'@param old_val    Last value of of the element.
@@ -336,7 +336,6 @@ res}
 #'@param init_val List of values to skip. These are values expected to be
 #'assigned on initialization. For buttons it may be 0. For others it may be
 #'"".
-#'be ignored, otherwise 0 will be included.
 #'@return Boolean result of the comparison
 #'@examples
 #' changed_true  = has_updated(ui_val = "a", old_val = "")
