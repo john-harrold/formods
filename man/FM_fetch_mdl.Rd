@@ -24,13 +24,19 @@ list containing the current dataset with the following format:
   \item{catalog:} Dataframe containing the a tabular catalog of the
   models found.
   \itemize{
-    \item{label:}  Text label for the model.
-    \item{object :}  Name of the object that contains the compiled rxode2 model.
-    \item{MOD_TYPE:}  Type of `formods` module the model came from.
-    \item{id:} Source `formods` Module ID.
-    \item{checksum:} Checksum of the module where the model came from.
-    \item{MDLchecksum:} Checksum of the model.
-    \item{code:}  Code to generate the model.
+    \item{label:}         Text label for the model (e.g. one-compartment model).
+    \item{MOD_TYPE:}      Type of module.
+    \item{id:}            Module ID.
+    \item{rx_obj:}        The rxode2 object.
+    \item{rx_obj_name:}   The rxode2 object name that holds the model.
+    \item{ts_obj:}        List of timescale information for the system and
+                          details of other timescales (\code{list(system="weeks", details = list(days=list(verb="days", conv=86400)))})
+    \item{ts_obj_name:}   The object name that holds the timescale for this  model.
+    \item{fcn_def:}    Text to define the model.
+    \item{MDLMETA:}    Notes about the model.
+    \item{code:}       Code to generate the model.
+    \item{checksum:}   Module checksum.
+    \item{MDLchecksum:} Model checksum.
   }
 }
 }

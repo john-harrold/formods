@@ -103,13 +103,19 @@ NULL for all modules with models available.</p></dd>
 <li><p>modules: List of module checksums.</p></li>
 <li><p>mdl: Result of MM_fetch_mdl, see  <code><a href="../articles/making_modules.html">vignette("making_modules", package = "formods")</a></code></p></li>
 <li><p>catalog: Dataframe containing the a tabular catalog of the
-  models found.</p><ul><li><p>label:  Text label for the model.</p></li>
-<li><p>object :  Name of the object that contains the compiled rxode2 model.</p></li>
-<li><p>MOD_TYPE:  Type of `formods` module the model came from.</p></li>
-<li><p>id: Source `formods` Module ID.</p></li>
-<li><p>checksum: Checksum of the module where the model came from.</p></li>
-<li><p>MDLchecksum: Checksum of the model.</p></li>
-<li><p>code:  Code to generate the model.</p></li>
+  models found.</p><ul><li><p>label:         Text label for the model (e.g. one-compartment model).</p></li>
+<li><p>MOD_TYPE:      Type of module.</p></li>
+<li><p>id:            Module ID.</p></li>
+<li><p>rx_obj:        The rxode2 object.</p></li>
+<li><p>rx_obj_name:   The rxode2 object name that holds the model.</p></li>
+<li><p>ts_obj:        List of timescale information for the system and
+                          details of other timescales (<code>list(system="weeks", details = list(days=list(verb="days", conv=86400)))</code>)</p></li>
+<li><p>ts_obj_name:   The object name that holds the timescale for this  model.</p></li>
+<li><p>fcn_def:    Text to define the model.</p></li>
+<li><p>MDLMETA:    Notes about the model.</p></li>
+<li><p>code:       Code to generate the model.</p></li>
+<li><p>checksum:   Module checksum.</p></li>
+<li><p>MDLchecksum: Model checksum.</p></li>
 </ul></li>
 </ul></div>
 
