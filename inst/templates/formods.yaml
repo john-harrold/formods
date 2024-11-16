@@ -89,7 +89,7 @@ FM:
     #  ===HEADERRIGHT===
     # The placeholder below is HEADERRIGHT, the location is header and by
     # default we will replace it with nothing. Placeholder text can have no
-    # spaces. 
+    # spaces.
     #
     # These defaults can be overwritten in the save section. If your template
     # has no placeholders you can comment out the entire phs section.
@@ -107,7 +107,7 @@ FM:
         location:  "footer"
         value:     ""
         tooltip:   "left footer text"
-    phs_formatting: 
+    phs_formatting:
       width:       "100%"
       tt_position: "left"
       tt_size:     "medium"
@@ -135,7 +135,7 @@ FM:
     # Separator when showing more than three in a column. For exmaple if you
     # had a dataset with 1,2,3,4,5,6 and many_sep was ",...," then it would
     # appear as "1,...,6"
-    many_sep: ",⋅⋅⋅,"
+    many_sep: ",...,"
     # This controls the differences for different data types. Take the output
     # of typeof(df$colname) and put an entry for that output here.
     data_types:

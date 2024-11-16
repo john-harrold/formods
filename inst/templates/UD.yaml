@@ -1,4 +1,9 @@
 MC:
+  module:
+    type: "UD"
+    depends: 
+      # internal R Object: module ID used in deployment
+      id_ASM: "ASM"
   # Controls what is shown in the compact ui mode: UD_ui_compact
   compact:
     code:    FALSE

@@ -1,0 +1,4 @@
+# Top level is the module ID and the mod_type is the module short name
+ASM:
+  fm_yaml:   'system.file(package="formods", "templates", "formods.yaml")'
+  mod_yaml:  'system.file(package="formods", "templates", "ASM.yaml")'

@@ -1,5 +1,13 @@
 # The MC field is a skeleton for constructing new modules
 MC:
+  # Module informaiton
+  module:
+    type: "===ZZ===" # Module type
+    # This is a list of modules this one depends on. The list names
+    # are the R object names used in this module and the value is the
+    # module ID associated with that module in the current deployment.
+    depends: 
+      id_ASM: "ASM"
   element_object_name: "===ZZ===_obj"
 # The include section is optional. You can use this section to copy files 
 # from the directory where you are running the app to the user directory to be

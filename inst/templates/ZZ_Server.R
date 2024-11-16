@@ -1,5 +1,6 @@
 #'@import rhandsontable
 #'@import shiny
+#'@import formods
 #'@importFrom digest digest
 #'@importFrom shinyAce aceEditor updateAceEditor
 
@@ -818,7 +819,7 @@ code}
 #'  \item{msgs:}      Messages to be passed back to the user.
 #'  \item{rpt:}       Report with any additions passed back to the user.
 #'}
-#'@seealso \code{\link[formods]{FM_generate_report}}
+#'@seealso \code{\link[formods:FM_generate_report]{formods::FM_generate_report()}}
 ===ZZ===_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
 
   isgood    = TRUE
@@ -858,9 +859,10 @@ res}
 #'  \itemize{
 #'    \item{label: Text label for the dataset}
 #'    \item{MOD_TYPE: Short name for the type of module.}
-#'    \item{id: module ID}
+#'    \item{id: module ID.}
+#'    \item{idx: unique numerical ID to identify this dataset in the module.}
 #'    \item{DS: Dataframe containing the actual dataset.}
-#'    \item{DSMETA: Metadata describing DS}
+#'    \item{DSMETA: Metadata describing DS.}
 #'    \item{code: Complete code to build dataset.}
 #'    \item{checksum: Module checksum.}
 #'    \item{DSchecksum: Dataset checksum.}
@@ -884,6 +886,7 @@ res}
   NEWDS = list(label      = NULL,
                MOD_TYPE   = NULL,
                id         = NULL,
+               idx        = NULL,
                DS         = NULL,
                DSMETA     = NULL,
                code       = NULL,
@@ -922,6 +925,7 @@ res}
 #'    \item{label:}         Text label for the model (e.g. one-compartment model).
 #'    \item{MOD_TYPE:}      Type of module.
 #'    \item{id:}            Module ID.
+#'    \item{idx:}           Numeric ID for the element.
 #'    \item{rx_obj:}        The rxode2 object.
 #'    \item{rx_obj_name:}   The rxode2 object name that holds the model.
 #'    \item{ts_obj:}        List of timescale information for the system and
@@ -970,6 +974,7 @@ res}
           list(label       = ce[["ui"]][["element_name"]],
                MOD_TYPE    = "===ZZ===",
                id          = state[["id"]],
+               idx         = ce[["idx"]],   
                rx_obj      = NULL, #
                rx_obj_name = NULL, #
                ts_obj      = NULL, #
@@ -1248,4 +1253,176 @@ state}
 state}
 
 
+#'@export
+#'@title Preload Data for ===ZZ=== Module
+#'@description Populates the supplied session variable with information from
+#'list of sources.
+#'@param session     Shiny session variable (in app) or a list (outside of app)
+#'@param src_list    List of preload data (all read together with module IDs at the top level) 
+#'@param mod_ID      Module ID of the module being loaded. 
+#'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions. 
+#'@param quickload   Logical \code{TRUE} to load reduced analysis \code{FALSE} to load the full analysis
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:}      Boolean indicating the exit status of the function.
+#'   \item{msgs:}        Messages to be passed back to the user.
+#'   \item{session:}     Session object
+#'   \item{input:}       The value of the shiny input at the end of the session initialization.
+#'   \item{state:}       App state.
+#'   \item{react_state:} The \code{react_state} components.
+#'}
+===ZZ===_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = list(), quickload=FALSE){
+  isgood  = TRUE
+  input   = list()
+  msgs    = c()
+  res     = c()
+  err_msg = c()
+  
 
+
+  FM_yaml_file  = render_str(src_list[[mod_ID]][["fm_yaml"]])
+  MOD_yaml_file = render_str(src_list[[mod_ID]][["mod_yaml"]])
+  id_ASM        = yaml_res[[mod_ID]][["mod_cfg"]][["MC"]][["module"]][["depends"]][["id_ASM"]]
+# id_UD         = yaml_res[[mod_ID]][["mod_cfg"]][["MC"]][["module"]][["depends"]][["id_UD"]]
+# id_DW         = yaml_res[[mod_ID]][["mod_cfg"]][["MC"]][["module"]][["depends"]][["id_DW"]]
+
+  # Creating an empty state object
+  state = ===ZZ===_fetch_state(id              = mod_ID,
+                               id_ASM          = id_ASM,
+                               input           = input,
+                               session         = session,
+                               FM_yaml_file    = FM_yaml_file,
+                               MOD_yaml_file   = MOD_yaml_file,
+                               react_state     = react_state)
+
+  elements = src_list[[mod_ID]][["elements"]]
+
+
+  # Checks to see if we can add elements
+  ADD_ELEMENTS = TRUE
+  if(is.null(elements)){
+    ADD_ELEMENTS = FALSE
+  }
+
+  if(ADD_ELEMENTS){
+    # All of the numeric IDs in the preload
+    enumeric    = c()
+
+    # Map between list index and internal figure ID
+    element_map = list()
+    for(ele_idx in 1:length(elements)){
+      enumeric = c(enumeric, elements[[ele_idx]][["idx"]])
+      element_map[[ paste0("element_",elements[[ele_idx]][["idx"]] )]] = ele_idx
+    }
+
+    # Creating empty element placeholders
+    while(state[["===ZZ==="]][["element_cntr"]] < max(enumeric)){
+      state = ===ZZ===_new_element(state)
+    }
+
+    # culling any unneeded views 
+    for(ele_id  in names(state[["===ZZ==="]][["elements"]])){
+      # This is a view that doesn't exist in elements so 
+      # we need to cull it
+      if(!(ele_id  %in% names(element_map))){
+        # Setting the view to be deleted as the current view
+        state[["===ZZ==="]][["elements"]][[ ele_id  ]] = NULL
+      }
+    }
+
+    # TODO: You need to process the elements and components here
+    #browser()
+    # Now we have empty elements defined
+    for(element_id in names(element_map)){
+      # Making the current element id active
+      state[["===ZZ==="]][["current_element"]]  =  element_id
+      ele_err_msg = c()
+
+      # Getting the numeric position in the list corresponding 
+      # to the current element id
+      ele_idx = element_map[[element_id]]
+      ele_isgood = TRUE
+
+      #-------------------------------------------------------
+      # Defining general options
+      FM_le(state, paste0("loading element idx: ", ele_idx ))
+
+      # Place checks for required fields here:
+      # req_ele_opts =c("field1", "field2")
+      # if(!all(req_ele_opts    %in% names( elements[[ele_idx]]))){
+      #   ele_isgood      = FALSE
+      #   missing_opts    = req_ele_opts[!(req_ele_opts %in% names(elements[[ele_idx]]))]
+      #   ele_err_msg = c(ele_err_msg,
+      #     paste0("element idx:  ",ele_idx, " missing option(s):" ),
+      #     paste0("  -> ", paste0(missing_opts, collapse=", "))
+      #     )
+      # }
+
+      # If the module requires components check here:
+      # if(!("components" %in% names(elements[[ele_idx]]))){
+      #   ele_isgood = FALSE
+      #   ele_err_msg = c(ele_err_msg, 
+      #       paste0("element idx: ",ele_idx, " no components defined"))
+      # }
+
+      # Next we process the components (models)
+      if(ele_isgood){
+
+        # Creating element components
+        # If there are components you can add them here:
+        # for(comp_idx in 1:length(elements[[ele_idx]][["components"]])){
+        #   tmp_component = elements[[ele_idx]][["components"]][[comp_idx]][["component"]]
+        #   add_component = TRUE
+        #   # If there are required component fields put them here
+        #   # req_comp_opts =c("field1", "field2")
+        #   # if(!all(req_comp_opts    %in% names(tmp_component))){
+        #   #   ele_isgood      = FALSE
+        #   #   add_component   = FALSE
+        #   #   missing_opts    = 
+        #   #     req_comp_opts[!(req_comp_opts %in% names(tmp_component))]
+        #   #   ele_err_msg = c(ele_err_msg,
+        #   #     paste0("element idx:  ",ele_idx, ", element idx: ", comp_idx, ", missing option(s):" ),
+        #   #     paste0("  -> ", paste0(missing_opts, collapse=", "))
+        #   #     )
+        #   # }
+        #   if(add_component && ele_isgood){
+        #   }
+        #   
+        #   
+        # }
+      }
+
+      if(ele_isgood){
+        formods::FM_le(state,paste0("added element idx: ",ele_idx))
+      } else {
+        ele_err_msg = c(
+          paste0("failed to add element idx: ",ele_idx),
+          ele_err_msg)
+        msgs = c(msgs, ele_err_msg)
+        isgood = FALSE
+      }
+    }
+  }
+
+  if(!isgood && !is.null(err_msg)){
+    formods::FM_le(state,err_msg,entry_type="danger")
+    msgs = c(msgs, err_msg)
+  }
+  
+  
+  formods::FM_le(state,paste0("module isgood: ",isgood))
+  
+  if(("ShinySession" %in% class(session))){
+    FM_set_mod_state(session, mod_ID, state)
+  } else {
+    session = FM_set_mod_state(session, mod_ID, state)
+  }
+
+  res = list(isgood      = isgood, 
+             msgs        = msgs,
+             session     = session,
+             input       = input,
+             react_state = react_state,
+             state       = state)
+  
+res}

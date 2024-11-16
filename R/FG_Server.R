@@ -1838,6 +1838,28 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
       }
     }
 
+
+    # these are more manually generated and the lists map ui values to names
+    # used in export/import yaml files
+    manual_elements = list(
+    facet = list(
+      mapping = list(
+        select_component_facet        = "column",
+        select_component_facet_scales = "scales",
+        select_component_facet_nrow   = "nrow",
+        select_component_facet_ncol   = "ncol")),
+    label = list(
+      mapping = list(
+        text_component_xlab           = "xlab",
+        text_component_ylab           = "ylab",
+        text_component_ggtitle        = "title")),
+    scales = list(                  
+      mapping = list(
+        select_component_xscale       = "xscale",
+        select_component_yscale       = "yscale",
+        text_component_xlim           = "xlim",
+        text_component_ylim           = "ylim")))
+
     # Adding other ui_ids here
     ui_ids = c(ui_ids,
       "button_fig_new",
@@ -1848,29 +1870,18 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
       "hot_fg_elements",
       "text_fig_key",
       "text_fig_notes",
-      "text_component_xlab",
-      "text_component_ylab",
-      "text_component_xlim",
-      "text_component_ylim",
-      "text_component_ggtitle",
       "select_fg_page",
       "select_current_fig",
       "select_current_view",
-      "select_component_facet",
-      "select_component_facet_scales",
-      "select_component_facet_nrow",
-      "select_component_facet_ncol",
-      "select_component_xscale",
-      "select_component_yscale",
+       names(manual_elements[["facet"]][["mapping"]]),
+       names(manual_elements[["scales"]][["mapping"]]),
+       names(manual_elements[["label"]][["mapping"]]),
       "select_fg_element")
 
     # Since some IDs can be reused in the elements above we do this to
     # remove any extras:
     ui_ids = unique(ui_ids)
   }
-
-  # JMH remove this
-  #state_tmp = state
 
   # Names of button elements:
   button_counters = c(
@@ -1925,7 +1936,8 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
   state[["FG"]][["aes_elements"]]  = aes_elements
   # JMH replace with tis
   # This adds the automatically created elements:
-  state[["FG"]][["auto_elements"]] = auto_elements
+  state[["FG"]][["auto_elements"]]   = auto_elements
+  state[["FG"]][["manual_elements"]] = manual_elements
 
   FM_le(state, "State initialized")
 
@@ -2067,10 +2079,6 @@ fers_builder = function(state){
   # Pulling out the current figure to get the object name
   current_fig = FG_fetch_current_fig(state)
   fg_object_name = current_fig[["fg_object_name"]]
-
-  # Pulling out the element configuration from the yaml file:
-  # JMH remove this
-  #element_cfg = state[["MC"]][["elements"]][[element]]
 
   # JMH replace with this:
   # Pulling out the element components
@@ -2882,233 +2890,349 @@ res}
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
-#'@param id An ID string that corresponds with the ID used to call the modules UI elements
-#'@param id_UD An ID string that corresponds with the ID used to call the UD modules UI elements
-#'@param id_DW An ID string that corresponds with the ID used to call the DW modules UI elements
-#'@param full_session  Boolean to indicate if the full test session should be created (default \code{TRUE}).
+#'@return The FG portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}} 
+#'@examples
+#' sess_res = FG_test_mksession(session=list())
+#'@seealso \code{\link{ASM_set_app_state}}
+FG_test_mksession = function(session){
+
+  sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+              system.file(package="formods", "preload", "UD_preload.yaml"),
+              system.file(package="formods", "preload", "DW_preload.yaml"),
+              system.file(package="formods", "preload", "FG_preload_minimal.yaml"))
+  res = ASM_set_app_state(session=list(), sources=sources)
+  res = res[["all_sess_res"]][["FG"]]
+
+res}
+
+
+#'@export
+#'@title Preload Data for FG Module
+#'@description Populates the supplied session variable with information from
+#'list of sources.
+#'@param session     Shiny session variable (in app) or a list (outside of app)
+#'@param src_list    List of preload data (all read together with module IDs at the top level) 
+#'@param mod_ID      Module ID of the module being loaded. 
+#'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions. 
+#'@param quickload   Logical \code{TRUE} to load reduced analysis \code{FALSE} to load the full analysis
 #'@return list with the following elements
 #' \itemize{
-#'   \item{isgood:} Boolean indicating the exit status of the function.
-#'   \item{session:} The value Shiny session variable (in app) or a list (outside of app) after initialization.
-#'   \item{input:} The value of the shiny input at the end of the session initialization.
-#'   \item{state:} App state.
-#'   \item{rsc:} The \code{react_state} components.
+#'   \item{isgood:}      Boolean indicating the exit status of the function.
+#'   \item{msgs:}        Messages to be passed back to the user.
+#'   \item{session:}     Session object
+#'   \item{input:}       The value of the shiny input at the end of the session initialization.
+#'   \item{state:}       App state.
+#'   \item{react_state:} The \code{react_state} components.
 #'}
-#'@examples
-#'\donttest{
-#' sess_res = FG_test_mksession(session=list(), full_session=FALSE)
-#'}
-FG_test_mksession = function(session, id = "FG", id_UD="UD", id_DW="DW", full_session=TRUE){
-
+FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = list(), quickload=FALSE){
   isgood = TRUE
-  rsc    = NULL
   input  = list()
+  msgs   = c()
+  res    = c()
 
-  # Populating the session with UD and DW components
-  sess_res = DW_test_mksession(session=session, id=id_DW, id_UD = id_UD)
-  if(!("ShinySession" %in% class(session))){
-    session = sess_res[["session"]]
-  }
 
-  # Pulling out the react state components
-  rsc         = sess_res$rsc
-  react_state = rsc
-
-  # YAML files for the fetch calls below
-  FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
-  MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml")
-
-  # empty input
-  input = list()
+  FM_yaml_file  = render_str(src_list[[mod_ID]][["fm_yaml"]])
+  MOD_yaml_file = render_str(src_list[[mod_ID]][["mod_yaml"]])
+  id_UD         = yaml_res[[mod_ID]][["mod_cfg"]][["MC"]][["module"]][["depends"]][["id_UD"]]
+  id_ASM        = yaml_res[[mod_ID]][["mod_cfg"]][["MC"]][["module"]][["depends"]][["id_ASM"]]
+  id_DW         = yaml_res[[mod_ID]][["mod_cfg"]][["MC"]][["module"]][["depends"]][["id_DW"]]
 
   # Creating an empty state object
-  state = FG_fetch_state(id              = id,
+  state = FG_fetch_state(id              = mod_ID,
                          input           = input,
                          session         = session,
                          FM_yaml_file    = FM_yaml_file,
                          MOD_yaml_file   = MOD_yaml_file,
-                         id_ASM          = "ASM",
+                         id_ASM          = id_ASM,
                          id_UD           = id_UD,
                          id_DW           = id_DW,
                          react_state     = react_state)
 
+  elements = src_list[[mod_ID]][["elements"]]
 
-  #------------------------------------
-  # Creating "Individual profiles by cohort" data view
-  state[["FG"]][["ui"]][["text_fig_key"]]        = "Individual profiles by cohort"
-  state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_1"
-  current_fig = FG_fetch_current_fig(state)
-  current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
-  current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
-  state = FG_set_current_fig(state, current_fig)
-
-  # Adding the lines
-  state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
-  state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
-  state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
-  state[["FG"]][["ui"]][["select_component_color"]]     = "CMT"
-  state[["FG"]][["ui"]][["select_component_group"]]     = "IDCMT"
-
-  fgb_res  = fers_builder(state)
-  state = FG_build( state,
-    cmd     = fgb_res[["cmd"]],
-    element = fgb_res[["element"]],
-    desc    = fgb_res[["desc"]])
-
-  # faceting by cohort
-  state[["FG"]][["ui"]][["select_fg_element"]]                = "facet"
-  state[["FG"]][["ui"]][["select_component_facet"]]           = "Cohort"
-  state[["FG"]][["ui"]][["select_component_facet_scales"]]    = state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["default"]]
-  state[["FG"]][["ui"]][["select_component_facet_nrow"]]      = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["nrow"]][["default"]] 
-  state[["FG"]][["ui"]][["select_component_facet_ncol"]]      = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["ncol"]][["default"]] 
-
-  fgb_res  = fers_builder(state)
-  state = FG_build( state,
-    cmd     = fgb_res[["cmd"]],
-    element = fgb_res[["element"]],
-    desc    = fgb_res[["desc"]])
-
-  # setting the log scale
-  state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
-  state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
-
-  fgb_res  = fers_builder(state)
-  state = FG_build( state,
-    cmd     = fgb_res[["cmd"]],
-    element = fgb_res[["element"]],
-    desc    = fgb_res[["desc"]])
-
-
-
-  if(full_session){
-    #------------------------------------
-    # Plotting the 3 mg SD IV cohort
-    # Updating the key and data view
-    state = FG_new_fig(state)
-    state[["FG"]][["ui"]][["text_fig_key"]]        = "3 mg SD IV"
-    state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_2"
-    current_fig = FG_fetch_current_fig(state)
-    current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
-    current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
-    state = FG_set_current_fig(state, current_fig)
-
-    # Adding the lines
-    state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
-    state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
-    state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
-    state[["FG"]][["ui"]][["select_component_group"]]     = "ID"
-
-    fgb_res  = fers_builder(state)
-    state = FG_build( state,
-      cmd     = fgb_res[["cmd"]],
-      element = fgb_res[["element"]],
-      desc    = fgb_res[["desc"]])
-
-
-    # setting the log scale
-    state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
-    state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
-
-    fgb_res  = fers_builder(state)
-    state = FG_build( state,
-      cmd     = fgb_res[["cmd"]],
-      element = fgb_res[["element"]],
-      desc    = fgb_res[["desc"]])
-
-    #------------------------------------
-    # Plotting the 3 mg MD SC first dose cohort
-    # Updating the key and data view
-    state = FG_new_fig(state)
-    state[["FG"]][["ui"]][["text_fig_key"]]        = "3 mg SC first dose"
-    state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_3"
-    current_fig = FG_fetch_current_fig(state)
-    current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
-    current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
-    state = FG_set_current_fig(state, current_fig)
-
-    # Adding the lines
-    state[["FG"]][["ui"]][["select_fg_element"]]          = "line"
-    state[["FG"]][["ui"]][["select_component_x"]]         = "TIME_DY"
-    state[["FG"]][["ui"]][["select_component_y"]]         = "DV"
-    state[["FG"]][["ui"]][["select_component_group"]]     = "ID"
-
-    fgb_res  = fers_builder(state)
-    state = FG_build( state,
-      cmd     = fgb_res[["cmd"]],
-      element = fgb_res[["element"]],
-      desc    = fgb_res[["desc"]])
-
-
-    # setting the log scale
-    state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
-    state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
-
-    fgb_res  = fers_builder(state)
-    state = FG_build( state,
-      cmd     = fgb_res[["cmd"]],
-      element = fgb_res[["element"]],
-      desc    = fgb_res[["desc"]])
-
-    #------------------------------------
-    # Boxplots of parameters
-    # Updating the key and data view
-    state = FG_new_fig(state)
-    state[["FG"]][["ui"]][["text_fig_key"]]        = "Parameter distribution by Cohort"
-    state[["FG"]][["ui"]][["select_current_view"]] = "DW_myDS_4"
-    current_fig = FG_fetch_current_fig(state)
-    current_fig[["key"]]         = state[["FG"]][["ui"]][["text_fig_key"]]
-    current_fig[["fig_dsview"]]  = state[["FG"]][["ui"]][["select_current_view"]]
-    state = FG_set_current_fig(state, current_fig)
-
-    # Adding the boxplots
-    state[["FG"]][["ui"]][["select_fg_element"]]          = "boxplot"
-    state[["FG"]][["ui"]][["select_component_x"]]         = "parameter"
-    state[["FG"]][["ui"]][["select_component_y"]]         = "values"
-    state[["FG"]][["ui"]][["select_component_fill"]]      = "Cohort"
-    # The select_component* ui elements are recycled in the UI and would
-    # normally be reset to "" when a new figure element is loaded. For the
-    # purposes here we need to reset those manually.
-    state[["FG"]][["ui"]][["select_component_group"]]     = ""
-    state[["FG"]][["ui"]][["select_component_color"]]     = ""
-
-    fgb_res  = fers_builder(state)
-    state = FG_build( state,
-      cmd     = fgb_res[["cmd"]],
-      element = fgb_res[["element"]],
-      desc    = fgb_res[["desc"]])
-
-    # setting the log scale
-    state[["FG"]][["ui"]][["select_fg_element"]]          = "scales"
-    state[["FG"]][["ui"]][["select_component_yscale"]]    = "log10"
-
-    fgb_res  = fers_builder(state)
-    state = FG_build( state,
-      cmd     = fgb_res[["cmd"]],
-      element = fgb_res[["element"]],
-      desc    = fgb_res[["desc"]])
-    #------------------------------------
+  # Checks to see if we can add elements
+  ADD_ELEMENTS = TRUE
+  if(is.null(elements)){
+    ADD_ELEMENTS = FALSE
+  }
+  if(is.null(state[["FG"]][["DSV"]][["hasds"]])){
+    ADD_ELEMENTS = FALSE
+  } else if(!state[["FG"]][["DSV"]][["hasds"]]){
+    ADD_ELEMENTS = FALSE
   }
 
-  # This functions works both in a shiny app and outside of one
-  # if we're in a shiny app then the 'session' then the class of
-  # session will be a ShinySession. Otherwise it'll be a list if
-  # we're not in the app (ie just running test examples) then
-  # we need to set the state manually
+
+  if(ADD_ELEMENTS){
+    # All of the numeric IDs in the preload
+    enumeric    = c()
+
+    # Map between list index and internal figure ID
+    element_map = list()
+    for(ele_idx in 1:length(elements)){
+      enumeric = c(enumeric, elements[[ele_idx]][["idx"]])
+      element_map[[ paste0("Fig_",elements[[ele_idx]][["idx"]] )]] = ele_idx
+    }
+    # Creating empty fig placeholders
+    while(state[["FG"]][["fig_cntr"]] < max(enumeric)){
+      state = FG_new_fig(state)
+    }
+    # culling any unneeded views 
+    for(fig_id  in names(state[["FG"]][["figs"]])){
+      # This is a view that doesn't exist in elements so 
+      # we need to cull it
+      if(!(fig_id  %in% names(element_map))){
+        # Setting the view to be deleted as the current view
+        state[["FG"]][["figs"]][[ fig_id  ]] = NULL
+      }
+    }
+
+
+    #auto_elements = state[["FG"]][["auto_elements"]]
+
+    # Creating some local variables to make it easier below
+    # This contains all plot types:
+    plot_elements = state[["MC"]][["elements"]]
+
+    # these are the elements defined by aesthetics 
+    aes_elements  = state[["FG"]][["aes_elements"]]
+
+    # ui elements that are automatically generated
+    auto_elements = state[["FG"]][["auto_elements"]]
+
+    # ui elements taht are more manually generated
+    manual_elements = state[["FG"]][["manual_elements"]]
+
+    # Available data sources
+    DSV = state[["FG"]][["DSV"]]
+
+
+
+    # Now we have empty elements defined
+    for(element_id in names(element_map)){
+      # Making the current element element id active
+      state[["FG"]][["current_fig"]]  =  element_id
+
+      # Getting the numeric position in the list corresponding 
+      # to the current element id
+      ele_idx = element_map[[element_id]]
+
+
+
+      fig_isgood = TRUE
+      # first we set the figure name:
+      FM_le(state, paste0("loading figure idx: ", ele_idx ))
+      if(!is.null(elements[[ele_idx]][["name"]])){
+        FM_le(state, paste0("setting name: ", elements[[ele_idx]][["name"]]))
+        current_ele = FG_fetch_current_fig(state)
+        current_ele[["key"]] = elements[[ele_idx]][["name"]]
+        state = FG_set_current_fig(state, current_ele)
+      }
+
+      # Attaching data source
+      if(!is.null(elements[[ele_idx]][["data_source"]][["id"]]) &
+         !is.null(elements[[ele_idx]][["data_source"]][["idx"]])){
+        tmp_DSV = DSV[["catalog"]][c(DSV[["catalog"]][["id"]]  == elements[[ele_idx]][["data_source"]][["id"]] & 
+                                     DSV[["catalog"]][["idx"]] == elements[[ele_idx]][["data_source"]][["idx"]]), ]
+        if(nrow(tmp_DSV) == 1){
+          FM_le(state, paste0("setting data source: ", tmp_DSV[["object"]][1]) )
+          current_ele = FG_fetch_current_fig(state)
+          current_ele[["fig_dsview"]] = tmp_DSV[["object"]][1] 
+          state = FG_set_current_fig(state, current_ele)
+        } else {
+          FM_le(state, paste0("error locating data source, expecting 1 source found ", nrow(tmp_DSV)), entry_type="danger")
+        }
+      } else {
+        fig_isgood = FALSE
+      }
+
+      if(fig_isgood){
+      } else {
+        isgood = FALSE
+        tmp_msgs = c(paste0("fig id: ", element_id, " unable to find data source."))
+        FM_le(state, tmp_msgs, entry_type="danger")
+        msgs = c(msgs, tmp_msgs)
+      }
+
+
+
+      # If everything is good up to this point then we process the components
+      if(length(elements[[ele_idx]][["components"]] > 0) & fig_isgood){
+
+        # This will pull out all of the ui_ids that realte to components.
+        # Basically all of the ui_ids that start with either select_component
+        # or text_component
+        all_comp_ids = sort(names(state[["FG"]][["ui"]])[
+                              grep(x=names(state[["FG"]][["ui"]]), pattern="^select_component|^text_component")
+                            ])
+
+
+        for(comp_idx in 1:length(elements[[ele_idx]][["components"]])){
+          tmp_component = elements[[ele_idx]][["components"]][[comp_idx]][["component"]]
+          add_component = TRUE
+          comp_err_msg = c()
+
+
+          if(!is.null(tmp_component [["type"]])){
+
+            # Zeroing out the input list for figure components. This prevents
+            # residual data from being reused when looping:
+            state[["FG"]][["ui"]][all_comp_ids] = ""
+
+            FM_le(state, paste0("  -> ", tmp_component[["type"]]))
+            if(tmp_component[["type"]] %in% names(plot_elements)){
+
+              # defining the component type:
+              state[["FG"]][["ui"]][["select_fg_element"]] = tmp_component[["type"]]
+
+
+              if(tmp_component[["type"]] %in% aes_elements){
+                # Processing components defined by aesthetics. These
+                # are plot components like geom_line, geom_point, etc
+
+                # All of the aesthetics defined (either ass aes or manual) for
+                # the current component
+                def_aes_all = c(names(tmp_component[["aes"]]), names(tmp_component[["manual"]]))
+
+                # Checking to see if all the required aes have been defined:
+                if(!all(plot_elements[[ tmp_component[["type"]] ]][["aes_req"]] %in% def_aes_all)){
+                  add_component = FALSE
+                  isgood        = FALSE
+                  missing_aes = plot_elements[[ tmp_component[["type"]] ]][["aes_req"]][
+                      !c(plot_elements[[ tmp_component[["type"]] ]][["aes_req"]] %in% def_aes_all)
+                       ]
+                  comp_err_msg = c( comp_err_msg,
+                              paste0("  -> missing required aesthetic(s): ", paste0(missing_aes, collapse=", ") ) )
+                }
+
+
+                # Making sure the specified ui elements are allowed:
+                if(!all(def_aes_all %in% plot_elements[[ tmp_component[["type"]] ]][["ui_aes"]] )){
+                  add_component = FALSE
+                  isgood        = FALSE
+                  missing_aes = def_aes_all[
+                      !c( def_aes_all %in% plot_elements[[ tmp_component[["type"]] ]][["ui_aes"]] )
+                       ]
+                  comp_err_msg = c( comp_err_msg,
+                              paste0("  -> extra aesthetic(s) found: ", paste0(missing_aes, collapse=", ")))
+                }
+
+                # Making sure that something has been defined
+                if(is.null(tmp_component[["aes"]]) && is.null(tmp_component[["manual"]])){
+                  add_component = FALSE
+                  isgood        = FALSE
+                  comp_err_msg = c( comp_err_msg,
+                              paste0("  -> both aes and manual fields are NULL"))
+                }
+
+                if(add_component){
+                  # Adding aesthetics 
+                  if(!is.null(tmp_component[["aes"]])){
+                    for(cname in names( tmp_component[["aes"]])){
+                      cname_ui = paste0("select_component_", cname)
+                      state[["FG"]][["ui"]][[cname_ui]] = tmp_component[["aes"]][[cname]]
+                    }
+                  }
+                  # Manual
+                  if(!is.null(tmp_component[["manual"]])){
+                    for(cname in names( tmp_component[["manual"]])){
+                      # setting the select component to manual
+                      state[["FG"]][["ui"]][[paste0("select_component_", cname)]] = "manual"
+
+                      # now setting the manual value
+                      cname_ui = paste0("text_component_", cname, "_manual")
+                      state[["FG"]][["ui"]][[cname_ui]] = tmp_component[["manual"]][[cname]]
+                    }
+                  }
+                }
+              } else {
+                # These are other ggplot components like scales and labels
+                manual_elements[[  tmp_component[["type"]] ]]
+                allowed_options = as.vector(unlist(manual_elements[[  tmp_component[["type"]]  ]][["mapping"]]))
+                found_options   = names(tmp_component[["options"]])
+
+                # Making sure the found options are good
+                if(!all(found_options %in% allowed_options)){
+                  add_component = FALSE
+                  isgood        = FALSE
+                  extra_options = found_options[!(found_options %in% allowed_options)]
+                  comp_err_msg = c( comp_err_msg,
+                              paste0("  -> extra options found: ", paste0(extra_options, collapse=", ")))
+                }
+
+                if(add_component){
+                  for(oname_ui in names( manual_elements[[  tmp_component[["type"]]  ]][["mapping"]] )){
+
+                    oname = manual_elements[[  tmp_component[["type"]]  ]][["mapping"]][[oname_ui]]
+                    if(oname %in% names(tmp_component[["options"]])){
+                      state[["FG"]][["ui"]][[oname_ui]] = tmp_component[["options"]][[oname]]
+                    } else {
+                      # This clears out any previous definitions
+                      state[["FG"]][["ui"]][[oname_ui]] = ""
+                    }
+                  }
+                }
+              }
+            } else {
+              add_component = FALSE
+              isgood = FALSE
+              tmp_msg = paste0("unknown plot component type: ", tmp_component[["type"]] ) 
+              msgs = c(msgs, tmp_msg)
+              FM_le(state,tmp_msg,entry_type="danger")
+            }
+          } else {
+              add_component = FALSE
+              isgood = FALSE
+              tmp_msg = paste0("plot type not defined")
+              msgs = c(msgs, tmp_msg)
+              FM_le(state,tmp_msg,entry_type="danger")
+          }
+
+          if(add_component){
+            fgb_res  = fers_builder(state)
+            if(fgb_res[["isgood"]]){
+              state = FG_build( state,
+                cmd     = fgb_res[["cmd"]],
+                element = fgb_res[["element"]],
+                desc    = fgb_res[["desc"]])
+            } else {
+              isgood         = FALSE
+              add_component = FALSE
+              comp_err_msg = c(comp_err_msg,  paste0(element_id, ": fers_builder() failed"))
+              comp_err_msg = c(comp_err_msg, fgb_res[["msgs"]])
+            }
+          }
+          # Flushing all the error messages
+          if(!add_component){
+            comp_err_msg = c(
+              paste0("figure idx: ", ele_idx, ", component idx: ", comp_idx, ", type: ", tmp_component[["type"]] ),
+              comp_err_msg)
+            msgs = c(msgs, comp_err_msg)
+            FM_le(state,comp_err_msg,entry_type="danger")
+          }
+        }
+      }
+    }
+
+
+    # If we failed somewhere up there then we return a bad status
+    if(!fig_isgood){
+      isgood = FALSE
+    }
+  }
+
+  formods::FM_le(state,paste0("module isgood: ",isgood))
+
   if(("ShinySession" %in% class(session))){
-    FM_set_mod_state(session, id, state)
+    FM_set_mod_state(session, mod_ID, state)
   } else {
-    session = FM_set_mod_state(session, id, state)
+    session = FM_set_mod_state(session, mod_ID, state)
   }
 
-  # Required for proper reaction:
-  rsc[[id]]  = list(FG = list(checksum=state[["FG"]][["checksum"]]))
-
-  res = list(
-    isgood  = isgood,
-    session = session,
-    input   = input,
-    state   = state,
-    rsc     = rsc
-  )
-}
-
+  res = list(isgood      = isgood, 
+             msgs        = msgs,
+             session     = session,
+             input       = input,
+             react_state = react_state,
+             state       = state)
+  
+res}

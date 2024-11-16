@@ -1,5 +1,9 @@
 # ASM module configuration 
 MC:
+  module:
+    type: "ASM"
+    # internal R Object: module ID used in deployment
+    depends: NULL
   code: # module specific code options
     readOnly: TRUE
     mode:     r    

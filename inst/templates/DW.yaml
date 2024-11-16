@@ -1,5 +1,11 @@
 # Data Wrangling (DW) configuration
 MC: 
+  module:
+    type: "DW"
+    # internal R Object: module ID used in deployment
+    depends: 
+      id_ASM: "ASM"
+      id_UD:  "UD"
   # Controls what is shown in the compact ui mode: DW_ui_compact
   compact:
     code:    TRUE 

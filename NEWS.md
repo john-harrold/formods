@@ -1,4 +1,8 @@
-# formods 0.1.7 (development version)
+# formods 0.1.8 (development version)
+
+
+
+# formods 0.1.7 
 
 * Added word placeholders to the UI so the user can change them when generating reports/saving the app state.
 * Fixed issue with `has_updated()` where zero values from ui inputs were not taking effect because of a special case with buttons. This requires an `is_button=TRUE` argument for buttons.  

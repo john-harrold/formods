@@ -1,5 +1,12 @@
 # Figure Generation (FG) configuration
 MC:
+  module:
+    type: "FG"
+    # internal R Object: module ID used in deployment
+    depends: 
+      id_ASM: "ASM"
+      id_UD:  "UD"
+      id_DW:  "DW"
   # Controls what is shown in the compact ui mode: FG_ui_compact
   compact:
     code:    TRUE 

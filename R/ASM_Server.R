@@ -1064,73 +1064,266 @@ code}
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
-#'@param id An ID string that corresponds with the ID used to call the modules UI elements
-#'@param id_UD An ID string that corresponds with the ID used to call the UD modules UI elements
-#'@param id_DW An ID string that corresponds with the ID used to call the DW modules UI elements
-#'@param full_session  Boolean to indicate if the full test session should be created (default \code{TRUE}).
-#'@return list with the following elements
-#' \itemize{
-#'   \item{isgood:} Boolean indicating the exit status of the function.
-#'   \item{session:} The value Shiny session variable (in app) or a list (outside of app) after initialization.
-#'   \item{input:} The value of the shiny input at the end of the session initialization.
-#'   \item{state:} App state.
-#'   \item{rsc:} The \code{react_state} components.
-#'}
+#'@return The ASM portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}} 
 #'@examples
 #' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
-ASM_test_mksession = function(session, id="ASM", id_UD="UD", id_DW = "DW", full_session=TRUE){
+#'@seealso \code{\link{ASM_set_app_state}}
+ASM_test_mksession = function(session){
 
-  isgood = TRUE
-  rsc    = list()
-  input  = list()
+  sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"))
+  res = ASM_set_app_state(session=list(), sources=sources)
+  res = res[["all_sess_res"]][["ASM"]]
 
-  # Populating the session with DW components
-  #sess_res = FG_test_mksession(session, id=id_FG, id_UD = id_UD, id_DW=id_DW, full_session=full_session)
-  sess_res = DW_test_mksession(session, id=id_DW, id_UD=id_UD)
-  if(!("ShinySession" %in% class(session))){
-    session = sess_res[["session"]]
+res}
+
+
+#'@export
+#'@title Preload Data Into App
+#'@description Populates session data for testing or to load a specific
+#'analysis. 
+#'@param session     Shiny session variable (in app) or a list (outside of app)
+#'@param sources     Vector of at corresponds with the ID used to call the modules UI elements
+#'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions
+#'@param quickload   Logical \code{TRUE} to load reduced analysis \code{FALSE} to load the full analysis
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:}       Boolean indicating the exit status of the function.
+#'   \item{msgs:}         Messages to be passed back to the user.
+#'   \item{all_sess_res:} List containing the result for each module stored in
+#'   the list name with the module ID.
+#'   \item{session:} Returning the session variable to be used in scripting (not in app).
+#'}
+#'@examples
+#'res = ASM_set_app_state(session=list(), sources=system.file(package="formods", "preload", "UD.yaml"))
+ASM_set_app_state = function(session, sources=NULL, react_state = list(), quickload=FALSE){
+  isgood       = TRUE
+  msgs         = c()
+  err_msgs     = c()
+  all_sess_res = list()
+
+  # Loading the app state
+  ras_res = ASM_read_app_state(sources = sources)
+  src_list = ras_res[["src_list"]]
+  yaml_res = ras_res[["yaml_res"]]
+
+  if(!ras_res[["isgood"]]){
+    isgood = FALSE
+    msgs = c(msgs, ras_res[["msgs"]])
   }
 
-  # Pulling out the react state components
-  rsc         = sess_res$rsc
-  react_state = rsc
+  # Making sure they are ordered based on dependencies 
+  deps_found = c()
+  IDs_proc   = c()
+  IDs_found  = names(yaml_res)
 
-  # YAML files for the fetch calls below
-  FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
-  MOD_yaml_file = system.file(package = "formods", "templates", "ASM.yaml")
+  idx = 1
 
-  # empty input
-  input = list()
+  while(idx <= length(IDs_found)){
+    for(mod_ID in IDs_found){
+      # we only consider the ID if it hasn't 
+      # been processed yet:
+      if(!(mod_ID %in% IDs_proc)){
+        yaml_res[[mod_ID]][["mod_cfg"]][["module"]]
+        # Current module dependencies
+        tmp_depends = yaml_res[[mod_ID]][["mod_cfg"]][["MC"]][["module"]][["depends"]]
+        # If there are no dependencies then we add the ID
+        if(is.null(tmp_depends)){
+          IDs_proc = c(IDs_proc, mod_ID)
+        } else {
+          if(all(unlist(tmp_depends) %in% IDs_proc)){
+            IDs_proc = c(IDs_proc, mod_ID)
+          }
+        }
+      }
+    }
 
-  # Creating an empty state object
-  state = ASM_fetch_state(id           = id,
-                          input        = input,
-                          session      = session,
-                          FM_yaml_file = FM_yaml_file,
+    # This will break out of the loop if we've found the 
+    # order for all of the modules
+    if(all(IDs_found %in% IDs_proc)){
+      idx = length(IDs_found) + 1
+    }
+    idx = idx+1
+  }
+
+  if(!all(IDs_found %in% IDs_proc)){
+    isgood = FALSE
+    msgs = c(msgs, "Unable to sort out dependencies for the following modules:",
+             paste0("  - ", paste0(IDs_found[!(IDs_found %in% IDs_proc)], collapse=", ")))
+  }
+
+  if(isgood){
+
+    # Looping through each ID and loading 
+    for(mod_ID in IDs_proc){
+
+      MOD_FUNC = paste0(yaml_res[[mod_ID]][["mod_cfg"]][["MC"]][["module"]][["type"]], "_preload")
+      if(exists(MOD_FUNC, mode="function")){
+
+        FUNC_CALL = paste0("sess_res   = ", MOD_FUNC,"(session=session, src_list=src_list, yaml_res=yaml_res, mod_ID = mod_ID, react_state=react_state, quickload=quickload)")
+        eval(parse(text=FUNC_CALL))
+
+
+        # Capturing any loading errors that may have occurred: 
+        if(!sess_res[["isgood"]]){
+          isgood = FALSE
+          msgs = c(msgs, sess_res[["msgs"]])
+          FM_message(line=paste0("Failure to preload module ID: ", mod_ID), entry_type="danger")
+          for(tmp_line in sess_res[["msgs"]]){
+            FM_message(line=tmp_line, entry_type="danger")
+          }
+        }
+
+        # Storing the results of the individual session loaded
+        all_sess_res[[mod_ID]] = sess_res
+
+        # If we're running at the scripting level we need to pull 
+        # the session information and react_state out of result
+        if(!("ShinySession" %in% class(session))){
+          session     = sess_res[["session"]]
+          react_state = sess_res[["react_state"]]
+        }
+      } else {
+        isgood = FALSE
+        err_msgs = c(err_msgs,
+                     paste0("Unable to find formods module preload function:"),
+                     paste0("  -> function:  ", MOD_FUNC, "()"),
+                     paste0("  -> module ID: ", mod_ID))
+
+      }
+    }
+  }
+
+  if(!isgood){
+    for(tmp_line in err_msgs){
+      FM_message(line=tmp_line, entry_type="danger")
+    }
+    msgs = c(msgs,err_msgs)
+  }
+
+
+  res=list(isgood       =isgood, 
+           msgs         = msgs,
+           all_sess_res = all_sess_res,
+           session      = session)
+
+res}
+
+#'@export
+#'@title Preload Data for ASM Module
+#'@description Populates the supplied session variable with information from
+#'list of sources.
+#'@param session     Shiny session variable (in app) or a list (outside of app)
+#'@param src_list    List of preload data (all read together with module IDs at the top level) 
+#'@param yaml_res    Result of reading in the formods (fm_cfg) and module (mod_cfg) yaml files     
+#'@param mod_ID      Module ID of the module being loaded. 
+#'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions
+#'@param quickload   Logical \code{TRUE} to load reduced analysis \code{FALSE} to load the full analysis
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:}      Boolean indicating the exit status of the function.
+#'   \item{msgs:}        Messages to be passed back to the user.
+#'   \item{session:}     Session object
+#'   \item{input:}       The value of the shiny input at the end of the session initialization.
+#'   \item{state:}       App state.
+#'   \item{react_state:} The \code{react_state} components.
+#'}
+ASM_preload  = function(session, src_list, yaml_res=NULL, mod_ID=NULL, react_state = list(), quickload=FALSE){
+  isgood = TRUE
+  input  = list()
+  msgs   = c()
+
+  FM_yaml_file  = render_str(src_list[[mod_ID]][["fm_yaml"]])
+  MOD_yaml_file = render_str(src_list[[mod_ID]][["mod_yaml"]])
+
+  state = ASM_fetch_state(id            = mod_ID,
+                          input         = input,
+                          session       = session,
+                          FM_yaml_file  = FM_yaml_file, 
                           MOD_yaml_file = MOD_yaml_file)
 
-  # This functions works both in a shiny app and outside of one
-  # if we're in a shiny app then the 'session' then the class of
-  # session will be a ShinySession. Otherwise it'll be a list if
-  # we're not in the app (ie just running test examples) then
-  # we need to set the state manually
+  # Required for proper reaction:
+  react_state[[mod_ID]]  = list(ASM = list(checksum=state[["ASM"]][["checksum"]]))
+
+  # Saving the state
   if(("ShinySession" %in% class(session))){
-    FM_set_mod_state(session, id, state)
+    FM_set_mod_state(session, mod_ID, state)
   } else {
-    session = FM_set_mod_state(session, id, state)
+    session = FM_set_mod_state(session, mod_ID, state)
   }
 
-  # Required for proper reaction:
-  rsc[[id]]  = list(ASM = list(checksum=state[["ASM"]][["checksum"]]))
+  formods::FM_le(state,paste0("module isgood: ",isgood))
 
-  # Defaults to not generating the reports and only the code when saving:
-  state[["ASM"]][["ui"]][["switch_gen_rpts"]] = FALSE
+  res = list(isgood      = isgood, 
+             msgs        = msgs,
+             session     = session,
+             input       = input,
+             react_state = react_state,
+             state       = state)
+res} 
+
+
+#'@export
+#'@title Read App State From Yaml Files
+#'@description Reads in the app state from yaml files.
+#'@param sources     Vector of at corresponds with the ID used to call the modules UI elements
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:}       Boolean indicating the exit status of the function.
+#'   \item{msgs:}         Messages to be passed back to the user.
+#'   \item{src_list:}     List containing the result of reading all of the sources. 
+#'   \item{yaml_res:}     Lists with elements for each module ID found in src_list with elements holding the modules configuration file \code{"mod_cfg"} and the modules formods configuration file \code{"fm_cfg"}
+#'}
+#'@examples
+#'res = ASM_read_app_state(sources=system.file(package="formods", "preload", "UD_preload.yaml"))
+ASM_read_app_state = function(sources=NULL){
+
+  isgood   = TRUE
+  msgs     = c()  
+  src_list = list()
+  err_msgs = c()
+
+  for(tmp_source in sources){
+    if(file.exists(tmp_source)){
+      src_list = c(src_list, yaml::read_yaml(tmp_source))
+    } else {
+      isgood = FALSE
+      err_msgs = c(err_msgs, paste0("File does not exist: ", tmp_source))
+    }
+  }
+
+  # Getting the module information from the different IDs found in the sources
+  yaml_res = list()
+  for(mod_ID in names(src_list)){
+    mod_yaml = formods::render_str(src_list[[mod_ID]][["mod_yaml"]])
+    if(file.exists(mod_yaml)){
+      yaml_res[[mod_ID]][["mod_cfg"]]  = yaml::read_yaml(mod_yaml)
+    } else {
+      isgood = FALSE
+      err_msgs = c(err_msgs, paste0("Module ", mod_ID, ", mod_yaml does not exist: ", mod_yaml))
+    }
+
+
+    fm_yaml  = formods::render_str(src_list[[mod_ID]][["fm_yaml"]])
+    if(file.exists(fm_yaml)){
+      yaml_res[[mod_ID]][["fm_cfg"]]  = yaml::read_yaml(fm_yaml)
+    } else {
+      isgood = FALSE
+      err_msgs = c(err_msgs, paste0("Module ", mod_ID, ", fm_yaml does not exist: ", fm_yaml))
+    }
+  }
+
+  if(!isgood){
+    for(msg_line in err_msgs){
+      FM_message(msg_line, entry_type="danger")
+    }
+    msgs = c(msgs, err_msgs)
+  }
 
   res = list(
-    isgood  = isgood,
-    session = session,
-    input   = input,
-    state   = state,
-    rsc     = rsc
-  )
-res}
+    isgood   = isgood,
+    msgs     = msgs,
+    src_list = src_list,
+    yaml_res = yaml_res)
+
+
+res} 

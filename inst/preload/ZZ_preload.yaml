@@ -1,0 +1,13 @@
+===ZZ===:
+  fm_yaml:   'system.file(package="formods", "templates", "formods.yaml")'
+  mod_yaml:  'system.file(package="formods", "templates", "===ZZ===.yaml")'
+  # The remainder is the free form for your module. If your module has the
+  # format of elements and components you can use the skeleton below to get
+  # started
+  elements:
+   - element:
+     idx:    1
+     name:   "Element Name"
+     components:     
+       - component:
+           option1: "opt"

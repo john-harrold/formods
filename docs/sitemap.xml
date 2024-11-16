@@ -1,291 +1,107 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/articles/included_modules.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/making_modules.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ASM_Server.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ASM_fetch_code.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ASM_fetch_dlfn.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ASM_fetch_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ASM_init_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ASM_onload.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ASM_test_mksession.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ASM_write_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DW_Server.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DW_add_wrangling_element.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DW_append_report.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DW_attach_ds.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DW_fetch_code.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DW_fetch_current_view.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DW_fetch_ds.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DW_fetch_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DW_init_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DW_new_view.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DW_set_current_view.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DW_test_mksession.html</loc>
-  </url>
-  <url>
-    <loc>/reference/DW_update_checksum.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FG_Server.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FG_append_report.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FG_build.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FG_extract_page.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FG_fetch_code.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FG_fetch_current_fig.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FG_fetch_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FG_init_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FG_new_fig.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FG_set_current_fig.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FG_test_mksession.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FG_update_checksum.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_add_ui_tooltip.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_build_comment.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_fetch_app_code.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_fetch_app_info.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_fetch_app_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_fetch_current_mods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_fetch_data_format.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_fetch_deps.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_fetch_ds.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_fetch_log_path.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_fetch_mdl.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_fetch_mod_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_fetch_user_files_path.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_generate_report.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_init_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_le.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_message.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_mk_error_fig.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_notify.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_pause_screen.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_pretty_sort.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_proc_include.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_resume_screen.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_set_app_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_set_mod_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_set_notification.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_set_ui_msg.html</loc>
-  </url>
-  <url>
-    <loc>/reference/FM_tc.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UD_Server.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UD_attach_ds.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UD_ds_read.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UD_fetch_code.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UD_fetch_ds.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UD_fetch_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UD_init_state.html</loc>
-  </url>
-  <url>
-    <loc>/reference/UD_test_mksession.html</loc>
-  </url>
-  <url>
-    <loc>/reference/autocast.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dw_eval_element.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dwrs_builder.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fers_builder.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fetch_hold.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fetch_package_version.html</loc>
-  </url>
-  <url>
-    <loc>/reference/formods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/formods_check.html</loc>
-  </url>
-  <url>
-    <loc>/reference/has_changed.html</loc>
-  </url>
-  <url>
-    <loc>/reference/has_updated.html</loc>
-  </url>
-  <url>
-    <loc>/reference/icon_link.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/is_installed.html</loc>
-  </url>
-  <url>
-    <loc>/reference/linspace.html</loc>
-  </url>
-  <url>
-    <loc>/reference/new_module_template.html</loc>
-  </url>
-  <url>
-    <loc>/reference/remove_hold.html</loc>
-  </url>
-  <url>
-    <loc>/reference/set_hold.html</loc>
-  </url>
-  <url>
-    <loc>/reference/unfactor.html</loc>
-  </url>
-  <url>
-    <loc>/reference/use_formods.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://formods.ubiquity.tools/404.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/LICENSE-text.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/articles/included_modules.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/articles/index.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/articles/making_modules.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/authors.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/index.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/news/index.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_Server.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_fetch_code.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_fetch_dlfn.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_fetch_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_init_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_onload.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_preload.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_read_app_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_set_app_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_test_mksession.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_write_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_Server.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_add_wrangling_element.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_append_report.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_attach_ds.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_fetch_code.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_fetch_current_view.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_fetch_ds.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_fetch_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_hasds.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_init_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_new_view.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_preload.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_set_current_view.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_test_mksession.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_update_checksum.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_Server.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_append_report.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_build.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_extract_page.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_fetch_code.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_fetch_current_fig.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_fetch_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_init_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_new_fig.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_preload.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_set_current_fig.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_test_mksession.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_update_checksum.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_add_ui_tooltip.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_build_comment.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_fetch_app_code.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_fetch_app_info.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_fetch_app_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_fetch_current_mods.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_fetch_data_format.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_fetch_deps.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_fetch_ds.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_fetch_log_path.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_fetch_mdl.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_fetch_mod_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_fetch_user_files_path.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_generate_report.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_init_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_le.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_message.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_mk_error_fig.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_notify.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_pause_screen.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_pretty_sort.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_proc_include.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_resume_screen.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_set_app_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_set_mod_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_set_notification.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_set_ui_msg.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_tc.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/UD_Server.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/UD_attach_ds.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/UD_ds_read.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/UD_fetch_code.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/UD_fetch_ds.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/UD_fetch_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/UD_init_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/UD_preload.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/UD_test_mksession.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/autocast.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/dw_eval_element.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/dwrs_builder.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/fers_builder.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/fetch_hold.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/fetch_package_version.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/formods.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/formods_check.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/has_changed.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/has_updated.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/icon_link.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/index.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/is_installed.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/linspace.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/new_module_template.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/remove_hold.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/render_str.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/set_hold.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/unfactor.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/use_formods.html</loc></url>
 </urlset>
+

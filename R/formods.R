@@ -134,6 +134,7 @@ res}
 #'     \item{object:} Name of the R Object containing the data frame
 #'     \item{MOD_TYPE:} Short name of the type of module
 #'     \item{id:} Module ID
+#'     \item{idx:} Numerical identifyer within the module
 #'     \item{checksum:} Module checksum
 #'     \item{DSchecksum:} Checksum of the dataset
 #'     \item{code:} Code to generate the dataset
@@ -207,6 +208,7 @@ FM_fetch_ds = function(state, session, ids=NULL){
         object      = dsname,
         MOD_TYPE    = ds[[dsname]][["MOD_TYPE"]],
         id          = ds[[dsname]][["id"]],
+        idx         = ds[[dsname]][["idx"]],
         checksum    = ds[[dsname]][["checksum"]],
         DSchecksum  = ds[[dsname]][["DSchecksum"]],
         code        = ds[[dsname]][["code"]])
@@ -239,8 +241,20 @@ res}
 autocast = function(ui_input, quote_char=TRUE){
 
 
-  ui_input_num = as.numeric(as.character(ui_input))
+  ui_input_num = suppressWarnings(as.numeric(as.character(ui_input)))
                                 # NULL returns numeric length zero
+
+ # Taken from here:
+ # https://stackoverflow.com/a/36239701
+ # as.num = function(x, na.strings = "NA") {
+ #    stopifnot(is.character(x))
+ #    na = x %in% na.strings
+ #    x[na] = "0"
+ #    x = as.numeric(x)
+ #    x[na] = NA_real_
+ #    x
+ #}
+  
   if(any(is.na(ui_input_num)) | (length(ui_input_num) == 0)){
     res = as.character(ui_input)
     if(quote_char){
@@ -2436,14 +2450,16 @@ new_module_template = function(
 
   # Source and destination files:
   mod_files = list(
-    mc     = list(source = system.file(package="formods", "templates", "ZZ_module_components.R"),
-                  dest   = paste0(SN, "_module_components.R")),
-    server = list(source = system.file(package="formods", "templates", "ZZ_Server.R"),
-                  dest   = paste0(SN, "_Server.R")),
-    yaml   = list(source = system.file(package="formods", "templates", "ZZ.yaml"),
-                  dest   = paste0(SN, ".yaml")),
-    funcs  = list(source = system.file(package="formods", "templates", "ZZ_funcs.R"),
-                  dest   = paste0(SN, "_funcs.R"))
+    mc      = list(source = system.file(package="formods", "templates", "ZZ_module_components.R"),
+                   dest   = paste0(SN, "_module_components.R")),
+    server  = list(source = system.file(package="formods", "templates", "ZZ_Server.R"),
+                   dest   = paste0(SN, "_Server.R")),
+    yaml    = list(source = system.file(package="formods", "templates", "ZZ.yaml"),
+                   dest   = paste0(SN, ".yaml")),
+    preload = list(source = system.file(package="formods", "preload", "ZZ_preload.yaml"),
+                   dest   = paste0(SN, ".yaml")),
+    funcs   = list(source = system.file(package="formods", "templates", "ZZ_funcs.R"),
+                   dest   = paste0(SN, "_funcs.R"))
   )
 
   # Placeholder substitutions
@@ -2525,6 +2541,11 @@ use_formods = function(
   template_dir = file.path(repo_root, "inst", "templates")
   if(!dir.exists(template_dir)){
     dir.create(template_dir, recursive=TRUE)
+  }
+
+  preload_dir  = file.path(repo_root, "inst", "preload")
+  if(!dir.exists(preload_dir)){
+    dir.create(preload_dir, recursive=TRUE)
   }
 
   test_apps_dir = file.path(repo_root, "inst", "test_apps")
@@ -2655,6 +2676,7 @@ FM_fetch_mdl = function(state, session, ids=NULL){
           object      = mdlname,
           MOD_TYPE    = mdl[[mdlname]][["MOD_TYPE"]],
           id          = mdl[[mdlname]][["id"]],
+          idx         = mdl[[mdlname]][["idx"]],
           checksum    = mdl[[mdlname]][["checksum"]],
           MDLchecksum = mdl[[mdlname]][["MDLchecksum"]],
           code        = mdl[[mdlname]][["code"]])
@@ -2710,3 +2732,26 @@ linspace = function(a, b, n=100){
    return(seq(a,b,step))
 
 }
+
+#'@export
+#'@title Evaluate R Code in String
+#'@description Attempts to evaluate a string as a chunk of R code. If that
+#'succeeds it will return the result. If not it will return the original text. 
+#'@param estr String to render.
+#'@return String containing the evaled as a character or the original string
+#'@examples
+#' res = eval_str(estr="ls()")
+render_str <- function(estr=""){
+
+  cmd = paste0("res = ", estr)
+
+  tc_res = FM_tc(cmd=cmd, tc_env = list(), capture="res")
+
+  if(tc_res[["isgood"]]){
+    res = tc_res[["capture"]][["res"]]
+  } else {
+    res = estr
+
+  }
+
+  return(res)}

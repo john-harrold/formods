@@ -1,0 +1,126 @@
+DW:
+  fm_yaml:   'system.file(package="formods", "templates", "formods.yaml")'
+  mod_yaml:  'system.file(package="formods", "templates", "DW.yaml")'
+  elements:
+    # Each element has a name and a unique numeric identifier used within this
+    # module. The name is what is shown to the user.
+    #
+    # Set components to NULL if there are none. Each component has an action
+    # and other options depending on the action. Here are the currently
+    # allowed actions and options:
+    #    filter 
+    #     column:   column to filter by
+    #     operator: ==, !=, %in%, !%in%, or within
+    #     rhs:      right hand side of the filter operation it can be one or
+    #     more values depending on the operator:
+    #        == !=     --> Single value
+    #       %in% !%in% --> One or more value
+    #       within     --> Two values
+    #
+    #    mutate 
+    #     column:   column to change or create
+    #     rhs:      right hand side of the mutate operation.
+    #
+    #    rename 
+    #     column:   column to rename          
+    #     rhs:      new name 
+    #
+    #    group 
+    #     column:   column(s) to group by
+    #
+    #    longer 
+    #     column:   column(s) ts to make longer
+    #     names:    name of column to contain names
+    #     values:   name of column to contain values
+    #
+    #    wider 
+    #     names:    name of column that contains names
+    #     values:   name of column that contains values
+    #
+    #    select
+    #     column:   column(s) to keep
+    #
+    #    ungroup (no options)
+    #
+    #    onerow (no options)
+    #
+    - element:
+      idx:    1
+      name:   "Observations"
+      components:     
+        - component:
+            action:   "filter"
+            column:   "EVID"   
+            operator: "=="
+            rhs:       0 
+        - component:
+            action:   "filter"
+            column:   "DV"   
+            operator: "!="
+            rhs:       0 
+        - component:
+            action:   "mutate"
+            column:   "IDCMT"   
+            rhs:      "paste0(ID, ', ', CMT)"   
+    - element: 
+      idx:     2
+      name:   "PK 3mg SD IV"
+      components:     
+        - component:
+            action:   "filter"
+            column:   "EVID"   
+            operator: "=="
+            rhs:       0 
+        - component:
+            action:   "filter"
+            column:   "DV"   
+            operator: "!="
+            rhs:       0 
+        - component:
+            action:   "filter"
+            column:   "Cohort"   
+            operator: "%in%"
+            rhs:      "SD 3 mg IV"
+        - component:
+            action:   "filter"
+            column:   "CMT"      
+            operator: "%in%"
+            rhs:      "C_ng_ml"   
+    - element: 
+      idx:     3
+      name:   "PK 3mg SD IV (NCA)"
+      components:     
+        - component:
+            action:   "filter"
+            column:   "EVID"   
+            operator: "=="
+            rhs:       0 
+        - component:
+            action:   "filter"
+            column:   "Cohort"   
+            operator: "%in%"
+            rhs:      "SD 3 mg IV"
+        - component:
+            action:   "filter"
+            column:   "CMT"      
+            operator: "%in%"
+            rhs:      "C_ng_ml"   
+    - element: 
+      idx:     4
+      name:   "PKPD 3mg SD IV (NCA)"
+      components:     
+        - component:
+            action:   "filter"
+            column:   "EVID"   
+            operator: "=="
+            rhs:       0 
+        - component:
+            action:   "filter"
+            column:   "Cohort"   
+            operator: "%in%"
+            rhs:      "SD 3 mg IV"
+        - component:
+            action:   "filter"
+            column:   "CMT"      
+            operator: "%in%"
+            rhs:      ["C_ng_ml", "BM_ng_ml"]

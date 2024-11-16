@@ -21,7 +21,7 @@ Creates a new figure in a FG module
 library(formods)
 # Within shiny both session and input variables will exist,
 # this creates examples here for testing purposes:
-sess_res = FG_test_mksession(session=list(), full_session=FALSE)
+sess_res = FG_test_mksession(session=list())
 session = sess_res$session
 input   = sess_res$input
 
@@ -31,10 +31,8 @@ state   = sess_res$state
 # This sets the current active figure to Fig_1
 state[["FG"]][["current_fig"]]  =  "Fig_1"
 
-# This is a paginated figure, and we can access a specific
-# figure using the following:
+# If this is a paginated figure, and we can access a specific
 pg_1 = FG_extract_page(state, 1)
-pg_2 = FG_extract_page(state, 2)
 
 # This will give you access to the current figure directly:
 current_fig = FG_fetch_current_fig(state)

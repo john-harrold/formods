@@ -1,4 +1,4 @@
-url: ~
+url: https://formods.ubiquity.tools
 template:
   bootstrap: 5
   bootswatch: united
@@ -21,6 +21,7 @@ reference:
     - linspace
     - new_module_template
     - remove_hold
+    - render_str
     - set_hold
     - unfactor
     - use_formods

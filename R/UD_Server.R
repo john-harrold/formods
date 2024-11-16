@@ -485,7 +485,6 @@ UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
   state = UD_attach_ds(state,
             clean = clean_ds)
 
-
   FM_le(state, "State initialized")
   state}
 
@@ -575,6 +574,7 @@ UD_attach_ds = function(
   # Calculating the checksum we include both the contents as well as the clean
   # state:
   checksum = digest::digest(c(contents,  state[["UD"]][["clean"]], algo=c("md5")))
+
 
   if(is.null(object_name)){
   # getting the object name:
@@ -770,6 +770,7 @@ code}
 #'    \item{label: Text label for the dataset}
 #'    \item{MOD_TYPE: Short name for the type of module.}
 #'    \item{id: module ID}
+#'    \item{idx: unique numerical ID to identify this dataset in the module.}
 #'    \item{DS: Dataframe containing the actual dataset.}
 #'    \item{DSMETA: Metadata describing DS, see \code{FM_fetch_ds()} for
 #'    details on the format.}
@@ -807,6 +808,7 @@ UD_fetch_ds = function(state){
   NEWDS = list(label      = NULL,
                MOD_TYPE   = NULL,
                id         = NULL,
+               idx        = 1,    
                DS         = NULL,
                DSMETA     = NULL,
                code       = NULL,
@@ -840,53 +842,96 @@ res}
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
-#'@param id An ID string that corresponds with the ID used to call the modules UI elements
-#'@return list with the following elements
-#' \itemize{
-#'   \item{isgood:} Boolean indicating the exit status of the function.
-#'   \item{session:} The value Shiny session variable (in app) or a list (outside of app) after initialization.
-#'   \item{input:} The value of the shiny input at the end of the session initialization.
-#'   \item{state:} App state.
-#'   \item{rsc:} The \code{react_state} components.
-#'}
+#'@return The UD portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}} 
 #'@examples
 #' res = UD_test_mksession(session=list())
-UD_test_mksession = function(session, id = "UD"){
+#'@seealso \code{\link{ASM_set_app_state}}
+UD_test_mksession = function(session){
 
+  sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+              system.file(package="formods", "preload", "UD_preload.yaml"))
+  res = ASM_set_app_state(session=list(), sources=sources)
+  res = res[["all_sess_res"]][["UD"]]
+
+res}
+
+
+#'@export
+#'@title Preload Data for UD Module
+#'@description Populates the supplied session variable with information from
+#'list of sources.
+#'@param session     Shiny session variable (in app) or a list (outside of app)
+#'@param src_list    List of preload data (all read together with module IDs at the top level) 
+#'@param mod_ID      Module ID of the module being loaded. 
+#'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions. 
+#'@param quickload   Logical \code{TRUE} to load reduced analysis \code{FALSE} to load the full analysis
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:}      Boolean indicating the exit status of the function.
+#'   \item{msgs:}        Messages to be passed back to the user.
+#'   \item{session:}     Session object
+#'   \item{input:}       The value of the shiny input at the end of the session initialization.
+#'   \item{state:}       App state.
+#'   \item{react_state:} The \code{react_state} components.
+#'}
+UD_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = list(), quickload=FALSE){
   isgood = TRUE
-  rsc    = list()
   input  = list()
+  msgs   = c()
 
-  input[["input_data_file"]][["datapath"]] = system.file(package="formods", "test_data","TEST_DATA.xlsx")
-  input[["input_data_file"]][["name"]]     = "TEST_DATA.xlsx"
+  FM_yaml_file  = render_str(src_list[[mod_ID]][["fm_yaml"]])
+  MOD_yaml_file = render_str(src_list[[mod_ID]][["mod_yaml"]])
+  id_ASM        = yaml_res[[mod_ID]][["mod_cfg"]][["MC"]][["module"]][["depends"]][["id_ASM"]]
 
-  FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
-  MOD_yaml_file = system.file(package = "formods", "templates", "UD.yaml")
 
-  state = UD_fetch_state(id            = id,
+  full_file_path = render_str(src_list[[mod_ID]][["data_source"]][["file_name"]])
+  clean_ds       = render_str(src_list[[mod_ID]][["data_source"]][["clean"]])
+
+
+  input[["input_data_file"]][["datapath"]] = full_file_path
+  input[["input_data_file"]][["name"]]     = basename(full_file_path)
+  # Handling the situation where the sheet has not been defined:
+  input[["input_select_sheet"]] = NULL
+  if(!is.null(src_list[[mod_ID]][["data_source"]][["sheet"]])){
+    input[["input_select_sheet"]] = 
+      render_str(src_list[[mod_ID]][["data_source"]][["sheet"]])
+  }
+
+  # Setting cleaning options
+  if(!is.null(clean_ds)){
+    input[["input_data_file"]][["switch_clean"]] = as.character(clean_ds)
+  }
+
+  state = UD_fetch_state(id            = mod_ID,
+                         id_ASM        = id_ASM,
                          input         = input,
                          session       = session,
                          FM_yaml_file  = FM_yaml_file,
                          MOD_yaml_file = MOD_yaml_file)
 
 
-  # This functions works both in a shiny app and outside of one
-  # if we're in a shiny app then the 'session' then the class of
-  # session will be a ShinySession. Otherwise it'll be a list if
-  # we're not in the app (ie just running test examples) then
-  # we need to set the state manually
-  if(!("ShinySession" %in% class(session))){
-    session = FM_set_mod_state(session, id, state)
+  # Required for proper reaction:
+  react_state[[mod_ID]]  = list(UD  = list(checksum=state[["UD"]][["checksum"]]))
+
+  if(!state[["UD"]][["isgood"]]){
+    isgood = FALSE
+    msgs = c(msgs, "Failed to load dataset")
+  }
+ 
+  # Saving the state
+  if(("ShinySession" %in% class(session))){
+    FM_set_mod_state(session, mod_ID, state)
+  } else {
+    session = FM_set_mod_state(session, mod_ID, state)
   }
 
-  # Required for proper reaction:
-  rsc[[id]] = list(UD = list(checksum=state[["UD"]][["checksum"]]))
+  formods::FM_le(state,paste0("module isgood: ",isgood))
 
-  res = list(
-    isgood  = isgood,
-    session = session,
-    input   = input,
-    state   = state,
-    rsc     = rsc
-  )
-}
+  res = list(isgood      = isgood, 
+             msgs        = msgs,
+             session     = session,
+             input       = input,
+             react_state = react_state,
+             state       = state)
+res}
+

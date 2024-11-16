@@ -4,26 +4,20 @@
 \alias{UD_test_mksession}
 \title{Populate Session Data for Module Testing}
 \usage{
-UD_test_mksession(session, id = "UD")
+UD_test_mksession(session)
 }
 \arguments{
 \item{session}{Shiny session variable (in app) or a list (outside of app)}
-
-\item{id}{An ID string that corresponds with the ID used to call the modules UI elements}
 }
 \value{
-list with the following elements
-\itemize{
-  \item{isgood:} Boolean indicating the exit status of the function.
-  \item{session:} The value Shiny session variable (in app) or a list (outside of app) after initialization.
-  \item{input:} The value of the shiny input at the end of the session initialization.
-  \item{state:} App state.
-  \item{rsc:} The \code{react_state} components.
-}
+The UD portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}}
 }
 \description{
 Populates the supplied session variable for testing.
 }
 \examples{
 res = UD_test_mksession(session=list())
+}
+\seealso{
+\code{\link{ASM_set_app_state}}
 }
