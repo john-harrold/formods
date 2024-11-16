@@ -844,9 +844,9 @@ res}
 #'@param session Shiny session variable (in app) or a list (outside of app)
 #'@return The UD portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}} 
 #'@examples
-#' res = UD_test_mksession(session=list())
+#' sess_res = UD_test_mksession()
 #'@seealso \code{\link{ASM_set_app_state}}
-UD_test_mksession = function(session){
+UD_test_mksession = function(session=list()){
 
   sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
               system.file(package="formods", "preload", "UD_preload.yaml"))
@@ -862,6 +862,7 @@ res}
 #'list of sources.
 #'@param session     Shiny session variable (in app) or a list (outside of app)
 #'@param src_list    List of preload data (all read together with module IDs at the top level) 
+#'@param yaml_res    List data from module yaml config
 #'@param mod_ID      Module ID of the module being loaded. 
 #'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions. 
 #'@param quickload   Logical \code{TRUE} to load reduced analysis \code{FALSE} to load the full analysis

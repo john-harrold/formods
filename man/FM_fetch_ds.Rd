@@ -60,8 +60,7 @@ available.
 \examples{
 # We need a module state and a Shiny session variable
 # to use this function:
-id="UD"
-sess_res = UD_test_mksession(session=list(), id=id)
+sess_res = UD_test_mksession()
 session = sess_res$session
 state   = sess_res$state
 ds = FM_fetch_ds(state, session)

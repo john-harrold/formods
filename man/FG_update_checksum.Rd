@@ -20,7 +20,7 @@ were any changes to the figures within it.
 \examples{
 # This will create a populated FG state object:
 \donttest{
-sess_res = FG_test_mksession(session=list(), full_session=FALSE)
+sess_res = FG_test_mksession()
 state   = sess_res$state
 state = FG_update_checksum(state)
 }

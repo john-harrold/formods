@@ -23,8 +23,7 @@ with this function.
 }
 \examples{
 # We need a module state object to use this function:
-id="UD"
-sess_res = UD_test_mksession(session=list(), id=id)
+sess_res = UD_test_mksession()
 state = sess_res$state
 state = FM_set_ui_msg(state, "Something happend.")
 }

@@ -18,7 +18,7 @@ Fetches the code to generate results seen in the app
 \examples{
 \donttest{
 # This will create a populated FG state object:
-sess_res = FG_test_mksession(session=list(), full_session=FALSE)
+sess_res = FG_test_mksession()
 state   = sess_res$state
 code  = FG_fetch_code(state)
 cat(paste(code, collapse="\n"))

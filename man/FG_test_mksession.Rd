@@ -4,7 +4,7 @@
 \alias{FG_test_mksession}
 \title{Populate Session Data for Module Testing}
 \usage{
-FG_test_mksession(session)
+FG_test_mksession(session = list())
 }
 \arguments{
 \item{session}{Shiny session variable (in app) or a list (outside of app)}
@@ -16,7 +16,7 @@ The FG portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state
 Populates the supplied session variable for testing.
 }
 \examples{
-sess_res = FG_test_mksession(session=list())
+sess_res = FG_test_mksession()
 }
 \seealso{
 \code{\link{ASM_set_app_state}}

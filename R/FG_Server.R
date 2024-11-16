@@ -2059,7 +2059,7 @@ state}
 #'}
 #'@examples
 #'\donttest{
-#' sess_res = FG_test_mksession(session=list(), full_session=FALSE)
+#' sess_res = FG_test_mksession()
 #' state = sess_res$state
 #' fb_res = fers_builder(state)
 #'}
@@ -2597,7 +2597,7 @@ state}
 #'@examples
 #'# This will create a populated FG state object:
 #'\donttest{
-#' sess_res = FG_test_mksession(session=list(), full_session=FALSE)
+#' sess_res = FG_test_mksession()
 #' state   = sess_res$state
 #' state = FG_update_checksum(state)
 #'}
@@ -2671,7 +2671,7 @@ fobj}
 #'@examples
 #'\donttest{
 #'# This will create a populated FG state object:
-#'sess_res = FG_test_mksession(session=list(), full_session=FALSE)
+#'sess_res = FG_test_mksession()
 #'state   = sess_res$state
 #'code  = FG_fetch_code(state)
 #'cat(paste(code, collapse="\n"))
@@ -2710,7 +2710,7 @@ code}
 #'@seealso \code{\link{FM_generate_report}}
 #'@examples
 #'\donttest{
-#' sess_res = FG_test_mksession(session=list(), full_session=FALSE)
+#' sess_res = FG_test_mksession()
 #' state = sess_res$state
 #' # This will read in the default PowerPoint report template
 #' rpt =
@@ -2892,9 +2892,9 @@ res}
 #'@param session Shiny session variable (in app) or a list (outside of app)
 #'@return The FG portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}} 
 #'@examples
-#' sess_res = FG_test_mksession(session=list())
+#' sess_res = FG_test_mksession()
 #'@seealso \code{\link{ASM_set_app_state}}
-FG_test_mksession = function(session){
+FG_test_mksession = function(session=list()){
 
   sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
               system.file(package="formods", "preload", "UD_preload.yaml"),
@@ -2912,6 +2912,7 @@ res}
 #'list of sources.
 #'@param session     Shiny session variable (in app) or a list (outside of app)
 #'@param src_list    List of preload data (all read together with module IDs at the top level) 
+#'@param yaml_res    List data from module yaml config
 #'@param mod_ID      Module ID of the module being loaded. 
 #'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions. 
 #'@param quickload   Logical \code{TRUE} to load reduced analysis \code{FALSE} to load the full analysis

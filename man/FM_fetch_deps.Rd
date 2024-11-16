@@ -26,8 +26,7 @@ might depend on.
 }
 \examples{
 # We need a Shiny session object to use this function:
-id="UD"
-sess_res = UD_test_mksession(session=list(), id=id)
+sess_res = UD_test_mksession()
 session  = sess_res$session
 state    = sess_res$state
 mod_deps = FM_fetch_deps(state, session)

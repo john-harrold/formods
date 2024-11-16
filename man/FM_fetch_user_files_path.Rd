@@ -17,8 +17,7 @@ Use this to get the path to the temporary directory where formods stores user fi
 }
 \examples{
 # We need a state object to use this function:
-id="UD"
-sess_res = UD_test_mksession(session=list(), id=id)
+sess_res = UD_test_mksession()
 state = sess_res$state
 user_dir = FM_fetch_user_files_path(state)
 user_dir

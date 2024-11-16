@@ -29,7 +29,7 @@ reproduce the analysis within the app.
 }
 \examples{
 # We need a Shiny session object to use this function:
-sess_res = DW_test_mksession(session=list())
+sess_res = DW_test_mksession()
 session = sess_res$session
 state   = sess_res$state
 app_code = FM_fetch_app_code(session = session,

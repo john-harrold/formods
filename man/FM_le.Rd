@@ -24,8 +24,7 @@ display it to the console.
 }
 \examples{
 # We need a module state to use this function:
-id="UD"
-sess_res = UD_test_mksession(session=list(), id=id)
+sess_res = UD_test_mksession()
 state   = sess_res$state
 FM_le(state, "This is a normal  message")
 FM_le(state, "This is a danger  message", entry_type="danger")

@@ -20,7 +20,7 @@ value if that is null
 }
 \examples{
 # Creating a state object for testing
-sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
+sess_res = ASM_test_mksession()
 state = sess_res$state
 dlfn = ASM_fetch_dlfn(state)
 dlfn

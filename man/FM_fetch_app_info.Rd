@@ -26,8 +26,7 @@ Returns diagnostic information about the app
 }
 \examples{
 # We need a Shiny session object to use this function:
-id="UD"
-sess_res = UD_test_mksession(session=list(), id=id)
+sess_res = UD_test_mksession()
 session = sess_res$session
 app_info  = FM_fetch_app_info(session)
 app_info$msgs

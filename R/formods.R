@@ -148,8 +148,7 @@ res}
 #'@examples
 #' # We need a module state and a Shiny session variable
 #' # to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = UD_test_mksession()
 #' session = sess_res$session
 #' state   = sess_res$state
 #' ds = FM_fetch_ds(state, session)
@@ -513,7 +512,7 @@ hold_status}
 #' }
 #'@examples
 #' # We need a Shiny session object to use this function:
-#' sess_res = DW_test_mksession(session=list())
+#' sess_res = DW_test_mksession()
 #' session = sess_res$session
 #' state   = sess_res$state
 #' app_code = FM_fetch_app_code(session = session,
@@ -625,18 +624,9 @@ res}
 #'@examples
 #' # Within shiny a session variable will exist,
 #' # this creates one here for testing purposes:
-#' sess_res = UD_test_mksession(session=list())
+#' sess_res = UD_test_mksession()
 #' session = sess_res$session
-#'# This function assumes that some module state exists:
-#'state = UD_init_state(
-#'  FM_yaml_file  = system.file(package = "formods",
-#'                              "templates",
-#'                              "formods.yaml"),
-#'  MOD_yaml_file = system.file(package = "formods",
-#'                              "templates",
-#'                              "UD.yaml"),
-#'  id = "UD",
-#'  session = session)
+#' state   = sess_res$state
 #' FM_fetch_log_path(state)
 FM_fetch_log_path = function(state){
 
@@ -652,8 +642,7 @@ res}
 #'@return Character string with the path to the log file.
 #'@examples
 #' # We need a state object to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = UD_test_mksession()
 #' state = sess_res$state
 #' user_dir = FM_fetch_user_files_path(state)
 #' user_dir
@@ -689,8 +678,7 @@ user_dir}
 #'@return Boolean value indicating success (\code{TRUE}) or failure (\code{FALSE}).
 #'@examples
 #' # We need a module state to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = UD_test_mksession()
 #' state   = sess_res$state
 #' FM_le(state, "This is a normal  message")
 #' FM_le(state, "This is a danger  message", entry_type="danger")
@@ -923,10 +911,9 @@ p_res}
 #'@return module state or NULL if it's not defined.
 #'@examples
 #' # We need a Shiny session variable to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = UD_test_mksession()
 #' session = sess_res$session
-#' state = FM_fetch_mod_state(session, id)
+#' state = FM_fetch_mod_state(session, "UD")
 FM_fetch_mod_state <- function(session,id){
 
   FM_ID = paste0("FM_", id)
@@ -945,11 +932,10 @@ state}
 #'@examples
 #' # We need a Shiny session variable and a module state
 #' # object to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = UD_test_mksession()
 #' session = sess_res$session
 #' state   = sess_res$state
-#' FM_set_mod_state(session, id, state)
+#' FM_set_mod_state(session, "UD", state)
 FM_set_mod_state <- function(session,id,state){
 
   FM_ID = paste0("FM_", id)
@@ -968,8 +954,7 @@ session}
 #'@return No return value, just updates the app state in the session variable.
 #'@examples
 #' # We need a Shiny session object to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = UD_test_mksession()
 #' session = sess_res$session
 #' app_state = FM_fetch_app_state(session)
 #' FM_set_app_state(session, app_state)
@@ -1074,8 +1059,7 @@ NULL}
 #' }
 #'@examples
 #' # We need a Shiny session object to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = UD_test_mksession()
 #' session = sess_res$session
 #' app_info  = FM_fetch_app_info(session)
 #' app_info$msgs
@@ -1219,8 +1203,7 @@ res}
 #'@return App state or NULL if it's not defined.
 #'@examples
 #' # We need a Shiny session object to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = UD_test_mksession()
 #' session = sess_res$session
 #' app_state = FM_fetch_app_state(session)
 #' app_state
@@ -1248,7 +1231,7 @@ app_state}
 #'@examples
 #' # Within shiny a session variable will exist,
 #' # this creates examples here for testing purposes:
-#' sess_res = UD_test_mksession(session=list())
+#' sess_res = UD_test_mksession()
 #' session = sess_res$session
 #'state = FM_init_state(
 #'    FM_yaml_file  = system.file(package = "formods",
@@ -1349,8 +1332,7 @@ state}
 #'@return No return value, sets message in supplied session variable.
 #'@examples
 #' # We need a module state object to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = UD_test_mksession()
 #' state = sess_res$state
 #' session = sess_res$session
 #' FM_proc_include(state, session)
@@ -1456,8 +1438,7 @@ FM_proc_include = function(state, session){
 #'@return state with ui message set.
 #'@examples
 #' # We need a module state object to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = UD_test_mksession()
 #' state = sess_res$state
 #' state = FM_set_ui_msg(state, "Something happend.")
 FM_set_ui_msg = function(state, msgs, append=FALSE){
@@ -2003,7 +1984,7 @@ state}
 #'@return Pauses the screen and has no return value.
 #'@examples
 #' # We need a module state object and Shiny session objects to use this function:
-#' sess_res = UD_test_mksession(session=list())
+#' sess_res = UD_test_mksession()
 #' session = sess_res$session
 #' state = sess_res$state
 #' FM_pause_screen(state, session)
@@ -2033,7 +2014,7 @@ NULL}
 #' }
 #'@examples
 #' # We need a module state object to use this function:
-#' sess_res = UD_test_mksession(session=list())
+#' sess_res = UD_test_mksession()
 #' state = sess_res$state
 #'
 #' data_file_local =  system.file(package="formods", "test_data", "TEST_DATA.xlsx")
@@ -2113,7 +2094,7 @@ res}
 #'@return No return value, called to disable screen pause.
 #'@examples
 #' # We need a module state object and Shiny session objects to use this function:
-#' sess_res = UD_test_mksession(session=list())
+#' sess_res = UD_test_mksession()
 #' session = sess_res$session
 #' state = sess_res$state
 #' FM_pause_screen(state, session)
@@ -2142,8 +2123,7 @@ NULL}
 #'@examples
 #'if(interactive()){
 #' # We need a module state object to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = UD_test_mksession()
 #' state = sess_res$state
 #' uiele = shiny::textInput(inputId = "my input", label="example input")
 #'
@@ -2180,8 +2160,7 @@ uiele}
 #' }
 #'@examples
 #' # We need a Shiny session object to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = UD_test_mksession()
 #' session  = sess_res$session
 #' state    = sess_res$state
 #' mod_deps = FM_fetch_deps(state, session)
@@ -2614,8 +2593,7 @@ nmr}
 #'@examples
 #' # We need a module state and a Shiny session variable
 #' # to use this function:
-#' id="UD"
-#' sess_res = UD_test_mksession(session=list(), id=id)
+#' sess_res = UD_test_mksession()
 #' session = sess_res$session
 #' state   = sess_res$state
 #' mdl = FM_fetch_mdl(state, session)
@@ -2740,7 +2718,7 @@ linspace = function(a, b, n=100){
 #'@param estr String to render.
 #'@return String containing the evaled as a character or the original string
 #'@examples
-#' res = eval_str(estr="ls()")
+#' res = render_str(estr="ls()")
 render_str <- function(estr=""){
 
   cmd = paste0("res = ", estr)

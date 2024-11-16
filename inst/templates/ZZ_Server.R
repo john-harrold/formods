@@ -503,7 +503,7 @@
 #'@examples
 #' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
-#' sess_res = ===ZZ===_test_mksession(session=list())
+#' sess_res = ===ZZ===_test_mksession()
 #' session = sess_res$session
 #' input   = sess_res$input
 #'
@@ -714,7 +714,7 @@
 #'@examples
 #' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
-#' sess_res = ===ZZ===_test_mksession(session=list())
+#' sess_res = ===ZZ===_test_mksession()
 #' session = sess_res$session
 #' input   = sess_res$input
 #'
@@ -870,7 +870,7 @@ res}
 #'}
 #'@examples
 #' # We need a module state:
-#' sess_res = ===ZZ===_test_mksession(session=list())
+#' sess_res = ===ZZ===_test_mksession()
 #' state = sess_res$state
 #'
 #' ds = ===ZZ===_fetch_ds(state)
@@ -940,7 +940,7 @@ res}
 #'}
 #'@examples
 #' # We need a module state:
-#' sess_res = ===ZZ===_test_mksession(session=list(), full_session=FALSE)
+#' sess_res = ===ZZ===_test_mksession()
 #' state = sess_res$state
 #'
 #' mdls = ===ZZ===_fetch_mdl(state)
@@ -1040,44 +1040,17 @@ state}
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
-#'@param id An ID string that corresponds with the ID used to call the modules UI elements
-#'@param full_session  Boolean to indicate if the full test session should be created (default \code{TRUE}).
-#'@return list with the following elements
-#' \itemize{
-#'   \item{isgood:} Boolean indicating the exit status of the function.
-#'   \item{session:} The value Shiny session variable (in app) or a list (outside of app) after initialization.
-#'   \item{input:} The value of the shiny input at the end of the session initialization.
-#'   \item{state:} App state.
-#'   \item{rsc:} The \code{react_state} components.
-#'}
+#'@return The ===ZZ=== portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}} 
 #'@examples
-#' sess_res = ===ZZ===_test_mksession(session=list())
-===ZZ===_test_mksession = function(session, id = "===ZZ===", full_session=TRUE){
+#' sess_res = ===ZZ===_test_mksession()
+===ZZ===_test_mksession = function(session = list()){
 
-  isgood = TRUE
-  rsc    = list()
-  input  = list()
-
-  # Configuration files
-  FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
-  MOD_yaml_file = system.file(package = "===PKG===", "templates", "===ZZ===.yaml")
-
-  # Creating an empty state object
-  state = ===ZZ===_fetch_state(id              = "===ZZ===",
-                         input           = input,
-                         session         = session,
-                         FM_yaml_file    = FM_yaml_file,
-                         MOD_yaml_file   = MOD_yaml_file,
-                         react_state     = NULL)
-
-  res = list(
-    isgood  = isgood,
-    session = session,
-    input   = input,
-    state   = state,
-    rsc     = rsc
-  )
-}
+  sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+              system.file(package="formods", "preload", "UD_preload.yaml"))
+  res = ASM_set_app_state(session=list(), sources=sources)
+  res = res[["all_sess_res"]][["===ZZ==="]]
+  
+res}
 
 #'@export
 #'@title New ===Module_Name=== ===ELEMENT===
@@ -1240,7 +1213,7 @@ state}
 #'@param session Shiny session variable
 #'@return State object with updates made to the state object
 #'@examples
-#' sess_res = ===ZZ===_test_mksession(session=list())
+#' sess_res = ===ZZ===_test_mksession()
 #' session = sess_res$session
 #' state   = sess_res$state
 #' state = ===ZZ===_onload(state, session)
@@ -1259,6 +1232,7 @@ state}
 #'list of sources.
 #'@param session     Shiny session variable (in app) or a list (outside of app)
 #'@param src_list    List of preload data (all read together with module IDs at the top level) 
+#'@param yaml_res    List data from module yaml config
 #'@param mod_ID      Module ID of the module being loaded. 
 #'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions. 
 #'@param quickload   Logical \code{TRUE} to load reduced analysis \code{FALSE} to load the full analysis

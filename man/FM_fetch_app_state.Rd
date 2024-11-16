@@ -17,8 +17,7 @@ Returns the entire state of the App
 }
 \examples{
 # We need a Shiny session object to use this function:
-id="UD"
-sess_res = UD_test_mksession(session=list(), id=id)
+sess_res = UD_test_mksession()
 session = sess_res$session
 app_state = FM_fetch_app_state(session)
 app_state

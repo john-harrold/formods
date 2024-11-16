@@ -578,7 +578,7 @@ ASM_Server <- function(id,
 #'@examples
 #' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
-#' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
+#' sess_res = ASM_test_mksession()
 #' session = sess_res$session
 #' input   = sess_res$input
 #'
@@ -804,7 +804,7 @@ state}
 #'@examples
 #' # Within shiny the session variable will exist,
 #' # this creates an example here for testing purposes:
-#' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
+#' sess_res = ASM_test_mksession()
 #' session = sess_res$session
 #'state = ASM_init_state(
 #'    FM_yaml_file  = system.file(package = "formods",
@@ -890,7 +890,7 @@ ASM_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
 #'@return character object with the download file name
 #'@examples
 #' # Creating a state object for testing
-#' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
+#' sess_res = ASM_test_mksession()
 #' state = sess_res$state
 #' dlfn = ASM_fetch_dlfn(state)
 #' dlfn
@@ -917,7 +917,7 @@ ASM_fetch_dlfn = function(state, extension=".zip"){
 #' \donttest{
 #' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
-#' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
+#' sess_res = ASM_test_mksession()
 #' session = sess_res$session
 #' input   = sess_res$input
 #'
@@ -1051,7 +1051,7 @@ ASM_write_state = function(state, session, file, mod_ids){
 #'@return The ASM module does not generate code
 #'@examples
 #' # Creating a state object for testing
-#' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
+#' sess_res = ASM_test_mksession()
 #' state = sess_res$state
 #' code = ASM_fetch_code(state)
 ASM_fetch_code = function(state){
@@ -1066,9 +1066,9 @@ code}
 #'@param session Shiny session variable (in app) or a list (outside of app)
 #'@return The ASM portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}} 
 #'@examples
-#' sess_res = ASM_test_mksession(session=list(), full_session=FALSE)
+#' sess_res = ASM_test_mksession()
 #'@seealso \code{\link{ASM_set_app_state}}
-ASM_test_mksession = function(session){
+ASM_test_mksession = function(session=list()){
 
   sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"))
   res = ASM_set_app_state(session=list(), sources=sources)
@@ -1094,12 +1094,17 @@ res}
 #'   \item{session:} Returning the session variable to be used in scripting (not in app).
 #'}
 #'@examples
-#'res = ASM_set_app_state(session=list(), sources=system.file(package="formods", "preload", "UD.yaml"))
+#' sources=system.file(package="formods", "preload", "UD.yaml")
+#'res = ASM_set_app_state(session=list(), sources=sources)
 ASM_set_app_state = function(session, sources=NULL, react_state = list(), quickload=FALSE){
   isgood       = TRUE
   msgs         = c()
   err_msgs     = c()
   all_sess_res = list()
+
+  # This is created in an eval below so we define 
+  # it here to prevent errors in check
+  sess_res = NULL
 
   # Loading the app state
   ras_res = ASM_read_app_state(sources = sources)

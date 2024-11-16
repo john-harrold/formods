@@ -35,5 +35,6 @@ Populates session data for testing or to load a specific
 analysis.
 }
 \examples{
-res = ASM_set_app_state(session=list(), sources=system.file(package="formods", "preload", "UD.yaml"))
+sources=system.file(package="formods", "preload", "UD.yaml")
+res = ASM_set_app_state(session=list(), sources=sources)
 }

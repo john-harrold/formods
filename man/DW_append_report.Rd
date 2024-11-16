@@ -33,14 +33,14 @@ xlsx report object.
 }
 \examples{
 # We need a state object to use below
-sess_res = DW_test_mksession(session=list())
+sess_res = DW_test_mksession()
 state = sess_res$state
 
 rpt = list(summary = list(), sheets=list())
 
 rpt_res = DW_append_report(state,
- rpt     = rpt,
- rpttype = "xlsx")
+  rpt     = rpt,
+  rpttype = "xlsx")
 
 # Shows if report elements are present
 rpt_res$hasrptele

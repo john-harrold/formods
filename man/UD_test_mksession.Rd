@@ -4,7 +4,7 @@
 \alias{UD_test_mksession}
 \title{Populate Session Data for Module Testing}
 \usage{
-UD_test_mksession(session)
+UD_test_mksession(session = list())
 }
 \arguments{
 \item{session}{Shiny session variable (in app) or a list (outside of app)}
@@ -16,7 +16,7 @@ The UD portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state
 Populates the supplied session variable for testing.
 }
 \examples{
-res = UD_test_mksession(session=list())
+sess_res = UD_test_mksession()
 }
 \seealso{
 \code{\link{ASM_set_app_state}}

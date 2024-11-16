@@ -32,7 +32,7 @@ Description
 }
 \examples{
 \donttest{
-sess_res = FG_test_mksession(session=list(), full_session=FALSE)
+sess_res = FG_test_mksession()
 state = sess_res$state
 # This will read in the default PowerPoint report template
 rpt =

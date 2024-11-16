@@ -18,17 +18,8 @@ Use this to get the path to the formods log file
 \examples{
 # Within shiny a session variable will exist,
 # this creates one here for testing purposes:
-sess_res = UD_test_mksession(session=list())
+sess_res = UD_test_mksession()
 session = sess_res$session
-# This function assumes that some module state exists:
-state = UD_init_state(
- FM_yaml_file  = system.file(package = "formods",
-                             "templates",
-                             "formods.yaml"),
- MOD_yaml_file = system.file(package = "formods",
-                             "templates",
-                             "UD.yaml"),
- id = "UD",
- session = session)
+state   = sess_res$state
 FM_fetch_log_path(state)
 }

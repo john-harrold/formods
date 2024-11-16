@@ -23,9 +23,8 @@ id
 \examples{
 # We need a Shiny session variable and a module state
 # object to use this function:
-id="UD"
-sess_res = UD_test_mksession(session=list(), id=id)
+sess_res = UD_test_mksession()
 session = sess_res$session
 state   = sess_res$state
-FM_set_mod_state(session, id, state)
+FM_set_mod_state(session, "UD", state)
 }

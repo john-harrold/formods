@@ -8,8 +8,6 @@ DW_hasds(state)
 }
 \arguments{
 \item{state}{DW state from \code{DW_fetch_state()}}
-
-\item{session}{Shiny session variable (in app) or a list (outside of app)}
 }
 \value{
 Logical TRUE if there is a dataset or FALSE otherwise.
@@ -19,7 +17,7 @@ Walks through the DW state object to see if there are any
 datasets available
 }
 \examples{
-sess_res = DW_test_mksession(session=list())
+sess_res = DW_test_mksession()
 state = sess_res[["state"]]
 DW_hasds(state)
 }

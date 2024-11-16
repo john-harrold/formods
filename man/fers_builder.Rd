@@ -26,7 +26,7 @@ of a ggplot object \code{p}.
 }
 \examples{
 \donttest{
-sess_res = FG_test_mksession(session=list(), full_session=FALSE)
+sess_res = FG_test_mksession()
 state = sess_res$state
 fb_res = fers_builder(state)
 }

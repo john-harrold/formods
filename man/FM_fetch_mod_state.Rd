@@ -20,8 +20,7 @@ id
 }
 \examples{
 # We need a Shiny session variable to use this function:
-id="UD"
-sess_res = UD_test_mksession(session=list(), id=id)
+sess_res = UD_test_mksession()
 session = sess_res$session
-state = FM_fetch_mod_state(session, id)
+state = FM_fetch_mod_state(session, "UD")
 }

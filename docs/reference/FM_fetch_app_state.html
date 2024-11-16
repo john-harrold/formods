@@ -62,15 +62,1054 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># We need a Shiny session object to use this function:</span></span></span>
-<span class="r-in"><span><span class="va">id</span><span class="op">=</span><span class="st">"UD"</span></span></span>
-<span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="UD_test_mksession.html">UD_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, id<span class="op">=</span><span class="va">id</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in UD_test_mksession(session = list(), id = id):</span> unused argument (id = id)</span>
+<span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="UD_test_mksession.html">UD_test_mksession</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: module isgood: TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:897d952fecbc804999396a96f9df4b20</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module isgood: TRUE</span>
 <span class="r-in"><span><span class="va">session</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">session</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'sess_res' not found</span>
 <span class="r-in"><span><span class="va">app_state</span> <span class="op">=</span> <span class="fu">FM_fetch_app_state</span><span class="op">(</span><span class="va">session</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'session' not found</span>
 <span class="r-in"><span><span class="va">app_state</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'app_state' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include$files</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include$files[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include$files[[1]]$file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include$files[[1]]$file$source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(system.file(package=\"onbrand\"), \"templates\", \"report.docx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include$files[[1]]$file$dest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(\"config\",\"report.docx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include$files[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include$files[[2]]$file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include$files[[2]]$file$source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(system.file(package=\"onbrand\"), \"templates\", \"report.pptx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include$files[[2]]$file$dest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(\"config\",\"report.pptx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include$files[[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include$files[[3]]$file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include$files[[3]]$file$source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(system.file(package=\"onbrand\"), \"templates\", \"report.yaml\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$include$files[[3]]$file$dest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(\"config\",\"report.yaml\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$deployed</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$code$theme</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "vibrant_ink"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$code$showLineNumbers</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$code$gen_file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "run_analysis.R"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$code$gen_preamble</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# formods automated output ------------------------------------------------\n# https://formods.ubiquity.tools/\nrm(list=ls())"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$code$packages</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "onbrand" "writexl"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$success</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$success$useFontAwesome</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$success$useIcon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$success$background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#5bb85b"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$failure</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$failure$useFontAwesome</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$failure$useIcon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$failure$background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#d9534f"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$info</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$info$useFontAwesome</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$info$useIcon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$info$background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#5bc0de"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$warning</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$warning$useFontAwesome</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$warning$useIcon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$notifications$config$warning$background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#f0ac4d"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$enabled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$content_init</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$content_init$xlsx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rpt = list(summary = NULL,\n           sheets  = list())"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$content_init$docx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rpt  = onbrand::read_template(\n  template = file.path(\"config\", \"report.docx\"),\n  mapping  = file.path(\"config\", \"report.yaml\"))"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$content_init$pptx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rpt  = onbrand::read_template(\n  template = file.path(\"config\", \"report.pptx\"),\n  mapping  = file.path(\"config\", \"report.yaml\"))"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[1]]$name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HEADERLEFT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[1]]$location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "header"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[1]]$value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[1]]$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left header text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[2]]$name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HEADERRIGHT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[2]]$location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "header"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[2]]$value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[2]]$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "right header text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[3]]$name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FOOTERLEFT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[3]]$location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "footer"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[3]]$value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs[[3]]$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left footer text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs_formatting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs_formatting$width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "100%"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs_formatting$tt_position</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$reporting$phs_formatting$tt_size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "medium"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$ui</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$ui$button_style</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "fill"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$ui$select_size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$ui$color_green</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#00BB8A"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$ui$color_red</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#FF475E"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$ui$color_blue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#0088FF"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$ui$color_purple</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#bd2cf4"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_header</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:===COLOR==='&gt;&lt;b&gt;===NAME===&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;===LABEL===&lt;/font&gt;&lt;/span&gt;"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$subtext</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "===LABEL===: ===RANGE==="</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$many_sep</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ",...,"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_types</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_types$character</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_types$character$color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#DD4B39"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_types$character$label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_types$double</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_types$double$color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_types$double$label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_types$integer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_types$integer$color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_types$integer$label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_types$other</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_types$other$color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "black"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$data_meta$data_types$other$label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "other"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$labels</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$labels$default_ds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Original data set"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$user_files</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$user_files$use_tmpdir</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$logging</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$logging$enabled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$logging$timestamp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$logging$timestamp_fmt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "%Y-%m-%d %H:%M:%S"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$logging$log_file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "formods_log.txt"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$yaml$FM$logging$console</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$module</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$module$type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ASM"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$module$depends</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$code$readOnly</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$code$mode</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "r"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$show_log</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$reporting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$reporting$enabled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$reporting$priority</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$input_load_state</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$input_load_state$width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "100%"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$ui_asm_save_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$ui_asm_save_name$width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "100%"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$button_state_save</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$button_state_save$size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sm"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$button_state_save$block</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$button_rpt_xlsx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$button_rpt_xlsx$size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sm"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$button_rpt_xlsx$block</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$button_rpt_pptx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$button_rpt_pptx$size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sm"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$button_rpt_pptx$block</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$button_rpt_docx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$button_rpt_docx$size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sm"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$button_rpt_docx$block</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$switch_gen_reports</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$switch_gen_reports$default</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$switch_gen_reports$right</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$switch_gen_reports$inline</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$formatting$switch_gen_reports$width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$ui_asm_save_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Save Analysis"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$ui_asm_save_name_ph</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "my_analysis"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$ui_asm_switch_gen_rpts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Generate reports when saving."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$save_state</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Save"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$gen_rpt_header</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Generate Reports"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$gen_rpt_docx_ph</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Word Report Paceholders"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$input_load_state</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Load Analysis"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$upload_button</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Load"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$upload_placeholder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Select analysis file"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$ui_asm_rpt_xlsx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "xlsx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$ui_asm_rpt_pptx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "pptx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$ui_asm_rpt_docx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "docx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$load_success</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Analysis loaded"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$busy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$busy$loading_state</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Loading analysis"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$busy$saving_state</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Saving analysis"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$busy$xlsx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Generating report: Excel"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$busy$docx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Generating report: Word"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$labels$busy$pptx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Generating report: PowerPoint"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$errors</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$errors$bad_input</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Input error message"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$errors$load_failed</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Failed to load analysis"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$tooltips</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$tooltips$include</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$tooltips$components</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MC$tooltips$components$input_tip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "My tool tip"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$button_counters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$button_counters$button_state_save</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$button_counters$button_rpt_xlsx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$button_counters$button_rpt_docx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$button_counters$button_rpt_pptx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ui_hold</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ui_ids</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "button_state_save"          "button_rpt_xlsx"           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "button_rpt_docx"            "button_rpt_pptx"           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "ui_asm_save_name"           "switch_gen_rpts"           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7] "ui_asm_docx_ph_HEADERLEFT"  "ui_asm_docx_ph_HEADERRIGHT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [9] "ui_asm_docx_ph_FOOTERLEFT" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$isgood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$checksum</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "f9e884084b84794d762a535f3facec85"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_HEADERLEFT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_HEADERLEFT$name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HEADERLEFT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_HEADERLEFT$location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "header"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_HEADERLEFT$value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_HEADERLEFT$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left header text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_HEADERLEFT$ph_idx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_HEADERRIGHT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_HEADERRIGHT$name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HEADERRIGHT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_HEADERRIGHT$location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "header"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_HEADERRIGHT$value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_HEADERRIGHT$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "right header text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_HEADERRIGHT$ph_idx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_FOOTERLEFT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_FOOTERLEFT$name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FOOTERLEFT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_FOOTERLEFT$location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "footer"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_FOOTERLEFT$value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_FOOTERLEFT$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left footer text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ph_uis$ui_asm_docx_ph_FOOTERLEFT$ph_idx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ui</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ui$ui_asm_docx_ph_HEADERLEFT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ui$ui_asm_docx_ph_HEADERRIGHT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ui$ui_asm_docx_ph_FOOTERLEFT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ui$button_state_save</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ui$button_rpt_xlsx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ui$button_rpt_docx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ui$button_rpt_pptx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ui$ui_asm_save_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$ASM$ui$switch_gen_rpts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MOD_TYPE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ASM"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ASM"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$FM_yaml_file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/Rtmp27HIPC/temp_libpath5b9d6ecf42ee/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$MOD_yaml_file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/Rtmp27HIPC/temp_libpath5b9d6ecf42ee/formods/templates/ASM.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_ASM$shiny_token</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "non_shiny"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include$files</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include$files[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include$files[[1]]$file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include$files[[1]]$file$source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(system.file(package=\"onbrand\"), \"templates\", \"report.docx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include$files[[1]]$file$dest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(\"config\",\"report.docx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include$files[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include$files[[2]]$file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include$files[[2]]$file$source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(system.file(package=\"onbrand\"), \"templates\", \"report.pptx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include$files[[2]]$file$dest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(\"config\",\"report.pptx\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include$files[[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include$files[[3]]$file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include$files[[3]]$file$source</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(system.file(package=\"onbrand\"), \"templates\", \"report.yaml\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$include$files[[3]]$file$dest</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "file.path(\"config\",\"report.yaml\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$deployed</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$code$theme</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "vibrant_ink"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$code$showLineNumbers</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$code$gen_file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "run_analysis.R"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$code$gen_preamble</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# formods automated output ------------------------------------------------\n# https://formods.ubiquity.tools/\nrm(list=ls())"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$code$packages</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "onbrand" "writexl"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$success</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$success$useFontAwesome</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$success$useIcon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$success$background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#5bb85b"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$failure</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$failure$useFontAwesome</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$failure$useIcon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$failure$background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#d9534f"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$info</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$info$useFontAwesome</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$info$useIcon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$info$background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#5bc0de"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$warning</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$warning$useFontAwesome</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$warning$useIcon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$notifications$config$warning$background</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#f0ac4d"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$enabled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$content_init</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$content_init$xlsx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rpt = list(summary = NULL,\n           sheets  = list())"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$content_init$docx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rpt  = onbrand::read_template(\n  template = file.path(\"config\", \"report.docx\"),\n  mapping  = file.path(\"config\", \"report.yaml\"))"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$content_init$pptx</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rpt  = onbrand::read_template(\n  template = file.path(\"config\", \"report.pptx\"),\n  mapping  = file.path(\"config\", \"report.yaml\"))"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[1]]$name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HEADERLEFT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[1]]$location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "header"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[1]]$value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[1]]$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left header text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[2]]$name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "HEADERRIGHT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[2]]$location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "header"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[2]]$value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[2]]$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "right header text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[3]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[3]]$name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "FOOTERLEFT"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[3]]$location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "footer"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[3]]$value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs[[3]]$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left footer text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs_formatting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs_formatting$width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "100%"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs_formatting$tt_position</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$reporting$phs_formatting$tt_size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "medium"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$ui</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$ui$button_style</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "fill"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$ui$select_size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$ui$color_green</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#00BB8A"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$ui$color_red</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#FF475E"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$ui$color_blue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#0088FF"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$ui$color_purple</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#bd2cf4"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_header</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "&lt;span style='color:===COLOR==='&gt;&lt;b&gt;===NAME===&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;===LABEL===&lt;/font&gt;&lt;/span&gt;"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$subtext</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "===LABEL===: ===RANGE==="</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$many_sep</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ",...,"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_types</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_types$character</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_types$character$color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#DD4B39"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_types$character$label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "text"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_types$double</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_types$double$color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_types$double$label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_types$integer</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_types$integer$color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#3C8DBC"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_types$integer$label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "num"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_types$other</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_types$other$color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "black"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$data_meta$data_types$other$label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "other"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$labels</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$labels$default_ds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Original data set"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$user_files</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$user_files$use_tmpdir</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$logging</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$logging$enabled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$logging$timestamp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$logging$timestamp_fmt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "%Y-%m-%d %H:%M:%S"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$logging$log_file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "formods_log.txt"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$yaml$FM$logging$console</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$module</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$module$type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$module$depends</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$module$depends$id_ASM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ASM"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$compact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$compact$code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$compact$preview</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$reporting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$reporting$enabled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$reporting$priority</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$labels</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$labels$default_ds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Original data set"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$labels$upload_button</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Select file"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$labels$tab_main</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Upload file"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$labels$tab_code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Code"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$labels$tab_preview</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Data preview"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$labels$switch_clean</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Clean column names on upload"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$labels$msg_bad_extension</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Incorrect file extension (===EXT===). Unable to load file  ===FILE===.\nOnly the following extesions are allowed: ===ALLOWEDEXT===."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$tooltips</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$tooltips$include</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$tooltips$show_code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Show data reading code"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$formatting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$formatting$preview</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$formatting$preview$width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$formatting$preview$height</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$formatting$code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$formatting$code$width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$formatting$code$height</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$formatting$switch_clean</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$formatting$switch_clean$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Strange characters in column names can cause problems. When switched on, this will clean up the column headers and fix those that might break things."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$formatting$switch_clean$tooltip_position</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "bottom"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$allowed_extensions</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "csv"  "tsv"  "xls"  "xlsx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$code$packages</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "readxl"  "readr"   "janitor"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$code$readOnly</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$code$mode</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "r"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$code$preamble</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Loading data ------------------------------------------------------------"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$ds_object_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "myDS"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$clean_data</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$clean_data$enabled</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$clean_data$default</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MC$clean_data$code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "# Make sure you put whatever packages you use here in the packages section\n# above.\n#\n# contents - data frame containing the loaded dataset.\n# code     - code used to load the dataset you need to append any cleaning\n#            code you generate  here.\n# object_name - Name of the dataset object used in generated code.\nif(system.file(package=\"janitor\") != \"\"){\n  contents = janitor::clean_names(contents, case=\"none\")\n  code = paste0(code, '\\n', object_name, ' = janitor::clean_names(', object_name,', case=\"none\")')\n}"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$isgood</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$clean</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$load_msg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;em&gt;File loaded.&lt;/em&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$data_file_local</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T//RtmpiUuOyl/non_shiny/FM/TEST_DATA.xlsx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$data_file_ext</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "xlsx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$data_file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "TEST_DATA.xlsx"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$sheet</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DATA"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$sheets</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DATA" "DDT" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$code</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "myDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$object_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "myDS"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$checksum</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "897d952fecbc804999396a96f9df4b20"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$UD$contents</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10,680 × 33</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       ID TIME_DY TIME_HR NTIME_DY NTIME_HR  TIME     AMT    DV RECDESC     DOSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1       0       0        0        0     0 3<span style="text-decoration: underline;">000</span>000    0  dose     3<span style="text-decoration: underline;">000</span>000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1       0       0        0        0     0       0 <span style="text-decoration: underline;">1</span>250  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>     1       0       0        0        0     0       0    0  C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>     1       1      24        1       24    24       0 <span style="text-decoration: underline;">1</span>647  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>     1       1      24        1       24    24       0  690. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>     1       2      48        2       48    48       0 <span style="text-decoration: underline;">1</span>947  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>     1       2      48        2       48    48       0  588. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>     1       3      72        3       72    72       0 <span style="text-decoration: underline;">2</span>170  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>     1       3      72        3       72    72       0  506. C_ng_ml  3<span style="text-decoration: underline;">000</span>000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>     1       4      96        4       96    96       0 <span style="text-decoration: underline;">2</span>332  BM_ng_ml 3<span style="text-decoration: underline;">000</span>000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 10,670 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 23 more variables: DOSE_STR &lt;chr&gt;, Cohort &lt;chr&gt;, ROUTE &lt;chr&gt;, WT &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SUBTYPE &lt;chr&gt;, SEX &lt;chr&gt;, F1 &lt;dbl&gt;, ka &lt;dbl&gt;, CL &lt;dbl&gt;, Vc &lt;dbl&gt;, Vp &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Q &lt;dbl&gt;, BM_IC &lt;dbl&gt;, kdeg_BM &lt;dbl&gt;, Emax &lt;dbl&gt;, EC50 &lt;dbl&gt;, CMT &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   DUR &lt;dbl&gt;, EVID &lt;dbl&gt;, NDose &lt;chr&gt;, DOSE_NUM &lt;dbl&gt;, SUBTYPE_ID &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   SEX_ID &lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MOD_TYPE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$FM_yaml_file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/Rtmp27HIPC/temp_libpath5b9d6ecf42ee/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$MOD_yaml_file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/Rtmp27HIPC/temp_libpath5b9d6ecf42ee/formods/templates/UD.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $FM_UD$shiny_token</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "non_shiny"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

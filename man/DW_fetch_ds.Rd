@@ -38,7 +38,7 @@ Fetches the datasets contained in the module.
 }
 \examples{
 # We need a state variable
-sess_res = DW_test_mksession(session=list())
+sess_res = DW_test_mksession()
 state = sess_res$state
 
 ds = DW_fetch_ds(state)

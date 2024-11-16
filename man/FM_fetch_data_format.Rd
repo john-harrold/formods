@@ -27,7 +27,7 @@ type information.
 }
 \examples{
 # We need a module state object to use this function:
-sess_res = UD_test_mksession(session=list())
+sess_res = UD_test_mksession()
 state = sess_res$state
 
 data_file_local =  system.file(package="formods", "test_data", "TEST_DATA.xlsx")

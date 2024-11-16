@@ -44,7 +44,7 @@ Initializes a formods state object with common elements.
 \examples{
 # Within shiny a session variable will exist,
 # this creates examples here for testing purposes:
-sess_res = UD_test_mksession(session=list())
+sess_res = UD_test_mksession()
 session = sess_res$session
 state = FM_init_state(
    FM_yaml_file  = system.file(package = "formods",

@@ -22,7 +22,7 @@ current view_id
 \examples{
 library(formods)
 # The example requires a formods DW state object
-state  = DW_test_mksession(session=list())$state
+state  = DW_test_mksession()$state
 state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
 state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
 state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="

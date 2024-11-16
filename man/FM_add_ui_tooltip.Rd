@@ -34,8 +34,7 @@ Adds a tool tip to a user element.
 \examples{
 if(interactive()){
 # We need a module state object to use this function:
-id="UD"
-sess_res = UD_test_mksession(session=list(), id=id)
+sess_res = UD_test_mksession()
 state = sess_res$state
 uiele = shiny::textInput(inputId = "my input", label="example input")
 

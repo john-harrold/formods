@@ -1436,7 +1436,7 @@ DW_Server <- function(id,
 #'@examples
 #' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
-#' sess_res = DW_test_mksession(session=list())
+#' sess_res = DW_test_mksession()
 #' session = sess_res$session
 #' input   = sess_res$input
 #'
@@ -1822,7 +1822,7 @@ state }
 #'@examples
 #' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
-#' sess_res = DW_test_mksession(session=list())
+#' sess_res = DW_test_mksession()
 #' session = sess_res$session
 #' input   = sess_res$input
 #'
@@ -2323,7 +2323,7 @@ state}
 #'@examples
 #' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
-#' sess_res = DW_test_mksession(session=list())
+#' sess_res = DW_test_mksession()
 #' session = sess_res$session
 #' input   = sess_res$input
 #'
@@ -2363,7 +2363,7 @@ state}
 #'@examples
 #' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
-#' sess_res = DW_test_mksession(session=list())
+#' sess_res = DW_test_mksession()
 #' session = sess_res$session
 #' input   = sess_res$input
 #'
@@ -2438,7 +2438,7 @@ state}
 #'and isgood)
 #'@examples
 #' # This will create a formods DW state object for the example
-#' sess_res = DW_test_mksession(session=list())
+#' sess_res = DW_test_mksession()
 #' state   = sess_res$state
 #' code = DW_fetch_code(state)
 #' cat(code)
@@ -2481,24 +2481,24 @@ code}
 #'}
 #'
 #'@examples
-#'# We need a state object to use below
-#'sess_res = DW_test_mksession(session=list())
-#'state = sess_res$state
+#' # We need a state object to use below
+#' sess_res = DW_test_mksession()
+#' state = sess_res$state
+#' 
+#' rpt = list(summary = list(), sheets=list())
+#' 
+#' rpt_res = DW_append_report(state,
+#'   rpt     = rpt,
+#'   rpttype = "xlsx")
+#' 
+#' # Shows if report elements are present
+#' rpt_res$hasrptele
 #'
-#'rpt = list(summary = list(), sheets=list())
+#' # Code chunk to generate report element
+#' cat(paste(rpt_res$code, collapse="\n"))
 #'
-#'rpt_res = DW_append_report(state,
-#'  rpt     = rpt,
-#'  rpttype = "xlsx")
-#'
-#'# Shows if report elements are present
-#'rpt_res$hasrptele
-#'
-#'# Code chunk to generate report element
-#'cat(paste(rpt_res$code, collapse="\n"))
-#'
-#'# Tabular summary of data views
-#'rpt_res$rpt$summary
+#' # Tabular summary of data views
+#' rpt_res$rpt$summary
 #'@seealso \code{\link{FM_generate_report}}
 DW_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
 
@@ -2584,7 +2584,7 @@ res}
 #'}
 #'@examples
 #' # We need a state variable
-#' sess_res = DW_test_mksession(session=list())
+#' sess_res = DW_test_mksession()
 #' state = sess_res$state
 #'
 #' ds = DW_fetch_ds(state)
@@ -2665,9 +2665,9 @@ res}
 #'@param session Shiny session variable (in app) or a list (outside of app)
 #'@return The DW portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}} 
 #'@examples
-#' sess_res = DW_test_mksession(session=list())
+#' sess_res = DW_test_mksession()
 #'@seealso \code{\link{ASM_set_app_state}}
-DW_test_mksession = function(session){
+DW_test_mksession = function(session=list()){
 
   sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
               system.file(package="formods", "preload", "UD_preload.yaml"),
@@ -3081,10 +3081,9 @@ res}
 #'@description Walks through the DW state object to see if there are any
 #'datasets available 
 #'@param state DW state from \code{DW_fetch_state()}
-#'@param session Shiny session variable (in app) or a list (outside of app)
 #'@return Logical TRUE if there is a dataset or FALSE otherwise.
 #'@examples
-#' sess_res = DW_test_mksession(session=list())
+#' sess_res = DW_test_mksession()
 #' state = sess_res[["state"]]
 #' DW_hasds(state)
 DW_hasds = function(state){
@@ -3110,7 +3109,8 @@ hasds}
 #'list of sources.
 #'@param session     Shiny session variable (in app) or a list (outside of app)
 #'@param src_list    List of preload data (all read together with module IDs at the top level) 
-#'@param mod_ID      Module ID of the module being loaded. 
+#'@param yaml_res    List data from module yaml config
+#'@param mod_ID      Module ID of the module being loaded
 #'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions. 
 #'@param quickload   Logical \code{TRUE} to load reduced analysis \code{FALSE} to load the full analysis
 #'@return list with the following elements

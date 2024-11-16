@@ -17,5 +17,5 @@ Attempts to evaluate a string as a chunk of R code. If that
 succeeds it will return the result. If not it will return the original text.
 }
 \examples{
-res = eval_str(estr="ls()")
+res = render_str(estr="ls()")
 }

@@ -18,7 +18,9 @@ DW_preload(
 
 \item{src_list}{List of preload data (all read together with module IDs at the top level)}
 
-\item{mod_ID}{Module ID of the module being loaded.}
+\item{yaml_res}{List data from module yaml config}
+
+\item{mod_ID}{Module ID of the module being loaded}
 
 \item{react_state}{Reactive shiny object (in app) or a list (outside of app) used to trigger reactions.}
 
