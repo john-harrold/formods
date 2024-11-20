@@ -12,10 +12,10 @@
 <url><loc>https://formods.ubiquity.tools/reference/ASM_fetch_dlfn.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_fetch_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_init_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_mk_preload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_onload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_preload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_read_app_state.html</loc></url>
-<url><loc>https://formods.ubiquity.tools/reference/ASM_set_app_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_test_mksession.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_write_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/DW_Server.html</loc></url>
@@ -28,6 +28,7 @@
 <url><loc>https://formods.ubiquity.tools/reference/DW_fetch_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/DW_hasds.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/DW_init_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DW_mk_preload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/DW_new_view.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/DW_preload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/DW_set_current_view.html</loc></url>
@@ -41,12 +42,14 @@
 <url><loc>https://formods.ubiquity.tools/reference/FG_fetch_current_fig.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FG_fetch_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FG_init_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FG_mk_preload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FG_new_fig.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FG_preload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FG_set_current_fig.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FG_test_mksession.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FG_update_checksum.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_add_ui_tooltip.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_app_preload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_build_comment.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_fetch_app_code.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_fetch_app_info.html</loc></url>
@@ -63,6 +66,7 @@
 <url><loc>https://formods.ubiquity.tools/reference/FM_init_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_le.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_message.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_mk_app_preload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_mk_error_fig.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_notify.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_pause_screen.html</loc></url>
@@ -81,6 +85,7 @@
 <url><loc>https://formods.ubiquity.tools/reference/UD_fetch_ds.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/UD_fetch_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/UD_init_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/UD_mk_preload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/UD_preload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/UD_test_mksession.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/autocast.html</loc></url>

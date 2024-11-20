@@ -56,27 +56,17 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The ASM portion of the `all_sess_res` returned from <code><a href="ASM_set_app_state.html">ASM_set_app_state</a></code></p>
+    <p>The ASM portion of the `all_sess_res` returned from <code>ASM_set_app_state</code></p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="ASM_set_app_state.html">ASM_set_app_state</a></code></p></div>
+    <div class="dont-index"><p><code>ASM_set_app_state</code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu">ASM_test_mksession</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: State initialized</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: module isgood: TRUE</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ASM_set_app_state(session = list(), sources = sources):</span> could not find function "ASM_set_app_state"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

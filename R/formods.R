@@ -2733,3 +2733,209 @@ render_str <- function(estr=""){
   }
 
   return(res)}
+
+#'@export
+#'@title Preload Data Into App
+#'@description Populates session data for testing or to load a specific
+#'analysis. 
+#'@param session     Shiny session variable (in app) or a list (outside of app)
+#'@param sources     Vector of at corresponds with the ID used to call the modules UI elements
+#'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions
+#'@param quickload   Logical \code{TRUE} to load reduced analysis \code{FALSE} to load the full analysis
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:}       Boolean indicating the exit status of the function.
+#'   \item{msgs:}         Messages to be passed back to the user.
+#'   \item{all_sess_res:} List containing the result for each module stored in
+#'   the list name with the module ID.
+#'   \item{session:} Returning the session variable to be used in scripting (not in app).
+#'}
+#'@examples
+#' sources=system.file(package="formods", "preload", "UD.yaml")
+#'res = FM_app_preload(session=list(), sources=sources)
+FM_app_preload = function(session, sources=NULL, react_state = list(), quickload=FALSE){
+  isgood       = TRUE
+  msgs         = c()
+  err_msgs     = c()
+  all_sess_res = list()
+
+  # This is created in an eval below so we define 
+  # it here to prevent errors in check
+  sess_res = NULL
+
+  # Loading the app state
+  ras_res = ASM_read_app_state(sources = sources)
+  src_list = ras_res[["src_list"]]
+  yaml_res = ras_res[["yaml_res"]]
+
+  if(!ras_res[["isgood"]]){
+    isgood = FALSE
+    msgs = c(msgs, ras_res[["msgs"]])
+  }
+
+  # Making sure they are ordered based on dependencies 
+  deps_found = c()
+  IDs_proc   = c()
+  IDs_found  = names(yaml_res)
+
+  idx = 1
+
+  while(idx <= length(IDs_found)){
+    for(mod_ID in IDs_found){
+      # we only consider the ID if it hasn't 
+      # been processed yet:
+      if(!(mod_ID %in% IDs_proc)){
+        yaml_res[[mod_ID]][["mod_cfg"]][["module"]]
+        # Current module dependencies
+        tmp_depends = yaml_res[[mod_ID]][["mod_cfg"]][["MC"]][["module"]][["depends"]]
+        # If there are no dependencies then we add the ID
+        if(is.null(tmp_depends)){
+          IDs_proc = c(IDs_proc, mod_ID)
+        } else {
+          if(all(unlist(tmp_depends) %in% IDs_proc)){
+            IDs_proc = c(IDs_proc, mod_ID)
+          }
+        }
+      }
+    }
+
+    # This will break out of the loop if we've found the 
+    # order for all of the modules
+    if(all(IDs_found %in% IDs_proc)){
+      idx = length(IDs_found) + 1
+    }
+    idx = idx+1
+  }
+
+  if(!all(IDs_found %in% IDs_proc)){
+    isgood = FALSE
+    msgs = c(msgs, "Unable to sort out dependencies for the following modules:",
+             paste0("  - ", paste0(IDs_found[!(IDs_found %in% IDs_proc)], collapse=", ")))
+  }
+
+  if(isgood){
+
+    # Looping through each ID and loading 
+    for(mod_ID in IDs_proc){
+
+      MOD_FUNC = paste0(yaml_res[[mod_ID]][["mod_cfg"]][["MC"]][["module"]][["type"]], "_preload")
+      if(exists(MOD_FUNC, mode="function")){
+
+        FUNC_CALL = paste0("sess_res   = ", MOD_FUNC,"(session=session, src_list=src_list, yaml_res=yaml_res, mod_ID = mod_ID, react_state=react_state, quickload=quickload)")
+        eval(parse(text=FUNC_CALL))
+
+
+        # Capturing any loading errors that may have occurred: 
+        if(!sess_res[["isgood"]]){
+          isgood = FALSE
+          msgs = c(msgs, sess_res[["msgs"]])
+          FM_message(line=paste0("Failure to preload module ID: ", mod_ID), entry_type="danger")
+          for(tmp_line in sess_res[["msgs"]]){
+            FM_message(line=tmp_line, entry_type="danger")
+          }
+        }
+
+        # Storing the results of the individual session loaded
+        all_sess_res[[mod_ID]] = sess_res
+
+        # If we're running at the scripting level we need to pull 
+        # the session information and react_state out of result
+        if(!("ShinySession" %in% class(session))){
+          session     = sess_res[["session"]]
+          react_state = sess_res[["react_state"]]
+        }
+      } else {
+        isgood = FALSE
+        err_msgs = c(err_msgs,
+                     paste0("Unable to find formods module preload function:"),
+                     paste0("  -> function:  ", MOD_FUNC, "()"),
+                     paste0("  -> module ID: ", mod_ID))
+
+      }
+    }
+  }
+
+  if(!isgood){
+    for(tmp_line in err_msgs){
+      FM_message(line=tmp_line, entry_type="danger")
+    }
+    msgs = c(msgs,err_msgs)
+  }
+
+
+  res=list(isgood       =isgood, 
+           msgs         = msgs,
+           all_sess_res = all_sess_res,
+           session      = session)
+
+res}
+
+#'@export
+#'@title Preload Data Into App
+#'@description Populates session data for testing or to load a specific
+#'analysis. 
+#'@param session     Shiny session variable (in app) or a list (outside of app)
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:}       Boolean indicating the exit status of the function.
+#'   \item{msgs:}         Messages to be passed back to the user.
+#'   \item{yaml_list:}    Lists with preload components.
+#'   \item{session:} Returning the session variable to be used in scripting (not in app).
+#'}
+#'@examples
+#' sources=system.file(package="formods", "preload", "UD.yaml")
+#'sess_res = ASM_set_app_state(session=list(), sources=sources)
+#'mkp_res = ASM_mk_app_preload(sess_res$session)
+FM_mk_app_preload = function(session){
+  isgood       = TRUE
+  msgs         = c()
+  ids          = c()
+  mk_res       = NULL
+
+  yaml_list    = list()
+
+  app_state = FM_fetch_app_state(session)
+
+  # Getting all the module IDs in the app:
+  for(mod_state in names(app_state)){
+    ids = c(ids, app_state[[mod_state]]$id)
+  }
+
+  # Walking through each module id and attempting to extract models
+  for(mod_ID in ids){
+    tmp_state    = FM_fetch_mod_state(session, mod_ID)
+    tmp_MOD_TYPE = tmp_state[["MOD_TYPE"]]
+    MOD_FUNC     = paste0(tmp_MOD_TYPE, "_mk_preload")
+
+    # If that module has a mk_preload function then we try build it:
+    if(exists(MOD_FUNC, mode="function")){
+      FM_message(line=paste0("Loading module: ", mod_ID))
+      FUNC_CALL = paste0("mk_res = ", MOD_FUNC,"(state = tmp_state)")
+      eval(parse(text=FUNC_CALL))
+      if(mk_res[["isgood"]]){
+        # Saving module yaml component
+        yaml_list = c(yaml_list, mk_res[["yaml_list"]])
+      
+      } else {
+        # Capturing any genration errors that may have occurred: 
+        isgood = FALSE
+        msgs = c(msgs, mk_res[["msgs"]])
+        FM_message(line=paste0("Failure to preload module ID: ", mod_ID), entry_type="danger")
+        for(tmp_line in mk_res[["msgs"]]){
+          FM_message(line=tmp_line, entry_type="danger")
+        }
+      }
+    } else {
+      tmp_msg = paste0("No mk preload function found: ", MOD_FUNC, "() for ID: ", mod_ID) 
+      FM_message(line=tmp_msg, entry_type="warning")
+    }
+
+  }
+
+  #browser()
+
+  res=list(isgood       = isgood, 
+           msgs         = msgs,
+           yaml_list    = yaml_list,
+           session      = session)
+res}

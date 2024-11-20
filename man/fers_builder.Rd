@@ -15,6 +15,8 @@ list containing the following elements
  \item{isgood:} Return status of the function.
  \item{cmd:}    ggplot R command as a character string
  \item{element:} The type of element being added
+ \item{pll:}    Preload list (pll) containing components to save with
+ mk_preload.
  \item{desc:}   Verbose description of the element
  \item{msgs:}   Messages to be passed back to the user
 }

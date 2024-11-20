@@ -1285,8 +1285,8 @@ state}
     # Map between list index and internal figure ID
     element_map = list()
     for(ele_idx in 1:length(elements)){
-      enumeric = c(enumeric, elements[[ele_idx]][["idx"]])
-      element_map[[ paste0("element_",elements[[ele_idx]][["idx"]] )]] = ele_idx
+      enumeric = c(enumeric, elements[[ele_idx]][["element"]][["idx"]])
+      element_map[[ paste0("element_",elements[[ele_idx]][["element"]][["idx"]] )]] = ele_idx
     }
 
     # Creating empty element placeholders
@@ -1323,9 +1323,9 @@ state}
 
       # Place checks for required fields here:
       # req_ele_opts =c("field1", "field2")
-      # if(!all(req_ele_opts    %in% names( elements[[ele_idx]]))){
+      # if(!all(req_ele_opts    %in% names( elements[[ele_idx]][["element"]]))){
       #   ele_isgood      = FALSE
-      #   missing_opts    = req_ele_opts[!(req_ele_opts %in% names(elements[[ele_idx]]))]
+      #   missing_opts    = req_ele_opts[!(req_ele_opts %in% names(elements[[ele_idx]][["element"]]))]
       #   ele_err_msg = c(ele_err_msg,
       #     paste0("element idx:  ",ele_idx, " missing option(s):" ),
       #     paste0("  -> ", paste0(missing_opts, collapse=", "))
@@ -1333,7 +1333,7 @@ state}
       # }
 
       # If the module requires components check here:
-      # if(!("components" %in% names(elements[[ele_idx]]))){
+      # if(!("components" %in% names(elements[[ele_idx]][["element"]]))){
       #   ele_isgood = FALSE
       #   ele_err_msg = c(ele_err_msg, 
       #       paste0("element idx: ",ele_idx, " no components defined"))
@@ -1344,8 +1344,8 @@ state}
 
         # Creating element components
         # If there are components you can add them here:
-        # for(comp_idx in 1:length(elements[[ele_idx]][["components"]])){
-        #   tmp_component = elements[[ele_idx]][["components"]][[comp_idx]][["component"]]
+        # for(comp_idx in 1:length(elements[[ele_idx]][["element"]][["components"]])){
+        #   tmp_component = elements[[ele_idx]][["element"]][["components"]][[comp_idx]][["component"]]
         #   add_component = TRUE
         #   # If there are required component fields put them here
         #   # req_comp_opts =c("field1", "field2")
@@ -1400,3 +1400,41 @@ state}
              state       = state)
   
 res}
+
+
+
+#'@export
+#'@title Read App State From Yaml Files
+#'@description Reads in the app state from yaml files.
+#'@param state ===ZZ=== state object
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:}       Boolean indicating the exit status of the function.
+#'   \item{msgs:}         Messages to be passed back to the user.
+#'   \item{yaml_list:}    Lists with preload components.
+#'}
+#'@examples
+#'res = ===ZZ===_mk_preload(state)
+===ZZ===_mk_preload     = function(state){
+  isgood    = TRUE
+  msgs      = c()  
+  err_msg   = c()
+  yaml_list = list()
+
+  yaml_list[[ state[["id"]] ]] = list(
+      fm_yaml  = file.path("config", basename(state[["FM_yaml_file"]])),
+      mod_yaml = file.path("config", basename(state[["MOD_yaml_file"]]))
+  )
+
+  if(!isgood && !is.null(err_msg)){
+    formods::FM_le(state,err_msg,entry_type="danger")
+    msgs = c(msgs, err_msg)
+  }
+  
+  formods::FM_le(state,paste0("mk_preload isgood: ",isgood))
+
+  res = list(
+    isgood    = isgood,
+    msgs      = msgs,
+    yaml_list = yaml_list)
+}

@@ -8,6 +8,7 @@ FG_build(
   state,
   del_row = NULL,
   cmd = NULL,
+  pll = NULL,
   element = "unknown",
   desc = "unknown"
 )
@@ -18,6 +19,9 @@ FG_build(
 \item{del_row}{Row number to be deleted (NULL if no rows need to be deleted)}
 
 \item{cmd}{String containing the plotting command.  Set to NULL to initialize a
+new figure or force a rebuild after a dataset update.}
+
+\item{pll}{Preload list for the plotting command.  Set to NULL to initialize a
 new figure or force a rebuild after a dataset update.}
 
 \item{element}{Short name for the figure element being performed, eg. point}

@@ -842,15 +842,15 @@ res}
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
-#'@return The UD portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}} 
+#'@return The UD portion of the `all_sess_res` returned from \code{\link{FM_app_preload}} 
 #'@examples
 #' sess_res = UD_test_mksession()
-#'@seealso \code{\link{ASM_set_app_state}}
+#'@seealso \code{\link{FM_app_preload}}
 UD_test_mksession = function(session=list()){
 
   sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
               system.file(package="formods", "preload", "UD_preload.yaml"))
-  res = ASM_set_app_state(session=list(), sources=sources)
+  res = FM_app_preload(session=list(), sources=sources)
   res = res[["all_sess_res"]][["UD"]]
 
 res}
@@ -936,3 +936,40 @@ UD_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
              state       = state)
 res}
 
+
+#'@export
+#'@title Make List of Current ASM State
+#'@description Converts the current ASM state into a preload list.
+#'@param state UD state object
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:}       Boolean indicating the exit status of the function.
+#'   \item{msgs:}         Messages to be passed back to the user.
+#'   \item{yaml_list:}    Lists with preload components.
+#'}
+#'@examples
+#' sess_res = UD_test_mksession()
+#' state = sess_res$state
+#' res = UD_mk_preload(state)
+UD_mk_preload     = function(state){
+  isgood    = TRUE
+  msgs      = c()  
+  yaml_list = list()
+
+  yaml_list[[ state[["id"]] ]] = list(
+      fm_yaml  = file.path("config", basename(state[["FM_yaml_file"]])),
+      mod_yaml = file.path("config", basename(state[["MOD_yaml_file"]]))
+  )
+
+  yaml_list[[ state[["id"]] ]][[ "data_source" ]] = list(
+    file_name = state[["UD"]][["data_file"]],
+    sheet     = state[["UD"]][["sheet"]],
+    clean     = state[["UD"]][["clean"]])
+
+  formods::FM_le(state,paste0("mk_preload isgood: ",isgood))
+
+  res = list(
+    isgood    = isgood,
+    msgs      = msgs,
+    yaml_list = yaml_list)
+res}

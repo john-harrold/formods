@@ -10,7 +10,7 @@ FG_test_mksession(session = list())
 \item{session}{Shiny session variable (in app) or a list (outside of app)}
 }
 \value{
-The FG portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}}
+The FG portion of the `all_sess_res` returned from \code{\link{FM_app_preload}}
 }
 \description{
 Populates the supplied session variable for testing.
@@ -19,5 +19,5 @@ Populates the supplied session variable for testing.
 sess_res = FG_test_mksession()
 }
 \seealso{
-\code{\link{ASM_set_app_state}}
+\code{\link{FM_app_preload}}
 }

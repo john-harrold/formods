@@ -3,70 +3,72 @@ FG:
   mod_yaml:  'system.file(package="formods", "templates", "FG.yaml")'
   elements:
     - element:
-      idx: 1
-      name:   "3 mg SD IV"
-      # The data source contains the module ID (text) and the index used in
-      # the module to identify the data source. When you use FM_fetch_ds to
-      # identify data sources in other modules it creates a catalog data
-      # frame. These correspond to the id and idx columns in that data frame.
-      data_source:
-        id:   "DW"  # Module ID
-        idx:    2   # Data source index
-      # Components must have a type field this can be a type defined by 
-      # aesthetics (like geom_line). 
-      components:     
-        - component:
-            type:     "line"
-            aes:
-              'x':        "TIME_DY"
-              'y':        "DV"
-              'color':    "CMT"
-              'group':    "ID"
-        - component:
-            type:     "label"
-            options:
-              'xlab':    "Time (Days)"
-              'ylab':    "Conc (n/gml)"
+        idx: 1
+        name:   "3 mg SD IV"
+        notes:  "Individual profiles of subjects in the 3 mg single dose IV cohort."
+        # The data source contains the module ID (text) and the index used in
+        # the module to identify the data source. When you use FM_fetch_ds to
+        # identify data sources in other modules it creates a catalog data
+        # frame. These correspond to the id and idx columns in that data frame.
+        data_source:
+          id:   "DW"  # Module ID
+          idx:    2   # Data source index
+        # Components must have a type field this can be a type defined by 
+        # aesthetics (like geom_line). 
+        components:     
+          - component:
+              type:     "line"
+              aes:
+                'x':        "TIME_DY"
+                'y':        "DV"
+                'color':    "CMT"
+                'group':    "ID"
+          - component:
+              type:     "label"
+              options:
+                'xlab':    "Time (Days)"
+                'ylab':    "Conc (n/gml)"
     - element:
-      idx: 2
-      name:   "Observations"
-      # The data source contains the module ID (text) and the index used in
-      # the module to identify the data source. When you use FM_fetch_ds to
-      # identify data sources in other modules it creates a catalog data
-      # frame. These correspond to the id and idx columns in that data frame.
-      data_source:
-        id:   "DW"  # Module ID
-        idx:    1   # Data source index
-      # Components must have a type field this can be a type defined by 
-      # aesthetics (like geom_line). 
-      components:     
-        - component:
-            type:     "line"
-            aes:
-              'x':        "TIME_DY"
-              'y':        "DV"
-              'color':    "CMT"
-              'group':    "IDCMT"
-            manual:
-              'alpha':  0.5 
-        # Some types define things other than geometries. These will have
-        # options that will be unique to the particular type
-        - component:
-            type:     "facet"
-            options:
-              'column':    "Cohort" 
-              'scales':    "Fixed"
-              'nrow':       2
-              'ncol':       3 
-        - component:
-            type:     "label"
-            options:
-              'xlab':    "Time (Days)"
-              'ylab':    "Conc (n/gml) or BM level"
-              'title':   "Response by Cohort"
-        - component:
-            type:     "scales"
-            options:
-              'yscale':  "log10"
-
+        idx: 2
+        name:   "Observations"
+        notes:  "All observations (biomarker and PK) by cohort."
+        # The data source contains the module ID (text) and the index used in
+        # the module to identify the data source. When you use FM_fetch_ds to
+        # identify data sources in other modules it creates a catalog data
+        # frame. These correspond to the id and idx columns in that data frame.
+        data_source:
+          id:   "DW"  # Module ID
+          idx:    1   # Data source index
+        # Components must have a type field this can be a type defined by 
+        # aesthetics (like geom_line). 
+        components:     
+          - component:
+              type:     "line"
+              aes:
+                'x':        "TIME_DY"
+                'y':        "DV"
+                'color':    "CMT"
+                'group':    "IDCMT"
+              manual:
+                'alpha':  0.5 
+          # Some types define things other than geometries. These will have
+          # options that will be unique to the particular type
+          - component:
+              type:     "facet"
+              options:
+                'column':    "Cohort" 
+                'scales':    "Fixed"
+                'nrow':       2
+                'ncol':       3 
+          - component:
+              type:     "label"
+              options:
+                'xlab':    "Time (Days)"
+                'ylab':    "Conc (n/gml) or BM level"
+                'title':   "Response by Cohort"
+          - component:
+              type:     "scales"
+              options:
+                'yscale':  "log10"
         
+          

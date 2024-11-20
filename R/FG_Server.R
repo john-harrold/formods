@@ -1492,7 +1492,7 @@ FG_fetch_state = function(id,
 
     # Forcing a figure rebuild when a database change has been detected
     # JMH should we loop through all figures and rebuild them all?
-    state = FG_build( state=state, del_row = NULL, cmd = NULL)
+    state = FG_build( state=state, del_row = NULL, cmd = NULL, pll=NULL)
   }
   #---------------------------------------------
   # Here we update the state based on user input
@@ -1521,7 +1521,7 @@ FG_fetch_state = function(id,
           if(nrow(current_fig[["elements_table"]]) == nrow(hot_df)){
             # Flagging that row for removal and forcing a rebuild of the figure:
             del_row = which(hot_df$Delete == TRUE)
-            state = FG_build( state=state, del_row = del_row, cmd = NULL)
+            state = FG_build( state=state, del_row = del_row, cmd = NULL, pll=NULL)
           }
         }
       }
@@ -1578,6 +1578,7 @@ FG_fetch_state = function(id,
       # Evaluating the element
       state = FG_build( state,
         cmd     = fgb_res[["cmd"]],
+        pll     = fgb_res[["pll"]],
         element = fgb_res[["element"]],
         desc    = fgb_res[["desc"]])
     }
@@ -1695,7 +1696,7 @@ FG_fetch_state = function(id,
     state = FM_set_ui_msg(state, msgs)
 
     # Forcing a rebuild of the figure:
-    state = FG_build( state=state, del_row = NULL, cmd = NULL)
+    state = FG_build( state=state, del_row = NULL, cmd = NULL, pll = NULL)
   }
   # Copy figure
   if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_copy"]],
@@ -1991,7 +1992,9 @@ FG_new_fig    = function(state){
          notes          = "",
          isgood         = TRUE,
          add_isgood     = TRUE,
-         elements_table = NULL)
+         fge_cntr       = 1,
+         elements_table = NULL,
+         elements_list  = list())
 
   # Setting the new figure id as the current figure
   state[["FG"]][["current_fig"]]    = fig_id
@@ -2000,7 +2003,7 @@ FG_new_fig    = function(state){
   state = FG_set_current_fig(state, fig_def)
 
   # Creating the new figure pages
-  state = FG_build(state, NULL)
+  state = FG_build(state=state, del_row = NULL, cmd = NULL, pll = NULL)
 
 state}
 
@@ -2054,6 +2057,8 @@ state}
 #'  \item{isgood:} Return status of the function.
 #'  \item{cmd:}    ggplot R command as a character string
 #'  \item{element:} The type of element being added
+#'  \item{pll:}    Preload list (pll) containing components to save with
+#'  mk_preload.
 #'  \item{desc:}   Verbose description of the element
 #'  \item{msgs:}   Messages to be passed back to the user
 #'}
@@ -2065,12 +2070,13 @@ state}
 #'}
 fers_builder = function(state){
 
-  isgood = TRUE
-  msgs   = c()
-  cmd    = ""
-  desc   = ""
-  descs  = c()
-  element= ""
+  isgood   = TRUE
+  msgs     = c()
+  cmd      = ""
+  desc     = ""
+  descs    = c()
+  pll      = list()
+  element  = ""
 
   element        = state[["FG"]][["ui"]][["select_fg_element"]]
   ui             = state[["FG"]][["ui"]]
@@ -2080,14 +2086,16 @@ fers_builder = function(state){
   current_fig = FG_fetch_current_fig(state)
   fg_object_name = current_fig[["fg_object_name"]]
 
-  # JMH replace with this:
   # Pulling out the element components
   element_cfg                       = state[["MC"]][["elements"]][[element]]
-  # JMH adding the select and manual id elements
+  # adding the select and manual id elements
   element_cfg[["ui_aes_select_id"]] = state[["FG"]][["auto_elements"]][[element]][["ui_aes_select_id"]]
   element_cfg[["ui_aes_manual_id"]] = state[["FG"]][["auto_elements"]][[element]][["ui_aes_manual_id"]]
 
+
   if(element%in% aes_elements){
+    # Defining the preload type
+    pll[["type"]] = element
 
     # The geom function name:
     fcn = element_cfg[["fcn"]]
@@ -2126,11 +2134,19 @@ fers_builder = function(state){
 
             # updating description
             descs = c(descs, paste0(comp_idx,":", man_rhs))
+
+            # Adding manual component to the preload list:
+            pll[["manual"]][[comp_idx]] = man_rhs
+
           }
         } else {
           aes_comp = c(aes_comp, paste0(comp_idx, "=", ui[[sel_idx]]))
+
           # updating description
           descs = c(descs, paste0(comp_idx,":", ui[[sel_idx]]))
+
+          # Adding manual component to the preload list:
+          pll[["aes"]][[comp_idx]] = ui[[sel_idx]]
         }
       }
     }
@@ -2152,6 +2168,9 @@ fers_builder = function(state){
     # creating the description
     desc = paste(descs, collapse = ", ")
   } else if(element == "facet"){
+    # Defining the preload type
+    pll[["type"]] = element
+
     # We want to make sure at least one column has been selected
     if(ui[["select_component_facet"]][1] == ""){
       isgood = FALSE
@@ -2160,26 +2179,20 @@ fers_builder = function(state){
     } else {
 
       # Getting the facet scales
-      if(ui[["select_component_facet_scales"]] %in% names(state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["choices"]])){
-        facet_scales = ui[["select_component_facet_scales"]]
-      } else {
-        facet_scales = state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["default"]]
+      if(!(ui[["select_component_facet_scales"]] %in% names(state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["choices"]]))){
+        ui[["select_component_facet_scales"]] = state[["MC"]][["formatting"]][["components"]][["facet_scales"]][["default"]]
         msgs = c(msgs, "Unable to determine facet scales from ui using default")
       }
 
 
       # Number of rows
-      if(ui[["select_component_facet_nrow"]] %in% state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["nrow"]][["choices"]]){
-        facet_nrow =  ui[["select_component_facet_nrow"]]
-      } else {
-        facet_nrow = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["nrow"]][["default"]] 
+      if(!(ui[["select_component_facet_nrow"]] %in% state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["nrow"]][["choices"]])){
+        ui[["select_component_facet_nrow"]] = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["nrow"]][["default"]] 
       }
 
       # Number of columns
-      if(ui[["select_component_facet_ncol"]] %in% state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["ncol"]][["choices"]]){
-        facet_ncol =  ui[["select_component_facet_ncol"]]
-      } else {
-        facet_ncol = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["ncol"]][["default"]] 
+      if(!(ui[["select_component_facet_ncol"]] %in% state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["ncol"]][["choices"]])){
+        ui[["select_component_facet_ncol"]] = state[["MC"]][["formatting"]][["components"]][["facet_dims"]][["ncol"]][["default"]] 
       }
 
       # The faceting command will depend on the number of columns selected
@@ -2191,11 +2204,13 @@ fers_builder = function(state){
                      ui[["select_component_facet"]][1],
                      "~",
                      ui[["select_component_facet"]][2],
-                     ", scales = ", deparse(facet_scales),
-                     ", nrow = ", facet_nrow,
-                     ", ncol = ", facet_ncol,
+                     ", scales = ", deparse( ui[["select_component_facet_scales"]] ),
+                     ", nrow = ", ui[["select_component_facet_nrow"]],
+                     ", ncol = ", ui[["select_component_facet_ncol"]],
                      ", page=1",
                      ")")
+
+
 
       } else{
         cmd = paste0(
@@ -2203,18 +2218,27 @@ fers_builder = function(state){
                      "ggforce::facet_wrap_paginate(vars(",
                      paste0(ui[["select_component_facet"]], collapse=", ")
                      , ")",
-                     ", scales = ", deparse(facet_scales),
-                     ", nrow = ", facet_nrow,
-                     ", ncol = ", facet_ncol,
+                     ", scales = ", deparse( ui[["select_component_facet_scales"]] ),
+                     ", nrow = ", ui[["select_component_facet_nrow"]],
+                     ", ncol = ", ui[["select_component_facet_ncol"]],
                      ", page=1",
                      ")")
 
+      }
+
+      # Defining the preload options for faceting
+      for(uiname in names(state[["FG"]][["manual_elements"]][[element]][["mapping"]])){
+        pll[["options"]][[ 
+           state[["FG"]][["manual_elements"]][[element]][["mapping"]][[ uiname ]] 
+         ]] = ui[[uiname]]
       }
 
       desc = paste0(ui[["select_component_facet"]], collapse= ", ")
 
     }
   } else if(element == "scales"){
+    # Defining the preload type
+    pll[["type"]] = element
 
     cmds      = c() # All the scale commands
     descs     = c() # All the descriptions
@@ -2265,9 +2289,19 @@ fers_builder = function(state){
       }
 
     }
+
+    # Defining the preload options for faceting
+    for(uiname in names(state[["FG"]][["manual_elements"]][[element]][["mapping"]])){
+      pll[["options"]][[ 
+         state[["FG"]][["manual_elements"]][[element]][["mapping"]][[ uiname ]] 
+       ]] = ui[[uiname]]
+    }
+
     cmd  = paste0(cmds,  collapse= " \n")
     desc = paste0(descs, collapse= ", ")
   } else if(element == "label"){
+    # Defining the preload type
+    pll[["type"]] = element
 
     # We'll construct the indiviudal commands xlab(), ylab(), etc, and
     # Combine them in the end
@@ -2294,6 +2328,15 @@ fers_builder = function(state){
                     paste0(cmds, collapse = " + "))
       desc = paste0(descs, collapse= ", ")
     }
+
+    # Defining the preload options for faceting
+    for(uiname in names(state[["FG"]][["manual_elements"]][[element]][["mapping"]])){
+      pll[["options"]][[ 
+         state[["FG"]][["manual_elements"]][[element]][["mapping"]][[ uiname ]] 
+       ]] = ui[[uiname]]
+    }
+
+
   }else{
     isgood = FALSE
     err_msg =
@@ -2306,6 +2349,7 @@ fers_builder = function(state){
   res = list(isgood   = isgood,
              cmd      = cmd,
              element  = element,
+             pll      = pll,
              desc     = desc,
              msgs     = msgs)
 
@@ -2321,6 +2365,8 @@ res}
 #'@param del_row Row number to be deleted (NULL if no rows need to be deleted)
 #'@param cmd String containing the plotting command.  Set to NULL to initialize a
 #'new figure or force a rebuild after a dataset update.
+#'@param pll Preload list for the plotting command.  Set to NULL to initialize a
+#'new figure or force a rebuild after a dataset update.
 #'@param element Short name for the figure element being performed, eg. point
 #'@param desc Verbose description for the action being performed
 #'@return list with the following elements
@@ -2333,6 +2379,7 @@ res}
 FG_build = function(state,
                    del_row     = NULL,
                    cmd         = NULL,
+                   pll         = NULL,
                    element     = "unknown",
                    desc        = "unknown"){
 
@@ -2369,6 +2416,9 @@ FG_build = function(state,
 
     # Here we process row deletions
     if(!is.null(curr_ET) & !is.null(del_row)){
+      # Removing the preload component
+      current_fig[["elements_list"]][[ curr_ET[del_row, ][["Key"]] ]] = NULL
+
       # Removing the specified row from the elements table:
       curr_ET = curr_ET[-c(del_row), ]
 
@@ -2405,10 +2455,15 @@ FG_build = function(state,
 
             # We flag that we found a duplicate:
             dupe_found = TRUE
+
+            # Updating the preload component with the new one:
+            current_fig[["elements_list"]][[ curr_ET[row_idx, ][["Key"]] ]][["pll"]] = pll
+
             # Then we replace the cmd and Description elements of the old row
             # with the new one:
             curr_ET[row_idx, ][["cmd"]]         = cmd
             curr_ET[row_idx, ][["Description"]] = desc
+
             msgs = c(msgs,
               stringr::str_replace_all(
                 state[["MC"]][["errors"]][["only_one_element"]],
@@ -2469,13 +2524,22 @@ FG_build = function(state,
             if(tcres[["isgood"]]){
               # If the try catch was successful we extract the updated plot object
               assign(fg_object_name, tcres[["capture"]][[fg_object_name]])
+              fge_key = paste0("FGE ", current_fig[["fge_cntr"]])
               # Then we add the new row to the event table
               curr_ET = rbind(curr_ET,
-                    data.frame(Element     = element,
+                    data.frame(Key         = fge_key,
+                               Element     = element,
                                cmd         = cmd,
                                Description = desc,
                                Status      = "Success",
                                Delete      = FALSE))
+
+              # Adding to the list
+              current_fig[["elements_list"]][[fge_key]][["pll"]] = pll
+             
+              # Incrementing the counter
+              current_fig[["fge_cntr"]] = current_fig[["fge_cntr"]] + 1
+
               # Saveing the command for the code block
               code_lines = c(code_lines, cmd)
             } else {
@@ -2555,7 +2619,6 @@ FG_build = function(state,
     }
 
     # Code for the modules feeding into this one
-    # JMH check this code works
     code_previous   = state[["FG"]][["DSV"]][["ds"]][[current_fig[["fig_dsview"]]]][["code"]]
 
     # Just the code to build the figure
@@ -2890,17 +2953,17 @@ res}
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
-#'@return The FG portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}} 
+#'@return The FG portion of the `all_sess_res` returned from \code{\link{FM_app_preload}} 
 #'@examples
 #' sess_res = FG_test_mksession()
-#'@seealso \code{\link{ASM_set_app_state}}
+#'@seealso \code{\link{FM_app_preload}}
 FG_test_mksession = function(session=list()){
 
   sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
               system.file(package="formods", "preload", "UD_preload.yaml"),
               system.file(package="formods", "preload", "DW_preload.yaml"),
               system.file(package="formods", "preload", "FG_preload_minimal.yaml"))
-  res = ASM_set_app_state(session=list(), sources=sources)
+  res = FM_app_preload(session=list(), sources=sources)
   res = res[["all_sess_res"]][["FG"]]
 
 res}
@@ -2970,8 +3033,8 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
     # Map between list index and internal figure ID
     element_map = list()
     for(ele_idx in 1:length(elements)){
-      enumeric = c(enumeric, elements[[ele_idx]][["idx"]])
-      element_map[[ paste0("Fig_",elements[[ele_idx]][["idx"]] )]] = ele_idx
+      enumeric = c(enumeric, elements[[ele_idx]][["element"]][["idx"]])
+      element_map[[ paste0("Fig_",elements[[ele_idx]][["element"]][["idx"]] )]] = ele_idx
     }
     # Creating empty fig placeholders
     while(state[["FG"]][["fig_cntr"]] < max(enumeric)){
@@ -3022,18 +3085,24 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
       fig_isgood = TRUE
       # first we set the figure name:
       FM_le(state, paste0("loading figure idx: ", ele_idx ))
-      if(!is.null(elements[[ele_idx]][["name"]])){
-        FM_le(state, paste0("setting name: ", elements[[ele_idx]][["name"]]))
+      if(!is.null(elements[[ele_idx]][["element"]][["name"]])){
+        FM_le(state, paste0("setting name: ", elements[[ele_idx]][["element"]][["name"]]))
         current_ele = FG_fetch_current_fig(state)
-        current_ele[["key"]] = elements[[ele_idx]][["name"]]
+        current_ele[["key"]] = elements[[ele_idx]][["element"]][["name"]]
+        state = FG_set_current_fig(state, current_ele)
+      }
+      if(!is.null(elements[[ele_idx]][["element"]][["notes"]])){
+        FM_le(state, paste0("notes found and set"))
+        current_ele = FG_fetch_current_fig(state)
+        current_ele[["notes"]] = elements[[ele_idx]][["element"]][["notes"]]
         state = FG_set_current_fig(state, current_ele)
       }
 
       # Attaching data source
-      if(!is.null(elements[[ele_idx]][["data_source"]][["id"]]) &
-         !is.null(elements[[ele_idx]][["data_source"]][["idx"]])){
-        tmp_DSV = DSV[["catalog"]][c(DSV[["catalog"]][["id"]]  == elements[[ele_idx]][["data_source"]][["id"]] & 
-                                     DSV[["catalog"]][["idx"]] == elements[[ele_idx]][["data_source"]][["idx"]]), ]
+      if(!is.null(elements[[ele_idx]][["element"]][["data_source"]][["id"]]) &
+         !is.null(elements[[ele_idx]][["element"]][["data_source"]][["idx"]])){
+        tmp_DSV = DSV[["catalog"]][c(DSV[["catalog"]][["id"]]  == elements[[ele_idx]][["element"]][["data_source"]][["id"]] & 
+                                     DSV[["catalog"]][["idx"]] == elements[[ele_idx]][["element"]][["data_source"]][["idx"]]), ]
         if(nrow(tmp_DSV) == 1){
           FM_le(state, paste0("setting data source: ", tmp_DSV[["object"]][1]) )
           current_ele = FG_fetch_current_fig(state)
@@ -3057,7 +3126,7 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
 
 
       # If everything is good up to this point then we process the components
-      if(length(elements[[ele_idx]][["components"]] > 0) & fig_isgood){
+      if(length(elements[[ele_idx]][["element"]][["components"]] > 0) & fig_isgood){
 
         # This will pull out all of the ui_ids that realte to components.
         # Basically all of the ui_ids that start with either select_component
@@ -3067,8 +3136,8 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
                             ])
 
 
-        for(comp_idx in 1:length(elements[[ele_idx]][["components"]])){
-          tmp_component = elements[[ele_idx]][["components"]][[comp_idx]][["component"]]
+        for(comp_idx in 1:length(elements[[ele_idx]][["element"]][["components"]])){
+          tmp_component = elements[[ele_idx]][["element"]][["components"]][[comp_idx]][["component"]]
           add_component = TRUE
           comp_err_msg = c()
 
@@ -3147,7 +3216,8 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
                 }
               } else {
                 # These are other ggplot components like scales and labels
-                manual_elements[[  tmp_component[["type"]] ]]
+                # JMH this next line isn't needed?
+                #manual_elements[[  tmp_component[["type"]] ]]
                 allowed_options = as.vector(unlist(manual_elements[[  tmp_component[["type"]]  ]][["mapping"]]))
                 found_options   = names(tmp_component[["options"]])
 
@@ -3193,6 +3263,7 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
             if(fgb_res[["isgood"]]){
               state = FG_build( state,
                 cmd     = fgb_res[["cmd"]],
+                pll     = fgb_res[["pll"]],
                 element = fgb_res[["element"]],
                 desc    = fgb_res[["desc"]])
             } else {
@@ -3237,3 +3308,100 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
              state       = state)
   
 res}
+
+#'@export
+#'@title Make List of Current FG State
+#'@description Converts the current FG state into a preload list.
+#'@param state FG state object
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:}       Boolean indicating the exit status of the function.
+#'   \item{msgs:}         Messages to be passed back to the user.
+#'   \item{yaml_list:}    Lists with preload components.
+#'}
+#'@examples
+#' sess_res = FG_test_mksession()
+#' state = sess_res$state
+#' res = FG_mk_preload(state)
+FG_mk_preload     = function(state){
+  isgood    = TRUE
+  msgs      = c()  
+  err_msg   = c()
+
+  ylist     = list(
+      fm_yaml  = file.path("config", basename(state[["FM_yaml_file"]])),
+      mod_yaml = file.path("config", basename(state[["MOD_yaml_file"]])),
+      elements = list() 
+  )
+
+
+  DSV = state[["FG"]][["DSV"]]
+
+  if(DSV[["hasds"]]){
+    ele_idx = 1
+    # Walking through each element:
+    for(element_id in names(state[["FG"]][["figs"]])){
+      tmp_source_ele = state[["FG"]][["figs"]][[element_id]]
+   
+      # Finding the data source:
+      dsv_row = 
+      DSV[["catalog"]][
+        DSV[["catalog"]][["object"]] == tmp_source_ele[["fig_dsview"]], ]
+      ds_id  = dsv_row[["id"]]
+      ds_idx = dsv_row[["idx"]]
+
+      # Creates the empty element:
+      tmp_element = list(
+        idx   = tmp_source_ele[["idx"]],
+        name  = tmp_source_ele[["key"]],
+        notes = tmp_source_ele[["notes"]],
+        data_source = list(
+          id  = ds_id,
+          idx = ds_idx),
+        components = list())
+   
+      FM_le(state, paste0("saving element (", tmp_source_ele[["idx"]], ") ", tmp_source_ele[["key"]]))
+   
+      # Adding components:
+      if(is.data.frame(tmp_source_ele[["elements_table"]])){
+        comp_idx = 1
+        for(tmp_key in tmp_source_ele[["elements_table"]][["Key"]]){
+          if(tmp_key %in% names(tmp_source_ele[["elements_list"]])){
+            if("pll" %in% names(tmp_source_ele[["elements_list"]][[tmp_key]])){
+              tmp_element[["components"]][[comp_idx]] = list(component=
+                tmp_source_ele[["elements_list"]][[tmp_key]][["pll"]])
+              FM_le(state, paste0("  -> ",tmp_key, ": ", tmp_source_ele[["elements_list"]][[tmp_key]][["pll"]][["type"]]) )
+            } else {
+              err_msg = c(err_msg, paste0("missing preload list (pll) for key: ", tmp_key))
+              isgood = FALSE
+            }
+          } else {
+            err_msg = c(err_msg, paste0("missing key: ", tmp_key))
+            isgood = FALSE
+          }
+          comp_idx = comp_idx + 1
+        }
+      }
+   
+      # Appending element
+      ylist[["elements"]][[ele_idx]] = list(element = tmp_element)
+      ele_idx = ele_idx + 1
+    }
+  }
+
+  formods::FM_le(state,paste0("mk_preload isgood: ",isgood))
+
+  yaml_list = list()
+  yaml_list[[ state[["id"]] ]]  = ylist
+
+  if(!isgood && !is.null(err_msg)){
+    formods::FM_le(state,err_msg,entry_type="danger")
+    msgs = c(msgs, err_msg)
+  }
+  
+  res = list(
+    isgood    = isgood,
+    msgs      = msgs,
+    yaml_list = yaml_list)
+res}
+

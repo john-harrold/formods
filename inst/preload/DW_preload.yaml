@@ -45,82 +45,82 @@ DW:
     #    onerow (no options)
     #
     - element:
-      idx:    1
-      name:   "Observations"
-      components:     
-        - component:
-            action:   "filter"
-            column:   "EVID"   
-            operator: "=="
-            rhs:       0 
-        - component:
-            action:   "filter"
-            column:   "DV"   
-            operator: "!="
-            rhs:       0 
-        - component:
-            action:   "mutate"
-            column:   "IDCMT"   
-            rhs:      "paste0(ID, ', ', CMT)"   
+        idx:    1
+        name:   "Observations"
+        components:     
+          - component:
+              action:   "filter"
+              column:   "EVID"   
+              operator: "=="
+              rhs:       0 
+          - component:
+              action:   "filter"
+              column:   "DV"   
+              operator: "!="
+              rhs:       0 
+          - component:
+              action:   "mutate"
+              column:   "IDCMT"   
+              rhs:      "paste0(ID, ', ', CMT)"   
     - element: 
-      idx:     2
-      name:   "PK 3mg SD IV"
-      components:     
-        - component:
-            action:   "filter"
-            column:   "EVID"   
-            operator: "=="
-            rhs:       0 
-        - component:
-            action:   "filter"
-            column:   "DV"   
-            operator: "!="
-            rhs:       0 
-        - component:
-            action:   "filter"
-            column:   "Cohort"   
-            operator: "%in%"
-            rhs:      "SD 3 mg IV"
-        - component:
-            action:   "filter"
-            column:   "CMT"      
-            operator: "%in%"
-            rhs:      "C_ng_ml"   
+        idx:     2
+        name:   "PK 3mg SD IV"
+        components:     
+          - component:
+              action:   "filter"
+              column:   "EVID"   
+              operator: "=="
+              rhs:       0 
+          - component:
+              action:   "filter"
+              column:   "DV"   
+              operator: "!="
+              rhs:       0 
+          - component:
+              action:   "filter"
+              column:   "Cohort"   
+              operator: "%in%"
+              rhs:      "SD 3 mg IV"
+          - component:
+              action:   "filter"
+              column:   "CMT"      
+              operator: "%in%"
+              rhs:      "C_ng_ml"   
     - element: 
-      idx:     3
-      name:   "PK 3mg SD IV (NCA)"
-      components:     
-        - component:
-            action:   "filter"
-            column:   "EVID"   
-            operator: "=="
-            rhs:       0 
-        - component:
-            action:   "filter"
-            column:   "Cohort"   
-            operator: "%in%"
-            rhs:      "SD 3 mg IV"
-        - component:
-            action:   "filter"
-            column:   "CMT"      
-            operator: "%in%"
-            rhs:      "C_ng_ml"   
+        idx:     3
+        name:   "PK 3mg SD IV (NCA)"
+        components:     
+          - component:
+              action:   "filter"
+              column:   "EVID"   
+              operator: "=="
+              rhs:       0 
+          - component:
+              action:   "filter"
+              column:   "Cohort"   
+              operator: "%in%"
+              rhs:      "SD 3 mg IV"
+          - component:
+              action:   "filter"
+              column:   "CMT"      
+              operator: "%in%"
+              rhs:      "C_ng_ml"   
     - element: 
-      idx:     4
-      name:   "PKPD 3mg SD IV (NCA)"
-      components:     
-        - component:
-            action:   "filter"
-            column:   "EVID"   
-            operator: "=="
-            rhs:       0 
-        - component:
-            action:   "filter"
-            column:   "Cohort"   
-            operator: "%in%"
-            rhs:      "SD 3 mg IV"
-        - component:
-            action:   "filter"
-            column:   "CMT"      
-            operator: "%in%"
-            rhs:      ["C_ng_ml", "BM_ng_ml"]
+        idx:     4
+        name:   "PKPD 3mg SD IV (NCA)"
+        components:     
+          - component:
+              action:   "filter"
+              column:   "EVID"   
+              operator: "=="
+              rhs:       0 
+          - component:
+              action:   "filter"
+              column:   "Cohort"   
+              operator: "%in%"
+              rhs:      "SD 3 mg IV"
+          - component:
+              action:   "filter"
+              column:   "CMT"      
+              operator: "%in%"
+              rhs:      ["C_ng_ml", "BM_ng_ml"]

@@ -6,8 +6,8 @@
   # started
   elements:
    - element:
-     idx:    1
-     name:   "Element Name"
-     components:     
-       - component:
-           option1: "opt"
+       idx:    1
+       name:   "Element Name"
+       components:     
+         - component:
+             option1: "opt"

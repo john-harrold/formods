@@ -63,18 +63,9 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Creating a state object for testing</span></span></span>
 <span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="ASM_test_mksession.html">ASM_test_mksession</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.docx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.pptx")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: State initialized</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: module isgood: TRUE</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ASM_set_app_state(session = list(), sources = sources):</span> could not find function "ASM_set_app_state"</span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'sess_res' not found</span>
 <span class="r-in"><span><span class="va">code</span> <span class="op">=</span> <span class="fu">ASM_fetch_code</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>

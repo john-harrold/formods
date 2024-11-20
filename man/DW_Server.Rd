@@ -156,7 +156,13 @@ server <- function(input, output, session) {
   mod_ids = c("UD", "DW", "FG")
 
   #Populating with test data
-  FG_test_mksession(session)
+  #FG_test_mksession(session)
+  sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+              system.file(package="formods", "preload", "UD_preload.yaml"),
+              system.file(package="formods", "preload", "DW_preload.yaml"),
+              system.file(package="formods", "preload", "FG_preload.yaml"))
+  res = FM_app_preload(session=session, sources=sources)
+
   # Module servers
   formods::ASM_Server(id="ASM",
              deployed    = deployed,

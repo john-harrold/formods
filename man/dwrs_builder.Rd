@@ -15,6 +15,8 @@ list containing the following elements
  \item{isgood:} Return status of the function
  \item{cmd:}    Data wrangling R command
  \item{action:} The action being performed
+ \item{pll:}    Preload list (pll) containing components to save with
+ mk_preload.
  \item{desc:}   Verbose description of the action
  \item{msgs:}   Messages to be passed back to the user
 }

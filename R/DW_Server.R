@@ -1537,12 +1537,14 @@ DW_fetch_state = function(id,                    input,     session,
             # If this is run before the hot_table updates we want to skip it
             # So this, so we only update when the OLD_ET and the table in the UI have
             # the same number of rows
+            del_key = NULL
             if(nrow(OLD_ET) == nrow(hot_df)){
               for(eridx in 1:nrow(OLD_ET)){
                 if(hot_df[eridx, ]$Delete == FALSE){
                   NEW_ET = rbind(NEW_ET,
                                  OLD_ET[eridx,])
                 } else {
+                  del_key = hot_df[eridx, ][["Key"]]
                   # When we find the row being deleted we add a notification
                   del_row = hot_df[eridx, ]
                   notify_text = state[["MC"]][["notifications"]][["del_dw_element"]]
@@ -1603,6 +1605,11 @@ DW_fetch_state = function(id,                    input,     session,
               }
               # Saving the NEW_ET over the elements_table in the state
               current_view[["elements_table"]]  = NEW_ET
+
+              # Removing the key from the list as well
+              if(!is.null(del_key)){
+                current_view[["elements_list"]][[del_key]]  = NULL
+              }
               state = DW_set_current_view(state, current_view)
               FM_le(state, "wrangling element deleted")
             }
@@ -1947,6 +1954,8 @@ state }
 #'  \item{isgood:} Return status of the function
 #'  \item{cmd:}    Data wrangling R command
 #'  \item{action:} The action being performed
+#'  \item{pll:}    Preload list (pll) containing components to save with
+#'  mk_preload.
 #'  \item{desc:}   Verbose description of the action
 #'  \item{msgs:}   Messages to be passed back to the user
 #'}
@@ -1958,6 +1967,9 @@ dwrs_builder = function(state){
   cmd    = ""
   desc   = ""
   action = ""
+
+  # Preload list
+  pll    = list()
 
 
   action         = state[["DW"]][["ui"]][["select_dw_element"]]
@@ -2073,6 +2085,13 @@ dwrs_builder = function(state){
                       paste(ui[["fds_filter_rhs"]], collapse=','))
       }
       cmd = paste0(view_ds_object_name,  " = dplyr::filter(", view_ds_object_name, ",", cond_str, ")")
+
+      # Packing up the preload list:
+      pll[["action"]]     = action
+      pll[["column"]]     = ui[["select_fds_filter_column"]] 
+      pll[["operator"]]   = ui[["select_fds_filter_operator"]] 
+      pll[["rhs"]]        = ui[["fds_filter_rhs"]] 
+
     } else if(action == "mutate"){
       rhs_str = ui[["select_fds_mutate_rhs"]]
       cmd = paste0(view_ds_object_name, " = dplyr::mutate(", view_ds_object_name,",",
@@ -2081,6 +2100,12 @@ dwrs_builder = function(state){
                   rhs_str, ")")
       desc = paste( ui[["select_fds_mutate_column"]],
                     "=", rhs_str)
+
+      # Packing up the preload list:
+      pll[["action"]]     = action
+      pll[["column"]]     = ui[["select_fds_mutate_column"]] 
+      pll[["rhs"]]        = ui[["select_fds_mutate_rhs"]]
+
     } else if(action == "rename"){
       new_name =  ui[["fds_rename_rhs"]]
       cmd = paste0(view_ds_object_name, " = dplyr::rename(", view_ds_object_name,",",
@@ -2090,18 +2115,33 @@ dwrs_builder = function(state){
                   ")")
       desc = paste(ui[["select_fds_rename_column"]], " to ", new_name)
 
+      # Packing up the preload list:
+      pll[["action"]]     = action
+      pll[["column"]]     = ui[["select_fds_rename_column"]] 
+      pll[["rhs"]]        = ui[["fds_rename_rhs"]]
+
     } else if(action == "group"){
       group_cols_str   = paste(ui[["select_fds_group_column"]], collapse=', ')
       cmd = paste0(view_ds_object_name, " = dplyr::group_by(", view_ds_object_name,",",
                   group_cols_str,
                   ")")
       desc = paste(group_cols_str)
+
+      # Packing up the preload list:
+      pll[["action"]]     = action
+      pll[["column"]]     = ui[["select_fds_group_column"]] 
+
     } else if(action == "select"){
       select_cols_str   = paste(ui[["select_fds_select_column"]], collapse=', ')
       cmd = paste0(view_ds_object_name, " = dplyr::select(", view_ds_object_name,",",
                   select_cols_str,
                   ")")
       desc = paste(select_cols_str)
+
+      # Packing up the preload list:
+      pll[["action"]]     = action
+      pll[["column"]]     = ui[["select_fds_select_column"]] 
+
     } else if(action == "longer"){
       select_cols_str         = paste(ui[["select_fds_longer_column"]], collapse=', ')
       select_cols_str_quote   = paste(ui[["select_fds_longer_column"]], collapse='", "')
@@ -2115,6 +2155,13 @@ dwrs_builder = function(state){
                   ', values_to = "', values_to, '"',
                   ")")
       desc = paste(select_cols_str, "-->", names_to, ", ", values_to)
+
+      # Packing up the preload list:
+      pll[["action"]]     = action
+      pll[["column"]]     = ui[["select_fds_longer_column"]] 
+      pll[["names"]]      = ui[["select_fds_longer_names"]] 
+      pll[["values"]]     = ui[["select_fds_longer_values"]] 
+
     } else if(action == "wider"){
       names_from        = ui[["select_fds_wider_names"]]
       values_from       = ui[["select_fds_wider_values"]]
@@ -2124,12 +2171,24 @@ dwrs_builder = function(state){
                   ', values_from = "', values_from, '"',
                   ")")
       desc = paste("names_from: ", names_from, ", values_from: ", values_from)
+
+      # Packing up the preload list:
+      pll[["action"]]     = action
+      pll[["names"]]      = ui[["select_fds_wider_names"]] 
+      pll[["values"]]     = ui[["select_fds_wider_values"]] 
+
     } else if(action == "ungroup"){
       cmd = paste0(view_ds_object_name, " = dplyr::ungroup(",view_ds_object_name,")")
       desc = state[["MC"]][["labels"]][["ungroup_data"]]
+
+      # Packing up the preload list:
+      pll[["action"]]     = action
     } else if(action == "onerow"){
       cmd = paste0(view_ds_object_name, " = dplyr::filter(", view_ds_object_name, ",row_number()==1)")
       desc = state[["MC"]][["labels"]][["keep_onerow"]]
+
+      # Packing up the preload list:
+      pll[["action"]]     = action
     } else {
       isgood = FALSE
       msgs = c(msgs, paste("Action not found:", action))
@@ -2140,6 +2199,7 @@ dwrs_builder = function(state){
              cmd    = cmd,
              action = action,
              desc   = desc,
+             pll    = pll,
              msgs   = msgs)
 
   res
@@ -2229,6 +2289,8 @@ DW_new_view = function(state){
          key                 = paste0("data_", view_id),
          WDS                 = state[["DW"]][["UD"]][["contents"]],
          elements_table      = NULL,
+         elements_list       = list(),
+         dwe_cntr            = 1,
          # Generated on save
          checksum            = digest::digest(state[["DW"]][["UD"]][["contents"]], algo=c("md5")),
          code                = NULL,
@@ -2416,14 +2478,24 @@ DW_add_wrangling_element = function(state, dwb_res, dwee_res){
 
   current_view = DW_fetch_current_view(state)
   # - append the cmd and description to the DW table
+  dwe_key = paste0("DWE ", current_view[["dwe_cntr"]])
+
+  # Adding to the table
   current_view[["elements_table"]] =
     rbind(current_view[["elements_table"]],
       data.frame(
+      Key           = dwe_key,
       Action        = dwb_res[["action"]],
       Description   = dwb_res[["desc"]],
       cmd           = dwb_res[["cmd"]],
       Status        = "Success",
       Delete        = FALSE))
+
+  # Adding to the list
+  current_view[["elements_list"]][[dwe_key]][["pll"]] = dwb_res[["pll"]]
+
+  # Incrementing the 
+  current_view[["dwe_cntr"]] = current_view[["dwe_cntr"]] + 1
 
   current_view[["WDS"]]  = dwee_res[["DS"]]
   state = DW_set_current_view(state, current_view)
@@ -2663,16 +2735,16 @@ res}
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
-#'@return The DW portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}} 
+#'@return The DW portion of the `all_sess_res` returned from \code{\link{FM_app_preload}} 
 #'@examples
 #' sess_res = DW_test_mksession()
-#'@seealso \code{\link{ASM_set_app_state}}
+#'@seealso \code{\link{FM_app_preload}}
 DW_test_mksession = function(session=list()){
 
   sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
               system.file(package="formods", "preload", "UD_preload.yaml"),
               system.file(package="formods", "preload", "DW_preload.yaml"))
-  res = ASM_set_app_state(session=list(), sources=sources)
+  res = FM_app_preload(session=list(), sources=sources)
   res = res[["all_sess_res"]][["DW"]]
 
 
@@ -3150,8 +3222,8 @@ DW_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
     element_map = list()
 
     for(ele_idx in 1:length(elements)){
-      enumeric = c(enumeric, elements[[ele_idx]][["idx"]])
-      element_map[[ paste0("view_",elements[[ele_idx]][["idx"]] )]] = ele_idx
+      enumeric = c(enumeric, elements[[ele_idx]][["element"]][["idx"]])
+      element_map[[ paste0("view_",elements[[ele_idx]][["element"]][["idx"]] )]] = ele_idx
     }
     # Creating empty view placeholders
     while(state[["DW"]][["view_cntr"]] < max(enumeric)){
@@ -3177,18 +3249,18 @@ DW_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
 
       # first we set the name
       FM_le(state, paste0("loading data view idx: ", ele_idx))
-      if(!is.null(elements[[ele_idx]][["name"]])){
-        FM_le(state, paste0("setting name: ", elements[[ele_idx]][["name"]]))
+      if(!is.null(elements[[ele_idx]][["element"]][["name"]])){
+        FM_le(state, paste0("setting name: ", elements[[ele_idx]][["element"]][["name"]]))
         current_view = DW_fetch_current_view(state)
-        current_view[["key"]] = elements[[ele_idx]][["name"]]
+        current_view[["key"]] = elements[[ele_idx]][["element"]][["name"]]
         state = DW_set_current_view(state, current_view)
       }
 
       # Now we walk through any components 
-      if(length(elements[[ele_idx]][["components"]]) > 0){
-        for(comp_idx in 1:length(elements[[ele_idx]][["components"]])){
+      if(length(elements[[ele_idx]][["element"]][["components"]]) > 0){
+        for(comp_idx in 1:length(elements[[ele_idx]][["element"]][["components"]])){
 
-          tmp_component = elements[[ele_idx]][["components"]][[comp_idx]][["component"]]
+          tmp_component = elements[[ele_idx]][["element"]][["components"]][[comp_idx]][["component"]]
 
           add_component = TRUE
           # Here we construct the input based on the type of action selected
@@ -3277,4 +3349,86 @@ DW_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
              input       = input,
              react_state = react_state,
              state       = state)
+res}
+
+#'@export
+#'@title Make List of Current DW State
+#'@description Converts the current DW state into a preload list.
+#'@param state DW state object
+#'@return list with the following elements
+#' \itemize{
+#'   \item{isgood:}       Boolean indicating the exit status of the function.
+#'   \item{msgs:}         Messages to be passed back to the user.
+#'   \item{yaml_list:}    Lists with preload components.
+#'}
+#'@examples
+#' sess_res = DW_test_mksession()
+#' state = sess_res$state
+#' res = DW_mk_preload(state)
+DW_mk_preload     = function(state){
+  isgood    = TRUE
+  msgs      = c()  
+  err_msg   = c()
+
+  ylist     = list(
+      fm_yaml  = file.path("config", basename(state[["FM_yaml_file"]])),
+      mod_yaml = file.path("config", basename(state[["MOD_yaml_file"]])),
+      elements = list() 
+  )
+
+  ele_idx = 1
+  # Walking through each element:
+  for(element_id in names(state[["DW"]][["views"]])){
+    tmp_source_ele = state[["DW"]][["views"]][[element_id]]
+
+    # Creates the empty element:
+    tmp_element = list(
+      idx  = tmp_source_ele[["idx"]],
+      name = tmp_source_ele[["key"]],
+      components = list())
+
+    FM_le(state, paste0("saving element (", tmp_source_ele[["idx"]], ") ", tmp_source_ele[["key"]]))
+
+    # Adding components:
+    if(is.data.frame(tmp_source_ele[["elements_table"]])){
+      comp_idx = 1
+      for(tmp_key in tmp_source_ele[["elements_table"]][["Key"]]){
+        if(tmp_key %in% names(tmp_source_ele[["elements_list"]])){
+          if("pll" %in% names(tmp_source_ele[["elements_list"]][[tmp_key]])){
+            tmp_element[["components"]][[comp_idx]] = list(component=
+              tmp_source_ele[["elements_list"]][[tmp_key]][["pll"]])
+            FM_le(state, paste0("  -> ",tmp_key, ": ", tmp_source_ele[["elements_list"]][[tmp_key]][["pll"]][["action"]]) )
+          } else {
+            err_msg = c(err_msg, paste0("missing preload list (pll) for key: ", tmp_key))
+            isgood = FALSE
+          }
+        } else {
+          err_msg = c(err_msg, paste0("missing key: ", tmp_key))
+          isgood = FALSE
+        }
+        comp_idx = comp_idx + 1
+      }
+    }
+
+
+    # Appending element
+    ylist[["elements"]][[ele_idx]] = list(element = tmp_element)
+    ele_idx = ele_idx + 1
+  }
+
+
+  formods::FM_le(state,paste0("mk_preload isgood: ",isgood))
+
+  yaml_list = list()
+  yaml_list[[ state[["id"]] ]]  = ylist
+
+  if(!isgood && !is.null(err_msg)){
+    formods::FM_le(state,err_msg,entry_type="danger")
+    msgs = c(msgs, err_msg)
+  }
+  
+  res = list(
+    isgood    = isgood,
+    msgs      = msgs,
+    yaml_list = yaml_list)
 res}
