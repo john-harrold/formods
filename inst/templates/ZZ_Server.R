@@ -1401,10 +1401,8 @@ state}
   
 res}
 
-
-
 #'@export
-#'@title Read App State From Yaml Files
+#'@title Make List of Current ===ZZ=== State
 #'@description Reads in the app state from yaml files.
 #'@param state ===ZZ=== state object
 #'@return list with the following elements
