@@ -8,6 +8,7 @@
 build_custom.R
 ^tmp$
 README.RMD
-
+CNAME
+_pkgdown_backup.yml
 ^codecov\.yml$
 ^\.github$

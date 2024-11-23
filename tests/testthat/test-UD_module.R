@@ -4,6 +4,7 @@ sess_res = suppressMessages(UD_test_mksession(session=list()))
 test_that("UD -- Fetch state ", {
   state   = sess_res$state
   expect_true(state$UD$isgood)
+  expect_true(sess_res$isgood)
 })
 
 test_that("UD -- Source file types", {

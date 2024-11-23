@@ -1064,14 +1064,14 @@ code}
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
-#'@return The ASM portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}} 
+#'@return The ASM portion of the `all_sess_res` returned from \code{\link{FM_app_preload}} 
 #'@examples
 #' sess_res = ASM_test_mksession()
-#'@seealso \code{\link{ASM_set_app_state}}
+#'@seealso \code{\link{FM_app_preload}}
 ASM_test_mksession = function(session=list()){
 
   sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"))
-  res = ASM_set_app_state(session=list(), sources=sources)
+  res = FM_app_preload(session=session, sources=sources)
   res = res[["all_sess_res"]][["ASM"]]
 
 res}

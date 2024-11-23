@@ -5,4 +5,5 @@ test_that("DW -- Fetch state", {
   # Test data:
   state = sess_res$state
   expect_true(state$DW$isgood)
+  expect_true(sess_res$isgood)
 })

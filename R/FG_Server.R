@@ -2963,7 +2963,7 @@ FG_test_mksession = function(session=list()){
               system.file(package="formods", "preload", "UD_preload.yaml"),
               system.file(package="formods", "preload", "DW_preload.yaml"),
               system.file(package="formods", "preload", "FG_preload_minimal.yaml"))
-  res = FM_app_preload(session=list(), sources=sources)
+  res = FM_app_preload(session=session, sources=sources)
   res = res[["all_sess_res"]][["FG"]]
 
 res}

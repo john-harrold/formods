@@ -850,7 +850,7 @@ UD_test_mksession = function(session=list()){
 
   sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
               system.file(package="formods", "preload", "UD_preload.yaml"))
-  res = FM_app_preload(session=list(), sources=sources)
+  res = FM_app_preload(session=session, sources=sources)
   res = res[["all_sess_res"]][["UD"]]
 
 res}

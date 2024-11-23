@@ -1421,17 +1421,43 @@ res}
   err_msg   = c()
   yaml_list = list()
 
-  yaml_list[[ state[["id"]] ]] = list(
+  ylist = list(
       fm_yaml  = file.path("config", basename(state[["FM_yaml_file"]])),
       mod_yaml = file.path("config", basename(state[["MOD_yaml_file"]]))
   )
 
+  # Creating the yaml list with the module ID at the top level
+  yaml_list = list()
+  yaml_list[[ state[["id"]] ]]  = ylist
+      
+  ele_idx = 1
+  # Walking through each element:
+  for(element_id in names(state[["===ZZ==="]][["elements"]])){
+    tmp_source_ele = state[["===ZZ==="]][["elements"]][[element_id]]
+  
+    FM_le(state, paste0("saving element (", tmp_source_ele[["idx"]], ") ", tmp_source_ele[["ui"]][["element_name"]]))
+
+    tmp_element = list(
+      idx               = tmp_source_ele[["idx"]],
+      name              = tmp_source_ele[["ui"]][["element_name"]],
+      components  = list())
+
+    # Add element and component details here:
+
+    # Appending element
+    ylist[["elements"]][[ele_idx]] = list(element = tmp_element)
+    ele_idx = ele_idx + 1
+  }
+
+  formods::FM_le(state,paste0("mk_preload isgood: ",isgood))
+
+  yaml_list = list()
+  yaml_list[[ state[["id"]] ]]  = ylist
+  
   if(!isgood && !is.null(err_msg)){
     formods::FM_le(state,err_msg,entry_type="danger")
     msgs = c(msgs, err_msg)
   }
-  
-  formods::FM_le(state,paste0("mk_preload isgood: ",isgood))
 
   res = list(
     isgood    = isgood,

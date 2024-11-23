@@ -24,6 +24,6 @@ analysis.
 }
 \examples{
 sources=system.file(package="formods", "preload", "UD.yaml")
-sess_res = ASM_set_app_state(session=list(), sources=sources)
-mkp_res = ASM_mk_app_preload(sess_res$session)
+sess_res = FM_app_preload(session=list(), sources=sources)
+mkp_res = FM_mk_app_preload(sess_res$session)
 }

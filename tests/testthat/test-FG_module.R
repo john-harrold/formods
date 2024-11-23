@@ -5,6 +5,7 @@ test_that("FG -- Fetch state", {
   # Test data:
   state = sess_res$state
   expect_true(state$FG$isgood)
+  expect_true(sess_res$isgood)
 })
 
 test_that("FG -- Forcing builds of figures", {
