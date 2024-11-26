@@ -1053,6 +1053,7 @@ NULL}
 #'   \item{uiele_packages:} UI element for installed packages to be used in shiny apps.
 #'   \item{uiele_options:}  UI element for current options.
 #'   \item{uiele_modules: } UI element for loaded formods modules to be used in shiny apps.
+#'   \item{modules: }  List with formods module IDs used in the app as the element names. Each contains details about that module.
 #'   \item{msgs:}  System information as text to be used in a report/terminal.
 #'   \item{si_packages} Dataframe with currently used packages.
 #'   \item{si_options} Dataframe with current options
@@ -1068,6 +1069,7 @@ FM_fetch_app_info <- function(session){
   uiele           = NULL
   uiele_packages  = NULL
   uiele_modules   = NULL
+  modules         = list()
   si_packages     = NULL
 
   # The devtools package is needed for some information we want to find out if
@@ -1135,6 +1137,13 @@ FM_fetch_app_info <- function(session){
         uiele_modules   = tagList(uiele_modules,tags$ul(tags$li(tmp_msg)))
         msgs    = c(msgs, tmp_msg)
       }
+
+      modules[[ state[["id"]] ]] = list(
+        MOD_TYPE      = state[["MOD_TYPE"]],
+        deps          = deps,
+        FM_yaml_file  = state[["FM_yaml_file"]],
+        MOD_yaml_file = state[["MOD_yaml_file"]]
+      )
     }
   }
 
@@ -1189,6 +1198,7 @@ FM_fetch_app_info <- function(session){
   res = list(uiele          = uiele,
              uiele_packages = uiele_packages,
              uiele_modules  = uiele_modules ,
+             modules        = modules,
              uiele_options  = uiele_options ,
              msgs           = msgs,
              si_options     = si_options,
@@ -1991,7 +2001,7 @@ state}
 #' FM_resume_screen(state, session)
 FM_pause_screen = function(state, session, message){
 
-  if((any(c("ShinySession", "session_proxy") %in% class(session)))){
+  if(formods::is_shiny(session)){
     if(system.file(package = "shinybusy") !=""){
      shinybusy::show_modal_spinner(text=message, session=session)
     }
@@ -2101,7 +2111,7 @@ res}
 #' FM_resume_screen(state, session)
 FM_resume_screen=function(state, session){
 
-  if((any(c("ShinySession", "session_proxy") %in% class(session)))){
+  if(formods::is_shiny(session)){
     if(system.file(package = "shinybusy") !=""){
       shinybusy::remove_modal_spinner(session = session)
     }
@@ -2391,6 +2401,22 @@ is_installed = function(pkgname){
   res = TRUE
   if(!requireNamespace(pkgname, quietly=TRUE)){
     res = FALSE
+  }
+
+res}
+
+#'@export
+#'@title Determine if Object is Shiny Session Object
+#'@description Determines if the specified object is a shiny session object.
+#'@param session Session object  
+#'@return Logical indicating if the object is a shiny session object or not
+#'@examples
+#' is_shiny(session = list())
+is_shiny     = function(session=list()){
+
+  res = FALSE
+  if(any(c("ShinySession", "session_proxy") %in% class(session))){
+    res = TRUE  
   }
 
 res}
@@ -2840,7 +2866,7 @@ FM_app_preload = function(session, sources=NULL, react_state = list(), quickload
 
         # If we're running at the scripting level we need to pull 
         # the session information and react_state out of result
-        if(!("ShinySession" %in% class(session))){
+        if(!formods::is_shiny(session)){
           session     = sess_res[["session"]]
           react_state = sess_res[["react_state"]]
         }
@@ -2909,7 +2935,7 @@ FM_mk_app_preload = function(session){
 
     # If that module has a mk_preload function then we try build it:
     if(exists(MOD_FUNC, mode="function")){
-      FM_message(line=paste0("Loading module: ", mod_ID))
+      FM_message(line=paste0("Saving module: ", mod_ID))
       FUNC_CALL = paste0("mk_res = ", MOD_FUNC,"(state = tmp_state)")
       eval(parse(text=FUNC_CALL))
       if(mk_res[["isgood"]]){
@@ -2939,3 +2965,20 @@ FM_mk_app_preload = function(session){
            yaml_list    = yaml_list,
            session      = session)
 res}
+
+#'@export
+#'@title Resets the App State
+#'@description Removes formods data from the app.
+#'@param session Shiny session variable.
+#'@return session variable with app data removed. 
+#'@examples
+#' # We need a Shiny session object to use this function:
+#' sess_res = UD_test_mksession()
+#' session = sess_res$session
+#' app_state = FM_reset_app(session)
+#' app_state
+FM_reset_app <- function(session){
+
+  session$userData[["FM"]] = NULL
+
+session}

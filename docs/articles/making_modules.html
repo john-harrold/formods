@@ -802,7 +802,6 @@ FM:
     color_red:    "#FF475E"
     color_blue:   "#0088FF"
     color_purple: "#bd2cf4"
-
   data_meta:
     # This controls the overall format of headers and the select subtext for
     # data frames with the following placeholders surrouned by ===:
@@ -833,9 +832,18 @@ FM:
       other:
         color:    "black"
         label:    "other"
+  workflows:
+    example: 
+      group:      "Examples"
+      desc:       "Example Workflow"
+      # Set to true if the workflow requires a dataset
+      require_ds: TRUE
+      # this can contain an aboslute path as a string or R evaluable code
+      preload:    "file.path('.', 'example.yaml')"
   labels:
     # JMH remove this once the datset stuff has been moved over
-    default_ds:   "Original data set"
+    # default_ds:   " Original data set"
+    ui_label:      "put labels here"
   user_files:
     use_tmpdir:     TRUE
   logging:

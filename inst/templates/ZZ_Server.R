@@ -1211,7 +1211,7 @@ state}
 #'object to account for differences that may apply between servers.
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
 #'@param session Shiny session variable
-#'@return State object with updates made to the state object
+#'@return List contianing the ===ZZ=== state object and shiny session object
 #'@examples
 #' sess_res = ===ZZ===_test_mksession()
 #' session = sess_res$session
@@ -1223,7 +1223,11 @@ state}
   # have any you can leave this function as a passthrough for the state object
   # or just delete it.
 
-state}
+
+  res = 
+  list(state   = state,
+       session = session)
+res}
 
 
 #'@export
@@ -1386,7 +1390,7 @@ state}
   
   formods::FM_le(state,paste0("module isgood: ",isgood))
   
-  if(("ShinySession" %in% class(session))){
+  if(formods::is_shiny(session)){
     FM_set_mod_state(session, mod_ID, state)
   } else {
     session = FM_set_mod_state(session, mod_ID, state)

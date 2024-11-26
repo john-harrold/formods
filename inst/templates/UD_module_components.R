@@ -34,9 +34,13 @@ ui <- dashboardPage(
          box(title="Load Results",
            "ui_ud_text_load_result",
            htmlOutput(NS("UD", "ui_ud_text_load_result"))),
+         box(title="Workflows",
+           "ui_ud_workflows",
+           htmlOutput(NS("UD", "ui_ud_workflows")))),
+       fluidRow(
          box(title="Data Preview",
            "ui_ud_data_preview",
-           htmlOutput(NS("UD", "ui_ud_data_preview")))),
+           htmlOutput(NS("UD", "ui_ud_data_preview")), width=12)),
        fluidRow(
          box(title="Generated Code",
            "ui_ud_ace_code",

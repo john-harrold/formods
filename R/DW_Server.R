@@ -3337,7 +3337,7 @@ DW_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
   formods::FM_le(state,paste0("module isgood: ",isgood))
 
   # Saving the state
-  if(("ShinySession" %in% class(session))){
+  if(is_shiny(session)){
     FM_set_mod_state(session, mod_ID, state)
   } else {
     session = FM_set_mod_state(session, mod_ID, state)

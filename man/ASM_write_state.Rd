@@ -2,7 +2,7 @@
 % Please edit documentation in R/ASM_Server.R
 \name{ASM_write_state}
 \alias{ASM_write_state}
-\title{Write State to File for Saving}
+\title{Write State to File for Saving (depreciated)}
 \usage{
 ASM_write_state(state, session, file, mod_ids)
 }

@@ -115,6 +115,7 @@ UD_Server <- function(id,
       # Reacting to data file changes
       input$input_data_file
       input$input_select_sheet
+      input$btn_run_wf
       state = UD_fetch_state(id            = id,
                              id_ASM        = id_ASM,
                              input         = input,
@@ -136,6 +137,7 @@ UD_Server <- function(id,
       # Reacting to data file changes
       input$input_data_file
       input$input_select_sheet
+      input$btn_run_wf
       state = UD_fetch_state(id            = id,
                              id_ASM        = id_ASM,
                              input         = input,
@@ -147,6 +149,106 @@ UD_Server <- function(id,
         uiele = tagList(tags$b("Dataset Preveiw"),
                         rhandsontable::rHandsontableOutput(NS(id, "hot_data_preview")))
       } else {uiele = NULL}
+      uiele})
+    #------------------------------------
+    # Workflow form elements
+    output$ui_ud_workflows     =  renderUI({
+      state = UD_fetch_state(id            = id,
+                             id_ASM        = id_ASM,
+                             input         = input,
+                             session       = session,
+                             FM_yaml_file  = FM_yaml_file,
+                             MOD_yaml_file = MOD_yaml_file)
+      wf = state[["yaml"]][["FM"]][["workflows"]]
+
+      uiele    = NULL
+      WF_FOUND = FALSE
+
+
+      # place holders for selection elements
+      groups          = c() # List of all groups found in the workflows
+      values          = c() # Workflow names from formods yaml file
+      desc            = c() # Verbose description of workflow names show to the user
+      choices_simple  = c()
+      choices_group   = c()
+
+      if(length(names(wf)) > 0){
+        for(wfn in names(wf)){
+          # Checking for the existence of the preload file. We only 
+          # show preload options that actually exist
+          plf= render_str(wf[[wfn]][["preload"]])
+          if(file.exists(plf)){
+            # We found at least one workflow
+            WF_FOUND = TRUE
+
+            # These are the relevant components needed to construct the UI
+            # elements:
+            groups = c(groups, wf[[wfn]][["group"]])
+            #values = c(values, wfn)
+            #desc   = c(desc  , wf[[wfn]][["desc"]])
+            choices_simple = c(choices_simple, eval(parse(text=paste0('c("',wf[[wfn]][["desc"]], '"=wfn)'))))
+            choices_group[[  wf[[wfn]][["group"]] ]] = c(choices_group[[  wf[[wfn]][["group"]] ]], eval(parse(text=paste0('c("',wf[[wfn]][["desc"]], '"=wfn)'))))
+          } else {
+            FM_le(state, paste0("preload file not found: ", plf), entry_type="warning")
+          }
+        }
+      }
+
+      # If no workflow elements are found we return a no workflows found
+      # message
+      if(WF_FOUND){
+
+        liveSearch = FALSE
+        if(state[["MC"]][["formatting"]][["workflow"]][["liveSearch"]]){
+          if(length(choices_simple) >state[["MC"]][["formatting"]][["workflow"]][["size"]]){
+            liveSearch = TRUE
+          }
+        }
+
+        po = shinyWidgets::pickerOptions( 
+            liveSearch =liveSearch,
+            size       =state[["MC"]][["formatting"]][["workflow"]][["size"]])
+
+        if(length(groups) <2){
+          choices = choices_simple 
+        } else {
+          choices = choices_group
+        }
+
+        uiele_btn = 
+          shinyWidgets::actionBttn(
+                  inputId = NS(id, "btn_run_wf"),
+                  label   = state[["MC"]][["labels"]][["run_wf"]],
+                  style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                  size    = state[["MC"]][["formatting"]][["btn_run_wf"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["btn_run_wf"]][["block"]],
+                  color   = "primary",
+                  icon    = icon("plus-sign", lib="glyphicon"))
+        uiele_btn = 
+          div(style=paste0("width:",state[["MC"]][["formatting"]][["btn_run_wf"]][["width"]]),uiele_btn)
+
+        uiele_select = 
+            pickerInput(
+               inputId = NS(id, "workflow"),
+               label = state[["MC"]][["labels"]][["workflow"]],
+               choices = choices,
+               options = po,
+               width      = state[["MC"]][["formatting"]][["workflow"]][["width"]]
+              )
+        uiele_select = 
+          div(style=paste0("width:",state[["MC"]][["formatting"]][["workflow"]][["width"]]),uiele_select)
+
+        uiele_select = FM_add_ui_tooltip(state, uiele_select, 
+                 tooltip     = state[["MC"]][["formatting"]][["btn_run_wf"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["btn_run_wf"]][["tooltip_position"]])
+
+        uiele = 
+          tagList(uiele_select, uiele_btn)
+      } else {
+        uiele = state[["MC"]][["errors"]][["no_workflows_found"]]
+      }
+
+
       uiele})
 
     #------------------------------------
@@ -279,6 +381,24 @@ UD_Server <- function(id,
       }, priority=100)
     }
 
+    #------------------------------------
+    toNotify <- reactive({
+      list(input$btn_run_wf)
+    })
+    observeEvent(toNotify(), {
+      state = UD_fetch_state(id            = id,
+                             id_ASM        = id_ASM,
+                             input         = input,
+                             session       = session,
+                             FM_yaml_file  = FM_yaml_file,
+                             MOD_yaml_file = MOD_yaml_file)
+
+      # Triggering optional notifications
+      notify_res =
+      FM_notify(state = state,
+       session     = session)
+    })
+
   })
 }
 
@@ -346,6 +466,75 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
     # General state information
     state = UD_init_state(FM_yaml_file, MOD_yaml_file, id, session)
   }
+
+  #---------------------------------------------
+  # Here we update the state based on user input
+  for(ui_name in state[["UD"]][["ui_ids"]]){
+    if(!is.null(isolate(input[[ui_name]]))){
+       state[["UD"]][["ui"]][[ui_name]] = isolate(input[[ui_name]])
+     } else {
+       if(ui_name %in% names(state[["UD"]][["button_counters"]])){
+         state[["UD"]][["ui"]][[ui_name]] = 0
+       } else {
+         state[["UD"]][["ui"]][[ui_name]] = ""
+       }
+
+       # initializing the previous ui values as well:
+       if(is.null(state[["UD"]][["ui_old"]][[ui_name]])){
+         state[["UD"]][["ui_old"]][[ui_name]] = state[["UD"]][["ui"]][[ui_name]]
+       }
+     }
+   }
+
+  #---------------------------------------------
+  # Now we sync the ui in the state with the button click
+  # tracking or current element. This ensures that every
+  # time the state is fetched all of the components of
+  # the current element are in sync.
+
+  # This is a list of ui changes that were detected and
+  # can be used to trigger different actions below:
+  changed_uis = c()
+
+
+  for(ui_name in state[["UD"]][["ui_ids"]]){
+    if(!fetch_hold(state, ui_name)){
+      if(ui_name %in% names(state[["UD"]][["button_counters"]])){
+        # Button changes are compared to the button click tracking values
+        change_detected =
+          has_updated(ui_val   = state[["UD"]][["ui"]][[ui_name]],
+                      old_val  = state[["UD"]][["button_counters"]][[ui_name]],
+                      init_val = c("", "0"))
+
+        if(change_detected){
+          formods::FM_le(state, paste0("button click: ", ui_name, " = ", state[["UD"]][["ui"]][[ui_name]]))
+
+          # Saving the change:
+          state[["UD"]][["button_counters"]][[ui_name]] =
+            state[["UD"]][["ui"]][[ui_name]]
+
+          # logging the changed ui name:
+          changed_uis = c(changed_uis, ui_name)
+        }
+      }else{
+        change_detected =
+          has_updated(ui_val   = state[["UD"]][["ui"]][[ui_name]],
+                      old_val  = state[["UD"]][["ui_old"]][[ui_name]],
+                      init_val = c(""))
+        if(change_detected){
+          formods::FM_le(state, paste0("setting: ", ui_name, " = ", paste(state[["UD"]][["ui"]][[ui_name]], collapse=", ")))
+
+          # Saving the change:
+          state[["UD"]][["ui_old"]][[ui_name]] = state[["UD"]][["ui"]][[ui_name]]
+
+          # logging the changed ui name:
+          changed_uis = c(changed_uis, ui_name)
+        }
+      }
+    }
+  }
+
+
 
   clean_ds = state[["MC"]][["clean_data"]][["default"]]
   if(!is.null(isolate(input$switch_clean))){
@@ -439,6 +628,52 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
   # Saving the state
   FM_set_mod_state(session, id, state)
 
+  if("btn_run_wf" %in% changed_uis){
+    wfn = state[["UD"]][["ui"]][["workflow"]]
+    wfl = state[["yaml"]][["FM"]][["workflows"]][[wfn]]
+
+    if(wfl[["require_ds"]] & !state[["UD"]][["isgood"]]){
+      # To run this workflow a dataset is required but one has not been
+      # uploaded. 
+      state[["UD"]][["load_msg"]]        = state[["MC"]][["errors"]][["no_ds_for_workflow"]]
+
+      state = FM_set_notification(state,
+        notify_text =  state[["MC"]][["errors"]][["no_ds_for_workflow_short"]],
+        notify_id   = "workflow_not_run",
+        type        = "failure")
+
+      FM_set_mod_state(session, id, state)
+    } else {
+      FM_le(state, paste0("Running workflow (", wfn, "): ", wfl[["desc"]]))
+      # Preload file
+      plf = render_str(wfl[["preload"]])
+
+      # Preload list:
+      pll = yaml::read_yaml(plf)
+
+      # If require_ds is true we need to append (or replace existing) UD
+      # portion of the preload file:
+      if(wfl[["require_ds"]]){
+        res_mpl = UD_mk_preload(state=state)
+
+        # Removing any previous references to the UD module:
+        pll[[ state[["id"]] ]] = NULL
+
+        # Appending the current state:
+        pll = c(res_mpl[["yaml_list"]], pll)
+
+        # Writing the new workflow yaml list
+        browser()
+
+        # Preloading the app
+      }
+
+
+    }
+
+
+  }
+
   # Returning the state
   state}
 
@@ -469,15 +704,23 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
 UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 
 
+  button_counters = c("btn_run_wf")
+  ui_ids = c("workflow",
+             button_counters)
+
+
   state = FM_init_state(
     FM_yaml_file    = FM_yaml_file,
     MOD_yaml_file   = MOD_yaml_file,
     id              = id,
     MT              = "UD",
-    button_counters = NULL,
-    ui_ids          = NULL,
-    ui_hold         = NULL,
+    button_counters = button_counters,
+    ui_ids          = ui_ids,
+    ui_hold         = ui_ids, 
     session         = session)
+
+  state[["UD"]][["ui_ids"]] = ui_ids
+
 
   # Assigning the default clean option
   clean_ds =   state[["MC"]][["clean_data"]][["default"]]
@@ -592,19 +835,18 @@ UD_attach_ds = function(
     isgood = FALSE
   }
 
-  state[["UD"]] =
-    list(isgood          = isgood         ,
-         clean           = clean          ,
-         load_msg        = load_msg       ,
-         data_file_local = data_file_local,
-         data_file_ext   = data_file_ext  ,
-         data_file       = data_file      ,
-         sheet           = sheet          ,
-         sheets          = sheets         ,
-         code            = code           ,
-         object_name     = object_name    ,
-         checksum        = checksum       ,
-         contents        = contents      )
+  state[["UD"]][["isgood"]]          = isgood          
+  state[["UD"]][["clean"]]           = clean           
+  state[["UD"]][["load_msg"]]        = load_msg        
+  state[["UD"]][["data_file_local"]] = data_file_local 
+  state[["UD"]][["data_file_ext"]]   = data_file_ext   
+  state[["UD"]][["data_file"]]       = data_file       
+  state[["UD"]][["sheet"]]           = sheet           
+  state[["UD"]][["sheets"]]          = sheets          
+  state[["UD"]][["code"]]            = code            
+  state[["UD"]][["object_name"]]     = object_name     
+  state[["UD"]][["checksum"]]        = checksum        
+  state[["UD"]][["contents"]]        = contents        
 
   state}
 
@@ -920,7 +1162,7 @@ UD_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
   }
  
   # Saving the state
-  if(("ShinySession" %in% class(session))){
+  if(formods::is_shiny(session)){
     FM_set_mod_state(session, mod_ID, state)
   } else {
     session = FM_set_mod_state(session, mod_ID, state)

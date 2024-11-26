@@ -12,10 +12,12 @@
 <url><loc>https://formods.ubiquity.tools/reference/ASM_fetch_dlfn.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_fetch_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_init_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_load_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_mk_preload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_onload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_preload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_read_app_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/ASM_save_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_test_mksession.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/ASM_write_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/DW_Server.html</loc></url>
@@ -72,6 +74,7 @@
 <url><loc>https://formods.ubiquity.tools/reference/FM_pause_screen.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_pretty_sort.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_proc_include.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_reset_app.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_resume_screen.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_set_app_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_set_mod_state.html</loc></url>
@@ -101,6 +104,7 @@
 <url><loc>https://formods.ubiquity.tools/reference/icon_link.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/index.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/is_installed.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/is_shiny.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/linspace.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/new_module_template.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/remove_hold.html</loc></url>

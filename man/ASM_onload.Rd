@@ -12,7 +12,7 @@ ASM_onload(state, session)
 \item{session}{Shiny session variable}
 }
 \value{
-ASM state object
+List contianing the ASM state objects and shiny session object
 }
 \description{
 Creates a list of the initialized module state
