@@ -35,8 +35,12 @@ session = sess_res$session
 state   = sess_res$state
 
 ssf  = tempfile(fileext=".zip")
+
+ss_res = 
 ASM_save_state(state, session,
-               file    = ssf)
+               file_path = ssf)
+
+ls_res = 
 ASM_load_state(state, session,
-               file    = ssf)
+               file_path = ssf)
 }

@@ -1344,23 +1344,24 @@ FG_Server <- function(id,
 #'    \item{DSV:}              Available data sets from the UD and DW modules.
 #'    \item{figs:}             List of figures. Each view has the following structure:
 #'      \itemize{
-#'        \item{add_isgood:    JMH}
+#'        \item{add_isgood:     Boolean indicating the success/failure of adding the last figure elemnt.}
 #'        \item{checksum:       Checksum of the figure used to detect changes in the figure.}
 #'        \item{code:           Code to generate figure from start to finish.}
 #'        \item{code_fg_only:   Code to just generate the figure.}
 #'        \item{code_previous:  Code to load and/or wrangle the dataset.}
 #'        \item{elements_table: Table of figure generation elements.}
-#'        \item{fg_object_name: JMH}
+#'        \item{fg_object_name: The object name that contains the figure in the generated code.}
 #'        \item{fig_dsview:     Name of the dataset view for the current figure (also the R object name of the dataset view).}
-#'        \item{fobj:           JMH}
+#'        \item{fobj:           The ggplot object of the figure.}
 #'        \item{id:             Character id (\code{fig_idx})}
 #'        \item{idx:            Numeric id (\code{1})}
 #'        \item{isgood:}        Boolean status of the figure. FALSE if evaluation/build fails.
 #'        \item{key:            Figure key acts as a title/caption (user editable)}
-#'        \item{msgs:           JMH}
+#'        \item{msgs:           Any messages generated when building the
+#'        figure.}
 #'        \item{notes:          Figure notes  (user editable)}
-#'        \item{num_pages:      JMH}
-#'        \item{page:           JMH}
+#'        \item{num_pages:      Number of pages in the figure.} 
+#'        \item{page:           The currently selected figure page.}
 #'      }
 #'  }
 #'  \item{MOD_TYPE:} Character data containing the type of module \code{"DW"}
@@ -1535,7 +1536,6 @@ FG_fetch_state = function(id,
       (!fetch_hold(state, "select_current_fig"))){
 
     # Changing the current view to the one selected in the UI
-    # JMH create FG_mkactive_fig here to set active
     state[["FG"]][["current_fig"]]  =  state[["FG"]][["ui"]][["select_current_fig"]]
   }
 

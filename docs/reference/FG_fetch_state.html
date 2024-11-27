@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">formods</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -113,23 +113,24 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <li><p>current_fig:      fig_id of the currently figure.</p></li>
 <li><p>fig_cntr:         Counter for figures, incremented each time a new figure is created.</p></li>
 <li><p>DSV:              Available data sets from the UD and DW modules.</p></li>
-<li><p>figs:             List of figures. Each view has the following structure:</p><ul><li><p>add_isgood:    JMH</p></li>
+<li><p>figs:             List of figures. Each view has the following structure:</p><ul><li><p>add_isgood:     Boolean indicating the success/failure of adding the last figure elemnt.</p></li>
 <li><p>checksum:       Checksum of the figure used to detect changes in the figure.</p></li>
 <li><p>code:           Code to generate figure from start to finish.</p></li>
 <li><p>code_fg_only:   Code to just generate the figure.</p></li>
 <li><p>code_previous:  Code to load and/or wrangle the dataset.</p></li>
 <li><p>elements_table: Table of figure generation elements.</p></li>
-<li><p>fg_object_name: JMH</p></li>
+<li><p>fg_object_name: The object name that contains the figure in the generated code.</p></li>
 <li><p>fig_dsview:     Name of the dataset view for the current figure (also the R object name of the dataset view).</p></li>
-<li><p>fobj:           JMH</p></li>
+<li><p>fobj:           The ggplot object of the figure.</p></li>
 <li><p>id:             Character id (<code>fig_idx</code>)</p></li>
 <li><p>idx:            Numeric id (<code>1</code>)</p></li>
 <li><p>isgood:        Boolean status of the figure. FALSE if evaluation/build fails.</p></li>
 <li><p>key:            Figure key acts as a title/caption (user editable)</p></li>
-<li><p>msgs:           JMH</p></li>
+<li><p>msgs:           Any messages generated when building the
+       figure.</p></li>
 <li><p>notes:          Figure notes  (user editable)</p></li>
-<li><p>num_pages:      JMH</p></li>
-<li><p>page:           JMH</p></li>
+<li><p>num_pages:      Number of pages in the figure.</p></li>
+<li><p>page:           The currently selected figure page.</p></li>
 </ul></li>
 </ul></li>
 <li><p>MOD_TYPE: Character data containing the type of module <code>"DW"</code></p></li>
@@ -1620,10 +1621,10 @@ structure of the list is defined below:</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD" "DW"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/Rtmp4qE77G/temp_libpathcc9e68c735e0/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpGDxdg2/temp_libpath1055384218cb/formods/templates/formods.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/Rtmp4qE77G/temp_libpathcc9e68c735e0/formods/templates/FG.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpGDxdg2/temp_libpath1055384218cb/formods/templates/FG.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $shiny_token</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "non_shiny"</span>

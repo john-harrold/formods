@@ -148,12 +148,19 @@ ASM_Server <- function(id,
 
         # Runing in a tryCatch enviornment to trap errors otherwise
         # they are lost. If it fails we log them.
-        tcres = FM_tc("ws_res = ASM_write_state(state, session, file, mod_ids)",
-                      list(state   = state,
-                           session = session,
-                           file    = file,
-                           mod_ids = mod_ids),
-                      c("ws_res"))
+     #  tcres = FM_tc("ws_res = ASM_write_state(state, session, file, mod_ids)",
+     #                list(state   = state,
+     #                     session = session,
+     #                     file    = file,
+     #                     mod_ids = mod_ids),
+     #                c("ws_res"))
+
+        tcres = FM_tc(cmd = "ws_res = ASM_save_state(state=state, session=session, file_path=file, pll=NULL)",
+                      tc_env = 
+                      list(state     = state,
+                           session   = session,
+                           file = file),
+                      capture = c("ws_res"))
 
         if(!tcres$isgood){
           FM_le(state, "Failed to write state")
@@ -403,35 +410,6 @@ ASM_Server <- function(id,
         }
       }
       uiele})
- # JMH delete?
- #  # Generated data reading code
- #  observe({
- #    # Reacting to file changes
- #    input$input_load_state
- #    input$input_select_sheet
- #    state = ASM_fetch_state(id           = id,
- #                            input        = input,
- #                            session      = session,
- #                            FM_yaml_file = FM_yaml_file,
- #                            MOD_yaml_file = MOD_yaml_file)
- #
- #    if(is.null(state[["ASM"]][["code"]])){
- #      uiele = "# code"
- #    } else {
- #      uiele = state[["ASM"]][["code"]]
- #    }
- #
- #
- #    shinyAce::updateAceEditor(
- #      session         = session,
- #      editorId        = "ui_asm_ace_code",
- #      theme           = state[["yaml"]][["FM"]][["code"]][["theme"]],
- #      showLineNumbers = state[["yaml"]][["FM"]][["code"]][["showLineNumbers"]],
- #      readOnly        = state[["MC"]][["code"]][["readOnly"]],
- #      mode            = state[["MC"]][["code"]][["mode"]],
- #      value           = uiele)
- #
- #  })
     #------------------------------------
     output$ui_asm_sys_modules  = renderUI({
       state = ASM_fetch_state(id           = id,
@@ -637,120 +615,31 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
            ") for saved state. Only .zip files allowed."))
     }
 
-
     if(ls_isgood){
-      FM_pause_screen(state   = state,
-                      message = state[["MC"]][["labels"]][["busy"]][["loading_state"]],
-                      session = session)
-
-
-      test_checksum = digest::digest(file_path, algo=c("md5"))
-
       # This detects if the temporary file has changed. This is
       # how we tell if a file has been uploaded
+      test_checksum = digest::digest(file_path, algo=c("md5"))
+
       if(test_checksum != state[["ASM"]][["checksum"]]){
-        FM_le(state, paste0("State upload file: ", file_name))
-        FM_le(state, "  Unpacking saved state")
-        # Making a diretory to unpack the files into:
-        unpack_dir = tempfile(pattern="FM")
-        if(dir.exists(unpack_dir)){
-          unlink(unpack_dir, recursive = TRUE, force=TRUE)
-        }
-        dir.create(unpack_dir)
-        zip::unzip(file_path, exdir=unpack_dir)
+        FM_pause_screen(state   = state,
+                        message = state[["MC"]][["labels"]][["busy"]][["loading_state"]],
+                        session = session)
+        ls_res = 
+          ASM_load_state(state     = state, 
+                         session   = session,
+                         file_path = file_path)
 
-        # checking for the state rds file
-        rds_file = file.path(unpack_dir, "fmas.rds")
-        if(file.exists(rds_file)){
+        # Pulling the state out of the load results:
+        state = ls_res[["state"]]
 
-          # Reading in the app state
-          app_state = readRDS(rds_file)
-
-          # Removing the rds_file so it wont be in the
-          # new app state
-          unlink(rds_file)
-
-          user_dir = FM_fetch_user_files_path(state)
-
-          # These are the files that are not replaced. Mainly the log file:
-          excludes = c(state[["yaml"]][["FM"]][["logging"]][["log_file"]])
-
-          # These are the files to delete:
-          fdel = dir(user_dir)
-          fdel = fdel[!(fdel %in% excludes)]
-
-          # This will just delete what is left in fdel
-          for(fname in fdel){
-            unlink(file.path(user_dir, fname), recursive = TRUE, force=TRUE)
-          }
-
-          FM_le(state, "  Replacing app files")
-          # These are the files from the upload that we want to keep
-          fkeep = dir(unpack_dir)
-          fkeep = fkeep[!(fkeep %in% excludes)]
-          for(fname in fkeep){
-            FM_le(state, paste0("   -> ", fname))
-            file.rename(from       = file.path(unpack_dir, fname),
-                        to         = file.path(user_dir,   fname))
-          }
-
-          # The shiny_token changes from session to session. When we load the
-          # old session we need to replace the token from the previous session
-          # with the token from the current session which should be stored in
-          # the state object.
-          FM_le(state, "  Token update")
-          for(asele in names(app_state)){
-            if("shiny_token" %in% names(app_state[[asele]])){
-              app_state[[asele]][["shiny_token"]] = state[["shiny_token"]]
-            }
-          }
-
-          # Applying any onload functions that were found
-          for(asele in names(app_state)){
-            if("shiny_token" %in% names(app_state[[asele]])){
-              tmp_state = app_state[[asele]]
-
-              # Next we look to see if there is an onload function for the
-              # current module:
-              tmp_MOD_TYPE = tmp_state[["MOD_TYPE"]]
-              MOD_FUNC     = paste0(tmp_MOD_TYPE, "_onload")
-
-              if(exists(MOD_FUNC, mode="function")){
-                FM_le(state, paste0("  Processing ", MOD_FUNC, "() for module id: ", tmp_state[["id"]]))
-                # If there is we update the state and put it back in the
-                # app_state object
-                FUNC_CALL = paste0("tmp_state = ", MOD_FUNC,"(state = tmp_state, session=session)")
-                eval(parse(text=FUNC_CALL))
-                app_state[[asele]] = tmp_state
-              }
-            }
-          }
-
-          FM_le(state, "  Replacing app state/setting holds")
-          FM_fetch_user_files_path(state)
-          FM_set_app_state(session, app_state, set_holds=TRUE)
-
-        }else {
-          FM_le(state, "  fmas.rds file not found in save state")
+        if(!ls_res[["isgood"]]){
           ls_isgood = FALSE
-          msgs = c(msgs, "fmas.rds file not found in saved state")
+          msgs = c(msgs, ls_res[["msgs"]])
         }
-
-        # The last thing we do is replace the state checksum with
-        # the uploaded file checksum to prevent multiple uploads
-        # each time the state has been fetched. We do this even if
-        # the load failed because otherwise subsequenty fetch state
-        # calls will attempt to load the failed state again.
         state[["ASM"]][["checksum"]] = test_checksum
-        #---------------------------------------------
       }
-
-
       FM_resume_screen(state   = state,
                        session = session)
-
-
-
     }
 
     # Setting notifications for the user
@@ -910,145 +799,145 @@ ASM_fetch_dlfn = function(state, extension=".zip"){
   dlfn    = paste0(save_bfn, extension)
   dlfn}
 
-#'@export
-#'@title Write State to File for Saving (depreciated)
-#'@description Called from download handler and used to write a saved state
-#'value if that is null
-#'@param state ASM state from \code{ASM_fetch_state()}
-#'@param session Shiny session variable
-#'@param file File name to write zipped state.
-#'@param mod_ids Vector of module IDs and order they are needed (used for code generation).
-#'@return This function only writes the state and has no return value.
-#'@examples
-#' \donttest{
-#' # Within shiny both session and input variables will exist,
-#' # this creates examples here for testing purposes:
-#' sess_res = ASM_test_mksession()
-#' session = sess_res$session
-#' input   = sess_res$input
-#'
-#' # Configuration files
-#' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
-#' MOD_yaml_file = system.file(package = "formods", "templates", "ASM.yaml")
-#'
-#' # We need to specify the ID of the ASM module
-#' id = "ASM"
-#'
-#' state = ASM_fetch_state(id           = id,
-#'                         input        = input,
-#'                         session      = session,
-#'                         FM_yaml_file = FM_yaml_file,
-#'                         MOD_yaml_file = MOD_yaml_file)
-#'
-#' ASM_write_state(state, session,
-#'                 file    = tempfile(fileext=".zip"),
-#'                 mod_ids = c("UD"))
-#' }
-ASM_write_state = function(state, session, file, mod_ids){
-
-  if((any(c("ShinySession", "session_proxy") %in% class(session)))){
-    if(system.file(package = "shinybusy") !=""){
-      shinybusy::show_modal_spinner(text=state[["MC"]][["labels"]][["busy"]][["saving_state"]])
-    }
-  }
-
-
-  FM_le(state, paste0("writing app state to file on server: "))
-  FM_le(state, paste0("  ", file))
-
-  # User directory where uploaded files, logs, etc will be stored
-  user_dir = FM_fetch_user_files_path(state)
-
-  # Pulling out the app state
-  app_state = FM_fetch_app_state(session)
-
-  # Pulling out the reproducible app code
-  app_code = FM_fetch_app_code(session=session, state = state, mod_ids = mod_ids)
-
-  # Generating reports
-  switch_gen_rpts = state[["ASM"]][["ui"]][["switch_gen_rpts"]]
-  if(!is.logical(switch_gen_rpts)){
-    switch_gen_rpts =  FALSE
-  }
-
-  # Clearing reports from the user directory
-  rptdir = file.path(user_dir, "reports")
-  if(dir.exists(rptdir)){
-    unlink(rptdir, recursive=TRUE)
-  }
-  dir.create(rptdir)
-
-  rpttypes = c("xlsx", "pptx", "docx")
-  rptctr = 1
-
-  code_only_msg = ""
-  if(!switch_gen_rpts){
-    code_only_msg = " code only "
-    FM_le(state, "Generating reports (code only)")
-  } else {
-    FM_le(state, "Generating reports")
-  }
-
-  for(rpttype in rpttypes){
-    if(system.file(package = "shinybusy") !=""){
-      if((any(c("ShinySession", "session_proxy") %in% class(session)))){
-        shinybusy::update_modal_spinner(text=
-                paste0(state[["MC"]][["labels"]][["busy"]][[rpttype]], code_only_msg, "(",rptctr, "/", length(rpttypes),")"))
-      }
-    }
-
-    rpt_file_name = paste0("report.", rpttype)
-    grres = FM_generate_report(
-       state         = state,
-       session       = session,
-       file_dir      = rptdir ,
-       file_name     = rpt_file_name,
-       gen_code_only = !(switch_gen_rpts),
-       rpterrors     = TRUE)
-
-    # Appending the report generation code
-    if(grres[["isgood"]]){
-      app_code[["code"]] = c(app_code[["code"]], paste0("# Generating report: ", rpttype))
-      app_code[["code"]] = c(app_code[["code"]], grres[["code"]])
-    } else {
-      app_code[["code"]] = c(app_code[["code"]], paste0("# ", rpttype, " not generated"))
-      app_code[["code"]] = c(app_code[["code"]], paste0("# ", grres[["errmsg"]]))
-    }
-
-    rptctr = rptctr + 1
-  }
-
-  if(app_code[["isgood"]]){
-    # Writing app_code to the export script
-    gen_file = state[["yaml"]][["FM"]][["code"]][["gen_file"]]
-    if(file.exists(file.path(user_dir, gen_file))){
-      unlink(file.path(user_dir, gen_file))
-    }
-    write(app_code[["code"]], file=file.path(user_dir, gen_file), append=FALSE)
-  } else {
-    if(!is.null(app_code[["msgs"]])){
-      FM_le(state, app_code[["msgs"]])
-    }
-  }
-
-  # Writing the app state object to a file:
-  saveRDS(app_state, file.path(user_dir, "fmas.rds"))
-
-
-  if((any(c("ShinySession", "session_proxy") %in% class(session)))){
-    if(system.file(package = "shinybusy") !=""){
-      shinybusy::remove_modal_spinner()
-    }
-  }
-
-  # Zipping everything up into an archive
-  zip::zip(zipfile=file,
-           files=dir(user_dir),
-           recurse=TRUE,
-           root = user_dir,
-           include_directories=TRUE)
-  FM_le(state, "done writing app state")
-  NULL}
+#  #'@export
+#  #'@title Write State to File for Saving (depreciated)
+#  #'@description Called from download handler and used to write a saved state
+#  #'value if that is null
+#  #'@param state ASM state from \code{ASM_fetch_state()}
+#  #'@param session Shiny session variable
+#  #'@param file File name to write zipped state.
+#  #'@param mod_ids Vector of module IDs and order they are needed (used for code generation).
+#  #'@return This function only writes the state and has no return value.
+#  #'@examples
+#  #' \donttest{
+#  #' # Within shiny both session and input variables will exist,
+#  #' # this creates examples here for testing purposes:
+#  #' sess_res = ASM_test_mksession()
+#  #' session = sess_res$session
+#  #' input   = sess_res$input
+#  #'
+#  #' # Configuration files
+#  #' FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml")
+#  #' MOD_yaml_file = system.file(package = "formods", "templates", "ASM.yaml")
+#  #'
+#  #' # We need to specify the ID of the ASM module
+#  #' id = "ASM"
+#  #'
+#  #' state = ASM_fetch_state(id           = id,
+#  #'                         input        = input,
+#  #'                         session      = session,
+#  #'                         FM_yaml_file = FM_yaml_file,
+#  #'                         MOD_yaml_file = MOD_yaml_file)
+#  #'
+#  #' ASM_write_state(state, session,
+#  #'                 file    = tempfile(fileext=".zip"),
+#  #'                 mod_ids = c("UD"))
+#  #' }
+#  ASM_write_state = function(state, session, file, mod_ids){
+#  
+#    if((any(c("ShinySession", "session_proxy") %in% class(session)))){
+#      if(system.file(package = "shinybusy") !=""){
+#        shinybusy::show_modal_spinner(text=state[["MC"]][["labels"]][["busy"]][["saving_state"]])
+#      }
+#    }
+#  
+#  
+#    FM_le(state, paste0("writing app state to file on server: "))
+#    FM_le(state, paste0("  ", file))
+#  
+#    # User directory where uploaded files, logs, etc will be stored
+#    user_dir = FM_fetch_user_files_path(state)
+#  
+#    # Pulling out the app state
+#    app_state = FM_fetch_app_state(session)
+#  
+#    # Pulling out the reproducible app code
+#    app_code = FM_fetch_app_code(session=session, state = state, mod_ids = mod_ids)
+#  
+#    # Generating reports
+#    switch_gen_rpts = state[["ASM"]][["ui"]][["switch_gen_rpts"]]
+#    if(!is.logical(switch_gen_rpts)){
+#      switch_gen_rpts =  FALSE
+#    }
+#  
+#    # Clearing reports from the user directory
+#    rptdir = file.path(user_dir, "reports")
+#    if(dir.exists(rptdir)){
+#      unlink(rptdir, recursive=TRUE)
+#    }
+#    dir.create(rptdir)
+#  
+#    rpttypes = c("xlsx", "pptx", "docx")
+#    rptctr = 1
+#  
+#    code_only_msg = ""
+#    if(!switch_gen_rpts){
+#      code_only_msg = " code only "
+#      FM_le(state, "Generating reports (code only)")
+#    } else {
+#      FM_le(state, "Generating reports")
+#    }
+#  
+#    for(rpttype in rpttypes){
+#      if(system.file(package = "shinybusy") !=""){
+#        if((any(c("ShinySession", "session_proxy") %in% class(session)))){
+#          shinybusy::update_modal_spinner(text=
+#                  paste0(state[["MC"]][["labels"]][["busy"]][[rpttype]], code_only_msg, "(",rptctr, "/", length(rpttypes),")"))
+#        }
+#      }
+#  
+#      rpt_file_name = paste0("report.", rpttype)
+#      grres = FM_generate_report(
+#         state         = state,
+#         session       = session,
+#         file_dir      = rptdir ,
+#         file_name     = rpt_file_name,
+#         gen_code_only = !(switch_gen_rpts),
+#         rpterrors     = TRUE)
+#  
+#      # Appending the report generation code
+#      if(grres[["isgood"]]){
+#        app_code[["code"]] = c(app_code[["code"]], paste0("# Generating report: ", rpttype))
+#        app_code[["code"]] = c(app_code[["code"]], grres[["code"]])
+#      } else {
+#        app_code[["code"]] = c(app_code[["code"]], paste0("# ", rpttype, " not generated"))
+#        app_code[["code"]] = c(app_code[["code"]], paste0("# ", grres[["errmsg"]]))
+#      }
+#  
+#      rptctr = rptctr + 1
+#    }
+#  
+#    if(app_code[["isgood"]]){
+#      # Writing app_code to the export script
+#      gen_file = state[["yaml"]][["FM"]][["code"]][["gen_file"]]
+#      if(file.exists(file.path(user_dir, gen_file))){
+#        unlink(file.path(user_dir, gen_file))
+#      }
+#      write(app_code[["code"]], file=file.path(user_dir, gen_file), append=FALSE)
+#    } else {
+#      if(!is.null(app_code[["msgs"]])){
+#        FM_le(state, app_code[["msgs"]])
+#      }
+#    }
+#  
+#    # Writing the app state object to a file:
+#    saveRDS(app_state, file.path(user_dir, "fmas.rds"))
+#  
+#  
+#    if((any(c("ShinySession", "session_proxy") %in% class(session)))){
+#      if(system.file(package = "shinybusy") !=""){
+#        shinybusy::remove_modal_spinner()
+#      }
+#    }
+#  
+#    # Zipping everything up into an archive
+#    zip::zip(zipfile=file,
+#             files=dir(user_dir),
+#             recurse=TRUE,
+#             root = user_dir,
+#             include_directories=TRUE)
+#    FM_le(state, "done writing app state")
+#    NULL}
 
 #'@export
 #'@title Fetch Module Code
@@ -1259,8 +1148,10 @@ ASM_mk_preload     = function(state){
 #' state   = sess_res$state
 #'
 #' ssf  = tempfile(fileext=".zip")
+#'
+#' ss_res = 
 #' ASM_save_state(state, session,
-#'                file_path    = ssf)
+#'                file_path  = ssf)
 ASM_save_state = function(state, session, file_path, pll = NULL){
 
   isgood = TRUE
@@ -1407,18 +1298,18 @@ ASM_save_state = function(state, session, file_path, pll = NULL){
 #' state   = sess_res$state
 #'
 #' ssf  = tempfile(fileext=".zip")
+#'
+#' ss_res = 
 #' ASM_save_state(state, session,
-#'                file    = ssf)
+#'                file_path = ssf)
+#'
+#' ls_res = 
 #' ASM_load_state(state, session,
-#'                file    = ssf)
+#'                file_path = ssf)
 ASM_load_state = function(state, session, file_path){
   isgood     = TRUE
   msgs       = c()
   tmp_ol_res = NULL
-
-  FM_pause_screen(state   = state,
-                  message = state[["MC"]][["labels"]][["busy"]][["loading_state"]],
-                  session = session)
 
   unpack_dir = tempfile(pattern="FM")
   if(dir.exists(unpack_dir)){
@@ -1508,24 +1399,6 @@ ASM_load_state = function(state, session, file_path){
   }
 
   setwd(old_wd)
-  FM_resume_screen(state   = state,
-                   session = session)
-
-  # Setting notifications for the user
-  if(isgood){
-    state = FM_set_notification(
-      state       = state,
-      notify_text = state[["MC"]][["labels"]][["load_success"]],
-      notify_id   = "ASM load failed",
-      type        = "success")
-
-  } else {
-    state = FM_set_notification(
-      state       = state,
-      notify_text = state[["MC"]][["errors"]][["load_failed"]],
-      notify_id   = "ASM load failed",
-      type        = "failure")
-  }
 
   # Passing any messages back to the user
   state = FM_set_ui_msg(state, msgs)
@@ -1534,4 +1407,3 @@ ASM_load_state = function(state, session, file_path){
              session  = session,
              msgs     = msgs)
   res}
-

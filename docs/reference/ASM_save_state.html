@@ -9,7 +9,7 @@ value if that is null"><meta property="og:image" content="https://formods.ubiqui
 
     <a class="navbar-brand me-2" href="../index.html">formods</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,20 +96,16 @@ following elements:</p><ul><li><p>isgood:      Boolean indicating the exit statu
 <span class="r-in"><span><span class="va">state</span>   <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ssf</span>  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext<span class="op">=</span><span class="st">".zip"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ss_res</span> <span class="op">=</span> </span></span>
 <span class="r-in"><span><span class="fu">ASM_save_state</span><span class="op">(</span><span class="va">state</span>, <span class="va">session</span>,</span></span>
-<span class="r-in"><span>               file_path    <span class="op">=</span> <span class="va">ssf</span><span class="op">)</span></span></span>
+<span class="r-in"><span>               file_path  <span class="op">=</span> <span class="va">ssf</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Saving module: ASM</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: mk_preload isgood: TRUE</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: writing app state to file on server: </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   /var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T//RtmpiJBi7u/fileeb6168946f26.zip</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   /var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T//Rtmpg1wsFd/file1194f198d1ece.zip</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: Generating reports (code only)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: done writing app state</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $isgood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $msgs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

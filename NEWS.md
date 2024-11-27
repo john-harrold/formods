@@ -1,5 +1,8 @@
-# formods 0.1.8 (development version)
+# formods 0.2.0 (development version)
 
+* Created preload functionality to allow modules to save to and be loaded from yaml files 
+* Updated the save/load functionality for the ASM module to switch to use this functionality (this breaks the previous save methodology.)
+* Creating workflows to automate analysis initialization 
 
 
 # formods 0.1.7 
