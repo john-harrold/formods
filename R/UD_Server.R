@@ -347,6 +347,7 @@ UD_Server <- function(id,
            div(style="display:inline-block;width:100%", htmlOutput(NS(id, "ui_ud_load_data"))),
            htmlOutput(NS(id, "ui_ud_clean")),
            htmlOutput(NS(id, "ui_ud_select_sheets")),
+           htmlOutput(NS(id, "ui_ud_workflows")),
            div(style="display:inline-block;vertical-align:top;width:40px", uiele_code_button),
            htmlOutput(NS(id, "ui_ud_text_load_result")))
 
@@ -625,23 +626,19 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
   }
 
   #---------------------------------------------
-  # Saving the state
-  FM_set_mod_state(session, id, state)
+  # Running workflows
 
   if("btn_run_wf" %in% changed_uis){
+    load_msg = c()
+    rwf_isgood = TRUE
     wfn = state[["UD"]][["ui"]][["workflow"]]
     wfl = state[["yaml"]][["FM"]][["workflows"]][[wfn]]
 
     if(wfl[["require_ds"]] & !state[["UD"]][["isgood"]]){
       # To run this workflow a dataset is required but one has not been
       # uploaded. 
-      state[["UD"]][["load_msg"]]        = state[["MC"]][["errors"]][["no_ds_for_workflow"]]
-
-      state = FM_set_notification(state,
-        notify_text =  state[["MC"]][["errors"]][["no_ds_for_workflow_short"]],
-        notify_id   = "workflow_not_run",
-        type        = "failure")
-
+      load_msg  = state[["MC"]][["errors"]][["no_ds_for_workflow"]]
+      rwf_isgood = FALSE
       FM_set_mod_state(session, id, state)
     } else {
       FM_le(state, paste0("Running workflow (", wfn, "): ", wfl[["desc"]]))
@@ -661,18 +658,59 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
 
         # Appending the current state:
         pll = c(res_mpl[["yaml_list"]], pll)
-
-        # Writing the new workflow yaml list
-        browser()
-
-        # Preloading the app
       }
 
 
+      ASM_state = FM_fetch_mod_state(id=state[["MC"]][["module"]][["depends"]][["id_ASM"]], session=session)
+
+      if(is.null(ASM_state)){
+        load_msg =  state[["MC"]][["errors"]][["no_asm_state"]]
+        rwf_isgood = FALSE
+      } else {
+        # Writing the new workflow yaml list to a save file:
+        ssf  = tempfile(fileext=".zip")
+        ss_res = ASM_save_state(state=state, session=session, file_path=ssf, pll=pll)
+        if(ss_res[["isgood"]]){
+          FM_pause_screen(state   = state,
+                          message = state[["MC"]][["labels"]][["busy"]][["rwf"]],
+                          session = session)
+          ls_res = 
+          ASM_load_state(state, session,
+                         file_path = ssf)
+          FM_resume_screen(state   = state,
+                           session = session)
+
+
+          state = ls_res[["state"]]
+
+          if(!ls_res[["isgood"]]){
+            load_msg =  c(state[["MC"]][["errors"]][["ls_failed"]], ls_res[["msgs"]])
+            rwf_isgood = FALSE
+          }
+
+        } else {
+          load_msg =  c(state[["MC"]][["errors"]][["ss_failed"]], ss_res[["msgs"]])
+          rwf_isgood = FALSE
+        }
+      }
     }
 
-
+    if(rwf_isgood){
+      state = FM_set_notification(state,
+        notify_text =  state[["MC"]][["labels"]][["rwf_success"]],
+        notify_id   = "rwf_success",
+        type        = "success")
+    } else {
+      state = FM_set_notification(state,
+        notify_text =  state[["MC"]][["errors"]][["rwf_failed"]],
+        notify_id   = "rwf_failed", 
+        type        = "failure")
+    }
+    state[["UD"]][["load_msg"]] = paste0(load_msg, collapse="\n")
   }
+
+  # Saving the state
+  FM_set_mod_state(session, id, state)
 
   # Returning the state
   state}

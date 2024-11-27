@@ -20,6 +20,9 @@ MC:
     tab_code:      "Code"
     tab_preview:   "Data preview"
     switch_clean:  "Clean column names on upload"
+    rwf_success:   "Workflow complete."
+    busy:
+      rwf: "Running workflow be patient."
     # In the following you can use placeholder for the follwing:
     # ===EXT===        Uploaded file extension
     # ===FILE===       Loaded file name
@@ -31,6 +34,10 @@ MC:
     no_workflows_found: "No valid workflows have been found"
     no_ds_for_workflow: "The selected workflow requires a dataset. Please upload a dataset first then run the workflow."
     no_ds_for_workflow_short: "Workflow not run, no dataset."
+    no_asm_state: "Unable to read ASM state."
+    ss_failed: "Unable to save workflow file."
+    ls_failed: "Unable to load workflow file."
+    rwf_failed: "Workflow failed."
   tooltips:
     # Set to FALSE to disable tool tips for this module
     include: TRUE
