@@ -53,6 +53,14 @@ CSS <- "
 }
 "
 
+
+formods.yaml  = system.file(package="formods",  "templates",  "formods.yaml")
+ASM.yaml      = system.file(package="formods",  "templates",  "ASM.yaml")
+UD.yaml       = system.file(package="formods",  "templates",  "UD.yaml")
+DW.yaml       = system.file(package="formods",  "templates",  "DW.yaml")
+FG.yaml       = system.file(package="formods",  "templates",  "FG.yaml")
+
+
 # Default to not deployed
 if(!exists("deployed")){
   deployed = FALSE
@@ -146,31 +154,47 @@ server <- function(input, output, session) {
   # changes in the module state outside of the module
   react_FM = reactiveValues()
 
+  #Uncomment to populate with test data
+  # sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+  #             system.file(package="formods", "preload", "UD_preload.yaml"),
+  #             system.file(package="formods", "preload", "DW_preload.yaml"),
+  #             system.file(package="formods", "preload", "FG_preload.yaml"))
+  # res = FM_app_preload(session=session, sources=sources)
+
+  if(file.exists("preload.yaml")){
+    shinybusy::show_modal_spinner(text="Preloading analysis, be patient", session=session)
+    res = FM_app_preload(session=session, sources="preload.yaml")
+    shinybusy::remove_modal_spinner(session = session)
+  }
+
+
   # This is the list of module ids used for reproducible script generation. The
   # order here is important.
   mod_ids = c("UD", "DW", "FG")
 
-  #Populating with test data
-  #FG_test_mksession(session)
-  sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
-              system.file(package="formods", "preload", "UD_preload.yaml"),
-              system.file(package="formods", "preload", "DW_preload.yaml"),
-              system.file(package="formods", "preload", "FG_preload.yaml"))
-  res = FM_app_preload(session=session, sources=sources)
 
   # Module servers
   formods::ASM_Server(id="ASM",
-             deployed    = deployed,
-             react_state = react_FM, mod_ids = mod_ids)
+             FM_yaml_file  = formods.yaml,
+             MOD_yaml_file = ASM.yaml,
+             deployed      = deployed,
+             react_state   = react_FM,
+             mod_ids       = mod_ids)
   formods::UD_Server( id="UD", id_ASM = "ASM",
-             deployed    = deployed,
-             react_state = react_FM)
+             FM_yaml_file  = formods.yaml,
+             MOD_yaml_file = UD.yaml,
+             deployed      = deployed,
+             react_state   = react_FM)
   formods::DW_Server( id="DW", id_ASM = "ASM",id_UD = "UD",
-             deployed    = deployed,
-             react_state = react_FM)
+             FM_yaml_file  = formods.yaml,
+             MOD_yaml_file = DW.yaml,
+             deployed      = deployed,
+             react_state   = react_FM)
   formods::FG_Server( id="FG", id_ASM = "ASM",id_UD = "UD", id_DW = "DW",
-             deployed    = deployed,
-             react_state = react_FM)
+             FM_yaml_file  = formods.yaml,
+             MOD_yaml_file = FG.yaml,
+             deployed      = deployed,
+             react_state   = react_FM)
 }
 
 shinyApp(ui, server)

@@ -50,6 +50,8 @@ navbar:
          href: articles/included_modules.html
        - text: "Making Modules"
          href: articles/making_modules.html
+       - text: "Automating Workflows and Preloading Content"
+         href: articles/preload.html
   - text: "Functions"
     icon: fas fa-hat-wizard
     href: reference/index.html

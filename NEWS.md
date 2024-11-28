@@ -1,15 +1,19 @@
 # formods 0.2.0 (development version)
 
-* Created preload functionality to allow modules to save to and be loaded from yaml files 
+* Created preload functionality to allow modules to save to and be loaded from yaml files.
+* Updated the `ZZ_Server.R` to include save/load of preload yaml files.
 * Updated the save/load functionality for the ASM module to switch to use this functionality (this breaks the previous save methodology.)
-* Creating workflows to automate analysis initialization 
+* Creating workflows to automate analysis initialization .
+* Updated FM_compact.R test app to use the preload script in an unzipped saved
+  analysis.
+* Created `is_shiny()` function. 
 
 
 # formods 0.1.7 
 
 * Added word placeholders to the UI so the user can change them when generating reports/saving the app state.
 * Fixed issue with `has_updated()` where zero values from ui inputs were not taking effect because of a special case with buttons. This requires an `is_button=TRUE` argument for buttons.  
-* Updated the `ZZ_Server.R` template to use `has_updated()`
+* Updated the `ZZ_Server.R` template to use `has_updated()`.
 
 # formods 0.1.6 
 

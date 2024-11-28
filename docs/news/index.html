@@ -19,6 +19,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fas fa-chalkboard-teacher"></span> Tutorials</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/included_modules.html">Included Modules</a></li>
     <li><a class="dropdown-item" href="../articles/making_modules.html">Making Modules</a></li>
+    <li><a class="dropdown-item" href="../articles/preload.html">Automating Workflows and Preloading Content</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fas fa-hat-wizard"></span> Functions</a></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html"><span class="fa fas fa-rss"></span> News</a></li>
@@ -38,16 +39,17 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="formods-020-development-version">formods 0.2.0 (development version)<a class="anchor" aria-label="anchor" href="#formods-020-development-version"></a></h2>
-<ul><li>Created preload functionality to allow modules to save to and be loaded from yaml files</li>
+<ul><li>Created preload functionality to allow modules to save to and be loaded from yaml files.</li>
+<li>Updated the <code>ZZ_Server.R</code> to include save/load of preload yaml files.</li>
 <li>Updated the save/load functionality for the ASM module to switch to use this functionality (this breaks the previous save methodology.)</li>
-<li>Creating workflows to automate analysis initialization</li>
+<li>Creating workflows to automate analysis initialization .</li>
+<li>Updated FM_compact.R test app to use the preload script in an unzipped saved analysis.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.7" id="formods-017">formods 0.1.7<a class="anchor" aria-label="anchor" href="#formods-017"></a></h2><p class="text-muted">CRAN release: 2024-09-20</p>
 <ul><li>Added word placeholders to the UI so the user can change them when generating reports/saving the app state.</li>
 <li>Fixed issue with <code><a href="../reference/has_updated.html">has_updated()</a></code> where zero values from ui inputs were not taking effect because of a special case with buttons. This requires an <code>is_button=TRUE</code> argument for buttons.<br></li>
-<li>Updated the <code>ZZ_Server.R</code> template to use <code><a href="../reference/has_updated.html">has_updated()</a></code>
-</li>
+<li>Updated the <code>ZZ_Server.R</code> template to use <code><a href="../reference/has_updated.html">has_updated()</a></code>.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.6" id="formods-016">formods 0.1.6<a class="anchor" aria-label="anchor" href="#formods-016"></a></h2><p class="text-muted">CRAN release: 2024-05-25</p>

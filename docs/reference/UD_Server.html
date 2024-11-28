@@ -19,6 +19,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fas fa-chalkboard-teacher"></span> Tutorials</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/included_modules.html">Included Modules</a></li>
     <li><a class="dropdown-item" href="../articles/making_modules.html">Making Modules</a></li>
+    <li><a class="dropdown-item" href="../articles/preload.html">Automating Workflows and Preloading Content</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fas fa-hat-wizard"></span> Functions</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html"><span class="fa fas fa-rss"></span> News</a></li>
@@ -107,6 +108,14 @@
 <span class="r-in"><span><span class="st">  margin-bottom: 20px;</span></span></span>
 <span class="r-in"><span><span class="st">}</span></span></span>
 <span class="r-in"><span><span class="st">"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">formods.yaml</span>  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>,  <span class="st">"templates"</span>,  <span class="st">"formods.yaml"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ASM.yaml</span>      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>,  <span class="st">"templates"</span>,  <span class="st">"ASM.yaml"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">UD.yaml</span>       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>,  <span class="st">"templates"</span>,  <span class="st">"UD.yaml"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">DW.yaml</span>       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>,  <span class="st">"templates"</span>,  <span class="st">"DW.yaml"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">FG.yaml</span>       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>,  <span class="st">"templates"</span>,  <span class="st">"FG.yaml"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Default to not deployed</span></span></span>
 <span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists</a></span><span class="op">(</span><span class="st">"deployed"</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span></span>
@@ -201,31 +210,47 @@
 <span class="r-in"><span>  <span class="co"># changes in the module state outside of the module</span></span></span>
 <span class="r-in"><span>  <span class="va">react_FM</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/reactiveValues.html" class="external-link">reactiveValues</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co">#Uncomment to populate with test data</span></span></span>
+<span class="r-in"><span>  <span class="co"># sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),</span></span></span>
+<span class="r-in"><span>  <span class="co">#             system.file(package="formods", "preload", "UD_preload.yaml"),</span></span></span>
+<span class="r-in"><span>  <span class="co">#             system.file(package="formods", "preload", "DW_preload.yaml"),</span></span></span>
+<span class="r-in"><span>  <span class="co">#             system.file(package="formods", "preload", "FG_preload.yaml"))</span></span></span>
+<span class="r-in"><span>  <span class="co"># res = FM_app_preload(session=session, sources=sources)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="st">"preload.yaml"</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu">shinybusy</span><span class="fu">::</span><span class="fu"><a href="https://dreamrs.github.io/shinybusy/reference/modal-spinner.html" class="external-link">show_modal_spinner</a></span><span class="op">(</span>text<span class="op">=</span><span class="st">"Preloading analysis, be patient"</span>, session<span class="op">=</span><span class="va">session</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">res</span> <span class="op">=</span> <span class="fu"><a href="FM_app_preload.html">FM_app_preload</a></span><span class="op">(</span>session<span class="op">=</span><span class="va">session</span>, sources<span class="op">=</span><span class="st">"preload.yaml"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu">shinybusy</span><span class="fu">::</span><span class="fu"><a href="https://dreamrs.github.io/shinybusy/reference/modal-spinner.html" class="external-link">remove_modal_spinner</a></span><span class="op">(</span>session <span class="op">=</span> <span class="va">session</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># This is the list of module ids used for reproducible script generation. The</span></span></span>
 <span class="r-in"><span>  <span class="co"># order here is important.</span></span></span>
 <span class="r-in"><span>  <span class="va">mod_ids</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UD"</span>, <span class="st">"DW"</span>, <span class="st">"FG"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span>  <span class="co">#Populating with test data</span></span></span>
-<span class="r-in"><span>  <span class="co">#FG_test_mksession(session)</span></span></span>
-<span class="r-in"><span>  <span class="va">sources</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"preload"</span>, <span class="st">"ASM_preload.yaml"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>              <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"preload"</span>, <span class="st">"UD_preload.yaml"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>              <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"preload"</span>, <span class="st">"DW_preload.yaml"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>              <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"formods"</span>, <span class="st">"preload"</span>, <span class="st">"FG_preload.yaml"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">res</span> <span class="op">=</span> <span class="fu"><a href="FM_app_preload.html">FM_app_preload</a></span><span class="op">(</span>session<span class="op">=</span><span class="va">session</span>, sources<span class="op">=</span><span class="va">sources</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># Module servers</span></span></span>
 <span class="r-in"><span>  <span class="fu">formods</span><span class="fu">::</span><span class="fu"><a href="ASM_Server.html">ASM_Server</a></span><span class="op">(</span>id<span class="op">=</span><span class="st">"ASM"</span>,</span></span>
-<span class="r-in"><span>             deployed    <span class="op">=</span> <span class="va">deployed</span>,</span></span>
-<span class="r-in"><span>             react_state <span class="op">=</span> <span class="va">react_FM</span>, mod_ids <span class="op">=</span> <span class="va">mod_ids</span><span class="op">)</span></span></span>
+<span class="r-in"><span>             FM_yaml_file  <span class="op">=</span> <span class="va">formods.yaml</span>,</span></span>
+<span class="r-in"><span>             MOD_yaml_file <span class="op">=</span> <span class="va">ASM.yaml</span>,</span></span>
+<span class="r-in"><span>             deployed      <span class="op">=</span> <span class="va">deployed</span>,</span></span>
+<span class="r-in"><span>             react_state   <span class="op">=</span> <span class="va">react_FM</span>,</span></span>
+<span class="r-in"><span>             mod_ids       <span class="op">=</span> <span class="va">mod_ids</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">formods</span><span class="fu">::</span><span class="fu">UD_Server</span><span class="op">(</span> id<span class="op">=</span><span class="st">"UD"</span>, id_ASM <span class="op">=</span> <span class="st">"ASM"</span>,</span></span>
-<span class="r-in"><span>             deployed    <span class="op">=</span> <span class="va">deployed</span>,</span></span>
-<span class="r-in"><span>             react_state <span class="op">=</span> <span class="va">react_FM</span><span class="op">)</span></span></span>
+<span class="r-in"><span>             FM_yaml_file  <span class="op">=</span> <span class="va">formods.yaml</span>,</span></span>
+<span class="r-in"><span>             MOD_yaml_file <span class="op">=</span> <span class="va">UD.yaml</span>,</span></span>
+<span class="r-in"><span>             deployed      <span class="op">=</span> <span class="va">deployed</span>,</span></span>
+<span class="r-in"><span>             react_state   <span class="op">=</span> <span class="va">react_FM</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">formods</span><span class="fu">::</span><span class="fu"><a href="DW_Server.html">DW_Server</a></span><span class="op">(</span> id<span class="op">=</span><span class="st">"DW"</span>, id_ASM <span class="op">=</span> <span class="st">"ASM"</span>,id_UD <span class="op">=</span> <span class="st">"UD"</span>,</span></span>
-<span class="r-in"><span>             deployed    <span class="op">=</span> <span class="va">deployed</span>,</span></span>
-<span class="r-in"><span>             react_state <span class="op">=</span> <span class="va">react_FM</span><span class="op">)</span></span></span>
+<span class="r-in"><span>             FM_yaml_file  <span class="op">=</span> <span class="va">formods.yaml</span>,</span></span>
+<span class="r-in"><span>             MOD_yaml_file <span class="op">=</span> <span class="va">DW.yaml</span>,</span></span>
+<span class="r-in"><span>             deployed      <span class="op">=</span> <span class="va">deployed</span>,</span></span>
+<span class="r-in"><span>             react_state   <span class="op">=</span> <span class="va">react_FM</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">formods</span><span class="fu">::</span><span class="fu"><a href="FG_Server.html">FG_Server</a></span><span class="op">(</span> id<span class="op">=</span><span class="st">"FG"</span>, id_ASM <span class="op">=</span> <span class="st">"ASM"</span>,id_UD <span class="op">=</span> <span class="st">"UD"</span>, id_DW <span class="op">=</span> <span class="st">"DW"</span>,</span></span>
-<span class="r-in"><span>             deployed    <span class="op">=</span> <span class="va">deployed</span>,</span></span>
-<span class="r-in"><span>             react_state <span class="op">=</span> <span class="va">react_FM</span><span class="op">)</span></span></span>
+<span class="r-in"><span>             FM_yaml_file  <span class="op">=</span> <span class="va">formods.yaml</span>,</span></span>
+<span class="r-in"><span>             MOD_yaml_file <span class="op">=</span> <span class="va">FG.yaml</span>,</span></span>
+<span class="r-in"><span>             deployed      <span class="op">=</span> <span class="va">deployed</span>,</span></span>
+<span class="r-in"><span>             react_state   <span class="op">=</span> <span class="va">react_FM</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></span>

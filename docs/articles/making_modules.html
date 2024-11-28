@@ -40,6 +40,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials">
 <li><a class="dropdown-item" href="../articles/included_modules.html">Included Modules</a></li>
     <li><a class="dropdown-item" href="../articles/making_modules.html">Making Modules</a></li>
+    <li><a class="dropdown-item" href="../articles/preload.html">Automating Workflows and Preloading Content</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fas fa-hat-wizard"></span> Functions</a></li>
@@ -426,6 +427,10 @@ demonstrate the functions below.</p>
 <span><span class="co">#&gt; → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span></span>
 <span><span class="co">#&gt; → ASM:   dest:   file.path("config","report.yaml")</span></span>
 <span><span class="co">#&gt; → ASM: State initialized</span></span>
+<span><span class="co">#&gt; → ASM: setting word placeholders:</span></span>
+<span><span class="co">#&gt; → ASM:   -&gt; setting docx ph: HEADERLEFT = left header</span></span>
+<span><span class="co">#&gt; → ASM:   -&gt; setting docx ph: HEADERRIGHT = right header</span></span>
+<span><span class="co">#&gt; → ASM:   -&gt; setting docx ph: FOOTERLEFT = left footer</span></span>
 <span><span class="co">#&gt; → ASM: module isgood: TRUE</span></span>
 <span><span class="co">#&gt; → UD: including file</span></span>
 <span><span class="co">#&gt; → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span></span>

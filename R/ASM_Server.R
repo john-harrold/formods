@@ -389,13 +389,18 @@ ASM_Server <- function(id,
       if(state[["ASM"]][["isgood"]]){
         if( length(state[["ASM"]][["ph_uis"]]) > 0){
           for(ph_ui in names(state[["ASM"]][["ph_uis"]])){
+            tmp_value = state[["ASM"]][["ui"]][[ph_ui]]
+            if(tmp_value == ""){
+              tmp_value = state[["ASM"]][["ph_uis"]][[ph_ui]][["value"]]
+            }
+
             tmp_uiele =
               textInput(
                 inputId     = NS(id, ph_ui),
                 width = state[["yaml"]][["FM"]][["reporting"]][["phs_formatting"]][["width"]],
                 label = NULL,
                 placeholder = state[["ASM"]][["ph_uis"]][[ph_ui]][["name"]],
-                value = state[["ASM"]][["ui"]][[ph_ui]])
+                value = tmp_value)
 
             if(is.character( state[["ASM"]][["ph_uis"]][[ph_ui]][["tooltip"]])){
               tmp_uiele = FM_add_ui_tooltip(
@@ -1006,11 +1011,40 @@ ASM_preload  = function(session, src_list, yaml_res=NULL, mod_ID=NULL, react_sta
                           FM_yaml_file  = FM_yaml_file, 
                           MOD_yaml_file = MOD_yaml_file)
 
+
+  # Populating any word document preload values:
+  if(length(names(src_list[[mod_ID]][["docx_ph"]])) > 0){
+    # Placeholders defined for the app in the formods.yaml file
+    fm_phs = yaml_res[[mod_ID]][["fm_cfg"]][["FM"]][["reporting"]][["phs"]] 
+
+    # Just the names found 
+    found_ph_names = as.vector(unlist(fm_phs)[names(unlist(fm_phs)) == "name"])
+
+    # placeholders loaded from the preload file
+    l_phs = src_list[[mod_ID]][["docx_ph"]]
+
+    # Setting word placeholders
+    FM_le(state, paste0("setting word placeholders: "))
+    for(ph_ui in names(state[["ASM"]][["ph_uis"]])){
+      # If the placeholder was found in the preload AND 
+      # if the name exists in formods.yaml then we set it
+      ph_name = state[["ASM"]][["ph_uis"]][[ ph_ui ]][["name"]]
+      if(ph_name %in% names(l_phs) & ph_name %in% found_ph_names){
+        formods::FM_le(state,paste0("  -> setting docx ph: ",ph_name, " = ", l_phs[[ph_name]]))
+        # Updates at the ui storage location
+        state[["ASM"]][["ui"]][[ph_ui]]                = l_phs[[ph_name]]
+
+        # Updates the default value as well  
+        state[["ASM"]][["ph_uis"]][[ph_ui]][["value"]] = l_phs[[ph_name]]
+      }
+    }
+  }
+
   # Required for proper reaction:
   react_state[[mod_ID]]  = list(ASM = list(checksum=state[["ASM"]][["checksum"]]))
 
   # Saving the state
-  if(any(c("session_proxy", "ShinySession") %in% class(session))){
+  if(is_shiny(session)){
     FM_set_mod_state(session, mod_ID, state)
   } else {
     session = FM_set_mod_state(session, mod_ID, state)
@@ -1117,6 +1151,12 @@ ASM_mk_preload     = function(state){
       fm_yaml  = file.path("config", basename(state[["FM_yaml_file"]])),
       mod_yaml = file.path("config", basename(state[["MOD_yaml_file"]]))
   )
+
+  # Setting the word placeholder values
+  for(ph_ui in names(state[["ASM"]][["ph_uis"]])){
+    ph_name = state[["ASM"]][["ph_uis"]][[ ph_ui ]][["name"]]
+    yaml_list[[ state[["id"]] ]][["docx_ph"]][[ph_name]] = state[["ASM"]][["ui"]][[ph_ui]] 
+  }
 
   formods::FM_le(state,paste0("mk_preload isgood: ",isgood))
 

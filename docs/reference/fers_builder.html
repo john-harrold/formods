@@ -23,6 +23,7 @@ of a ggplot object p."><meta property="og:image" content="https://formods.ubiqui
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fas fa-chalkboard-teacher"></span> Tutorials</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/included_modules.html">Included Modules</a></li>
     <li><a class="dropdown-item" href="../articles/making_modules.html">Making Modules</a></li>
+    <li><a class="dropdown-item" href="../articles/preload.html">Automating Workflows and Preloading Content</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fas fa-hat-wizard"></span> Functions</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html"><span class="fa fas fa-rss"></span> News</a></li>
@@ -85,6 +86,10 @@ of a ggplot object <code>p</code>.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: setting word placeholders: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   -&gt; setting docx ph: HEADERLEFT = left header</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   -&gt; setting docx ph: HEADERRIGHT = right header</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   -&gt; setting docx ph: FOOTERLEFT = left footer</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: module isgood: TRUE</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
@@ -163,9 +168,9 @@ of a ggplot object <code>p</code>.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: setting name: 3 mg SD IV</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: setting data source: DW_myDS_2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   -&gt; line</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:f6797ec11aca30aacf2e0921bfd93d56</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:9fd8c70153158acab75bd520e28b32ed</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   -&gt; label</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:5ddaeb6a125dda70c314e361e7ecbe70</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module checksum updated:e4ad845309b0ed4883fd38b472de541b</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: module isgood: TRUE</span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-in"><span><span class="va">fb_res</span> <span class="op">=</span> <span class="fu">fers_builder</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>

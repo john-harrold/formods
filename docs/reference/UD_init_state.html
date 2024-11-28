@@ -19,6 +19,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fas fa-chalkboard-teacher"></span> Tutorials</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials"><li><a class="dropdown-item" href="../articles/included_modules.html">Included Modules</a></li>
     <li><a class="dropdown-item" href="../articles/making_modules.html">Making Modules</a></li>
+    <li><a class="dropdown-item" href="../articles/preload.html">Automating Workflows and Preloading Content</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fas fa-hat-wizard"></span> Functions</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html"><span class="fa fas fa-rss"></span> News</a></li>
@@ -86,6 +87,10 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: setting word placeholders: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   -&gt; setting docx ph: HEADERLEFT = left header</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   -&gt; setting docx ph: HEADERRIGHT = right header</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   -&gt; setting docx ph: FOOTERLEFT = left footer</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: module isgood: TRUE</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
@@ -457,6 +462,14 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$switch_clean</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Clean column names on upload"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$rwf_success</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Workflow complete."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$busy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$busy$rwf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Running workflow be patient."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$msg_bad_extension</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Incorrect file extension (===EXT===). Unable to load file  ===FILE===.\nOnly the following extesions are allowed: ===ALLOWEDEXT===."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -470,6 +483,18 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$no_ds_for_workflow_short</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Workflow not run, no dataset."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$no_asm_state</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Unable to read ASM state."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$ss_failed</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Unable to save workflow file."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$ls_failed</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Unable to load workflow file."</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$errors$rwf_failed</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Workflow failed."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MC$tooltips</span>
@@ -606,10 +631,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpGDxdg2/temp_libpath1055384218cb/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpSYRoUO/temp_libpath13c2570e2c951/formods/templates/formods.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpGDxdg2/temp_libpath1055384218cb/formods/templates/UD.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpSYRoUO/temp_libpath13c2570e2c951/formods/templates/UD.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $shiny_token</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "non_shiny"</span>
