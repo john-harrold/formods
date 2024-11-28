@@ -133,15 +133,12 @@ The module template will create a standard set of functions for you. The `MM` be
         -   `checksum` Checksum of the module the model came from.
         -   `DSchecksum` Checksum of the model.
 -   `MM_preload` The ASM module provides the ability to load a previous analysis from yaml files. This function is called with the contents of those yaml files to process and load them. 
+-   `MM_mk_preload` This will create a preload list of the current state of the module.
 -   `MM_test_mksession` When testing outside of Shiny it is useful to
-    have a prepopulated session, intput, etc objects with actual data.
-    Each module shoudl have a `test_mksession` function that populates
+    have a pre-populated session, input, etc. objects with actual data.
+    Each module should have a `test_mksession` function that populates
     these objects with useful data. If your module depends on a
-    different module, you can use the `test_mksession` for the modyou
-    yours depends on. For example the data wrangling module depends on
-    the upload data module. So the `DW_test_mksession` function uses
-    `UD_test_mksession` internally to load the test dataset and then
-    builds on top of that. The function should return the following:
+    different module. The function should return the following:
     -   `isgood` Boolean indicating the exit status of the function.
     -   `session` The value Shiny session variable (in app) or a list
         (outside of app) after initialization.
@@ -174,7 +171,7 @@ changes in the checksum element below:
 
 `react_state[["ID"]][["MM"]][["checksum"]]`
 
--   `checksum` A checksum that can be used to detect changes in this
+-  `checksum` A checksum that can be used to detect changes in this
     module. For example in the UD module this will change if the
     uploaded file or the sheet selected from a currently uplo:waded file
     changes.
@@ -185,7 +182,11 @@ changes in the checksum element below:
     console.
 -   `FM_tc()` - This can be used to evaluate code, trap errors, and
     process results.
--   `has_changed()`
+-   `has_changed()` - Depreciated see `has_updated()`
+-   `has_updated()` - Used to compare objects to see if they have changed. 
+-   `icon_link()` - Used to create the ui for a link to an icon.
+-   `is_installed()` - Used to test if a package is available.
+-   `is_shiny()` - Used to test if a session object is simply a list or a legitimate Shiny session object. 
 -   `set_hold()` - Used to set a hold on one or more UI elements. This prevents internal updating of that UI element based on the current value in the App. 
 -   `fetch_hold()` - This will retrieve the hold status of a UI element.
 -   `remove_hold()` - This will remove any holds set on a UI element.

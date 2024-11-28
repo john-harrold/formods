@@ -1545,7 +1545,6 @@ FG_fetch_state = function(id,
       #(!fetch_hold(state, "select_fg_page"))
       ){
 
-
     FM_le(state, "figure page change detected")
 
     # pulling the current figure
@@ -3025,7 +3024,6 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
     ADD_ELEMENTS = FALSE
   }
 
-
   if(ADD_ELEMENTS){
     # All of the numeric IDs in the preload
     enumeric    = c()
@@ -3036,6 +3034,7 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
       enumeric = c(enumeric, elements[[ele_idx]][["element"]][["idx"]])
       element_map[[ paste0("Fig_",elements[[ele_idx]][["element"]][["idx"]] )]] = ele_idx
     }
+
     # Creating empty fig placeholders
     while(state[["FG"]][["fig_cntr"]] < max(enumeric)){
       state = FG_new_fig(state)
@@ -3079,8 +3078,6 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
       # Getting the numeric position in the list corresponding 
       # to the current element id
       ele_idx = element_map[[element_id]]
-
-
 
       fig_isgood = TRUE
       # first we set the figure name:

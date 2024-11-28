@@ -223,7 +223,7 @@ UD_Server <- function(id,
                   size    = state[["MC"]][["formatting"]][["btn_run_wf"]][["size"]],
                   block   = state[["MC"]][["formatting"]][["btn_run_wf"]][["block"]],
                   color   = "primary",
-                  icon    = icon("plus-sign", lib="glyphicon"))
+                  icon    = icon("play"))
         uiele_btn = 
           div(style=paste0("width:",state[["MC"]][["formatting"]][["btn_run_wf"]][["width"]]),uiele_btn)
 
@@ -711,7 +711,6 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
 
   # Saving the state
   FM_set_mod_state(session, id, state)
-
   # Returning the state
   state}
 
@@ -1168,19 +1167,22 @@ UD_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
   full_file_path = render_str(src_list[[mod_ID]][["data_source"]][["file_name"]])
   clean_ds       = render_str(src_list[[mod_ID]][["data_source"]][["clean"]])
 
-
-  input[["input_data_file"]][["datapath"]] = full_file_path
-  input[["input_data_file"]][["name"]]     = basename(full_file_path)
-  # Handling the situation where the sheet has not been defined:
-  input[["input_select_sheet"]] = NULL
-  if(!is.null(src_list[[mod_ID]][["data_source"]][["sheet"]])){
-    input[["input_select_sheet"]] = 
-      render_str(src_list[[mod_ID]][["data_source"]][["sheet"]])
+  # If we're loading a saved state where there was no dataset then the file
+  # path will be null and we need to skip it:
+  if(!is.null(full_file_path)){
+    input[["input_data_file"]][["datapath"]] = full_file_path
+    input[["input_data_file"]][["name"]]     = basename(full_file_path)
+    # Handling the situation where the sheet has not been defined:
+    input[["input_select_sheet"]] = NULL
+    if(!is.null(src_list[[mod_ID]][["data_source"]][["sheet"]])){
+      input[["input_select_sheet"]] = 
+        render_str(src_list[[mod_ID]][["data_source"]][["sheet"]])
+    }
   }
 
   # Setting cleaning options
   if(!is.null(clean_ds)){
-    input[["input_data_file"]][["switch_clean"]] = as.character(clean_ds)
+    input[["switch_clean"]] = as.character(clean_ds)
   }
 
   state = UD_fetch_state(id            = mod_ID,
@@ -1194,9 +1196,12 @@ UD_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
   # Required for proper reaction:
   react_state[[mod_ID]]  = list(UD  = list(checksum=state[["UD"]][["checksum"]]))
 
-  if(!state[["UD"]][["isgood"]]){
-    isgood = FALSE
-    msgs = c(msgs, "Failed to load dataset")
+  # We only flag a failure if there is a data file and the state is bad:
+  if(!is.null(full_file_path)){
+    if(!state[["UD"]][["isgood"]]){
+      isgood = FALSE
+      msgs = c(msgs, "Failed to load dataset")
+    }
   }
  
   # Saving the state

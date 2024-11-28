@@ -3215,115 +3215,116 @@ DW_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
   elements = src_list[[mod_ID]][["elements"]]
 
   if(!is.null(elements)){
-    # All of the numeric IDs in the preload
-    enumeric    = c()
+    if(length(elements) > 0){
+      # All of the numeric IDs in the preload
+      enumeric    = c()
+    
+      # Map between list index and internal figure ID
+      element_map = list()
 
-    # Map between list index and internal figure ID
-    element_map = list()
-
-    for(ele_idx in 1:length(elements)){
-      enumeric = c(enumeric, elements[[ele_idx]][["element"]][["idx"]])
-      element_map[[ paste0("view_",elements[[ele_idx]][["element"]][["idx"]] )]] = ele_idx
-    }
-    # Creating empty view placeholders
-    while(state[["DW"]][["view_cntr"]] < max(enumeric)){
-      state =DW_new_view(state)
-    }
-    # culling any unneeded views 
-    for(view_id in names(state[["DW"]][["views"]])){
-      # This is a view that doesn't exist in elements so 
-      # we need to cull it
-      if(!(view_id %in% names(element_map))){
-        # Setting the view to be deleted as the current view
-        state[["DW"]][["views"]][[ view_id ]] = NULL
+      for(ele_idx in 1:length(elements)){
+        enumeric = c(enumeric, elements[[ele_idx]][["element"]][["idx"]])
+        element_map[[ paste0("view_",elements[[ele_idx]][["element"]][["idx"]] )]] = ele_idx
       }
-    }
-
-    # Now we have empty data views for the needed elements 
-    for(view_id in names(element_map)){
-      state[["DW"]][["current_view"]] = view_id
-
-      # Getting the numeric position in the list corresponding to the current
-      # view id
-      ele_idx = element_map[[view_id]]
-
-      # first we set the name
-      FM_le(state, paste0("loading data view idx: ", ele_idx))
-      if(!is.null(elements[[ele_idx]][["element"]][["name"]])){
-        FM_le(state, paste0("setting name: ", elements[[ele_idx]][["element"]][["name"]]))
-        current_view = DW_fetch_current_view(state)
-        current_view[["key"]] = elements[[ele_idx]][["element"]][["name"]]
-        state = DW_set_current_view(state, current_view)
+      # Creating empty view placeholders
+      while(state[["DW"]][["view_cntr"]] < max(enumeric)){
+        state =DW_new_view(state)
       }
-
-      # Now we walk through any components 
-      if(length(elements[[ele_idx]][["element"]][["components"]]) > 0){
-        for(comp_idx in 1:length(elements[[ele_idx]][["element"]][["components"]])){
-
-          tmp_component = elements[[ele_idx]][["element"]][["components"]][[comp_idx]][["component"]]
-
-          add_component = TRUE
-          # Here we construct the input based on the type of action selected
-          state[["DW"]][["ui"]][["select_dw_element"]] = tmp_component[["action"]]
-
-          FM_le(state, paste0("  -> ", tmp_component[["action"]]))
-
-          if(tmp_component[["action"]] == "filter"){
-            state[["DW"]][["ui"]][["select_fds_filter_column"]]   = tmp_component[["column"]]
-            state[["DW"]][["ui"]][["select_fds_filter_operator"]] = tmp_component[["operator"]]
-            state[["DW"]][["ui"]][["fds_filter_rhs"]]             = tmp_component[["rhs"]] 
-          }else if(tmp_component[["action"]] == "mutate"){
-            state[["DW"]][["ui"]][["select_fds_mutate_column"]]   = tmp_component[["column"]]
-            state[["DW"]][["ui"]][["select_fds_mutate_rhs"]]      = tmp_component[["rhs"]] 
-          }else if(tmp_component[["action"]] == "rename"){
-            state[["DW"]][["ui"]][["select_fds_rename_column"]]   = tmp_component[["column"]]
-            state[["DW"]][["ui"]][["fds_rename_rhs"]]             = tmp_component[["rhs"]] 
-          }else if(tmp_component[["action"]] == "group"){
-            state[["DW"]][["ui"]][["select_fds_group_column"]]    = tmp_component[["column"]]
-          }else if(tmp_component[["action"]] == "longer"){
-            state[["DW"]][["ui"]][["select_fds_longer_column"]]    = tmp_component[["column"]]
-            state[["DW"]][["ui"]][["select_fds_longer_names"]]     = tmp_component[["names"]]
-            state[["DW"]][["ui"]][["select_fds_longer_values"]]    = tmp_component[["values"]]
-          }else if(tmp_component[["action"]] == "wider"){
-            state[["DW"]][["ui"]][["select_fds_wider_names"]]      = tmp_component[["names"]]
-            state[["DW"]][["ui"]][["select_fds_wider_values"]]     = tmp_component[["values"]]
-          }else if(tmp_component[["action"]] == "select"){
-            state[["DW"]][["ui"]][["select_fds_select_column"]]    = tmp_component[["column"]]
-          }else if(tmp_component[["action"]] == "ungroup"){
-          }else if(tmp_component[["action"]] == "onerow"){
-          }else{
-            isgood        = FALSE
-            add_component = FALSE
-            msgs = c(msgs, 
-                     paste0("view_id:        ",view_id),
-                     paste0("Unknown action: ",tmp_component[["action"]])
-                     )
-          }
-
-
-          if(add_component){
-            dwb_res  = dwrs_builder(state)
-            dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
-            state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
-            # Capturing any failures:
-            if(!dwb_res[["isgood"]]){
-              isgood = FALSE
-              msgs = c(msgs, paste0(view_id, ": dwrs_builder() failed"))
-              msgs = c(msgs, dwb_res[["msgs"]])
+      # culling any unneeded views 
+      for(view_id in names(state[["DW"]][["views"]])){
+        # This is a view that doesn't exist in elements so 
+        # we need to cull it
+        if(!(view_id %in% names(element_map))){
+          # Setting the view to be deleted as the current view
+          state[["DW"]][["views"]][[ view_id ]] = NULL
+        }
+      }
+    
+      # Now we have empty data views for the needed elements 
+      for(view_id in names(element_map)){
+        state[["DW"]][["current_view"]] = view_id
+    
+        # Getting the numeric position in the list corresponding to the current
+        # view id
+        ele_idx = element_map[[view_id]]
+    
+        # first we set the name
+        FM_le(state, paste0("loading data view idx: ", ele_idx))
+        if(!is.null(elements[[ele_idx]][["element"]][["name"]])){
+          FM_le(state, paste0("setting name: ", elements[[ele_idx]][["element"]][["name"]]))
+          current_view = DW_fetch_current_view(state)
+          current_view[["key"]] = elements[[ele_idx]][["element"]][["name"]]
+          state = DW_set_current_view(state, current_view)
+        }
+    
+        # Now we walk through any components 
+        if(length(elements[[ele_idx]][["element"]][["components"]]) > 0){
+          for(comp_idx in 1:length(elements[[ele_idx]][["element"]][["components"]])){
+    
+            tmp_component = elements[[ele_idx]][["element"]][["components"]][[comp_idx]][["component"]]
+    
+            add_component = TRUE
+            # Here we construct the input based on the type of action selected
+            state[["DW"]][["ui"]][["select_dw_element"]] = tmp_component[["action"]]
+    
+            FM_le(state, paste0("  -> ", tmp_component[["action"]]))
+    
+            if(tmp_component[["action"]] == "filter"){
+              state[["DW"]][["ui"]][["select_fds_filter_column"]]   = tmp_component[["column"]]
+              state[["DW"]][["ui"]][["select_fds_filter_operator"]] = tmp_component[["operator"]]
+              state[["DW"]][["ui"]][["fds_filter_rhs"]]             = tmp_component[["rhs"]] 
+            }else if(tmp_component[["action"]] == "mutate"){
+              state[["DW"]][["ui"]][["select_fds_mutate_column"]]   = tmp_component[["column"]]
+              state[["DW"]][["ui"]][["select_fds_mutate_rhs"]]      = tmp_component[["rhs"]] 
+            }else if(tmp_component[["action"]] == "rename"){
+              state[["DW"]][["ui"]][["select_fds_rename_column"]]   = tmp_component[["column"]]
+              state[["DW"]][["ui"]][["fds_rename_rhs"]]             = tmp_component[["rhs"]] 
+            }else if(tmp_component[["action"]] == "group"){
+              state[["DW"]][["ui"]][["select_fds_group_column"]]    = tmp_component[["column"]]
+            }else if(tmp_component[["action"]] == "longer"){
+              state[["DW"]][["ui"]][["select_fds_longer_column"]]    = tmp_component[["column"]]
+              state[["DW"]][["ui"]][["select_fds_longer_names"]]     = tmp_component[["names"]]
+              state[["DW"]][["ui"]][["select_fds_longer_values"]]    = tmp_component[["values"]]
+            }else if(tmp_component[["action"]] == "wider"){
+              state[["DW"]][["ui"]][["select_fds_wider_names"]]      = tmp_component[["names"]]
+              state[["DW"]][["ui"]][["select_fds_wider_values"]]     = tmp_component[["values"]]
+            }else if(tmp_component[["action"]] == "select"){
+              state[["DW"]][["ui"]][["select_fds_select_column"]]    = tmp_component[["column"]]
+            }else if(tmp_component[["action"]] == "ungroup"){
+            }else if(tmp_component[["action"]] == "onerow"){
+            }else{
+              isgood        = FALSE
+              add_component = FALSE
+              msgs = c(msgs, 
+                       paste0("view_id:        ",view_id),
+                       paste0("Unknown action: ",tmp_component[["action"]])
+                       )
             }
-            if(!dwee_res[["isgood"]]){
-              isgood = FALSE
-              msgs = c(msgs, paste0(view_id, ": dw_eval_element() failed"))
-              msgs = c(msgs, dwee_res[["msgs"]])
+    
+    
+            if(add_component){
+              dwb_res  = dwrs_builder(state)
+              dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+              state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+              # Capturing any failures:
+              if(!dwb_res[["isgood"]]){
+                isgood = FALSE
+                msgs = c(msgs, paste0(view_id, ": dwrs_builder() failed"))
+                msgs = c(msgs, dwb_res[["msgs"]])
+              }
+              if(!dwee_res[["isgood"]]){
+                isgood = FALSE
+                msgs = c(msgs, paste0(view_id, ": dw_eval_element() failed"))
+                msgs = c(msgs, dwee_res[["msgs"]])
+              }
             }
           }
         }
       }
+      # Setting holds 
+      # Defaulting to the last view
+      state[["DW"]][["current_view"]] = names(state[["DW"]][["views"]])[ length(names(state[["DW"]][["views"]])) ]
     }
-
-    # Setting holds 
-    # Defaulting to the last view
-    state[["DW"]][["current_view"]] = names(state[["DW"]][["views"]])[ length(names(state[["DW"]][["views"]])) ]
   }
 
   # Setting holds:
