@@ -2462,7 +2462,7 @@ new_module_template = function(
     yaml    = list(source = system.file(package="formods", "templates", "ZZ.yaml"),
                    dest   = paste0(SN, ".yaml")),
     preload = list(source = system.file(package="formods", "preload", "ZZ_preload.yaml"),
-                   dest   = paste0(SN, ".yaml")),
+                   dest   = paste0(SN, "_preload.yaml")),
     funcs   = list(source = system.file(package="formods", "templates", "ZZ_funcs.R"),
                    dest   = paste0(SN, "_funcs.R"))
   )
@@ -2566,21 +2566,24 @@ use_formods = function(
           element  = element,
           file_dir = tempdir())
 
-  tmp_server = file.path(repo_root, "R",                 nmr[["server"]][["dest"]])
-  tmp_yaml   = file.path(repo_root, "inst", "templates", nmr[["yaml"]][["dest"]])
-  tmp_mc     = file.path(repo_root, "inst", "templates", nmr[["mc"]][["dest"]])
-  tmp_funcs  = file.path(repo_root, "inst", "test_apps", nmr[["funcs"]][["dest"]])
+  tmp_server   = file.path(repo_root, "R",                 nmr[["server"]][["dest"]])
+  tmp_yaml     = file.path(repo_root, "inst", "templates", nmr[["yaml"]][["dest"]])
+  tmp_mc       = file.path(repo_root, "inst", "templates", nmr[["mc"]][["dest"]])
+  tmp_funcs    = file.path(repo_root, "inst", "test_apps", nmr[["funcs"]][["dest"]])
+  tmp_preload  = file.path(repo_root, "inst", "preload",   nmr[["preload"]][["dest"]])
 
   message("Creating module files:")
   message(paste0(" - ", tmp_server))
   message(paste0(" - ", tmp_yaml))
   message(paste0(" - ", tmp_mc))
   message(paste0(" - ", tmp_funcs))
+  message(paste0(" - ", tmp_preload))
 
   file.copy(from = nmr[["server"]][["dest_full"]],  to = tmp_server,  overwrite =  overwrite)
   file.copy(from = nmr[["yaml"]][["dest_full"]],    to = tmp_yaml,    overwrite =  overwrite)
   file.copy(from = nmr[["mc"]][["dest_full"]],      to = tmp_mc,      overwrite =  overwrite)
   file.copy(from = nmr[["funcs"]][["dest_full"]],   to = tmp_funcs,   overwrite =  overwrite)
+  file.copy(from = nmr[["preload"]][["dest_full"]], to = tmp_preload, overwrite =  overwrite)
 nmr}
 
 #'@export
