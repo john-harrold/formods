@@ -69,7 +69,7 @@ UD_Server <- function(id,
         shinyWidgets::materialSwitch(
            inputId = NS(id, "switch_clean"),
            label   = state[["MC"]][["labels"]][["switch_clean"]],
-           value   = state[["UD"]][["clean"]],
+           value   = as.logical(state[["UD"]][["clean"]]),
            status  = "success"
         )
 
