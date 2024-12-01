@@ -33,6 +33,9 @@ ASM_Server <- function(id,
                       mod_ids) {
   moduleServer(id, function(input, output, session) {
 
+  # Used to trigger messages from download button
+  toMessage = reactiveValues()
+
     #------------------------------------
     # Create ui outputs here:
     output$ui_asm_save_name_text  = renderUI({
@@ -155,16 +158,45 @@ ASM_Server <- function(id,
      #                     mod_ids = mod_ids),
      #                c("ws_res"))
 
-        tcres = FM_tc(cmd = "ws_res = ASM_save_state(state=state, session=session, file_path=file, pll=NULL)",
+        if((any(c("ShinySession", "session_proxy") %in% class(session)))){
+          if(system.file(package = "shinybusy") !=""){
+            shinybusy::show_modal_spinner(text=state[["MC"]][["labels"]][["busy"]][["saving_state"]])
+          }
+        }
+
+        tmp_cmd = "ws_res = ASM_save_state(state=state, session=session, file_path=file, pll=NULL)"
+        tcres = FM_tc(cmd = tmp_cmd,
                       tc_env = 
                       list(state     = state,
                            session   = session,
                            file = file),
                       capture = c("ws_res"))
 
+        if((any(c("ShinySession", "session_proxy") %in% class(session)))){
+          if(system.file(package = "shinybusy") !=""){
+            shinybusy::remove_modal_spinner()
+          }
+        }
+
+
         if(!tcres$isgood){
           FM_le(state, "Failed to write state")
+          FM_le(state, tmp_cmd)
           FM_le(state, tcres$msgs)
+
+          state = FM_set_notification(
+            state       = state,
+            notify_text =  state[["MC"]][["errors"]][["save_failed"]],
+            notify_id   = "ASM save failed",
+            type        = "failure")
+
+          state = FM_set_ui_msg(state, tcres$msgs)
+          FM_set_mod_state(session, id, state)
+
+          toMessage[["message"]] = TRUE
+          notify_res =
+          FM_notify(state = state,
+           session     = session)
         }
       }
     )
@@ -294,6 +326,7 @@ ASM_Server <- function(id,
     output$ui_asm_msg = renderText({
       input[["button_state_save"]]
       input[["input_load_state"]]
+      toMessage$message
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
@@ -1197,12 +1230,6 @@ ASM_save_state = function(state, session, file_path, pll = NULL){
   isgood = TRUE
   msgs   = c()
 
-  if((any(c("ShinySession", "session_proxy") %in% class(session)))){
-    if(system.file(package = "shinybusy") !=""){
-      shinybusy::show_modal_spinner(text=state[["MC"]][["labels"]][["busy"]][["saving_state"]])
-    }
-  }
-
   # If pll is null then we generate it here:
   if(is.null(pll)){
     mkp_res  = FM_mk_app_preload(session)
@@ -1296,11 +1323,6 @@ ASM_save_state = function(state, session, file_path, pll = NULL){
       }
     }
    
-    if((any(c("ShinySession", "session_proxy") %in% class(session)))){
-      if(system.file(package = "shinybusy") !=""){
-        shinybusy::remove_modal_spinner()
-      }
-    }
    
     # Zipping everything up into an archive
     zip::zip(zipfile=file_path,

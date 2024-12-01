@@ -119,11 +119,11 @@ server <- function(input, output, session) {
   react_FM = reactiveValues()
 
   #Uncomment to populate with test data
-  # sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
-  #             system.file(package="formods", "preload", "UD_preload.yaml"),
-  #             system.file(package="formods", "preload", "DW_preload.yaml"),
-  #             system.file(package="formods", "preload", "FG_preload.yaml"))
-  # res = FM_app_preload(session=session, sources=sources)
+    sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+                system.file(package="formods", "preload", "UD_preload.yaml"),
+                system.file(package="formods", "preload", "DW_preload.yaml"),
+                system.file(package="formods", "preload", "FG_preload.yaml"))
+    res = FM_app_preload(session=session, sources=sources)
 
   if(file.exists("preload.yaml")){
     shinybusy::show_modal_spinner(text="Preloading analysis, be patient", session=session)

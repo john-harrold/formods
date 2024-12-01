@@ -57,6 +57,7 @@ MC:
   errors:
     bad_input:   "Input error message"
     load_failed: "Failed to load analysis"
+    save_failed: "Failed to save analysis"
   tooltips: 
     # Set to FALSE to disable tool tips for this module
     include: TRUE

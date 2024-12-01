@@ -253,7 +253,7 @@ autocast = function(ui_input, quote_char=TRUE){
  #    x[na] = NA_real_
  #    x
  #}
-  
+
   if(any(is.na(ui_input_num)) | (length(ui_input_num) == 0)){
     res = as.character(ui_input)
     if(quote_char){
@@ -2408,7 +2408,7 @@ res}
 #'@export
 #'@title Determine if Object is Shiny Session Object
 #'@description Determines if the specified object is a shiny session object.
-#'@param session Session object  
+#'@param session Session object
 #'@return Logical indicating if the object is a shiny session object or not
 #'@examples
 #' is_shiny(session = list())
@@ -2416,7 +2416,7 @@ is_shiny     = function(session=list()){
 
   res = FALSE
   if(any(c("ShinySession", "session_proxy") %in% class(session))){
-    res = TRUE  
+    res = TRUE
   }
 
 res}
@@ -2743,7 +2743,7 @@ linspace = function(a, b, n=100){
 #'@export
 #'@title Evaluate R Code in String
 #'@description Attempts to evaluate a string as a chunk of R code. If that
-#'succeeds it will return the result. If not it will return the original text. 
+#'succeeds it will return the result. If not it will return the original text.
 #'@param estr String to render.
 #'@return String containing the evaled as a character or the original string
 #'@examples
@@ -2766,7 +2766,7 @@ render_str <- function(estr=""){
 #'@export
 #'@title Preload Data Into App
 #'@description Populates session data for testing or to load a specific
-#'analysis. 
+#'analysis.
 #'@param session     Shiny session variable (in app) or a list (outside of app)
 #'@param sources     Vector of at corresponds with the ID used to call the modules UI elements
 #'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions
@@ -2788,7 +2788,7 @@ FM_app_preload = function(session, sources=NULL, react_state = list(), quickload
   err_msgs     = c()
   all_sess_res = list()
 
-  # This is created in an eval below so we define 
+  # This is created in an eval below so we define
   # it here to prevent errors in check
   sess_res = NULL
 
@@ -2802,7 +2802,7 @@ FM_app_preload = function(session, sources=NULL, react_state = list(), quickload
     msgs = c(msgs, ras_res[["msgs"]])
   }
 
-  # Making sure they are ordered based on dependencies 
+  # Making sure they are ordered based on dependencies
   deps_found = c()
   IDs_proc   = c()
   IDs_found  = names(yaml_res)
@@ -2811,7 +2811,7 @@ FM_app_preload = function(session, sources=NULL, react_state = list(), quickload
 
   while(idx <= length(IDs_found)){
     for(mod_ID in IDs_found){
-      # we only consider the ID if it hasn't 
+      # we only consider the ID if it hasn't
       # been processed yet:
       if(!(mod_ID %in% IDs_proc)){
         yaml_res[[mod_ID]][["mod_cfg"]][["module"]]
@@ -2828,7 +2828,7 @@ FM_app_preload = function(session, sources=NULL, react_state = list(), quickload
       }
     }
 
-    # This will break out of the loop if we've found the 
+    # This will break out of the loop if we've found the
     # order for all of the modules
     if(all(IDs_found %in% IDs_proc)){
       idx = length(IDs_found) + 1
@@ -2844,7 +2844,7 @@ FM_app_preload = function(session, sources=NULL, react_state = list(), quickload
 
   if(isgood){
 
-    # Looping through each ID and loading 
+    # Looping through each ID and loading
     for(mod_ID in IDs_proc){
 
       MOD_FUNC = paste0(yaml_res[[mod_ID]][["mod_cfg"]][["MC"]][["module"]][["type"]], "_preload")
@@ -2854,7 +2854,7 @@ FM_app_preload = function(session, sources=NULL, react_state = list(), quickload
         eval(parse(text=FUNC_CALL))
 
 
-        # Capturing any loading errors that may have occurred: 
+        # Capturing any loading errors that may have occurred:
         if(!sess_res[["isgood"]]){
           isgood = FALSE
           msgs = c(msgs, sess_res[["msgs"]])
@@ -2867,7 +2867,7 @@ FM_app_preload = function(session, sources=NULL, react_state = list(), quickload
         # Storing the results of the individual session loaded
         all_sess_res[[mod_ID]] = sess_res
 
-        # If we're running at the scripting level we need to pull 
+        # If we're running at the scripting level we need to pull
         # the session information and react_state out of result
         if(!formods::is_shiny(session)){
           session     = sess_res[["session"]]
@@ -2892,7 +2892,7 @@ FM_app_preload = function(session, sources=NULL, react_state = list(), quickload
   }
 
 
-  res=list(isgood       =isgood, 
+  res=list(isgood       =isgood,
            msgs         = msgs,
            all_sess_res = all_sess_res,
            session      = session)
@@ -2902,7 +2902,7 @@ res}
 #'@export
 #'@title Preload Data Into App
 #'@description Populates session data for testing or to load a specific
-#'analysis. 
+#'analysis.
 #'@param session     Shiny session variable (in app) or a list (outside of app)
 #'@return list with the following elements
 #' \itemize{
@@ -2944,18 +2944,18 @@ FM_mk_app_preload = function(session){
       if(mk_res[["isgood"]]){
         # Saving module yaml component
         yaml_list = c(yaml_list, mk_res[["yaml_list"]])
-      
+
       } else {
-        # Capturing any genration errors that may have occurred: 
+        # Capturing any genration errors that may have occurred:
         isgood = FALSE
         msgs = c(msgs, mk_res[["msgs"]])
-        FM_message(line=paste0("Failure to preload module ID: ", mod_ID), entry_type="danger")
-        for(tmp_line in mk_res[["msgs"]]){
+        FM_message(line=paste0("Failure to make preload for module ID: ", mod_ID), entry_type="danger")
+        for(tmp_line in c(FUNC_CALL, mk_res[["msgs"]])){
           FM_message(line=tmp_line, entry_type="danger")
         }
       }
     } else {
-      tmp_msg = paste0("No mk preload function found: ", MOD_FUNC, "() for ID: ", mod_ID) 
+      tmp_msg = paste0("No mk preload function found: ", MOD_FUNC, "() for ID: ", mod_ID)
       FM_message(line=tmp_msg, entry_type="warning")
     }
 
@@ -2963,7 +2963,7 @@ FM_mk_app_preload = function(session){
 
   #browser()
 
-  res=list(isgood       = isgood, 
+  res=list(isgood       = isgood,
            msgs         = msgs,
            yaml_list    = yaml_list,
            session      = session)
@@ -2973,7 +2973,7 @@ res}
 #'@title Resets the App State
 #'@description Removes formods data from the app.
 #'@param session Shiny session variable.
-#'@return session variable with app data removed. 
+#'@return session variable with app data removed.
 #'@examples
 #' # We need a Shiny session object to use this function:
 #' sess_res = UD_test_mksession()

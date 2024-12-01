@@ -1772,6 +1772,7 @@ DW_fetch_state = function(id,                    input,     session,
     # From the original view we copy both the WDS and elements_table fields
     new_view[["WDS"]]            = original_view[["WDS"]]
     new_view[["elements_table"]] = original_view[["elements_table"]]
+    new_view[["elements_list"]]  = original_view[["elements_list"]]
     state = DW_set_current_view(state, new_view)
 
     # Setting hold for views select
@@ -3401,17 +3402,20 @@ DW_mk_preload     = function(state){
               tmp_source_ele[["elements_list"]][[tmp_key]][["pll"]])
             FM_le(state, paste0("  -> ",tmp_key, ": ", tmp_source_ele[["elements_list"]][[tmp_key]][["pll"]][["action"]]) )
           } else {
-            err_msg = c(err_msg, paste0("missing preload list (pll) for key: ", tmp_key))
+            tmp_err_msg = paste0("  -> missing preload list (pll) for key: ", tmp_key)
+            FM_le(state,  tmp_err_msg, entry_type="danger")
+            err_msg     = c(err_msg, tmp_err_msg)
             isgood = FALSE
           }
         } else {
-          err_msg = c(err_msg, paste0("missing key: ", tmp_key))
+          tmp_err_msg = paste0("  -> missing key: ", tmp_key)
+          FM_le(state,  tmp_err_msg, entry_type="danger")
+          err_msg = c(err_msg, tmp_err_msg)
           isgood = FALSE
         }
         comp_idx = comp_idx + 1
       }
     }
-
 
     # Appending element
     ylist[["elements"]][[ele_idx]] = list(element = tmp_element)
@@ -3425,7 +3429,6 @@ DW_mk_preload     = function(state){
   yaml_list[[ state[["id"]] ]]  = ylist
 
   if(!isgood && !is.null(err_msg)){
-    formods::FM_le(state,err_msg,entry_type="danger")
     msgs = c(msgs, err_msg)
   }
 
