@@ -1,37 +1,38 @@
 # Data Wrangling (DW) configuration
-MC: 
+MC:
   module:
     type: "DW"
     # internal R Object: module ID used in deployment
-    depends: 
+    depends:
       id_ASM: "ASM"
       id_UD:  "UD"
   # Controls what is shown in the compact ui mode: DW_ui_compact
   compact:
-    code:    TRUE 
-    preview: TRUE 
-    clip:    TRUE 
+    code:    TRUE
+    preview: TRUE
+    clip:    TRUE
   reporting:
-    enabled: TRUE 
+    enabled: TRUE
     priority: 1
   notifications:
     new_dw_element: "Added element: ===ACTION=== (===DESC===)"
     del_dw_element: "Removed element: ===ACTION=== (===DESC===)"
-  tooltips: 
+  tooltips:
     # Set to FALSE to disable tool tips for this module
     include:              TRUE
     show_code:            "Show data wrangling code"
     dw_elements:          "Current wrangling elements"
-  labels: 
+  labels:
     tab_main:             "Wrangle"
     tab_code:             "Code"
     add_element:          "Add Operation/Action"
+    select_dw_views:      "Current data view"
     fds_filter_column:    "Filter by Column"
     fds_filter_operator:  "Condition"
     fds_filter_rhs:       "Matching"
     fds_mutate_column:    "New or current column to alter"
     fds_mutate_rhs:       "New Value"
-    fds_rename_column:    "Curret Column"   
+    fds_rename_column:    "Curret Column"
     fds_rename_rhs:       "New Name"
     fds_group_column:     "Columns to group"
     fds_longer_column:    "Columns to make longer"
@@ -49,14 +50,14 @@ MC:
     no_dataset:           "No dataset available to wrangle. You need to load a dataset to use this module."
     no_dw_elements:       "No data wrangling elements defined yet"
     busy:
-      dv_update:  "Updating data views. Please be patient..." 
+      dv_update:  "Updating data views. Please be patient..."
   errors:
     fds_filter_column:    "Filter column not specified."
     fds_filter_operator:  "Filter condition not specified."
     fds_filter_rhs:       "Filter RHS not specified."
     fds_mutate_column:    "Mutate column not specified."
     fds_mutate_rhs:       "Mutate RHS not specified."
-    fds_rename_column:    "Column to rename not specified."   
+    fds_rename_column:    "Column to rename not specified."
     fds_rename_rhs:       "New column name not specified."
     fds_group_column:     "No columns to group specified."
     fds_select_column:    "You must select at least one column to keep."
@@ -71,7 +72,7 @@ MC:
     no_rows:              "There are no rows in the data set."
     element_not_added:    "Unable to add the data wrangling element:"
     fix_bad_element:      "There is a bad element in the data wrangling chain,\nyou need to fix that before adding new elements"
-  operators:  
+  operators:
     # Do not change the type or rop. Only modify the text element
     - type: "factor"
       text: "is one of"
@@ -90,39 +91,39 @@ MC:
       rop:  "!="
   actions:
     filter:
-      choice:  "Filter"   
+      choice:  "Filter"
       subtext: "Filter data"
     mutate:
-      choice:  "Alter"  
+      choice:  "Alter"
       subtext: "Create new column or change existing column"
     rename:
-      choice:  "Rename"  
+      choice:  "Rename"
       subtext: "Rename column"
-    group:  
-      choice:  "Group"   
+    group:
+      choice:  "Group"
       subtext: "Group subsequent operations by columns"
     ungroup:
-      choice:  "Ungroup" 
-      subtext: "Removing groping"                        
-    longer: 
-      choice:  "Elongate" 
-      subtext: "Make Longer: rows to columns"                        
-    wider:  
-      choice:  "Widen" 
-      subtext: "Make Wider: columns to rows"                        
-    onerow: 
-      choice:  "First Row" 
-      subtext: "Keep only first row of grouped data"                          
-    select: 
-      choice:  "Select" 
+      choice:  "Ungroup"
+      subtext: "Removing groping"
+    longer:
+      choice:  "Elongate"
+      subtext: "Make Longer: rows to columns"
+    wider:
+      choice:  "Widen"
+      subtext: "Make Wider: columns to rows"
+    onerow:
+      choice:  "First Row"
+      subtext: "Keep only first row of grouped data"
+    select:
+      choice:  "Select"
       subtext: "Choose columns to keep"
   formatting:
     # dimensions of the table preview in pixels
-    preview:    
-      width:  800 
+    preview:
+      width:  800
       height: 400
     # Dimensions of the table with the data wrangling elements
-    dw_elements:    
+    dw_elements:
       width:  600
       height: 200
     current_key:
@@ -130,43 +131,45 @@ MC:
     code:
       width:  800
       height: 300
-    # Button sizes from actionBttn (shinyWidgets) 
+    # Button sizes from actionBttn (shinyWidgets)
     # xs,sm, md, lg.
     button_dw_del:
-      size: "sm" 
-      block: TRUE 
+      size: "sm"
+      block: TRUE
       tooltip: "Delete the current data view."
       tooltip_position: "right"
     button_dw_clip:
-      size: "sm" 
-      block: TRUE 
+      size: "sm"
+      block: TRUE
       tooltip: "Copy code to generate current data view to the clipboard."
       tooltip_position: "right"
+    select_dw_views:
+      width: 200
     button_dw_save:
-      size: "sm" 
-      block: TRUE 
+      size: "sm"
+      block: TRUE
       tooltip: "Save changes to data view name"
       tooltip_position: "right"
     button_dw_copy:
-      size: "sm" 
-      block: TRUE 
+      size: "sm"
+      block: TRUE
       tooltip: "Copy current data view to a new data view."
       tooltip_position: "right"
     button_dw_new:
-      size: "sm" 
-      block: TRUE 
+      size: "sm"
+      block: TRUE
       tooltip: "Create a new empty data view."
       tooltip_position: "right"
     button_dw_add_element:
-      size: "sm" 
-      block: TRUE 
+      size: "sm"
+      block: TRUE
   code: # module specific code options
     readOnly: TRUE
-    mode:     r    
+    mode:     r
     packages: ["dplyr", "tidyr"]
     # The preamble goes before the section of generated code for this module
     # in the export script that is generated on save.
-    preamble: |- 
+    preamble: |-
       # Data wrangling ----------------------------------------------------------
   # Name of the data set after wrangling it should be different than the value
   # in the UD section
