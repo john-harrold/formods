@@ -54,5 +54,5 @@ Note that because `formods` depends on `onbrand` you will need to first install 
 
 ``` r 
 library(formods)
-formods()
+run_formods()
 ```

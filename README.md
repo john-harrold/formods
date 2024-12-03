@@ -53,7 +53,6 @@ install the development version of `onbrand`.
 # Getting started
 
 ``` r
-library(shiny)
 library(formods)
-runApp(system.file(package="formods", "templates","FM_compact.R"))
+run_formods()
 ```
