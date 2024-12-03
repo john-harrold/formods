@@ -26,6 +26,10 @@ DW.yaml       = system.file(package="formods",  "templates",  "DW.yaml")
 FG.yaml       = system.file(package="formods",  "templates",  "FG.yaml")
 
 
+# Name of  file to indicate we need to load testing data
+ftmptest = file.path(tempdir(), "formods.test")
+
+
 # Default to not deployed
 if(!exists("deployed")){
   deployed = FALSE
@@ -119,14 +123,16 @@ server <- function(input, output, session) {
   # changes in the module state outside of the module
   react_FM = reactiveValues()
 
-  #Uncomment to populate with test data
-  # sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
-  #             system.file(package="formods", "preload", "UD_preload.yaml"),
-  #             system.file(package="formods", "preload", "DW_preload.yaml"),
-  #             system.file(package="formods", "preload", "FG_preload.yaml"))
-  # res = FM_app_preload(session=session, sources=sources)
-
-  if(file.exists("preload.yaml")){
+  #Uncommenet to populate with test data
+  # If the ftmptest file is present we load test data
+  if(file.exists(ftmptest)){
+    sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+                system.file(package="formods", "preload", "UD_preload.yaml"),
+                system.file(package="formods", "preload", "DW_preload.yaml"),
+                system.file(package="formods", "preload", "FG_preload.yaml"))
+    res = FM_app_preload(session=session, sources=sources)
+  } else if(file.exists("preload.yaml")){
+    
     shinybusy::show_modal_spinner(text="Preloading analysis, be patient", session=session)
     res = FM_app_preload(session=session, sources="preload.yaml")
     shinybusy::remove_modal_spinner(session = session)

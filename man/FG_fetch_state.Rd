@@ -73,7 +73,7 @@ structure of the list is defined below:
        \item{msgs:           Any messages generated when building the
        figure.}
        \item{notes:          Figure notes  (user editable)}
-       \item{num_pages:      Number of pages in the figure.} 
+       \item{num_pages:      Number of pages in the figure.}
        \item{page:           The currently selected figure page.}
      }
  }

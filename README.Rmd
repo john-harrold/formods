@@ -53,7 +53,6 @@ Note that because `formods` depends on `onbrand` you will need to first install 
 # Getting started
 
 ``` r 
-library(shiny)
 library(formods)
-runApp(system.file(package="formods", "templates","FM_compact.R"))
+formods()
 ```

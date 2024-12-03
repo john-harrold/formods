@@ -7,6 +7,7 @@
 * Updated FM_compact.R test app to use the preload script in an unzipped saved
   analysis.
 * Created `is_shiny()` function. 
+* Created `run_formods()` function to run the test app. 
 
 
 # formods 0.1.7 

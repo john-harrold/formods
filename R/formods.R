@@ -2985,3 +2985,61 @@ FM_reset_app <- function(session){
   session$userData[["FM"]] = NULL
 
 session}
+
+
+#'@export
+#'@title Run the {formods} Shiny App
+#'@description Runs the test formods. app.
+#'@param host Hostname of the server ("127.0.0.1")
+#'@param port Port number for the app (3838)
+#'@param server_opts List of options (names) and their vlues (value) e.g.
+#'\code{list(shiny.maxRequestSize = 30 * 1024^2)}.
+#'@param devmode   Boolean value, when TRUE will run formods with development
+#'modules.
+#'@param mksession Boolean value, when TRUE will load test session data
+#'for app testing.
+#'@return Nothing is returned, this function just runs the built-in formods 
+#'app.
+#'@examples
+#'if (interactive()) {
+#' run_formods()
+#'}
+run_formods  = function(host        = "127.0.0.1",
+                    port        = 3838,
+                    server_opts = list(shiny.maxRequestSize = 30 * 1024^2),
+                    devmode     = FALSE,
+                    mksession   = FALSE){
+
+  if(exists("server_opts")){
+    for(oname in names(server_opts)){
+      eval(parse(text=paste0('options(',oname,'= server_opts[[oname]])')))
+    }
+  }
+
+  # File used to indicate we're in test mode
+  ftmptest = file.path(tempdir(), "formods.test")
+
+  # Deleteing any existing files
+  if(file.exists(ftmptest)){
+    unlink(ftmptest)
+  }
+
+  # If mksession is true we create the temporary file
+  if(mksession){
+    file.create(ftmptest)
+  }
+  
+
+  if(devmode){
+    shiny::runApp(system.file(package="formods", "templates","FM_compact.R"),
+                  host  = host,
+                  port  = port)
+  } else {
+    shiny::runApp(system.file(package="formods", "templates","FM_compact.R"),
+                  host  = host,
+                  port  = port)
+  }
+  
+
+
+}

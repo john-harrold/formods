@@ -279,16 +279,14 @@ from.</li>
 a previous analysis from yaml files. This function is called with the
 contents of those yaml files to process and load them.</li>
 <li>
+<code>MM_mk_preload</code> This will create a preload list of the
+current state of the module.</li>
+<li>
 <code>MM_test_mksession</code> When testing outside of Shiny it is
-useful to have a prepopulated session, intput, etc objects with actual
-data. Each module shoudl have a <code>test_mksession</code> function
+useful to have a pre-populated session, input, etc. objects with actual
+data. Each module should have a <code>test_mksession</code> function
 that populates these objects with useful data. If your module depends on
-a different module, you can use the <code>test_mksession</code> for the
-modyou yours depends on. For example the data wrangling module depends
-on the upload data module. So the <code>DW_test_mksession</code>
-function uses <code>UD_test_mksession</code> internally to load the test
-dataset and then builds on top of that. The function should return the
-following:
+a different module. The function should return the following:
 <ul>
 <li>
 <code>isgood</code> Boolean indicating the exit status of the
@@ -367,7 +365,22 @@ are displayed in the console.</li>
 <li>
 <code><a href="../reference/FM_tc.html">FM_tc()</a></code> - This can be used to evaluate code, trap
 errors, and process results.</li>
-<li><code><a href="../reference/has_changed.html">has_changed()</a></code></li>
+<li>
+<code><a href="../reference/has_changed.html">has_changed()</a></code> - Depreciated see
+<code><a href="../reference/has_updated.html">has_updated()</a></code>
+</li>
+<li>
+<code><a href="../reference/has_updated.html">has_updated()</a></code> - Used to compare objects to see if they
+have changed.</li>
+<li>
+<code><a href="../reference/icon_link.html">icon_link()</a></code> - Used to create the ui for a link to an
+icon.</li>
+<li>
+<code><a href="../reference/is_installed.html">is_installed()</a></code> - Used to test if a package is
+available.</li>
+<li>
+<code><a href="../reference/is_shiny.html">is_shiny()</a></code> - Used to test if a session object is simply
+a list or a legitimate Shiny session object.</li>
 <li>
 <code><a href="../reference/set_hold.html">set_hold()</a></code> - Used to set a hold on one or more UI
 elements. This prevents internal updating of that UI element based on
