@@ -11,7 +11,7 @@
 
 ![cranlogs](https://cranlogs.r-pkg.org/badges/formods)
 ![Active](https://www.repostatus.org/badges/latest/active.svg)
-[![Lifecycle:
+[![Life-cycle:
 Experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![Codecov test
 coverage](https://codecov.io/gh/john-harrold/formods/branch/master/graph/badge.svg)](https://app.codecov.io/gh/john-harrold/formods?branch=master)
@@ -20,9 +20,9 @@ coverage](https://codecov.io/gh/john-harrold/formods/branch/master/graph/badge.s
 
 Shiny apps can often make use of the same key elements,
 [formods](https://formods.ubiquity.tools) provides modules for common
-tasks (data upload, wragling data, figure genration and saving the app
+tasks (data upload, wrangling data, figure generation and saving the app
 state). These modules can react and interact as well as generate code to
-create reproducable analyses. {formods} also defines a framework for
+create reproducible analyses. {formods} also defines a framework for
 creating reactive modules. The vignettes outline how to use these
 modules as well as how to create other modules within this framework.
 
