@@ -1773,6 +1773,8 @@ DW_fetch_state = function(id,                    input,     session,
     new_view[["WDS"]]            = original_view[["WDS"]]
     new_view[["elements_table"]] = original_view[["elements_table"]]
     new_view[["elements_list"]]  = original_view[["elements_list"]]
+    new_view[["dwe_cntr"]]       = original_view[["dwe_cntr"]]
+
     state = DW_set_current_view(state, new_view)
 
     # Setting hold for views select
@@ -1813,6 +1815,17 @@ DW_fetch_state = function(id,                    input,     session,
 
   # Saving the state
   FM_set_mod_state(session, id, state)
+
+  # Uncomment below to debug 
+  #current_view = DW_fetch_current_view(state)
+  #message(current_view[["key"]])
+  #message("Table details:")
+  #tidyr::as_tibble(current_view[["elements_table"]])
+  #
+  #message("List details:")
+  #message(paste0("Counter: ", current_view[["dwe_cntr"]]))
+  #message(paste0("List elements: ", paste0(names(current_view[["elements_list"]]), collapse=", ")))
+  #message(str(current_view[["elements_list"]]))
 
   # Returning the state
 state }

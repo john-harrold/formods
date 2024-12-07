@@ -1740,6 +1740,7 @@ FG_fetch_state = function(id,
     new_fig[["code_previous" ]]  = old_fig[["code_previous" ]]
     new_fig[["code_fg_only"  ]]  = old_fig[["code_fg_only"  ]]
     new_fig[["notes"         ]]  = old_fig[["notes"         ]]
+    new_fig[["fge_cntr"      ]]  = old_fig[["fge_cntr"      ]]
 
     # Now we dump the new figure with the old components
     # copied into it back into the state object:
