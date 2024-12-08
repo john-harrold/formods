@@ -974,7 +974,7 @@ res}
           list(label       = ce[["ui"]][["element_name"]],
                MOD_TYPE    = "===ZZ===",
                id          = state[["id"]],
-               idx         = ce[["idx"]],   
+               idx         = ce[["idx"]],
                rx_obj      = NULL, #
                rx_obj_name = NULL, #
                ts_obj      = NULL, #
@@ -1040,7 +1040,7 @@ state}
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
-#'@return The ===ZZ=== portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}} 
+#'@return The ===ZZ=== portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}}
 #'@examples
 #' sess_res = ===ZZ===_test_mksession()
 ===ZZ===_test_mksession = function(session = list()){
@@ -1049,7 +1049,7 @@ state}
               system.file(package="formods", "preload", "UD_preload.yaml"))
   res = ASM_set_app_state(session=list(), sources=sources)
   res = res[["all_sess_res"]][["===ZZ==="]]
-  
+
 res}
 
 #'@export
@@ -1224,7 +1224,7 @@ state}
   # or just delete it.
 
 
-  res = 
+  res =
   list(state   = state,
        session = session)
 res}
@@ -1235,10 +1235,10 @@ res}
 #'@description Populates the supplied session variable with information from
 #'list of sources.
 #'@param session     Shiny session variable (in app) or a list (outside of app)
-#'@param src_list    List of preload data (all read together with module IDs at the top level) 
+#'@param src_list    List of preload data (all read together with module IDs at the top level)
 #'@param yaml_res    List data from module yaml config
-#'@param mod_ID      Module ID of the module being loaded. 
-#'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions. 
+#'@param mod_ID      Module ID of the module being loaded.
+#'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions.
 #'@param quickload   Logical \code{TRUE} to load reduced analysis \code{FALSE} to load the full analysis
 #'@return list with the following elements
 #' \itemize{
@@ -1255,7 +1255,7 @@ res}
   msgs    = c()
   res     = c()
   err_msg = c()
-  
+
 
 
   FM_yaml_file  = render_str(src_list[[mod_ID]][["fm_yaml"]])
@@ -1298,9 +1298,9 @@ res}
       state = ===ZZ===_new_element(state)
     }
 
-    # culling any unneeded views 
+    # culling any unneeded views
     for(ele_id  in names(state[["===ZZ==="]][["elements"]])){
-      # This is a view that doesn't exist in elements so 
+      # This is a view that doesn't exist in elements so
       # we need to cull it
       if(!(ele_id  %in% names(element_map))){
         # Setting the view to be deleted as the current view
@@ -1316,7 +1316,7 @@ res}
       state[["===ZZ==="]][["current_element"]]  =  element_id
       ele_err_msg = c()
 
-      # Getting the numeric position in the list corresponding 
+      # Getting the numeric position in the list corresponding
       # to the current element id
       ele_idx = element_map[[element_id]]
       ele_isgood = TRUE
@@ -1339,7 +1339,7 @@ res}
       # If the module requires components check here:
       # if(!("components" %in% names(elements[[ele_idx]][["element"]]))){
       #   ele_isgood = FALSE
-      #   ele_err_msg = c(ele_err_msg, 
+      #   ele_err_msg = c(ele_err_msg,
       #       paste0("element idx: ",ele_idx, " no components defined"))
       # }
 
@@ -1356,7 +1356,7 @@ res}
         #   # if(!all(req_comp_opts    %in% names(tmp_component))){
         #   #   ele_isgood      = FALSE
         #   #   add_component   = FALSE
-        #   #   missing_opts    = 
+        #   #   missing_opts    =
         #   #     req_comp_opts[!(req_comp_opts %in% names(tmp_component))]
         #   #   ele_err_msg = c(ele_err_msg,
         #   #     paste0("element idx:  ",ele_idx, ", element idx: ", comp_idx, ", missing option(s):" ),
@@ -1365,8 +1365,8 @@ res}
         #   # }
         #   if(add_component && ele_isgood){
         #   }
-        #   
-        #   
+        #
+        #
         # }
       }
 
@@ -1386,23 +1386,23 @@ res}
     formods::FM_le(state,err_msg,entry_type="danger")
     msgs = c(msgs, err_msg)
   }
-  
-  
+
+
   formods::FM_le(state,paste0("module isgood: ",isgood))
-  
+
   if(formods::is_shiny(session)){
     FM_set_mod_state(session, mod_ID, state)
   } else {
     session = FM_set_mod_state(session, mod_ID, state)
   }
 
-  res = list(isgood      = isgood, 
+  res = list(isgood      = isgood,
              msgs        = msgs,
              session     = session,
              input       = input,
              react_state = react_state,
              state       = state)
-  
+
 res}
 
 #'@export
@@ -1416,10 +1416,12 @@ res}
 #'   \item{yaml_list:}    Lists with preload components.
 #'}
 #'@examples
-#'res = ===ZZ===_mk_preload(state)
+#' sess_res = ===ZZ===_test_mksession()
+#' state = sess_res$state
+#' res = ===ZZ===_mk_preload(state)
 ===ZZ===_mk_preload     = function(state){
   isgood    = TRUE
-  msgs      = c()  
+  msgs      = c()
   err_msg   = c()
   yaml_list = list()
 
@@ -1431,12 +1433,12 @@ res}
   # Creating the yaml list with the module ID at the top level
   yaml_list = list()
   yaml_list[[ state[["id"]] ]]  = ylist
-      
+
   ele_idx = 1
   # Walking through each element:
   for(element_id in names(state[["===ZZ==="]][["elements"]])){
     tmp_source_ele = state[["===ZZ==="]][["elements"]][[element_id]]
-  
+
     FM_le(state, paste0("saving element (", tmp_source_ele[["idx"]], ") ", tmp_source_ele[["ui"]][["element_name"]]))
 
     tmp_element = list(
@@ -1455,7 +1457,7 @@ res}
 
   yaml_list = list()
   yaml_list[[ state[["id"]] ]]  = ylist
-  
+
   if(!isgood && !is.null(err_msg)){
     formods::FM_le(state,err_msg,entry_type="danger")
     msgs = c(msgs, err_msg)
