@@ -14,7 +14,7 @@ list with the following elements
 \itemize{
   \item{isgood:}       Boolean indicating the exit status of the function.
   \item{msgs:}         Messages to be passed back to the user.
-  \item{src_list:}     List containing the result of reading all of the sources. 
+  \item{src_list:}     List containing the result of reading all of the sources.
   \item{yaml_res:}     Lists with elements for each module ID found in src_list with elements holding the modules configuration file \code{"mod_cfg"} and the modules formods configuration file \code{"fm_cfg"}
 }
 }

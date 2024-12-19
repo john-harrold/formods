@@ -174,7 +174,7 @@ UD_Server <- function(id,
 
       if(length(names(wf)) > 0){
         for(wfn in names(wf)){
-          # Checking for the existence of the preload file. We only 
+          # Checking for the existence of the preload file. We only
           # show preload options that actually exist
           plf= render_str(wf[[wfn]][["preload"]])
           if(file.exists(plf)){
@@ -205,17 +205,17 @@ UD_Server <- function(id,
           }
         }
 
-        po = shinyWidgets::pickerOptions( 
+        po = shinyWidgets::pickerOptions(
             liveSearch =liveSearch,
             size       =state[["MC"]][["formatting"]][["workflow"]][["size"]])
 
         if(length(groups) <2){
-          choices = choices_simple 
+          choices = choices_simple
         } else {
           choices = choices_group
         }
 
-        uiele_btn = 
+        uiele_btn =
           shinyWidgets::actionBttn(
                   inputId = NS(id, "btn_run_wf"),
                   label   = state[["MC"]][["labels"]][["run_wf"]],
@@ -224,10 +224,10 @@ UD_Server <- function(id,
                   block   = state[["MC"]][["formatting"]][["btn_run_wf"]][["block"]],
                   color   = "primary",
                   icon    = icon("play"))
-        uiele_btn = 
+        uiele_btn =
           div(style=paste0("width:",state[["MC"]][["formatting"]][["btn_run_wf"]][["width"]]),uiele_btn)
 
-        uiele_select = 
+        uiele_select =
             pickerInput(
                inputId = NS(id, "workflow"),
                label = state[["MC"]][["labels"]][["workflow"]],
@@ -235,14 +235,14 @@ UD_Server <- function(id,
                options = po,
                width      = state[["MC"]][["formatting"]][["workflow"]][["width"]]
               )
-        uiele_select = 
+        uiele_select =
           div(style=paste0("width:",state[["MC"]][["formatting"]][["workflow"]][["width"]]),uiele_select)
 
-        uiele_select = FM_add_ui_tooltip(state, uiele_select, 
+        uiele_select = FM_add_ui_tooltip(state, uiele_select,
                  tooltip     = state[["MC"]][["formatting"]][["btn_run_wf"]][["tooltip"]],
                  position    = state[["MC"]][["formatting"]][["btn_run_wf"]][["tooltip_position"]])
 
-        uiele = 
+        uiele =
           tagList(uiele_select, uiele_btn)
       } else {
         uiele = state[["MC"]][["errors"]][["no_workflows_found"]]
@@ -636,7 +636,7 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
 
     if(wfl[["require_ds"]] & !state[["UD"]][["isgood"]]){
       # To run this workflow a dataset is required but one has not been
-      # uploaded. 
+      # uploaded.
       load_msg  = state[["MC"]][["errors"]][["no_ds_for_workflow"]]
       rwf_isgood = FALSE
       FM_set_mod_state(session, id, state)
@@ -674,7 +674,7 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
           FM_pause_screen(state   = state,
                           message = state[["MC"]][["labels"]][["busy"]][["rwf"]],
                           session = session)
-          ls_res = 
+          ls_res =
           ASM_load_state(state, session,
                          file_path = ssf)
           FM_resume_screen(state   = state,
@@ -703,7 +703,7 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
     } else {
       state = FM_set_notification(state,
         notify_text =  state[["MC"]][["errors"]][["rwf_failed"]],
-        notify_id   = "rwf_failed", 
+        notify_id   = "rwf_failed",
         type        = "failure")
     }
     state[["UD"]][["load_msg"]] = paste0(load_msg, collapse="\n")
@@ -753,7 +753,7 @@ UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
     MT              = "UD",
     button_counters = button_counters,
     ui_ids          = ui_ids,
-    ui_hold         = ui_ids, 
+    ui_hold         = ui_ids,
     session         = session)
 
   state[["UD"]][["ui_ids"]] = ui_ids
@@ -772,7 +772,7 @@ UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 #'@title Attach Data Set to UD State
 #'@description Attaches a dataset to the UD state supplied.
 #'@param state UD state module.
-#'@param clean  Boolean switch to determine if the headers in the loaded dataset was cleaned. 
+#'@param clean  Boolean switch to determine if the headers in the loaded dataset was cleaned.
 #'@param isgood Boolean object indicating if the file was successfully loaded.
 #'@param load_msg Text message indicated the success or any problems encountered when uploading the file.
 #'@param data_file_local Full path to the data file on the server.
@@ -872,18 +872,18 @@ UD_attach_ds = function(
     isgood = FALSE
   }
 
-  state[["UD"]][["isgood"]]          = isgood          
-  state[["UD"]][["clean"]]           = clean           
-  state[["UD"]][["load_msg"]]        = load_msg        
-  state[["UD"]][["data_file_local"]] = data_file_local 
-  state[["UD"]][["data_file_ext"]]   = data_file_ext   
-  state[["UD"]][["data_file"]]       = data_file       
-  state[["UD"]][["sheet"]]           = sheet           
-  state[["UD"]][["sheets"]]          = sheets          
-  state[["UD"]][["code"]]            = code            
-  state[["UD"]][["object_name"]]     = object_name     
-  state[["UD"]][["checksum"]]        = checksum        
-  state[["UD"]][["contents"]]        = contents        
+  state[["UD"]][["isgood"]]          = isgood
+  state[["UD"]][["clean"]]           = clean
+  state[["UD"]][["load_msg"]]        = load_msg
+  state[["UD"]][["data_file_local"]] = data_file_local
+  state[["UD"]][["data_file_ext"]]   = data_file_ext
+  state[["UD"]][["data_file"]]       = data_file
+  state[["UD"]][["sheet"]]           = sheet
+  state[["UD"]][["sheets"]]          = sheets
+  state[["UD"]][["code"]]            = code
+  state[["UD"]][["object_name"]]     = object_name
+  state[["UD"]][["checksum"]]        = checksum
+  state[["UD"]][["contents"]]        = contents
 
   state}
 
@@ -1075,8 +1075,8 @@ code}
 #'            session       = session,
 #'            FM_yaml_file  = FM_yaml_file,
 #'            MOD_yaml_file = MOD_yaml_file )
-#'   
-#'  ds_res = UD_fetch_ds(state) 
+#'
+#'  ds_res = UD_fetch_ds(state)
 UD_fetch_ds = function(state){
   hasds  = FALSE
   isgood = TRUE
@@ -1087,7 +1087,7 @@ UD_fetch_ds = function(state){
   NEWDS = list(label      = NULL,
                MOD_TYPE   = NULL,
                id         = NULL,
-               idx        = 1,    
+               idx        = 1,
                DS         = NULL,
                DSMETA     = NULL,
                code       = NULL,
@@ -1121,9 +1121,10 @@ res}
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
-#'@return The UD portion of the `all_sess_res` returned from \code{\link{FM_app_preload}} 
+#'@return The UD portion of the `all_sess_res` returned from \code{\link{FM_app_preload}}
 #'@examples
-#' sess_res = UD_test_mksession()
+#' session = shiny::MockShinySession$new()
+#' sess_res = UD_test_mksession(session=session)
 #'@seealso \code{\link{FM_app_preload}}
 UD_test_mksession = function(session=list()){
 
@@ -1140,10 +1141,10 @@ res}
 #'@description Populates the supplied session variable with information from
 #'list of sources.
 #'@param session     Shiny session variable (in app) or a list (outside of app)
-#'@param src_list    List of preload data (all read together with module IDs at the top level) 
+#'@param src_list    List of preload data (all read together with module IDs at the top level)
 #'@param yaml_res    List data from module yaml config
-#'@param mod_ID      Module ID of the module being loaded. 
-#'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions. 
+#'@param mod_ID      Module ID of the module being loaded.
+#'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions.
 #'@param quickload   Logical \code{TRUE} to load reduced analysis \code{FALSE} to load the full analysis
 #'@return list with the following elements
 #' \itemize{
@@ -1175,7 +1176,7 @@ UD_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
     # Handling the situation where the sheet has not been defined:
     input[["input_select_sheet"]] = NULL
     if(!is.null(src_list[[mod_ID]][["data_source"]][["sheet"]])){
-      input[["input_select_sheet"]] = 
+      input[["input_select_sheet"]] =
         render_str(src_list[[mod_ID]][["data_source"]][["sheet"]])
     }
   }
@@ -1203,7 +1204,7 @@ UD_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
       msgs = c(msgs, "Failed to load dataset")
     }
   }
- 
+
   # Saving the state
   if(formods::is_shiny(session)){
     FM_set_mod_state(session, mod_ID, state)
@@ -1213,7 +1214,7 @@ UD_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
 
   formods::FM_le(state,paste0("module isgood: ",isgood))
 
-  res = list(isgood      = isgood, 
+  res = list(isgood      = isgood,
              msgs        = msgs,
              session     = session,
              input       = input,
@@ -1238,7 +1239,7 @@ res}
 #' res = UD_mk_preload(state)
 UD_mk_preload     = function(state){
   isgood    = TRUE
-  msgs      = c()  
+  msgs      = c()
   yaml_list = list()
 
   yaml_list[[ state[["id"]] ]] = list(

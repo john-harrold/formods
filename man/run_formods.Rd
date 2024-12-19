@@ -2,7 +2,7 @@
 % Please edit documentation in R/formods.R
 \name{run_formods}
 \alias{run_formods}
-\title{Run the {formods} Shiny App}
+\title{Run the 'formods' Shiny App}
 \usage{
 run_formods(
   host = "127.0.0.1",
@@ -27,7 +27,7 @@ modules.}
 for app testing.}
 }
 \value{
-Nothing is returned, this function just runs the built-in formods 
+Nothing is returned, this function just runs the built-in formods
 app.
 }
 \description{

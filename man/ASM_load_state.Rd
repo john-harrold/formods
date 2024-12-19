@@ -19,7 +19,7 @@ following elements:
 \itemize{
   \item{isgood:}      Boolean indicating the exit status of the function.
   \item{msgs:}        Messages to be passed back to the user.
-  \item{state:}       AMS state     
+  \item{state:}       AMS state
   \item{session:}     Session object
 }
 }
@@ -36,11 +36,11 @@ state   = sess_res$state
 
 ssf  = tempfile(fileext=".zip")
 
-ss_res = 
+ss_res =
 ASM_save_state(state, session,
                file_path = ssf)
 
-ls_res = 
+ls_res =
 ASM_load_state(state, session,
                file_path = ssf)
 }

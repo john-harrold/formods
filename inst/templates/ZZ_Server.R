@@ -931,10 +931,10 @@ res}
 #'    \item{ts_obj:}        List of timescale information for the system and
 #'                          details of other timescales (\code{list(system="weeks", details = list(days=list(verb="days", conv=86400)))})
 #'    \item{ts_obj_name:}   The object name that holds the timescale for this  model.
-#'    \item{fcn_def:}    Text to define the model.
-#'    \item{MDLMETA:}    Notes about the model.
-#'    \item{code:}       Code to generate the model.
-#'    \item{checksum:}   Module checksum.
+#'    \item{fcn_def:}      Text to define the model.
+#'    \item{MDLMETA:}      Notes about the model.
+#'    \item{code:}         Code to generate the model.
+#'    \item{checksum:}     Module checksum.
 #'    \item{MDLchecksum:} Model checksum.
 #'  }
 #'}
@@ -1042,7 +1042,8 @@ state}
 #'@param session Shiny session variable (in app) or a list (outside of app)
 #'@return The ===ZZ=== portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}}
 #'@examples
-#' sess_res = ===ZZ===_test_mksession()
+#' session = shiny::MockShinySession$new()
+#' sess_res = ===ZZ===_test_mksession(session=session)
 ===ZZ===_test_mksession = function(session = list()){
 
   sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),

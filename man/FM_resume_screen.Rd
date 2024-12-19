@@ -22,6 +22,6 @@ Stops Modal Screen Pause
 sess_res = UD_test_mksession()
 session = sess_res$session
 state = sess_res$state
-FM_pause_screen(state, session)
+FM_pause_screen(state, session, "pausing")
 FM_resume_screen(state, session)
 }

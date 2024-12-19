@@ -100,17 +100,17 @@ following elements:</p><ul><li><p>isgood:      Boolean indicating the exit statu
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ssf</span>  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext<span class="op">=</span><span class="st">".zip"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">ss_res</span> <span class="op">=</span> </span></span>
+<span class="r-in"><span><span class="va">ss_res</span> <span class="op">=</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="ASM_save_state.html">ASM_save_state</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">session</span>,</span></span>
 <span class="r-in"><span>               file_path <span class="op">=</span> <span class="va">ssf</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Saving module: ASM</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: mk_preload isgood: TRUE</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: writing app state to file on server: </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   /var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T//RtmpxxeT0v/filebb141c6b6370.zip</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   /var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T//Rtmptomxww/filefd832c78bdc6.zip</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: Generating reports (code only)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: done writing app state</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">ls_res</span> <span class="op">=</span> </span></span>
+<span class="r-in"><span><span class="va">ls_res</span> <span class="op">=</span></span></span>
 <span class="r-in"><span><span class="fu">ASM_load_state</span><span class="op">(</span><span class="va">state</span>, <span class="va">session</span>,</span></span>
 <span class="r-in"><span>               file_path <span class="op">=</span> <span class="va">ssf</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>

@@ -16,7 +16,8 @@ The DW portion of the `all_sess_res` returned from \code{\link{FM_app_preload}}
 Populates the supplied session variable for testing.
 }
 \examples{
-sess_res = DW_test_mksession()
+session = shiny::MockShinySession$new()
+sess_res = DW_test_mksession(session=session)
 }
 \seealso{
 \code{\link{FM_app_preload}}

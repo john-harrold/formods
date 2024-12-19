@@ -2954,16 +2954,25 @@ res}
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
+#' session = shiny::MockShinySession$new()
 #'@return The FG portion of the `all_sess_res` returned from \code{\link{FM_app_preload}}
 #'@examples
-#' sess_res = FG_test_mksession()
+#' session = shiny::MockShinySession$new()
+#' sess_res = FG_test_mksession(session=session)
 #'@seealso \code{\link{FM_app_preload}}
-FG_test_mksession = function(session=list()){
+FG_test_mksession = function(session=list(), full=FALSE){
 
-  sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
-              system.file(package="formods", "preload", "UD_preload.yaml"),
-              system.file(package="formods", "preload", "DW_preload.yaml"),
-              system.file(package="formods", "preload", "FG_preload_minimal.yaml"))
+  if(full){
+    sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+                system.file(package="formods", "preload", "UD_preload.yaml"),
+                system.file(package="formods", "preload", "DW_preload.yaml"),
+                system.file(package="formods", "preload", "FG_preload.yaml"))
+  } else {
+    sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+                system.file(package="formods", "preload", "UD_preload.yaml"),
+                system.file(package="formods", "preload", "DW_preload.yaml"),
+                system.file(package="formods", "preload", "FG_preload_minimal.yaml"))
+  }
   res = FM_app_preload(session=session, sources=sources)
   res = res[["all_sess_res"]][["FG"]]
 

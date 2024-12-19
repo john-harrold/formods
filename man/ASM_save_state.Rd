@@ -36,7 +36,7 @@ state   = sess_res$state
 
 ssf  = tempfile(fileext=".zip")
 
-ss_res = 
+ss_res =
 ASM_save_state(state, session,
                file_path  = ssf)
 }

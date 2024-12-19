@@ -1997,7 +1997,7 @@ state}
 #' sess_res = UD_test_mksession()
 #' session = sess_res$session
 #' state = sess_res$state
-#' FM_pause_screen(state, session)
+#' FM_pause_screen(state, session, "pausing")
 #' FM_resume_screen(state, session)
 FM_pause_screen = function(state, session, message){
 
@@ -2107,7 +2107,7 @@ res}
 #' sess_res = UD_test_mksession()
 #' session = sess_res$session
 #' state = sess_res$state
-#' FM_pause_screen(state, session)
+#' FM_pause_screen(state, session, "pausing")
 #' FM_resume_screen(state, session)
 FM_resume_screen=function(state, session){
 
@@ -2415,7 +2415,7 @@ res}
 is_shiny     = function(session=list()){
 
   res = FALSE
-  if(any(c("ShinySession", "session_proxy") %in% class(session))){
+  if(any(c("ShinySession", "MockShinySession", "session_proxy") %in% class(session))){
     res = TRUE
   }
 
@@ -2988,7 +2988,7 @@ session}
 
 
 #'@export
-#'@title Run the {formods} Shiny App
+#'@title Run the 'formods' Shiny App
 #'@description Runs the test formods. app.
 #'@param host Hostname of the server ("127.0.0.1")
 #'@param port Port number for the app (3838)
@@ -2998,7 +2998,7 @@ session}
 #'modules.
 #'@param mksession Boolean value, when TRUE will load test session data
 #'for app testing.
-#'@return Nothing is returned, this function just runs the built-in formods 
+#'@return Nothing is returned, this function just runs the built-in formods
 #'app.
 #'@examples
 #'if (interactive()) {
@@ -3028,7 +3028,7 @@ run_formods  = function(host        = "127.0.0.1",
   if(mksession){
     file.create(ftmptest)
   }
-  
+
 
   if(devmode){
     shiny::runApp(system.file(package="formods", "templates","FM_compact.R"),
@@ -3039,7 +3039,7 @@ run_formods  = function(host        = "127.0.0.1",
                   host  = host,
                   port  = port)
   }
-  
+
 
 
 }
