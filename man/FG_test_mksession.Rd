@@ -8,7 +8,9 @@ FG_test_mksession(session = list(), full = FALSE)
 }
 \arguments{
 \item{session}{Shiny session variable (in app) or a list (outside of app)
-session = shiny::MockShinySession$new()}
+session = shiny::MockShinySession$new().}
+
+\item{full}{Boolean indicating if the full test session should be created.}
 }
 \value{
 The FG portion of the `all_sess_res` returned from \code{\link{FM_app_preload}}

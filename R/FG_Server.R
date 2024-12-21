@@ -2954,14 +2954,14 @@ res}
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
-#' session = shiny::MockShinySession$new()
+#' session = shiny::MockShinySession$new().
+#'@param full Boolean indicating if the full test session should be created.
 #'@return The FG portion of the `all_sess_res` returned from \code{\link{FM_app_preload}}
 #'@examples
 #' session = shiny::MockShinySession$new()
 #' sess_res = FG_test_mksession(session=session)
 #'@seealso \code{\link{FM_app_preload}}
 FG_test_mksession = function(session=list(), full=FALSE){
-
   if(full){
     sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
                 system.file(package="formods", "preload", "UD_preload.yaml"),
