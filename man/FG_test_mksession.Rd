@@ -4,10 +4,11 @@
 \alias{FG_test_mksession}
 \title{Populate Session Data for Module Testing}
 \usage{
-FG_test_mksession(session = list())
+FG_test_mksession(session = list(), full = FALSE)
 }
 \arguments{
-\item{session}{Shiny session variable (in app) or a list (outside of app)}
+\item{session}{Shiny session variable (in app) or a list (outside of app)
+session = shiny::MockShinySession$new()}
 }
 \value{
 The FG portion of the `all_sess_res` returned from \code{\link{FM_app_preload}}
