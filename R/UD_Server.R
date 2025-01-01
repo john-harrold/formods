@@ -671,7 +671,6 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
           pll[[tmp_modID]][["mod_yaml"]] = tmp_modstate[["MOD_yaml_file"]]
         } else {
           tmp_msg = paste0("Module with ID: ", tmp_modID, " found in workflow but not in app. ")
-          msgs = c(msgs, tmp_msg)
           FM_le(state, tmp_msg, entry_type="error")
         }
       }
