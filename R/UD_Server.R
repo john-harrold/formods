@@ -661,6 +661,24 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
       }
 
 
+      # Because preload files from saved analyses can have relative
+      # paths to configuration yaml files in them, we need replace those 
+      # With the paths to those files used in the current app
+      for(tmp_modID in names(pll)){
+        tmp_modstate = FM_fetch_mod_state(session, tmp_modID)
+        if(!is.null(tmp_modstate)){
+          pll[[tmp_modID]][["fm_yaml"]]  = tmp_modstate[["FM_yaml_file"]]
+          pll[[tmp_modID]][["mod_yaml"]] = tmp_modstate[["MOD_yaml_file"]]
+        } else {
+          tmp_msg = paste0("Module with ID: ", tmp_modID, " found in workflow but not in app. ")
+          msgs = c(msgs, tmp_msg)
+          FM_le(state, tmp_msg, entry_type="error")
+        }
+      }
+
+
+
+
       ASM_state = FM_fetch_mod_state(id=state[["MC"]][["module"]][["depends"]][["id_ASM"]], session=session)
 
       if(is.null(ASM_state)){
