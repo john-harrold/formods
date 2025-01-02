@@ -2131,14 +2131,16 @@ fers_builder = function(state){
             # If the selection is "manual" then we add it to
             # the list of manual components
             man_rhs = autocast(ui[[man_idx]], quote_char=TRUE)
+
+            # The preload list just needs the raw input passed to it
+            man_rhs_pll = ui[[man_idx]] 
             man_comp = c(man_comp, paste0(comp_idx, "=", man_rhs))
 
             # updating description
             descs = c(descs, paste0(comp_idx,":", man_rhs))
 
             # Adding manual component to the preload list:
-            pll[["manual"]][[comp_idx]] = man_rhs
-
+            pll[["manual"]][[comp_idx]] = man_rhs_pll 
           }
         } else {
           aes_comp = c(aes_comp, paste0(comp_idx, "=", ui[[sel_idx]]))
@@ -2370,12 +2372,14 @@ res}
 #'new figure or force a rebuild after a dataset update.
 #'@param element Short name for the figure element being performed, eg. point
 #'@param desc Verbose description for the action being performed
-#'@return list with the following elements
-#'\itemize{
-#'  \item{isgood:} Return status of the function.
-#'  \item{msgs:}   Messages to be passed back to the user.
-#'  \item{pages:}  List with each element containing a ggplot object (\code{p}) and the code to generate that object (\code{code})
-#'}
+#'@return State with the build result stored in the current figure. Pull out
+#'the figure to inspect it:
+#'
+#' current_fig = FG_fetch_current_fig(state)
+#'
+#' Look at this logical object to test if the build worked.
+#'
+#' current_fig[["add_isgood"]]
 #'@example inst/test_apps/FG_funcs.R
 FG_build = function(state,
                    del_row     = NULL,
@@ -3060,9 +3064,6 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
       }
     }
 
-
-    #auto_elements = state[["FG"]][["auto_elements"]]
-
     # Creating some local variables to make it easier below
     # This contains all plot types:
     plot_elements = state[["MC"]][["elements"]]
@@ -3274,6 +3275,15 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
                 pll     = fgb_res[["pll"]],
                 element = fgb_res[["element"]],
                 desc    = fgb_res[["desc"]])
+
+              # Checking to make sure the component addition worked:
+              current_fig = FG_fetch_current_fig(state)
+              if(!current_fig[["add_isgood"]]){
+                isgood         = FALSE
+                add_component = FALSE
+                comp_err_msg = c(comp_err_msg, current_fig[["msgs"]])
+              }
+              #browser()
             } else {
               isgood         = FALSE
               add_component = FALSE
