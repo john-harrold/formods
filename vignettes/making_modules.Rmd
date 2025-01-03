@@ -420,6 +420,14 @@ reserved elements. These reserved keyword are:
 
 Other than those fields you can store whatever else you need for your module.
 
+# Checklist
+
+The following is a suggested checkist to go over when making a module:
+
+- Try the following functions with and without content
+  - `MM_mk_preload`
+  - `MM_fetch_code`
+
 ## Configuration file
 
 ```{css, echo=FALSE}

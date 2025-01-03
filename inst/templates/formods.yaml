@@ -34,7 +34,7 @@ FM:
       # https://formods.ubiquity.tools/
       rm(list=ls())
     # Each module should have a packages section that lists the packages
-    # needed for code genereated for that module.
+    # needed for code generated for that module.
     packages: ["onbrand", "writexl"]
   notifications:
     config:
@@ -62,7 +62,7 @@ FM:
     enabled: TRUE
     # The content_init section is used to initialize reports. You shouldn't
     # change the xlsx rpt but the docx and pptx rpt can be altered to
-    # preprocess reports if you need to such as adding default.
+    # pre-process reports if you need to such as adding default.
     content_init:
       xlsx: |-
            rpt = list(summary = NULL,
@@ -122,16 +122,16 @@ FM:
     color_purple: "#bd2cf4"
   data_meta:
     # This controls the overall format of headers and the select subtext for
-    # data frames with the following placeholders surrouned by ===:
+    # data frames with the following placeholders surround by ===:
     # COLOR  - font color
-    # NAME   - colum name
+    # NAME   - column name
     # LABEL  - type label
     # RANGE  - this depends on the nature of the data in the column:
     #        - If there are between 1 and 3 values then those values are shown.
     #        - If there are more than 3 values then the min and max are show.
     data_header:  "<span style='color:===COLOR==='><b>===NAME===</b><br/><font size='-3'>===LABEL===</font></span>"
     subtext:      "===LABEL===: ===RANGE==="
-    # Separator when showing more than three in a column. For exmaple if you
+    # Separator when showing more than three in a column. For example if you
     # had a dataset with 1,2,3,4,5,6 and many_sep was ",...," then it would
     # appear as "1,...,6"
     many_sep: ",...,"
@@ -156,10 +156,10 @@ FM:
       desc:       "Example Workflow"
       # Set to true if the workflow requires a dataset
       require_ds: TRUE
-      # this can contain an aboslute path as a string or R evaluable code
+      # this can contain an absolute path as a string or R evaluable code
       preload:    "file.path('.', 'example.yaml')"
   labels:
-    # JMH remove this once the datset stuff has been moved over
+    # JMH remove this once the dataset stuff has been moved over
     # default_ds:   " Original data set"
     ui_label:      "put labels here"
   user_files:

@@ -81,8 +81,10 @@ file.copy(from = system.file(package="formods", "templates",  "formods.yaml"),
 To make your app use this file you need to edit it and change the assignment of the `formods.yaml` object:
 
 ```r
-formods.yaml       = "myformods.yaml"
+formods.yaml       = file.path(getwd(), "myformods.yaml")
 ```
+
+When you alter these configuration file locations it is important to give the full path. 
 
 If you edit the file `myformods.yaml` you will see a section called workflows:
           
