@@ -15,13 +15,13 @@ MC:
     enabled: TRUE
     priority: 1
   notifications:
-    new_dw_element: "Added element: ===ACTION=== (===DESC===)"
-    del_dw_element: "Removed element: ===ACTION=== (===DESC===)"
+    new_dw_element: "Added component: ===ACTION=== (===DESC===)"
+    del_dw_element: "Removed component: ===ACTION=== (===DESC===)"
   tooltips:
     # Set to FALSE to disable tool tips for this module
     include:              TRUE
     show_code:            "Show data wrangling code"
-    dw_elements:          "Current wrangling elements"
+    dw_elements:          "Current wrangling components"
   labels:
     tab_main:             "Wrangle"
     tab_code:             "Code"
@@ -48,7 +48,7 @@ MC:
     ungroup_data:         "Removing current grouping"
     keep_onerow:          "Keep first row in current grouping"
     no_dataset:           "No dataset available to wrangle. You need to load a dataset to use this module."
-    no_dw_elements:       "No data wrangling elements defined yet"
+    no_dw_elements:       "No data wrangling components defined yet"
     busy:
       dv_update:  "Updating data views. Please be patient..."
   errors:
@@ -70,8 +70,8 @@ MC:
     current_key_empty:    "The data view description field cannot be empty"
     unknown_action:       "The selection action is not supported."
     no_rows:              "There are no rows in the data set."
-    element_not_added:    "Unable to add the data wrangling element:"
-    fix_bad_element:      "There is a bad element in the data wrangling chain,\nyou need to fix that before adding new elements"
+    element_not_added:    "Unable to add the data wrangling component:"
+    fix_bad_element:      "There is a bad component in the data wrangling chain,\nyou need to fix that before adding new components"
   operators:
     # Do not change the type or rop. Only modify the text element
     - type: "factor"

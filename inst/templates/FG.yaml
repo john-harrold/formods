@@ -3,26 +3,26 @@ MC:
   module:
     type: "FG"
     # internal R Object: module ID used in deployment
-    depends: 
+    depends:
       id_ASM: "ASM"
       id_UD:  "UD"
       id_DW:  "DW"
   # Controls what is shown in the compact ui mode: FG_ui_compact
   compact:
-    code:    TRUE 
+    code:    TRUE
     preview: "ggplot"   # Either "ggplot" or "plotly" (plotly is experimental)
-    clip:    TRUE 
+    clip:    TRUE
   reporting:
-    enabled: TRUE 
+    enabled: TRUE
     priority: 1
-  tooltips: 
+  tooltips:
     # Set to FALSE to disable tool tips for this module
     include: TRUE
     components:
       manual:
         x:             "Numeric location on the x-axis"
         "y":           "Numeric location on the y-axis"
-        color:         "A named color red, blue, green"
+        color:         "A named color (blue, green, tomato), or a hexadecimal color code (#1bbdea)"
         linetype:      "Specify either solid, dashed, dotted, dotdash, longdash or twodash"
         shape:         "Open shapes: square (0), circle (1), triangle (2); Filled shapes:  square (15), circle (16), triangle (17)"
         size:          "Numeric value"
@@ -30,7 +30,7 @@ MC:
         group:         NULL
         xintercept:    NULL
         yintercept:    NULL
-    ph: 
+    ph:
       notes:             "Optional figure notes that will be carried over and used in other elements (e.g. reporting)."
       fig_key:           "Unique description used for referencing figures and in other elements (e.g. reporting)."
     show_code:         "Show figure generation code"
@@ -48,22 +48,22 @@ MC:
       lower:         "lower"
       middle:        "middle"
       upper:         "upper"
-      shape:         "shape"     
-      size:          "size"     
+      shape:         "shape"
+      size:          "size"
       alpha:         "transparency"
-      group:         "group"     
+      group:         "group"
       xintercept:    "x intercept"
       yintercept:    "y intercept"
       yscale:        "y-scale"
       xscale:        "x-scale"
       ylim:          "y limits"
       xlim:          "x limits"
-    ph:              
+    ph:
       xlab:          "x-axis label"
       ylab:          "y-axis label"
       ggtitle:       "plot title"
       notes:         "optional notes here"
-      fig_key:       "title/caption"     
+      fig_key:       "title/caption"
       manual:        "Manual"
       axlim:         "0.1, 1000 # Empty for auto"
     manual:          "Manual"
@@ -80,8 +80,8 @@ MC:
     msg_bad_label:   "No labels were specified, unable to add element."
     msg_bad_facet:   "At least one column must be selected to add a faceting element."
     msg_bad_element: "Unable to add the specified element: ===ELEMENT==="
-    msg_bad_manual_comp: |- 
-      The plot element component ===COMP=== was specified manually but 
+    msg_bad_manual_comp: |-
+      The plot element component ===COMP=== was specified manually but
       no manual value was provided.
     select_current_fig:  "Current figure"
     select_component_facet: "Columns to facet by"
@@ -91,7 +91,7 @@ MC:
     select_current_view: "Data from"
     no_figures_defined:  "No figures have been defined. There are no data sources to create figures. You need to load data and create data views to use this module."
     busy:
-      fig_update:  "Updating the current figure. Please be patient..." 
+      fig_update:  "Updating the current figure. Please be patient..."
   errors:
     element_not_added:    "Unable to add the data figure element:"
     current_key_empty:    "The figure description field cannot be empty."
@@ -100,59 +100,59 @@ MC:
     # For each element below you should only modify the choice and subtext
     # elements
     line:
-      choice:  "Line"     
+      choice:  "Line"
       subtext: "Continuous line"
       ui_aes:  ["x", "y", "color", "group", "linetype", "size", "alpha"]
       aes_req: ["x", "y"]
       fcn:     "geom_line"
     point:
-      choice:  "Point"  
+      choice:  "Point"
       subtext: "Scatter plot"
       ui_aes:  ["x", "y", "color", "group", "shape", "size", "alpha"]
       aes_req: ["x", "y"]
       fcn:     "geom_point"
     errorbar:
-      choice:  "Errobar"  
+      choice:  "Errobar"
       subtext: "Errorbars around points"
       ui_aes:  ["x", "ymin", "ymax", "color", "group", "size", "alpha"]
       aes_req: ["x", "ymin", "ymax"]
       fcn:     "geom_errorbar"
     hguide:
-      choice:  "H-Guide"  
+      choice:  "H-Guide"
       subtext: "Horizontal guide"
       ui_aes:  ["yintercept", "linetype", "color", "size"]
       aes_req: ["yintercept"]
       fcn:     "geom_hline"
     vguide:
-      choice:  "V-Guide"  
+      choice:  "V-Guide"
       subtext: "Vertical guide"
       ui_aes:  ["xintercept", "linetype", "color", "size"]
       aes_req: ["xintercept"]
       fcn:     "geom_vline"
     facet:
-      choice:  "Facet"  
+      choice:  "Facet"
       subtext: "Facet by one or more variables"
     label:
-      choice:  "Label"  
+      choice:  "Label"
       subtext: "Label axes or plot title"
       ui_text: ["xlab", "ylab", "ggtitle"]
     scales:
       choice:  "Format Axes"
       subtext: "Axis scales and limits"
     smooth:
-      choice:  "Smooth Trend"     
+      choice:  "Smooth Trend"
       subtext: "Smoothed conditional means"
       ui_aes:  ["x", "y", "color", "group", "fill", "weight", "linetype", "size", "alpha", "ymax", "ymin"]
       aes_req: ["x", "y"]
       fcn:     "geom_smooth"
-    ribbon: 
-      choice:  "Shaded Area"     
+    ribbon:
+      choice:  "Shaded Area"
       subtext: "Creating prediction intervals"
       ui_aes:  ["x", "ymin", "ymax", "color", "group", "fill", "linetype", "size", "alpha"]
       aes_req: ["x", "ymin", "ymax"]
-      fcn:     "geom_ribbon"  
+      fcn:     "geom_ribbon"
     boxplot:
-      choice:  "Boxplot"     
+      choice:  "Boxplot"
       subtext: "Box and whiskers plot"
       ui_aes:  ["x", "y", "lower", "middle", "upper", "ymin", "ymax", "color", "group", "fill", "weight", "linetype", "size", "shape", "alpha"]
       aes_req: ["x", "y"]
@@ -164,17 +164,17 @@ MC:
       height: 300
     # Dimensions of the figure preview
     # Must be numeric
-    preview:    
+    preview:
       width:  800
       height: 400
     #If you make the slider width = preview it will
     # span the bottom of the figure
-    select_fg_page:    
+    select_fg_page:
       tooltip: "Select the figure page to view."
       tooltip_position: "bottom"
-      width:  150  
+      width:  150
     # Dimensions of the notes text area
-    notes:      
+    notes:
       width:  "560px"
       height: "75px"
     components:
@@ -202,15 +202,15 @@ MC:
           free_y:
             choice: "Free y-axis"
             subtext: "Independent y-axis for each facet"
-      facet_dims:   
-        ncol: 
+      facet_dims:
+        ncol:
           tooltip: "Number of columns"
           tooltip_position: "right"
           subtext: "Number of columns"
           width: "75px"
           default: 4
           choices: [ 1,2,3,4,5,6]
-        nrow: 
+        nrow:
           tooltip: "Number of rows"
           tooltip_position: "right"
           subtext: "Number of rows"
@@ -228,49 +228,49 @@ MC:
     select_current_view:
       width: 200
     # Dimensions of the table with the figure generation elements
-    fg_elements:    
+    fg_elements:
       width:  600
       height: 200
-    # Button sizes from actionBttn (shinyWidgets) 
+    # Button sizes from actionBttn (shinyWidgets)
     # xs,sm, md, lg.
     button_fig_del:
-      size: "sm" 
+      size: "sm"
       block: TRUE
       tooltip: "Delete the current figure."
       tooltip_position: "right"
     button_fig_save:
-      size: "sm" 
+      size: "sm"
       block: TRUE
       tooltip: "Save changes to caption, notes and data source."
       tooltip_position: "right"
     button_fig_clip:
-      size: "sm" 
+      size: "sm"
       block: TRUE
       tooltip: "Copy code to generate current figure to the clipboard."
       tooltip_position: "right"
     button_fig_copy:
-      size: "sm" 
+      size: "sm"
       block: TRUE
       tooltip: "Copy current figure to a new figure."
       tooltip_position: "right"
     button_fig_new:
-      size: "sm" 
+      size: "sm"
       block: TRUE
       tooltip: "Create a new empty figure."
       tooltip_position: "right"
     button_fig_add:
-      size: "sm" 
+      size: "sm"
       block: TRUE
   # You can put any post_processing you want to apply to all figures.
-  # The ggplot object will be available as the ===FGOBJ=== 
+  # The ggplot object will be available as the ===FGOBJ===
   post_processing: |-
     ===FGOBJ=== = ===FGOBJ=== + ggplot2::theme_light()
   fg_object_name: "myp"
   code: # module specific code options
     packages: ["ggplot2", "ggforce"]
     readOnly: TRUE
-    mode:     r    
+    mode:     r
     # The preamble goes before the section of generated code for this module
     # in the export script that is generated on save.
-    preamble: |- 
+    preamble: |-
       # Generating figures ------------------------------------------------------
