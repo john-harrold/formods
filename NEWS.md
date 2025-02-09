@@ -1,4 +1,9 @@
-# formods 0.2.0 (development version)
+# formods 0.2.1 (development version)
+
+* Added default colors (yellow and orange)
+
+
+# formods 0.2.0 
 
 * Created preload functionality to allow modules to save to and be loaded from yaml files.
 * Updated the `ZZ_Server.R` to include save/load of preload yaml files.
