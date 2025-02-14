@@ -972,16 +972,6 @@ UD_ds_read = function(state,
   }
 
   # Reading in the file contents:
-  if(data_file_ext %in% c("csv")){
-    contents = rio::import(file=data_file_local)
-    code     = paste0(object_name, ' = rio::import(file="',data_file,'")')
-    isgood   = TRUE
-  }
-  if(data_file_ext %in% c("tsv")){
-    contents = rio::import(file=data_file_local)
-    code     = paste0(object_name, ' = rio::import(file="',data_file,'")')
-    isgood   = TRUE
-  }
   if(data_file_ext %in% c("xls", "xlsx")){
     # If you load one excel sheet and then switch to another
     # where that sheet isn't present this will reset "sheet"
@@ -996,6 +986,10 @@ UD_ds_read = function(state,
       sheet = sheets[1] }
     contents = rio::import(file=data_file_local, which=sheet)
     code = paste0(object_name, ' = rio::import(file="',data_file,'", which="',sheet,'")')
+    isgood   = TRUE
+  } else {
+    contents = rio::import(file=data_file_local)
+    code     = paste0(object_name, ' = rio::import(file="',data_file,'")')
     isgood   = TRUE
   }
 

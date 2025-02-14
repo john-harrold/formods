@@ -70,6 +70,8 @@ MC:
   allowed_extensions:
     - csv
     - tsv
+    - sas
+    - sas7bdat
     - xls
     - xlsx
   code: # module specific code options
