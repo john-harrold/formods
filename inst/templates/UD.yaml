@@ -73,7 +73,7 @@ MC:
     - xls
     - xlsx
   code: # module specific code options
-    packages: ["readxl", "readr", "janitor"]
+    packages: ["readxl", "rio", "janitor"]
     readOnly: TRUE
     mode:     r
     # The preamble goes before the section of generated code for this module

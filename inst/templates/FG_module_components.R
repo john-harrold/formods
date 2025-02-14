@@ -100,9 +100,9 @@ ui <- dashboardPage(
 server <- function(input, output, session) {
 
   # Test dataset in the package
-  DATA = readxl::read_excel(
-           path  = system.file(package="formods", "test_data", "TEST_DATA.xlsx"),
-           sheet = "DATA") %>%
+  DATA = rio::import(
+           file  = system.file(package="formods", "test_data", "TEST_DATA.xlsx"),
+           which = "DATA") %>%
     dplyr::filter(EVID==0)
 
   # Module server

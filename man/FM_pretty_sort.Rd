@@ -22,7 +22,7 @@ data_file_local  =  system.file(package="formods", "test_data", "TEST_DATA.xlsx"
 # Excel files need a sheet specification:
 sheet           = "DATA"
 # We will also attach the sheets along with it
-df = readxl::read_excel(path=data_file_local, sheet=sheet)
+df = rio::import(file=data_file_local, which=sheet)
 # Regular sorting:
 sort(unique(df$Cohort))
 FM_pretty_sort(unique(df$Cohort))

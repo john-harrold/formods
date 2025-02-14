@@ -10,10 +10,9 @@
 #' @name formods
 "_PACKAGE"
 
-
 #'@import cli
 #'@importFrom digest digest
-#'@importFrom writexl write_xlsx
+#'@importFrom rio export  
 .onAttach <- function(libname, pkgname){
 
   #------------------------------------
@@ -1748,11 +1747,14 @@ FM_generate_report = function(state,
           # This is the main difference between the app and the exported code.
           # in the app we write to whichever location is specified:
           if(!gen_code_only){
-            writexl::write_xlsx(rpt_list,
-              path=file.path(file_dir, file_name))
+           #writexl::write_xlsx(rpt_list,
+           #  path=file.path(file_dir, file_name))
+            rio::export(rpt_list,
+              file   = file.path(file_dir, file_name),
+              format = "xlsx")
           }
           # In the exported code we just write to the working directory:
-          code = c(code, paste0('writexl::write_xlsx(rpt_list, path=file.path("reports", "report.', rpttype, '"))' ))
+          code = c(code, paste0('rio::export(rpt_list, file=file.path("reports", "report.', rpttype, '"), format="xlsx")' ))
         }
 
         # Adding placeholder substitution to Word documents
@@ -1861,9 +1863,12 @@ FM_generate_report = function(state,
       if(rpttype == "xlsx"){
         # This writes a document containing errors
         # so that they can be passed back to the user
-        writexl::write_xlsx(
+        # writexl::write_xlsx(
+        #   list(Message = data.frame(Message = errmsg)),
+        #   path=file.path(file_dir, file_name))
+        rio::export(
           list(Message = data.frame(Message = errmsg)),
-          path=file.path(file_dir, file_name))
+          file=file.path(file_dir, file_name), format="xlsx")
       }
     }
   }
@@ -2030,7 +2035,7 @@ NULL}
 #' data_file_local =  system.file(package="formods", "test_data", "TEST_DATA.xlsx")
 #' sheet           = "DATA"
 #'
-#' df = readxl::read_excel(path=data_file_local, sheet=sheet)
+#' df = rio::import(file=data_file_local, which=sheet)
 #'
 #' hfmt = FM_fetch_data_format(df, state)
 #'
@@ -2251,7 +2256,7 @@ res}
 #' # Excel files need a sheet specification:
 #' sheet           = "DATA"
 #' # We will also attach the sheets along with it
-#' df = readxl::read_excel(path=data_file_local, sheet=sheet)
+#' df = rio::import(file=data_file_local, which=sheet)
 #' # Regular sorting:
 #' sort(unique(df$Cohort))
 #' FM_pretty_sort(unique(df$Cohort))

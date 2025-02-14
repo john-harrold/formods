@@ -33,7 +33,7 @@ state = sess_res$state
 data_file_local =  system.file(package="formods", "test_data", "TEST_DATA.xlsx")
 sheet           = "DATA"
 
-df = readxl::read_excel(path=data_file_local, sheet=sheet)
+df = rio::import(file=data_file_local, which=sheet)
 
 hfmt = FM_fetch_data_format(df, state)
 

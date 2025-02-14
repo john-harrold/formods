@@ -11,10 +11,8 @@
 
 ![cranlogs](https://cranlogs.r-pkg.org/badges/formods)
 ![Active](https://www.repostatus.org/badges/latest/active.svg)
-[![Life-cycle:
+[![Lifecycle:
 Experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
-[![Codecov test
-coverage](https://codecov.io/gh/john-harrold/formods/branch/master/graph/badge.svg)](https://app.codecov.io/gh/john-harrold/formods?branch=master)
 [![R-CMD-check](https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 

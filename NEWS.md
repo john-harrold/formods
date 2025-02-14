@@ -1,6 +1,7 @@
 # formods 0.2.1 (development version)
 
 * Added default colors (yellow and orange)
+* Moved data loading/saving over to `{rio}`
 
 
 # formods 0.2.0 

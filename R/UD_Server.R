@@ -1,8 +1,9 @@
 #'@import rhandsontable
 #'@import readxl
+#'@import rio
 #'@import shiny
 #'@importFrom digest digest
-#'@importFrom readr read_csv
+#'@importFrom rio import export 
 #'@importFrom shinyAce aceEditor updateAceEditor
 #'@importFrom stats setNames
 #'@importFrom stringr str_replace_all
@@ -972,13 +973,13 @@ UD_ds_read = function(state,
 
   # Reading in the file contents:
   if(data_file_ext %in% c("csv")){
-    contents = readr::read_csv(file=data_file_local)
-    code     = paste0(object_name, ' = readr::read_csv(file="',data_file,'")')
+    contents = rio::import(file=data_file_local)
+    code     = paste0(object_name, ' = rio::import(file="',data_file,'")')
     isgood   = TRUE
   }
   if(data_file_ext %in% c("tsv")){
-    contents = readr::read_tsv(file=data_file_local)
-    code     = paste0(object_name, ' = readr::read_tsv(file="',data_file,'")')
+    contents = rio::import(file=data_file_local)
+    code     = paste0(object_name, ' = rio::import(file="',data_file,'")')
     isgood   = TRUE
   }
   if(data_file_ext %in% c("xls", "xlsx")){
@@ -993,8 +994,8 @@ UD_ds_read = function(state,
     # By default we read the first sheet
     if(is.null(sheet)){
       sheet = sheets[1] }
-    contents = readxl::read_excel(path=data_file_local, sheet=sheet)
-    code = paste0(object_name, ' = readxl::read_excel(path="',data_file,'", sheet="',sheet,'")')
+    contents = rio::import(file=data_file_local, which=sheet)
+    code = paste0(object_name, ' = rio::import(file="',data_file,'", which="',sheet,'")')
     isgood   = TRUE
   }
 

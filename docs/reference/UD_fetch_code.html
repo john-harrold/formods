@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">formods</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,7 +92,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:897d952fecbc804999396a96f9df4b20</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module isgood: TRUE</span>
 <span class="r-in"><span><span class="fu">UD_fetch_code</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "myDS = readxl::read_excel(path=\"TEST_DATA.xlsx\", sheet=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "myDS = rio::import(file=\"TEST_DATA.xlsx\", which=\"DATA\")\nmyDS = janitor::clean_names(myDS, case=\"none\")"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

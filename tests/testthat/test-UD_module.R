@@ -14,9 +14,9 @@ test_that("UD -- Source file types", {
 
 
   # Test data from the package
-  df   = readxl::read_excel(
-           path  = system.file(package="formods", "test_data", "TEST_DATA.xlsx"),
-           sheet = "DATA")
+  df   = rio::import(
+           file  = system.file(package="formods", "test_data", "TEST_DATA.xlsx"),
+           which = "DATA")
 
   # Files to hold the test data:
   path_csv  = tempfile(fileext=".csv")
@@ -30,7 +30,7 @@ test_that("UD -- Source file types", {
   # Writing the test data to files:
   write.csv(  df, path_csv,           row.names=FALSE)
   write.table(df, path_tsv, sep="\t", row.names=FALSE)
-  writexl::write_xlsx(catalog, path=path_xlsx)
+  rio::export(catalog, file=path_xlsx, format="xlsx")
 
   res_csv =
   suppressMessages(

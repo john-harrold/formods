@@ -29,12 +29,14 @@ new figure or force a rebuild after a dataset update.}
 \item{desc}{Verbose description for the action being performed}
 }
 \value{
-list with the following elements
-\itemize{
- \item{isgood:} Return status of the function.
- \item{msgs:}   Messages to be passed back to the user.
- \item{pages:}  List with each element containing a ggplot object (\code{p}) and the code to generate that object (\code{code})
-}
+State with the build result stored in the current figure. Pull out
+the figure to inspect it:
+
+current_fig = FG_fetch_current_fig(state)
+
+Look at this logical object to test if the build worked.
+
+current_fig[["add_isgood"]]
 }
 \description{
 Takes the current state and rebuilds the active figure. If the

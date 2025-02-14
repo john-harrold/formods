@@ -35,7 +35,7 @@ FM:
       rm(list=ls())
     # Each module should have a packages section that lists the packages
     # needed for code generated for that module.
-    packages: ["onbrand", "writexl"]
+    packages: ["onbrand", "rio"]
   notifications:
     config:
       # You can put any arguments here that would be arguments for

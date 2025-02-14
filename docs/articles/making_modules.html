@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">formods</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -464,8 +464,6 @@ state object. Here we create some examples and other objects needed to
 demonstrate the functions below.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://formods.ubiquity.tools/">formods</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
-<span><span class="co">#&gt;   object 'type_sum.accel' not found</span></span>
 <span><span class="co">#&gt; Loading formods</span></span>
 <span><span class="co"># This creates the state and session objects</span></span>
 <span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="../reference/UD_test_mksession.html">UD_test_mksession</a></span><span class="op">(</span>session<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -722,6 +720,20 @@ errors populated with <code><a href="../reference/FM_set_ui_msg.html">FM_set_ui_
 <p>Other than those fields you can store whatever else you need for your
 module.</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="checklist">Checklist<a class="anchor" aria-label="anchor" href="#checklist"></a>
+</h2>
+<p>The following is a suggested checkist to go over when making a
+module:</p>
+<ul>
+<li>Try the following functions with and without content
+<ul>
+<li><code>MM_mk_preload</code></li>
+<li><code>MM_fetch_code</code></li>
+</ul>
+</li>
+</ul>
 <div class="section level3">
 <h3 id="configuration-file">Configuration file<a class="anchor" aria-label="anchor" href="#configuration-file"></a>
 </h3>
@@ -773,8 +785,8 @@ FM:
       # https://formods.ubiquity.tools/
       rm(list=ls())
     # Each module should have a packages section that lists the packages
-    # needed for code genereated for that module.
-    packages: ["onbrand", "writexl"]
+    # needed for code generated for that module.
+    packages: ["onbrand", "rio"]
   notifications:
     config:
       # You can put any arguments here that would be arguments for
@@ -801,7 +813,7 @@ FM:
     enabled: TRUE
     # The content_init section is used to initialize reports. You shouldn't
     # change the xlsx rpt but the docx and pptx rpt can be altered to
-    # preprocess reports if you need to such as adding default.
+    # pre-process reports if you need to such as adding default.
     content_init:
       xlsx: |-
            rpt = list(summary = NULL,
@@ -859,18 +871,20 @@ FM:
     color_red:    "#FF475E"
     color_blue:   "#0088FF"
     color_purple: "#bd2cf4"
+    color_orange: "#FEC108"
+    color_yellow: "#FFE447"
   data_meta:
     # This controls the overall format of headers and the select subtext for
-    # data frames with the following placeholders surrouned by ===:
+    # data frames with the following placeholders surround by ===:
     # COLOR  - font color
-    # NAME   - colum name
+    # NAME   - column name
     # LABEL  - type label
     # RANGE  - this depends on the nature of the data in the column:
     #        - If there are between 1 and 3 values then those values are shown.
     #        - If there are more than 3 values then the min and max are show.
     data_header:  "&lt;span style='color:===COLOR==='&gt;&lt;b&gt;===NAME===&lt;/b&gt;&lt;br/&gt;&lt;font size='-3'&gt;===LABEL===&lt;/font&gt;&lt;/span&gt;"
     subtext:      "===LABEL===: ===RANGE==="
-    # Separator when showing more than three in a column. For exmaple if you
+    # Separator when showing more than three in a column. For example if you
     # had a dataset with 1,2,3,4,5,6 and many_sep was ",...," then it would
     # appear as "1,...,6"
     many_sep: ",...,"
@@ -890,15 +904,15 @@ FM:
         color:    "black"
         label:    "other"
   workflows:
-    example: 
+    example:
       group:      "Examples"
       desc:       "Example Workflow"
       # Set to true if the workflow requires a dataset
       require_ds: TRUE
-      # this can contain an aboslute path as a string or R evaluable code
+      # this can contain an absolute path as a string or R evaluable code
       preload:    "file.path('.', 'example.yaml')"
   labels:
-    # JMH remove this once the datset stuff has been moved over
+    # JMH remove this once the dataset stuff has been moved over
     # default_ds:   " Original data set"
     ui_label:      "put labels here"
   user_files:
