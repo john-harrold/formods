@@ -77,7 +77,11 @@ NULL for all modules with models available.</p></dd>
 <li><p>modules: List of module checksums.</p></li>
 <li><p>mdl: Result of MM_fetch_mdl, see  <code><a href="../articles/making_modules.html">vignette("making_modules", package = "formods")</a></code></p></li>
 <li><p>catalog: Dataframe containing the a tabular catalog of the
-  models found.</p><ul><li><p>label:         Text label for the model (e.g. one-compartment model).</p></li>
+  models found.</p></li>
+<li><p>choices: List of values to use with selectInput()/pickerInput()</p><ul><li><p>plain:  Raw vector of choices</p></li>
+<li><p>labeled: Named vector of choices</p></li>
+<li><p>grouped: Choices grouped by module</p></li>
+</ul><p></p><ul><li><p>label:         Text label for the model (e.g. one-compartment model).</p></li>
 <li><p>MOD_TYPE:      Type of module.</p></li>
 <li><p>id:            Module ID.</p></li>
 <li><p>rx_obj:        The rxode2 object.</p></li>

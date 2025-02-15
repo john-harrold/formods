@@ -1,7 +1,12 @@
 # formods 0.2.1 (development version)
 
-* Added default colors (yellow and orange)
-* Moved data loading/saving over to `{rio}`
+* Added default colors (yellow and orange).
+* Moved data loading/saving over to `{rio}`.
+* Added support for sas and sas7bdat files.
+* Fixed bug in FG module where a figure built on a data view crashes the app when the data view is deleted..
+* Added a return list element to `FM_fetch_ds()` to include the choices.
+* Added a similar return list element to `FM_fetch_mdl()`.
+* Added filed in module section of the module yaml file to include description of the module to be associated with assets that module provides. E.g. if the DW module provides datasets we can assoicate those with the DW module in UI elements like data source selection..
 
 
 # formods 0.2.0 

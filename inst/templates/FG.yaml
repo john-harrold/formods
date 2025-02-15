@@ -1,6 +1,7 @@
 # Figure Generation (FG) configuration
 MC:
   module:
+    description: "Figure Generation"
     type: "FG"
     # internal R Object: module ID used in deployment
     depends:

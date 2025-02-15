@@ -1,6 +1,7 @@
 # ASM module configuration 
 MC:
   module:
+    description: "App State Management"
     type: "ASM"
     # internal R Object: module ID used in deployment
     depends: NULL

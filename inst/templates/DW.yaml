@@ -1,6 +1,7 @@
 # Data Wrangling (DW) configuration
 MC:
   module:
+    description: "Data Views"
     type: "DW"
     # internal R Object: module ID used in deployment
     depends:

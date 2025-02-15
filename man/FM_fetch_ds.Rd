@@ -33,6 +33,12 @@ list containing the current dataset with the following format:
     \item{checksum:} Module checksum when the dataset was pulled
     \item{DSchecksum:} Checksum of the dataframe in DS
   }
+  \item{choices:} List of values to use with selectInput()/pickerInput()
+  \itemize{
+    \item{plain:}  Raw vector of choices
+    \item{labeled:} Named vector of choices
+    \item{grouped:} Choices grouped by module
+  }
   \item{catalog:} Dataframe containing the a tabular catalog of the
   datasets found.
   \itemize{

@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-Shiny apps can often make use of the same key elements, [formods](<https://formods.ubiquity.tools>) provides modules for common tasks (data upload, wrangling data, figure generation and saving the app state). These modules can react and interact as well as generate code to create reproducible analyses. {formods} also defines a framework for creating reactive modules. The vignettes outline how to use these modules as well as how to create other modules within this framework.
+Shiny apps can often make use of the same key elements, [formods](<https://formods.ubiquity.tools>) provides modules for common tasks (data upload, wrangling data, figure generation and saving the app state). These modules can react and interact as well as generate code to create reproducible analyses. `{formods}` also defines a framework for creating reactive modules. The vignettes outline how to use these modules as well as how to create other modules within this framework.
 
 # Installation
 <!---

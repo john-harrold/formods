@@ -2,6 +2,10 @@
 MC:
   # Module informaiton
   module:
+    # The description is used to identify the source of different components
+    # within the app. E.g. if your module provides data views they will be
+    # associated with this description
+    description: "Module Description"
     type: "===ZZ===" # Module type
     # This is a list of modules this one depends on. The list names
     # are the R object names used in this module and the value is the

@@ -126,6 +126,12 @@ res}
 #'     \item{checksum:} Module checksum when the dataset was pulled
 #'     \item{DSchecksum:} Checksum of the dataframe in DS
 #'   }
+#'   \item{choices:} List of values to use with selectInput()/pickerInput()
+#'   \itemize{
+#'     \item{plain:}  Raw vector of choices
+#'     \item{labeled:} Named vector of choices
+#'     \item{grouped:} Choices grouped by module
+#'   }
 #'   \item{catalog:} Dataframe containing the a tabular catalog of the
 #'   datasets found.
 #'   \itemize{
@@ -159,6 +165,7 @@ FM_fetch_ds = function(state, session, ids=NULL){
   catalog = NULL
   ds      = list()
   modules = list()
+  choices = list()
 
   # Pulling out the app state:
   app_state = FM_fetch_app_state(session)
@@ -172,6 +179,7 @@ FM_fetch_ds = function(state, session, ids=NULL){
   }
 
   # Walking through each module id and attempting to extract a dataset
+  MOD_DESC_list = list()
   for(tmp_id in ids){
 
     # pulling out the current module state and creating the
@@ -179,6 +187,12 @@ FM_fetch_ds = function(state, session, ids=NULL){
     tmp_state    = FM_fetch_mod_state(session, tmp_id)
     tmp_MOD_TYPE = tmp_state[["MOD_TYPE"]]
     MOD_FUNC     = paste0(tmp_MOD_TYPE, "_fetch_ds")
+
+    MOD_DESC     = tmp_state[["MC"]][["module"]][["description"]]
+
+    if(is.null(tmp_state[["MC"]][["module"]][["description"]])){
+      MOD_DESC = tmp_id
+    }
 
     # If that module has a ds fetching function then we try to fetch it:
     if(exists(MOD_FUNC, mode="function")){
@@ -191,13 +205,17 @@ FM_fetch_ds = function(state, session, ids=NULL){
       if(fetch_ds_res[["hasds"]]){
         # We've found at least one dataset
         hasds = TRUE
+        MOD_DESC_list[names(fetch_ds_res[["ds"]])] = MOD_DESC
         ds = c(ds, fetch_ds_res[["ds"]])
       }
     }
   }
 
+
   if(hasds){
     # Creating catalog and modules elements:
+    tmp_choices_group        = list()
+    tmp_choices_group_labels = list()
     for(dsname in names(ds)){
       catalog = rbind(
       catalog,
@@ -205,6 +223,7 @@ FM_fetch_ds = function(state, session, ids=NULL){
         label       = ds[[dsname]][["label"]],
         object      = dsname,
         MOD_TYPE    = ds[[dsname]][["MOD_TYPE"]],
+        MOD_DESC    = MOD_DESC_list[[dsname]],
         id          = ds[[dsname]][["id"]],
         idx         = ds[[dsname]][["idx"]],
         checksum    = ds[[dsname]][["checksum"]],
@@ -212,7 +231,30 @@ FM_fetch_ds = function(state, session, ids=NULL){
         code        = ds[[dsname]][["code"]])
       )
 
+   
+      # Stores the values for the selector
+      tmp_choices_group[[   MOD_DESC_list[[dsname]]  ]] = c( 
+        tmp_choices_group[[ MOD_DESC_list[[dsname]]  ]], 
+        dsname)
+   
+      # corresponding list storing the lables
+      tmp_choices_group_labels[[   MOD_DESC_list[[dsname]]  ]] = c( 
+        tmp_choices_group_labels[[ MOD_DESC_list[[dsname]]  ]], 
+        ds[[dsname]][["label"]])
+
       modules[[ ds[[dsname]][["MOD_TYPE"]]]  ][[ ds[[dsname]][["id"]] ]] = ds[[dsname]][["checksum"]]
+    }
+
+    # This creates choices for selectInput()
+    choices[["plain"]]   = catalog[["object"]]
+    choices[["labeled"]] = catalog[["object"]]
+      names(choices[["labeled"]])  = catalog[["label"]]
+
+    if(length(tmp_choices_group) > 0){
+      for(gname in names(tmp_choices_group)){
+              choices[["grouped"]][[gname]]  =   tmp_choices_group[[gname]]
+        names(choices[["grouped"]][[gname]]) =   tmp_choices_group_labels[[gname]]
+      }
     }
   } else {
     isgood = FALSE
@@ -223,6 +265,7 @@ FM_fetch_ds = function(state, session, ids=NULL){
              hasds   = hasds,
              catalog = catalog,
              modules = modules,
+             choices = choices,
              ds      = ds)
 
 res}
@@ -2608,6 +2651,12 @@ nmr}
 #'    \item{mdl:} Result of MM_fetch_mdl, see  \code{vignette("making_modules", package = "formods")}
 #'   \item{catalog:} Dataframe containing the a tabular catalog of the
 #'   models found.
+#'   \item{choices:} List of values to use with selectInput()/pickerInput()
+#'   \itemize{
+#'     \item{plain:}  Raw vector of choices
+#'     \item{labeled:} Named vector of choices
+#'     \item{grouped:} Choices grouped by module
+#'   }
 #'   \itemize{
 #'     \item{label:}         Text label for the model (e.g. one-compartment model).
 #'     \item{MOD_TYPE:}      Type of module.
@@ -2641,6 +2690,7 @@ FM_fetch_mdl = function(state, session, ids=NULL){
   catalog    = NULL
   msgs       = c()
   mdl        = list()
+  choices = list()
 
 
   # If we're null then we walk through the session variable and pull out all
@@ -2654,6 +2704,7 @@ FM_fetch_mdl = function(state, session, ids=NULL){
   }
 
   # Walking through each module id and attempting to extract models
+  MOD_DESC_list = list()
   for(tmp_id in ids){
 
     # pulling out the current module state and creating the
@@ -2661,6 +2712,12 @@ FM_fetch_mdl = function(state, session, ids=NULL){
     tmp_state    = FM_fetch_mod_state(session, tmp_id)
     tmp_MOD_TYPE = tmp_state[["MOD_TYPE"]]
     MOD_FUNC     = paste0(tmp_MOD_TYPE, "_fetch_mdl")
+
+    MOD_DESC     = tmp_state[["MC"]][["module"]][["description"]]
+
+    if(is.null(tmp_state[["MC"]][["module"]][["description"]])){
+      MOD_DESC = tmp_id
+    }
 
     # If that module has a mdl fetching function then we try to fetch it:
     if(exists(MOD_FUNC, mode="function")){
@@ -2674,12 +2731,15 @@ FM_fetch_mdl = function(state, session, ids=NULL){
         # We've found at least one model
         hasmdl = TRUE
         mdl        = c(mdl, fetch_res[["mdl"]])
+        MOD_DESC_list[names(fetch_res[["mdl"]])] = MOD_DESC
       }
     }
   }
 
   if(hasmdl){
     # Creating catalog and modules elements:
+    tmp_choices_group        = list()
+    tmp_choices_group_labels = list()
     for(mdlname in names(mdl)){
       catalog = rbind(
         catalog,
@@ -2687,6 +2747,7 @@ FM_fetch_mdl = function(state, session, ids=NULL){
           label       = mdl[[mdlname]][["label"]],
           object      = mdlname,
           MOD_TYPE    = mdl[[mdlname]][["MOD_TYPE"]],
+          MOD_DESC    = MOD_DESC_list[[mdlname]],
           id          = mdl[[mdlname]][["id"]],
           idx         = mdl[[mdlname]][["idx"]],
           checksum    = mdl[[mdlname]][["checksum"]],
@@ -2694,7 +2755,29 @@ FM_fetch_mdl = function(state, session, ids=NULL){
           code        = mdl[[mdlname]][["code"]])
       )
 
+      # Stores the values for the selector
+      tmp_choices_group[[   MOD_DESC_list[[mdlname]]  ]] = c( 
+        tmp_choices_group[[ MOD_DESC_list[[mdlname]]  ]], 
+        mdlname)
+   
+      # corresponding list storing the lables
+      tmp_choices_group_labels[[   MOD_DESC_list[[mdlname]]  ]] = c( 
+        tmp_choices_group_labels[[ MOD_DESC_list[[mdlname]]  ]], 
+        mdl[[mdlname]][["label"]])
+
       modules[[ mdl[[mdlname]][["MOD_TYPE"]]]  ][[ mdl[[mdlname]][["id"]] ]] = mdl[[mdlname]][["checksum"]]
+    }
+
+    # This creates choices for selectInput()
+    choices[["plain"]]   = catalog[["object"]]
+    choices[["labeled"]] = catalog[["object"]]
+      names(choices[["labeled"]])  = catalog[["label"]]
+
+    if(length(tmp_choices_group) > 0){
+      for(gname in names(tmp_choices_group)){
+              choices[["grouped"]][[gname]]  =   tmp_choices_group[[gname]]
+        names(choices[["grouped"]][[gname]]) =   tmp_choices_group_labels[[gname]]
+      }
     }
   } else {
     isgood = FALSE
@@ -2705,6 +2788,7 @@ FM_fetch_mdl = function(state, session, ids=NULL){
              hasmdl     = hasmdl,
              catalog    = catalog,
              modules    = modules,
+             choices = choices,
              mdl        = mdl)
 
 

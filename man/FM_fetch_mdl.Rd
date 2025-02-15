@@ -23,6 +23,12 @@ list containing the current dataset with the following format:
    \item{mdl:} Result of MM_fetch_mdl, see  \code{vignette("making_modules", package = "formods")}
   \item{catalog:} Dataframe containing the a tabular catalog of the
   models found.
+  \item{choices:} List of values to use with selectInput()/pickerInput()
+  \itemize{
+    \item{plain:}  Raw vector of choices
+    \item{labeled:} Named vector of choices
+    \item{grouped:} Choices grouped by module
+  }
   \itemize{
     \item{label:}         Text label for the model (e.g. one-compartment model).
     \item{MOD_TYPE:}      Type of module.

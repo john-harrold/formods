@@ -1,5 +1,6 @@
 MC:
   module:
+    description: "Uploaded Data"
     type: "UD"
     depends: 
       # internal R Object: module ID used in deployment

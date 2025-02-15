@@ -37,6 +37,7 @@ following information:
 The following modules are currently available:
 
 -   ASM - [App State Management](https://formods.ubiquity.tools)
+-   DM - [Data Management](https://formods.ubiquity.tools)
 -   DW - [Data Wrangling](https://formods.ubiquity.tools)
 -   FG - [Figure Generation](https://formods.ubiquity.tools)
 -   FM - [Formods](https://formods.ubiquity.tools)

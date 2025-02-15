@@ -1150,6 +1150,9 @@ FG_Server <- function(id,
         # Pulling out the data set views catalog
         ds_catalog = state[["FG"]][["DSV"]][["catalog"]]
 
+        # Pulling out the select choices list:
+        all_choices = state[["FG"]][["DSV"]][["choices"]]
+
         if(current_fig[["fig_dsview"]] %in% ds_catalog[["object"]]){
           current_view_id= current_fig[["fig_dsview"]]
         } else {
@@ -1160,8 +1163,8 @@ FG_Server <- function(id,
           FM_le(state, paste0("switching to view:", current_view_id ))
         }
 
-        choices        = ds_catalog[["object"]]
-        names(choices) = ds_catalog[["label"]]
+        # Using choices grouped by module
+        choices = all_choices[["grouped"]]
 
         choicesOpt = NULL
         shinyWidgets::updatePickerInput(
@@ -2394,21 +2397,28 @@ FG_build = function(state,
   if(!is.null(current_fig)){
     msgs        = c()
 
+    # These will be used to flag any failures below:
+    isgood     = TRUE
+    add_isgood = TRUE
+
     # Defining the dataset locally:
-    # JMH check assignments below:
     ds_object_name = current_fig[["fig_dsview"]]
     assign(ds_object_name,
            state[["FG"]][["DSV"]][["ds"]][[ds_object_name]][["DS"]])
+
+    # This will catch if a dataset has become unavailable after the figure has
+    # been built. For example if a data view was deleted:
+    if(is.null(state[["FG"]][["DSV"]][["ds"]][[ds_object_name]][["DS"]])){
+      isgood     = FALSE
+      add_isgood = FALSE
+      msgs = c(msgs, paste0("missing data source: ", ds_object_name))
+    }
 
     # Pulling out the figure object name:
     fg_object_name = current_fig[["fg_object_name"]]
 
     # Initializing the figure object
     assign(fg_object_name, NULL)
-
-    # These will be used to flag any failures below:
-    isgood     = TRUE
-    add_isgood = TRUE
 
     # The figure code is initialized with the code init:
     code_init = paste0(fg_object_name, " = ggplot2::ggplot(data=", ds_object_name,")")
