@@ -180,28 +180,31 @@ generated (<code>FALSE</code>).</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Code chunk to generate report element</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">rpt_res</span><span class="op">$</span><span class="va">code</span>, collapse<span class="op">=</span><span class="st">"\n"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["sheets"]][["DW_myDS_1"]]=DW_myDS_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # Observationsrpt[["sheets"]][["DW_myDS_1"]]=DW_myDS_1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_1",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Description="Observations"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["sheets"]][["DW_myDS_2"]]=DW_myDS_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # PK 3mg SD IVrpt[["sheets"]][["DW_myDS_2"]]=DW_myDS_2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_2",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Description="PK 3mg SD IV"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["sheets"]][["DW_myDS_3"]]=DW_myDS_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # PK 3mg SD IV (NCA)rpt[["sheets"]][["DW_myDS_3"]]=DW_myDS_3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_3",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Description="PK 3mg SD IV (NCA)"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["sheets"]][["DW_myDS_4"]]=DW_myDS_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # PKPD 3mg SD IV (NCA)rpt[["sheets"]][["DW_myDS_4"]]=DW_myDS_4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> rpt[["summary"]] = rbind(rpt[["summary"]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   data.frame(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Sheet_Name="DW_myDS_4",</span>

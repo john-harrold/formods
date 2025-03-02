@@ -329,7 +329,11 @@ will set a notification called `Example Notification`. Along with that a
 timestamp is set:
 
 ``` r
-   state = FM_set_notification(state, "Something happened", "Example Notification")
+   state = FM_set_notification(
+     state       = state, 
+     notify_text = "Something happened", 
+     notify_id   = "example",
+     type        = "info")
 ```
 
 That timestamp is used to track and prevent the notification from being
@@ -423,11 +427,25 @@ Other than those fields you can store whatever else you need for your module.
 
 # Checklist
 
-The following is a suggested checkist to go over when making a module:
+The following is a suggested checklist to go over when making a module:
 
-- Try the following functions with and without content
-  - `MM_mk_preload`
-  - `MM_fetch_code`
+- Module Building checklist
+  - [ ] Build ui structure 
+  - [ ] `ZZ_preload`
+  - [ ] `ZZ_test_mksession`
+  - [ ] `ZZ_mk_preload`
+  - [ ] `ui_zz_compact`
+  - [ ] `ZZ_fetch_ds`
+  - [ ] `ZZ_fetch_mdl`
+  - [ ] `ZZ_fetch_code`
+  - [ ] `ZZ_append_report `
+  - [ ] Create tests
+  - [ ] Create examples 
+  - [ ] Update/Create vignettes
+  
+- Test the following functions with and without content
+  - [ ] `ZZ_mk_preload`
+  - [ ] `ZZ_fetch_code`
 
 ## Configuration file
 

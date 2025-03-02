@@ -76,14 +76,12 @@
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
-<!---
-You can install the released version of ``formods`` from [CRAN](https://cran.r-project.org/package=formods) with:
-&#10;``` r
-install.packages("formods")
-```
---->
-<p>You can install the development version from <a href="https://github.com/john-harrold/formods" class="external-link">GitHub</a> with:</p>
+<p>You can install the released version of <code>formods</code> from <a href="https://cran.r-project.org/package=formods" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"formods"</span>, dependencies<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Make sure to set depenendencies to <code>TRUE</code> to get all of the suggested packages.</p>
+<p>You can install the development version from <a href="https://github.com/john-harrold/formods" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Installing devtools if it's not already installed</span></span>
 <span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package<span class="op">=</span><span class="st">"devtools"</span><span class="op">)</span> <span class="op">==</span> <span class="st">""</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span> </span>
@@ -95,7 +93,7 @@ install.packages("formods")
 <div class="section level1">
 <h1 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h1>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://formods.ubiquity.tools/">formods</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/run_formods.html">run_formods</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>

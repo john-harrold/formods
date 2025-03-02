@@ -3036,6 +3036,10 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
                          id_DW           = id_DW,
                          react_state     = react_state)
 
+  if(!formods::is_shiny(session)){
+    session = FM_set_mod_state(session, mod_ID, state)
+  }
+
   elements = src_list[[mod_ID]][["elements"]]
 
   # Checks to see if we can add elements

@@ -432,7 +432,7 @@
 
           # Pulling out the current element
           current_ele = ===ZZ===_fetch_current_element(state)
-          uiele = current_ele[["code"]]
+          uiele = current_ele[["code_ele_only"]]
 
           clipr::write_clip(uiele)
         }
@@ -594,7 +594,9 @@
                       old_val  = state[["===ZZ==="]][["ui_old"]][[ui_name]],
                       init_val = c(""))
         if(change_detected){
-          formods::FM_le(state, paste0("setting ===ELEMENT===: ", ui_name, " = ", paste(state[["===ZZ==="]][["ui"]][[ui_name]], collapse=", ")))
+          changed_data_str = paste(state[["===ZZ==="]][["ui"]][[ui_name]], collapse=", ")
+          changed_data_str = substr(changed_data_str, 1, 70)
+          formods::FM_le(state, paste0("setting ===ELEMENT===: ", ui_name, " = ", changed_data_str))
 
           # Saving the change:
           state[["===ZZ==="]][["ui_old"]][[ui_name]] = state[["===ZZ==="]][["ui"]][[ui_name]]
@@ -731,23 +733,17 @@
 #' state
 ===ZZ===_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 
-
-  button_counters = c("button_clk_save",
-                      "button_clk_clip",
-                      "button_clk_del",
-                      "button_clk_copy",
-                      "button_clk_new")
-
+  MOD_yaml_contents = FM_read_yaml(MOD_yaml_file)
+  button_counters = MOD_yaml_contents[["MC"]][["ui_ids"]][["buttons"]]
+  ui_module       = MOD_yaml_contents[["MC"]][["ui_ids"]][["module"]]
 
   # These are the module ui elements that are associated with
   # the current element
-  ui_ele          = c("element_name")
+  ui_ele          = MOD_yaml_contents[["MC"]][["ui_ids"]][["element"]]
 
   # This contains all of the relevant ui_ids in the module. You need to append
   # ui_ids that are outside of the current element here as well.
-  ui_ids          = c(button_counters,
-                      ui_ele,
-                     "element_selection")
+  ui_ids          = c(button_counters, ui_ele, ui_ids)
 
   # Making all the ui_ids holdable
   ui_hold         = ui_ids
@@ -820,6 +816,25 @@ code}
 #'  \item{rpt:}       Report with any additions passed back to the user.
 #'}
 #'@seealso \code{\link[formods:FM_generate_report]{formods::FM_generate_report()}}
+#'@examples
+#' # We need a state object to use below
+#' sess_res = ===ZZ===_test_mksession()
+#' state = sess_res$state
+#'
+#' rpt = list(summary = list(), sheets=list())
+#'
+#' rpt_res = ===ZZ===_append_report(state,
+#'   rpt     = rpt,
+#'   rpttype = "xlsx")
+#'
+#' # Shows if report elements are present
+#' rpt_res$hasrptele
+#'
+#' # Code chunk to generate report element
+#' cat(paste(rpt_res$code, collapse="\n"))
+#'
+#' # Tabular summary of data views
+#' rpt_res$rpt$summary
 ===ZZ===_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
 
   isgood    = TRUE
@@ -859,8 +874,10 @@ res}
 #'  \itemize{
 #'    \item{label: Text label for the dataset}
 #'    \item{MOD_TYPE: Short name for the type of module.}
-#'    \item{id: module ID.}
+#'    \item{id: Module ID.}
 #'    \item{idx: unique numerical ID to identify this dataset in the module.}
+#'    \item{ds_label: optional label that can be defined by a user and used in
+#'    workflows. Must be unique to the module.}
 #'    \item{DS: Dataframe containing the actual dataset.}
 #'    \item{DSMETA: Metadata describing DS.}
 #'    \item{code: Complete code to build dataset.}
@@ -882,16 +899,20 @@ res}
   msgs   = c()
   ds     = list()
 
+  mod_checksum = state[["===ZZ==="]][["checksum"]]
+
   # Empty list for new datasets
   NEWDS = list(label      = NULL,
                MOD_TYPE   = NULL,
-               id         = NULL,
+               id         = state[["id"]],
                idx        = NULL,
+               ds_label   = "",
                DS         = NULL,
                DSMETA     = NULL,
                code       = NULL,
-               checksum   = NULL,
+               checksum   = mod_checksum,
                DSchecksum = NULL)
+
 
   # This prevents returning a dataset if this is triggered before data has
   # been loaded
@@ -901,7 +922,8 @@ res}
     isgood = FALSE
 
     # Putting it all into the ds object to be returned
-    ds[[object_name]] = NEWDS
+    #TMPDS = NEWDS
+    #ds[[object_name]] = TMPDS
   }
 
   res = list(hasds  = hasds,
@@ -953,44 +975,42 @@ res}
   msgs       = c()
   mdl        = list()
 
-  # This prevents returning a dataset if this is triggered before data has
-  # been loaded
-  if(state[["===ZZ==="]][["isgood"]]){
-
-    # Checksum for the module
-    m_checksum = state[["===ZZ==="]][["checksum"]]
-    elements = names(state[["===ZZ==="]][["elements"]])
-    if(!is.null(elements)){
-      # We have at least 1 model
-      hasmdl = TRUE
-      for(element in elements){
-        # current element
-        ce = state[["===ZZ==="]][["elements"]][[element]]
-        ce_checksum = ce[["checksum"]]
-
-
-        # NOTE: You need to populate teh NULL pieces below:
-        mdl[[ ce[["rx_obj_name"]] ]] =
-          list(label       = ce[["ui"]][["element_name"]],
-               MOD_TYPE    = "===ZZ===",
-               id          = state[["id"]],
-               idx         = ce[["idx"]],
-               rx_obj      = NULL, #
-               rx_obj_name = NULL, #
-               ts_obj      = NULL, #
-               ts_obj_name = NULL, #
-               fcn_def     = NULL, #
-               MDLMETA     = NULL, #
-               code        = NULL, #
-               checksum    = m_checksum,
-               MDLchecksum = ce_checksum)
-      }
-    }
-
-  } else {
-    isgood = FALSE
-    msgs = c(msgs, "Bad ===ZZ=== state")
-  }
+ #if(state[["===ZZ==="]][["isgood"]]){
+ #
+ #  # Checksum for the module
+ #  m_checksum = state[["===ZZ==="]][["checksum"]]
+ #  elements = names(state[["===ZZ==="]][["elements"]])
+ #  if(!is.null(elements)){
+ #    # We have at least 1 model
+ #    hasmdl = TRUE
+ #    for(element in elements){
+ #      # current element
+ #      ce = state[["===ZZ==="]][["elements"]][[element]]
+ #      ce_checksum = ce[["checksum"]]
+ #
+ #
+ #      # NOTE: You need to populate teh NULL pieces below:
+ #      mdl[[ ce[["rx_obj_name"]] ]] =
+ #        list(label       = ce[["ui"]][["element_name"]],
+ #             MOD_TYPE    = "===ZZ===",
+ #             id          = state[["id"]],
+ #             idx         = ce[["idx"]],
+ #             rx_obj      = NULL, #
+ #             rx_obj_name = NULL, #
+ #             ts_obj      = NULL, #
+ #             ts_obj_name = NULL, #
+ #             fcn_def     = NULL, #
+ #             MDLMETA     = NULL, #
+ #             code        = NULL, #
+ #             checksum    = m_checksum,
+ #             MDLchecksum = ce_checksum)
+ #    }
+ #  }
+ #
+ #} else {
+ #  isgood = FALSE
+ #  msgs = c(msgs, "Bad ===ZZ=== state")
+ #}
 
   res = list(hasmdl     = hasmdl,
              isgood     = isgood,
@@ -1040,7 +1060,7 @@ state}
 #'@title Populate Session Data for Module Testing
 #'@description Populates the supplied session variable for testing.
 #'@param session Shiny session variable (in app) or a list (outside of app)
-#'@return The ===ZZ=== portion of the `all_sess_res` returned from \code{\link{ASM_set_app_state}}
+#'@return The ===ZZ=== portion of the `all_sess_res` returned from \code{\link{FM_app_preload}}
 #'@examples
 #' session = shiny::MockShinySession$new()
 #' sess_res = ===ZZ===_test_mksession(session=session)
@@ -1048,13 +1068,13 @@ state}
 
   sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
               system.file(package="formods", "preload", "UD_preload.yaml"))
-  res = ASM_set_app_state(session=list(), sources=sources)
+  res = FM_app_preload(session=list(), sources=sources)
   res = res[["all_sess_res"]][["===ZZ==="]]
 
 res}
 
 #'@export
-#'@title New ===Module_Name=== ===ELEMENT===
+#'@title New ===ZZ_NAME=== ===ELEMENT===
 #'@description Appends a new empty ===ELEMENT=== to the ===ZZ=== state object
 #'and makes this new ===ELEMENT=== the active ===ELEMENT===.
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
@@ -1219,7 +1239,6 @@ state}
 #' state   = sess_res$state
 #' state = ===ZZ===_onload(state, session)
 ===ZZ===_onload     = function(state, session){
-
   # Put any post processing you would use after loading here. If you do not
   # have any you can leave this function as a passthrough for the state object
   # or just delete it.
@@ -1274,6 +1293,12 @@ res}
                                MOD_yaml_file   = MOD_yaml_file,
                                react_state     = react_state)
 
+  # This saves the module to the session variable so it's there to be used
+  # below
+  if(!formods::is_shiny(session)){
+    session = FM_set_mod_state(session, mod_ID, state)
+  }
+
   elements = src_list[[mod_ID]][["elements"]]
 
 
@@ -1309,6 +1334,14 @@ res}
       }
     }
 
+
+    # TODO: This adds the main ui components. These are not element specific
+    # and apply to the entire module. For example the currently selected
+    # element. 
+    for(uiname in names(src_list[["===ZZ==="]][["ui"]])){
+      state[["===ZZ==="]][["ui"]][[uiname]] = src_list[["===ZZ==="]][["ui"]][[uiname]]
+    }
+
     # TODO: You need to process the elements and components here
     #browser()
     # Now we have empty elements defined
@@ -1325,6 +1358,12 @@ res}
       #-------------------------------------------------------
       # Defining general options
       FM_le(state, paste0("loading element idx: ", ele_idx ))
+
+      current_ele = ===ZZ===_fetch_current_element(state)
+      # Pulling the element level uis components from the preload. This just
+      # replaces the default element uis with the ones on the preload. This
+      # may require more finesse depending on how the module works:
+      # current_ele[["ui"]] = elements[[ele_idx]][["element"]][["ui"]]
 
       # Place checks for required fields here:
       # req_ele_opts =c("field1", "field2")
@@ -1344,32 +1383,16 @@ res}
       #       paste0("element idx: ",ele_idx, " no components defined"))
       # }
 
-      # Next we process the components (models)
+      # Next we process the components 
       if(ele_isgood){
 
-        # Creating element components
-        # If there are components you can add them here:
-        # for(comp_idx in 1:length(elements[[ele_idx]][["element"]][["components"]])){
-        #   tmp_component = elements[[ele_idx]][["element"]][["components"]][[comp_idx]][["component"]]
-        #   add_component = TRUE
-        #   # If there are required component fields put them here
-        #   # req_comp_opts =c("field1", "field2")
-        #   # if(!all(req_comp_opts    %in% names(tmp_component))){
-        #   #   ele_isgood      = FALSE
-        #   #   add_component   = FALSE
-        #   #   missing_opts    =
-        #   #     req_comp_opts[!(req_comp_opts %in% names(tmp_component))]
-        #   #   ele_err_msg = c(ele_err_msg,
-        #   #     paste0("element idx:  ",ele_idx, ", element idx: ", comp_idx, ", missing option(s):" ),
-        #   #     paste0("  -> ", paste0(missing_opts, collapse=", "))
-        #   #     )
-        #   # }
-        #   if(add_component && ele_isgood){
-        #   }
-        #
-        #
-        # }
       }
+
+      # This saves any changes made to the current element. You may need to
+      # move it around depending on how functions operate
+      state = ===ZZ===_set_current_element(
+        state   = state,
+        element = current_ele)
 
       if(ele_isgood){
         formods::FM_le(state,paste0("added element idx: ",ele_idx))

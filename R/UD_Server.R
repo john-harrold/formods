@@ -1062,6 +1062,8 @@ code}
 #'    \item{MOD_TYPE: Short name for the type of module.}
 #'    \item{id: module ID}
 #'    \item{idx: unique numerical ID to identify this dataset in the module.}
+#'    \item{ds_label: optional label that can be defined by a user and used in
+#'    workflows. Must be unique to the module.}
 #'    \item{DS: Dataframe containing the actual dataset.}
 #'    \item{DSMETA: Metadata describing DS, see \code{FM_fetch_ds()} for
 #'    details on the format.}
@@ -1100,6 +1102,7 @@ UD_fetch_ds = function(state){
                MOD_TYPE   = NULL,
                id         = NULL,
                idx        = 1,
+               ds_label   = "",
                DS         = NULL,
                DSMETA     = NULL,
                code       = NULL,
@@ -1205,6 +1208,9 @@ UD_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
                          FM_yaml_file  = FM_yaml_file,
                          MOD_yaml_file = MOD_yaml_file)
 
+  if(!formods::is_shiny(session)){
+    session = FM_set_mod_state(session, mod_ID, state)
+  }
 
   # Required for proper reaction:
   react_state[[mod_ID]]  = list(UD  = list(checksum=state[["UD"]][["checksum"]]))

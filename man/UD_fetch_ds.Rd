@@ -24,6 +24,8 @@ list containing the following elements
    \item{MOD_TYPE: Short name for the type of module.}
    \item{id: module ID}
    \item{idx: unique numerical ID to identify this dataset in the module.}
+   \item{ds_label: optional label that can be defined by a user and used in
+   workflows. Must be unique to the module.}
    \item{DS: Dataframe containing the actual dataset.}
    \item{DSMETA: Metadata describing DS, see \code{FM_fetch_ds()} for
    details on the format.}

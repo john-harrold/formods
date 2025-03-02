@@ -117,11 +117,8 @@ res}
 #'   \itemize{
 #'     \item{label:}  Text label for the dataset (used to display to the user)
 #'     \item{DS:}     Data frame with the dataset
-#'     \item{DSMETA:} Data frame with metadata about the colunns of the
-#'     dataset in \code{DS}. The data frame should have the following columns:
-#'     \itemize{
-#'        \item{col1:} column 1
-#'     }
+#'     \item{DSMETA:} Optional data frame with metadata about the colunns of the
+#'     dataset in \code{DS}. 
 #'     \item{code:} Code to generate the dataset.
 #'     \item{checksum:} Module checksum when the dataset was pulled
 #'     \item{DSchecksum:} Checksum of the dataframe in DS
@@ -140,6 +137,8 @@ res}
 #'     \item{MOD_TYPE:} Short name of the type of module
 #'     \item{id:} Module ID
 #'     \item{idx:} Numerical identifyer within the module
+#'     \item{ds_label: optional label that can be defined by a user and used in
+#'     workflows. Must be unique to the module.}
 #'     \item{checksum:} Module checksum
 #'     \item{DSchecksum:} Checksum of the dataset
 #'     \item{code:} Code to generate the dataset
@@ -226,6 +225,7 @@ FM_fetch_ds = function(state, session, ids=NULL){
         MOD_DESC    = MOD_DESC_list[[dsname]],
         id          = ds[[dsname]][["id"]],
         idx         = ds[[dsname]][["idx"]],
+        ds_label    = ds[[dsname]][["ds_label"]],
         checksum    = ds[[dsname]][["checksum"]],
         DSchecksum  = ds[[dsname]][["DSchecksum"]],
         code        = ds[[dsname]][["code"]])
@@ -1376,12 +1376,13 @@ FM_init_state = function(
 state}
 
 #'@export
-#'@title Sets Message in State from UI Processing
-#'@description Any errors that need to be passed back to the user can be set
-#'with this function.
+#'@title Process Include Files in formods.yaml 
+#'@description Reads in the formods.yaml file and copies any include files
+#'that are needed into the user directory.
 #'@param state formods State object.
 #'@param session Shiny session variable.
-#'@return No return value, sets message in supplied session variable.
+#'@return No return value, sets include flag to indicate everythign has been
+#'set.
 #'@examples
 #' # We need a module state object to use this function:
 #' sess_res = UD_test_mksession()
@@ -1968,7 +1969,9 @@ FM_notify = function(state, session){
           cn = shinybusy::config_notify()
 
           # Loading formods
-          if(type %in% names(state[["yaml"]][["FM"]][["notifications"]][["config"]])){
+          if(is.null(type)){
+            FM_le(state, "Notification type was NULL")
+          } else if(type %in% names(state[["yaml"]][["FM"]][["notifications"]][["config"]])){
             tc_env = state[["yaml"]][["FM"]][["notifications"]][["config"]][[type]]
             cmd_args = paste(paste(names(tc_env), "=", names(tc_env)), collapse = ",\n ")
             cmd = paste("cn = shinybusy::config_notify(\n", cmd_args, ")")
@@ -2261,6 +2264,7 @@ FM_fetch_deps = function(state, session){
   # We also add itself
   deps_found = sort(unique(c(deps_found, state[["id"]])))
 
+
   # Now we loop through each dependency and pull out the required packages
   if(!is.null(deps_found)){
     for(tmp_dep in deps_found){
@@ -2271,6 +2275,7 @@ FM_fetch_deps = function(state, session){
       }
     }
   }
+
 
   if(!is.null(packages)){
     packages = sort(unique(packages))
@@ -3077,6 +3082,24 @@ session}
 
 
 #'@export
+#'@title Fetch Yaml Contents  
+#'@description Wrapper for read_yaml() to make this function available to
+#'modules dependent on formods.
+#'@param file  yaml file.
+#'@return List containing the contents of the yaml file.
+#'@examples
+#' res = FM_read_yaml(
+#'    system.file(package = "formods",
+#'                          "templates",
+#'                          "formods.yaml"))
+FM_read_yaml <- function(file){
+
+  res = yaml::read_yaml(file)
+
+res}
+
+
+#'@export
 #'@title Run the 'formods' Shiny App
 #'@description Runs the test formods. app.
 #'@param host Hostname of the server ("127.0.0.1")
@@ -3128,7 +3151,5 @@ run_formods  = function(host        = "127.0.0.1",
                   host  = host,
                   port  = port)
   }
-
-
 
 }

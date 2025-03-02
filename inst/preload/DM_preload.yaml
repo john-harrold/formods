@@ -1,0 +1,57 @@
+DM:
+  fm_yaml:   'system.file(package="formods", "templates", "formods.yaml")'
+  mod_yaml:  'system.file(package="formods", "templates", "DM.yaml")'
+  ui:
+    element_selection: "element_1"
+    source_url:        ""
+  sources: 
+   - source:
+      file_name:    "TEST_DATA.xlsx"
+      source_str:   'system.file(package="formods", "test_data", "TEST_DATA.xlsx")'
+      source_type:  "file"
+      source_id:    1
+   - source:
+      source_str:   'https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_PC.csv'
+      source_type:  "url"
+      source_id:    2
+   - source:
+      source_str:   'https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_EX.csv'
+      source_type:  "url"
+      source_id:    3
+   - source:
+      source_str:   'https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_DM.csv'
+      source_type:  "url"
+      source_id:    4
+  elements:
+   - element:
+       idx:          1
+       ui: 
+         element_name: "Excel (from file)"
+         ds_label:     ""
+         source_id:    1
+         ds_sheet:     "DATA"
+         clean_ds:     TRUE
+   - element:
+       idx:          2
+       ui: 
+         element_name: "STDM PC (url)"
+         ds_label:     "PC"
+         source_id:    2
+         ds_sheet:     ""
+         clean_ds:     TRUE
+   - element:
+       idx:          3
+       ui: 
+         element_name: "STDM EX (url)"
+         ds_label:     "EX"
+         source_id:    3
+         ds_sheet:     ""
+         clean_ds:     TRUE
+   - element:
+       idx:          5
+       ui: 
+         element_name: "STDM DM (url)"
+         ds_label:     "DM"
+         source_id:    4
+         ds_sheet:     ""
+         clean_ds:     TRUE

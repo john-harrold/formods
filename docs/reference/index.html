@@ -213,7 +213,13 @@
           <code><a href="FM_proc_include.html">FM_proc_include()</a></code>
 
         </dt>
-        <dd>Sets Message in State from UI Processing</dd>
+        <dd>Process Include Files in formods.yaml</dd>
+      </dl><dl><dt>
+
+          <code><a href="FM_read_yaml.html">FM_read_yaml()</a></code>
+
+        </dt>
+        <dd>Fetch Yaml Contents</dd>
       </dl><dl><dt>
 
           <code><a href="FM_reset_app.html">FM_reset_app()</a></code>
@@ -347,77 +353,6 @@
         </dt>
         <dd>Create Module Templates in a Package Repository</dd>
       </dl></div><div class="section level2">
-      <h2 id="upload-data-ud-">Upload Data (UD)<a class="anchor" aria-label="anchor" href="#upload-data-ud-"></a></h2>
-
-
-
-
-    </div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="UD_Server.html">UD_Server()</a></code>
-
-        </dt>
-        <dd>Data Upload Server</dd>
-      </dl><dl><dt>
-
-          <code><a href="UD_attach_ds.html">UD_attach_ds()</a></code>
-
-        </dt>
-        <dd>Attach Data Set to UD State</dd>
-      </dl><dl><dt>
-
-          <code><a href="UD_ds_read.html">UD_ds_read()</a></code>
-
-        </dt>
-        <dd>Generate Code and Load DS</dd>
-      </dl><dl><dt>
-
-          <code><a href="UD_fetch_code.html">UD_fetch_code()</a></code>
-
-        </dt>
-        <dd>Fetch Module Code</dd>
-      </dl><dl><dt>
-
-          <code><a href="UD_fetch_ds.html">UD_fetch_ds()</a></code>
-
-        </dt>
-        <dd>Fetch Module Datasets</dd>
-      </dl><dl><dt>
-
-          <code><a href="UD_fetch_state.html">UD_fetch_state()</a></code>
-
-        </dt>
-        <dd>Fetch Upload Data State</dd>
-      </dl><dl><dt>
-
-          <code><a href="UD_init_state.html">UD_init_state()</a></code>
-
-        </dt>
-        <dd>Initialize UD Module State</dd>
-      </dl><dl><dt>
-
-          <code><a href="UD_mk_preload.html">UD_mk_preload()</a></code>
-
-        </dt>
-        <dd>Make List of Current ASM State</dd>
-      </dl><dl><dt>
-
-          <code><a href="UD_preload.html">UD_preload()</a></code>
-
-        </dt>
-        <dd>Preload Data for UD Module</dd>
-      </dl><dl><dt>
-
-          <code><a href="UD_test_mksession.html">UD_test_mksession()</a></code>
-
-        </dt>
-        <dd>Populate Session Data for Module Testing</dd>
-      </dl></div><div class="section level2">
       <h2 id="app-state-managemnt-asm-">App State Managemnt (ASM)<a class="anchor" aria-label="anchor" href="#app-state-managemnt-asm-"></a></h2>
 
 
@@ -500,6 +435,155 @@
 
         </dt>
         <dd>Populate Session Data for Module Testing</dd>
+      </dl></div><div class="section level2">
+      <h2 id="data-management-dm-">Data Management (DM)<a class="anchor" aria-label="anchor" href="#data-management-dm-"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="DM_Server.html">DM_Server()</a></code>
+
+        </dt>
+        <dd>Data Management State Server</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_add_file.html">DM_add_file()</a></code>
+
+        </dt>
+        <dd>Make List of Current DM State</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_add_url.html">DM_add_url()</a></code>
+
+        </dt>
+        <dd>Attaches Data Source from URL</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_append_report.html">DM_append_report()</a></code>
+
+        </dt>
+        <dd>Append Report Elements</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_del_current_element.html">DM_del_current_element()</a></code>
+
+        </dt>
+        <dd>Deletes Current ds</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_delete_source.html">DM_delete_source()</a></code>
+
+        </dt>
+        <dd>Make List of Current DM State</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_fetch_code.html">DM_fetch_code()</a></code>
+
+        </dt>
+        <dd>Fetch Module Code</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_fetch_current_element.html">DM_fetch_current_element()</a></code>
+
+        </dt>
+        <dd>Fetches Current ds</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_fetch_ds.html">DM_fetch_ds()</a></code>
+
+        </dt>
+        <dd>Fetch Data Management Module Datasets</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_fetch_source.html">DM_fetch_source()</a></code>
+
+        </dt>
+        <dd>Gets Source File Name for Element</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_fetch_state.html">DM_fetch_state()</a></code>
+
+        </dt>
+        <dd>Fetch Data Management State</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_init_state.html">DM_init_state()</a></code>
+
+        </dt>
+        <dd>Initialize DM Module State</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_mk_preload.html">DM_mk_preload()</a></code>
+
+        </dt>
+        <dd>Make List of Current DM State</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_new_element.html">DM_new_element()</a></code>
+
+        </dt>
+        <dd>New Data Management ds</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_onload.html">DM_onload()</a></code>
+
+        </dt>
+        <dd>Processes State After Loading</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_preload.html">DM_preload()</a></code>
+
+        </dt>
+        <dd>Preload Data for DM Module</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_run_code.html">DM_run_code()</a></code>
+
+        </dt>
+        <dd>Run Element Code</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_set_current_element.html">DM_set_current_element()</a></code>
+
+        </dt>
+        <dd>Sets the Value for the Current ds</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_test_mksession.html">DM_test_mksession()</a></code>
+
+        </dt>
+        <dd>Populate Session Data for Module Testing</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_update_checksum.html">DM_update_checksum()</a></code>
+
+        </dt>
+        <dd>Updates DM Module Checksum</dd>
+      </dl><dl><dt>
+
+          <code><a href="DM_update_element_code.html">DM_update_element_code()</a></code>
+
+        </dt>
+        <dd>Updates Element Code</dd>
+      </dl><dl><dt>
+
+          <code><a href="is_excel.html">is_excel()</a></code>
+
+        </dt>
+        <dd>Determines if a File is Excel</dd>
+      </dl><dl><dt>
+
+          <code><a href="is_importable.html">is_importable()</a></code>
+
+        </dt>
+        <dd>Determines if a File is Importable</dd>
       </dl></div><div class="section level2">
       <h2 id="data-wrangling-dw-">Data Wrangling (DW)<a class="anchor" aria-label="anchor" href="#data-wrangling-dw-"></a></h2>
 
@@ -720,6 +804,77 @@
 
         </dt>
         <dd>Builds a Figure Element R Statement From UI Elements:</dd>
+      </dl></div><div class="section level2">
+      <h2 id="upload-data-ud-">Upload Data (UD)<a class="anchor" aria-label="anchor" href="#upload-data-ud-"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="UD_Server.html">UD_Server()</a></code>
+
+        </dt>
+        <dd>Data Upload Server</dd>
+      </dl><dl><dt>
+
+          <code><a href="UD_attach_ds.html">UD_attach_ds()</a></code>
+
+        </dt>
+        <dd>Attach Data Set to UD State</dd>
+      </dl><dl><dt>
+
+          <code><a href="UD_ds_read.html">UD_ds_read()</a></code>
+
+        </dt>
+        <dd>Generate Code and Load DS</dd>
+      </dl><dl><dt>
+
+          <code><a href="UD_fetch_code.html">UD_fetch_code()</a></code>
+
+        </dt>
+        <dd>Fetch Module Code</dd>
+      </dl><dl><dt>
+
+          <code><a href="UD_fetch_ds.html">UD_fetch_ds()</a></code>
+
+        </dt>
+        <dd>Fetch Module Datasets</dd>
+      </dl><dl><dt>
+
+          <code><a href="UD_fetch_state.html">UD_fetch_state()</a></code>
+
+        </dt>
+        <dd>Fetch Upload Data State</dd>
+      </dl><dl><dt>
+
+          <code><a href="UD_init_state.html">UD_init_state()</a></code>
+
+        </dt>
+        <dd>Initialize UD Module State</dd>
+      </dl><dl><dt>
+
+          <code><a href="UD_mk_preload.html">UD_mk_preload()</a></code>
+
+        </dt>
+        <dd>Make List of Current ASM State</dd>
+      </dl><dl><dt>
+
+          <code><a href="UD_preload.html">UD_preload()</a></code>
+
+        </dt>
+        <dd>Preload Data for UD Module</dd>
+      </dl><dl><dt>
+
+          <code><a href="UD_test_mksession.html">UD_test_mksession()</a></code>
+
+        </dt>
+        <dd>Populate Session Data for Module Testing</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

@@ -15,7 +15,7 @@ state = ===ZZ===_del_current_element(state)
 element = ===ZZ===_fetch_current_element(state)
 
 # You can modify the element
-element[["name"]] = "A more descriptive name"
+element[["ui"]][["element_name"]] = "A more descriptive name"
 
 # You can now place element back in the state
 state = ===ZZ===_set_current_element(state, element)

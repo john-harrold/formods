@@ -104,3 +104,18 @@ MC:
     show_code: "Show ===ELEMENT=== code" 
     components:
       input_tip: "My tool tip"
+  # ui_ids in the module these are automatically tracked
+  ui_ids:
+    # These are tracked at the module level
+    module:
+      - element_selection
+    # These are tracked at the element level
+    element:
+      - element_name
+    # These are ui ids for buttons
+    buttons:
+      - button_clk_save
+      - button_clk_clip
+      - button_clk_del
+      - button_clk_copy
+      - button_clk_new

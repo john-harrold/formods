@@ -2,7 +2,7 @@
 % Please edit documentation in R/formods.R
 \name{FM_proc_include}
 \alias{FM_proc_include}
-\title{Sets Message in State from UI Processing}
+\title{Process Include Files in formods.yaml}
 \usage{
 FM_proc_include(state, session)
 }
@@ -12,11 +12,12 @@ FM_proc_include(state, session)
 \item{session}{Shiny session variable.}
 }
 \value{
-No return value, sets message in supplied session variable.
+No return value, sets include flag to indicate everythign has been
+set.
 }
 \description{
-Any errors that need to be passed back to the user can be set
-with this function.
+Reads in the formods.yaml file and copies any include files
+that are needed into the user directory.
 }
 \examples{
 # We need a module state object to use this function:

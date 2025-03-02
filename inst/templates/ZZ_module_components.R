@@ -10,8 +10,7 @@ ui <- dashboardPage(
   dashboardHeader(title="===ZZ=== Module Template"),
   dashboardSidebar(
      sidebarMenu(
-       menuItem("Module UI Components",    tabName="appstate",  icon=icon("archive")),
-       menuItem("Compact View",  tabName="compact", icon=icon("archive"))
+       menuItem("Module UI Components",    tabName="appstate",  icon=icon("archive"))
      )
   ),
   dashboardBody(
@@ -67,10 +66,7 @@ ui <- dashboardPage(
        fluidRow(
          box(title="Current Module State",
            verbatimTextOutput("ui_state"),width=12))
-       ),
-       tabItem(tabName="compact",
-          "===ZZ===_ui_compact",
-          htmlOutput(NS("===ZZ===", "===ZZ===_ui_compact")))
+       )
       )
     )
   )

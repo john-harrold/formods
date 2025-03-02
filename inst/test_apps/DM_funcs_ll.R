@@ -1,0 +1,57 @@
+# This creates a testing environment
+sess_res = DM_test_mksession()
+session = sess_res$session
+input   = sess_res$input
+state   = sess_res$state
+
+# Next we delete all the elements that are currently defined
+ele_ids =  names(state[["DM"]][["elements"]])
+while(state[["DM"]][["current_element"]] %in% ele_ids){
+  state =  suppressMessages(DM_del_current_element(state))
+}
+
+# This will delete all the pre-defined sources
+sources_df = state[["DM"]][["defined_sources"]]
+source_ids = sources_df$ID
+for(source_id in source_ids){
+  state = suppressMessages(DM_delete_source(state = state, id = source_id))
+}
+
+# Adding a file as a resource
+DM_add_file(
+  state     = state,
+  file_name = "TEST_DATA.xlsx",
+  file_path = system.file(package="formods", "test_data", "TEST_DATA.xlsx"),
+  load_ID   = 10)
+
+
+# Because CRAN won't let you have lines longer than 100 chars we have to 
+# build the string then pass it to the function below:
+tmp_url       = paste0('https://raw.githubusercontent.com/john-harrold', '/', 
+                       'formods/refs/heads/master/inst/test_data/SDTM_DM.csv')
+# Adding a url as a resource
+DM_add_url(
+  state     = state,
+  url       = tmp_url,
+  load_ID   = 11)
+
+# Attaching a file to dataset element:
+current_ele  = DM_fetch_current_element(state)
+current_ele[["ui"]][["source_id"]] = "10"
+current_ele[["ui"]][["ds_sheet"]]  = "DATA"
+
+#This will pull out the source details for an element:
+fsres = DM_fetch_source(state=state, element=current_ele)
+
+# Rebuilding the code to attach the file:
+current_ele = DM_update_element_code(state = state, element=current_ele, session)
+
+# Running the attachment code:
+current_ele = DM_run_code(state = state, element=current_ele)
+
+# Saving the element:
+DM_set_current_element(
+  state   = state,
+  element = current_ele)
+
+

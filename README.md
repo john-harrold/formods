@@ -26,12 +26,13 @@ modules as well as how to create other modules within this framework.
 
 # Installation
 
-<!---
 You can install the released version of ``formods`` from [CRAN](https://cran.r-project.org/package=formods) with:
-&#10;``` r
-install.packages("formods")
+
+``` r
+install.packages("formods", dependencies=TRUE)
 ```
---->
+
+Make sure to set depenendencies to `TRUE` to get all of the suggested packages. 
 
 You can install the development version from
 [GitHub](https://github.com/john-harrold/formods) with:

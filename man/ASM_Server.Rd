@@ -34,6 +34,7 @@ Server function for the Save State Shiny Module
 }
 \examples{
 if(interactive()){
+if(interactive()){
 # These are suggested packages
 library(shinydashboard)
 library(ggpubr)
@@ -58,6 +59,7 @@ formods.yaml  = system.file(package="formods",  "templates",  "formods.yaml")
 ASM.yaml      = system.file(package="formods",  "templates",  "ASM.yaml")
 UD.yaml       = system.file(package="formods",  "templates",  "UD.yaml")
 DW.yaml       = system.file(package="formods",  "templates",  "DW.yaml")
+DM.yaml       = system.file(package="formods",  "templates",  "DM.yaml")
 FG.yaml       = system.file(package="formods",  "templates",  "FG.yaml")
 
 
@@ -80,6 +82,7 @@ ui <- dashboardPage(
   dashboardSidebar(
      sidebarMenu(
        menuItem("Source Data",     tabName="upload",      icon=icon("table")) ,
+       menuItem("Manage Data",     tabName="manage_data", icon=icon("folder-tree")),
        menuItem("Wrangle",         tabName="wrangle",     icon=icon("hat-cowboy")),
        menuItem("Plot",            tabName="plot",        icon=icon("chart-line")),
        menuItem("App State",       tabName="app_state",   icon=icon("archive")),
@@ -118,6 +121,9 @@ ui <- dashboardPage(
        tabItem(tabName="wrangle",
                box(title="Transform and Create Views of Your Data", width=12,
                htmlOutput(NS("DW",  "DW_ui_compact")))),
+       tabItem(tabName="manage_data",
+               box(title="Transform and Create Views of Your Data", width=12,
+               htmlOutput(NS("DM",  "DM_ui_compact")))),
        tabItem(tabName="plot",
                box(title="Visualize Data", width=12,
                htmlOutput(NS("FG",  "FG_ui_compact")))),
@@ -163,6 +169,7 @@ server <- function(input, output, session) {
   if(file.exists(ftmptest)){
     sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
                 system.file(package="formods", "preload", "UD_preload.yaml"),
+                system.file(package="formods", "preload", "DM_preload.yaml"),
                 system.file(package="formods", "preload", "DW_preload.yaml"),
                 system.file(package="formods", "preload", "FG_preload.yaml"))
     res = FM_app_preload(session=session, sources=sources)
@@ -196,6 +203,11 @@ server <- function(input, output, session) {
              MOD_yaml_file = DW.yaml,
              deployed      = deployed,
              react_state   = react_FM)
+  formods::DM_Server( id="DM", id_ASM = "ASM",
+             FM_yaml_file  = formods.yaml,
+             MOD_yaml_file = DM.yaml,
+             deployed      = deployed,
+             react_state   = react_FM)
   formods::FG_Server( id="FG", id_ASM = "ASM",id_UD = "UD", id_DW = "DW",
              FM_yaml_file  = formods.yaml,
              MOD_yaml_file = FG.yaml,
@@ -204,5 +216,6 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+}
 }
 }

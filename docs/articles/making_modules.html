@@ -614,7 +614,11 @@ object as user information is processed. This will set a notification
 called <code>Example Notification</code>. Along with that a timestamp is
 set:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>   <span class="va">state</span> <span class="op">=</span> <span class="fu"><a href="../reference/FM_set_notification.html">FM_set_notification</a></span><span class="op">(</span><span class="va">state</span>, <span class="st">"Something happened"</span>, <span class="st">"Example Notification"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span>   <span class="va">state</span> <span class="op">=</span> <span class="fu"><a href="../reference/FM_set_notification.html">FM_set_notification</a></span><span class="op">(</span></span>
+<span>     state       <span class="op">=</span> <span class="va">state</span>, </span>
+<span>     notify_text <span class="op">=</span> <span class="st">"Something happened"</span>, </span>
+<span>     notify_id   <span class="op">=</span> <span class="st">"example"</span>,</span>
+<span>     type        <span class="op">=</span> <span class="st">"info"</span><span class="op">)</span></span></code></pre></div>
 <p>That timestamp is used to track and prevent the notification from
 being shown multiple times. Next you need to setup the reactions to
 display the notifications. Here you can create a reactive expression of
@@ -727,13 +731,29 @@ module.</p>
 <div class="section level2">
 <h2 id="checklist">Checklist<a class="anchor" aria-label="anchor" href="#checklist"></a>
 </h2>
-<p>The following is a suggested checkist to go over when making a
+<p>The following is a suggested checklist to go over when making a
 module:</p>
 <ul>
-<li>Try the following functions with and without content
-<ul>
-<li><code>MM_mk_preload</code></li>
-<li><code>MM_fetch_code</code></li>
+<li>Module Building checklist
+<ul class="task-list">
+<li><label><input type="checkbox">Build ui structure</label></li>
+<li><label><input type="checkbox"><code>ZZ_preload</code></label></li>
+<li><label><input type="checkbox"><code>ZZ_test_mksession</code></label></li>
+<li><label><input type="checkbox"><code>ZZ_mk_preload</code></label></li>
+<li><label><input type="checkbox"><code>ui_zz_compact</code></label></li>
+<li><label><input type="checkbox"><code>ZZ_fetch_ds</code></label></li>
+<li><label><input type="checkbox"><code>ZZ_fetch_mdl</code></label></li>
+<li><label><input type="checkbox"><code>ZZ_fetch_code</code></label></li>
+<li><label><input type="checkbox"><code>ZZ_append_report</code></label></li>
+<li><label><input type="checkbox">Create tests</label></li>
+<li><label><input type="checkbox">Create examples</label></li>
+<li><label><input type="checkbox">Update/Create vignettes</label></li>
+</ul>
+</li>
+<li>Test the following functions with and without content
+<ul class="task-list">
+<li><label><input type="checkbox"><code>ZZ_mk_preload</code></label></li>
+<li><label><input type="checkbox"><code>ZZ_fetch_code</code></label></li>
 </ul>
 </li>
 </ul>

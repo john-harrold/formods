@@ -27,12 +27,14 @@ reference:
     - set_hold
     - unfactor
     - use_formods
-  - title: "Upload Data (UD)"
-  - contents:
-    - starts_with("UD_")
   - title: "App State Managemnt (ASM)"
   - contents:
     - starts_with("ASM_")
+  - title: "Data Management (DM)"
+  - contents:
+    - starts_with("DM_")
+    - is_excel
+    - is_importable
   - title: "Data Wrangling (DW)"
   - contents:
     - starts_with("DW_")
@@ -42,6 +44,9 @@ reference:
   - contents:
     - starts_with("FG_")
     - fers_builder
+  - title: "Upload Data (UD)"
+  - contents:
+    - starts_with("UD_")
 navbar:
   left:
   - text: "Tutorials"

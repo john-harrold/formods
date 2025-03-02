@@ -53,6 +53,7 @@ MC:
     busy:
       dv_update:  "Updating data views. Please be patient..."
   errors:
+    no_code:              "# No data wragling elements defined yet!"
     fds_filter_column:    "Filter column not specified."
     fds_filter_operator:  "Filter condition not specified."
     fds_filter_rhs:       "Filter RHS not specified."

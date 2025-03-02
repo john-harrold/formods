@@ -1,0 +1,189 @@
+# The MC field is a skeleton for constructing new modules
+MC:
+  # Module informaiton
+  module:
+    # The description is used to identify the source of different components
+    # within the app. E.g. if your module provides data views they will be
+    # associated with this description
+    description: "Data Managment"
+    type: "DM" # Module type
+    # This is a list of modules this one depends on. The list names
+    # are the R object names used in this module and the value is the
+    # module ID associated with that module in the current deployment.
+    depends: 
+      id_ASM: "ASM"
+  element_object_name: "DM_obj"
+# The include section is optional. You can use this section to copy files 
+# from the directory where you are running the app to the user directory to be
+# used in the app and when saved. The source and dest options can be a path
+# command like below or a double  quoted string: 
+#
+# '"/path/to/file"'
+#
+# The dest should be relative to user directory (think the root of the zip
+# file that is exported). See formods.yaml for examples. 
+#
+# include:
+#   files:
+#   - file:
+#       source: 'file.path(system.file(package="onbrand"), "templates", "report.docx")'
+#       dest:   'file.path("config","report.docx")'
+  code: # module specific code options
+    packages: ["rio", "janitor"] # Set to NULL if there are no package dependencies
+    readOnly: TRUE
+    mode:     r
+  # Controls what is shown in the compact ui mode:
+  compact:
+    code:    TRUE 
+    clip:    TRUE 
+  # This is where you put reporting options. The expected options are shown
+  # here, but module-specific options can also be added if needed:
+  reporting:
+    enabled: FALSE
+    # Priority of reporting relative to other modules 
+    # (higher numbers are reported first)
+    priority: 1
+  # put different formatting options (widths, heights,
+  # shinyWidgets button sizes, etc) here.
+  formatting:
+    # Dimensions of code snippet box
+    clean_ds:
+      default: TRUE # This controls the default value for the switch in the ui
+      tooltip: "Clean the data set columns (remove space, special characters, etc) when loading"
+      tooltip_position: "top"
+    code:
+      width:  800
+      height: 300
+    current_element:
+      width:  "200px"
+      tooltip: "Highlighted data sets indicate a problem (e.g. the data source not defined, deleted, etc.)"
+      tooltip_position: "top"
+    source_id:    
+      width:  "200px"
+    ds_sheet:    
+      width:  "200px"
+    source_url:    
+      width:  "200px"
+      placeholder: "https://adomain.com/file.csv"
+    ds_label:
+      width:  "75px"
+      placeholder: "PK"
+      tooltip: "Optional label should be unique and map to expected labels in workflows"
+      tooltip_position: "top"
+    ds_label_val:
+      val_good:  'icon("check", style="color: #00BB8A")'
+      val_bad:   'icon("xmark", style="color: #FF475E")'
+      tooltip_good: "Label is good, no conflicts."
+      # The placeholder ===CONFLICTS=== will be replaced by a comma delimited
+      # string of other data sets that use the same label.
+      tooltip_bad:  "Label conflcts with the following data sets: ===CONFLICTS==="
+      tooltip_position: "top"
+    element_name:
+      width:  "200px"
+    preview:
+      resources_tab: 
+        label: "Resources"
+        icon:  "server"
+      ds_tab:     
+        label: "Datasets"
+        icon:  "table"
+      width:  800
+      height: 500
+    input:
+    button_clk_run:
+      size: "sm"
+      block: TRUE
+    button_clk_del:
+      size: "sm"
+      block: TRUE
+      tooltip: "Delete the current data source."
+      tooltip_position: "right"
+    button_clk_save:
+      size: "sm"
+      block: TRUE
+      tooltip: "Save the name for the current data source."
+      tooltip_position: "right"
+    button_clk_get_url:
+      width: "200px"
+      size: "sm"
+      block: TRUE
+      tooltip: "Fetch the data source in the url."
+      tooltip_position: "right"
+    button_clk_clip:
+      size: "sm"
+      block: TRUE
+      tooltip: "Copy the code to generate the current data source to the clipboard."
+      tooltip_position: "right"
+    button_clk_copy:
+      size: "sm"
+      block: TRUE
+      tooltip: "Make a copy of the current data source."
+      tooltip_position: "right"
+    button_clk_new:
+      size: "sm"
+      block: TRUE
+      tooltip: "Create a new data source."
+      tooltip_position: "right"
+      width: 100
+    file_upload:
+      width:  600
+    ot_files:   
+      width: 250
+  labels:
+    current_element: NULL # "Select ds"
+    source_id:       "Select data source" 
+    ds_sheet:    "Select sheet" 
+    source_url:      "Web address" 
+    ds_label:      "Label" 
+    clean_ds:        "Clean dataset columns" 
+    element_name :   NULL # "ds name"
+    save_btn:     "Save"
+    get_url_btn:  "Attach URL"
+    clip_btn:     "Code" 
+    copy_btn:     "Copy"
+    del_btn:      "Delete"
+    new_btn:      "New"
+    file_upload:  "Upload file(s)"
+    resources_header: "tags$h2('Define new resources')"
+    dataset_header:   "tags$h2('Current dataset')"
+  errors:
+    code_gen_failed: "Code generation failed"
+    run_code_failed: "Unable to load dataset"
+    add_url_failed: "Unable to fetch url"
+    add_url_success: "URL successfully fetched"
+    no_ds: "Data source not available"
+    no_code:        "# There are no data sources yet defined"
+    no_files:       "No resources (files uploaded, urls, etc) defined."
+    no_files_mkres: "To define datasets you must first Upload/create resources."
+  tooltips:
+    # Set to FALSE to disable tool tips for this module
+    include: TRUE
+    elements: "Show data source components"
+    show_code: "Show data source code" 
+    components:
+      input_tip: "My tool tip"
+  # These are the ui_ids in the module. THIS SHOULD NOT BE CHANGED when
+  # customized the # site. 
+  ui_ids:
+    # These are tracked at the module level
+    module:
+      - element_selection
+      - DM_hot_resources
+      - source_url
+    # These are tracked at the element level
+    element:
+      - element_name
+      - source_id
+      - ds_sheet
+      - ds_label
+      - clean_ds
+    # These are ui ids for buttons
+    buttons:
+      - button_clk_save
+      - button_clk_clip
+      - button_clk_del
+      - button_clk_copy
+      - button_clk_new
+      - button_clk_get_url
+      - button_file_upload
+      

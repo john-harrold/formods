@@ -24,11 +24,8 @@ list containing the current dataset with the following format:
   \itemize{
     \item{label:}  Text label for the dataset (used to display to the user)
     \item{DS:}     Data frame with the dataset
-    \item{DSMETA:} Data frame with metadata about the colunns of the
-    dataset in \code{DS}. The data frame should have the following columns:
-    \itemize{
-       \item{col1:} column 1
-    }
+    \item{DSMETA:} Optional data frame with metadata about the colunns of the
+    dataset in \code{DS}. 
     \item{code:} Code to generate the dataset.
     \item{checksum:} Module checksum when the dataset was pulled
     \item{DSchecksum:} Checksum of the dataframe in DS
@@ -47,6 +44,8 @@ list containing the current dataset with the following format:
     \item{MOD_TYPE:} Short name of the type of module
     \item{id:} Module ID
     \item{idx:} Numerical identifyer within the module
+    \item{ds_label: optional label that can be defined by a user and used in
+    workflows. Must be unique to the module.}
     \item{checksum:} Module checksum
     \item{DSchecksum:} Checksum of the dataset
     \item{code:} Code to generate the dataset

@@ -134,13 +134,22 @@ Provides
 
 * Data sets via: `FM_fetch_ds()`  
 
+## Data Management (DM)
+
+The DM module allows users to upload multiple data files (resources) into the App and create datasets from those file. 
+
+Provides 
+
+* Data sets via: `FM_fetch_ds()`  
+* Reporting of data sets (Excel)
+
 ## Data Wrangling (DW)
 
 The DW module provides an interface to `dplyr` and `tidyr`.These are used to create chains of data wrangling commands that the user can build to transform the data creating **data views**. The DW module can use data from the UD module, or can take in a list with a dataset.
 
 Provides 
 
-* Data views via: `FM_fetch_ds()`  
+* Datasets views via: `FM_fetch_ds()`  
 * Reporting of data views (Excel)
 
 ## Figure Generation (FG)

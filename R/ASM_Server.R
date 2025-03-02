@@ -1045,6 +1045,9 @@ ASM_preload  = function(session, src_list, yaml_res=NULL, mod_ID=NULL, react_sta
                           FM_yaml_file  = FM_yaml_file,
                           MOD_yaml_file = MOD_yaml_file)
 
+  if(!formods::is_shiny(session)){
+    session = FM_set_mod_state(session, mod_ID, state)
+  }
 
   # Populating any word document preload values:
   if(length(names(src_list[[mod_ID]][["docx_ph"]])) > 0){

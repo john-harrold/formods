@@ -4,10 +4,13 @@
   # The remainder is the free form for your module. If your module has the
   # format of elements and components you can use the skeleton below to get
   # started
+  ui:
+    element_selection: "element_1" 
   elements:
    - element:
        idx:    1
-       name:   "Element Name"
+       ui:
+         element_name:   "Element Name"
        components:     
          - component:
              option1: "opt"

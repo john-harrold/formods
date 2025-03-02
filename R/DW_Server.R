@@ -54,7 +54,6 @@ DW_Server <- function(id,
       react_state[[id_UD]]
       react_state[[id_ASM]]
 
-
       state = DW_fetch_state(id              = id,
                              input           = input,
                              session         = session,
@@ -156,7 +155,8 @@ DW_Server <- function(id,
         current_view = DW_fetch_current_view(state)
 
         if(is.null(current_view[["elements_table"]])){
-          uiele = "# No data wragling elements defined yet!"
+          #uiele = "# No data wragling elements defined yet!"
+          uiele = state[["MC"]][["errors"]][["no_code"]]
         } else {
           uiele = current_view[["code"]]
           # Adding the preamble to load necessary packages
@@ -2608,7 +2608,8 @@ DW_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
                state[["DW"]][["views"]][[view_id]][["WDS"]])
 
         # This appends the data frame to the report list
-        code_chunk = paste0('rpt[["sheets"]][["',
+        code_chunk = paste0(paste0("# ", state[["DW"]][["views"]][[view_id]][["key"]] ),
+                            'rpt[["sheets"]][["',
                             state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]],
                             '"]]=',
                             state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]] )
@@ -2624,7 +2625,7 @@ DW_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
                 paste0('    Sheet_Name="',  state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]], '",'),
                 paste0('    Description="', state[["DW"]][["views"]][[view_id]][["key"]], '"'),
                        "  )",
-                       ')')
+                       ')', "")
         # Evaluating the code
         if(!gen_code_only){
           eval(parse(text=code_chunk))}
@@ -2661,6 +2662,8 @@ res}
 #'    \item{MOD_TYPE: Short name for the type of module.}
 #'    \item{id: module ID}
 #'    \item{idx: unique numerical ID to identify this dataset in the module.}
+#'    \item{ds_label: optional label that can be defined by a user and used in
+#'    workflows. Must be unique to the module.}
 #'    \item{DS: Dataframe containing the actual dataset.}
 #'    \item{DSMETA: Metadata describing DS, see \code{FM_fetch_ds()} for
 #'    details on the format.}
@@ -2687,6 +2690,7 @@ DW_fetch_ds = function(state){
                MOD_TYPE   = NULL,
                id         = NULL,
                idx        = NULL,
+               ds_label   = "",
                DS         = NULL,
                DSMETA     = NULL,
                code       = NULL,
@@ -2829,6 +2833,10 @@ DW_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
                          MOD_yaml_file   = MOD_yaml_file,
                          id_UD           = id_UD,
                          react_state     = react_state)
+
+  if(!formods::is_shiny(session)){
+    session = FM_set_mod_state(session, mod_ID, state)
+  }
 
   elements = src_list[[mod_ID]][["elements"]]
 
