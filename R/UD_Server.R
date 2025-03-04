@@ -3,13 +3,11 @@
 #'@import rio
 #'@import shiny
 #'@importFrom digest digest
-#'@importFrom rio import export 
+#'@importFrom rio import export
 #'@importFrom shinyAce aceEditor updateAceEditor
 #'@importFrom stats setNames
 #'@importFrom stringr str_replace_all
 #'@importFrom tools file_ext
-#'@importFrom yaml read_yaml
-
 
 #'@export
 #'@title Data Upload Server
@@ -23,7 +21,7 @@
 #'@return UD Server object
 #'@example inst/test_apps/FM_compact.R
 UD_Server <- function(id,
-                      id_ASM       = "ASM",
+                      id_ASM       = "XYZ",  # JMH depreciate this
                       FM_yaml_file  = system.file(package = "formods",
                                                   "templates",
                                                   "formods.yaml"),
@@ -34,12 +32,16 @@ UD_Server <- function(id,
                       react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
 
+  FM_message(paste0("depreciating id_ASM (", id_ASM, ")"))
+
+   MOD_yaml_cont = FM_read_yaml(MOD_yaml_file)
+   id_ASM = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_ASM"]]
+
 
     #------------------------------------
     # Creates the file upload elements
     output$ui_ud_load_data = renderUI({
       state = UD_fetch_state(id            = id,
-                             id_ASM        = id_ASM,
                              input         = input,
                              session       = session,
                              FM_yaml_file  = FM_yaml_file,
@@ -58,7 +60,6 @@ UD_Server <- function(id,
     # Clean switch
     output$ui_ud_clean = renderUI({
       state = UD_fetch_state(id            = id,
-                             id_ASM        = id_ASM,
                              input         = input,
                              session       = session,
                              FM_yaml_file  = FM_yaml_file,
@@ -90,7 +91,6 @@ UD_Server <- function(id,
       # Reacting to data file changes
       input$input_data_file
       state = UD_fetch_state(id            = id,
-                             id_ASM        = id_ASM,
                              input         = input,
                              session       = session,
                              FM_yaml_file  = FM_yaml_file,
@@ -118,7 +118,6 @@ UD_Server <- function(id,
       input$input_select_sheet
       input$btn_run_wf
       state = UD_fetch_state(id            = id,
-                             id_ASM        = id_ASM,
                              input         = input,
                              session       = session,
                              FM_yaml_file  = FM_yaml_file,
@@ -140,7 +139,6 @@ UD_Server <- function(id,
       input$input_select_sheet
       input$btn_run_wf
       state = UD_fetch_state(id            = id,
-                             id_ASM        = id_ASM,
                              input         = input,
                              session       = session,
                              FM_yaml_file  = FM_yaml_file,
@@ -155,7 +153,6 @@ UD_Server <- function(id,
     # Workflow form elements
     output$ui_ud_workflows     =  renderUI({
       state = UD_fetch_state(id            = id,
-                             id_ASM        = id_ASM,
                              input         = input,
                              session       = session,
                              FM_yaml_file  = FM_yaml_file,
@@ -259,7 +256,6 @@ UD_Server <- function(id,
       input$input_data_file
       input$input_select_sheet
       state = UD_fetch_state(id            = id,
-                             id_ASM        = id_ASM,
                              input         = input,
                              session       = session,
                              FM_yaml_file  = FM_yaml_file,
@@ -296,7 +292,6 @@ UD_Server <- function(id,
       # Forcing a reaction to changes in other modules
       react_state[[id_ASM]]
       state = UD_fetch_state(id            = id,
-                             id_ASM        = id_ASM,
                              input         = input,
                              session       = session,
                              FM_yaml_file  = FM_yaml_file,
@@ -317,7 +312,6 @@ UD_Server <- function(id,
     # Creates the ui for the compact view of the module
     output$UD_ui_compact  =  renderUI({
       state = UD_fetch_state(id            = id,
-                             id_ASM        = id_ASM,
                              input         = input,
                              session       = session,
                              FM_yaml_file  = FM_yaml_file,
@@ -372,7 +366,6 @@ UD_Server <- function(id,
       # This updates the reaction state:
       observeEvent(toListen(), {
         state = UD_fetch_state(id            = id,
-                               id_ASM        = id_ASM,
                                input         = input,
                                session       = session,
                                FM_yaml_file  = FM_yaml_file,
@@ -389,7 +382,6 @@ UD_Server <- function(id,
     })
     observeEvent(toNotify(), {
       state = UD_fetch_state(id            = id,
-                             id_ASM        = id_ASM,
                              input         = input,
                              session       = session,
                              FM_yaml_file  = FM_yaml_file,
@@ -408,7 +400,6 @@ UD_Server <- function(id,
 #'@title Fetch Upload Data State
 #'@description Merges default app options with the changes made in the UI
 #'@param id Shiny module ID
-#'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param input Shiny input variable
 #'@param session Shiny session variable
 #'@param FM_yaml_file App configuration file with FM as main section.
@@ -456,7 +447,7 @@ UD_Server <- function(id,
 #'            session       = session,
 #'            FM_yaml_file  = FM_yaml_file,
 #'            MOD_yaml_file = MOD_yaml_file )
-UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_file ){
+UD_fetch_state = function(id, input, session, FM_yaml_file,  MOD_yaml_file ){
 
   # Template for an empty dataset
   #---------------------------------------------
@@ -647,7 +638,7 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
       plf = render_str(wfl[["preload"]])
 
       # Preload list:
-      pll = yaml::read_yaml(plf)
+      pll = FM_read_yaml(plf)
 
       # If require_ds is true we need to append (or replace existing) UD
       # portion of the preload file:
@@ -663,7 +654,7 @@ UD_fetch_state = function(id, id_ASM, input, session, FM_yaml_file,  MOD_yaml_fi
 
 
       # Because preload files from saved analyses can have relative
-      # paths to configuration yaml files in them, we need replace those 
+      # paths to configuration yaml files in them, we need replace those
       # With the paths to those files used in the current app
       for(tmp_modID in names(pll)){
         tmp_modstate = FM_fetch_mod_state(session, tmp_modID)
@@ -1202,7 +1193,6 @@ UD_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
   }
 
   state = UD_fetch_state(id            = mod_ID,
-                         id_ASM        = id_ASM,
                          input         = input,
                          session       = session,
                          FM_yaml_file  = FM_yaml_file,

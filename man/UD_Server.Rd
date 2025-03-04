@@ -6,7 +6,7 @@
 \usage{
 UD_Server(
   id,
-  id_ASM = "ASM",
+  id_ASM = "XYZ",
   FM_yaml_file = system.file(package = "formods", "templates", "formods.yaml"),
   MOD_yaml_file = system.file(package = "formods", "templates", "UD.yaml"),
   deployed = FALSE,

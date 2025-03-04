@@ -22,12 +22,18 @@
 FG_Server <- function(id,
                 FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
                 MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml"),
-                id_ASM        = "ASM",
-                id_UD         = "UD",
-                id_DW         = "DW",
+                id_ASM        = "XYZ",
+                id_UD         = "XYZ",
+                id_DW         = "XYZ",
                 deployed      = FALSE,
                 react_state   = NULL) {
   moduleServer(id, function(input, output, session) {
+
+   MOD_yaml_cont = FM_read_yaml(MOD_yaml_file)
+   id_ASM = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_ASM"]]
+   id_UD  = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_UD"]]
+   id_DW  = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_DW"]]
+
 
     #------------------------------------
     output$hot_fg_elements = rhandsontable::renderRHandsontable({
@@ -45,9 +51,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
       current_fig = FG_fetch_current_fig(state)
 
@@ -115,9 +118,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       current_fig = FG_fetch_current_fig(state)
@@ -279,9 +279,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       # Pausing access to the screen
@@ -343,9 +340,6 @@ FG_Server <- function(id,
                               session        = session,
                               FM_yaml_file   = FM_yaml_file,
                               MOD_yaml_file  = MOD_yaml_file,
-                              id_ASM         = id_ASM,
-                              id_UD          = id_UD,
-                              id_DW          = id_DW,
                               react_state    = react_state)
 
        current_fig = FG_fetch_current_fig(state)
@@ -376,9 +370,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       uiele = NULL
@@ -427,9 +418,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
 
@@ -453,9 +441,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       uiele = NULL
@@ -484,9 +469,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       uiele = NULL
@@ -516,9 +498,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       # This is a suggest, so we only generate this button conditionally
@@ -551,9 +530,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       uiele = NULL
@@ -583,9 +559,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       uiele = NULL
@@ -622,9 +595,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       uiele = NULL
@@ -658,9 +628,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       # Figuring out the pages in the current figure
@@ -709,9 +676,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       uiele = "ui_fg_add_element_button"
@@ -740,9 +704,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       uiele = state[["FG"]][["ui_msg"]]
@@ -758,9 +719,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       # Pulling out the current plot element:
@@ -1048,9 +1006,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       if(is.null(names(state[["FG"]][["figs"]]))){
@@ -1100,9 +1055,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       choicesOpt = NULL
@@ -1135,9 +1087,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       current_fig = FG_fetch_current_fig(state)
@@ -1182,9 +1131,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
       # This is all conditional on the whether clipr is installed $
       # and if the app isn't deployed
@@ -1221,9 +1167,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
 
       uiele = NULL
@@ -1273,9 +1216,6 @@ FG_Server <- function(id,
                                session        = session,
                                FM_yaml_file   = FM_yaml_file,
                                MOD_yaml_file  = MOD_yaml_file,
-                               id_ASM         = id_ASM,
-                               id_UD          = id_UD,
-                               id_DW          = id_DW,
                                react_state    = react_state)
 
         FM_le(state, "reaction state updated")
@@ -1298,9 +1238,6 @@ FG_Server <- function(id,
                              session        = session,
                              FM_yaml_file   = FM_yaml_file,
                              MOD_yaml_file  = MOD_yaml_file,
-                             id_ASM         = id_ASM,
-                             id_UD          = id_UD,
-                             id_DW          = id_DW,
                              react_state    = react_state)
       FM_le(state, "removing holds")
       # Removing all holds
@@ -1321,9 +1258,6 @@ FG_Server <- function(id,
 #'@param input Shiny input variable
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
-#'@param id_ASM ID string for the app state management module used to save and load app states
-#'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
-#'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@param session Shiny session variable
 #'@return list containing the current state of the app including default
@@ -1379,22 +1313,17 @@ FG_Server <- function(id,
 #'
 #' # We need to specify both the FG module id as well as the
 #' # id of the UD module that feeds into it.
-#' id    = "FG"
-#' id_UD = "UD"
-#' id_DW = "DW"
 #'
 #' # These would be the Shiny input and session variables
 #' input   = list()
 #' session = list()
 #'
 #' # Creating an empty state object
-#' state = FG_fetch_state(id              = id,
+#' state = FG_fetch_state(id              = "FG",
 #'                        input           = input,
 #'                        session         = session,
 #'                        FM_yaml_file    = FM_yaml_file,
 #'                        MOD_yaml_file   = MOD_yaml_file,
-#'                        id_UD           = id_UD,
-#'                        id_DW           = id_DW,
 #'                        react_state     = NULL)
 #'
 #' state
@@ -1403,9 +1332,6 @@ FG_fetch_state = function(id,
                           session,
                           FM_yaml_file,
                           MOD_yaml_file,
-                          id_ASM = NULL,
-                          id_UD  = NULL,
-                          id_DW  = NULL,
                           react_state){
 
   # After the app has loaded the state must be initialized
@@ -1421,10 +1347,12 @@ FG_fetch_state = function(id,
     state = FG_init_state(FM_yaml_file    = FM_yaml_file,
                           MOD_yaml_file   = MOD_yaml_file,
                           id              = id,
-                          id_UD           = id_UD,
-                          id_DW           = id_DW,
                           session         = session)
   }
+
+  id_ASM = state[["MC"]][["module"]][["depends"]][["id_ASM"]]
+  id_UD  = state[["MC"]][["module"]][["depends"]][["id_UD"]]
+  id_DW  = state[["MC"]][["module"]][["depends"]][["id_DW"]]
 
   # detecting changes in the datasets
   UPDATE_DS = FALSE
@@ -1488,8 +1416,6 @@ FG_fetch_state = function(id,
       state = FG_init_state(FM_yaml_file    = FM_yaml_file,
                             MOD_yaml_file   = MOD_yaml_file,
                             id              = id,
-                            id_UD           = id_UD,
-                            id_DW           = id_DW,
                             session         = session)
     }
 
@@ -1776,8 +1702,6 @@ state}
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id Shiny module ID
-#'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
-#'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@return list containing an empty app state object
 #'@examples
 #' # These would be the Shiny input and session variables
@@ -1792,19 +1716,22 @@ state}
 #'                                "templates",
 #'                                "FG.yaml"),
 #'    id              = "FG",
-#'    id_UD           = "UD",
-#'    id_DW           = "DW",
 #'    session         = session)
 #'
 #' state
-FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session){
+FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
   state = list()
 
   # Reading in default information from the yaml file
   state[["yaml"]] = yaml::read_yaml(FM_yaml_file)
 
   # This assigns the module config "MC" element to the correct
-  MOD_CONFIG = yaml::read_yaml(MOD_yaml_file)
+  MOD_CONFIG    = FM_read_yaml(MOD_yaml_file)
+  id_ASM = MOD_CONFIG[["MC"]][["module"]][["depends"]][["id_ASM"]]
+  id_UD  = MOD_CONFIG[["MC"]][["module"]][["depends"]][["id_UD"]]
+  id_DW  = MOD_CONFIG[["MC"]][["module"]][["depends"]][["id_DW"]]
+
+  #MOD_CONFIG = yaml::read_yaml(MOD_yaml_file)
   state[["MC"]] = MOD_CONFIG[["MC"]]
 
   isgood = TRUE
@@ -3031,9 +2958,6 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
                          session         = session,
                          FM_yaml_file    = FM_yaml_file,
                          MOD_yaml_file   = MOD_yaml_file,
-                         id_ASM          = id_ASM,
-                         id_UD           = id_UD,
-                         id_DW           = id_DW,
                          react_state     = react_state)
 
   if(!formods::is_shiny(session)){

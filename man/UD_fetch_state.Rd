@@ -4,12 +4,10 @@
 \alias{UD_fetch_state}
 \title{Fetch Upload Data State}
 \usage{
-UD_fetch_state(id, id_ASM, input, session, FM_yaml_file, MOD_yaml_file)
+UD_fetch_state(id, input, session, FM_yaml_file, MOD_yaml_file)
 }
 \arguments{
 \item{id}{Shiny module ID}
-
-\item{id_ASM}{ID string for the app state management module used to save and load app states}
 
 \item{input}{Shiny input variable}
 

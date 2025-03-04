@@ -4,20 +4,10 @@
 \alias{DM_fetch_state}
 \title{Fetch Data Management State}
 \usage{
-DM_fetch_state(
-  id,
-  id_ASM,
-  input,
-  session,
-  FM_yaml_file,
-  MOD_yaml_file,
-  react_state
-)
+DM_fetch_state(id, input, session, FM_yaml_file, MOD_yaml_file, react_state)
 }
 \arguments{
 \item{id}{Shiny module ID}
-
-\item{id_ASM}{ID string for the app state management module used to save and load app states}
 
 \item{input}{Shiny input variable}
 
@@ -64,7 +54,6 @@ MOD_yaml_file = system.file(package = "formods", "templates", "DM.yaml")
 
 # Creating an empty state object
 state = DM_fetch_state(id              = "DM",
-                       id_ASM          = "ASM",
                        input           = input,
                        session         = session,
                        FM_yaml_file    = FM_yaml_file,

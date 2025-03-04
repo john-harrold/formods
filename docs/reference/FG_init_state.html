@@ -44,7 +44,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">FG_init_state</span><span class="op">(</span><span class="va">FM_yaml_file</span>, <span class="va">MOD_yaml_file</span>, <span class="va">id</span>, <span class="va">id_UD</span>, <span class="va">id_DW</span>, <span class="va">session</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">FG_init_state</span><span class="op">(</span><span class="va">FM_yaml_file</span>, <span class="va">MOD_yaml_file</span>, <span class="va">id</span>, <span class="va">session</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -61,14 +61,6 @@
 
 <dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
 <dd><p>Shiny module ID</p></dd>
-
-
-<dt id="arg-id-ud">id_UD<a class="anchor" aria-label="anchor" href="#arg-id-ud"></a></dt>
-<dd><p>ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.</p></dd>
-
-
-<dt id="arg-id-dw">id_DW<a class="anchor" aria-label="anchor" href="#arg-id-dw"></a></dt>
-<dd><p>ID string for the data wrangling module to process any uploaded data</p></dd>
 
 
 <dt id="arg-session">session<a class="anchor" aria-label="anchor" href="#arg-session"></a></dt>
@@ -94,8 +86,6 @@
 <span class="r-in"><span>                               <span class="st">"templates"</span>,</span></span>
 <span class="r-in"><span>                               <span class="st">"FG.yaml"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>   id              <span class="op">=</span> <span class="st">"FG"</span>,</span></span>
-<span class="r-in"><span>   id_UD           <span class="op">=</span> <span class="st">"UD"</span>,</span></span>
-<span class="r-in"><span>   id_DW           <span class="op">=</span> <span class="st">"DW"</span>,</span></span>
 <span class="r-in"><span>   session         <span class="op">=</span> <span class="va">session</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG: including file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → FG:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
@@ -1382,10 +1372,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "UD" "DW"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpIps00n/temp_libpath16d92dbea059/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpLfv7kX/temp_libpath689b4b58ac21/formods/templates/formods.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpIps00n/temp_libpath16d92dbea059/formods/templates/FG.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpLfv7kX/temp_libpath689b4b58ac21/formods/templates/FG.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $shiny_token</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "non_shiny"</span>

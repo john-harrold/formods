@@ -8,9 +8,9 @@ FG_Server(
   id,
   FM_yaml_file = system.file(package = "formods", "templates", "formods.yaml"),
   MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml"),
-  id_ASM = "ASM",
-  id_UD = "UD",
-  id_DW = "DW",
+  id_ASM = "XYZ",
+  id_UD = "XYZ",
+  id_DW = "XYZ",
   deployed = FALSE,
   react_state = NULL
 )

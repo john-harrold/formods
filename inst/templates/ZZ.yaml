@@ -7,11 +7,15 @@ MC:
     # associated with this description
     description: "Module Description"
     type: "===ZZ===" # Module type
-    # This is a list of modules this one depends on. The list names
-    # are the R object names used in this module and the value is the
-    # module ID associated with that module in the current deployment.
+    # This is a list of modules this one depends on. The list names reference
+    # the module short name (ASM in id_ASM) value is the module ID ("ASM"
+    # value) associated with that module in the current deployment. These
+    # module IDs need to be consistent with the module IDs used in the UI and
+    # Server portion of the app.
     depends: 
-      id_ASM: "ASM"
+      id_ASM: "ASM" # All modules should depend on ASM
+      id_UD:  "UD"  # UD and DM are required if you want to use uploaded data
+      id_DM:  "DM"
   element_object_name: "===ZZ===_obj"
 # The include section is optional. You can use this section to copy files 
 # from the directory where you are running the app to the user directory to be

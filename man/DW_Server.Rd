@@ -6,8 +6,8 @@
 \usage{
 DW_Server(
   id,
-  id_ASM = "ASM",
-  id_UD = "UD",
+  id_ASM = "DEP",
+  id_UD = "DEP",
   FM_yaml_file = system.file(package = "formods", "templates", "formods.yaml"),
   MOD_yaml_file = system.file(package = "formods", "templates", "DW.yaml"),
   deployed = FALSE,

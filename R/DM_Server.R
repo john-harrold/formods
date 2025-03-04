@@ -8,7 +8,6 @@
 #'@title Data Management State Server
 #'@description Server function for the Data Management  Shiny Module
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
-#'@param id_ASM ID string for the app state managment module used to save and load app states
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param deployed Boolean variable indicating whether the app is deployed or not.
@@ -16,13 +15,14 @@
 #'@return UD Server object
 #'@example inst/test_apps/FM_compact.R
 DM_Server <- function(id,
-               id_ASM        = "ASM",
                FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
                MOD_yaml_file = system.file(package = "formods",  "templates", "DM.yaml"),
                deployed      = FALSE,
                react_state   = NULL) {
   moduleServer(id, function(input, output, session) {
 
+    MOD_yaml_cont = FM_read_yaml(MOD_yaml_file)
+    id_ASM = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_ASM"]]
 
     #------------------------------------
     # Select the active ds
@@ -35,7 +35,6 @@ DM_Server <- function(id,
       input$DM_hot_ds_preview
 
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -89,7 +88,6 @@ DM_Server <- function(id,
       input$DM_hot_resources
 
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -143,7 +141,6 @@ DM_Server <- function(id,
     output$DM_hot_ds_preview =  rhandsontable::renderRHandsontable({
       input$ui_dm_code
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -188,7 +185,6 @@ DM_Server <- function(id,
       input$source_id
       input$clean_ds
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -200,7 +196,6 @@ DM_Server <- function(id,
     # File upload form
     output$DM_ui_file_upload    = renderUI({
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -228,7 +223,6 @@ DM_Server <- function(id,
       input$DM_hot_resources
       req(input$source_id)
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -267,7 +261,6 @@ DM_Server <- function(id,
       react_state[[id_ASM]]
 
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -311,7 +304,6 @@ DM_Server <- function(id,
       input$DM_hot_resources
       react_state[[id_ASM]]
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -342,7 +334,6 @@ DM_Server <- function(id,
       #input$button_clk_new
       input$element_selection
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -378,7 +369,6 @@ DM_Server <- function(id,
     output$DM_ui_source_url   = renderUI({
       input$element_selection
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -415,7 +405,6 @@ DM_Server <- function(id,
       react_state[[id_ASM]]
 
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -466,7 +455,6 @@ DM_Server <- function(id,
 
       if(is_installed("janitor")){
         state = DM_fetch_state(id              = id,
-                               id_ASM          = id_ASM,
                                input           = input,
                                session         = session,
                                FM_yaml_file    = FM_yaml_file,
@@ -500,7 +488,6 @@ DM_Server <- function(id,
       input$DM_hot_ds_preview
       input$DM_hot_resources
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -535,7 +522,6 @@ DM_Server <- function(id,
       input$DM_hot_ds_preview
       input$DM_hot_resources
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -601,7 +587,6 @@ DM_Server <- function(id,
     output$DM_ui_text_element_name = renderUI({
       input$element_selection
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -626,7 +611,6 @@ DM_Server <- function(id,
     # Create ui outputs here:
     output$DM_ui_element = renderUI({
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -653,7 +637,6 @@ DM_Server <- function(id,
 
       # Reacting to file changes
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -683,7 +666,6 @@ DM_Server <- function(id,
     # new
     output$ui_dm_new_btn = renderUI({
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -710,7 +692,6 @@ DM_Server <- function(id,
     # Save
     output$ui_dm_save_btn = renderUI({
       state = DM_fetch_state(id        = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -736,7 +717,6 @@ DM_Server <- function(id,
     # clip code
     output$ui_dm_clip_code = renderUI({
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -762,7 +742,6 @@ DM_Server <- function(id,
     # delete
     output$ui_dm_del_btn   = renderUI({
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -786,7 +765,6 @@ DM_Server <- function(id,
     # copy
     output$ui_dm_copy_btn   = renderUI({
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -814,7 +792,6 @@ DM_Server <- function(id,
       input$button_clk_get_url
 
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -829,7 +806,6 @@ DM_Server <- function(id,
     # Compact ui
     output$DM_ui_compact  =  renderUI({
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -964,7 +940,6 @@ DM_Server <- function(id,
       # This updates the reaction state:
       observeEvent(toListen(), {
         state = DM_fetch_state(id        = id,
-                               id_ASM          = id_ASM,
                                input           = input,
                                session         = session,
                                FM_yaml_file    = FM_yaml_file,
@@ -996,7 +971,6 @@ DM_Server <- function(id,
     })
     observeEvent(toNotify(), {
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -1012,7 +986,6 @@ DM_Server <- function(id,
     # Copying element code to the clipboard
     observeEvent(input$button_clk_clip, {
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -1050,7 +1023,6 @@ DM_Server <- function(id,
       # Once the UI has been regenerated we
       # remove any holds for this module
       state = DM_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -1071,7 +1043,6 @@ DM_Server <- function(id,
 #'@title Fetch Data Management State
 #'@description Merges default app options with the changes made in the UI
 #'@param id Shiny module ID
-#'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param input Shiny input variable
 #'@param session Shiny session variable
 #'@param FM_yaml_file App configuration file with FM as main section.
@@ -1107,13 +1078,12 @@ DM_Server <- function(id,
 #'
 #' # Creating an empty state object
 #' state = DM_fetch_state(id              = "DM",
-#'                        id_ASM          = "ASM",
 #'                        input           = input,
 #'                        session         = session,
 #'                        FM_yaml_file    = FM_yaml_file,
 #'                        MOD_yaml_file   = MOD_yaml_file,
 #'                        react_state     = NULL)
-DM_fetch_state = function(id, id_ASM, input, session, FM_yaml_file, MOD_yaml_file, react_state){
+DM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react_state){
 
   # Template for an empty dataset
   #---------------------------------------------
@@ -2167,7 +2137,6 @@ DM_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
 
   # Creating an empty state object
   state = DM_fetch_state(id              = mod_ID,
-                         id_ASM          = id_ASM,
                          input           = input,
                          session         = session,
                          FM_yaml_file    = FM_yaml_file,

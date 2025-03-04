@@ -4,15 +4,7 @@
 \alias{DW_fetch_state}
 \title{Fetch Data Wrangling State}
 \usage{
-DW_fetch_state(
-  id,
-  input,
-  session,
-  FM_yaml_file,
-  MOD_yaml_file,
-  id_UD,
-  react_state
-)
+DW_fetch_state(id, input, session, FM_yaml_file, MOD_yaml_file, react_state)
 }
 \arguments{
 \item{id}{Shiny module ID}
@@ -23,9 +15,7 @@ DW_fetch_state(
 
 \item{FM_yaml_file}{App configuration file with FM as main section.}
 
-\item{MOD_yaml_file}{Module configuration file with MC as main section.}
-
-\item{id_UD}{ID string for the upload data module used to handle uploads or
+\item{MOD_yaml_file}{Module configuration file with MC as main section.
 the name of the list element in react_state where the data set is stored.}
 
 \item{react_state}{Variable passed to server to allow reaction outside of
@@ -91,7 +81,6 @@ MOD_yaml_file = system.file(package = "formods", "templates", "DW.yaml")
 # We need to specify both the DW module id as well as the
 # id of the UD module that feeds into it.
 id    = "DW"
-id_UD = "UD"
 
 # Creating an empty state object
 state = DW_fetch_state(id              = id,
@@ -99,7 +88,6 @@ state = DW_fetch_state(id              = id,
                        session         = session,
                        FM_yaml_file    = FM_yaml_file,
                        MOD_yaml_file   = MOD_yaml_file,
-                       id_UD           = "UD",
                        react_state     = NULL)
 
 }

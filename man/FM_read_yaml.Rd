@@ -21,4 +21,6 @@ res = FM_read_yaml(
    system.file(package = "formods",
                          "templates",
                          "formods.yaml"))
+
+res
 }

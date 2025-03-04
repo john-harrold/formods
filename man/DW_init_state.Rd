@@ -4,16 +4,14 @@
 \alias{DW_init_state}
 \title{Initialize DW Module State}
 \usage{
-DW_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, session)
+DW_init_state(FM_yaml_file, MOD_yaml_file, id, session)
 }
 \arguments{
 \item{FM_yaml_file}{App configuration file with FM as main section.}
 
 \item{MOD_yaml_file}{Module configuration file with MC as main section.}
 
-\item{id}{Shiny module ID}
-
-\item{id_UD}{ID string for the upload data module used to handle uploads or
+\item{id}{Shiny module ID
 the name of the list element in react_state where the data set is stored.}
 
 \item{session}{Shiny session variable
@@ -40,7 +38,6 @@ state = DW_init_state(
                                "templates",
                                "DW.yaml"),
    id              = "DW",
-   id_UD           = "UD",
    session         = session)
 
 state

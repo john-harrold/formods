@@ -3092,6 +3092,8 @@ session}
 #'    system.file(package = "formods",
 #'                          "templates",
 #'                          "formods.yaml"))
+#'
+#' res
 FM_read_yaml <- function(file){
 
   res = yaml::read_yaml(file)

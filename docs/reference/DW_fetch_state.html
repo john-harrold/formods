@@ -44,15 +44,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">DW_fetch_state</span><span class="op">(</span></span>
-<span>  <span class="va">id</span>,</span>
-<span>  <span class="va">input</span>,</span>
-<span>  <span class="va">session</span>,</span>
-<span>  <span class="va">FM_yaml_file</span>,</span>
-<span>  <span class="va">MOD_yaml_file</span>,</span>
-<span>  <span class="va">id_UD</span>,</span>
-<span>  <span class="va">react_state</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">DW_fetch_state</span><span class="op">(</span><span class="va">id</span>, <span class="va">input</span>, <span class="va">session</span>, <span class="va">FM_yaml_file</span>, <span class="va">MOD_yaml_file</span>, <span class="va">react_state</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -76,11 +68,7 @@
 
 
 <dt id="arg-mod-yaml-file">MOD_yaml_file<a class="anchor" aria-label="anchor" href="#arg-mod-yaml-file"></a></dt>
-<dd><p>Module configuration file with MC as main section.</p></dd>
-
-
-<dt id="arg-id-ud">id_UD<a class="anchor" aria-label="anchor" href="#arg-id-ud"></a></dt>
-<dd><p>ID string for the upload data module used to handle uploads or
+<dd><p>Module configuration file with MC as main section.
 the name of the list element in react_state where the data set is stored.</p></dd>
 
 
@@ -219,7 +207,6 @@ structure of the list is defined below.</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-in"><span><span class="co"># We need to specify both the DW module id as well as the</span></span></span>
 <span class="r-in"><span><span class="co"># id of the UD module that feeds into it.</span></span></span>
 <span class="r-in"><span><span class="va">id</span>    <span class="op">=</span> <span class="st">"DW"</span></span></span>
-<span class="r-in"><span><span class="va">id_UD</span> <span class="op">=</span> <span class="st">"UD"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Creating an empty state object</span></span></span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="fu">DW_fetch_state</span><span class="op">(</span>id              <span class="op">=</span> <span class="va">id</span>,</span></span>
@@ -227,7 +214,6 @@ structure of the list is defined below.</p><ul><li><p>yaml: Contents of the yaml
 <span class="r-in"><span>                       session         <span class="op">=</span> <span class="va">session</span>,</span></span>
 <span class="r-in"><span>                       FM_yaml_file    <span class="op">=</span> <span class="va">FM_yaml_file</span>,</span></span>
 <span class="r-in"><span>                       MOD_yaml_file   <span class="op">=</span> <span class="va">MOD_yaml_file</span>,</span></span>
-<span class="r-in"><span>                       id_UD           <span class="op">=</span> <span class="st">"UD"</span>,</span></span>
 <span class="r-in"><span>                       react_state     <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

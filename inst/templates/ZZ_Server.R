@@ -8,7 +8,6 @@
 #'@title ===ZZ_NAME=== State Server
 #'@description Server function for the ===ZZ_NAME===  Shiny Module
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
-#'@param id_ASM ID string for the app state managment module used to save and load app states
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param deployed Boolean variable indicating whether the app is deployed or not.
@@ -17,13 +16,14 @@
 #'@examples
 #' NOTE: you will need to create a server example
 ===ZZ===_Server <- function(id,
-               id_ASM        = "ASM",
                FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
                MOD_yaml_file = system.file(package = "===PKG===",  "templates", "===ZZ===.yaml"),
                deployed      = FALSE,
                react_state   = NULL) {
   moduleServer(id, function(input, output, session) {
 
+    MOD_yaml_cont = FM_read_yaml(MOD_yaml_file)
+    id_ASM = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_ASM"]]
 
     #------------------------------------
     # Select the active ===ELEMENT===
@@ -33,7 +33,6 @@
       input$button_clk_copy
       input$button_clk_new
       state = ===ZZ===_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -58,7 +57,6 @@
     output$===ZZ===_ui_text_element_name = renderUI({
       input$element_selection
       state = ===ZZ===_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -83,7 +81,6 @@
     # Create ui outputs here:
     output$===ZZ===_ui_element = renderUI({
       state = ===ZZ===_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -97,7 +94,6 @@
     observe({
       # Reacting to file changes
       state = ===ZZ===_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -126,7 +122,6 @@
     # new
     output$ui_===zz===_new_btn = renderUI({
       state = ===ZZ===_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -153,7 +148,6 @@
     # Save
     output$ui_===zz===_save_btn = renderUI({
       state = ===ZZ===_fetch_state(id        = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -179,7 +173,6 @@
     # clip code
     output$ui_===zz===_clip_code = renderUI({
       state = ===ZZ===_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -205,7 +198,6 @@
     # delete
     output$ui_===zz===_del_btn   = renderUI({
       state = ===ZZ===_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -229,7 +221,6 @@
     # copy
     output$ui_===zz===_copy_btn   = renderUI({
       state = ===ZZ===_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -254,7 +245,6 @@
     # User messages:
     output$ui_===zz===_msg = renderText({
       state = ===ZZ===_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -269,7 +259,6 @@
     # Compact ui
     output$===ZZ===_ui_compact  =  renderUI({
       state = ===ZZ===_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -376,7 +365,6 @@
       # This updates the reaction state:
       observeEvent(toListen(), {
         state = ===ZZ===_fetch_state(id        = id,
-                               id_ASM          = id_ASM,
                                input           = input,
                                session         = session,
                                FM_yaml_file    = FM_yaml_file,
@@ -402,7 +390,6 @@
     })
     observeEvent(toNotify(), {
       state = ===ZZ===_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -418,7 +405,6 @@
     # Copying element code to the clipboard
     observeEvent(input$button_clk_clip, {
       state = ===ZZ===_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -456,7 +442,6 @@
       # Once the UI has been regenerated we
       # remove any holds for this module
       state = ===ZZ===_fetch_state(id              = id,
-                             id_ASM          = id_ASM,
                              input           = input,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
@@ -513,13 +498,12 @@
 #'
 #' # Creating an empty state object
 #' state = ===ZZ===_fetch_state(id              = "===ZZ===",
-#'                        id_ASM          = "ASM",
 #'                        input           = input,
 #'                        session         = session,
 #'                        FM_yaml_file    = FM_yaml_file,
 #'                        MOD_yaml_file   = MOD_yaml_file,
 #'                        react_state     = NULL)
-===ZZ===_fetch_state = function(id, id_ASM, input, session, FM_yaml_file, MOD_yaml_file, react_state){
+===ZZ===_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react_state){
 
   # Template for an empty dataset
   #---------------------------------------------
@@ -532,6 +516,7 @@
     # General state information
     state = ===ZZ===_init_state(FM_yaml_file, MOD_yaml_file, id, session)
   }
+  id_ASM = state[["MC"]][["module"]][["depends"]][["id_ASM"]]
 
   #---------------------------------------------
   # Here we update the state based on user input
@@ -1286,7 +1271,6 @@ res}
 
   # Creating an empty state object
   state = ===ZZ===_fetch_state(id              = mod_ID,
-                               id_ASM          = id_ASM,
                                input           = input,
                                session         = session,
                                FM_yaml_file    = FM_yaml_file,

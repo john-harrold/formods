@@ -4,17 +4,7 @@
 \alias{FG_fetch_state}
 \title{Fetch Figure Generation State}
 \usage{
-FG_fetch_state(
-  id,
-  input,
-  session,
-  FM_yaml_file,
-  MOD_yaml_file,
-  id_ASM = NULL,
-  id_UD = NULL,
-  id_DW = NULL,
-  react_state
-)
+FG_fetch_state(id, input, session, FM_yaml_file, MOD_yaml_file, react_state)
 }
 \arguments{
 \item{id}{Shiny module ID}
@@ -26,12 +16,6 @@ FG_fetch_state(
 \item{FM_yaml_file}{App configuration file with FM as main section.}
 
 \item{MOD_yaml_file}{Module configuration file with MC as main section.}
-
-\item{id_ASM}{ID string for the app state management module used to save and load app states}
-
-\item{id_UD}{ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.}
-
-\item{id_DW}{ID string for the data wrangling module to process any uploaded data}
 
 \item{react_state}{Variable passed to server to allow reaction outside of module (\code{NULL})}
 }
@@ -93,22 +77,17 @@ MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml")
 
 # We need to specify both the FG module id as well as the
 # id of the UD module that feeds into it.
-id    = "FG"
-id_UD = "UD"
-id_DW = "DW"
 
 # These would be the Shiny input and session variables
 input   = list()
 session = list()
 
 # Creating an empty state object
-state = FG_fetch_state(id              = id,
+state = FG_fetch_state(id              = "FG",
                        input           = input,
                        session         = session,
                        FM_yaml_file    = FM_yaml_file,
                        MOD_yaml_file   = MOD_yaml_file,
-                       id_UD           = id_UD,
-                       id_DW           = id_DW,
                        react_state     = NULL)
 
 state

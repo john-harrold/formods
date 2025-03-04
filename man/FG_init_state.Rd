@@ -4,7 +4,7 @@
 \alias{FG_init_state}
 \title{Initialize FG Module State}
 \usage{
-FG_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
+FG_init_state(FM_yaml_file, MOD_yaml_file, id, session)
 }
 \arguments{
 \item{FM_yaml_file}{App configuration file with FM as main section.}
@@ -12,10 +12,6 @@ FG_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, id_DW, session)
 \item{MOD_yaml_file}{Module configuration file with MC as main section.}
 
 \item{id}{Shiny module ID}
-
-\item{id_UD}{ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.}
-
-\item{id_DW}{ID string for the data wrangling module to process any uploaded data}
 
 \item{session}{Shiny session variable}
 }
@@ -38,8 +34,6 @@ state = FG_init_state(
                                "templates",
                                "FG.yaml"),
    id              = "FG",
-   id_UD           = "UD",
-   id_DW           = "DW",
    session         = session)
 
 state

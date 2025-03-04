@@ -5,7 +5,6 @@
 #'@importFrom digest digest
 #'@importFrom rlang .data
 #'@importFrom shinyAce aceEditor updateAceEditor
-#'@importFrom yaml read_yaml
 
 # https://getbootstrap.com/docs/3.3/components/
 
@@ -24,8 +23,8 @@
 #'@return DW Server object
 #'@example inst/test_apps/FM_compact.R
 DW_Server <- function(id,
-                      id_ASM       = "ASM",
-                      id_UD        = "UD",
+                      id_ASM       = "DEP",
+                      id_UD        = "DEP",
                       FM_yaml_file  = system.file(package = "formods",
                                                   "templates",
                                                   "formods.yaml"),
@@ -35,6 +34,14 @@ DW_Server <- function(id,
                       deployed     = FALSE,
                       react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
+
+  FM_message(paste0("depreciating id_ASM (", id_ASM, ")"))
+  FM_message(paste0("depreciating id_UD (", id_UD, ")"))
+
+  MOD_yaml_cont = FM_read_yaml(MOD_yaml_file)
+  id_ASM = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_ASM"]]
+  id_UD  = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_UD"]]
+
 
     #------------------------------------
     # Current DW elements
@@ -59,7 +66,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       # Pulling out the current view
@@ -144,7 +150,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       uiele = NULL
@@ -184,7 +189,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       # This is all conditional on the whether clipr is installed $
@@ -227,7 +231,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       view_ids = names(state[["DW"]][["views"]])
@@ -277,7 +280,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
     current_view = DW_fetch_current_view(state)
@@ -306,7 +308,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
       uiele = NULL
       if(state[["DW"]][["UD"]][["isgood"]]){
@@ -323,7 +324,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       if(state[["DW"]][["UD"]][["isgood"]]){
@@ -393,7 +393,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       req(input$select_dw_element)
@@ -431,7 +430,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       req(input$select_dw_element)
@@ -481,7 +479,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       req(input$select_dw_element)
@@ -525,7 +522,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       req(input$select_dw_element)
@@ -582,7 +578,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       req(input$select_dw_element)
@@ -640,7 +635,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       req(input$select_dw_element)
@@ -684,7 +678,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       req(input$select_dw_element)
@@ -708,7 +701,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       req(input$select_dw_element)
@@ -735,7 +727,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       req(input$select_dw_element)
@@ -774,7 +765,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       req(input$select_fds_filter_column)
@@ -811,7 +801,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       req(input$select_fds_filter_column)
@@ -873,7 +862,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
 
@@ -955,7 +943,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       if(state[["DW"]][["UD"]][["isgood"]]){
@@ -983,7 +970,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       uiele = NULL
@@ -1011,7 +997,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       uiele = NULL
@@ -1038,7 +1023,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       uiele = NULL
@@ -1065,7 +1049,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       # This is a suggest, so we only generate this button conditionally
@@ -1095,7 +1078,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       uiele = NULL
@@ -1134,7 +1116,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
    #   if(system.file(package = "shinybusy") !=""){
@@ -1181,7 +1162,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       current_view = DW_fetch_current_view(state)
@@ -1310,7 +1290,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       # Triggering optional notifications
@@ -1340,7 +1319,6 @@ DW_Server <- function(id,
                                session         = session,
                                FM_yaml_file    = FM_yaml_file,
                                MOD_yaml_file   = MOD_yaml_file,
-                               id_UD           = id_UD,
                                react_state     = react_state)
 
         FM_le(state, "reaction state updated")
@@ -1367,7 +1345,6 @@ DW_Server <- function(id,
                              session         = session,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
-                             id_UD           = id_UD,
                              react_state     = react_state)
 
       FM_le(state, "removing holds")
@@ -1389,7 +1366,6 @@ DW_Server <- function(id,
 #'@param session Shiny session variable
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
-#'@param id_UD  ID string for the upload data module used to handle uploads or
 #'the name of the list element in react_state where the data set is stored.
 #'@param react_state Variable passed to server to allow reaction outside of
 #'module (\code{NULL})
@@ -1448,7 +1424,6 @@ DW_Server <- function(id,
 #' # We need to specify both the DW module id as well as the
 #' # id of the UD module that feeds into it.
 #' id    = "DW"
-#' id_UD = "UD"
 #'
 #' # Creating an empty state object
 #' state = DW_fetch_state(id              = id,
@@ -1456,11 +1431,10 @@ DW_Server <- function(id,
 #'                        session         = session,
 #'                        FM_yaml_file    = FM_yaml_file,
 #'                        MOD_yaml_file   = MOD_yaml_file,
-#'                        id_UD           = "UD",
 #'                        react_state     = NULL)
 #'
 DW_fetch_state = function(id,                    input,     session,
-                          FM_yaml_file,  MOD_yaml_file,       id_UD,
+                          FM_yaml_file,  MOD_yaml_file,     
                           react_state){
 
   #---------------------------------------------
@@ -1470,10 +1444,10 @@ DW_fetch_state = function(id,                    input,     session,
   # initialize it
   if(is.null(state)){
     # General state information
-    state = DW_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, session)
+    state = DW_init_state(FM_yaml_file, MOD_yaml_file, id, session)
   }
 
-
+  id_UD  = state[["MC"]][["module"]][["depends"]][["id_UD"]]
   #---------------------------------------------
   # detecting changes in the datasets
   if("checksum" %in% names(isolate(react_state[[id_UD]][["UD"]]))){
@@ -1497,7 +1471,7 @@ DW_fetch_state = function(id,                    input,     session,
     if(UPDATE_DS){
       # JMH prevent triggering UPDATE_DS on app state reset
       FM_le(state, "original dataset changed")
-      state = DW_init_state(FM_yaml_file, MOD_yaml_file, id, id_UD, session)
+      state = DW_init_state(FM_yaml_file, MOD_yaml_file, id, session)
     }
   }
 
@@ -1836,7 +1810,6 @@ state }
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param id Shiny module ID
-#'@param id_UD  ID string for the upload data module used to handle uploads or
 #'the name of the list element in react_state where the data set is stored.
 #'@param session Shiny session variable
 #'module (\code{NULL})
@@ -1856,11 +1829,14 @@ state }
 #'                                "templates",
 #'                                "DW.yaml"),
 #'    id              = "DW",
-#'    id_UD           = "UD",
 #'    session         = session)
 #'
 #' state
-DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, id_UD,session){
+DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
+
+  MOD_yaml_cont = FM_read_yaml(MOD_yaml_file)
+  id_ASM = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_ASM"]]
+  id_UD  = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_UD"]]
 
   # initializing the state with the required formods elements:
   button_counters = c(
@@ -2831,7 +2807,6 @@ DW_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
                          session         = session,
                          FM_yaml_file    = FM_yaml_file,
                          MOD_yaml_file   = MOD_yaml_file,
-                         id_UD           = id_UD,
                          react_state     = react_state)
 
   if(!formods::is_shiny(session)){
