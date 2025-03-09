@@ -82,10 +82,10 @@ MC:
       width:  "200px"
     preview:
       resources_tab: 
-        label: "Resources"
+        label: "Current Resources"
         icon:  "server"
       ds_tab:     
-        label: "Datasets"
+        label: "Dataset Preview"
         icon:  "table"
       width:  800
       height: 500
@@ -147,6 +147,7 @@ MC:
     resources_header: "tags$h2('Define new resources')"
     dataset_header:   "tags$h2('Current dataset')"
   errors:
+    no_janitor: "Janitor package not found, please install to clean dataset columns"
     code_gen_failed: "Code generation failed"
     run_code_failed: "Unable to load dataset"
     add_url_failed: "Unable to fetch url"

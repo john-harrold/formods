@@ -476,16 +476,16 @@ DM_Server <- function(id,
       input$ds_sheet
       req(input$source_id)
 
+      state = DM_fetch_state(id              = id,
+                             input           = input,
+                             session         = session,
+                             FM_yaml_file    = FM_yaml_file,
+                             MOD_yaml_file   = MOD_yaml_file,
+                             react_state     = react_state)
+
       uiele = NULL
 
-
       if(is_installed("janitor")){
-        state = DM_fetch_state(id              = id,
-                               input           = input,
-                               session         = session,
-                               FM_yaml_file    = FM_yaml_file,
-                               MOD_yaml_file   = MOD_yaml_file,
-                               react_state     = react_state)
 
         current_ele = DM_fetch_current_element(state)
         srcnfo = DM_fetch_source(state = state, element = current_ele)
@@ -504,6 +504,8 @@ DM_Server <- function(id,
                   position    = state[["MC"]][["formatting"]][["clean_ds"]][["tooltip_position"]])
 
         }
+      } else {
+       uiele = tagList(tags$b(state[["MC"]][["errors"]][["no_janitor"]]), tags$br(), tags$br())
       }
 
     })

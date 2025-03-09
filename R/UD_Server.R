@@ -66,19 +66,23 @@ UD_Server <- function(id,
                              MOD_yaml_file = MOD_yaml_file)
 
       uiele = NULL
-      if(state[["MC"]][["clean_data"]][["enabled"]]){
-        uiele =
-        shinyWidgets::materialSwitch(
-           inputId = NS(id, "switch_clean"),
-           label   = state[["MC"]][["labels"]][["switch_clean"]],
-           value   = as.logical(state[["UD"]][["clean"]]),
-           status  = "success"
-        )
-
-      uiele = FM_add_ui_tooltip(state, uiele,
-              tooltip     = state[["MC"]][["formatting"]][["switch_clean"]][["tooltip"]],
-              position    = state[["MC"]][["formatting"]][["switch_clean"]][["tooltip_position"]])
-
+      if(is_installed("janitor")){
+        if(state[["MC"]][["clean_data"]][["enabled"]]){
+          uiele =
+          shinyWidgets::materialSwitch(
+             inputId = NS(id, "switch_clean"),
+             label   = state[["MC"]][["labels"]][["switch_clean"]],
+             value   = as.logical(state[["UD"]][["clean"]]),
+             status  = "success"
+          )
+        
+        uiele = FM_add_ui_tooltip(state, uiele,
+                tooltip     = state[["MC"]][["formatting"]][["switch_clean"]][["tooltip"]],
+                position    = state[["MC"]][["formatting"]][["switch_clean"]][["tooltip_position"]])
+        
+        }
+      } else {
+       uiele = tagList(tags$b(state[["MC"]][["errors"]][["no_janitor"]]), tags$br(), tags$br())
       }
 
 
@@ -770,7 +774,11 @@ UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 
 
   # Assigning the default clean option
-  clean_ds =   state[["MC"]][["clean_data"]][["default"]]
+  if(is_installed("janitor")){
+    clean_ds =   state[["MC"]][["clean_data"]][["default"]]
+  } else {
+    clean_ds = FALSE
+  }
 
   state = UD_attach_ds(state,
             clean = clean_ds)
@@ -1190,6 +1198,10 @@ UD_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
   }
 
   # Setting cleaning options
+  if(!is_installed("janitor")){
+    clean_ds = FALSE
+  }
+
   if(!is.null(clean_ds)){
     input[["switch_clean"]] = as.character(clean_ds)
   }
