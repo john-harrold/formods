@@ -44,7 +44,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">DM_fetch_ds</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">DM_fetch_ds</span><span class="op">(</span><span class="va">state</span>, meta_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -53,6 +53,10 @@
 
 <dl><dt id="arg-state">state<a class="anchor" aria-label="anchor" href="#arg-state"></a></dt>
 <dd><p>DM state from <code><a href="DM_fetch_state.html">DM_fetch_state()</a></code></p></dd>
+
+
+<dt id="arg-meta-only">meta_only<a class="anchor" aria-label="anchor" href="#arg-meta-only"></a></dt>
+<dd><p>Include only metadata and not the dataset (default <code>FALSE</code>)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -66,7 +70,7 @@
 <li><p>MOD_TYPE: Short name for the type of module.</p></li>
 <li><p>id: Module ID.</p></li>
 <li><p>idx: unique numerical ID to identify this dataset in the module.</p></li>
-<li><p>ds_label: optional label that can be defined by a user and used in
+<li><p>res_label: optional label that can be defined by a user and used in
    workflows. Must be unique to the module.</p></li>
 <li><p>DS: Dataframe containing the actual dataset.</p></li>
 <li><p>DSMETA: Metadata describing DS.</p></li>
@@ -104,10 +108,10 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: including file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   dest:   file.path("config","report.yaml")</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: eab3a64a67d5051360245fc5102d8f11</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 441abbd92e02d893eb5136ccdfcc717d</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: State initialized</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: 8f8fb1c9c5591194e29d678c59dd65a3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 02ad1aa7547ec903848451a547d1b96a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: 641fcbc6616d24d05acded4317a3bb12</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 5c077c5702479f330bf233040eb4a51b</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: adding preload sources</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:  - file added: TEST_DATA.xlsx</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added: TEST_DATA.xlsx</span>
@@ -118,22 +122,23 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:  - url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_DM.csv</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_DM.csv</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: loading element idx: 1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: fe0e4ee9b402f889cf0e7477bac9f213</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 76ca470f0310a540f6aacd97ef5c2468</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: 90805ca6c41a39696e1572d9b0a75868</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: e23d5c825540acc0ebc26cb74c8b151a</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added element idx: 1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: loading element idx: 2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: 5c7cefc79c0b65bb58765341a8dd506d</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 64ac29c2d15f205edb990374126ec3dc</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: 91cc11ad4056dc94d79d3abaf349947c</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 6740accf74e2e7963b4b5c64e02d82ed</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added element idx: 2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: loading element idx: 3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: e2dd12d2f04a4e16b73f9ddc1f26a107</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 3eb441432c94b38219b5258fc5233051</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: eb243cd0070c11a9b8eb12a941aed0f4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 6c287333ee1e505fd946b7fa38d55fbb</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added element idx: 3</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: loading element idx: 4</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: b2964af4d0a05b8045bd2cbbd88f7670</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: e97fb2236b4efde42924c470361eacee</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: 8f030dd87b955499cd28c7c4b9d7d38e</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 90c51329eaebf19b7165662cea52f5af</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added element idx: 4</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module isgood: TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → # preload_complete is good: TRUE ------------------------------------------</span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ds</span> <span class="op">=</span> <span class="fu">DM_fetch_ds</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>
@@ -162,7 +167,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_1$idx</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_1$ds_label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_1$res_label</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] ""</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_1$DS</span>
@@ -12299,10 +12304,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DM_obj_1 = rio::import(file=\"data/DM/TEST_DATA.xlsx\", which =\"DATA\")\nDM_obj_1 = janitor::clean_names(DM_obj_1, case=\"none\")"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_1$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "e97fb2236b4efde42924c470361eacee"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "90c51329eaebf19b7165662cea52f5af"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_1$DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "fe0e4ee9b402f889cf0e7477bac9f213"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "90805ca6c41a39696e1572d9b0a75868"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_2</span>
@@ -12318,7 +12323,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_2$idx</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_2$ds_label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_2$res_label</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "PC"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_2$DS</span>
@@ -13533,10 +13538,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DM_obj_2 = rio::import(file=\"https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_PC.csv\")\nDM_obj_2 = janitor::clean_names(DM_obj_2, case=\"none\")"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_2$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "e97fb2236b4efde42924c470361eacee"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "90c51329eaebf19b7165662cea52f5af"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_2$DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "5c7cefc79c0b65bb58765341a8dd506d"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "91cc11ad4056dc94d79d3abaf349947c"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_3</span>
@@ -13552,7 +13557,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_3$idx</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_3$ds_label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_3$res_label</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "EX"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_3$DS</span>
@@ -13646,10 +13651,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DM_obj_3 = rio::import(file=\"https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_EX.csv\")\nDM_obj_3 = janitor::clean_names(DM_obj_3, case=\"none\")"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_3$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "e97fb2236b4efde42924c470361eacee"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "90c51329eaebf19b7165662cea52f5af"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_3$DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "e2dd12d2f04a4e16b73f9ddc1f26a107"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "eb243cd0070c11a9b8eb12a941aed0f4"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_5</span>
@@ -13665,7 +13670,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_5$idx</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_5$ds_label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_5$res_label</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DM"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_5$DS</span>
@@ -13841,10 +13846,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "DM_obj_5 = rio::import(file=\"https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_DM.csv\")\nDM_obj_5 = janitor::clean_names(DM_obj_5, case=\"none\")"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_5$checksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "e97fb2236b4efde42924c470361eacee"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "90c51329eaebf19b7165662cea52f5af"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ds$DM_obj_5$DSchecksum</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "b2964af4d0a05b8045bd2cbbd88f7670"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "8f030dd87b955499cd28c7c4b9d7d38e"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

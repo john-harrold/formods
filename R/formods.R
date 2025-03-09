@@ -12,7 +12,7 @@
 
 #'@import cli
 #'@importFrom digest digest
-#'@importFrom rio export  
+#'@importFrom rio export
 .onAttach <- function(libname, pkgname){
 
   #------------------------------------
@@ -107,6 +107,7 @@ res}
 #'@param state Current module state after yaml file has been read
 #'@param session Shiny session variable
 #'@param ids  Vector of ID strings for the modules containing the datasets or
+#'@param meta_only Include only metadata and not the dataset (default \code{FALSE})
 #'NULL for all datasets available.
 #'@return list containing the current dataset with the following format:
 #' \itemize{
@@ -118,7 +119,7 @@ res}
 #'     \item{label:}  Text label for the dataset (used to display to the user)
 #'     \item{DS:}     Data frame with the dataset
 #'     \item{DSMETA:} Optional data frame with metadata about the colunns of the
-#'     dataset in \code{DS}. 
+#'     dataset in \code{DS}.
 #'     \item{code:} Code to generate the dataset.
 #'     \item{checksum:} Module checksum when the dataset was pulled
 #'     \item{DSchecksum:} Checksum of the dataframe in DS
@@ -136,8 +137,8 @@ res}
 #'     \item{object:} Name of the R Object containing the data frame
 #'     \item{MOD_TYPE:} Short name of the type of module
 #'     \item{id:} Module ID
-#'     \item{idx:} Numerical identifyer within the module
-#'     \item{ds_label: optional label that can be defined by a user and used in
+#'     \item{idx:} Numerical identifier within the module
+#'     \item{res_label: optional label that can be defined by a user and used in
 #'     workflows. Must be unique to the module.}
 #'     \item{checksum:} Module checksum
 #'     \item{DSchecksum:} Checksum of the dataset
@@ -148,6 +149,10 @@ res}
 #'   ID. For each of these there is a checksum. For example to access the
 #'   checksum of a DW module with a  module ID of 'my_id', you would use the
 #'   following: \code{res$modules$DW$my_id}.
+#'   \item{module_ids:} List with an entry for each module_id. The element name is
+#'   the module id. For each of these there is a checksum. For example to access the
+#'   checksum of a module with an id 'my_id', you would use the
+#'   following: \code{res$module_ids$DW$my_id}.
 #' }
 #'@examples
 #' # We need a module state and a Shiny session variable
@@ -157,13 +162,14 @@ res}
 #' state   = sess_res$state
 #' ds = FM_fetch_ds(state, session)
 #' ds$catalog
-FM_fetch_ds = function(state, session, ids=NULL){
+FM_fetch_ds = function(state, session, ids=NULL, meta_only = FALSE){
 
   isgood  = TRUE
   hasds   = FALSE
   catalog = NULL
   ds      = list()
   modules = list()
+  module_ids = list()
   choices = list()
 
   # Pulling out the app state:
@@ -195,12 +201,10 @@ FM_fetch_ds = function(state, session, ids=NULL){
 
     # If that module has a ds fetching function then we try to fetch it:
     if(exists(MOD_FUNC, mode="function")){
-
       # Function call used to fetch a dataset
       fetch_ds_res = NULL
-      FUNC_CALL = paste0("fetch_ds_res = ", MOD_FUNC,"(state = tmp_state)")
+      FUNC_CALL = paste0("fetch_ds_res = ", MOD_FUNC,"(state = tmp_state, meta_only = ", toString(meta_only), ")")
       eval(parse(text=FUNC_CALL))
-
       if(fetch_ds_res[["hasds"]]){
         # We've found at least one dataset
         hasds = TRUE
@@ -225,24 +229,25 @@ FM_fetch_ds = function(state, session, ids=NULL){
         MOD_DESC    = MOD_DESC_list[[dsname]],
         id          = ds[[dsname]][["id"]],
         idx         = ds[[dsname]][["idx"]],
-        ds_label    = ds[[dsname]][["ds_label"]],
+        res_label   = ds[[dsname]][["res_label"]],
         checksum    = ds[[dsname]][["checksum"]],
         DSchecksum  = ds[[dsname]][["DSchecksum"]],
         code        = ds[[dsname]][["code"]])
       )
 
-   
+
       # Stores the values for the selector
-      tmp_choices_group[[   MOD_DESC_list[[dsname]]  ]] = c( 
-        tmp_choices_group[[ MOD_DESC_list[[dsname]]  ]], 
+      tmp_choices_group[[   MOD_DESC_list[[dsname]]  ]] = c(
+        tmp_choices_group[[ MOD_DESC_list[[dsname]]  ]],
         dsname)
-   
+
       # corresponding list storing the lables
-      tmp_choices_group_labels[[   MOD_DESC_list[[dsname]]  ]] = c( 
-        tmp_choices_group_labels[[ MOD_DESC_list[[dsname]]  ]], 
+      tmp_choices_group_labels[[   MOD_DESC_list[[dsname]]  ]] = c(
+        tmp_choices_group_labels[[ MOD_DESC_list[[dsname]]  ]],
         ds[[dsname]][["label"]])
 
       modules[[ ds[[dsname]][["MOD_TYPE"]]]  ][[ ds[[dsname]][["id"]] ]] = ds[[dsname]][["checksum"]]
+      module_ids[[ ds[[dsname]][["id"]] ]] = ds[[dsname]][["checksum"]]
     }
 
     # This creates choices for selectInput()
@@ -261,12 +266,13 @@ FM_fetch_ds = function(state, session, ids=NULL){
   }
 
   # Packing everything up to be returned to the user
-  res = list(isgood  = isgood,
-             hasds   = hasds,
-             catalog = catalog,
-             modules = modules,
-             choices = choices,
-             ds      = ds)
+  res = list(isgood     = isgood,
+             hasds      = hasds,
+             catalog    = catalog,
+             modules    = modules,
+             module_ids = module_ids,
+             choices    = choices,
+             ds         = ds)
 
 res}
 
@@ -657,6 +663,101 @@ FM_fetch_app_code = function(session, state, mod_ids){
              msgs   = msgs,
              code   = code)
 res}
+
+
+#'@export
+#'@title Compares DS Summary with Current State for Changes
+#'@description Takes the result of \code{FM_fetch_ds()} and compares that to the
+#'current react_state to determine if any datasets have changed for the given
+#'module IDs.
+#'@param state module state after yaml read
+#'@param fdres  Output of \code{FM_fetch_ds()}.
+#'@param ids    IDs the current module is
+#'@param react_state Reactive shiny object (in app) or a list (outside of app) used to trigger reactions
+#'@return Logical indicating if a change has been
+#' detected (\code{TRUE}) or not '(\code{FALSE})
+#'@examples
+#' session = shiny::MockShinySession$new()
+#' sess_res = FG_test_mksession(session=session)
+#' state = sess_res$state
+#' FM_has_ds_changed(state = state, fdres = NULL, ids = ("DW"), react_state=list())
+FM_has_ds_changed = function(state, fdres, ids, react_state){
+
+  ds_has_changed = FALSE
+
+  # Flags used to determine if any of the modules have datasets
+  anyds = FALSE
+
+  # Finding the IDs that are present in react_state
+  rs = list()
+  for(tmpid in ids){
+    # This will skip modules that have not yet been initialized
+    if(length(isolate(react_state[[tmpid]])) > 0){
+      rs[[tmpid]] = isolate(react_state[[tmpid]][[1]])
+
+      # Determining if there are any datasets present
+      if(is.logical(rs[[tmpid]][["hasds"]])){
+        if(rs[[tmpid]][["hasds"]]){
+          anyds = TRUE
+        }
+      }
+    }
+  }
+
+  # We only proceed if there are ids found in react_state
+  if(!is.null(rs)){
+    # If fdres is NULL but there are ids where rs hasds == TRUE
+    #  - fdres is not initialized but there are datasets so this should force it
+    #    to be initialized
+    if(is.null(fdres) & anyds){
+      ds_has_changed = TRUE
+      FM_le(state, "DS change detected: fdres is NULL")
+    }
+
+
+    if(is.data.frame(fdres[["catalog"]])){
+      for(tmpid in names(rs)){
+        # Any of the ids in rs where hasds==TRUE but _are not_ present in fdres
+        #  - this means that there were no datasets when fdres was
+        #    generated but there are now
+        if(rs[[tmpid]][["hasds"]]){
+          if(!any(fdres[["catalog"]][["id"]] == tmpid)){
+            ds_has_changed = TRUE
+            FM_le(state, paste0("DS change detected: fdres is is missing ", tmpid))
+          }
+        }
+
+        # Any of the ids in rs where hasds==FALSE but _are_ present in fdres
+        #  - this means that there were datasets when fdres was
+        #    generated but have since been deleted
+        if(!rs[[tmpid]][["hasds"]]){
+          if(any(fdres[["catalog"]][["id"]] == tmpid)){
+            ds_has_changed = TRUE
+            FM_le(state, paste0("DS change detected: source dataset from ", tmpid, " is missing"))
+          }
+        }
+
+        # Any of the ids in fdres have checksums different
+        # from the ids in rs
+        if(!is.null(fdres[["module_ids"]][[tmpid]]) &
+           !is.null(rs[[tmpid]][["checksum"]])){
+          if(rs[[tmpid]][["checksum"]] != fdres[["module_ids"]][[tmpid]]){
+            ds_has_changed = TRUE
+            FM_le(state, paste0("DS change detected: source dataset from ", tmpid, " checksums different."))
+            FM_le(state, paste0("fdres (old):       ", fdres[["module_ids"]][[tmpid]]))
+            FM_le(state, paste0("react_state (new): ", rs[[tmpid]][["checksum"]]))
+          }
+        } else {
+          FM_le(state, paste0("One or more checksum not found"), entry_type="danger")
+          FM_le(state, paste0("fdres:       ", fdres[["module_ids"]][[tmpid]]), entry_type="danger")
+          FM_le(state, paste0("react_state: ", rs[[tmpid]][["checksum"]]), entry_type="danger")
+        }
+      }
+    }
+  }
+
+
+ds_has_changed}
 
 #'@export
 #'@title Fetches the Path to the Log File
@@ -1376,7 +1477,7 @@ FM_init_state = function(
 state}
 
 #'@export
-#'@title Process Include Files in formods.yaml 
+#'@title Process Include Files in formods.yaml
 #'@description Reads in the formods.yaml file and copies any include files
 #'that are needed into the user directory.
 #'@param state formods State object.
@@ -2761,13 +2862,13 @@ FM_fetch_mdl = function(state, session, ids=NULL){
       )
 
       # Stores the values for the selector
-      tmp_choices_group[[   MOD_DESC_list[[mdlname]]  ]] = c( 
-        tmp_choices_group[[ MOD_DESC_list[[mdlname]]  ]], 
+      tmp_choices_group[[   MOD_DESC_list[[mdlname]]  ]] = c(
+        tmp_choices_group[[ MOD_DESC_list[[mdlname]]  ]],
         mdlname)
-   
+
       # corresponding list storing the lables
-      tmp_choices_group_labels[[   MOD_DESC_list[[mdlname]]  ]] = c( 
-        tmp_choices_group_labels[[ MOD_DESC_list[[mdlname]]  ]], 
+      tmp_choices_group_labels[[   MOD_DESC_list[[mdlname]]  ]] = c(
+        tmp_choices_group_labels[[ MOD_DESC_list[[mdlname]]  ]],
         mdl[[mdlname]][["label"]])
 
       modules[[ mdl[[mdlname]][["MOD_TYPE"]]]  ][[ mdl[[mdlname]][["id"]] ]] = mdl[[mdlname]][["checksum"]]
@@ -2985,6 +3086,7 @@ FM_app_preload = function(session, sources=NULL, react_state = list(), quickload
     msgs = c(msgs,err_msgs)
   }
 
+  FM_message(FM_build_comment(comment_str = paste0("preload_complete is good: ", isgood)))
 
   res=list(isgood       =isgood,
            msgs         = msgs,
@@ -3082,7 +3184,7 @@ session}
 
 
 #'@export
-#'@title Fetch Yaml Contents  
+#'@title Fetch Yaml Contents
 #'@description Wrapper for read_yaml() to make this function available to
 #'modules dependent on formods.
 #'@param file  yaml file.
@@ -3153,5 +3255,126 @@ run_formods  = function(host        = "127.0.0.1",
                   host  = host,
                   port  = port)
   }
-
 }
+
+#'@export
+#'@title Fetches Resource Object
+#'@description  Resources such as datasets can be specified using the module
+#' ID and either identifier index or the resource label. This
+#' function will attempt to rectify those and give the "best" answer. If a
+#' resource label is supplied and exists uniquely for that module ID, that
+#' object will be returned. If not then an error will be returned. If the
+#' resource label is not specified and the index is specified and that exists
+#' uniquely, that object will be returned. Otherwise an error will be returned.
+#'@param catalog Catalog table returned from formods fetch functions (e.g. '\code{FM_fetch_ds()}).
+#'@param id Module id.
+#'@param idx Element id from module, can be set to \code{NULL} or \code{""} if the \code{res_label} option is set.
+#'@param res_label Resource label, must be set to \code{NULL} or \code{""} to ignore the resource label and use \code{idx}.
+#'@return list containing the current dataset with the following format:
+#' \itemize{
+#'   \item{isgood:}  Boolean indicating the whether a resource object was found.
+#'    \item{msgs:}   Any messages generated
+#'   \item{res_row:} Row of catalog associated with resource or \code{NULL} if not found.
+#'   \item{res_obj:} Name of resource object or \code{NULL} if not found.
+#' }
+#'@examples
+#' # We need a module state and a Shiny session variable
+#' # to use this function:
+#' sess_res = UD_test_mksession()
+#' session = sess_res$session
+#' state   = sess_res$state
+#'
+#' DSV = FM_fetch_ds(state=state, session=session, ids=c("UD", "DM", "DW"), meta_only=TRUE)
+#'
+#' fetch_resource(catalog=DSV[["catalog"]], id = "UD", idx="1", res_label = "")
+fetch_resource = function(catalog = NULL, id = NULL, idx = NULL, res_label = NULL){
+
+  isgood  = TRUE
+  res_obj = NULL
+  res_row = NULL
+  msgs    = c()
+
+  if(is.null(catalog)){
+    isgood = FALSE
+    msgs = c(msgs, "catalog is NULL and should be defined")
+  }
+
+  if(is.null(id)){
+    isgood = FALSE
+    msgs = c(msgs, "module ID is NULL and should be defined")
+  }
+
+  idx_found = FALSE
+  rl_found  = FALSE
+
+  if(!is.null(idx)){
+    idx_found = TRUE
+  }
+
+  if(!is.null(res_label)){
+    if(res_label != ""){
+      rl_found = TRUE
+    }
+  }
+
+  if(!idx_found & !rl_found ){
+    isgood = FALSE
+    msgs = c(msgs, "either the resource id (idx) or label (resoure_label) must be specified")
+  }
+
+
+  if(isgood){
+    ridx =  NULL
+    if(rl_found){
+      ridx = which(catalog[["id"]] == id & catalog[["res_label"]] == res_label)
+      if(length(ridx) == 0){
+        isgood = FALSE
+        msgs = c(msgs, "resource not found using res_label")
+      } else {
+        msgs = c(msgs, "found by res_label")
+      }
+    }
+
+    if(idx_found & isgood & is.null(ridx)){
+      ridx = which(catalog[["id"]] == id & catalog[["idx"]] == idx)
+      if(length(ridx) == 0){
+        isgood = FALSE
+        msgs = c(msgs, "resource not found using idx")
+      } else {
+        msgs = c(msgs, "found by idx")
+      }
+    }
+
+    if(isgood){
+      if(length(ridx) == 1){
+        res_obj = catalog[ridx, ][["object"]]
+        res_row = catalog[ridx, ]
+      } else if(length(ridx) == 1){
+        isgood = FALSE
+        msgs = c(msgs, paste0("no resources found."))
+      } else if(length(ridx) > 1){
+        isgood = FALSE
+        msgs = c(msgs, paste0("multiple (", length(ridx), ") resources found."))
+      }
+    }
+  }
+
+
+  if(!isgood){
+    msgs = c("FM_fetch_resource()",
+      msgs,
+     "unable to identify resource using the following",
+     paste0(" - id:        ", id),
+     paste0(" - idx:       ", idx),
+     paste0(" - res_label: ", res_label))
+  }
+
+  res = list(
+    isgood  = isgood,
+    msgs    = msgs,
+    res_row = res_row, 
+    res_obj = res_obj
+  )
+
+res}
+

@@ -372,6 +372,7 @@ UD_Server <- function(id,
                                MOD_yaml_file = MOD_yaml_file)
         FM_le(state, "reaction state updated")
         #react_state[[id]] = state
+        react_state[[id]][["UD"]][["hasds"]]    = is.data.frame(state$UD$contents)
         react_state[[id]][["UD"]][["checksum"]] = state[["UD"]][["checksum"]]
       }, priority=100)
     }
@@ -1040,6 +1041,7 @@ code}
 #'@title Fetch Module Datasets
 #'@description Fetches the datasets contained in the module.
 #'@param state UD state from \code{UD_fetch_state()}
+#'@param meta_only Include only metadata and not the dataset (default \code{FALSE})
 #'@return Character object vector with the lines of code
 #'@return list containing the following elements
 #'\itemize{
@@ -1053,7 +1055,7 @@ code}
 #'    \item{MOD_TYPE: Short name for the type of module.}
 #'    \item{id: module ID}
 #'    \item{idx: unique numerical ID to identify this dataset in the module.}
-#'    \item{ds_label: optional label that can be defined by a user and used in
+#'    \item{res_label: optional label that can be defined by a user and used in
 #'    workflows. Must be unique to the module.}
 #'    \item{DS: Dataframe containing the actual dataset.}
 #'    \item{DSMETA: Metadata describing DS, see \code{FM_fetch_ds()} for
@@ -1082,7 +1084,7 @@ code}
 #'            MOD_yaml_file = MOD_yaml_file )
 #'
 #'  ds_res = UD_fetch_ds(state)
-UD_fetch_ds = function(state){
+UD_fetch_ds = function(state, meta_only = FALSE){
   hasds  = FALSE
   isgood = TRUE
   msgs   = c()
@@ -1093,7 +1095,7 @@ UD_fetch_ds = function(state){
                MOD_TYPE   = NULL,
                id         = NULL,
                idx        = 1,
-               ds_label   = "",
+               res_label   = "",
                DS         = NULL,
                DSMETA     = NULL,
                code       = NULL,
@@ -1203,7 +1205,7 @@ UD_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
   }
 
   # Required for proper reaction:
-  react_state[[mod_ID]]  = list(UD  = list(checksum=state[["UD"]][["checksum"]]))
+  react_state[[mod_ID]]  = list(UD  = list(hasds = TRUE, checksum=state[["UD"]][["checksum"]]))
 
   # We only flag a failure if there is a data file and the state is bad:
   if(!is.null(full_file_path)){

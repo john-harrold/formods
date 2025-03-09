@@ -4,10 +4,12 @@
 \alias{DM_fetch_ds}
 \title{Fetch Data Management Module Datasets}
 \usage{
-DM_fetch_ds(state)
+DM_fetch_ds(state, meta_only = FALSE)
 }
 \arguments{
 \item{state}{DM state from \code{DM_fetch_state()}}
+
+\item{meta_only}{Include only metadata and not the dataset (default \code{FALSE})}
 }
 \value{
 Character object vector with the lines of code
@@ -24,7 +26,7 @@ list containing the following elements
    \item{MOD_TYPE: Short name for the type of module.}
    \item{id: Module ID.}
    \item{idx: unique numerical ID to identify this dataset in the module.}
-   \item{ds_label: optional label that can be defined by a user and used in
+   \item{res_label: optional label that can be defined by a user and used in
    workflows. Must be unique to the module.}
    \item{DS: Dataframe containing the actual dataset.}
    \item{DSMETA: Metadata describing DS.}

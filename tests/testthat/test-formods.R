@@ -42,6 +42,13 @@ if(dir.exists("config")){
   unlink("config", recursive = TRUE)
 }
 
+
+DM_data_dir =  file.path("data","DM")
+if(dir.exists("data")){
+  unlink("data", recursive = TRUE)
+}
+dir.create(DM_data_dir, recursive = TRUE)
+
 if(file.exists("TEST_DATA.xlsx")){
   unlink("TEST_DATA.xlsx")
 }
@@ -53,11 +60,15 @@ file.copy(from = system.file(package="formods", "templates", "ASM.yaml"),       
 file.copy(from = system.file(package="formods", "templates", "UD.yaml"),         to="config")
 file.copy(from = system.file(package="formods", "templates", "FG.yaml"),         to="config")
 file.copy(from = system.file(package="formods", "templates", "DW.yaml"),         to="config")
+file.copy(from = system.file(package="formods", "templates", "DM.yaml"),         to="config")
 file.copy(from = system.file(package="formods", "test_data", "TEST_DATA.xlsx"),  to=".")
+file.copy(from = system.file(package="formods", "test_data", "TEST_DATA.xlsx"),  to=DM_data_dir)
+
 # Testing using the standard preload functions:
 sources = c(system.file(package="formods", "preload", "UD_preload.yaml"),
             system.file(package="formods", "preload", "ASM_preload.yaml"),
             system.file(package="formods", "preload", "DW_preload.yaml"),
+            system.file(package="formods", "preload", "DM_preload.yaml"),
             system.file(package="formods", "preload", "FG_preload.yaml"))
 
 sess_res = suppressMessages(FM_app_preload(session=list(), sources=sources))
@@ -74,6 +85,5 @@ sess_res = suppressMessages(FM_app_preload(session=list(), sources=tmp_pll_file)
 expect_true(sess_res[["isgood"]])
 
 setwd(old_wd)
-
 
 })

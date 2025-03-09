@@ -78,10 +78,10 @@ ui <- dashboardPage(
          box(title="",
            "DM_ui_clean_ds",     
            htmlOutput(NS("DM", "DM_ui_clean_ds")),
-           "DM_ui_ds_label",     
-           htmlOutput(NS("DM", "DM_ui_ds_label")),
-           "DM_ui_ds_label_val",     
-           htmlOutput(NS("DM", "DM_ui_ds_label_val")),
+           "DM_ui_res_label",     
+           htmlOutput(NS("DM", "DM_ui_res_label")),
+           "DM_ui_res_label_val",     
+           htmlOutput(NS("DM", "DM_ui_res_label_val")),
          width=6)
          ),
        fluidRow(
@@ -113,7 +113,7 @@ server <- function(input, output, session) {
   res = DM_test_mksession(session)
 
   # Module server
-  DM_Server(id="DM", id_ASM = "ASM", react_state=react_FM)
+  DM_Server(id="DM", react_state=react_FM)
 
   # Current state outside of the module
   output$ui_state  =  renderText({

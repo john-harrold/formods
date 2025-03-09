@@ -19,9 +19,14 @@ ui <- dashboardPage(
               box(title="Data View Actions",
               div(style="display:inline-block",
               "ui_dw_views",
-              htmlOutput(NS("DW", "ui_dw_views")),
+              htmlOutput(NS("DW", "ui_dw_views"))),
+              div(style="display:inline-block",
               "ui_dw_key",
               htmlOutput(NS("DW", "ui_dw_key"))),
+              div(style="display:inline-block",
+              "ui_dw_sources",
+              htmlOutput(NS("DW", "ui_dw_sources"))),
+                  tags$br(),
               div(style="display:inline-block",
                  "ui_dw_new_view",
                  htmlOutput(NS("DW", "ui_dw_new_view")) ),
@@ -97,8 +102,17 @@ server <- function(input, output, session) {
 
   # Creating upstream data for the UD module
   id_UD = "UD"
+  id_DM = "DM"
   res = UD_test_mksession(session)
-  react_FM[[id_UD]] = res[["rsc"]][[id_UD]]
+  res = res[["all_sess_res"]][["UD"]]
+
+  sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+              system.file(package="formods", "preload", "UD_preload.yaml"),
+              system.file(package="formods", "preload", "DM_preload.yaml"))
+  res = FM_app_preload(session=session, sources=sources)
+
+  react_FM[[id_UD]] =  res$all_sess_res$UD$react_state$UD
+  react_FM[[id_DM]] =  res$all_sess_res$DM$react_state$DM
 
   DW_Server(id="DW", react_state=react_FM)
 

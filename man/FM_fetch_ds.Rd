@@ -4,14 +4,16 @@
 \alias{FM_fetch_ds}
 \title{Fetches Datasets from Modules in the App}
 \usage{
-FM_fetch_ds(state, session, ids = NULL)
+FM_fetch_ds(state, session, ids = NULL, meta_only = FALSE)
 }
 \arguments{
 \item{state}{Current module state after yaml file has been read}
 
 \item{session}{Shiny session variable}
 
-\item{ids}{Vector of ID strings for the modules containing the datasets or
+\item{ids}{Vector of ID strings for the modules containing the datasets or}
+
+\item{meta_only}{Include only metadata and not the dataset (default \code{FALSE})
 NULL for all datasets available.}
 }
 \value{
@@ -25,7 +27,7 @@ list containing the current dataset with the following format:
     \item{label:}  Text label for the dataset (used to display to the user)
     \item{DS:}     Data frame with the dataset
     \item{DSMETA:} Optional data frame with metadata about the colunns of the
-    dataset in \code{DS}. 
+    dataset in \code{DS}.
     \item{code:} Code to generate the dataset.
     \item{checksum:} Module checksum when the dataset was pulled
     \item{DSchecksum:} Checksum of the dataframe in DS
@@ -43,8 +45,8 @@ list containing the current dataset with the following format:
     \item{object:} Name of the R Object containing the data frame
     \item{MOD_TYPE:} Short name of the type of module
     \item{id:} Module ID
-    \item{idx:} Numerical identifyer within the module
-    \item{ds_label: optional label that can be defined by a user and used in
+    \item{idx:} Numerical identifier within the module
+    \item{res_label: optional label that can be defined by a user and used in
     workflows. Must be unique to the module.}
     \item{checksum:} Module checksum
     \item{DSchecksum:} Checksum of the dataset
@@ -55,6 +57,10 @@ list containing the current dataset with the following format:
   ID. For each of these there is a checksum. For example to access the
   checksum of a DW module with a  module ID of 'my_id', you would use the
   following: \code{res$modules$DW$my_id}.
+  \item{module_ids:} List with an entry for each module_id. The element name is
+  the module id. For each of these there is a checksum. For example to access the
+  checksum of a module with an id 'my_id', you would use the
+  following: \code{res$module_ids$DW$my_id}.
 }
 }
 \description{

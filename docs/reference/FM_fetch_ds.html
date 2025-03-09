@@ -50,7 +50,7 @@ available.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">FM_fetch_ds</span><span class="op">(</span><span class="va">state</span>, <span class="va">session</span>, ids <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">FM_fetch_ds</span><span class="op">(</span><span class="va">state</span>, <span class="va">session</span>, ids <span class="op">=</span> <span class="cn">NULL</span>, meta_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -66,7 +66,11 @@ available.</p>
 
 
 <dt id="arg-ids">ids<a class="anchor" aria-label="anchor" href="#arg-ids"></a></dt>
-<dd><p>Vector of ID strings for the modules containing the datasets or
+<dd><p>Vector of ID strings for the modules containing the datasets or</p></dd>
+
+
+<dt id="arg-meta-only">meta_only<a class="anchor" aria-label="anchor" href="#arg-meta-only"></a></dt>
+<dd><p>Include only metadata and not the dataset (default <code>FALSE</code>)
 NULL for all datasets available.</p></dd>
 
 </dl></div>
@@ -92,8 +96,8 @@ NULL for all datasets available.</p></dd>
 <li><p>object: Name of the R Object containing the data frame</p></li>
 <li><p>MOD_TYPE: Short name of the type of module</p></li>
 <li><p>id: Module ID</p></li>
-<li><p>idx: Numerical identifyer within the module</p></li>
-<li><p>ds_label: optional label that can be defined by a user and used in
+<li><p>idx: Numerical identifier within the module</p></li>
+<li><p>res_label: optional label that can be defined by a user and used in
     workflows. Must be unique to the module.</p></li>
 <li><p>checksum: Module checksum</p></li>
 <li><p>DSchecksum: Checksum of the dataset</p></li>
@@ -104,6 +108,10 @@ NULL for all datasets available.</p></dd>
   ID. For each of these there is a checksum. For example to access the
   checksum of a DW module with a  module ID of 'my_id', you would use the
   following: <code>res$modules$DW$my_id</code>.</p></li>
+<li><p>module_ids: List with an entry for each module_id. The element name is
+  the module id. For each of these there is a checksum. For example to access the
+  checksum of a module with an id 'my_id', you would use the
+  following: <code>res$module_ids$DW$my_id</code>.</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -138,12 +146,13 @@ NULL for all datasets available.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:897d952fecbc804999396a96f9df4b20</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module isgood: TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → # preload_complete is good: TRUE ------------------------------------------</span>
 <span class="r-in"><span><span class="va">session</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">session</span></span></span>
 <span class="r-in"><span><span class="va">state</span>   <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-in"><span><span class="va">ds</span> <span class="op">=</span> <span class="fu">FM_fetch_ds</span><span class="op">(</span><span class="va">state</span>, <span class="va">session</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ds</span><span class="op">$</span><span class="va">catalog</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               label object MOD_TYPE      MOD_DESC id idx ds_label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Original data set   myDS       UD Uploaded Data UD   1         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               label object MOD_TYPE      MOD_DESC id idx res_label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Original data set   myDS       UD Uploaded Data UD   1          </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                           checksum                       DSchecksum</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 897d952fecbc804999396a96f9df4b20 897d952fecbc804999396a96f9df4b20</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                      code</span>

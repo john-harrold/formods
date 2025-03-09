@@ -7,6 +7,7 @@ MC:
     depends:
       id_ASM: "ASM"
       id_UD:  "UD"
+      id_DM:  "DM"
   # Controls what is shown in the compact ui mode: DW_ui_compact
   compact:
     code:    TRUE
@@ -20,36 +21,37 @@ MC:
     del_dw_element: "Removed component: ===ACTION=== (===DESC===)"
   tooltips:
     # Set to FALSE to disable tool tips for this module
-    include:              TRUE
-    show_code:            "Show data wrangling code"
-    dw_elements:          "Current wrangling components"
-  labels:
-    tab_main:             "Wrangle"
-    tab_code:             "Code"
-    add_element:          "Add Operation/Action"
-    select_dw_views:      "Current data view"
-    fds_filter_column:    "Filter by Column"
-    fds_filter_operator:  "Condition"
-    fds_filter_rhs:       "Matching"
-    fds_mutate_column:    "New or current column to alter"
-    fds_mutate_rhs:       "New Value"
-    fds_rename_column:    "Curret Column"
-    fds_rename_rhs:       "New Name"
-    fds_group_column:     "Columns to group"
-    fds_longer_column:    "Columns to make longer"
-    fds_longer_names:     "New column to contain names"
-    fds_longer_values:    "New column to contain values"
-    fds_wider_names:      "Column with names"
-    fds_wider_values:     "Column with values"
-    new_dw:               "New"
-    del_dw:               "Delete"
-    save_dw:              "Save"
-    copy_dw:              "Copy"
-    clip_dw:              "Code"
-    ungroup_data:         "Removing current grouping"
-    keep_onerow:          "Keep first row in current grouping"
-    no_dataset:           "No dataset available to wrangle. You need to load a dataset to use this module."
-    no_dw_elements:       "No data wrangling components defined yet"
+    include:               TRUE
+    show_code:             "Show data wrangling code"
+    dw_elements:           "Current wrangling components"
+  labels:                  
+    tab_main:              "Wrangle"
+    tab_code:              "Code"
+    add_element:           "Add Operation/Action"
+    select_dw_views:       "Current data view"
+    select_current_source: "Data from"           
+    fds_filter_column:     "Filter by Column"
+    fds_filter_operator:   "Condition"
+    fds_filter_rhs:        "Matching"
+    fds_mutate_column:     "New or current column to alter"
+    fds_mutate_rhs:        "New Value"
+    fds_rename_column:     "Curret Column"
+    fds_rename_rhs:        "New Name"
+    fds_group_column:      "Columns to group"
+    fds_longer_column:     "Columns to make longer"
+    fds_longer_names:      "New column to contain names"
+    fds_longer_values:     "New column to contain values"
+    fds_wider_names:       "Column with names"
+    fds_wider_values:      "Column with values"
+    new_dw:                "New"
+    del_dw:                "Delete"
+    save_dw:               "Save"
+    copy_dw:               "Copy"
+    clip_dw:               "Code"
+    ungroup_data:          "Removing current grouping"
+    keep_onerow:           "Keep first row in current grouping"
+    no_dataset:            "No dataset available to wrangle. You need to load a dataset to use this module."
+    no_dw_elements:        "No data wrangling components defined yet"
     busy:
       dv_update:  "Updating data views. Please be patient..."
   errors:
@@ -146,6 +148,8 @@ MC:
       tooltip: "Copy code to generate current data view to the clipboard."
       tooltip_position: "right"
     select_dw_views:
+      width: 200
+    select_current_source:
       width: 200
     button_dw_save:
       size: "sm"

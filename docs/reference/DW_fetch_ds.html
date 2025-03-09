@@ -44,7 +44,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">DW_fetch_ds</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">DW_fetch_ds</span><span class="op">(</span><span class="va">state</span>, meta_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -53,6 +53,10 @@
 
 <dl><dt id="arg-state">state<a class="anchor" aria-label="anchor" href="#arg-state"></a></dt>
 <dd><p>UD state from <code><a href="UD_fetch_state.html">UD_fetch_state()</a></code></p></dd>
+
+
+<dt id="arg-meta-only">meta_only<a class="anchor" aria-label="anchor" href="#arg-meta-only"></a></dt>
+<dd><p>Include only metadata and not the dataset (default <code>FALSE</code>)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -66,7 +70,7 @@
 <li><p>MOD_TYPE: Short name for the type of module.</p></li>
 <li><p>id: module ID</p></li>
 <li><p>idx: unique numerical ID to identify this dataset in the module.</p></li>
-<li><p>ds_label: optional label that can be defined by a user and used in
+<li><p>res_label: optional label that can be defined by a user and used in
    workflows. Must be unique to the module.</p></li>
 <li><p>DS: Dataframe containing the actual dataset.</p></li>
 <li><p>DSMETA: Metadata describing DS, see <code><a href="FM_fetch_ds.html">FM_fetch_ds()</a></code> for
@@ -108,6 +112,45 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:897d952fecbc804999396a96f9df4b20</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module isgood: TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   dest:   file.path("config","report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 441abbd92e02d893eb5136ccdfcc717d</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: 641fcbc6616d24d05acded4317a3bb12</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 5c077c5702479f330bf233040eb4a51b</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: adding preload sources</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:  - file added: TEST_DATA.xlsx</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added: TEST_DATA.xlsx</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:  - url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_PC.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_PC.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:  - url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_EX.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_EX.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:  - url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_DM.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_DM.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: loading element idx: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: 90805ca6c41a39696e1572d9b0a75868</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: e23d5c825540acc0ebc26cb74c8b151a</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added element idx: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: loading element idx: 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: f525c75e82c2d61ff96c4ea6b5f6a8be</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 2870e954bcfc07b91bef1a99a03f5de1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added element idx: 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: loading element idx: 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: 7f6b6a1db48614d26318a7241e292879</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: fe96ea845e2fdae1e326c7e5e7a644de</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added element idx: 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: loading element idx: 4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: e57ed1d120d27c41d93486bbd2e58e31</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: de888962a01b47da898f7bcecea5457e</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added element idx: 4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module isgood: TRUE</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.docx")</span>
@@ -120,6 +163,8 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: State initialized</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:a9496b622f92f683cc8c69f65ac1ece4</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: loading data view idx: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; setting data source: myDS</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:dfec3d5aa14c2716ccf367706931693f</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: setting name: Observations</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:4d9fd3d913355669d14e0ac710b0b5dc</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
@@ -129,6 +174,8 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; mutate</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:048df4e8afa9494121e72808981c842c</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: loading data view idx: 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; setting data source: myDS</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:048df4e8afa9494121e72808981c842c</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: setting name: PK 3mg SD IV</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:c54c6fc20ff13fd14fbb61c786f65078</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
@@ -140,6 +187,8 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:452fc9d9131592650a93b4b49de961d1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: loading data view idx: 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; setting data source: myDS</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:452fc9d9131592650a93b4b49de961d1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: setting name: PK 3mg SD IV (NCA)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:3b177ed09a80dfaf15c9f3dde8b9a8fb</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
@@ -149,6 +198,8 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:2cf968d6e72262f9274ea0389f717e84</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: loading data view idx: 4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; setting data source: myDS</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:2cf968d6e72262f9274ea0389f717e84</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: setting name: PKPD 3mg SD IV (NCA)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:67e9d6e6b2e085808be155613f8efe20</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
@@ -158,6 +209,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:306f66790aca305ff1b715f34802610e</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module isgood: TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → # preload_complete is good: TRUE ------------------------------------------</span>
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ds</span> <span class="op">=</span> <span class="fu">DW_fetch_ds</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span></span>

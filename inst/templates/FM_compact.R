@@ -86,7 +86,7 @@ ui <- dashboardPage(
                box(title="Transform and Create Views of Your Data", width=12,
                htmlOutput(NS("DW",  "DW_ui_compact")))),
        tabItem(tabName="manage_data",
-               box(title="Transform and Create Views of Your Data", width=12,
+               box(title="Manage and Create Data Sources", width=12,
                htmlOutput(NS("DM",  "DM_ui_compact")))),
        tabItem(tabName="plot",
                box(title="Visualize Data", width=12,
@@ -128,6 +128,12 @@ server <- function(input, output, session) {
   # changes in the module state outside of the module
   react_FM = reactiveValues()
 
+ #react_FM[["UD"]]   = list()
+ #react_FM[["FG"]]   = list()
+ #react_FM[["DW"]]   = list()
+ #react_FM[["DM"]]   = list()
+ #react_FM[["ASM"]]  = list()
+
   #Uncommenet to populate with test data
   # If the ftmptest file is present we load test data
   if(file.exists(ftmptest)){
@@ -136,11 +142,11 @@ server <- function(input, output, session) {
                 system.file(package="formods", "preload", "DM_preload.yaml"),
                 system.file(package="formods", "preload", "DW_preload.yaml"),
                 system.file(package="formods", "preload", "FG_preload.yaml"))
-    res = FM_app_preload(session=session, sources=sources)
+    res = FM_app_preload(session=session, sources=sources, react_state = react_FM)
   } else if(file.exists("preload.yaml")){
     
     shinybusy::show_modal_spinner(text="Preloading analysis, be patient", session=session)
-    res = FM_app_preload(session=session, sources="preload.yaml")
+    res = FM_app_preload(session=session, sources="preload.yaml", react_state=react_FM)
     shinybusy::remove_modal_spinner(session = session)
   }
 
@@ -157,22 +163,22 @@ server <- function(input, output, session) {
              deployed      = deployed,
              react_state   = react_FM,
              mod_ids       = mod_ids)
-  formods::UD_Server( id="UD", id_ASM = "ASM",
+  formods::UD_Server( id="UD", 
              FM_yaml_file  = formods.yaml,
              MOD_yaml_file = UD.yaml,
              deployed      = deployed,
              react_state   = react_FM)
-  formods::DW_Server( id="DW", id_ASM = "ASM",id_UD = "UD",
+  formods::DW_Server( id="DW",
              FM_yaml_file  = formods.yaml,
              MOD_yaml_file = DW.yaml,
              deployed      = deployed,
              react_state   = react_FM)
-  formods::DM_Server( id="DM", id_ASM = "ASM",
+  formods::DM_Server( id="DM", 
              FM_yaml_file  = formods.yaml,
              MOD_yaml_file = DM.yaml,
              deployed      = deployed,
              react_state   = react_FM)
-  formods::FG_Server( id="FG", id_ASM = "ASM",id_UD = "UD", id_DW = "DW",
+  formods::FG_Server( id="FG", 
              FM_yaml_file  = formods.yaml,
              MOD_yaml_file = FG.yaml,
              deployed      = deployed,

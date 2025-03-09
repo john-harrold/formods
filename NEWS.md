@@ -8,6 +8,7 @@
 * Added a similar return list element to `FM_fetch_mdl()`.
 * Added filed in module section of the module yaml file to include description of the module to be associated with assets that module provides. E.g. if the DW module provides datasets we can assoicate those with the DW module in UI elements like data source selection..
 * Added STDM test datasets for the PC, EX and DM domains.
+* Added `FM_has_ds_changed()` to detect changes in datasets
 
 
 # formods 0.2.0 

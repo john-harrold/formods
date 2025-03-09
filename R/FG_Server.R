@@ -33,7 +33,7 @@ FG_Server <- function(id,
    id_ASM = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_ASM"]]
    id_UD  = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_UD"]]
    id_DW  = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_DW"]]
-
+   id_DM  = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_DM"]]
 
     #------------------------------------
     output$hot_fg_elements = rhandsontable::renderRHandsontable({
@@ -109,10 +109,8 @@ FG_Server <- function(id,
     output$FG_ui_compact  =  renderUI({
 
       # Forcing a reaction to changes in other modules
-   # JMH data views fix
-   #  react_state[[id_UD]]
-   #  react_state[[id_DW]]
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]] 
+
       state = FG_fetch_state(id             = id,
                              input          = input,
                              session        = session,
@@ -260,10 +258,8 @@ FG_Server <- function(id,
     #------------------------------------
     output$ui_fg_preview_ggplot   = renderPlot({
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_DW]]
-      react_state[[id_ASM]]
-      # Forcing reactions:
+      force_mod_update[["triggered"]] 
+
       input[["button_fig_new"]]
       input[["button_fig_save"]]
       input[["button_fig_del"]]
@@ -321,9 +317,8 @@ FG_Server <- function(id,
     if(system.file(package = "plotly") != ""){
      output$ui_fg_preview_plotly   = plotly::renderPlotly({
        # Forcing a reaction to changes in other modules
-       react_state[[id_UD]]
-       react_state[[id_DW]]
-       react_state[[id_ASM]]
+       force_mod_update[["triggered"]] 
+
        # Forcing reactions:
        input[["button_fig_new"]]
        input[["button_fig_save"]]
@@ -404,10 +399,7 @@ FG_Server <- function(id,
     #------------------------------------
     output$ui_fg_fig_name  = renderUI({
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_DW]]
-      react_state[[id_ASM]]
-      #req(input$X)
+      force_mod_update[["triggered"]] 
       input[["button_fig_new"]]
       input[["button_fig_save"]]
       input[["button_fig_del"]]
@@ -581,10 +573,7 @@ FG_Server <- function(id,
     #------------------------------------
     output$ui_fg_fig_notes = renderUI({
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_DW]]
-      react_state[[id_ASM]]
-      #req(input$X)
+      force_mod_update[["triggered"]] 
       input[["button_fig_new"]]
       input[["button_fig_save"]]
       input[["button_fig_del"]]
@@ -613,6 +602,7 @@ FG_Server <- function(id,
     output$ui_fg_select_page = renderUI({
       react_state[[id_UD]]
       react_state[[id_DW]]
+      react_state[[id_DM]]
       react_state[[id_ASM]]
       # Forcing reactions:
       input[["button_fig_new"]]
@@ -991,11 +981,7 @@ FG_Server <- function(id,
     #------------------------------------
     output$ui_fg_curr_figs = renderUI({
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_DW]]
-      react_state[[id_ASM]]
-
-      #req(input$X)
+      force_mod_update[["triggered"]] 
       input[["button_fig_new"]]
       input[["button_fig_save"]]
       input[["button_fig_del"]]
@@ -1078,10 +1064,8 @@ FG_Server <- function(id,
       input$button_fig_del
       input$select_current_fig
 
-      react_state[[id_UD]]
-      react_state[[id_DW]]
-      react_state[[id_ASM]]
       # Forcing a reaction to changes in other modules
+      force_mod_update[["triggered"]] 
       state = FG_fetch_state(id             = id,
                              input          = input,
                              session        = session,
@@ -1151,9 +1135,7 @@ FG_Server <- function(id,
     #------------------------------------
     observe({
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_DW]]
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]] 
       input[["button_fig_new"]]
       input[["button_fig_save"]]
       input[["button_fig_del"]]
@@ -1194,8 +1176,28 @@ FG_Server <- function(id,
 
       })
     #------------------------------------
-    # Creating reaction if a variable has been specified
+    # This will be used to trigger a response when the dependent modules have
+    # changed
+    force_mod_update = reactiveValues()
+
     if(!is.null(react_state)){
+      observe({
+        react_state[[id_UD]]
+        react_state[[id_DW]]
+        react_state[[id_DM]]
+        react_state[[id_ASM]]
+
+        state = FG_fetch_state(id             = id,
+                               input          = input,
+                               session        = session,
+                               FM_yaml_file   = FM_yaml_file,
+                               MOD_yaml_file  = MOD_yaml_file,
+                               react_state    = react_state)
+
+        FM_le(state, "upstream modules forcing update")
+        force_mod_update[["triggered"]] = format(Sys.time(), "%Y-%m-%d %H:%M:%OS3")
+      }, priority = 100)
+
       # Here we list the ui inputs that will result in a state change:
       toListen <- reactive({
         list(input$button_element_add,
@@ -1203,9 +1205,7 @@ FG_Server <- function(id,
              input$button_fig_save,
              input$button_fig_copy,
              input$button_fig_del,
-             react_state[[id_UD]],
-             react_state[[id_DW]],
-             react_state[[id_ASM]]
+             force_mod_update[["triggered"]]
             )
       })
       # This updates the reaction state:
@@ -1219,11 +1219,11 @@ FG_Server <- function(id,
                                react_state    = react_state)
 
         FM_le(state, "reaction state updated")
-        #react_state[[id]] = state
         react_state[[id]][["FG"]][["checksum"]] = state[["FG"]][["checksum"]]
-      })
+      }, priority = -101)
     }
 
+    #------------------------------------
     # Removing holds
     remove_hold_listen  <- reactive({
       list(react_state[[id_ASM]],
@@ -1245,7 +1245,6 @@ FG_Server <- function(id,
         remove_hold(state, session, hname)
       }
     }, priority = -100)
-
 
   })
 }
@@ -1353,48 +1352,15 @@ FG_fetch_state = function(id,
   id_ASM = state[["MC"]][["module"]][["depends"]][["id_ASM"]]
   id_UD  = state[["MC"]][["module"]][["depends"]][["id_UD"]]
   id_DW  = state[["MC"]][["module"]][["depends"]][["id_DW"]]
+  id_DM  = state[["MC"]][["module"]][["depends"]][["id_DM"]]
+
 
   # detecting changes in the datasets
-  UPDATE_DS = FALSE
-  # Changes in uploaded dataset
-  if("checksum" %in% names(isolate(react_state[[id_UD]][["UD"]]))){
-    if(!is.null(isolate(react_state[[id_UD]][["UD"]][["checksum"]]))){
-      if(is.null(state[["FG"]][["DSV"]][["modules"]][["UD"]][[id_UD]])){
-        # If the UD checksum isn't NULL but the stored value in DSV is then we
-        # need to update the dataset
-        UPDATE_DS = TRUE
-      } else if(isolate(react_state[[id_UD]][["UD"]][["checksum"]]) !=
-                state[["FG"]][["DSV"]][["modules"]][["UD"]][[id_UD]]){
-        # If the stored checksum in DSV is different than the currently
-        # uploaded dataset in UD then we force a reset as well:
-        UPDATE_DS = TRUE
-      }
-    }
-  }
-
-  # Changes in data views from data wrangling module
-  if("checksum" %in% names(isolate(react_state[[id_DW]][["DW"]]))){
-    if(!is.null(isolate(react_state[[id_DW]][["DW"]][["checksum"]]))){
-      if(isolate(react_state[[id_DW]][["DW"]][["hasds"]])){
-        if(is.null(state[["FG"]][["DSV"]][["modules"]][["DW"]][[id_DW]])){
-          # If the DW checksum isn't NULL but the stored value in DSV is then we
-          # need to update the dataset
-          UPDATE_DS = TRUE
-        } else if(isolate(react_state[[id_DW]][["DW"]][["checksum"]]) !=
-                  state[["FG"]][["DSV"]][["modules"]][["DW"]][[id_DW]]){
-          # If the stored checksum in DSV is different than the currently
-          # uploaded dataset in DW then we force a reset as well:
-          UPDATE_DS = TRUE
-        }
-      } else {
-        # If there is no dataset but there was one once before we also
-        # trigger a dataset update:
-        if(!is.null(state[["FG"]][["DSV"]][["modules"]][["DW"]][[id_DW]])){
-          UPDATE_DS = TRUE
-        }
-      }
-    }
-  }
+  UPDATE_DS = 
+  FM_has_ds_changed(state = state, 
+    ids         = c(id_UD, id_DW, id_DM),
+    fdres       =  state[["FG"]][["DSV"]] ,
+    react_state = react_state)
 
  #message(" IN FG_fetch_state()")
  #message(paste0("UPDATE_DS: ", UPDATE_DS))
@@ -1409,7 +1375,7 @@ FG_fetch_state = function(id,
     # generation state will be good. Then we just need to attach the updated
     # dataset views:
     if(state[["FG"]][["isgood"]]){
-      state[["FG"]][["DSV"]] = FM_fetch_ds(state, session, c(id_UD, id_DW))
+      state[["FG"]][["DSV"]] = FM_fetch_ds(state, session, c(id_UD, id_DW, id_DM))
     } else {
       # If there is no dataset loaded the figure generation state will be bad
       # (isgood is FALSE). Then we need to reinitialize the module:
@@ -1730,6 +1696,7 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
   id_ASM = MOD_CONFIG[["MC"]][["module"]][["depends"]][["id_ASM"]]
   id_UD  = MOD_CONFIG[["MC"]][["module"]][["depends"]][["id_UD"]]
   id_DW  = MOD_CONFIG[["MC"]][["module"]][["depends"]][["id_DW"]]
+  id_DM  = MOD_CONFIG[["MC"]][["module"]][["depends"]][["id_DM"]]
 
   #MOD_CONFIG = yaml::read_yaml(MOD_yaml_file)
   state[["MC"]] = MOD_CONFIG[["MC"]]
@@ -1850,8 +1817,8 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
 
 
   #---------------------------------------------
-  # Finding the dataset
-  DSV = FM_fetch_ds(state, session, c(id_UD, id_DW))
+  # Fetching datasets
+  DSV = FM_fetch_ds(state, session, c(id_UD, id_DW, id_DM))
 
   # If the dataset isn't good then we need to
   # flag the whole module as not being good
@@ -2906,11 +2873,13 @@ FG_test_mksession = function(session=list(), full=FALSE){
   if(full){
     sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
                 system.file(package="formods", "preload", "UD_preload.yaml"),
+                system.file(package="formods", "preload", "DM_preload.yaml"),
                 system.file(package="formods", "preload", "DW_preload.yaml"),
                 system.file(package="formods", "preload", "FG_preload.yaml"))
   } else {
     sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
                 system.file(package="formods", "preload", "UD_preload.yaml"),
+                system.file(package="formods", "preload", "DM_preload.yaml"),
                 system.file(package="formods", "preload", "DW_preload.yaml"),
                 system.file(package="formods", "preload", "FG_preload_minimal.yaml"))
   }
@@ -3018,8 +2987,6 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
     # Available data sources
     DSV = state[["FG"]][["DSV"]]
 
-
-
     # Now we have empty elements defined
     for(element_id in names(element_map)){
       # Making the current element element id active
@@ -3045,25 +3012,26 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
         state = FG_set_current_fig(state, current_ele)
       }
 
+
       # Attaching data source
-      if(!is.null(elements[[ele_idx]][["element"]][["data_source"]][["id"]]) &
-         !is.null(elements[[ele_idx]][["element"]][["data_source"]][["idx"]])){
-        tmp_DSV = DSV[["catalog"]][c(DSV[["catalog"]][["id"]]  == elements[[ele_idx]][["element"]][["data_source"]][["id"]] &
-                                     DSV[["catalog"]][["idx"]] == elements[[ele_idx]][["element"]][["data_source"]][["idx"]]), ]
-        if(nrow(tmp_DSV) == 1){
-          FM_le(state, paste0("setting data source: ", tmp_DSV[["object"]][1]) )
-          current_ele = FG_fetch_current_fig(state)
-          current_ele[["fig_dsview"]] = tmp_DSV[["object"]][1]
-          state = FG_set_current_fig(state, current_ele)
-        } else {
-          FM_le(state, paste0("error locating data source, expecting 1 source found ", nrow(tmp_DSV)), entry_type="danger")
-        }
+      fr_res = 
+        fetch_resource(
+          catalog   = DSV[["catalog"]], 
+          id        = elements[[ele_idx]][["element"]][["data_source"]][["id"]],
+          idx       = elements[[ele_idx]][["element"]][["data_source"]][["idx"]],
+          res_label = elements[[ele_idx]][["element"]][["data_source"]][["res_label"]])
+
+      if(fr_res[["isgood"]]){
+        FM_le(state, paste0(" -> setting data source: ", fr_res[["res_obj"]]) )
+        current_ele = FG_fetch_current_fig(state)
+        current_ele[["fig_dsview"]] =  fr_res[["res_obj"]]
+        state = FG_set_current_fig(state, current_ele)
       } else {
         fig_isgood = FALSE
+        msgs = c(msgs, fr_res[["msgs"]])
       }
 
-      if(fig_isgood){
-      } else {
+      if(!fig_isgood){
         isgood = FALSE
         tmp_msgs = c(paste0("fig id: ", element_id, " unable to find data source."))
         FM_le(state, tmp_msgs, entry_type="danger")
@@ -3082,12 +3050,10 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
                               grep(x=names(state[["FG"]][["ui"]]), pattern="^select_component|^text_component")
                             ])
 
-
         for(comp_idx in 1:length(elements[[ele_idx]][["element"]][["components"]])){
           tmp_component = elements[[ele_idx]][["element"]][["components"]][[comp_idx]][["component"]]
           add_component = TRUE
           comp_err_msg = c()
-
 
           if(!is.null(tmp_component [["type"]])){
 
@@ -3100,7 +3066,6 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
 
               # defining the component type:
               state[["FG"]][["ui"]][["select_fg_element"]] = tmp_component[["type"]]
-
 
               if(tmp_component[["type"]] %in% aes_elements){
                 # Processing components defined by aesthetics. These
@@ -3303,8 +3268,9 @@ FG_mk_preload     = function(state){
       dsv_row =
       DSV[["catalog"]][
         DSV[["catalog"]][["object"]] == tmp_source_ele[["fig_dsview"]], ]
-      ds_id  = dsv_row[["id"]]
-      ds_idx = dsv_row[["idx"]]
+      ds_id        = dsv_row[["id"]]
+      ds_idx       = dsv_row[["idx"]]
+      ds_res_label = dsv_row[["res_label"]]
 
       # Creates the empty element:
       tmp_element = list(
@@ -3312,8 +3278,9 @@ FG_mk_preload     = function(state){
         name  = tmp_source_ele[["key"]],
         notes = tmp_source_ele[["notes"]],
         data_source = list(
-          id  = ds_id,
-          idx = ds_idx),
+          id        = ds_id,
+          idx       = ds_idx,
+          res_label = ds_res_label),
         components = list())
 
       FM_le(state, paste0("saving element (", tmp_source_ele[["idx"]], ") ", tmp_source_ele[["key"]]))

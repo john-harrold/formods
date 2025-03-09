@@ -41,6 +41,7 @@ DW_Server <- function(id,
   MOD_yaml_cont = FM_read_yaml(MOD_yaml_file)
   id_ASM = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_ASM"]]
   id_UD  = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_UD"]]
+  id_DM  = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_DM"]]
 
 
     #------------------------------------
@@ -58,8 +59,7 @@ DW_Server <- function(id,
       # Changes in view selected
       input$select_dw_views
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]]
 
       state = DW_fetch_state(id              = id,
                              input           = input,
@@ -129,11 +129,93 @@ DW_Server <- function(id,
 
     })
     #------------------------------------
+    # DSV dataset views
+    # This creates the selection UI
+    output$ui_dw_sources = renderUI({
+      state = DW_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             react_state    = react_state)
+
+      choicesOpt = NULL
+      uiele =
+        shinyWidgets::pickerInput(
+          selected   = "PH",
+          inputId    = NS(id, "select_current_source"),
+          label      = state[["MC"]][["labels"]][["select_current_source"]],
+          choices    = c("PH"),
+          width      = state[["MC"]][["formatting"]][["select_current_source"]][["width"]],
+          choicesOpt = choicesOpt)
+
+      uiele})
+    #------------------------------------
+    # This forces the dataset view selection to update
+    observe({
+      input$button_element_add
+      input$button_fig_new
+      input$button_fig_save
+      input$button_fig_copy
+      input$button_fig_del
+      input$select_dw_views
+
+      # Forcing a reaction to changes in other modules
+      force_mod_update[["triggered"]]
+
+      state = DW_fetch_state(id             = id,
+                             input          = input,
+                             session        = session,
+                             FM_yaml_file   = FM_yaml_file,
+                             MOD_yaml_file  = MOD_yaml_file,
+                             react_state    = react_state)
+
+      current_view = DW_fetch_current_view(state)
+
+      # If this is triggered before datasets have been loaded the state will
+      # be bad:
+      # JMH check the dsviews stuff
+      if(state[["DW"]][["isgood"]]){
+
+        # Pulling out the data set views catalog
+        ds_catalog = state[["DW"]][["DSV"]][["catalog"]]
+        state[["DW"]][["DSV"]][["catalog"]][["object"]][1]
+
+        # Pulling out the select choices list:
+        all_choices = state[["DW"]][["DSV"]][["choices"]]
+
+        csi_found = FALSE
+        if(!is.null(current_view[["ds_source_id"]])){
+         if(current_view[["ds_source_id"]] %in% ds_catalog[["object"]]){
+            current_source_id = current_view[["ds_source_id"]]
+            csi_found = TRUE
+          }
+        }
+
+        if(!csi_found){
+          current_source_id = ds_catalog[["object"]][1]
+          FM_le(state, paste0("ui_fg_curr_views: dataset view missing."   ))
+          FM_le(state, paste0("ds_view_key: ", current_view[["key"]]       ))
+          FM_le(state, paste0("switching to view:", current_source_id ))
+        }
+
+        # Using choices grouped by module
+        choices = all_choices[["grouped"]]
+
+        choicesOpt = NULL
+        shinyWidgets::updatePickerInput(
+          session    = session,
+          selected   = current_source_id,
+          inputId    = "select_current_source",
+          choices    = choices,
+          choicesOpt = choicesOpt)
+      }
+    })
+    #------------------------------------
     # Generated data wrangling code
     observe({
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]]
       # Force update on button click
       input$button_dw_add_element
       input$button_dw_new
@@ -223,8 +305,7 @@ DW_Server <- function(id,
       input$button_dw_copy
       input$button_dw_save
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]]
 
       state = DW_fetch_state(id              = id,
                              input           = input,
@@ -272,8 +353,7 @@ DW_Server <- function(id,
       input$button_dw_save
       input$select_dw_views
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]]
 
       state = DW_fetch_state(id              = id,
                              input           = input,
@@ -720,8 +800,7 @@ DW_Server <- function(id,
     # filter
     output$ui_dw_fds_filter_column_select = renderUI({
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]]
       state = DW_fetch_state(id              = id,
                              input           = input,
                              session         = session,
@@ -936,8 +1015,7 @@ DW_Server <- function(id,
       # req(input$fds_filter_rhs)
       input$select_dw_element
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]]
       state = DW_fetch_state(id              = id,
                              input           = input,
                              session         = session,
@@ -1100,13 +1178,13 @@ DW_Server <- function(id,
     # table preview of the data
     output$hot_data_preview =  rhandsontable::renderRHandsontable({
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]]
       # Triggering rebuilding of the table
       input$button_dw_add_element
       input$button_dw_new
       input$button_dw_del
       input$button_dw_copy
+      input$button_dw_save
       # Force update on deletion clicks
       input$hot_dw_elements
       # Force update when the view is changed
@@ -1117,11 +1195,6 @@ DW_Server <- function(id,
                              FM_yaml_file    = FM_yaml_file,
                              MOD_yaml_file   = MOD_yaml_file,
                              react_state     = react_state)
-
-   #   if(system.file(package = "shinybusy") !=""){
-   #    shinybusy::show_modal_spinner(text=state[["MC"]][["labels"]][["busy"]][["dv_update"]])
-   #   }
-
 
       df = NULL
 
@@ -1145,18 +1218,12 @@ DW_Server <- function(id,
        rowHeaders = NULL
        )
 
-
-    #if(system.file(package = "shinybusy") !=""){
-    #  shinybusy::remove_modal_spinner()
-    #}
-
     uiele})
     #------------------------------------
     # Creates the ui for the compact view of the module
     output$DW_ui_compact  =  renderUI({
       # Forcing a reaction to changes in other modules
-      react_state[[id_UD]]
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]]
       state = DW_fetch_state(id              = id,
                              input           = input,
                              session         = session,
@@ -1211,6 +1278,7 @@ DW_Server <- function(id,
         uiele = tagList(
           div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_views"))),
           div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_key"))),
+          div(style="display:inline-block", htmlOutput(NS(id, "ui_dw_sources"))),
           tags$br(),
           verbatimTextOutput(NS(id, "ui_dw_new_element_msg"))
         )
@@ -1297,9 +1365,26 @@ DW_Server <- function(id,
       FM_notify(state = state,
        session     = session)
     })
-    #------------------------------------
-    # Creating reaction if a variable has been specified
+    # This will be used to trigger a response when the dependent modules have
+    # changed
+    force_mod_update = reactiveValues()
     if(!is.null(react_state)){
+      observe({
+        react_state[[id_UD]]
+        react_state[[id_DM]]
+        react_state[[id_ASM]]
+
+        state = DW_fetch_state(id             = id,
+                               input          = input,
+                               session        = session,
+                               FM_yaml_file   = FM_yaml_file,
+                               MOD_yaml_file  = MOD_yaml_file,
+                               react_state    = react_state)
+
+        FM_le(state, "upstream modules forcing update")
+        force_mod_update[["triggered"]] = format(Sys.time(), "%Y-%m-%d %H:%M:%OS3")
+      }, priority = 100)
+
       # Here we list the ui inputs that will result in a state change:
       toListen <- reactive({
         list(input$button_dw_add_element,
@@ -1310,7 +1395,7 @@ DW_Server <- function(id,
              input$button_dw_save,
              input$hot_fg_elements,
              input$hot_dw_elements,
-             react_state[[id_ASM]])
+             force_mod_update[["triggered"]])
       })
       # This updates the reaction state:
       observeEvent(toListen(), {
@@ -1328,13 +1413,13 @@ DW_Server <- function(id,
 
         # Module checksum
         react_state[[id]][["DW"]][["checksum"]] = state[["DW"]][["checksum"]]
-      }, priority=99)
+      }, priority=-101)
     }
 
     # Removing holds
     remove_hold_listen  <- reactive({
       list(
-           react_state[[id_ASM]],
+           force_mod_update[["triggered"]],
            input$select_dw_views)
     })
     observeEvent(remove_hold_listen(), {
@@ -1434,7 +1519,7 @@ DW_Server <- function(id,
 #'                        react_state     = NULL)
 #'
 DW_fetch_state = function(id,                    input,     session,
-                          FM_yaml_file,  MOD_yaml_file,     
+                          FM_yaml_file,  MOD_yaml_file,
                           react_state){
 
   #---------------------------------------------
@@ -1448,6 +1533,28 @@ DW_fetch_state = function(id,                    input,     session,
   }
 
   id_UD  = state[["MC"]][["module"]][["depends"]][["id_UD"]]
+  id_DM  = state[["MC"]][["module"]][["depends"]][["id_DM"]]
+
+  # detecting changes in the datasets
+  UPDATE_DS =
+    FM_has_ds_changed(state = state,
+      ids         = c(id_UD, id_DM),
+      fdres       =  state[["DW"]][["DSV"]] ,
+      react_state = react_state)
+
+  if(UPDATE_DS){
+    FM_le(state, "Updating DS")
+    if(state[["DW"]][["isgood"]]){
+      state[["DW"]][["DSV"]] = FM_fetch_ds(state, session, c(id_UD, id_DM))
+    } else {
+      # If there is no dataset loaded the figure generation state will be bad
+      # (isgood is FALSE). Then we need to reinitialize the module:
+      state = DW_init_state(FM_yaml_file    = FM_yaml_file,
+                            MOD_yaml_file   = MOD_yaml_file,
+                            id              = id,
+                            session         = session)
+    }
+  }
   #---------------------------------------------
   # detecting changes in the datasets
   if("checksum" %in% names(isolate(react_state[[id_UD]][["UD"]]))){
@@ -1601,6 +1708,7 @@ DW_fetch_state = function(id,                    input,     session,
 
     # Changing the current view to the one selected in the UI
     state[["DW"]][["current_view"]] =  state[["DW"]][["ui"]][["select_dw_views"]]
+    state = set_hold(state, inputId = "select_dw_views")
     FM_le(state, "updated: select_dw_views")
   }
   # Detecting add_element clicks
@@ -1772,8 +1880,20 @@ DW_fetch_state = function(id,                    input,     session,
       # Resetting the key
       current_view = DW_fetch_current_view(state)
       current_view[["key"]] = state[["DW"]][["ui"]][["current_key"]]
-      state = DW_set_current_view(state, current_view)
 
+      if(has_changed(ui_val   = state[["DW"]][["ui"]][["select_current_source"]],
+                     old_val  = current_view[["ds_source_id"]])){
+        FM_le(state, "changing data source:")
+        FM_le(state, paste0(" - old source: ", current_view[["ds_source_id"]]))
+        FM_le(state, paste0(" - new source: ", state[["DW"]][["ui"]][["select_current_source"]]))
+
+        current_source_id = state[["DW"]][["ui"]][["select_current_source"]]
+        current_view[["ds_source_id"]] = current_source_id
+        current_view[["WDS"]]          = state[["DW"]][["DSV"]][["ds"]][[current_source_id]][["DS"]]
+
+      }
+      state = set_hold(state)
+      state = DW_set_current_view(state, current_view)
     } else {
       # returning an error
       msgs = c(msgs,
@@ -1837,6 +1957,7 @@ DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
   MOD_yaml_cont = FM_read_yaml(MOD_yaml_file)
   id_ASM = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_ASM"]]
   id_UD  = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_UD"]]
+  id_DM  = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_DM"]]
 
   # initializing the state with the required formods elements:
   button_counters = c(
@@ -1868,11 +1989,13 @@ DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
     "select_fds_longer_names"    ,
     "select_fds_wider_values"    ,
     "select_fds_wider_names"     ,
+    "select_current_source"      ,
     "select_dw_views"            ,
     "select_dw_element"
     )
 
   ui_hold         = c(
+    "select_current_source"      ,
     "hot_dw_elements",
     "current_key"    ,
     "select_dw_views"
@@ -1888,6 +2011,10 @@ DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
     ui_ids          = ui_ids,
     ui_hold         = ui_hold,
     session         = session)
+
+  #---------------------------------------------
+  # Fetching datasets
+  DSV = FM_fetch_ds(state, session, c(id_UD, id_DM))
 
   # Adding other module-specific fields
   # Creating operator table
@@ -1909,6 +2036,7 @@ DW_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
   state[["DW"]][["views"]]                = NULL
   state[["DW"]][["current_view"]]         = NULL
   state[["DW"]][["view_cntr"]]            = 0
+  state[["DW"]][["DSV"]]                  = DSV
 
   # By default the state is bad
   state[["DW"]][["UD"]][["isgood"]] = FALSE
@@ -2267,6 +2395,13 @@ DW_new_view = function(state){
   # Creating the object name for this view
   view_ds_object_name = paste0(state[["MC"]][["ds_object_name"]],
                           "_", state[["DW"]][["view_cntr"]])
+
+  if(is.null(state[["DW"]][["DSV"]][["catalog"]][["object"]][1])){
+    current_source_id = NULL
+  } else {
+    current_source_id = state[["DW"]][["DSV"]][["catalog"]][["object"]][1]
+  }
+
   # Default for a new view:
   view_def =
     list(
@@ -2278,7 +2413,8 @@ DW_new_view = function(state){
          code_previous       = NULL,
          # user facing
          key                 = paste0("data_", view_id),
-         WDS                 = state[["DW"]][["UD"]][["contents"]],
+         WDS                 = state[["DW"]][["DSV"]][["ds"]][[current_source_id]][["DS"]],
+         ds_source_id        = current_source_id,
          elements_table      = NULL,
          elements_list       = list(),
          dwe_cntr            = 1,
@@ -2584,11 +2720,12 @@ DW_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
                state[["DW"]][["views"]][[view_id]][["WDS"]])
 
         # This appends the data frame to the report list
-        code_chunk = paste0(paste0("# ", state[["DW"]][["views"]][[view_id]][["key"]] ),
+        code_chunk = c(paste0("# ", state[["DW"]][["views"]][[view_id]][["key"]] ),
+                       paste0(
                             'rpt[["sheets"]][["',
                             state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]],
                             '"]]=',
-                            state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]] )
+                            state[["DW"]][["views"]][[view_id]][["view_ds_object_name"]] ))
         # Evaluating the code
         if(!gen_code_only){
           eval(parse(text=code_chunk))}
@@ -2625,6 +2762,7 @@ res}
 #'@title Fetch Module Datasets
 #'@description Fetches the datasets contained in the module.
 #'@param state UD state from \code{UD_fetch_state()}
+#'@param meta_only Include only metadata and not the dataset (default \code{FALSE})
 #'@return Character object vector with the lines of code
 #'@return list containing the following elements
 #'\itemize{
@@ -2638,7 +2776,7 @@ res}
 #'    \item{MOD_TYPE: Short name for the type of module.}
 #'    \item{id: module ID}
 #'    \item{idx: unique numerical ID to identify this dataset in the module.}
-#'    \item{ds_label: optional label that can be defined by a user and used in
+#'    \item{res_label: optional label that can be defined by a user and used in
 #'    workflows. Must be unique to the module.}
 #'    \item{DS: Dataframe containing the actual dataset.}
 #'    \item{DSMETA: Metadata describing DS, see \code{FM_fetch_ds()} for
@@ -2654,7 +2792,7 @@ res}
 #' state = sess_res$state
 #'
 #' ds = DW_fetch_ds(state)
-DW_fetch_ds = function(state){
+DW_fetch_ds = function(state, meta_only=FALSE){
 
   hasds  = FALSE
   isgood = TRUE
@@ -2666,7 +2804,7 @@ DW_fetch_ds = function(state){
                MOD_TYPE   = NULL,
                id         = NULL,
                idx        = NULL,
-               ds_label   = "",
+               res_label  = "",
                DS         = NULL,
                DSMETA     = NULL,
                code       = NULL,
@@ -2682,7 +2820,7 @@ DW_fetch_ds = function(state){
     tmp_code          = state[["DW"]][["views"]][[dw_view]][["code"]]
     tmp_key           = state[["DW"]][["views"]][[dw_view]][["key"]]
     tmp_code_previous = state[["DW"]][["views"]][[dw_view]][["code_previous"]]
-    tmp_contents      = state[["DW"]][["views"]][[dw_view]][["WDS"]]
+
     tmp_et            = state[["DW"]][["views"]][[dw_view]][["elements_table"]]
     tmp_idx           = state[["DW"]][["views"]][[dw_view]][["idx"]]
 
@@ -2699,13 +2837,18 @@ DW_fetch_ds = function(state){
     if(!is.null(tmp_checksum)    &
        !is.null(tmp_object_name) &
        !is.null(tmp_et)          &
-       !is.null(tmp_contents)){
+       !is.null( state[["DW"]][["views"]][[dw_view]][["WDS"]])){
 
       TMPDS = NEWDS
 
+      if(meta_only){
+        TMPDS[["DS"]]         = NULL
+      } else {
+        TMPDS[["DS"]]         = state[["DW"]][["views"]][[dw_view]][["WDS"]]
+      }
+
       TMPDS[["label"]]      = tmp_key
       TMPDS[["idx"]]        = tmp_idx
-      TMPDS[["DS"]]         = tmp_contents
       TMPDS[["checksum"]]   = DW_checksum
       TMPDS[["DSchecksum"]] = tmp_checksum
       TMPDS[["code"]]       = modcode
@@ -2717,7 +2860,6 @@ DW_fetch_ds = function(state){
       ds[[object_name]] = TMPDS
     }
   }
-
 
   res = list(hasds  = hasds,
              isgood = isgood,
@@ -2739,6 +2881,7 @@ DW_test_mksession = function(session=list()){
 
   sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
               system.file(package="formods", "preload", "UD_preload.yaml"),
+              system.file(package="formods", "preload", "DM_preload.yaml"),
               system.file(package="formods", "preload", "DW_preload.yaml"))
   res = FM_app_preload(session=session, sources=sources)
   res = res[["all_sess_res"]][["DW"]]
@@ -2841,6 +2984,9 @@ DW_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
         }
       }
 
+      # Pulling out all the available datasets
+      DSV = state[["DW"]][["DSV"]]
+
       # Now we have empty data views for the needed elements
       for(view_id in names(element_map)){
         state[["DW"]][["current_view"]] = view_id
@@ -2851,76 +2997,99 @@ DW_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
 
         # first we set the name
         FM_le(state, paste0("loading data view idx: ", ele_idx))
-        if(!is.null(elements[[ele_idx]][["element"]][["name"]])){
-          FM_le(state, paste0("setting name: ", elements[[ele_idx]][["element"]][["name"]]))
+
+        # Attaching dataset to the current view
+        fr_res = 
+          fetch_resource(
+            catalog   = DSV[["catalog"]], 
+            id        = elements[[ele_idx]][["element"]][["data_source"]][["id"]],
+            idx       = elements[[ele_idx]][["element"]][["data_source"]][["idx"]],
+            res_label = elements[[ele_idx]][["element"]][["data_source"]][["res_label"]])
+        
+
+        #----------
+        if(fr_res[["isgood"]]){
+          FM_le(state, paste0("  -> setting data source: ", fr_res[["res_obj"]]) )
           current_view = DW_fetch_current_view(state)
-          current_view[["key"]] = elements[[ele_idx]][["element"]][["name"]]
+          current_view[["ds_source_id"]] = fr_res[["res_obj"]] 
+          current_view[["DSW"]]          = DSV[["ds"]][[ fr_res[["res_obj"]] ]][["DS"]]
           state = DW_set_current_view(state, current_view)
-        }
 
-        # Now we walk through any components
-        if(length(elements[[ele_idx]][["element"]][["components"]]) > 0){
-          for(comp_idx in 1:length(elements[[ele_idx]][["element"]][["components"]])){
-
-            tmp_component = elements[[ele_idx]][["element"]][["components"]][[comp_idx]][["component"]]
-
-            add_component = TRUE
-            # Here we construct the input based on the type of action selected
-            state[["DW"]][["ui"]][["select_dw_element"]] = tmp_component[["action"]]
-
-            FM_le(state, paste0("  -> ", tmp_component[["action"]]))
-
-            if(tmp_component[["action"]] == "filter"){
-              state[["DW"]][["ui"]][["select_fds_filter_column"]]   = tmp_component[["column"]]
-              state[["DW"]][["ui"]][["select_fds_filter_operator"]] = tmp_component[["operator"]]
-              state[["DW"]][["ui"]][["fds_filter_rhs"]]             = tmp_component[["rhs"]]
-            }else if(tmp_component[["action"]] == "mutate"){
-              state[["DW"]][["ui"]][["select_fds_mutate_column"]]   = tmp_component[["column"]]
-              state[["DW"]][["ui"]][["select_fds_mutate_rhs"]]      = tmp_component[["rhs"]]
-            }else if(tmp_component[["action"]] == "rename"){
-              state[["DW"]][["ui"]][["select_fds_rename_column"]]   = tmp_component[["column"]]
-              state[["DW"]][["ui"]][["fds_rename_rhs"]]             = tmp_component[["rhs"]]
-            }else if(tmp_component[["action"]] == "group"){
-              state[["DW"]][["ui"]][["select_fds_group_column"]]    = tmp_component[["column"]]
-            }else if(tmp_component[["action"]] == "longer"){
-              state[["DW"]][["ui"]][["select_fds_longer_column"]]    = tmp_component[["column"]]
-              state[["DW"]][["ui"]][["select_fds_longer_names"]]     = tmp_component[["names"]]
-              state[["DW"]][["ui"]][["select_fds_longer_values"]]    = tmp_component[["values"]]
-            }else if(tmp_component[["action"]] == "wider"){
-              state[["DW"]][["ui"]][["select_fds_wider_names"]]      = tmp_component[["names"]]
-              state[["DW"]][["ui"]][["select_fds_wider_values"]]     = tmp_component[["values"]]
-            }else if(tmp_component[["action"]] == "select"){
-              state[["DW"]][["ui"]][["select_fds_select_column"]]    = tmp_component[["column"]]
-            }else if(tmp_component[["action"]] == "ungroup"){
-            }else if(tmp_component[["action"]] == "onerow"){
-            }else{
-              isgood        = FALSE
-              add_component = FALSE
-              msgs = c(msgs,
-                       paste0("view_id:        ",view_id),
-                       paste0("Unknown action: ",tmp_component[["action"]])
-                       )
-            }
-
-
-            if(add_component){
-              dwb_res  = dwrs_builder(state)
-              dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
-              state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
-              # Capturing any failures:
-              if(!dwb_res[["isgood"]]){
-                isgood = FALSE
-                msgs = c(msgs, paste0(view_id, ": dwrs_builder() failed"))
-                msgs = c(msgs, dwb_res[["msgs"]])
+          if(!is.null(elements[[ele_idx]][["element"]][["name"]])){
+            FM_le(state, paste0("setting name: ", elements[[ele_idx]][["element"]][["name"]]))
+            current_view = DW_fetch_current_view(state)
+            current_view[["key"]] = elements[[ele_idx]][["element"]][["name"]]
+            state = DW_set_current_view(state, current_view)
+          }
+          
+          # Now we walk through any components
+          if(length(elements[[ele_idx]][["element"]][["components"]]) > 0){
+            for(comp_idx in 1:length(elements[[ele_idx]][["element"]][["components"]])){
+          
+              tmp_component = elements[[ele_idx]][["element"]][["components"]][[comp_idx]][["component"]]
+          
+              add_component = TRUE
+              # Here we construct the input based on the type of action selected
+              state[["DW"]][["ui"]][["select_dw_element"]] = tmp_component[["action"]]
+          
+              FM_le(state, paste0("  -> ", tmp_component[["action"]]))
+          
+              if(tmp_component[["action"]] == "filter"){
+                state[["DW"]][["ui"]][["select_fds_filter_column"]]   = tmp_component[["column"]]
+                state[["DW"]][["ui"]][["select_fds_filter_operator"]] = tmp_component[["operator"]]
+                state[["DW"]][["ui"]][["fds_filter_rhs"]]             = tmp_component[["rhs"]]
+              }else if(tmp_component[["action"]] == "mutate"){
+                state[["DW"]][["ui"]][["select_fds_mutate_column"]]   = tmp_component[["column"]]
+                state[["DW"]][["ui"]][["select_fds_mutate_rhs"]]      = tmp_component[["rhs"]]
+              }else if(tmp_component[["action"]] == "rename"){
+                state[["DW"]][["ui"]][["select_fds_rename_column"]]   = tmp_component[["column"]]
+                state[["DW"]][["ui"]][["fds_rename_rhs"]]             = tmp_component[["rhs"]]
+              }else if(tmp_component[["action"]] == "group"){
+                state[["DW"]][["ui"]][["select_fds_group_column"]]    = tmp_component[["column"]]
+              }else if(tmp_component[["action"]] == "longer"){
+                state[["DW"]][["ui"]][["select_fds_longer_column"]]    = tmp_component[["column"]]
+                state[["DW"]][["ui"]][["select_fds_longer_names"]]     = tmp_component[["names"]]
+                state[["DW"]][["ui"]][["select_fds_longer_values"]]    = tmp_component[["values"]]
+              }else if(tmp_component[["action"]] == "wider"){
+                state[["DW"]][["ui"]][["select_fds_wider_names"]]      = tmp_component[["names"]]
+                state[["DW"]][["ui"]][["select_fds_wider_values"]]     = tmp_component[["values"]]
+              }else if(tmp_component[["action"]] == "select"){
+                state[["DW"]][["ui"]][["select_fds_select_column"]]    = tmp_component[["column"]]
+              }else if(tmp_component[["action"]] == "ungroup"){
+              }else if(tmp_component[["action"]] == "onerow"){
+              }else{
+                isgood        = FALSE
+                add_component = FALSE
+                msgs = c(msgs,
+                         paste0("view_id:        ",view_id),
+                         paste0("Unknown action: ",tmp_component[["action"]])
+                         )
               }
-              if(!dwee_res[["isgood"]]){
-                isgood = FALSE
-                msgs = c(msgs, paste0(view_id, ": dw_eval_element() failed"))
-                msgs = c(msgs, dwee_res[["msgs"]])
+          
+          
+              if(add_component){
+                dwb_res  = dwrs_builder(state)
+                dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
+                state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+                # Capturing any failures:
+                if(!dwb_res[["isgood"]]){
+                  isgood = FALSE
+                  msgs = c(msgs, paste0(view_id, ": dwrs_builder() failed"))
+                  msgs = c(msgs, dwb_res[["msgs"]])
+                }
+                if(!dwee_res[["isgood"]]){
+                  isgood = FALSE
+                  msgs = c(msgs, paste0(view_id, ": dw_eval_element() failed"))
+                  msgs = c(msgs, dwee_res[["msgs"]])
+                }
               }
             }
           }
+        } else {
+          isgood = FALSE
+          msgs = c(msgs, fr_res[["msgs"]])
         }
+        #----------
       }
       # Setting holds
       # Defaulting to the last view
@@ -2979,14 +3148,26 @@ DW_mk_preload     = function(state){
   )
 
   ele_idx = 1
+  DSV = state[["DW"]][["DSV"]]
+
   # Walking through each element:
   for(element_id in names(state[["DW"]][["views"]])){
     tmp_source_ele = state[["DW"]][["views"]][[element_id]]
+
+    # Finding the data source:
+    dsv_row =
+      DSV[["catalog"]][
+        DSV[["catalog"]][["object"]] == tmp_source_ele[["ds_source_id"]], 
+        ]
 
     # Creates the empty element:
     tmp_element = list(
       idx  = tmp_source_ele[["idx"]],
       name = tmp_source_ele[["key"]],
+      data_source = list(
+        id        = dsv_row[["id"]],
+        idx       = dsv_row[["idx"]],
+        res_label = dsv_row[["res_label"]]),
       components = list())
 
     FM_le(state, paste0("saving element (", tmp_source_ele[["idx"]], ") ", tmp_source_ele[["key"]]))

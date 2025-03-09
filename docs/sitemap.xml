@@ -31,6 +31,7 @@
 <url><loc>https://formods.ubiquity.tools/reference/DM_fetch_ds.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/DM_fetch_source.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/DM_fetch_state.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/DM_hasds.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/DM_init_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/DM_mk_preload.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/DM_new_element.html</loc></url>
@@ -86,6 +87,7 @@
 <url><loc>https://formods.ubiquity.tools/reference/FM_fetch_mod_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_fetch_user_files_path.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_generate_report.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/FM_has_ds_changed.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_init_state.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_le.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/FM_message.html</loc></url>
@@ -119,6 +121,7 @@
 <url><loc>https://formods.ubiquity.tools/reference/fers_builder.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/fetch_hold.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/fetch_package_version.html</loc></url>
+<url><loc>https://formods.ubiquity.tools/reference/fetch_resource.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/formods.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/formods_check.html</loc></url>
 <url><loc>https://formods.ubiquity.tools/reference/has_changed.html</loc></url>

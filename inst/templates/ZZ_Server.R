@@ -353,10 +353,31 @@
     #------------------------------------
     # Creating reaction if a variable has been specified
     if(!is.null(react_state)){
+    # This will be used to trigger a response when the dependent modules have
+    # changed
+    force_mod_update = reactiveValues()
+    # Use the following to force updates in the UI for things like when an
+    # analysis is loaded and the ASM module is updated:
+    # force_mod_update[["triggered"]]
+      observe({
+        react_state[[id_ASM]]
+
+        state = FG_fetch_state(id             = id,
+                               input          = input,
+                               session        = session,
+                               FM_yaml_file   = FM_yaml_file,
+                               MOD_yaml_file  = MOD_yaml_file,
+                               react_state    = react_state)
+
+        FM_le(state, "upstream modules forcing update")
+        force_mod_update[["triggered"]] = rnorm(n=1)
+      }, priority = 100)
+
+
       # Here we list the ui inputs that will result in a state change:
       toListen <- reactive({
         list(
-           # react_state[[id_ASM]])
+             force_mod_update[["triggered"]],
              input$button_clk_new,
              input$button_clk_del,
              input$button_clk_copy,
@@ -374,6 +395,18 @@
         FM_le(state, "reaction state updated")
         #react_state[[id]] = state
         react_state[[id]][["===ZZ==="]][["checksum"]] = state[["===ZZ==="]][["checksum"]]
+
+        # The hasds and hasmdl options below should be dynamic. So if it
+        # currently has a dataset but then the user deletes the dataset it
+        # should switch from TRUE to FALSE
+
+        # Update hasds appropriately if the module currently provides datasets
+        react_state[[id]][["===ZZ==="]][["hasds"]]    =  FALSE
+
+        # Update hasmdl appropriately if the module currently provides models
+        react_state[[id]][["===ZZ==="]][["hasmdl"]]    =  FALSE
+
+
       }, priority=99)
     }
     #------------------------------------
@@ -429,7 +462,7 @@
     # load analyses using the application state manager
     remove_hold_listen  <- reactive({
         list(
-             react_state[[id_ASM]],
+             force_mod_update[["triggered"]],
            # input$button_clk_new,
            # input$button_clk_del,
            # input$button_clk_copy,
@@ -848,6 +881,7 @@ res}
 #'@title Fetch ===ZZ_NAME=== Module Datasets
 #'@description Fetches the datasets contained in the module.
 #'@param state ===ZZ=== state from \code{===ZZ===_fetch_state()}
+#'@param meta_only Include only metadata and not the dataset (default \code{FALSE})
 #'@return Character object vector with the lines of code
 #'@return list containing the following elements
 #'\itemize{
@@ -861,7 +895,7 @@ res}
 #'    \item{MOD_TYPE: Short name for the type of module.}
 #'    \item{id: Module ID.}
 #'    \item{idx: unique numerical ID to identify this dataset in the module.}
-#'    \item{ds_label: optional label that can be defined by a user and used in
+#'    \item{res_label: optional label that can be defined by a user and used in
 #'    workflows. Must be unique to the module.}
 #'    \item{DS: Dataframe containing the actual dataset.}
 #'    \item{DSMETA: Metadata describing DS.}
@@ -878,7 +912,7 @@ res}
 #' ds = ===ZZ===_fetch_ds(state)
 #'
 #' ds
-===ZZ===_fetch_ds = function(state){
+===ZZ===_fetch_ds = function(state, meta_only=FALSE){
   hasds  = FALSE
   isgood = TRUE
   msgs   = c()
@@ -891,13 +925,18 @@ res}
                MOD_TYPE   = NULL,
                id         = state[["id"]],
                idx        = NULL,
-               ds_label   = "",
+               res_label  = "",
                DS         = NULL,
                DSMETA     = NULL,
                code       = NULL,
                checksum   = mod_checksum,
                DSchecksum = NULL)
 
+  if(meta_only){
+    tmp_DS = NULL
+  } else {
+    tmp_DS = data.frame()
+  }
 
   # This prevents returning a dataset if this is triggered before data has
   # been loaded
@@ -1395,6 +1434,18 @@ res}
     msgs = c(msgs, err_msg)
   }
 
+  # Required for proper reaction:
+  # Update hasds appropriately if the module provides a dataset
+  react_state[[mod_ID]]  = list(===ZZ===  =
+          list(checksum = state[["===ZZ==="]][["checksum"]],
+               hasds    = FALSE))
+  
+  # Setting old ui values to current to prevent reactions on load
+  for(ui_name in names(state[["===ZZ==="]][["ui"]])){
+     state[["===ZZ==="]][["ui_old"]][[ui_name]] = state[["===ZZ==="]][["ui"]][[ui_name]] }
+  current_ele  = ===ZZ===_fetch_current_element(state)
+  for(ui_name in names(current_ele[["ui"]])){
+     state[["===ZZ==="]][["ui_old"]][[ui_name]] = current_ele[["ui"]][[ui_name]] }
 
   formods::FM_le(state,paste0("module isgood: ",isgood))
 

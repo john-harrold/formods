@@ -65,12 +65,12 @@ MC:
     source_url:    
       width:  "200px"
       placeholder: "https://adomain.com/file.csv"
-    ds_label:
+    res_label:
       width:  "75px"
       placeholder: "PK"
       tooltip: "Optional label should be unique and map to expected labels in workflows"
       tooltip_position: "top"
-    ds_label_val:
+    res_label_val:
       val_good:  'icon("check", style="color: #00BB8A")'
       val_bad:   'icon("xmark", style="color: #FF475E")'
       tooltip_good: "Label is good, no conflicts."
@@ -130,11 +130,11 @@ MC:
     ot_files:   
       width: 250
   labels:
-    current_element: NULL # "Select ds"
+    current_element: "Current data source" # "Select ds"
     source_id:       "Select data source" 
     ds_sheet:    "Select sheet" 
     source_url:      "Web address" 
-    ds_label:      "Label" 
+    res_label:      "Label" 
     clean_ds:        "Clean dataset columns" 
     element_name :   NULL # "ds name"
     save_btn:     "Save"
@@ -175,7 +175,7 @@ MC:
       - element_name
       - source_id
       - ds_sheet
-      - ds_label
+      - res_label
       - clean_ds
     # These are ui ids for buttons
     buttons:

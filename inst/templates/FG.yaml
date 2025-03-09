@@ -8,6 +8,7 @@ MC:
       id_ASM: "ASM"
       id_UD:  "UD"
       id_DW:  "DW"
+      id_DM:  "DM"
   # Controls what is shown in the compact ui mode: FG_ui_compact
   compact:
     code:    TRUE

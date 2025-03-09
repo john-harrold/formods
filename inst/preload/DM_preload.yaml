@@ -2,7 +2,7 @@ DM:
   fm_yaml:   'system.file(package="formods", "templates", "formods.yaml")'
   mod_yaml:  'system.file(package="formods", "templates", "DM.yaml")'
   ui:
-    element_selection: "element_1"
+    element_selection: "element_5"
     source_url:        ""
   sources: 
    - source:
@@ -27,7 +27,7 @@ DM:
        idx:          1
        ui: 
          element_name: "Excel (from file)"
-         ds_label:     ""
+         res_label:     ""
          source_id:    1
          ds_sheet:     "DATA"
          clean_ds:     TRUE
@@ -35,7 +35,7 @@ DM:
        idx:          2
        ui: 
          element_name: "STDM PC (url)"
-         ds_label:     "PC"
+         res_label:     "PC"
          source_id:    2
          ds_sheet:     ""
          clean_ds:     TRUE
@@ -43,7 +43,7 @@ DM:
        idx:          3
        ui: 
          element_name: "STDM EX (url)"
-         ds_label:     "EX"
+         res_label:     "EX"
          source_id:    3
          ds_sheet:     ""
          clean_ds:     TRUE
@@ -51,7 +51,7 @@ DM:
        idx:          5
        ui: 
          element_name: "STDM DM (url)"
-         ds_label:     "DM"
+         res_label:     "DM"
          source_id:    4
          ds_sheet:     ""
          clean_ds:     TRUE

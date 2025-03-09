@@ -234,11 +234,26 @@ DM_Server <- function(id,
 
       uiele = NULL
       if(srcnfo[["excel_file"]]){
+        choices  = c("PH")
+        selected = "PH"
+        if(!is.null( current_ele[["ui"]][["source_id"]])){
+          choices = readxl::excel_sheets(path=srcnfo[["full_path"]])
+          selected = choices[1]
+          if(!is.null( srcnfo[["sheet"]])){
+            if(srcnfo[["sheet"]]  %in% choices){
+              # If the current element has a valid value we overwrite the
+              # default here:
+              selected = srcnfo[["sheet"]]
+            }
+          }
+        }
+
         uiele =
           shinyWidgets::pickerInput(
             inputId    = NS(id, "ds_sheet"),
             label      = state[["MC"]][["labels"]][["ds_sheet"]],
-            choices    = c("PH"),
+            selected   = selected,
+            choices    = choices,
             width      = state[["MC"]][["formatting"]][["ds_sheet"]][["width"]])
       }
 
@@ -314,11 +329,22 @@ DM_Server <- function(id,
 
       uiele = NULL
       if(nrow(state[["DM"]][["defined_sources"]]) > 0){
+
+        if(!is.null( current_ele[["ui"]][["source_id"]])){
+          choices = state[["DM"]][["defined_sources"]][["ID"]]
+          names(choices) = state[["DM"]][["defined_sources"]][["Resource"]]
+          selected = current_ele[["ui"]][["source_id"]]
+        } else {
+          choices  = c("PH")
+          selected = "PH"
+        }
+
         uiele =
           shinyWidgets::pickerInput(
             inputId    = NS(id, "source_id"),
             label      = state[["MC"]][["labels"]][["source_id"]],
-            choices    = c("PH"),
+            selected   = selected,
+            choices    = choices,
             width      = state[["MC"]][["formatting"]][["source_id"]][["width"]])
       } else {
         uiele = state[["MC"]][["errors"]][["no_files_mkres"]]
@@ -483,7 +509,7 @@ DM_Server <- function(id,
     })
     #------------------------------------
     # Current ds label
-    output$DM_ui_ds_label = renderUI({
+    output$DM_ui_res_label = renderUI({
       input$element_selection
       input$DM_hot_ds_preview
       input$DM_hot_resources
@@ -501,23 +527,23 @@ DM_Server <- function(id,
       if(srcnfo[["isgood"]]){
         uiele =
         textInput(
-          inputId     = NS(id, "ds_label"),
-          label       = state[["MC"]][["labels"]][["ds_label"]],
-          width       = state[["MC"]][["formatting"]][["ds_label"]][["width"]] ,
-          value       = current_ele[["ui"]][["ds_label"]],
-          placeholder = state[["MC"]][["formatting"]][["ds_label"]][["placeholder"]]
+          inputId     = NS(id, "res_label"),
+          label       = state[["MC"]][["labels"]][["res_label"]],
+          width       = state[["MC"]][["formatting"]][["res_label"]][["width"]] ,
+          value       = current_ele[["ui"]][["res_label"]],
+          placeholder = state[["MC"]][["formatting"]][["res_label"]][["placeholder"]]
         )
-       
+
         uiele = formods::FM_add_ui_tooltip(state, uiele,
-          tooltip     = state[["MC"]][["formatting"]][["ds_label"]][["tooltip"]],
-          position    = state[["MC"]][["formatting"]][["ds_label"]][["tooltip_position"]])
+          tooltip     = state[["MC"]][["formatting"]][["res_label"]][["tooltip"]],
+          position    = state[["MC"]][["formatting"]][["res_label"]][["tooltip_position"]])
       }
 
     uiele})
     #------------------------------------
     # Current ds label
-    output$DM_ui_ds_label_val = renderUI({
-      input$ds_label
+    output$DM_ui_res_label_val = renderUI({
+      input$res_label
       input$element_selection
       input$DM_hot_ds_preview
       input$DM_hot_resources
@@ -534,20 +560,20 @@ DM_Server <- function(id,
 
       if(srcnfo[["isgood"]]){
         is_val = TRUE
-       
+
         clashes = c()
-        #message("fix ds_label_val")
+        #message("fix res_label_val")
         # If the label is undefined then it's fine
-        if(current_ele[["ui"]][["ds_label"]] != ""){
+        if(current_ele[["ui"]][["res_label"]] != ""){
           # JMH add logic to validate label
           for(element_id in names(state[["DM"]][["elements"]])){
             if(state[["DM"]][["current_element"]] != element_id){
-              if(state[["DM"]][["elements"]][[element_id]][["ui"]][["ds_label"]] != ""){
+              if(state[["DM"]][["elements"]][[element_id]][["ui"]][["res_label"]] != ""){
                 # Both the current element and the element being tested
-                # (identified by element_id) have non "" values for ds_label,
+                # (identified by element_id) have non "" values for res_label,
                 # so if they are the same we flag this as a conflict.
-                if(state[["DM"]][["elements"]][[element_id]][["ui"]][["ds_label"]] ==
-                   current_ele[["ui"]][["ds_label"]]){
+                if(state[["DM"]][["elements"]][[element_id]][["ui"]][["res_label"]] ==
+                   current_ele[["ui"]][["res_label"]]){
                    clashes = c(clashes,
                      paste0(state[["DM"]][["elements"]][[element_id]][["ui"]][["element_name"]],
                      " (", element_id, ")")
@@ -558,26 +584,26 @@ DM_Server <- function(id,
             }
           }
         }
-       
-       
+
+
         if(is_val){
-           val_str     = state[["MC"]][["formatting"]][["ds_label_val"]][["val_good"]]
-           tooltip_str = state[["MC"]][["formatting"]][["ds_label_val"]][["tooltip_good"]]
+           val_str     = state[["MC"]][["formatting"]][["res_label_val"]][["val_good"]]
+           tooltip_str = state[["MC"]][["formatting"]][["res_label_val"]][["tooltip_good"]]
         } else {
-           val_str = state[["MC"]][["formatting"]][["ds_label_val"]][["val_bad"]]
-           tooltip_str = state[["MC"]][["formatting"]][["ds_label_val"]][["tooltip_bad"]]
-       
+           val_str = state[["MC"]][["formatting"]][["res_label_val"]][["val_bad"]]
+           tooltip_str = state[["MC"]][["formatting"]][["res_label_val"]][["tooltip_bad"]]
+
            tooltip_str = stringr::str_replace_all(
              string       = tooltip_str,
              pattern      = "===CONFLICTS===",
              replacement  = paste0(clashes, collapse=", "))
         }
-       
+
         uiele = render_str(val_str)
         uiele = formods::FM_add_ui_tooltip(state, uiele,
           tooltip     = tooltip_str,
-          position    = state[["MC"]][["formatting"]][["ds_label_val"]][["tooltip_position"]])
-       
+          position    = state[["MC"]][["formatting"]][["res_label_val"]][["tooltip_position"]])
+
         render_str(val_str)
       }
 
@@ -911,8 +937,8 @@ DM_Server <- function(id,
         tags$br(),
         formods::render_str(state[["MC"]][["labels"]][["dataset_header"]]),
         div(style="display:inline-block", htmlOutput(NS(id, "DM_ui_source_id"))),
-        div(style="display:inline-block", htmlOutput(NS(id, "DM_ui_ds_label"))),
-        div(style="display:inline-block", htmlOutput(NS(id, "DM_ui_ds_label_val"))),
+        div(style="display:inline-block", htmlOutput(NS(id, "DM_ui_res_label"))),
+        div(style="display:inline-block", htmlOutput(NS(id, "DM_ui_res_label_val"))),
         tags$br(),
         div(style="display:inline-block", htmlOutput(NS(id, "DM_ui_ds_sheet"))),
         div(style="display:inline-block", htmlOutput(NS(id, "DM_ui_clean_ds"))),
@@ -947,9 +973,9 @@ DM_Server <- function(id,
                                react_state     = react_state)
 
         FM_le(state, "reaction state updated")
-        #react_state[[id]] = state
+        react_state[[id]][["DM"]][["hasds"]]    = DM_hasds(state)
         react_state[[id]][["DM"]][["checksum"]] = state[["DM"]][["checksum"]]
-      }, priority=99)
+      }, priority=-101)
     }
     #------------------------------------
     # This can be used to trigger notifications
@@ -1153,7 +1179,7 @@ DM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react
           changed_uis = c(changed_uis, ui_name)
         }
       }else{
-        if(ui_name == "ds_label"){
+        if(ui_name == "res_label"){
           change_detected =
             has_updated(ui_val   = state[["DM"]][["ui"]][[ui_name]],
                         old_val  = state[["DM"]][["ui_old"]][[ui_name]],
@@ -1616,18 +1642,20 @@ DM_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
       for(element_id in names(state[["DM"]][["elements"]])){
         tmp_source_ele = state[["DM"]][["elements"]][[element_id]]
         if(tmp_source_ele[["isgood"]]){
+          hasrptele = TRUE
           #tmp_source_ele[["ui"]][["element_name"]]
-          #tmp_source_ele[["ui"]][["ds_label"]]
+          #tmp_source_ele[["ui"]][["res_label"]]
           #tmp_source_ele[["objs"]][["element_object_name"]]
           #tmp_source_ele[["res"]][["run_code"]][["ds"]]
 
           #------------------------------------------------
           # This appends the data frame to the report list
-          code_chunk = paste0(paste0('# ', tmp_source_ele[["ui"]][["element_name"]]),
+          code_chunk = c(paste0('# ', tmp_source_ele[["ui"]][["element_name"]]),
+                         paste0(
                               'rpt[["sheets"]][["',
                               tmp_source_ele[["objs"]][["element_object_name"]],
                               '"]]=',
-                              tmp_source_ele[["objs"]][["element_object_name"]])
+                              tmp_source_ele[["objs"]][["element_object_name"]]))
           # Evaluating the code
           if(!gen_code_only){
             assign(tmp_source_ele[["objs"]][["element_object_name"]],
@@ -1639,8 +1667,8 @@ DM_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
           #------------------------------------------------
           # Appends the mapping between sheet name and description:
           tmp_desc  = tmp_source_ele[["ui"]][["element_name"]]
-          if( tmp_source_ele[["ui"]][["ds_label"]] != ""){
-            tmp_desc = paste0(tmp_desc, ": ", tmp_source_ele[["ui"]][["ds_label"]])
+          if( tmp_source_ele[["ui"]][["res_label"]] != ""){
+            tmp_desc = paste0(tmp_desc, ": ", tmp_source_ele[["ui"]][["res_label"]])
           }
 
           code_chunk = c('rpt[["summary"]] = rbind(rpt[["summary"]],',
@@ -1677,6 +1705,7 @@ res}
 #'@title Fetch Data Management Module Datasets
 #'@description Fetches the datasets contained in the module.
 #'@param state DM state from \code{DM_fetch_state()}
+#'@param meta_only Include only metadata and not the dataset (default \code{FALSE})
 #'@return Character object vector with the lines of code
 #'@return list containing the following elements
 #'\itemize{
@@ -1690,7 +1719,7 @@ res}
 #'    \item{MOD_TYPE: Short name for the type of module.}
 #'    \item{id: Module ID.}
 #'    \item{idx: unique numerical ID to identify this dataset in the module.}
-#'    \item{ds_label: optional label that can be defined by a user and used in
+#'    \item{res_label: optional label that can be defined by a user and used in
 #'    workflows. Must be unique to the module.}
 #'    \item{DS: Dataframe containing the actual dataset.}
 #'    \item{DSMETA: Metadata describing DS.}
@@ -1707,7 +1736,7 @@ res}
 #' ds = DM_fetch_ds(state)
 #'
 #' ds
-DM_fetch_ds = function(state){
+DM_fetch_ds = function(state, meta_only=FALSE){
   hasds  = FALSE
   isgood = TRUE
   msgs   = c()
@@ -1719,7 +1748,7 @@ DM_fetch_ds = function(state){
                MOD_TYPE   = "DM",
                id         = state[["id"]],
                idx        = NULL,
-               ds_label   = "",
+               res_label   = "",
                DS         = NULL,
                DSMETA     = NULL,
                code       = NULL,
@@ -1738,17 +1767,24 @@ DM_fetch_ds = function(state){
         tmp_DSchecksum    = tmp_ele[["checksum"]]
         tmp_code          = tmp_ele[["code"]]
         tmp_label         = tmp_ele[["ui"]][["element_name"]]
-        tmp_ds_label      = tmp_ele[["ui"]][["ds_label"]]
+        tmp_res_label      = tmp_ele[["ui"]][["res_label"]]
         tmp_idx           = tmp_ele[["idx"]]
-        tmp_contents      = tmp_ele[["res"]][["run_code"]][["ds"]]
+
 
         if(!is.null(tmp_object_name) &
-           !is.null(tmp_contents)){
+           !is.null(tmp_ele[["res"]][["run_code"]][["ds"]])){
+
           TMPDS = NEWDS
+
+          if(meta_only){
+            TMPDS[["DS"]]         = NULL
+          } else {
+            TMPDS[["DS"]]         = tmp_ele[["res"]][["run_code"]][["ds"]]
+          }
+
           TMPDS[["label"]]      = tmp_label
-          TMPDS[["ds_label"]]   = tmp_ds_label
+          TMPDS[["res_label"]]   = tmp_res_label
           TMPDS[["idx"]]        = tmp_idx
-          TMPDS[["DS"]]         = tmp_contents
           TMPDS[["DSchecksum"]] = tmp_DSchecksum
           TMPDS[["code"]]       = tmp_code
           hasds                 = TRUE
@@ -1946,7 +1982,7 @@ DM_new_element = function(state){
          ui                     = list(
            element_name  = paste0("Dataset ", state[["DM"]][["element_cntr"]]),
            source_id     = "",
-           ds_label      = "",
+           res_label      = "",
            clean_ds      = def_clean_ds
            ),
          id                     = element_id,
@@ -2187,7 +2223,7 @@ DM_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
     }
     # setting the resource counter to account for sources added
     state[["DM"]][["resource_cntr"]]  =
-      as.numeric(as.character(state[["DM"]][["defined_sources"]][["ID"]])) + 1
+      max(as.numeric(as.character(state[["DM"]][["defined_sources"]][["ID"]]))) + 1
     if(!is.null(elements)){
       # All of the numeric IDs in the preload
       enumeric    = c()
@@ -2286,6 +2322,24 @@ DM_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
       msgs = c(msgs, err_msg)
     }
   }
+
+  # Required for proper reaction:
+  react_state[[mod_ID]]  = list(DM  =
+          list(checksum = state[["DM"]][["checksum"]],
+               hasds    = DM_hasds(state)))
+
+
+  # Setting old ui values to current to prevent reactions on load
+  for(ui_name in names(state[["DM"]][["ui"]])){
+     state[["DM"]][["ui_old"]][[ui_name]] = state[["DM"]][["ui"]][[ui_name]] }
+  current_ele  = DM_fetch_current_element(state)
+  for(ui_name in names(current_ele[["ui"]])){
+     state[["DM"]][["ui_old"]][[ui_name]] = current_ele[["ui"]][[ui_name]] }
+
+
+  # holding everything
+  state = set_hold(state)
+
 
   formods::FM_le(state,paste0("module isgood: ",isgood))
 
@@ -2667,6 +2721,10 @@ DM_fetch_source = function(state, element){
       source_type = files_df[files_df[["ID"]] == element[["ui"]][["source_id"]], ][["source_type"]]
       url         = files_df[files_df[["ID"]] == element[["ui"]][["source_id"]], ][["url"        ]]
 
+      if(length(ridx) > 1){
+        browser()
+      }
+
       # Populating the sheet information
       if(!is.null(element[["ui"]][["ds_sheet"]])){
         if(element[["ui"]][["ds_sheet"]] != ""){
@@ -2878,7 +2936,6 @@ DM_mk_preload     = function(state){
   for(src_idx in 1:nrow(state[["DM"]][["defined_sources"]])){
 
     src_row = state[["DM"]][["defined_sources"]][src_idx, ]
-    src_idx = src_idx + 1
     source_type = src_row[["source_type"]]
     source_id   = src_row[["ID"]]
 
@@ -2898,7 +2955,6 @@ DM_mk_preload     = function(state){
 
     src_idx = src_idx + 1
   }
-
 
   ele_idx = 1
   # Walking through each element:
@@ -2932,3 +2988,34 @@ DM_mk_preload     = function(state){
     msgs      = msgs,
     yaml_list = yaml_list)
 }
+
+#'@export
+#'@title Check DM State For Datasets
+#'@description Walks through the DM state object to see if there are any
+#'datasets available
+#'@param state DM state from \code{DM_fetch_state()}
+#'@return Logical TRUE if there is a dataset or FALSE otherwise.
+#'@examples
+#' sess_res = DM_test_mksession()
+#' state = sess_res[["state"]]
+#' DM_hasds(state)
+DM_hasds = function(state){
+  hasds = FALSE
+# dw_views    = names(state[["DM"]][["views"]])
+  ds_eles = names(state[["DM"]][["elements"]])
+  for(ds_ele  in ds_eles){
+    tmp_checksum      = state[["DM"]][["elements"]][[ds_ele]][["checksum"]]
+    tmp_object_name   = state[["DM"]][["elements"]][[ds_ele]][["objs"]][["element_object_name"]]
+    tmp_ds            = state[["DM"]][["elements"]][[ds_ele]][["res"]][["run_code"]][["ds"]]
+    tmp_rc_isgood     = state[["DM"]][["elements"]][[ds_ele]][["res"]][["run_code"]][["isgood"]]
+    if(!is.logical(tmp_rc_isgood)){
+      tmp_rc_isgood = FALSE }
+
+    if(!is.null(tmp_checksum)    &
+       !is.null(tmp_object_name) &
+       !is.null(tmp_ds)          &
+       tmp_rc_isgood){
+       hasds = TRUE
+    }
+  }
+hasds}
