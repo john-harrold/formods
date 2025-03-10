@@ -711,7 +711,7 @@ FM_has_ds_changed = function(state, fdres, ids, react_state){
     #    to be initialized
     if(is.null(fdres) & anyds){
       ds_has_changed = TRUE
-      FM_le(state, "DS change detected: fdres is NULL")
+      FM_le(state, "Data source change detected: fdres is NULL")
     }
 
 
@@ -723,7 +723,7 @@ FM_has_ds_changed = function(state, fdres, ids, react_state){
         if(rs[[tmpid]][["hasds"]]){
           if(!any(fdres[["catalog"]][["id"]] == tmpid)){
             ds_has_changed = TRUE
-            FM_le(state, paste0("DS change detected: fdres is is missing ", tmpid))
+            FM_le(state, paste0("Data source change detected: fdres is is missing ", tmpid))
           }
         }
 
@@ -733,7 +733,7 @@ FM_has_ds_changed = function(state, fdres, ids, react_state){
         if(!rs[[tmpid]][["hasds"]]){
           if(any(fdres[["catalog"]][["id"]] == tmpid)){
             ds_has_changed = TRUE
-            FM_le(state, paste0("DS change detected: source dataset from ", tmpid, " is missing"))
+            FM_le(state, paste0("Data source change detected: source dataset from ", tmpid, " is missing"))
           }
         }
 
@@ -743,7 +743,7 @@ FM_has_ds_changed = function(state, fdres, ids, react_state){
            !is.null(rs[[tmpid]][["checksum"]])){
           if(rs[[tmpid]][["checksum"]] != fdres[["module_ids"]][[tmpid]]){
             ds_has_changed = TRUE
-            FM_le(state, paste0("DS change detected: source dataset from ", tmpid, " checksums different."))
+            FM_le(state, paste0("Data source change detected: source dataset from ", tmpid, " checksums different."))
             FM_le(state, paste0("fdres (old):       ", fdres[["module_ids"]][[tmpid]]))
             FM_le(state, paste0("react_state (new): ", rs[[tmpid]][["checksum"]]))
           }

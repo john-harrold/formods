@@ -1420,6 +1420,7 @@ DW_Server <- function(id,
     remove_hold_listen  <- reactive({
       list(
            force_mod_update[["triggered"]],
+           input$button_dw_save,
            input$select_dw_views)
     })
     observeEvent(remove_hold_listen(), {
@@ -1702,8 +1703,9 @@ DW_fetch_state = function(id,                    input,     session,
   }
 
   # Detecting view selection changes
-  if(has_changed(ui_val   = state[["DW"]][["ui"]][["select_dw_views"]],
-                 old_val  = state[["DW"]][["current_view"]]) &
+  if(has_updated(ui_val   = state[["DW"]][["ui"]][["select_dw_views"]],
+                 old_val  = state[["DW"]][["current_view"]],
+                 init_val = "") &
       (!fetch_hold(state,"select_dw_views"))){
 
     # Changing the current view to the one selected in the UI
@@ -1712,8 +1714,9 @@ DW_fetch_state = function(id,                    input,     session,
     FM_le(state, "updated: select_dw_views")
   }
   # Detecting add_element clicks
-  if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_add_element"]],
-                 old_val  = state[["DW"]][["button_counters"]][["button_dw_add_element"]])){
+  if(has_updated(ui_val   = state[["DW"]][["ui"]][["button_dw_add_element"]],
+                 old_val  = state[["DW"]][["button_counters"]][["button_dw_add_element"]],
+                 init_val = c("", 0))){
     # Empty messages:
     msgs = c()
     FM_le(state, "adding wrangling element")
@@ -1767,8 +1770,9 @@ DW_fetch_state = function(id,                    input,     session,
   }
 
   #------------------------------------
-  if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_new"]],
-                 old_val  = state[["DW"]][["button_counters"]][["button_dw_new"]])){
+  if(has_updated(ui_val   = state[["DW"]][["ui"]][["button_dw_new"]],
+                 old_val  = state[["DW"]][["button_counters"]][["button_dw_new"]],
+                 init_val = c("", 0))){
 
     FM_le(state, "creating new wrangling view")
     # Empty messages:
@@ -1786,9 +1790,11 @@ DW_fetch_state = function(id,                    input,     session,
     # updating the state checksum
     state = DW_update_checksum(state)
   }
+
   #------------------------------------
-  if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_del"]],
-                 old_val  = state[["DW"]][["button_counters"]][["button_dw_del"]])){
+  if(has_updated(ui_val   = state[["DW"]][["ui"]][["button_dw_del"]],
+                 old_val  = state[["DW"]][["button_counters"]][["button_dw_del"]],
+                 init_val = c("", 0))){
 
     FM_le(state, "deleting wrangling view")
     # Empty messages:
@@ -1819,8 +1825,9 @@ DW_fetch_state = function(id,                    input,     session,
   }
 
   #------------------------------------
-  if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_copy"]],
-                 old_val  = state[["DW"]][["button_counters"]][["button_dw_copy"]])){
+  if(has_updated(ui_val   = state[["DW"]][["ui"]][["button_dw_copy"]],
+                 old_val  = state[["DW"]][["button_counters"]][["button_dw_copy"]],
+                 init_val = c("", 0))){
 
     FM_le(state, "copying wrangling view")
 
@@ -1869,8 +1876,9 @@ DW_fetch_state = function(id,                    input,     session,
     state = DW_update_checksum(state)
   }
   #------------------------------------
-  if(has_changed(ui_val   = state[["DW"]][["ui"]][["button_dw_save"]],
-                 old_val  = state[["DW"]][["button_counters"]][["button_dw_save"]])){
+  if(has_updated(ui_val   = state[["DW"]][["ui"]][["button_dw_save"]],
+                 old_val  = state[["DW"]][["button_counters"]][["button_dw_save"]],
+                 init_val = c("", 0))){
 
     FM_le(state, "saving changes to current wrangling view")
     # Empty messages:
@@ -1880,8 +1888,7 @@ DW_fetch_state = function(id,                    input,     session,
       # Resetting the key
       current_view = DW_fetch_current_view(state)
       current_view[["key"]] = state[["DW"]][["ui"]][["current_key"]]
-
-      if(has_changed(ui_val   = state[["DW"]][["ui"]][["select_current_source"]],
+      if(has_updated(ui_val   = state[["DW"]][["ui"]][["select_current_source"]],
                      old_val  = current_view[["ds_source_id"]])){
         FM_le(state, "changing data source:")
         FM_le(state, paste0(" - old source: ", current_view[["ds_source_id"]]))
@@ -1892,13 +1899,15 @@ DW_fetch_state = function(id,                    input,     session,
         current_view[["WDS"]]          = state[["DW"]][["DSV"]][["ds"]][[current_source_id]][["DS"]]
 
       }
-      state = set_hold(state)
       state = DW_set_current_view(state, current_view)
     } else {
       # returning an error
       msgs = c(msgs,
           tags$em(state[["MC"]][["errors"]][["current_key_empty"]]))
     }
+
+    # setting holds
+    state = set_hold(state)
 
     # Lastly we save the button value from the UI to the state:
     state[["DW"]][["button_counters"]][["button_dw_save"]] = state[["DW"]][["ui"]][["button_dw_save"]]

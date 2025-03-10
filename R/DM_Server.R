@@ -273,7 +273,7 @@ DM_Server <- function(id,
       input$DM_hot_resources
       req(input$source_id)
 
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]]
 
       state = DM_fetch_state(id              = id,
                              input           = input,
@@ -317,7 +317,7 @@ DM_Server <- function(id,
       input$button_clk_get_url
       input$element_selection
       input$DM_hot_resources
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]]
       state = DM_fetch_state(id              = id,
                              input           = input,
                              session         = session,
@@ -428,7 +428,7 @@ DM_Server <- function(id,
       input$DM_hot_resources
       req(input$source_id)
 
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]]
 
       state = DM_fetch_state(id              = id,
                              input           = input,
@@ -955,11 +955,24 @@ DM_Server <- function(id,
 
     #------------------------------------
     # Creating reaction if a variable has been specified
+    force_mod_update = reactiveValues()
     if(!is.null(react_state)){
+      observe({
+        react_state[[id_ASM]]
+
+        state = DM_fetch_state(id             = id,
+                               input          = input,
+                               session        = session,
+                               FM_yaml_file   = FM_yaml_file,
+                               MOD_yaml_file  = MOD_yaml_file,
+                               react_state    = react_state)
+
+        FM_le(state, "upstream modules forcing update")
+        force_mod_update[["triggered"]] = format(Sys.time(), "%Y-%m-%d %H:%M:%OS3")
+      }, priority = 100)
       # Here we list the ui inputs that will result in a state change:
       toListen <- reactive({
         list(
-           # react_state[[id_ASM]])
              input$button_clk_new,
              input$button_clk_del,
              input$button_clk_copy,
@@ -1038,7 +1051,7 @@ DM_Server <- function(id,
     # load analyses using the application state manager
     remove_hold_listen  <- reactive({
         list(
-             react_state[[id_ASM]],
+             force_mod_update[["triggered"]],
            # input$button_clk_new,
            # input$button_clk_del,
            # input$button_clk_copy,

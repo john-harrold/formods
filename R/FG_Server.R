@@ -1426,8 +1426,9 @@ FG_fetch_state = function(id,
 
 
   # Detecting figure selection changes
-  if(has_changed(ui_val   = state[["FG"]][["ui"]][["select_current_fig"]],
-                 old_val  = state[["FG"]][["current_fig"]]) &
+  if(has_updated(ui_val   = state[["FG"]][["ui"]][["select_current_fig"]],
+                 old_val  = state[["FG"]][["current_fig"]],
+                 init_val = "") &
       (!fetch_hold(state, "select_current_fig"))){
 
     # Changing the current view to the one selected in the UI
@@ -1435,12 +1436,13 @@ FG_fetch_state = function(id,
   }
 
   # Detecting page selects
-  if(has_changed(ui_val   = state[["FG"]][["ui"]][["select_fg_page"]],
-                 old_val  =  FG_fetch_current_fig(state)[["page"]])
+  if(has_updated(ui_val   = state[["FG"]][["ui"]][["select_fg_page"]],
+                 old_val  =  FG_fetch_current_fig(state)[["page"]],
+                 init_val = "")
       #(!fetch_hold(state, "select_fg_page"))
       ){
 
-    FM_le(state, "figure page change detected")
+    FM_le(state, paste0("figure page change detected, new page: ", state[["FG"]][["ui"]][["select_fg_page"]]))
 
     # pulling the current figure
     current_fig = FG_fetch_current_fig(state)
@@ -1453,8 +1455,9 @@ FG_fetch_state = function(id,
 
   }
   # Adding a new element
-  if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_element_add"]],
-                 old_val  = state[["FG"]][["button_counters"]][["button_element_add"]])){
+  if(has_updated(ui_val   = state[["FG"]][["ui"]][["button_element_add"]],
+                 old_val  = state[["FG"]][["button_counters"]][["button_element_add"]],
+                 init_val = c("0", ""))){
 
     FM_le(state, "adding figure element")
     msgs = c()
@@ -1490,8 +1493,9 @@ FG_fetch_state = function(id,
     state = FM_set_ui_msg(state, msgs)
   }
   # New figure
-  if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_new"]],
-                 old_val  = state[["FG"]][["button_counters"]][["button_fig_new"]])){
+  if(has_updated(ui_val   = state[["FG"]][["ui"]][["button_fig_new"]],
+                 old_val  = state[["FG"]][["button_counters"]][["button_fig_new"]],
+                 init_val = c("0", ""))){
 
     FM_le(state, "creating new figure")
     msgs = c()
@@ -1511,8 +1515,9 @@ FG_fetch_state = function(id,
     state = FM_set_ui_msg(state, msgs)
   }
   # Delete figure
-  if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_del"]],
-                 old_val  = state[["FG"]][["button_counters"]][["button_fig_del"]])){
+  if(has_updated(ui_val   = state[["FG"]][["ui"]][["button_fig_del"]],
+                 old_val  = state[["FG"]][["button_counters"]][["button_fig_del"]],
+                 init_val = c("0", ""))){
 
     FM_le(state, "deleting figure")
     msgs = c()
@@ -1543,8 +1548,9 @@ FG_fetch_state = function(id,
     state = FM_set_ui_msg(state, msgs)
   }
   # Save figure
-  if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_save"]],
-                 old_val  = state[["FG"]][["button_counters"]][["button_fig_save"]])){
+  if(has_updated(ui_val   = state[["FG"]][["ui"]][["button_fig_save"]],
+                 old_val  = state[["FG"]][["button_counters"]][["button_fig_save"]],
+                 init_val = c("0", ""))){
 
     FM_le(state, "saving changes to current figure")
     msgs = c()
@@ -1593,8 +1599,9 @@ FG_fetch_state = function(id,
     state = FG_build( state=state, del_row = NULL, cmd = NULL, pll = NULL)
   }
   # Copy figure
-  if(has_changed(ui_val   = state[["FG"]][["ui"]][["button_fig_copy"]],
-                 old_val  = state[["FG"]][["button_counters"]][["button_fig_copy"]])){
+  if(has_updated(ui_val   = state[["FG"]][["ui"]][["button_fig_copy"]],
+                 old_val  = state[["FG"]][["button_counters"]][["button_fig_copy"]],
+                 init_val = c("0", ""))){
 
     FM_le(state, "copying figure")
     msgs = c()
