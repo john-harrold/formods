@@ -5,7 +5,7 @@
 #'@importFrom shinyAce aceEditor updateAceEditor
 
 #'@export
-#'@title ===ZZ_NAME=== State Server
+#'@title ===ZZ_NAME=== Server
 #'@description Server function for the ===ZZ_NAME===  Shiny Module
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
 #'@param FM_yaml_file App configuration file with FM as main section.
@@ -362,15 +362,15 @@
       observe({
         react_state[[id_ASM]]
 
-        state = FG_fetch_state(id             = id,
-                               input          = input,
-                               session        = session,
-                               FM_yaml_file   = FM_yaml_file,
-                               MOD_yaml_file  = MOD_yaml_file,
-                               react_state    = react_state)
+        state = ===ZZ===_fetch_state(id        = id,
+                               input           = input,
+                               session         = session,
+                               FM_yaml_file    = FM_yaml_file,
+                               MOD_yaml_file   = MOD_yaml_file,
+                               react_state     = react_state)
 
         FM_le(state, "upstream modules forcing update")
-        force_mod_update[["triggered"]] = rnorm(n=1)
+        force_mod_update[["triggered"]] = format(Sys.time(), "%Y-%m-%d %H:%M:%OS3")
       }, priority = 100)
 
 
@@ -1486,7 +1486,8 @@ res}
 
   ylist = list(
       fm_yaml  = file.path("config", basename(state[["FM_yaml_file"]])),
-      mod_yaml = file.path("config", basename(state[["MOD_yaml_file"]]))
+      mod_yaml = file.path("config", basename(state[["MOD_yaml_file"]])),
+      res_deps = list(ds=list()) 
   )
 
   # Creating the yaml list with the module ID at the top level

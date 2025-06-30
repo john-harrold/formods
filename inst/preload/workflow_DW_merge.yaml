@@ -1,0 +1,307 @@
+ASM:
+  fm_yaml: config/formods.yaml
+  mod_yaml: config/ASM.yaml
+  docx_ph:
+    HEADERLEFT: left header
+    HEADERRIGHT: right header
+    FOOTERLEFT: left footer
+UD:
+  fm_yaml: config/formods.yaml
+  mod_yaml: config/UD.yaml
+  data_source:
+    file_name: ~
+    sheet: ~
+    clean: yes
+DM:
+  fm_yaml: config/formods.yaml
+  mod_yaml: config/DM.yaml
+  ui:
+    element_selection: element_3
+    source_url: ''
+  sources:
+  - source:
+      source_id: '1'
+      source_type: url
+      source_str: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_PC.csv
+  - source:
+      source_id: '2'
+      source_type: url
+      source_str: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_EX.csv
+  - source:
+      source_id: '3'
+      source_type: url
+      source_str: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_DM.csv
+  elements:
+  - element:
+      idx: 1.0
+      ui:
+        element_name: STDM PC (url)
+        res_label: PC
+        source_id: 1
+        ds_sheet: ''
+        clean_ds: yes
+  - element:
+      idx: 2.0
+      ui:
+        element_name: STDM EX (url)
+        res_label: EX
+        source_id: 2
+        ds_sheet: ''
+        clean_ds: yes
+  - element:
+      idx: 3.0
+      ui:
+        element_name: STDM DM (url)
+        res_label: DM 
+        source_id: 3
+        ds_sheet: ''
+        clean_ds: yes
+DW:
+  fm_yaml: config/formods.yaml
+  mod_yaml: config/DW.yaml
+  res_deps:
+    ds:
+      DM:
+      - PC
+      - EX
+  elements:
+  - element:
+      idx: 1.0
+      name: Concentrations
+      data_source:
+        id: DM
+        idx: 1.0
+        res_label: PC
+      components: 
+      - component:
+          action: rename
+          column: PCTEST
+          rhs: ATEST
+      - component:
+          action: rename
+          column: PCDTC
+          rhs: ADTC
+      - component:
+          action: select
+          column:
+          - STUDYID
+          - DOMAIN
+          - USUBJID
+          - ATEST
+          - PCSTRESC
+          - PCSTRESN
+          - PCSTRESU
+          - PCSPEC
+          - PCLLOQ
+          - ADTC
+      - component:
+          action: mutate
+          column: AVAL
+          rhs: ' dplyr::case_when(!is.na(PCSTRESN) ~ PCSTRESN,  PCSTRESC %in% "<BLQ"
+            ~ 0, TRUE ~ PCSTRESN )'
+      - component:
+          action: mutate
+          column: AREFDTC
+          rhs: NA
+      - component:
+          action: mutate
+          column: EXDOSE
+          rhs: NA
+      - component:
+          action: mutate
+          column: EXDOSU
+          rhs: NA
+      - component:
+          action: mutate
+          column: EXROUTE
+          rhs: NA
+      - component:
+          action: mutate
+          column: ATPTREF
+          rhs: NA
+      - component:
+          action: mutate
+          column: AVALU
+          rhs: PCSTRESU
+      - component:
+          action: mutate
+          column: EVID
+          rhs: '0'
+      - component:
+          action: mutate
+          column: AMT
+          rhs: '0'
+      - component:
+          action: mutate
+          column: CMT
+          rhs: '"central"'
+  - element:
+      idx: 2.0
+      name: Demographics 
+      data_source:
+        id: DM
+        idx: 3.0
+        res_label: DM
+      components:
+      - component:
+          action: select
+          column:
+          - STUDYID
+          - USUBJID
+          - AGE
+          - AGEU
+          - SEX
+          - RACE
+          - ETHNIC
+          - ARM
+  - element:
+      idx: 3.0
+      name: ARD  
+      data_source:
+        id: DM
+        idx: 2.0
+        res_label: EX
+      components: 
+      - component:
+          action: rename
+          column: EXTRT
+          rhs: ATEST
+      - component:
+          action: rename
+          column: EXSTDTC
+          rhs: ADTC
+      - component:
+          action: rename
+          column: EXROUTE
+          rhs: 'NULL'
+      - component:
+          action: rename
+          column: EXDOSFRM
+          rhs: EXROUTE
+      - component:
+          action: select
+          column:
+          - STUDYID
+          - DOMAIN
+          - USUBJID
+          - ATEST
+          - EXDOSE
+          - EXDOSU
+          - EXROUTE
+          - ADTC
+      - component:
+          action: mutate
+          column: ATPTREF
+          rhs: '"FIRST DOSE"'
+      - component:
+          action: mutate
+          column: AREFDTC
+          rhs: ADTC
+      - component:
+          action: mutate
+          column: EVID
+          rhs: '0'
+      - component:
+          action: mutate
+          column: AMT
+          rhs: EXDOSE
+      - component:
+          action: mutate
+          column: PCSTRESC
+          rhs: NA
+      - component:
+          action: mutate
+          column: PCSTRESU
+          rhs: NA
+      - component:
+          action: mutate
+          column: PCSTRESN
+          rhs: NA
+      - component:
+          action: mutate
+          column: PCLLOQ
+          rhs: NA
+      - component:
+          action: mutate
+          column: PCSPEC
+          rhs: NA
+      - component:
+          action: mutate
+          column: AVAL
+          rhs: NA
+      - component:
+          action: mutate
+          column: AVALU
+          rhs: NA
+      - component:
+          action: mutate
+          column: CMT
+          rhs: '"central"'
+      - component:
+          action: merge
+          method: rbind
+          merge_rels_ui: []
+          data_source:
+            id: DW
+            idx: 1.0
+            res_label: ''
+      - component:
+          action: merge
+          method: left_join
+          merge_rels_ui:
+            STUDYID == STUDYID:
+              condition: equality
+              dv_cols: STUDYID
+              ns_cols: STUDYID
+            USUBJID == USUBJID:
+              condition: equality
+              dv_cols: USUBJID
+              ns_cols: USUBJID
+          data_source:
+            id: DW
+            idx: 2.0
+            res_label: ''
+      - component:
+          action: sort
+          column:
+          - USUBJID:ascending
+          - ADTC:ascending
+      - component:
+          action: group
+          column:
+          - USUBJID
+          - STUDYID 
+      - component:
+          action: mutate
+          column: EXDOSE
+          rhs: janitor::single_value(EXDOSE)
+      - component:
+          action: mutate
+          column: EXDOSU
+          rhs: janitor::single_value(EXDOSU)
+      - component:
+          action: mutate
+          column: ATPTREF
+          rhs: janitor::single_value(ATPTREF)
+      - component:
+          action: mutate
+          column: AREFDTC
+          rhs: zoo::na.locf(AREFDTC, na.rm = FALSE)
+      - component:
+          action: ungroup
+      - component:
+          action: mutate
+          column: ID
+          rhs: USUBJID
+      - component:
+          action: mutate
+          column: DV
+          rhs: AVAL
+      - component:
+          action: mutate
+          column: TIME
+          rhs: as.numeric(ADTC - AREFDTC, units = "days")
+FG:
+  fm_yaml: config/formods.yaml
+  mod_yaml: config/FG.yaml
+  elements: []

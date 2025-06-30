@@ -4,12 +4,6 @@
 #'@importFrom shinyAce aceEditor updateAceEditor
 #'@importFrom zip unzip zip
 
-
-# JMH
-# Load state notes:
-# - Replace current state with loaded state
-# - Change button values to current or zero
-
 #'@export
 #'@title Save State Server
 #'@description Server function for the Save State Shiny Module
@@ -110,6 +104,162 @@ ASM_Server <- function(id,
       )
 
       uiele})
+    #------------------------------------
+    output$ASM_ui_workflows     =  renderUI({
+      uiele = tagList(
+        htmlOutput(NS(id, "ui_asm_select_workflow")),
+        htmlOutput(NS(id, "ui_asm_workflow_check_res")),
+        htmlOutput(NS(id, "ui_asm_workflow_run_res")))
+
+      uiele})
+    #------------------------------------
+    # Workflow form elements
+    output$ui_asm_select_workflow     =  renderUI({
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+      wf = state[["yaml"]][["FM"]][["workflows"]]
+
+      uiele    = NULL
+      WF_FOUND = FALSE
+
+
+      # place holders for selection elements
+      groups          = c() # List of all groups found in the workflows
+      values          = c() # Workflow names from formods yaml file
+      desc            = c() # Verbose description of workflow names show to the user
+      choices_simple  = c()
+      choices_group   = c()
+
+      if(length(names(wf)) > 0){
+        for(wfn in names(wf)){
+          # Checking for the existence of the preload file. We only
+          # show preload options that actually exist
+          plf= render_str(wf[[wfn]][["preload"]])
+          if(file.exists(plf)){
+            # We found at least one workflow
+            WF_FOUND = TRUE
+
+            # These are the relevant components needed to construct the UI
+            # elements:
+            groups = c(groups, wf[[wfn]][["group"]])
+            #values = c(values, wfn)
+            #desc   = c(desc  , wf[[wfn]][["desc"]])
+            choices_simple = c(choices_simple, eval(parse(text=paste0('c("',wf[[wfn]][["desc"]], '"=wfn)'))))
+            choices_group[[  wf[[wfn]][["group"]] ]] = c(choices_group[[  wf[[wfn]][["group"]] ]], eval(parse(text=paste0('c("',wf[[wfn]][["desc"]], '"=wfn)'))))
+          } else {
+            FM_le(state, paste0("preload file not found: ", plf), entry_type="warning")
+          }
+        }
+      }
+
+      # If no workflow elements are found we return a no workflows found
+      # message
+      if(WF_FOUND){
+
+        liveSearch = FALSE
+        if(state[["MC"]][["formatting"]][["workflow"]][["liveSearch"]]){
+          if(length(choices_simple) >state[["MC"]][["formatting"]][["workflow"]][["size"]]){
+            liveSearch = TRUE
+          }
+        }
+
+        po = shinyWidgets::pickerOptions(
+            liveSearch =liveSearch,
+            size       =state[["MC"]][["formatting"]][["workflow"]][["size"]])
+
+        if(length(groups) <2){
+          choices = choices_simple
+        } else {
+          choices = choices_group
+        }
+
+        uiele_btn =
+          shinyWidgets::actionBttn(
+                  inputId = NS(id, "btn_run_wf_sys"),
+                  label   = state[["MC"]][["labels"]][["run_wf_sys"]],
+                  style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                  size    = state[["MC"]][["formatting"]][["btn_run_wf_sys"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["btn_run_wf_sys"]][["block"]],
+                  color   = "primary",
+                  icon    = icon("play"))
+        uiele_btn =
+          div(style=paste0("width:",state[["MC"]][["formatting"]][["btn_run_wf_sys"]][["width"]]),uiele_btn)
+
+        uiele_select =
+            pickerInput(
+               inputId = NS(id, "workflow"),
+               label = state[["MC"]][["labels"]][["workflow"]],
+               choices = choices,
+               options = po,
+               width      = state[["MC"]][["formatting"]][["workflow"]][["width"]]
+              )
+        uiele_select =
+          div(style=paste0("width:",state[["MC"]][["formatting"]][["workflow"]][["width"]]),uiele_select)
+
+        uiele_select = FM_add_ui_tooltip(state, uiele_select,
+                 tooltip     = state[["MC"]][["formatting"]][["btn_run_wf_sys"]][["tooltip"]],
+                 position    = state[["MC"]][["formatting"]][["btn_run_wf_sys"]][["tooltip_position"]])
+
+        uiele =
+          tagList(uiele_select, uiele_btn)
+      } else {
+        uiele = state[["MC"]][["errors"]][["no_workflows_found"]]
+      }
+      uiele})
+    #------------------------------------
+    # Workflow form elements: check results
+    output$ui_asm_workflow_check_res     =  renderUI({
+      req(input$workflow)
+      input$btn_run_wf_sys
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+
+
+      uiele = NULL
+      wfn = state[["ASM"]][["ui"]][["workflow"]]
+      wfl = state[["yaml"]][["FM"]][["workflows"]][[wfn]]
+      if(!is.null(wfl)){
+
+        # Getting the preload list for the selected workflow
+        # Preload list:
+        plf = render_str(wfl[["preload"]])
+        pll = FM_read_yaml(plf)
+
+        wfc_res = ASM_check_workflow(state=state, session=session, pll=pll)
+
+        uiele = tagList(tags$br(),
+         tags$b(state[["MC"]][["formatting"]][["workflow"]][["check_label"]]),
+         tags$br(),
+         wfc_res[["chk_msgs"]])
+
+      }
+    uiele})
+    #------------------------------------
+    # Workflow form elements: run results
+    output$ui_asm_workflow_run_res     =  renderUI({
+      req(input$workflow)
+      req(input$btn_run_wf_sys)
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+
+
+      uiele = NULL
+      if(!is.null(state[["ASM"]][["rwf_res"]][["msgs"]])){
+        uiele = tagList(tags$br(), 
+        tags$b(state[["MC"]][["formatting"]][["workflow"]][["run_label"]]),
+         tags$br(),
+        state[["ASM"]][["rwf_res"]][["msgs"]])
+      }
+    uiele})
     #------------------------------------
     output$ui_asm_switch_gen_rpts = renderUI({
       state = ASM_fetch_state(id           = id,
@@ -550,7 +700,8 @@ ASM_Server <- function(id,
 
   #------------------------------------
   toNotify <- reactive({
-    list(input$input_load_state)
+    list(input$input_load_state, 
+         input$btn_run_wf_sys)
   })
   observeEvent(toNotify(), {
     state = ASM_fetch_state(id           = id,
@@ -700,6 +851,45 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
     state = FM_set_ui_msg(state, msgs)
   }
 
+  #---------------------------------------------
+  # Running workflows
+
+  change_detected =
+    has_updated(ui_val   = state[["ASM"]][["ui"]][["btn_run_wf_sys"]],
+                old_val  = state[["ASM"]][["button_counters"]][["btn_run_wf_sys"]],
+                init_val = c("", "0"))
+  if(change_detected){
+
+    FM_le(state, "running system workflow")
+    rwf_isgood = TRUE
+    wfn = state[["ASM"]][["ui"]][["workflow"]]
+    wfl = state[["yaml"]][["FM"]][["workflows"]][[wfn]]
+
+    FM_pause_screen(state   = state,
+                    message = state[["MC"]][["labels"]][["busy"]][["rwf"]],
+                    session = session)
+
+    state = ASM_run_workflow(state=state, session=session, wfl=wfl)
+
+    FM_resume_screen(state   = state,
+                     session = session)
+
+    if(state[["ASM"]][["rwf_res"]][["isgood"]]){
+      state = FM_set_notification(state,
+        notify_text =  state[["MC"]][["labels"]][["rwf_success"]],
+        notify_id   = "rwf_result",
+        type        = "success")
+    } else {
+      state = FM_set_notification(state,
+        notify_text =  state[["MC"]][["errors"]][["rwf_failed"]],
+        notify_id   = "rwf_result",
+        type        = "failure")
+    }
+
+    # Updating the old value to prevent further reactions:
+    state[["ASM"]][["button_counters"]][["btn_run_wf_sys"]] = state[["ASM"]][["ui"]][["btn_run_wf_sys"]]
+  }
+
 
   #---------------------------------------------
   # Saving the state
@@ -755,7 +945,8 @@ ASM_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
    "button_state_save",
    "button_rpt_xlsx",
    "button_rpt_docx",
-   "button_rpt_pptx"
+   "button_rpt_pptx",
+   "btn_run_wf_sys"
   )
 
   ui_ids          = c(
@@ -764,6 +955,8 @@ ASM_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
    "button_rpt_docx",
    "button_rpt_pptx",
    "ui_asm_save_name",
+   "btn_run_wf_sys",
+   "workflow",
    "switch_gen_rpts"
     )
 
@@ -1211,6 +1404,7 @@ ASM_mk_preload     = function(state){
 #'@param session Shiny session variable
 #'@param file_path File path to write zipped state
 #'@param pll Preload list of the format generated by \code{FM_mk_app_preload()}. IF set to \code{NULL} it will be generated from the contents of the session variable.
+#'@param update_modal Logical controlling updates to modal messages (\code{TRUE})
 #'@return This function only writes the state and returns a list with the
 #'following elements:
 #' \itemize{
@@ -1229,7 +1423,7 @@ ASM_mk_preload     = function(state){
 #' ss_res =
 #' ASM_save_state(state, session,
 #'                file_path  = ssf)
-ASM_save_state = function(state, session, file_path, pll = NULL){
+ASM_save_state = function(state, session, file_path, pll = NULL, update_modal=TRUE){
 
   isgood = TRUE
   msgs   = c()
@@ -1286,10 +1480,10 @@ ASM_save_state = function(state, session, file_path, pll = NULL){
     }
 
     for(rpttype in rpttypes){
-      if(system.file(package = "shinybusy") !=""){
+      if(formods::is_installed("shinybusy") & update_modal){
         if((any(c("ShinySession", "session_proxy") %in% class(session)))){
           shinybusy::update_modal_spinner(text=
-                  paste0(state[["MC"]][["labels"]][["busy"]][[rpttype]], code_only_msg, "(",rptctr, "/", length(rpttypes),")"))
+            paste0(state[["MC"]][["labels"]][["busy"]][[rpttype]], code_only_msg, "(",rptctr, "/", length(rpttypes),")"))
         }
       }
 
@@ -1342,13 +1536,12 @@ ASM_save_state = function(state, session, file_path, pll = NULL){
   res}
 
 #'@export
-#'@title Write State to File for Saving
-#'@description Called from download handler and used to write a saved state
-#'value if that is null
+#'@title Load App State
+#'@description Used to load the saved app state from a zip file
 #'@param state ASM state from \code{ASM_fetch_state()}
 #'@param session Shiny session variable
 #'@param file_path Zip file with the saved sate
-#'@return This function only writes the state and returns a list with the
+#'@return This function overwrites the current app state and returns a list with the
 #'following elements:
 #' \itemize{
 #'   \item{isgood:}      Boolean indicating the exit status of the function.
@@ -1473,3 +1666,334 @@ ASM_load_state = function(state, session, file_path){
              session  = session,
              msgs     = msgs)
   res}
+
+#'@export
+#'@title Run Specified Workflow
+#'@description Called from download handler and used to write a saved state
+#'value if that is null
+#'@param state ASM state from \code{ASM_fetch_state()}
+#'@param session Shiny session variable
+#'@param wfl   List contining details about the workflow
+#'@return The ASM state object with the results stored as a list in the field \code{rwf_res}
+#'following elements:
+#' \itemize{
+#'   \item{isgood:}      Boolean indicating the exit status of the function.
+#'   \item{msgs:}        Messages to be passed back to the user.
+#' }
+#'@examples
+#' # Populating the session with data
+#' ds_plf = c(system.file(package="formods", "preload", "ASM_preload_empty.yaml"),
+#'            system.file(package="formods", "preload", "UD_preload.yaml"),
+#'            system.file(package="formods", "preload", "DM_preload_empty.yaml"))
+#' session = list()
+#' res_ds = FM_app_preload(session=session, sources=ds_plf)
+#' 
+#' session = res_ds[["session"]]
+#' state   = res_ds[["all_sess_res"]][["ASM"]][["state"]]
+#' 
+#' # Creating the workflow preload list
+#' wf_pll = c(
+#'   FM_read_yaml( system.file(package="formods", "preload", "ASM_preload.yaml")),
+#'   FM_read_yaml( system.file(package="formods", "preload", "UD_preload.yaml")),
+#'   FM_read_yaml( system.file(package="formods", "preload", "DM_preload_empty.yaml")),
+#'   FM_read_yaml( system.file(package="formods", "preload", "DW_preload_empty.yaml")))
+#' 
+#' tmp_preload = tempfile(fileext=".yaml")
+#' yaml::write_yaml(file=tmp_preload, x=wf_pll)
+#' 
+#' wfl = list(
+#'   require_ds = TRUE,
+#'   preload   = tmp_preload
+#' )
+#' 
+#' # Running the workflow
+#' state = ASM_run_workflow(state=state, session=session, wfl=wfl)
+ASM_run_workflow = function(state, session, wfl){
+  isgood     = TRUE
+  msgs       = c()
+
+    fds_res = FM_fetch_ds(state=state, session=session, meta_only=TRUE)
+
+    # JMH add checks for DW and resource labels
+    if(wfl[["require_ds"]] & !fds_res[["hasds"]]){
+#     # To run this workflow a dataset is required but one has not been
+#     # uploaded.
+      msgs  = c(msgs, state[["MC"]][["errors"]][["no_ds_for_workflow"]])
+      isgood = FALSE
+#     FM_set_mod_state(session, id, state)
+    } else {
+      FM_le(state, paste0("Running workflow: ", wfl[["desc"]]))
+      # Preload file
+      plf = render_str(wfl[["preload"]])
+
+      # Preload list:
+      pll = FM_read_yaml(plf)
+
+      # Walking trough each module we need to preserve. For example if we're running a workflow
+      # against the loaded datasets then we need to create preload lists for
+      # each of those modules based on the IDs specified in the ASM module yaml file.
+      for(tmp_mod_ID in names(state[["MC"]][["module"]][["workflow"]])){
+        tmp_state = FM_fetch_mod_state(id=tmp_mod_ID, session=session)
+
+        # Making a preload list for the current module
+        cmd = paste0("res_mpl =  ", tmp_state[["MOD_TYPE"]],"_mk_preload(state=tmp_state)")
+        tcres =
+          FM_tc(capture="res_mpl", 
+                cmd = cmd,
+                tc_env = list(tmp_state=tmp_state))
+
+        if(tcres[["isgood"]]){
+          # The results of the mk_preload command above
+          res_mpl = tcres[["capture"]][["res_mpl"]]
+
+          # Removing the source module from the preload list from the workflow
+          pll[[ tmp_state[["id"]] ]] = NULL
+
+          # Appending the current state:
+          pll = c(res_mpl[["yaml_list"]], pll)
+
+        } else {
+          isgood = FALSE
+          msgs = c(msgs, tcres[["msgs"]])
+        }
+      }
+
+      # We only proceed if the preload list was created
+      if(isgood){
+        # Because preload files from saved analyses can have relative
+        # paths to configuration yaml files in them, we need replace those
+        # With the paths to those files used in the current app
+        for(tmp_modID in names(pll)){
+          tmp_state = FM_fetch_mod_state(session, tmp_modID)
+          if(!is.null(tmp_state)){
+            pll[[tmp_modID]][["fm_yaml"]]  = tmp_state[["FM_yaml_file"]]
+            pll[[tmp_modID]][["mod_yaml"]] = tmp_state[["MOD_yaml_file"]]
+          } else {
+            tmp_msg = paste0("Module with ID: ", tmp_modID, " found in workflow but not in app. ")
+            FM_le(state, tmp_msg, entry_type="error")
+          }
+        }
+
+        # Writing the new workflow yaml list to a save file:
+        ssf  = tempfile(fileext=".zip")
+        ss_res = ASM_save_state(state=state, session=session, file_path=ssf, pll=pll, update_modal=FALSE)
+        if(ss_res[["isgood"]]){
+
+          ls_res =
+              ASM_load_state(state, session,
+                             file_path = ssf)
+
+          state = ls_res[["state"]]
+  
+          if(!ls_res[["isgood"]]){
+            msgs =  c(msgs, state[["MC"]][["errors"]][["ls_failed"]], ls_res[["msgs"]])
+            isgood = FALSE
+          }
+  
+        } else {
+          msgs =  c(msgs, state[["MC"]][["errors"]][["ss_failed"]], ss_res[["msgs"]])
+          isgood = FALSE
+        }
+      }
+    }
+
+  state[["ASM"]][["rwf_res"]] = list(
+    isgood = isgood,
+    msgs   = msgs
+  )
+state}
+
+#'@export
+#'@title Checks Workflow Preload List Against Current App State
+#'@description Compares the resource dependencies in a workflow preload list to
+#' those currently avialble in the state to determine if the workflow can be run.
+#'@param state ASM state from \code{ASM_fetch_state()}
+#'@param session Shiny session variable
+#'@param pll   Workflow preload list.
+#'@return A list with the following attributes 
+#'following elements:
+#' \itemize{
+#'   \item{isgood:}      Boolean indicating the exit status of the function.
+#'   \item{msgs:}        Messages to be passed back to the user.
+#'   \item{chk_msgs:}    Results of check, this can contain \code{"tags()"}
+#'   \item{dep_table:}   Table of dependency information with the following columns:
+#'   \itemize{
+#'     \item{mod_ID:}      The formods module ID of the module that needs the resource.
+#'     \item{dep_type :}   Type of resource dependency currently only \code{"ds"} for data source.
+#'     \item{id       :}   The formods module ID supplying the resource.
+#'     \item{res_label:}   The resource label.
+#'     \item{res_found:}   Logical indicating if the resource was found or not.
+#'   }
+#' }
+#'@examples
+#' # The ASM session won't have any components so the check below should fail
+#' sess_res = ASM_test_mksession()
+#' session = sess_res[["session"]]
+#' state = FM_fetch_mod_state(id="ASM", session=session)
+#' 
+#' # The DW test merge should require resource labels that are not currently present
+#' pll = formods::FM_read_yaml(system.file(package="formods", "preload", "DW_test_merge.yaml"))
+#' 
+#' cwf_res = ASM_check_workflow(state=state, session=session, pll=pll)
+#' 
+#' cwf_res
+ASM_check_workflow = function(state, session, pll){
+  isgood = TRUE
+  msgs   = c()
+
+  # Defaulting to no resources
+  chk_msgs = state[["MC"]][["formatting"]][["workflow"]][["chk_msgs"]][["no_res"]]
+
+  #pll = formods::FM_read_yaml(system.file(package="formods", "preload", "DW_test_merge.yaml"))
+
+  # Finding resource dependencies
+  res_deps = NULL
+  for(tmp_mod_ID in names(pll)){
+    for(tmp_dep_type in names(pll[[tmp_mod_ID]][["res_deps"]])){
+      for(tmp_res_mod_ID in names(pll[[tmp_mod_ID]][["res_deps"]][[tmp_dep_type]])){
+
+        pll[[tmp_mod_ID]][["res_deps"]][[tmp_dep_type]][[tmp_res_mod_ID]]
+
+        res_deps = rbind(res_deps, 
+          data.frame(mod_ID      = tmp_mod_ID,
+                     dep_type    = tmp_dep_type,
+                     id          = tmp_res_mod_ID,
+                     res_label   = pll[[tmp_mod_ID]][["res_deps"]][[tmp_dep_type]][[tmp_res_mod_ID]],
+                     res_found   = FALSE)
+        )
+      }
+    }
+  }
+
+  if(!is.null(res_deps)){
+    # Getting a catalog of the ds resources avialble in the app:
+    fds_res = FM_fetch_ds(state=state, session=session, meta_only=TRUE)
+    for(ridx in 1:nrow(res_deps)){
+      # Right now we only have dataset dependencies but this could expand in the future:
+      if(res_deps[ridx, ][["dep_type"]] == "ds"){
+        fr_res = 
+          fetch_resource(
+            catalog   = fds_res[["catalog"]],
+            id        = res_deps[ridx, ][["id"]], 
+            res_label = res_deps[ridx, ][["res_label"]])
+
+        # If the resource exists we flag it as found
+        if(fr_res[["isgood"]]){
+          res_deps[ridx, ][["res_found"]] = TRUE
+        }
+      }
+    }
+
+    if(all(res_deps[["res_found"]])){
+      chk_msgs = state[["MC"]][["formatting"]][["workflow"]][["chk_msgs"]][["all_found"]]
+    } else {
+      chk_msgs = state[["MC"]][["formatting"]][["workflow"]][["chk_msgs"]][["missing"]]
+      mdeps                 = res_deps[!res_deps[["res_found"]], ]
+      mdeps[["res_label"]]  = paste0("tags$b(", mdeps[["res_label"]],")")
+      mdeps_str             = paste0(mdeps[["res_label"]], collapse=", ")
+      chk_msgs              = stringr::str_replace(patter="===MISSING===", string=chk_msgs, replacement=mdeps_str)
+    }
+  }
+
+  # Rendering any code in the messages
+  chk_msgs = formods::render_str(chk_msgs)
+
+  res = list(
+    isgood    = isgood,
+    msgs      = msgs,
+    chk_msgs  = chk_msgs,
+    dep_table = res_deps)
+res}
+
+
+#'@export
+#'@title Test Specified Workflow 
+#'@description This will take a preload file for loading data and a separate preload file for a workflow and test whether it can be run.
+#'@param ds_plf Vector of preload yaml list files containing data loading
+#'@param wf_plf Vector of preload yaml list files containing workflows
+#'@return List with the following elements:
+#' \itemize{
+#'   \item{isgood:}      Boolean indicating the exit status of the function.
+#'   \item{msgs:}        Messages to be passed back to the user.
+#' }
+#'@examples
+#'  ds_plf = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+#'             system.file(package="formods", "preload", "UD_preload.yaml"),
+#'             system.file(package="formods", "preload", "DM_preload_empty.yaml"))
+#'
+#'  wf_plf = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+#'             system.file(package="formods", "preload", "UD_preload.yaml"),
+#'             system.file(package="formods", "preload", "DM_preload_empty.yaml"),
+#'             system.file(package="formods", "preload", "DW_preload.yaml"))
+#'
+#'  res = ASM_test_workflow(ds_plf=ds_plf, wf_plf=wf_plf)
+ASM_test_workflow = function(ds_plf, wf_plf){
+
+  isgood = TRUE
+  msgs   = c()
+
+  # Building the session with the datasets attached
+  session = list()
+  res_ds = FM_app_preload(session=session, sources=ds_plf)
+
+
+  if(res_ds[["isgood"]]){
+    # Session with the ds_plf populated
+    session = res_ds[["session"]]
+
+    # ASM state object
+    state = res_ds[["all_sess_res"]][["ASM"]][["state"]]
+
+    # turning preload files (plf) into a single preload lists (pll)
+    wf_pll = list()
+    for(tmp_wf_plf in wf_plf){
+       wf_pll = c(wf_pll, formods::FM_read_yaml(tmp_wf_plf))
+    }
+
+    # Some basic testing of the workflow
+    cwf_res = ASM_check_workflow(state=state, session=session, pll = wf_pll)
+    if(cwf_res[["isgood"]]){
+
+      # The run_workflow function takes in a yaml file so we need to write the wf_pll out to a file
+      tmp_preload = tempfile(fileext=".yaml")
+      yaml::write_yaml(file=tmp_preload, x=wf_pll)
+
+      wfl = list(
+        require_ds = TRUE,
+        preload   = tmp_preload
+      )
+
+      state = ASM_run_workflow(state=state, session=session, wfl=wfl)
+
+      # This tests to see if the preload failed:
+      if(!state[["ASM"]][["rwf_res"]][["isgood"]]){
+        isgood = FALSE 
+        if(!is.null(state[["ASM"]][["rwf_res"]][["isgood"]])){
+          msgs = c(msgs, 
+            "workflow run failed (ASM_run_workflow()), see messages below for details", 
+            state[["ASM"]][["rwf_res"]][["isgood"]])
+        } else {
+          msgs = c(msgs, "workflow check failed (ASM_run_workflow())")
+        }
+      }
+    } else {
+      if(!is.null(cwf_res[["msgs"]])){
+        msgs = c(msgs, "workflow check failed (ASM_check_workflow()), see messages below for details", cwf_res[["msgs"]])
+      } else {
+        msgs = c(msgs, "workflow check failed (ASM_check_workflow())")
+      }
+    }
+
+  } else {
+    isgood = FALSE
+    if(!is.null(res_ds[["msgs"]])){
+      msgs = c(msgs, "ds preload failed, see messages below for details", res_ds[["msgs"]])
+    } else {
+      msgs = c(msgs, "ds preload failed")
+    }
+  }
+
+  res = list(
+    isgood    = isgood,
+    msgs      = msgs)
+res}

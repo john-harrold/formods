@@ -17,48 +17,61 @@ MC:
     enabled: TRUE
     priority: 1
   notifications:
-    new_dw_element: "Added component: ===ACTION=== (===DESC===)"
+    new_dw_element: "Added data view component: ===ACTION=== (===DESC===)"
+    bad_dw_element: "Data view component not added"
+    new_merge_rel:  "Added merge relationship: ===MRDESC==="
     del_dw_element: "Removed component: ===ACTION=== (===DESC===)"
+    dw_source_missing: 'The data source ===DSID=== was not found and the data view "===VIEW===" (===DVID===), failed to rebuild'
+    rebuild_failed:       "Rebuild of data view failed"
   tooltips:
     # Set to FALSE to disable tool tips for this module
-    include:               TRUE
-    show_code:             "Show data wrangling code"
-    dw_elements:           "Current wrangling components"
-  labels:                  
-    tab_main:              "Wrangle"
-    tab_code:              "Code"
-    add_element:           "Add Operation/Action"
-    select_dw_views:       "Current data view"
-    select_current_source: "Data from"           
-    fds_filter_column:     "Filter by Column"
-    fds_filter_operator:   "Condition"
-    fds_filter_rhs:        "Matching"
-    fds_mutate_column:     "New or current column to alter"
-    fds_mutate_rhs:        "New Value"
-    fds_rename_column:     "Curret Column"
-    fds_rename_rhs:        "New Name"
-    fds_group_column:      "Columns to group"
-    fds_longer_column:     "Columns to make longer"
-    fds_longer_names:      "New column to contain names"
-    fds_longer_values:     "New column to contain values"
-    fds_wider_names:       "Column with names"
-    fds_wider_values:      "Column with values"
-    new_dw:                "New"
-    del_dw:                "Delete"
-    save_dw:               "Save"
-    copy_dw:               "Copy"
-    clip_dw:               "Code"
-    ungroup_data:          "Removing current grouping"
-    keep_onerow:           "Keep first row in current grouping"
-    no_dataset:            "No dataset available to wrangle. You need to load a dataset to use this module."
-    no_dw_elements:        "No data wrangling components defined yet"
+    include:                TRUE
+    show_code:              "Show data view wrangling code"
+    dw_elements:            "Current data view wrangling components"
+  labels:                   
+    tab_main:               "Wrangle"
+    tab_code:               "Code"
+    add_element:            "Add Operation/Action"
+    add_merge_relationship: NULL # "Add Relationship"
+    select_dw_views:        "Current data view"
+    fds_merge_source:       "New data source"           
+    fds_merge_method:       "How to merge"        
+    fds_merge_condition:    "Merge relationships"        
+    fds_filter_column:      "Filter by Column"
+    fds_sort_column:        "Select Column(s) to Sort by"
+    fds_filter_operator:    "Condition"
+    fds_filter_rhs:         "Matching"
+    fds_mutate_column:      "New or current column to alter"
+    fds_mutate_rhs:         "New Value"
+    fds_rename_column:      "Curret Column"
+    fds_rename_rhs:         "New Name"
+    fds_group_column:       "Columns to group"
+    fds_longer_column:      "Columns to make longer"
+    fds_longer_names:       "New column to contain names"
+    fds_longer_values:      "New column to contain values"
+    fds_wider_names:        "Column with names"
+    fds_wider_values:       "Column with values"
+    new_dw:                 "New"
+    del_dw:                 "Delete"
+    save_dw:                "Save"
+    copy_dw:                "Copy"
+    clip_dw:                "Code"
+    ungroup_data:           "Removing current grouping"
+    keep_onerow:            "Keeping the first row in current grouping"
+    sorting:                "Sorting by ===COLS==="
+    no_dataset:             "No dataset available to wrangle. You need to load a dataset to use this module."
+    no_dw_elements:         "No data wrangling components defined yet"
     busy:
       dv_update:  "Updating data views. Please be patient..."
   errors:
     no_code:              "# No data wragling elements defined yet!"
+    fds_sort_column:      "Sort column not specified."
     fds_filter_column:    "Filter column not specified."
     fds_filter_operator:  "Filter condition not specified."
     fds_filter_rhs:       "Filter RHS not specified."
+    fds_merge_rels:       "No merge relationships were defined, you need to define at least one."        
+    fds_merge_method:     "No merge method defined."
+    fds_merge_source:     "No merge source defined."
     fds_mutate_column:    "Mutate column not specified."
     fds_mutate_rhs:       "Mutate RHS not specified."
     fds_rename_column:    "Column to rename not specified."
@@ -72,10 +85,18 @@ MC:
     fds_wider_value s:    "You must select a column with the values."
     current_key:          "Short description"
     current_key_empty:    "The data view description field cannot be empty"
-    unknown_action:       "The selection action is not supported."
+    unknown_action:       "The selected action/operation is not supported."
     no_rows:              "There are no rows in the data set."
     element_not_added:    "Unable to add the data wrangling component:"
     fix_bad_element:      "There is a bad component in the data wrangling chain,\nyou need to fix that before adding new components"
+    rbind_col_missing_head:    "To vertically append tables the column names in each table must match."
+    rbind_col_missing_details: |-
+      Columns in ===DS1=== missing from ===DS2===: 
+      ===COLS===
+    cbind_row_mismatch: |-  
+      Rows must match: 
+        ===DS1=== has ===NR1=== rows
+        ===DS2=== has ===NR2=== rows
   operators:
     # Do not change the type or rop. Only modify the text element
     - type: "factor"
@@ -93,34 +114,65 @@ MC:
     - type: "not_factor"
       text: "is not equal to"
       rop:  "!="
+  # The order of the actions determines their order in the UI
   actions:
     filter:
-      choice:  "Filter"
-      subtext: "Filter data"
-    mutate:
-      choice:  "Alter"
-      subtext: "Create new column or change existing column"
-    rename:
-      choice:  "Rename"
-      subtext: "Rename column"
-    group:
-      choice:  "Group"
-      subtext: "Group subsequent operations by columns"
-    ungroup:
-      choice:  "Ungroup"
-      subtext: "Removing groping"
-    longer:
-      choice:  "Elongate"
-      subtext: "Make Longer: rows to columns"
-    wider:
-      choice:  "Widen"
-      subtext: "Make Wider: columns to rows"
-    onerow:
-      choice:  "First Row"
-      subtext: "Keep only first row of grouped data"
-    select:
-      choice:  "Select"
-      subtext: "Choose columns to keep"
+      choice:     "Filter"
+      subtext:    "Filter data"
+      icon:       "glyphicon-filter"
+      lib:        "glyphicon"
+    mutate:       
+      choice:     "Alter"
+      subtext:    "Create new column or change existing column"
+      icon:       "glyphicon-wrench"
+      lib:        "glyphicon"
+    rename:       
+      choice:     "Rename"
+      subtext:    "Rename column"
+      icon:       "glyphicon-edit"
+      lib:        "glyphicon"
+    select:       
+      choice:     "Select"
+      subtext:    "Choose columns to keep"
+      icon:       "glyphicon-check"
+      lib:        "glyphicon"
+    sort:  
+      choice:      "Sort"   
+      subtext:     "Sort by one or more columns"
+      icon:        "glyphicon-sort"
+      lib:         "glyphicon"
+    merge: 
+      choice:     "Merge"  
+      subtext:    "Combine with other data sources"
+      icon:       "glyphicon-align-justify"
+      lib:        "glyphicon"
+      #icon:       "fa-star"
+      #lib:        "fa"
+    group:        
+      choice:     "Group"
+      subtext:    "Group subsequent operations by columns"
+      icon:       "glyphicon-resize-small"
+      lib:        "glyphicon"
+    ungroup:      
+      choice:     "Ungroup"
+      subtext:    "Removing groping"
+      icon:       "glyphicon-resize-full"
+      lib:        "glyphicon"
+    longer:       
+      choice:     "Elongate"
+      subtext:    "Make Longer: rows to columns"
+      icon:       "glyphicon-resize-vertical"
+      lib:        "glyphicon"
+    wider:        
+      choice:     "Widen"
+      subtext:    "Make Wider: columns to rows"
+      icon:       "glyphicon-resize-horizontal"
+      lib:        "glyphicon"
+    onerow:       
+      choice:     "First Row"
+      subtext:    "Keep only first row of grouped data"
+      icon:       "glyphicon-export"
+      lib:        "glyphicon"
   formatting:
     # dimensions of the table preview in pixels
     preview:
@@ -128,8 +180,8 @@ MC:
       height: 400
     # Dimensions of the table with the data wrangling elements
     dw_elements:
-      width:  600
-      height: 200
+      width:  800
+      height: 300
     current_key:
       width: 300
     code:
@@ -149,8 +201,111 @@ MC:
       tooltip_position: "right"
     select_dw_views:
       width: 200
+      tooltip:          "If there is a data view that is highlighted there is an issue with it. Check data view the components for any errors."
+      tooltip_position: "top"
     select_current_source:
       width: 200
+    select_fds_sort_column:
+      names_asc:   "===COL=== (ascending)" 
+      names_des:   "===COL=== (descending)"
+      width:       "400px"
+    select_fds_merge_source:
+      width:       "200px"
+      tooltip:     "New data source to merge with data view"
+      tooltip_position: "right"
+    select_fds_merge_method:
+      width:       "200px"
+      tooltip:     "How to merge the new data source"
+      tooltip_position: "right"
+      methods:
+        rbind:
+          cname:   "Virtically Append"
+          subtext: "Data view and source must have same columns (rbind)"
+        cbind:
+          cname:   "Horizontally Append"
+          subtext: "Data view and source must have same number of rows (cbind)"
+        inner_join:
+          cname:   "Keep Rows Matching Data View and New Source"
+          subtext: "Only keep rows in where the new data source matches current data view (inner join)"
+        left_join:
+          cname:   "Keep Data View Rows"
+          subtext: "Only keep rows in new data source that have matches in the current data view (left join)"
+        right_join:
+          cname:   "Keep New Source Rows"
+          subtext: "Only keep rows in the current data view that have matches in the new data source (right join)"
+        full_join :
+          cname:   "Keep All Data"
+          subtext: "Keep all rows in both the current data_view and the source dataset (full join)"
+    select_fds_merge_condition:
+      width:            "200px"
+      tooltip:          "How columns in the current data view relate to the new data source."
+      tooltip_position: "right"
+      # These are the valid method that can accept conditions
+      valid_methods:    ["left_join", "right_join", "full_join", "inner_join"]
+      # The cname and subtext fields can be changed but do not change the top
+      # level elements (e.g. equality, inequality, etc)
+      relationships:
+        eq_ineq: 
+          op_width: "75px"
+          dv_cols:
+            tooltip:          "Select the column in the dataview"
+            tooltip_position: "left"
+          # These are the operators that are displayed when the inequality and
+          # closest inequality options are selected:
+          operators:
+            # You can change cnames but not the choices
+            choices: [">=", ">",  "<=", "<"]
+            cnames:  ["≥", ">",  "≤", "<"]
+            dnames:  ["gteq", "gt",  "lteq", "lt"]
+          ns_cols:
+            tooltip:          "Select the column in the new data source"
+            tooltip_position: "right"
+        # between, within and overlaps
+        bwo: 
+          range_width: "75px"
+          dv_single:
+            tooltip:             "Select the column with the value in the data view"
+            tooltip_position:    "right"
+          dv_range:
+            tooltip_ub:          "Select the column with the upper bound in the data view"
+            tooltip_position_ub: "right"
+            tooltip_lb:          "Select the column with the lower bound in the data view"
+            tooltip_position_lb: "right"
+          ns_range:
+            tooltip_ub:          "Select the column with the upper bound in the new data source"
+            tooltip_position_ub: "right"
+            tooltip_lb:          "Select the column with the lower bound in the new data source"
+            tooltip_position_lb: "right"
+      conditions:
+        equality:
+          desc:      "===DV=== == ===NS==="
+          cname:     "Equality"
+          subtext:   "Columns are the same"
+        inequality: 
+          desc:      "===DV=== ===OP=== ===NS==="
+          cname:     "Inequality"
+          subtext:   "Columns satisfy an inequality"
+        inequality_closest: 
+          desc:      "closest(===DV=== ===OP=== ===NS===)"
+          cname:     "Inequality Closest"
+          subtext:   "Closest match to an inequality"
+        between:             
+          desc:      "===DV_LB=== between ===NS_LB=== and ===NS_UB==="
+          cname:     "Between"
+          subtext:   "A column in your data view between values in two columns in the new data source"
+        within:              
+          desc:      "[===DV_LB===, ===DV_UB===] within [===NS_LB===, ===NS_UB===]"
+          cname:     "Within"
+          subtext:   "Ranges in data view (two columns) are within ranges (two columns) in the new data source"
+        overlaps:            
+          desc:      "[===DV_LB===, ===DV_UB===] overlaps [===NS_LB===, ===NS_UB===]"
+          cname:     "Overlaps"
+          subtext:   "Ranges in data view (two columns) overlap with ranges (two columns) in the new data source"
+    select_fds_merge_relationships:
+      no_rels: "No merge relationships have been defined"
+      tooltip: "The following merge relationships have been defined. Select them to remove."
+      tooltip_position: "bottom"
+      width: 600
     button_dw_save:
       size: "sm"
       block: TRUE
@@ -167,6 +322,12 @@ MC:
       tooltip: "Create a new empty data view."
       tooltip_position: "right"
     button_dw_add_element:
+      size: "sm"
+      block: TRUE
+    button_dw_add_merge_relationship:
+      tooltip: "Add the merge relationship."
+      tooltip_position: "left"
+      width: "40px"
       size: "sm"
       block: TRUE
   code: # module specific code options

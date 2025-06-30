@@ -59,8 +59,8 @@ list containing the current dataset with the following format:
   following: \code{res$modules$DW$my_id}.
   \item{module_ids:} List with an entry for each module_id. The element name is
   the module id. For each of these there is a checksum. For example to access the
-  checksum of a module with an id 'my_id', you would use the
-  following: \code{res$module_ids$DW$my_id}.
+  checksum of a module with id of  'my_id', you would use the
+  following: \code{res$module_ids$my_id}.
 }
 }
 \description{

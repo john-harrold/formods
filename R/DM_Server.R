@@ -5,7 +5,7 @@
 #'@importFrom shinyAce aceEditor updateAceEditor
 
 #'@export
-#'@title Data Management State Server
+#'@title Data Management Server
 #'@description Server function for the Data Management  Shiny Module
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
 #'@param FM_yaml_file App configuration file with FM as main section.
@@ -128,7 +128,7 @@ DM_Server <- function(id,
                      height     = state[["MC"]][["formatting"]][["preview"]][["height"]],
                      rowHeaders = NULL) |>
           hot_col("ID",     valign='htCenter')   |>
-          hot_col("Delete", valign='htCenter')   |>
+          hot_col("Delete", valign='htCenter', width = 40 )   |>
           hot_col("Type",   valign='htCenter')   |>
           hot_cols(colWidths = colWidths)
       }
@@ -402,6 +402,7 @@ DM_Server <- function(id,
                              react_state     = react_state)
 
       current_ele = DM_fetch_current_element(state)
+
       # JMH update value below with srcnfo
       srcnfo = DM_fetch_source(state = state, element=current_ele)
 
@@ -1052,9 +1053,9 @@ DM_Server <- function(id,
     remove_hold_listen  <- reactive({
         list(
              force_mod_update[["triggered"]],
-           # input$button_clk_new,
-           # input$button_clk_del,
-           # input$button_clk_copy,
+             input$button_clk_new,
+             input$button_clk_del,
+             input$button_clk_copy,
            # input$button_clk_save,
              input$element_selection
            # input$current_element
@@ -1194,17 +1195,10 @@ DM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react
           changed_uis = c(changed_uis, ui_name)
         }
       }else{
-        if(ui_name == "res_label"){
-          change_detected =
-            has_updated(ui_val   = state[["DM"]][["ui"]][[ui_name]],
-                        old_val  = state[["DM"]][["ui_old"]][[ui_name]],
-                        init_val = NULL)
-        } else {
-          change_detected =
-            has_updated(ui_val   = state[["DM"]][["ui"]][[ui_name]],
-                        old_val  = state[["DM"]][["ui_old"]][[ui_name]],
-                        init_val = c(""))
-        }
+        change_detected =
+          has_updated(ui_val   = state[["DM"]][["ui"]][[ui_name]],
+                      old_val  = state[["DM"]][["ui_old"]][[ui_name]],
+                      init_val = c(""))
         if(change_detected){
           changed_data_str = paste(state[["DM"]][["ui"]][[ui_name]], collapse=", ")
           changed_data_str = substr(changed_data_str, 1, 70)
@@ -1292,6 +1286,20 @@ DM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react
   if("button_clk_new" %in% changed_uis){
     FM_le(state, "new ds")
     state = DM_new_element(state)
+    #browser()
+
+    if(state[["DM"]][["ui"]][["source_id"]]!= ""){
+      current_ele = DM_fetch_current_element(state)
+      current_ele[["ui"]][["source_id"]]=state[["DM"]][["ui"]][["source_id"]]
+      state = DM_set_current_element(
+        state   = state,
+        element = current_ele)
+    }
+
+
+    state = set_hold(state)
+    state[["DM"]][["button_counters"]][["button_clk_new"]] = 
+      state[["DM"]][["ui"]][["button_clk_new"]]
   }
   #---------------------------------------------
   # uploading file
@@ -1412,6 +1420,8 @@ DM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react
   #---------------------------------------------
   # source (file, url, etc) changed so we update the dataset
   ui_force_update = c("source_id",
+                      "button_clk_new",
+                      "button_clk_copy",
                       "button_clk_get_url",
                       "DM_hot_resources",
                       "clean_ds",
@@ -1669,7 +1679,7 @@ DM_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
                          paste0(
                               'rpt[["sheets"]][["',
                               tmp_source_ele[["objs"]][["element_object_name"]],
-                              '"]]=',
+                              '"]] <- ',
                               tmp_source_ele[["objs"]][["element_object_name"]]))
           # Evaluating the code
           if(!gen_code_only){
@@ -1686,7 +1696,7 @@ DM_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
             tmp_desc = paste0(tmp_desc, ": ", tmp_source_ele[["ui"]][["res_label"]])
           }
 
-          code_chunk = c('rpt[["summary"]] = rbind(rpt[["summary"]],',
+          code_chunk = c('rpt[["summary"]] <- rbind(rpt[["summary"]],',
                          "  data.frame(",
                   paste0('    Sheet_Name="', tmp_source_ele[["objs"]][["element_object_name"]],
                          '",'),
@@ -1782,7 +1792,7 @@ DM_fetch_ds = function(state, meta_only=FALSE){
         tmp_DSchecksum    = tmp_ele[["checksum"]]
         tmp_code          = tmp_ele[["code"]]
         tmp_label         = tmp_ele[["ui"]][["element_name"]]
-        tmp_res_label      = tmp_ele[["ui"]][["res_label"]]
+        tmp_res_label     = tmp_ele[["ui"]][["res_label"]]
         tmp_idx           = tmp_ele[["idx"]]
 
 
@@ -1798,7 +1808,7 @@ DM_fetch_ds = function(state, meta_only=FALSE){
           }
 
           TMPDS[["label"]]      = tmp_label
-          TMPDS[["res_label"]]   = tmp_res_label
+          TMPDS[["res_label"]]  = tmp_res_label
           TMPDS[["idx"]]        = tmp_idx
           TMPDS[["DSchecksum"]] = tmp_DSchecksum
           TMPDS[["code"]]       = tmp_code
@@ -1903,9 +1913,6 @@ res}
 #               mdl        = mdl)
 #    res}
 
-
-# JMH Add module checksum template
-# JMH Add element checksum template
 
 #'@export
 #'@title Updates DM Module Checksum
@@ -2344,13 +2351,18 @@ DM_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
                hasds    = DM_hasds(state)))
 
 
-  # Setting old ui values to current to prevent reactions on load
-  for(ui_name in names(state[["DM"]][["ui"]])){
-     state[["DM"]][["ui_old"]][[ui_name]] = state[["DM"]][["ui"]][[ui_name]] }
+  # Making sure the ui tracked at the state level is consistent with the ui in the current element
   current_ele  = DM_fetch_current_element(state)
   for(ui_name in names(current_ele[["ui"]])){
-     state[["DM"]][["ui_old"]][[ui_name]] = current_ele[["ui"]][[ui_name]] }
+    if(ui_name %in% names(state[["DM"]][["ui"]])){
+      state[["DM"]][["ui"]][[ui_name]] = current_ele[["ui"]][[ui_name]] 
+      }
+    } 
 
+  # Setting old ui values to current to prevent reactions on load
+  for(ui_name in names(state[["DM"]][["ui"]])){
+     state[["DM"]][["ui_old"]][[ui_name]] = state[["DM"]][["ui"]][[ui_name]] 
+    }
 
   # holding everything
   state = set_hold(state)
@@ -2370,7 +2382,6 @@ DM_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
              input       = input,
              react_state = react_state,
              state       = state)
-
 res}
 
 #'@export
@@ -2533,24 +2544,28 @@ DM_update_element_code    = function(state, element, session){
   code_run      = c()
 
   msgs        = c()
-  isgood      = FALSE
+  isgood      = TRUE
 
   srcnfo = DM_fetch_source(state = state, element = element)
 
+  if(!srcnfo[["isgood"]]){
+    isgood = FALSE
+    msgs = c(msgs, "unable to find source for current element")
+  }
 
   if(srcnfo[["source_type"]] == "file"){
     if(srcnfo[["excel_file"]]){
       if(srcnfo[["excel_good"]]){
         isgood      = TRUE
-        code_export = paste0(element[["objs"]][["element_object_name"]], " = rio::import(file=",deparse(srcnfo[["rel_path"]]),  ", which =", deparse(srcnfo[["sheet"]]), ")")
-        code_run    = paste0(element[["objs"]][["element_object_name"]], " = rio::import(file=",deparse(srcnfo[["full_path"]]), ", which =", deparse(srcnfo[["sheet"]]), ")")
+        code_export = paste0(element[["objs"]][["element_object_name"]], " <- rio::import(file=",deparse(srcnfo[["rel_path"]]),  ", which =", deparse(srcnfo[["sheet"]]), ")")
+        code_run    = paste0(element[["objs"]][["element_object_name"]], " <- rio::import(file=",deparse(srcnfo[["full_path"]]), ", which =", deparse(srcnfo[["sheet"]]), ")")
       }
     }
 
     if(!srcnfo[["excel_file"]]){
       isgood      = TRUE
-      code_export = paste0(element[["objs"]][["element_object_name"]], " = rio::import(file=",deparse(srcnfo[["rel_path"]]),  ")")
-      code_run    = paste0(element[["objs"]][["element_object_name"]], " = rio::import(file=",deparse(srcnfo[["full_path"]]), ")")
+      code_export = paste0(element[["objs"]][["element_object_name"]], " <- rio::import(file=",deparse(srcnfo[["rel_path"]]),  ")")
+      code_run    = paste0(element[["objs"]][["element_object_name"]], " <- rio::import(file=",deparse(srcnfo[["full_path"]]), ")")
     }
   }
 
@@ -2558,15 +2573,15 @@ DM_update_element_code    = function(state, element, session){
     if(srcnfo[["excel_file"]]){
       if(srcnfo[["excel_good"]]){
         isgood      = TRUE
-        code_export = paste0(element[["objs"]][["element_object_name"]], " = rio::import(file=",deparse(srcnfo[["url"]]),  ", which =", deparse(srcnfo[["sheet"]]), ")")
-        code_run    = paste0(element[["objs"]][["element_object_name"]], " = rio::import(file=",deparse(srcnfo[["full_path"]]), ", which =", deparse(srcnfo[["sheet"]]), ")")
+        code_export = paste0(element[["objs"]][["element_object_name"]], " <- rio::import(file=",deparse(srcnfo[["url"]]),  ", which =", deparse(srcnfo[["sheet"]]), ")")
+        code_run    = paste0(element[["objs"]][["element_object_name"]], " <- rio::import(file=",deparse(srcnfo[["full_path"]]), ", which =", deparse(srcnfo[["sheet"]]), ")")
       }
     }
 
     if(!srcnfo[["excel_file"]]){
       isgood      = TRUE
-      code_export = paste0(element[["objs"]][["element_object_name"]], " = rio::import(file=",deparse(srcnfo[["url"]]),  ")")
-      code_run    = paste0(element[["objs"]][["element_object_name"]], " = rio::import(file=",deparse(srcnfo[["full_path"]]), ")")
+      code_export = paste0(element[["objs"]][["element_object_name"]], " <- rio::import(file=",deparse(srcnfo[["url"]]),  ")")
+      code_run    = paste0(element[["objs"]][["element_object_name"]], " <- rio::import(file=",deparse(srcnfo[["full_path"]]), ")")
     }
   }
 
@@ -2577,7 +2592,7 @@ DM_update_element_code    = function(state, element, session){
       if(is.logical(element[["ui"]][["clean_ds"]])){
         if(element[["ui"]][["clean_ds"]]){
           clean_code = paste0( element[["objs"]][["element_object_name"]],
-                              " = janitor::clean_names(",
+                              " <- janitor::clean_names(",
                               element[["objs"]][["element_object_name"]],
                               ', case="none")')
 
@@ -2924,15 +2939,15 @@ DM_mk_preload     = function(state){
   err_msg   = c()
   yaml_list = list()
 
-  #JMH
-
   ylist = list(
       fm_yaml  = file.path("config", basename(state[["FM_yaml_file"]])),
-      mod_yaml = file.path("config", basename(state[["MOD_yaml_file"]]))
+      mod_yaml = file.path("config", basename(state[["MOD_yaml_file"]])),
+      res_deps = list(ds=list()) ,
+      sources  = NULL,
+      elements = NULL 
   )
 
   # Creating the yaml list with the module ID at the top level
-
   # Adding state level ui values:
   ui_state = c(
     "element_selection",
@@ -2947,47 +2962,49 @@ DM_mk_preload     = function(state){
   }
 
 
-  # Walking through each source
-  for(src_idx in 1:nrow(state[["DM"]][["defined_sources"]])){
-
-    src_row = state[["DM"]][["defined_sources"]][src_idx, ]
-    source_type = src_row[["source_type"]]
-    source_id   = src_row[["ID"]]
-
-    tmp_source = list()
-    if(source_type == "file") {
-      source_str  = src_row[["rel_path"]]
-      tmp_source[["file_name"]]  = src_row[["file_name"]]
-    }else if(source_type == "url") {
-      source_str  = src_row[["url"]]
+  if(nrow(state[["DM"]][["defined_sources"]])>0){
+    # Walking through each source
+    for(src_idx in 1:nrow(state[["DM"]][["defined_sources"]])){
+  
+      src_row = state[["DM"]][["defined_sources"]][src_idx, ]
+      source_type = src_row[["source_type"]]
+      source_id   = src_row[["ID"]]
+  
+      tmp_source = list()
+      if(source_type == "file") {
+        source_str  = src_row[["rel_path"]]
+        tmp_source[["file_name"]]  = src_row[["file_name"]]
+      }else if(source_type == "url") {
+        source_str  = src_row[["url"]]
+      }
+      tmp_source[["source_id"]]    = source_id
+      tmp_source[["source_type"]]  = source_type
+      tmp_source[["source_str"]]   = source_str
+  
+      ylist[["sources"]][[src_idx]] = list(source  = tmp_source)
+      formods::FM_le(state, paste0("saving source (", source_id, ") ", source_str))
+  
+      src_idx = src_idx + 1
     }
-    tmp_source[["source_id"]]    = source_id
-    tmp_source[["source_type"]]  = source_type
-    tmp_source[["source_str"]]   = source_str
+  
+    ele_idx = 1
+    # Walking through each element:
+    for(element_id in names(state[["DM"]][["elements"]])){
+      tmp_source_ele = state[["DM"]][["elements"]][[element_id]]
+  
+      formods::FM_le(state, paste0("saving element (", tmp_source_ele[["idx"]], ") ", tmp_source_ele[["ui"]][["element_name"]]))
+  
+      # Constructing the source element
+      tmp_element = list(
+        idx  = tmp_source_ele[["idx"]],
+        ui   = tmp_source_ele[["ui"]])
+  
+      # Appending element
+      ylist[["elements"]][[ele_idx]] = list(element = tmp_element)
+      ele_idx = ele_idx + 1
+    }
 
-    ylist[["sources"]][[src_idx]] = list(source  = tmp_source)
-    formods::FM_le(state, paste0("saving source (", source_id, ") ", source_str))
-
-    src_idx = src_idx + 1
   }
-
-  ele_idx = 1
-  # Walking through each element:
-  for(element_id in names(state[["DM"]][["elements"]])){
-    tmp_source_ele = state[["DM"]][["elements"]][[element_id]]
-
-    formods::FM_le(state, paste0("saving element (", tmp_source_ele[["idx"]], ") ", tmp_source_ele[["ui"]][["element_name"]]))
-
-    # Constructing the source element
-    tmp_element = list(
-      idx  = tmp_source_ele[["idx"]],
-      ui   = tmp_source_ele[["ui"]])
-
-    # Appending element
-    ylist[["elements"]][[ele_idx]] = list(element = tmp_element)
-    ele_idx = ele_idx + 1
-  }
-
   formods::FM_le(state,paste0("mk_preload isgood: ",isgood))
 
   yaml_list = list()

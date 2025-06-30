@@ -83,6 +83,7 @@ ui <- dashboardPage(
      sidebarMenu(
        menuItem("Source Data",     tabName="upload",      icon=icon("table")) ,
        menuItem("Manage Data",     tabName="manage_data", icon=icon("folder-tree")),
+       menuItem("Workflows",       tabName="workflows",   icon=icon("robot")),
        menuItem("Wrangle",         tabName="wrangle",     icon=icon("hat-cowboy")),
        menuItem("Plot",            tabName="plot",        icon=icon("chart-line")),
        menuItem("App State",       tabName="app_state",   icon=icon("archive")),
@@ -118,6 +119,9 @@ ui <- dashboardPage(
                  )
                )
                ),
+       tabItem(tabName="workflows",
+                 box(title="Run Workflows",
+                     htmlOutput(NS("ASM", "ASM_ui_workflows")))),
        tabItem(tabName="wrangle",
                box(title="Transform and Create Views of Your Data", width=12,
                htmlOutput(NS("DW",  "DW_ui_compact")))),

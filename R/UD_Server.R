@@ -120,7 +120,6 @@ UD_Server <- function(id,
       # Reacting to data file changes
       input$input_data_file
       input$input_select_sheet
-      input$btn_run_wf
       state = UD_fetch_state(id            = id,
                              input         = input,
                              session       = session,
@@ -141,7 +140,6 @@ UD_Server <- function(id,
       # Reacting to data file changes
       input$input_data_file
       input$input_select_sheet
-      input$btn_run_wf
       state = UD_fetch_state(id            = id,
                              input         = input,
                              session       = session,
@@ -153,106 +151,6 @@ UD_Server <- function(id,
                         rhandsontable::rHandsontableOutput(NS(id, "hot_data_preview")))
       } else {uiele = NULL}
       uiele})
-    #------------------------------------
-    # Workflow form elements
-    output$ui_ud_workflows     =  renderUI({
-      state = UD_fetch_state(id            = id,
-                             input         = input,
-                             session       = session,
-                             FM_yaml_file  = FM_yaml_file,
-                             MOD_yaml_file = MOD_yaml_file)
-      wf = state[["yaml"]][["FM"]][["workflows"]]
-
-      uiele    = NULL
-      WF_FOUND = FALSE
-
-
-      # place holders for selection elements
-      groups          = c() # List of all groups found in the workflows
-      values          = c() # Workflow names from formods yaml file
-      desc            = c() # Verbose description of workflow names show to the user
-      choices_simple  = c()
-      choices_group   = c()
-
-      if(length(names(wf)) > 0){
-        for(wfn in names(wf)){
-          # Checking for the existence of the preload file. We only
-          # show preload options that actually exist
-          plf= render_str(wf[[wfn]][["preload"]])
-          if(file.exists(plf)){
-            # We found at least one workflow
-            WF_FOUND = TRUE
-
-            # These are the relevant components needed to construct the UI
-            # elements:
-            groups = c(groups, wf[[wfn]][["group"]])
-            #values = c(values, wfn)
-            #desc   = c(desc  , wf[[wfn]][["desc"]])
-            choices_simple = c(choices_simple, eval(parse(text=paste0('c("',wf[[wfn]][["desc"]], '"=wfn)'))))
-            choices_group[[  wf[[wfn]][["group"]] ]] = c(choices_group[[  wf[[wfn]][["group"]] ]], eval(parse(text=paste0('c("',wf[[wfn]][["desc"]], '"=wfn)'))))
-          } else {
-            FM_le(state, paste0("preload file not found: ", plf), entry_type="warning")
-          }
-        }
-      }
-
-      # If no workflow elements are found we return a no workflows found
-      # message
-      if(WF_FOUND){
-
-        liveSearch = FALSE
-        if(state[["MC"]][["formatting"]][["workflow"]][["liveSearch"]]){
-          if(length(choices_simple) >state[["MC"]][["formatting"]][["workflow"]][["size"]]){
-            liveSearch = TRUE
-          }
-        }
-
-        po = shinyWidgets::pickerOptions(
-            liveSearch =liveSearch,
-            size       =state[["MC"]][["formatting"]][["workflow"]][["size"]])
-
-        if(length(groups) <2){
-          choices = choices_simple
-        } else {
-          choices = choices_group
-        }
-
-        uiele_btn =
-          shinyWidgets::actionBttn(
-                  inputId = NS(id, "btn_run_wf"),
-                  label   = state[["MC"]][["labels"]][["run_wf"]],
-                  style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
-                  size    = state[["MC"]][["formatting"]][["btn_run_wf"]][["size"]],
-                  block   = state[["MC"]][["formatting"]][["btn_run_wf"]][["block"]],
-                  color   = "primary",
-                  icon    = icon("play"))
-        uiele_btn =
-          div(style=paste0("width:",state[["MC"]][["formatting"]][["btn_run_wf"]][["width"]]),uiele_btn)
-
-        uiele_select =
-            pickerInput(
-               inputId = NS(id, "workflow"),
-               label = state[["MC"]][["labels"]][["workflow"]],
-               choices = choices,
-               options = po,
-               width      = state[["MC"]][["formatting"]][["workflow"]][["width"]]
-              )
-        uiele_select =
-          div(style=paste0("width:",state[["MC"]][["formatting"]][["workflow"]][["width"]]),uiele_select)
-
-        uiele_select = FM_add_ui_tooltip(state, uiele_select,
-                 tooltip     = state[["MC"]][["formatting"]][["btn_run_wf"]][["tooltip"]],
-                 position    = state[["MC"]][["formatting"]][["btn_run_wf"]][["tooltip_position"]])
-
-        uiele =
-          tagList(uiele_select, uiele_btn)
-      } else {
-        uiele = state[["MC"]][["errors"]][["no_workflows_found"]]
-      }
-
-
-      uiele})
-
     #------------------------------------
     # Generated data reading code
     observe({
@@ -346,7 +244,6 @@ UD_Server <- function(id,
            div(style="display:inline-block;width:100%", htmlOutput(NS(id, "ui_ud_load_data"))),
            htmlOutput(NS(id, "ui_ud_clean")),
            htmlOutput(NS(id, "ui_ud_select_sheets")),
-           htmlOutput(NS(id, "ui_ud_workflows")),
            div(style="display:inline-block;vertical-align:top;width:40px", uiele_code_button),
            htmlOutput(NS(id, "ui_ud_text_load_result")))
 
@@ -383,7 +280,7 @@ UD_Server <- function(id,
 
     #------------------------------------
     toNotify <- reactive({
-      list(input$btn_run_wf)
+      list(input$input_data_file)
     })
     observeEvent(toNotify(), {
       state = UD_fetch_state(id            = id,
@@ -622,106 +519,6 @@ UD_fetch_state = function(id, input, session, FM_yaml_file,  MOD_yaml_file ){
     state[["UD"]][["load_msg"]]        = load_msg
   }
 
-  #---------------------------------------------
-  # Running workflows
-
-  if("btn_run_wf" %in% changed_uis){
-    load_msg = c()
-    rwf_isgood = TRUE
-    wfn = state[["UD"]][["ui"]][["workflow"]]
-    wfl = state[["yaml"]][["FM"]][["workflows"]][[wfn]]
-
-    if(wfl[["require_ds"]] & !state[["UD"]][["isgood"]]){
-      # To run this workflow a dataset is required but one has not been
-      # uploaded.
-      load_msg  = state[["MC"]][["errors"]][["no_ds_for_workflow"]]
-      rwf_isgood = FALSE
-      FM_set_mod_state(session, id, state)
-    } else {
-      FM_le(state, paste0("Running workflow (", wfn, "): ", wfl[["desc"]]))
-      # Preload file
-      plf = render_str(wfl[["preload"]])
-
-      # Preload list:
-      pll = FM_read_yaml(plf)
-
-      # If require_ds is true we need to append (or replace existing) UD
-      # portion of the preload file:
-      if(wfl[["require_ds"]]){
-        res_mpl = UD_mk_preload(state=state)
-
-        # Removing any previous references to the UD module:
-        pll[[ state[["id"]] ]] = NULL
-
-        # Appending the current state:
-        pll = c(res_mpl[["yaml_list"]], pll)
-      }
-
-
-      # Because preload files from saved analyses can have relative
-      # paths to configuration yaml files in them, we need replace those
-      # With the paths to those files used in the current app
-      for(tmp_modID in names(pll)){
-        tmp_modstate = FM_fetch_mod_state(session, tmp_modID)
-        if(!is.null(tmp_modstate)){
-          pll[[tmp_modID]][["fm_yaml"]]  = tmp_modstate[["FM_yaml_file"]]
-          pll[[tmp_modID]][["mod_yaml"]] = tmp_modstate[["MOD_yaml_file"]]
-        } else {
-          tmp_msg = paste0("Module with ID: ", tmp_modID, " found in workflow but not in app. ")
-          FM_le(state, tmp_msg, entry_type="error")
-        }
-      }
-
-
-
-
-      ASM_state = FM_fetch_mod_state(id=state[["MC"]][["module"]][["depends"]][["id_ASM"]], session=session)
-
-      if(is.null(ASM_state)){
-        load_msg =  state[["MC"]][["errors"]][["no_asm_state"]]
-        rwf_isgood = FALSE
-      } else {
-        # Writing the new workflow yaml list to a save file:
-        ssf  = tempfile(fileext=".zip")
-        ss_res = ASM_save_state(state=state, session=session, file_path=ssf, pll=pll)
-        if(ss_res[["isgood"]]){
-          FM_pause_screen(state   = state,
-                          message = state[["MC"]][["labels"]][["busy"]][["rwf"]],
-                          session = session)
-          ls_res =
-          ASM_load_state(state, session,
-                         file_path = ssf)
-          FM_resume_screen(state   = state,
-                           session = session)
-
-
-          state = ls_res[["state"]]
-
-          if(!ls_res[["isgood"]]){
-            load_msg =  c(state[["MC"]][["errors"]][["ls_failed"]], ls_res[["msgs"]])
-            rwf_isgood = FALSE
-          }
-
-        } else {
-          load_msg =  c(state[["MC"]][["errors"]][["ss_failed"]], ss_res[["msgs"]])
-          rwf_isgood = FALSE
-        }
-      }
-    }
-
-    if(rwf_isgood){
-      state = FM_set_notification(state,
-        notify_text =  state[["MC"]][["labels"]][["rwf_success"]],
-        notify_id   = "rwf_success",
-        type        = "success")
-    } else {
-      state = FM_set_notification(state,
-        notify_text =  state[["MC"]][["errors"]][["rwf_failed"]],
-        notify_id   = "rwf_failed",
-        type        = "failure")
-    }
-    state[["UD"]][["load_msg"]] = paste0(load_msg, collapse="\n")
-  }
 
   # Saving the state
   FM_set_mod_state(session, id, state)
@@ -755,7 +552,7 @@ UD_fetch_state = function(id, input, session, FM_yaml_file,  MOD_yaml_file ){
 UD_init_state = function(FM_yaml_file, MOD_yaml_file,  id, session){
 
 
-  button_counters = c("btn_run_wf")
+  button_counters = c()
   ui_ids = c("workflow",
              button_counters)
 
@@ -985,11 +782,11 @@ UD_ds_read = function(state,
     if(is.null(sheet)){
       sheet = sheets[1] }
     contents = rio::import(file=data_file_local, which=sheet)
-    code = paste0(object_name, ' = rio::import(file="',data_file,'", which="',sheet,'")')
+    code = paste0(object_name, ' <- rio::import(file="',data_file,'", which="',sheet,'")')
     isgood   = TRUE
   } else {
     contents = rio::import(file=data_file_local)
-    code     = paste0(object_name, ' = rio::import(file="',data_file,'")')
+    code     = paste0(object_name, ' <- rio::import(file="',data_file,'")')
     isgood   = TRUE
   }
 

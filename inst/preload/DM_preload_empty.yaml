@@ -1,0 +1,8 @@
+DM:
+  fm_yaml:   'system.file(package="formods", "templates", "formods.yaml")'
+  mod_yaml:  'system.file(package="formods", "templates", "DM.yaml")'
+  ui:
+    element_selection: ""
+    source_url:        ""
+  sources: ~ 
+  elements: ~ 

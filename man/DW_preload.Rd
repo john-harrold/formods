@@ -41,3 +41,6 @@ list with the following elements
 Populates the supplied session variable with information from
 list of sources.
 }
+\examples{
+# JMH add examples
+}

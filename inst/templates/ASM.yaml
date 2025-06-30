@@ -5,6 +5,13 @@ MC:
     type: "ASM"
     # internal R Object: module ID used in deployment
     depends: NULL
+    # List of formods modules (specified as the module ID) used as sources when
+    # running a workflow. These modules preserved and whatever contents they
+    # have will be used in the workflow the value is the type of resource the
+    # provide "ds" is currently the only supported resource type.
+    workflow: 
+      UD: "ds"
+      DM: "ds"
   code: # module specific code options
     readOnly: TRUE
     mode:     r    
@@ -30,12 +37,34 @@ MC:
     button_rpt_docx:
       size:    "sm" 
       block:   TRUE
+    btn_run_wf_sys:
+      size:    "sm" 
+      width:    200px
+      block:   TRUE 
+      tooltip: "Run selected workflow"
+      tooltip_position: "right"
     switch_gen_reports:
       default:      FALSE
       right:        TRUE
       inline:       TRUE  
       width:        NULL
+    workflow:
+      width:      200px
+      # Set to TRUE to enable live search if the number of available workflows
+      # is greater than size below.
+      liveSearch: TRUE
+      size:       10
+      check_label: "Workflow check results"
+      run_label: "Workflow run results"
+      chk_msgs:
+        # These strings will be rendered using formods::render_str() so you can include R code and tags here as well
+        no_res:    "Workflow good: No resource dependencies found"
+        all_found: "Workflow good: All resource dependencies found"
+        missing:   "Workflow issues: The folloiwng resource labels were not found: ===MISSING==="
   labels:    
+    rwf_success:   "Workflow complete."
+    workflow:      "Select workflow to run"
+    run_wf_sys:    "Run Workflow"
     ui_asm_save_name:       "Save Analysis"
     ui_asm_save_name_ph:    "my_analysis"
     ui_asm_switch_gen_rpts: "Generate reports when saving."
@@ -50,12 +79,19 @@ MC:
     ui_asm_rpt_docx:        "docx"
     load_success:           "Analysis loaded"
     busy:
+      rwf: "Running workflow be patient."
       loading_state:      "Loading analysis"
       saving_state:      "Saving analysis"
       xlsx:              "Generating report: Excel"
       docx:              "Generating report: Word"
       pptx:              "Generating report: PowerPoint"
   errors:
+    ss_failed: "Unable to save workflow file."
+    ls_failed: "Unable to load workflow file."
+    rwf_failed: "Workflow failed."
+    no_workflows_found: "No valid workflows have been found"
+    no_ds_for_workflow: "The selected workflow requires a dataset. Please upload a dataset first then run the workflow."
+    no_ds_for_workflow_short: "Workflow not run, no dataset."
     bad_input:   "Input error message"
     load_failed: "Failed to load analysis"
     save_failed: "Failed to save analysis"

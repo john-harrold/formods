@@ -2,16 +2,17 @@
 % Please edit documentation in R/DW_Server.R
 \name{DW_attach_ds}
 \alias{DW_attach_ds}
-\title{Attach Data Set to DW State}
+\title{Attach Data Set to DW View}
 \usage{
-DW_attach_ds(state, id_UD, session)
+DW_attach_ds(state, dw_view, ds_source_id)
 }
 \arguments{
 \item{state}{DW state from \code{DW_fetch_state()}}
 
-\item{id_UD}{ID string for the upload data module used to handle uploads}
+\item{dw_view}{Data view list of the format returned from \code{DW_fetch_current_view()}}
 
-\item{session}{Shiny session variable}
+\item{ds_source_id}{Source id from \code{DSV[["catalog"]][["object"]]} for
+the dataset.}
 }
 \value{
 state with data set attached
@@ -30,6 +31,10 @@ input   = sess_res$input
 state = sess_res$state
 
 # We need to identify the UD module with the data
-id_UD = "UD"
-state = DW_attach_ds(state, id_UD, session)
+# JMH TODO: update example
+dw_view = DW_fetch_current_view(state=state)
+
+ds_source_id = names(state[["DW"]][["DSV"]][["ds"]])[1]
+
+dw_view = DW_attach_ds(state=state, dw_view=dw_view, ds_source_id=ds_source_id)
 }

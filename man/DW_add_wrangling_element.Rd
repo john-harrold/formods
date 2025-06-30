@@ -4,14 +4,18 @@
 \alias{DW_add_wrangling_element}
 \title{Adding Wrangling Element to Current Data View}
 \usage{
-DW_add_wrangling_element(state, dwb_res, dwee_res)
+DW_add_wrangling_element(state, session, dwb_res, dwee_res, status = "Success")
 }
 \arguments{
 \item{state}{DW state from \code{DW_fetch_state()}}
 
+\item{session}{Shiny session variable}
+
 \item{dwb_res}{Output from \code{dwrs_builder()}}
 
-\item{dwee_res}{Output from \code{dw_eval_element()}
+\item{dwee_res}{Output from \code{dw_eval_element()}}
+
+\item{status}{Wrangling element status
 returned by \code{UD_fetch_state()}.}
 }
 \value{
@@ -23,7 +27,10 @@ Adds the wrangling element to the current data view.
 \examples{
 library(formods)
 # The example requires a formods DW state object
-state  = DW_test_mksession()$state
+sess_res = DW_test_mksession()
+state    = sess_res$state
+session  = sess_res$session
+
 state[["DW"]][["ui"]][["select_dw_element"]]          = "filter"
 state[["DW"]][["ui"]][["select_fds_filter_column"]]   = "EVID"
 state[["DW"]][["ui"]][["select_fds_filter_operator"]] = "=="
@@ -37,7 +44,11 @@ dwb_res  = dwrs_builder(state)
 dwee_res = dw_eval_element(state, dwb_res[["cmd"]])
 
 # Next we add this wrangling element to the state
-state    = DW_add_wrangling_element(state, dwb_res, dwee_res)
+state    = DW_add_wrangling_element(
+             state    = state, 
+             session  = session,
+             dwb_res  = dwb_res, 
+             dwee_res = dwee_res)
 
 # This creates a new data view and makes it active
 state = DW_new_view(state)
@@ -49,5 +60,17 @@ current_view = DW_fetch_current_view(state)
 current_view[["key"]] = "My new view"
 
 # And this will place it back into the state
-state = DW_set_current_view(state, current_view)
+state = DW_set_current_view(state, session, current_view)
+
+# This will pull out the available sources for the current data view.
+# This is used when doing merging:
+avail_ds = DW_fetch_available_sources(state, session, dw_view=current_view)
+
+# This will pull out the meta data for a given object
+ds_obj  = avail_ds[["catalog"]][["object"]][1]
+ds_meta = DW_fetch_obj_ds_meta(
+            state   = state, 
+            session = session, 
+            dw_view=current_view, 
+            ds_obj=ds_obj)
 }

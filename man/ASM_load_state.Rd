@@ -2,7 +2,7 @@
 % Please edit documentation in R/ASM_Server.R
 \name{ASM_load_state}
 \alias{ASM_load_state}
-\title{Write State to File for Saving}
+\title{Load App State}
 \usage{
 ASM_load_state(state, session, file_path)
 }
@@ -14,7 +14,7 @@ ASM_load_state(state, session, file_path)
 \item{file_path}{Zip file with the saved sate}
 }
 \value{
-This function only writes the state and returns a list with the
+This function overwrites the current app state and returns a list with the
 following elements:
 \itemize{
   \item{isgood:}      Boolean indicating the exit status of the function.
@@ -24,8 +24,7 @@ following elements:
 }
 }
 \description{
-Called from download handler and used to write a saved state
-value if that is null
+Used to load the saved app state from a zip file
 }
 \examples{
 # Within shiny the session variable will exist

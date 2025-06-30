@@ -68,6 +68,7 @@ FG_Server <- function(id,
       } else {
         df = current_fig[["elements_table"]]
         df[["cmd"]] = NULL
+        df[["Key"]] = NULL
 
         hot = rhandsontable::rhandsontable(
           df,
@@ -90,6 +91,8 @@ FG_Server <- function(id,
               return td;
                }") |>
           hot_col(col = "Delete",
+                  width = 40, 
+                  valign='htCenter',
                   renderer = "
                function(instance, td, row, col, prop, value, cellProperties) {
                  Handsontable.renderers.CheckboxRenderer.apply(this, arguments);
@@ -97,7 +100,9 @@ FG_Server <- function(id,
                }") |>
           hot_col("Element" ,      readOnly = TRUE) |>
           hot_col("Description" , readOnly = TRUE) |>
-          hot_col("Status" ,      readOnly = TRUE)
+          hot_col("Status" ,      
+                  valign='htCenter',
+                  readOnly = TRUE)
 
         uiele = hot
       }
@@ -293,7 +298,7 @@ FG_Server <- function(id,
       # when the figure is built.
       tcres =
         FM_tc(tc_env = list(fobj=fobj),
-              cmd = "fbuild = ggplot2::ggplot_build(fobj); suppressMessages(ggsave(tempfile(fileext='.png'), fobj))",
+              cmd = "fbuild <- ggplot2::ggplot_build(fobj); suppressMessages(ggsave(tempfile(fileext='.png'), fobj))",
               capture = c("fbuild"))
 
       if(tcres[["isgood"]]){
@@ -311,7 +316,6 @@ FG_Server <- function(id,
       # Removing the pause
       FM_resume_screen(state   = state,
                        session = session)
-
       fobj})
     #------------------------------------
     if(system.file(package = "plotly") != ""){
@@ -600,10 +604,8 @@ FG_Server <- function(id,
       uiele})
     #------------------------------------
     output$ui_fg_select_page = renderUI({
-      react_state[[id_UD]]
-      react_state[[id_DW]]
-      react_state[[id_DM]]
-      react_state[[id_ASM]]
+      force_mod_update[["triggered"]] 
+
       # Forcing reactions:
       input[["button_fig_new"]]
       input[["button_fig_save"]]
@@ -743,11 +745,6 @@ FG_Server <- function(id,
             # Aesthetic name
             ui_aes = state[["MC"]][["elements"]][[curr_element]][["ui_aes"]][aes_idx]
             # these are the IDs for the UI elements to be generated
-            # JMH remove this
-            #id_select = state[["MC"]][["elements"]][[curr_element]][["ui_aes_select_id"]][aes_idx]
-            #id_manual = state[["MC"]][["elements"]][[curr_element]][["ui_aes_manual_id"]][aes_idx]
-
-            # JMH replace with this
             id_select = state[["FG"]][["auto_elements"]][[curr_element]][["ui_aes_select_id"]][aes_idx]
             id_manual = state[["FG"]][["auto_elements"]][[curr_element]][["ui_aes_manual_id"]][aes_idx]
 
@@ -1734,11 +1731,6 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
         # Appending the IDs to the full list
         ui_ids = c(ui_ids, select_id, manual_id)
         # Saving the ids corresponding to the elements here:
-        # JMH remove this
-        #state[["MC"]][["elements"]][[element]][["ui_aes_select_id"]] = select_id
-        #state[["MC"]][["elements"]][[element]][["ui_aes_manual_id"]] = manual_id
-
-        # JMH replace with this
         auto_elements[[element]][["ui_aes_select_id"]] = select_id
         auto_elements[[element]][["ui_aes_manual_id"]] = manual_id
       }
@@ -1819,10 +1811,6 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
     ui_hold         = ui_hold,
     session         = session)
 
-  # JMH remove this
-  #state[["MC"]] = state_tmp[["MC"]]
-
-
   #---------------------------------------------
   # Fetching datasets
   DSV = FM_fetch_ds(state, session, c(id_UD, id_DW, id_DM))
@@ -1840,7 +1828,6 @@ FG_init_state = function(FM_yaml_file, MOD_yaml_file, id, session){
   state[["FG"]][["fig_cntr"]]      = 0
   state[["FG"]][["current_fig"]]   = NULL
   state[["FG"]][["aes_elements"]]  = aes_elements
-  # JMH replace with tis
   # This adds the automatically created elements:
   state[["FG"]][["auto_elements"]]   = auto_elements
   state[["FG"]][["manual_elements"]] = manual_elements
@@ -2067,7 +2054,7 @@ fers_builder = function(state){
     if(length(man_comp) > 0){
       man_chunk = paste0(man_comp, collapse=", ")
     }
-    cmd = paste0(fg_object_name , " = ", fg_object_name, " + ",
+    cmd = paste0(fg_object_name , " <- ", fg_object_name, " + ",
                  fcn,"(",
                 paste0(c(aes_chunk, man_chunk), collapse=", "),
                 ")")
@@ -2106,7 +2093,7 @@ fers_builder = function(state){
       if(length(ui[["select_component_facet"]]) == 2){
 
         cmd = paste0(
-                     fg_object_name , " = ", fg_object_name, " + ",
+                     fg_object_name , " <- ", fg_object_name, " + ",
                      "ggforce::facet_grid_paginate(",
                      ui[["select_component_facet"]][1],
                      "~",
@@ -2121,7 +2108,7 @@ fers_builder = function(state){
 
       } else{
         cmd = paste0(
-                     fg_object_name , " = ", fg_object_name, " + ",
+                     fg_object_name , " <- ", fg_object_name, " + ",
                      "ggforce::facet_wrap_paginate(vars(",
                      paste0(ui[["select_component_facet"]], collapse=", ")
                      , ")",
@@ -2191,7 +2178,7 @@ fers_builder = function(state){
         descs = c(descs, paste0(sname, "scale:linear"))
       }else if(ui[[paste0("select_component_", sname, "scale")]] =="log10"){
         descs = c(descs, paste0(sname, "-scale:log10"))
-        cmds = c(cmds,  paste0( fg_object_name , " = ", fg_object_name,
+        cmds = c(cmds,  paste0( fg_object_name , " <- ", fg_object_name,
                                " + scale_",sname,"_log10(limits=", tmp_lim_str, ")"))
       }
 
@@ -2231,7 +2218,7 @@ fers_builder = function(state){
       msgs = c(msgs, state[["MC"]][["labels"]][["msg_bad_label"]])
     } else {
       cmd  = paste0(
-                    fg_object_name , " = ", fg_object_name, " + ",
+                    fg_object_name , " <- ", fg_object_name, " + ",
                     paste0(cmds, collapse = " + "))
       desc = paste0(descs, collapse= ", ")
     }
@@ -2322,7 +2309,7 @@ FG_build = function(state,
     assign(fg_object_name, NULL)
 
     # The figure code is initialized with the code init:
-    code_init = paste0(fg_object_name, " = ggplot2::ggplot(data=", ds_object_name,")")
+    code_init = paste0(fg_object_name, " <- ggplot2::ggplot(data=", ds_object_name,")")
 
     # The figure code lines start with this:
     code_lines = code_init
@@ -2523,7 +2510,7 @@ FG_build = function(state,
     # see if that's true. Finally If one of the figure Elements is facet then
     # we see if there is more than one page.
     num_pages = 1
-    if( is.ggplot(get(fg_object_name))){
+    if( is_ggplot(get(fg_object_name))){
       if(!is.null(curr_ET)){
         if(any("facet" %in% curr_ET[["Element"]])){
           num_pages = ggforce::n_pages(get(fg_object_name))
@@ -2593,10 +2580,13 @@ FG_update_checksum = function(state){
   # This will be used to create a module checksum below:
   all_checksum_string = paste(fig_checksums, collapse=":")
 
-  # updating the checksum
-  state[["FG"]][["checksum"]] = digest::digest(all_checksum_string, algo=c("md5"))
-
-  FM_le(state, paste0("module checksum updated:", state[["FG"]][["checksum"]]))
+  new_checksum =  digest::digest(all_checksum_string, algo=c("md5"))
+  old_checksum = state[["FG"]][["checksum"]]
+  if(has_updated(ui_val = new_checksum, old_val = old_checksum)){
+    # updating the checksum
+    state[["FG"]][["checksum"]] = new_checksum
+    FM_le(state, paste0("module checksum updated:", state[["FG"]][["checksum"]]))
+  }
 
 state}
 
@@ -2740,7 +2730,7 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
               # creating the code for the slide:
               code_chunk = c(
               paste0('# Figure ', fig_id, ": ", key, '                                   '),
-                     'rpt  = onbrand::report_add_slide(rpt,                              ',
+                     'rpt  <- onbrand::report_add_slide(rpt,                              ',
                      '          template = "content_list",                               ',
                      '          elements = list(                                         ',
               paste0('            title        = list( content = "', key,'",             '),
@@ -2756,7 +2746,7 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
               }
               code_chunk = c(
               paste0('# Inserting figure: ', key),
-                     'rpt = onbrand::report_add_doc_content(rpt,',
+                     'rpt <- onbrand::report_add_doc_content(rpt,',
                      '        type     = "ggplot",',
                      '        content  = list(',
               paste0('          image    =  ', fg_object_name, ','),
@@ -2764,7 +2754,7 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
                                 notes_str,
               paste0('          caption  = "',key,'"))'),
                      '# adding a page break',
-                     'rpt = onbrand::report_add_doc_content(rpt,',
+                     'rpt <- onbrand::report_add_doc_content(rpt,',
                      '        type    = "break",',
                      '        content = NULL)',
                      ' '
@@ -2806,7 +2796,7 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
                 # creating the code for the slide:
                 code_chunk = c(
                 paste0('# Figure ', fig_id, '(',page,'): ', key, '                         '),
-                       'rpt  = onbrand::report_add_slide(rpt,                              ',
+                       'rpt  <- onbrand::report_add_slide(rpt,                              ',
                        '          template = "content_list",                               ',
                        '          elements = list(                                         ',
                 paste0('            title        = list( content = "', key,'",             '),
@@ -2823,7 +2813,7 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
                 }
                 code_chunk = c(
                 paste0('# Inserting figure ', fig_id, '(',page,'): ', key),
-                       'rpt = onbrand::report_add_doc_content(rpt,',
+                       'rpt <- onbrand::report_add_doc_content(rpt,',
                        '        type     = "ggplot",',
                        '        content  = list(',
                 paste0('          image    =  ', facet_cmd, ','),
@@ -2831,7 +2821,7 @@ FG_append_report = function(state, rpt, rpttype, gen_code_only=FALSE){
                                   notes_str,
                 paste0('          caption  = "',key,'"))'),
                        '# adding a page break',
-                       'rpt = onbrand::report_add_doc_content(rpt,',
+                       'rpt <- onbrand::report_add_doc_content(rpt,',
                        '        type    = "break",',
                        '        content = NULL)',
                        ' '
@@ -2950,6 +2940,11 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
   if(is.null(state[["FG"]][["DSV"]][["hasds"]])){
     ADD_ELEMENTS = FALSE
   } else if(!state[["FG"]][["DSV"]][["hasds"]]){
+    ADD_ELEMENTS = FALSE
+  }
+
+  # Checking to see if there are elements
+  if(length(elements) == 0){
     ADD_ELEMENTS = FALSE
   }
 
@@ -3135,8 +3130,6 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
                 }
               } else {
                 # These are other ggplot components like scales and labels
-                # JMH this next line isn't needed?
-                #manual_elements[[  tmp_component[["type"]] ]]
                 allowed_options = as.vector(unlist(manual_elements[[  tmp_component[["type"]]  ]][["mapping"]]))
                 found_options   = names(tmp_component[["options"]])
 

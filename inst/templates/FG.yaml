@@ -231,8 +231,8 @@ MC:
       width: 200
     # Dimensions of the table with the figure generation elements
     fg_elements:
-      width:  600
-      height: 200
+      width:  800
+      height: 300
     # Button sizes from actionBttn (shinyWidgets)
     # xs,sm, md, lg.
     button_fig_del:
@@ -266,7 +266,7 @@ MC:
   # You can put any post_processing you want to apply to all figures.
   # The ggplot object will be available as the ===FGOBJ===
   post_processing: |-
-    ===FGOBJ=== = ===FGOBJ=== + ggplot2::theme_light()
+    ===FGOBJ=== <- ===FGOBJ=== + ggplot2::theme_light()
   fg_object_name: "myp"
   code: # module specific code options
     packages: ["ggplot2", "ggforce"]

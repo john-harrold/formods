@@ -38,7 +38,7 @@ structure of the list is defined below.
    \item{button_counters:}  List of counters to detect button clicks.
    \item{code_previous:}    Loading code from the UD field.
    \item{current_view:}     View id of the current active data wrangling view.
-   \item{UD:}               Copy of the \code{"UD"} field of the  \code{id_UD} from the \code{react_state} input.
+   \item{DSV:}              Result of \code{FM_fetch_ds()}.
    \item{ui:}               Current value of form elements in the UI
    \item{ui_hold:}          List of hold elements to disable updates before a full ui referesh is complete.
    \item{view_cntr:}        Counter for tracking view ids, value contains the id of the last view created.

@@ -71,6 +71,7 @@ formods_check <- function(verbose=TRUE){
     "shinybusy",
     "shinydashboard",
     "testthat",
+    "zoo", 
     "utils")
 
   pkg_found   = c()
@@ -151,8 +152,8 @@ res}
 #'   following: \code{res$modules$DW$my_id}.
 #'   \item{module_ids:} List with an entry for each module_id. The element name is
 #'   the module id. For each of these there is a checksum. For example to access the
-#'   checksum of a module with an id 'my_id', you would use the
-#'   following: \code{res$module_ids$DW$my_id}.
+#'   checksum of a module with id of  'my_id', you would use the
+#'   following: \code{res$module_ids$my_id}.
 #' }
 #'@examples
 #' # We need a module state and a Shiny session variable
@@ -273,7 +274,6 @@ FM_fetch_ds = function(state, session, ids=NULL, meta_only = FALSE){
              module_ids = module_ids,
              choices    = choices,
              ds         = ds)
-
 res}
 
 #'@export
@@ -748,9 +748,15 @@ FM_has_ds_changed = function(state, fdres, ids, react_state){
             FM_le(state, paste0("react_state (new): ", rs[[tmpid]][["checksum"]]))
           }
         } else {
-          FM_le(state, paste0("One or more checksum not found"), entry_type="danger")
-          FM_le(state, paste0("fdres:       ", fdres[["module_ids"]][[tmpid]]), entry_type="danger")
-          FM_le(state, paste0("react_state: ", rs[[tmpid]][["checksum"]]), entry_type="danger")
+          # JMH we may need to add some logic here. It gets triggered when
+          # either fdres or rs has been initialized but the other has not.
+         #if(is.logical(rs[[tmpid]][["hasds"]])){
+         #  if(rs[[tmpid]][["hasds"]]){
+         #    FM_le(state, paste0("One or more checksum not found"), entry_type="danger")
+         #    FM_le(state, paste0("fdres:       ", fdres[["module_ids"]][[tmpid]]), entry_type="danger")
+         #    FM_le(state, paste0("react_state: ", rs[[tmpid]][["checksum"]]), entry_type="danger")
+         #  }
+         #}
         }
       }
     }
@@ -3361,7 +3367,7 @@ fetch_resource = function(catalog = NULL, id = NULL, idx = NULL, res_label = NUL
 
 
   if(!isgood){
-    msgs = c("FM_fetch_resource()",
+    msgs = c("fetch_resource()",
       msgs,
      "unable to identify resource using the following",
      paste0(" - id:        ", id),

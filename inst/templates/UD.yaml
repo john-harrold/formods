@@ -14,16 +14,13 @@ MC:
     priority: 1
   labels:
     default_ds:    "Original data set"
-    workflow:      "Select workflow to run"
-    run_wf:        "Run Workflow"
     upload_button: "Select file"
     tab_main:      "Upload file"
     tab_code:      "Code"
     tab_preview:   "Data preview"
     switch_clean:  "Clean column names on upload"
-    rwf_success:   "Workflow complete."
     busy:
-      rwf: "Running workflow be patient."
+      text: "busy message"
     # In the following you can use placeholder for the follwing:
     # ===EXT===        Uploaded file extension
     # ===FILE===       Loaded file name
@@ -32,14 +29,8 @@ MC:
       Incorrect file extension (===EXT===). Unable to load file  ===FILE===.
       Only the following extesions are allowed: ===ALLOWEDEXT===.
   errors:
-    no_workflows_found: "No valid workflows have been found"
-    no_ds_for_workflow: "The selected workflow requires a dataset. Please upload a dataset first then run the workflow."
-    no_ds_for_workflow_short: "Workflow not run, no dataset."
     no_asm_state: "Unable to read ASM state."
     no_janitor: "Janitor package not found, please install to clean dataset columns"
-    ss_failed: "Unable to save workflow file."
-    ls_failed: "Unable to load workflow file."
-    rwf_failed: "Workflow failed."
   tooltips:
     # Set to FALSE to disable tool tips for this module
     include: TRUE
@@ -55,18 +46,6 @@ MC:
     switch_clean:
       tooltip: "Strange characters in column names can cause problems. When switched on, this will clean up the column headers and fix those that might break things."
       tooltip_position: "bottom"
-    workflow:
-      width:      200px
-      # Set to TRUE to enable live search if the number of available workflows
-      # is greater than size below.
-      liveSearch: TRUE
-      size:       10
-    btn_run_wf:
-      size:    "sm" 
-      width:    200px
-      block:   TRUE 
-      tooltip: "Run selected workflow"
-      tooltip_position: "right"
   # The app supports csv, tsv, xls and xlsx. You can remove those you don't
   # want to use
   allowed_extensions:
@@ -118,6 +97,6 @@ MC:
       #            code you generate  here.
       # object_name - Name of the dataset object used in generated code.
       if(system.file(package="janitor") != ""){
-        contents = janitor::clean_names(contents, case="none")
-        code = paste0(code, '\n', object_name, ' = janitor::clean_names(', object_name,', case="none")')
+        contents <- janitor::clean_names(contents, case="none")
+        code = paste0(code, '\n', object_name, ' <- janitor::clean_names(', object_name,', case="none")')
       }

@@ -1,6 +1,13 @@
 ===ZZ===:
   fm_yaml:   'system.file(package="formods", "templates", "formods.yaml")'
   mod_yaml:  'system.file(package="formods", "templates", "===ZZ===.yaml")'
+  # Resource dependencies are placed here. This field should be optional. This
+  # should be of the format
+  # res_deps:
+  #   ds: 
+  #     MOD_ID: ["res_label1", "res_label2"]
+  res_deps: 
+    ds: NULL
   # The remainder is the free form for your module. If your module has the
   # format of elements and components you can use the skeleton below to get
   # started

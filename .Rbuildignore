@@ -12,3 +12,4 @@ CNAME
 _pkgdown_backup.yml
 ^codecov\.yml$
 ^\.github$
+^\.vscode$
