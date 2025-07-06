@@ -36,7 +36,6 @@ list with the following elements
   \item{state:}       App state.
   \item{react_state:} The \code{react_state} components.
 }
-JMH add examples
 }
 \description{
 Populates the supplied session variable with information from

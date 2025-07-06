@@ -43,7 +43,6 @@ DW_Server <- function(id,
   id_UD  = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_UD"]]
   id_DM  = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_DM"]]
 
-
     #------------------------------------
     # Current DW elements
     output$hot_dw_elements = rhandsontable::renderRHandsontable({
@@ -146,6 +145,7 @@ DW_Server <- function(id,
                              MOD_yaml_file  = MOD_yaml_file,
                              react_state    = react_state)
 
+      message("create picker input")
       choicesOpt = NULL
       uiele =
         shinyWidgets::pickerInput(
@@ -174,6 +174,8 @@ DW_Server <- function(id,
                              react_state    = react_state)
 
       current_view = DW_fetch_current_view(state)
+
+      message("update picker input")
 
       # If this is triggered before datasets have been loaded the state will
       # be bad:
@@ -1858,7 +1860,6 @@ DW_Server <- function(id,
 
       if(state[["DW"]][["DSV"]][["hasds"]]){
         df = DW_fetch_current_view(state)[["WDS"]]
-        #ds = state[["DW"]][["UD"]]
       }
 
      if(is.null(df)){
@@ -1881,7 +1882,7 @@ DW_Server <- function(id,
     # Creates the ui for the compact view of the module
     output$DW_ui_compact  =  renderUI({
       # Forcing a reaction to changes in other modules
-      force_mod_update[["triggered"]]
+      #force_mod_update[["triggered"]]
       state = DW_fetch_state(id              = id,
                              input           = input,
                              session         = session,
@@ -1890,7 +1891,6 @@ DW_Server <- function(id,
                              react_state     = react_state)
 
       current_view = DW_fetch_current_view(state)
-
 
       if(is.null(current_view[["WDS"]])){
         uiele = state[["MC"]][["labels"]][["no_dataset"]]
@@ -4186,8 +4186,6 @@ hasds}
 #'   \item{state:}       App state.
 #'   \item{react_state:} The \code{react_state} components.
 #'}
-#'@examples
-#' # JMH add examples
 DW_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = list(), quickload=FALSE){
   isgood = TRUE
   input  = list()
@@ -4465,6 +4463,7 @@ DW_mk_preload     = function(state){
     yaml_list = yaml_list)
 res}
 
+#'@export
 #'@title Rebuilds Data Views After Source Changes
 #'@description Will attempt to rebuild data views when changes in the source datasets have been detected
 #'@param state DW state object
@@ -4472,7 +4471,14 @@ res}
 #'@param view_ids List of view ids to mend or NULL to attempt to mend all
 #'@return State with dataviews rebuilt if dataset changes were detected
 #'@examples
-#' # JMH add examples
+#' sess_res = DW_test_mksession()
+#' state    = sess_res$state
+#' session  = sess_res$session
+#' view_ids = names(state[["DW"]][["views"]])[1]
+#' state = DW_rectify(
+#'   state    = state, 
+#'   session  = session, 
+#'   view_ids = view_ids)
 DW_rectify = function(state, session, view_ids = NULL){
 
   # View IDs to rectify:
@@ -4549,6 +4555,7 @@ DW_rectify = function(state, session, view_ids = NULL){
 
 state}
 
+#'@export
 #'@title Recursively Finds View Dependencies
 #'@description For the view ids specified in view_ids this will walk through and find any data views that
 #' depend on those view IDS and rebuild them if necessary.
@@ -4570,7 +4577,14 @@ state}
 #'  \item{dep_catalog_ex:} Same as deps_catalog but exculding  view_ids
 #' }
 #'@examples
-#' # JMH add examples
+#' sess_res = DW_test_mksession()
+#' state    = sess_res$state
+#' session  = sess_res$session
+#' view_ids = names(state[["DW"]][["views"]])[1]
+#' view_deps = DW_fetch_view_deps(
+#'   state    = state, 
+#'   session  = session, 
+#'   view_ids = view_ids)
 DW_fetch_view_deps = function(state, session, view_ids = NULL){
   isgood = TRUE
   msgs   = c()
@@ -4585,49 +4599,56 @@ DW_fetch_view_deps = function(state, session, view_ids = NULL){
     while(length(view_ids_to_proc) > 0){
       # Pulling off the first view id
       tmp_view_id = view_ids_to_proc[1]
-
       # Removing from the list of view ids to process
       view_ids_to_proc = view_ids_to_proc[-1]
 
-      # This is the current view being processed:
-      tmp_view = state[["DW"]][["views"]][[tmp_view_id]]
-
-      # Adding the view to the depencency catalog:
-      dep_catalog = rbind(dep_catalog,
-        data.frame(
-          view_id     = tmp_view[["id"]],
-          idx         = tmp_view[["idx"]],
-          checksum    = tmp_view[["checksum"]],
-          object_name = tmp_view[["view_ds_object_name"]]
+      if(length(which(all_view_ids == tmp_view_id))>0){
+       
+        # This is the current view being processed:
+        tmp_view = state[["DW"]][["views"]][[tmp_view_id]]
+       
+        # Adding the view to the depencency catalog:
+        dep_catalog = rbind(dep_catalog,
+          data.frame(
+            view_id     = tmp_view[["id"]],
+            idx         = tmp_view[["idx"]],
+            checksum    = tmp_view[["checksum"]],
+            object_name = tmp_view[["view_ds_object_name"]]
+          )
         )
-      )
-
-      # Checking for any ids that depend on the current view.
-      # First we get all of the view ids afer this one 
-      if(length(all_view_ids) > which(all_view_ids == tmp_view_id)){
-        # If there are view ids after this one we walk through them to see if
-        # the current view (tmp_view) is used in them
-        for(chk_dep_view_id in all_view_ids[(which(all_view_ids == tmp_view_id)+1):length(all_view_ids)]){
-
-          # Make sure the hk_dep_view_id is not in the to be added (view_ids_to_proc) or 
-          # already added list (dep_catalog[["view_id"]]). Otherwise we skip them
-          if(!(chk_dep_view_id %in%  view_ids_to_proc) & !(chk_dep_view_id %in% dep_catalog[["view_id"]])){
-            if(length(state[["DW"]][["views"]][[chk_dep_view_id]][["elements_table"]][["res_obj"]])> 0){
-
-              # If any of the object names in the catalog of dependencies are found in the current view ID being checked
-              # then we add that view id to the list to be processed. 
-              if(any(dep_catalog[["object_name"]] %in% state[["DW"]][["views"]][[chk_dep_view_id]][["elements_table"]][["res_obj"]])){
-               # Now we check if any of the object names are in the elements table of the view id to be checked. 
-                view_ids_to_proc = c(view_ids_to_proc, chk_dep_view_id)
+       
+        # Checking for any ids that depend on the current view.
+        # First we get all of the view ids afer this one 
+        if(length(all_view_ids) > which(all_view_ids == tmp_view_id)){
+          # If there are view ids after this one we walk through them to see if
+          # the current view (tmp_view) is used in them
+          for(chk_dep_view_id in all_view_ids[(which(all_view_ids == tmp_view_id)+1):length(all_view_ids)]){
+       
+            # Make sure the hk_dep_view_id is not in the to be added (view_ids_to_proc) or 
+            # already added list (dep_catalog[["view_id"]]). Otherwise we skip them
+            if(!(chk_dep_view_id %in%  view_ids_to_proc) & !(chk_dep_view_id %in% dep_catalog[["view_id"]])){
+              if(length(state[["DW"]][["views"]][[chk_dep_view_id]][["elements_table"]][["res_obj"]])> 0){
+       
+                # If any of the object names in the catalog of dependencies are found in the current view ID being checked
+                # then we add that view id to the list to be processed. 
+                if(any(dep_catalog[["object_name"]] %in% state[["DW"]][["views"]][[chk_dep_view_id]][["elements_table"]][["res_obj"]])){
+                 # Now we check if any of the object names are in the elements table of the view id to be checked. 
+                  view_ids_to_proc = c(view_ids_to_proc, chk_dep_view_id)
+                }
               }
             }
           }
         }
+      } else {
+        isgood = FALSE
+        msgs = c(msgs, paste0("the specified view_id was not found: ", paste0(view_ids, collapse=", ")))
       }
     }
     #sorting dep_catalog by idx so it will be in an order to process
-    dep_catalog    = dep_catalog[order(dep_catalog[["idx"]]), ]
-    dep_catalog_ex = dep_catalog[!(dep_catalog[["view_id"]] %in% view_ids), ]
+    if(!is.null(dep_catalog)){
+      dep_catalog    = dep_catalog[order(dep_catalog[["idx"]]), ]
+      dep_catalog_ex = dep_catalog[!(dep_catalog[["view_id"]] %in% view_ids), ]
+    }
   }
 
   res = list(

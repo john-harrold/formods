@@ -33,5 +33,12 @@ For the view ids specified in view_ids this will walk through and find any data 
 depend on those view IDS and rebuild them if necessary.
 }
 \examples{
-# JMH add examples
+sess_res = DW_test_mksession()
+state    = sess_res$state
+session  = sess_res$session
+view_ids = names(state[["DW"]][["views"]])[1]
+view_deps = DW_fetch_view_deps(
+  state    = state, 
+  session  = session, 
+  view_ids = view_ids)
 }

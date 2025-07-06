@@ -679,7 +679,6 @@ DM_Server <- function(id,
         uiele = current_ele[["code_ele_only"]]
       }
 
-
       shinyAce::updateAceEditor(
         session         = session,
         editorId        = "ui_dm_code",
@@ -974,10 +973,14 @@ DM_Server <- function(id,
       # Here we list the ui inputs that will result in a state change:
       toListen <- reactive({
         list(
-             input$button_clk_new,
-             input$button_clk_del,
-             input$button_clk_copy,
-             input$button_clk_save)
+            #input$button_file_upload,
+            #input$button_clk_get_url,
+            #input$button_clk_new,
+            #input$button_clk_del,
+            #input$button_clk_copy,
+             input$button_clk_save,
+             input$ui_dm_code
+             )
       })
       # This updates the reaction state:
       observeEvent(toListen(), {
@@ -988,8 +991,9 @@ DM_Server <- function(id,
                                MOD_yaml_file   = MOD_yaml_file,
                                react_state     = react_state)
 
-        FM_le(state, "reaction state updated")
-        react_state[[id]][["DM"]][["hasds"]]    = DM_hasds(state)
+        hasds = DM_hasds(state) 
+        FM_le(state, paste0("reaction state updated (hasds: ", hasds, ")"))
+        react_state[[id]][["DM"]][["hasds"]]    = hasds
         react_state[[id]][["DM"]][["checksum"]] = state[["DM"]][["checksum"]]
       }, priority=-101)
     }
@@ -1307,6 +1311,7 @@ DM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react
     FM_le(state, "processing file uploads")
     upload_isgood = TRUE
     upload_msgs   = c()
+
     for(ridx in 1:nrow(state[["DM"]][["ui"]][["button_file_upload"]])){
       state = DM_add_file(
         state     = state,
@@ -1331,6 +1336,7 @@ DM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react
                                   notify_id   = "add_files",
                                   notify_text = paste0(upload_msgs, collapse=", "))
     }
+
   }
   #---------------------------------------------
   # uploading file
@@ -1429,7 +1435,6 @@ DM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react
   if(any(ui_force_update %in% changed_uis)){
     current_ele = DM_fetch_current_element(state)
 
-
     FM_le(state, "updating code")
     #srcnfo = DM_fetch_source(state, current_ele)
 
@@ -1438,7 +1443,6 @@ DM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react
       state   = state,
       element = current_ele,
       session = session)
-
 
     # Removing any previous run_code results:
     current_ele[["res"]][["run_code"]][["isgood"]] = FALSE
@@ -1932,7 +1936,10 @@ DM_update_checksum     = function(state){
   for(element_id in element_ids){
     # We trigger updates when the element changes:
     chk_str = paste0(chk_str, ":", state[["DM"]][["elements"]][[element_id]][["checksum"]])
-
+    chk_str = paste0(chk_str, ":", state[["DM"]][["elements"]][[element_id]][["ui"]][["element_name"]])
+    # if(state[["DM"]][["elements"]][[element_id]][["isgood"]]){
+    #   browser()
+    # }
     #JMH add element_name here?
   }
 
@@ -1944,6 +1951,7 @@ DM_update_checksum     = function(state){
     state[["DM"]][["checksum"]] = new_chk
     FM_le(state, paste0("module checksum updated: ", state[["DM"]][["checksum"]]))
   }
+
 
 state}
 
@@ -2180,7 +2188,6 @@ res}
 #'   \item{state:}       App state.
 #'   \item{react_state:} The \code{react_state} components.
 #'}
-#' JMH add examples
 DM_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = list(), quickload=FALSE){
   isgood  = TRUE
   input   = list()
@@ -2559,6 +2566,9 @@ DM_update_element_code    = function(state, element, session){
         isgood      = TRUE
         code_export = paste0(element[["objs"]][["element_object_name"]], " <- rio::import(file=",deparse(srcnfo[["rel_path"]]),  ", which =", deparse(srcnfo[["sheet"]]), ")")
         code_run    = paste0(element[["objs"]][["element_object_name"]], " <- rio::import(file=",deparse(srcnfo[["full_path"]]), ", which =", deparse(srcnfo[["sheet"]]), ")")
+      } else {
+        isgood      = FALSE
+        msgs = c(msgs, "excel file issue probably no sheet selected")
       }
     }
 
@@ -2575,6 +2585,9 @@ DM_update_element_code    = function(state, element, session){
         isgood      = TRUE
         code_export = paste0(element[["objs"]][["element_object_name"]], " <- rio::import(file=",deparse(srcnfo[["url"]]),  ", which =", deparse(srcnfo[["sheet"]]), ")")
         code_run    = paste0(element[["objs"]][["element_object_name"]], " <- rio::import(file=",deparse(srcnfo[["full_path"]]), ", which =", deparse(srcnfo[["sheet"]]), ")")
+      } else {
+        isgood      = FALSE
+        msgs = c(msgs, "excel file issue probably no sheet selected")
       }
     }
 
@@ -2584,7 +2597,6 @@ DM_update_element_code    = function(state, element, session){
       code_run    = paste0(element[["objs"]][["element_object_name"]], " <- rio::import(file=",deparse(srcnfo[["full_path"]]), ")")
     }
   }
-
 
   # Adding cleaning code if necessary/possible
   if(isgood){

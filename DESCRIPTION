@@ -45,7 +45,7 @@ Suggests:
   here,
   janitor,
   knitr,
-  plotly,
+  plotly (>= 4.11.0),
   prompter,
   rmarkdown,
   shinybusy,

@@ -71,7 +71,7 @@ formods_check <- function(verbose=TRUE){
     "shinybusy",
     "shinydashboard",
     "testthat",
-    "zoo", 
+    "zoo",
     "utils")
 
   pkg_found   = c()
@@ -706,14 +706,13 @@ FM_has_ds_changed = function(state, fdres, ids, react_state){
 
   # We only proceed if there are ids found in react_state
   if(!is.null(rs)){
-    # If fdres is NULL but there are ids where rs hasds == TRUE
+    # If fdres$catalog is NULL but there are ids where rs hasds == TRUE
     #  - fdres is not initialized but there are datasets so this should force it
     #    to be initialized
-    if(is.null(fdres) & anyds){
+    if(is.null(fdres[["catalog"]]) & anyds){
       ds_has_changed = TRUE
-      FM_le(state, "Data source change detected: fdres is NULL")
+      FM_le(state, "Data source change detected: fdres$catalog is NULL")
     }
-
 
     if(is.data.frame(fdres[["catalog"]])){
       for(tmpid in names(rs)){
@@ -3093,6 +3092,11 @@ FM_app_preload = function(session, sources=NULL, react_state = list(), quickload
   }
 
   FM_message(FM_build_comment(comment_str = paste0("preload_complete is good: ", isgood)))
+  if(!is.null(msgs)){
+    for(msg in msgs){
+      FM_message(paste0(paste0("# ", msg)))
+    }
+  }
 
   res=list(isgood       =isgood,
            msgs         = msgs,
@@ -3378,7 +3382,7 @@ fetch_resource = function(catalog = NULL, id = NULL, idx = NULL, res_label = NUL
   res = list(
     isgood  = isgood,
     msgs    = msgs,
-    res_row = res_row, 
+    res_row = res_row,
     res_obj = res_obj
   )
 

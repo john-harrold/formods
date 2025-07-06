@@ -20,5 +20,12 @@ State with dataviews rebuilt if dataset changes were detected
 Will attempt to rebuild data views when changes in the source datasets have been detected
 }
 \examples{
-# JMH add examples
+sess_res = DW_test_mksession()
+state    = sess_res$state
+session  = sess_res$session
+view_ids = names(state[["DW"]][["views"]])[1]
+state = DW_rectify(
+  state    = state, 
+  session  = session, 
+  view_ids = view_ids)
 }

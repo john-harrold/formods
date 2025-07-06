@@ -1,4 +1,4 @@
-# formods 0.2.2 (development version)
+# formods 0.3.0 (development version)
 
 * Added default colors (yellow and orange).
 * Moved data loading/saving over to `{rio}`.
@@ -10,6 +10,9 @@
 * Added STDM test datasets for the PC, EX and DM domains.
 * Added `FM_has_ds_changed()` to detect changes in datasets
 * Moved workflow elements from UD to ASM and created testing functions `ASM_test_workflow()` and `ASM_check_workflow()`.
+* Added DM module to handle multpile files 
+* Added merging to DW Module and the ability to use previously defined data views in the current data view.
+* Added empty preload files for testing purposes 
 
 # formods 0.2.1
 
