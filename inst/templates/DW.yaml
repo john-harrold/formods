@@ -219,23 +219,23 @@ MC:
       tooltip_position: "right"
       methods:
         rbind:
-          cname:   "Virtically Append"
-          subtext: "Data view and source must have same columns (rbind)"
+          cname:   "Vertically Append"
+          subtext: "Data view and new source must have same columns (<i>rbind</i>)"
         cbind:
           cname:   "Horizontally Append"
-          subtext: "Data view and source must have same number of rows (cbind)"
+          subtext: "Data view and new source must have same number of rows (<i>cbind</i>)"
         inner_join:
           cname:   "Keep Rows Matching Data View and New Source"
-          subtext: "Only keep rows in where the new data source matches current data view (inner join)"
+          subtext: "Only keep rows in where the new source matches current data view. Rows not in both data view and new source will be dropped (<i>inner join</i>)"
         left_join:
           cname:   "Keep Data View Rows"
-          subtext: "Only keep rows in new data source that have matches in the current data view (left join)"
+          subtext: "Only keep rows in new source that have matches in the current data view. Rows in data view that are not in the new source will have NA values in the added columns (<i>left join</i>)"
         right_join:
           cname:   "Keep New Source Rows"
-          subtext: "Only keep rows in the current data view that have matches in the new data source (right join)"
+          subtext: "Only keep rows in the current data view that have matches in the new source. Rows in the new source that are not in the data view will have NA values in the added columns (<i>right join</i>)"
         full_join :
           cname:   "Keep All Data"
-          subtext: "Keep all rows in both the current data_view and the source dataset (full join)"
+          subtext: "Keep all rows in both the current data view and the source. Rows in new source that are not in the data view and vice-versa (rows in the data view not in the new source) will have NA values in the added columns (<i>full join</i>)"
     select_fds_merge_condition:
       width:            "200px"
       tooltip:          "How columns in the current data view relate to the new data source."

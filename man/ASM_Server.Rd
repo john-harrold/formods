@@ -54,7 +54,6 @@ CSS <- "
 }
 "
 
-
 formods.yaml  = system.file(package="formods",  "templates",  "formods.yaml")
 ASM.yaml      = system.file(package="formods",  "templates",  "ASM.yaml")
 UD.yaml       = system.file(package="formods",  "templates",  "UD.yaml")
@@ -184,7 +183,7 @@ server <- function(input, output, session) {
                 system.file(package="formods", "preload", "FG_preload.yaml"))
     res = FM_app_preload(session=session, sources=sources, react_state = react_FM)
   } else if(file.exists("preload.yaml")){
-
+    
     shinybusy::show_modal_spinner(text="Preloading analysis, be patient", session=session)
     res = FM_app_preload(session=session, sources="preload.yaml", react_state=react_FM)
     shinybusy::remove_modal_spinner(session = session)
@@ -203,7 +202,7 @@ server <- function(input, output, session) {
              deployed      = deployed,
              react_state   = react_FM,
              mod_ids       = mod_ids)
-  formods::UD_Server( id="UD",
+  formods::UD_Server( id="UD", 
              FM_yaml_file  = formods.yaml,
              MOD_yaml_file = UD.yaml,
              deployed      = deployed,
@@ -213,12 +212,12 @@ server <- function(input, output, session) {
              MOD_yaml_file = DW.yaml,
              deployed      = deployed,
              react_state   = react_FM)
-  formods::DM_Server( id="DM",
+  formods::DM_Server( id="DM", 
              FM_yaml_file  = formods.yaml,
              MOD_yaml_file = DM.yaml,
              deployed      = deployed,
              react_state   = react_FM)
-  formods::FG_Server( id="FG",
+  formods::FG_Server( id="FG", 
              FM_yaml_file  = formods.yaml,
              MOD_yaml_file = FG.yaml,
              deployed      = deployed,

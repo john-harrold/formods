@@ -70,7 +70,185 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># JMH add examples</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sess_res</span> <span class="op">=</span> <span class="fu"><a href="DW_test_mksession.html">DW_test_mksession</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   dest:   file.path("config","report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: setting word placeholders: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   -&gt; setting docx ph: HEADERLEFT = left header</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   -&gt; setting docx ph: HEADERRIGHT = right header</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   -&gt; setting docx ph: FOOTERLEFT = left footer</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: module isgood: TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD:   dest:   file.path("config","report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module checksum updated:897d952fecbc804999396a96f9df4b20</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: module isgood: TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:   dest:   file.path("config","report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: f280116ab6b4488df6de76aff513a83f</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: 641fcbc6616d24d05acded4317a3bb12</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 78099100dae67cc0fee50517ea72a920</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: adding preload sources</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:  - file added: TEST_DATA.xlsx</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added: TEST_DATA.xlsx</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:  - url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_PC.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_PC.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:  - url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_EX.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_EX.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM:  - url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_DM.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: url added: https://raw.githubusercontent.com/john-harrold/formods/refs/heads/master/inst/test_data/SDTM_DM.csv</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: loading element idx: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: 1c3ccc3e092b7e97513896a8b2d3e23c</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: e3389efc03701a252f8edb1203fa4b01</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added element idx: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: loading element idx: 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: 475fa98bbc468d8539930cf7219e5a9e</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: e179a716c02f3fadbeb945a8f2011f22</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added element idx: 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: loading element idx: 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: de3f50e548105ce6b8b5b89194bea843</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: 6dc48929cb5c96d4c268d683b99a843f</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added element idx: 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: loading element idx: 4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: ds checksum updated: 3885543b519ca3aed0750c919911d043</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module checksum updated: dfb7d0ae41b069ea0ec14b52ed1a748c</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: added element idx: 4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: module isgood: TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.docx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.pptx")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: including file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   source: file.path(system.file(package="onbrand"), "templates", "report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   dest:   file.path("config","report.yaml")</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: e19ddb59715ba77afdd1907053aa5d14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:a9496b622f92f683cc8c69f65ac1ece4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: State initialized</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: e19ddb59715ba77afdd1907053aa5d14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:0955d1f9a1922b95277b4ad1df38e987</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: e19ddb59715ba77afdd1907053aa5d14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:3d3523604fcde20ce1792b16611bdba2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: e19ddb59715ba77afdd1907053aa5d14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:dfec3d5aa14c2716ccf367706931693f</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: loading data view idx: 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; setting data source: myDS</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: setting name: Observations</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:4d9fd3d913355669d14e0ac710b0b5dc</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: e19ddb59715ba77afdd1907053aa5d14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: 0017bd7cdc15ff708408b2d60672ef88</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:2aba88838dee694a3d2813ed9f2837d2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: 0017bd7cdc15ff708408b2d60672ef88</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: 278da634fa74dc23eae6db31314e0324</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:c181a352a2bd3592494d917b87057086</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; mutate</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: 278da634fa74dc23eae6db31314e0324</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: a164ecd5a527b2b38058230c1daa0080</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:048df4e8afa9494121e72808981c842c</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: loading data view idx: 2</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; setting data source: myDS</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: setting name: PK 3mg SD IV</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:c54c6fc20ff13fd14fbb61c786f65078</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: e19ddb59715ba77afdd1907053aa5d14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: 0017bd7cdc15ff708408b2d60672ef88</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:496c1149f14ec1c48d4ddbc5aec72a72</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: 0017bd7cdc15ff708408b2d60672ef88</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: 278da634fa74dc23eae6db31314e0324</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:d65a6b3c16bea4262f7fb15a1d961512</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: 278da634fa74dc23eae6db31314e0324</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: 00bd5f01d02d634acf134cf01970a1c3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:f90816b8f2ef9aeaad82e4a00880e536</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: 00bd5f01d02d634acf134cf01970a1c3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: a01562e32a19fd4b10f88ace089346c6</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:452fc9d9131592650a93b4b49de961d1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: loading data view idx: 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; setting data source: myDS</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: setting name: PK 3mg SD IV (NCA)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:3b177ed09a80dfaf15c9f3dde8b9a8fb</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: e19ddb59715ba77afdd1907053aa5d14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: 0017bd7cdc15ff708408b2d60672ef88</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:ce7e35b3bc2e1f53088ae7edd5b4345e</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: 0017bd7cdc15ff708408b2d60672ef88</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: 198f7d878f23121868e677c0b86a5f3c</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:64a5146d5e7070664557a7ff3d80f6f0</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: 198f7d878f23121868e677c0b86a5f3c</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: 4326a7b6b9040676b320b387ba5b8ad9</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:2cf968d6e72262f9274ea0389f717e84</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: loading data view idx: 4</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; setting data source: myDS</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: setting name: PKPD 3mg SD IV (NCA)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:67e9d6e6b2e085808be155613f8efe20</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: e19ddb59715ba77afdd1907053aa5d14</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: 0017bd7cdc15ff708408b2d60672ef88</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:a7a211de4eb91c91098a1f20e62bec73</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: data view checksum updated: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   old: 0017bd7cdc15ff708408b2d60672ef88</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   new: 198f7d878f23121868e677c0b86a5f3c</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module checksum updated:306f66790aca305ff1b715f34802610e</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW:   -&gt; filter</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → DW: module isgood: TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → # preload_complete is good: TRUE ------------------------------------------</span>
+<span class="r-in"><span><span class="va">state</span>    <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">state</span></span></span>
+<span class="r-in"><span><span class="va">session</span>  <span class="op">=</span> <span class="va">sess_res</span><span class="op">$</span><span class="va">session</span></span></span>
+<span class="r-in"><span><span class="va">view_ids</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">state</span><span class="op">[[</span><span class="st">"DW"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"views"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="fu">DW_rectify</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  state    <span class="op">=</span> <span class="va">state</span>, </span></span>
+<span class="r-in"><span>  session  <span class="op">=</span> <span class="va">session</span>, </span></span>
+<span class="r-in"><span>  view_ids <span class="op">=</span> <span class="va">view_ids</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

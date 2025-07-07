@@ -18,7 +18,6 @@ CSS <- "
 }
 "
 
-
 formods.yaml  = system.file(package="formods",  "templates",  "formods.yaml")
 ASM.yaml      = system.file(package="formods",  "templates",  "ASM.yaml")
 UD.yaml       = system.file(package="formods",  "templates",  "UD.yaml")
@@ -157,7 +156,7 @@ server <- function(input, output, session) {
 
   # This is the list of module ids used for reproducible script generation. The
   # order here is important.
-  mod_ids = c("UD", "DW", "FG")
+  mod_ids = c("UD", "DM", "DW", "FG")
 
 
   # Module servers

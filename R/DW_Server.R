@@ -175,8 +175,6 @@ DW_Server <- function(id,
 
       current_view = DW_fetch_current_view(state)
 
-      message("update picker input")
-
       # If this is triggered before datasets have been loaded the state will
       # be bad:
       # JMH TODO: check the dsviews stuff
@@ -914,19 +912,18 @@ DW_Server <- function(id,
                              react_state     = react_state)
 
       merge_methods = state[["MC"]][["formatting"]][["select_fds_merge_method"]][["methods"]]
-      cnames  = c()
+
       choices = c()
-      subtext = c()
+      content = c()
       for(mchoice in names(merge_methods)){
         choices = c(choices, mchoice)
-        cnames  = c(cnames, merge_methods[[mchoice]][["cname"]])
-        subtext = c(subtext, merge_methods[[mchoice]][["subtext"]])
+        content = c(content,
+          HTML(paste0('<div style="width: 400px; white-space: normal;">
+                       <b>', merge_methods[[mchoice]][["cname"]], '</b>:
+                       <span style="color: gray;">',merge_methods[[mchoice]][["subtext"]] ,'</span>
+                      </div>'))
+        )
       }
-
-      names(choices) = cnames
-
-      state[["MC"]][["formatting"]][["select_fds_merge_method"]][["methods"]]
-
       uiele =
         div(style = "display: flex;",
         shinyWidgets::pickerInput(
@@ -935,18 +932,18 @@ DW_Server <- function(id,
           multiple    = TRUE,
           selected    = NULL,
           options = pickerOptions(
+            html       = TRUE,
             maxOptions = 1,
             title      = state[["MC"]][["labels"]][["fds_merge_method"]]),
           choicesOpt  = list(
-            style   = rep("", length(choices)),
-            subtext = subtext),
+            content = content),
           choices     = choices,
           width       = state[["MC"]][["formatting"]][["select_fds_merge_method"]][["width"]])
         )
+
         uiele = FM_add_ui_tooltip(state, uiele,
                  tooltip     = state[["MC"]][["formatting"]][["select_fds_merge_method"]][["tooltip"]],
                  position    = state[["MC"]][["formatting"]][["select_fds_merge_method"]][["tooltip_position"]])
-      #browser()
 
     uiele})
     #------------------------------------
