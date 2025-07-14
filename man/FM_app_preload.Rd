@@ -35,6 +35,7 @@ Populates session data for testing or to load a specific
 analysis.
 }
 \examples{
-sources=system.file(package="formods", "preload", "UD.yaml")
+sources=c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+          system.file(package="formods", "preload", "UD_preload.yaml"))
 res = FM_app_preload(session=list(), sources=sources)
 }

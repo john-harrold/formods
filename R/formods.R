@@ -247,7 +247,7 @@ FM_fetch_ds = function(state, session, ids=NULL, meta_only = FALSE){
         tmp_choices_group_labels[[ MOD_DESC_list[[dsname]]  ]],
         ds[[dsname]][["label"]])
 
-      modules[[ ds[[dsname]][["MOD_TYPE"]]]  ][[ ds[[dsname]][["id"]] ]] = ds[[dsname]][["checksum"]]
+      modules[[ ds[[dsname]][["MOD_TYPE"]]] ][[ ds[[dsname]][["id"]] ]] = ds[[dsname]][["checksum"]]
       module_ids[[ ds[[dsname]][["id"]] ]] = ds[[dsname]][["checksum"]]
     }
 
@@ -2876,7 +2876,7 @@ FM_fetch_mdl = function(state, session, ids=NULL){
         tmp_choices_group_labels[[ MOD_DESC_list[[mdlname]]  ]],
         mdl[[mdlname]][["label"]])
 
-      modules[[ mdl[[mdlname]][["MOD_TYPE"]]]  ][[ mdl[[mdlname]][["id"]] ]] = mdl[[mdlname]][["checksum"]]
+      modules[[ mdl[[mdlname]][["MOD_TYPE"]]] ][[ mdl[[mdlname]][["id"]] ]] = mdl[[mdlname]][["checksum"]]
     }
 
     # This creates choices for selectInput()
@@ -2980,7 +2980,8 @@ render_str <- function(estr=""){
 #'   \item{session:} Returning the session variable to be used in scripting (not in app).
 #'}
 #'@examples
-#' sources=system.file(package="formods", "preload", "UD.yaml")
+#' sources=c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+#'           system.file(package="formods", "preload", "UD_preload.yaml"))
 #'res = FM_app_preload(session=list(), sources=sources)
 FM_app_preload = function(session, sources=NULL, react_state = list(), quickload=FALSE){
   isgood       = TRUE

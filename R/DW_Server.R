@@ -3636,13 +3636,6 @@ state}
 #' dw_view = DW_attach_ds(state=state, dw_view=dw_view, ds_source_id=ds_source_id)
 DW_attach_ds = function(state, dw_view, ds_source_id){
 
-
-  # set the following fields:
-  # - WDS
-  # - ds_source_id
-  # - code_previous
-  # - ds_source_checksum
-
   if(ds_source_id %in% names(state[["DW"]][["DSV"]][["ds"]])){
     # Setting the dataset details
     dw_view[["ds_source_id"]]       = ds_source_id
