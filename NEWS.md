@@ -4,8 +4,7 @@
 * Moved data loading/saving over to `{rio}`.
 * Added support for sas and sas7bdat files.
 * Fixed bug in FG module where a figure built on a data view crashes the app when the data view is deleted.
-* Added a return list element to `FM_fetch_ds()` to include the choices.
-* Added a similar return list element to `FM_fetch_mdl()`.
+* Added a return list element to `FM_fetch_ds()` and `FM_fetch_mdl()` to include the choices.
 * Added filed in module section of the module yaml file to include description of the module to be associated with assets that module provides. E.g. if the DW module provides datasets we can assoicate those with the DW module in UI elements like data source selection..
 * Added STDM test datasets for the PC, EX and DM domains.
 * Added `FM_has_ds_changed()` to detect changes in datasets
@@ -13,6 +12,7 @@
 * Added DM module to handle multpile files 
 * Added merging to DW Module and the ability to use previously defined data views in the current data view.
 * Added empty preload files for testing purposes 
+* Created the function `FM_test_preload()` to automate testing of preload files and workflows.
 
 # formods 0.2.1
 
