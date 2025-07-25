@@ -27,6 +27,7 @@ value if that is null
 }
 \examples{
 # Populating the session with data
+session = list()
 ds_plf = c(system.file(package="formods", "preload", "ASM_preload_empty.yaml"),
            system.file(package="formods", "preload", "UD_preload.yaml"),
            system.file(package="formods", "preload", "DM_preload_empty.yaml"))
@@ -53,4 +54,6 @@ wfl = list(
 
 # Running the workflow
 state = ASM_run_workflow(state=state, session=session, wfl=wfl)
+
+state$ASM$rwf_res
 }

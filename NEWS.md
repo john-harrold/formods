@@ -8,11 +8,10 @@
 * Added filed in module section of the module yaml file to include description of the module to be associated with assets that module provides. E.g. if the DW module provides datasets we can assoicate those with the DW module in UI elements like data source selection..
 * Added STDM test datasets for the PC, EX and DM domains.
 * Added `FM_has_ds_changed()` to detect changes in datasets
-* Moved workflow elements from UD to ASM and created testing functions `ASM_test_workflow()` and `ASM_check_workflow()`.
+* Moved workflow elements from UD to ASM and created testing functions `ASM_test_preload()` and `ASM_check_workflow()`. The function `ASM_test_preload()` can be used to automate testing of preload files and workflows.
 * Added DM module to handle multpile files 
 * Added merging to DW Module and the ability to use previously defined data views in the current data view.
 * Added empty preload files for testing purposes 
-* Created the function `FM_test_preload()` to automate testing of preload files and workflows.
 
 # formods 0.2.1
 

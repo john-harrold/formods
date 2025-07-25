@@ -1542,6 +1542,7 @@ ASM_load_state = function(state, session, file_path){
 #' }
 #'@examples
 #' # Populating the session with data
+#' session = list()
 #' ds_plf = c(system.file(package="formods", "preload", "ASM_preload_empty.yaml"),
 #'            system.file(package="formods", "preload", "UD_preload.yaml"),
 #'            system.file(package="formods", "preload", "DM_preload_empty.yaml"))
@@ -1568,6 +1569,8 @@ ASM_load_state = function(state, session, file_path){
 #' 
 #' # Running the workflow
 #' state = ASM_run_workflow(state=state, session=session, wfl=wfl)
+#' 
+#' state$ASM$rwf_res
 ASM_run_workflow = function(state, session, wfl){
   isgood     = TRUE
   msgs       = c()
@@ -1766,94 +1769,321 @@ ASM_check_workflow = function(state, session, pll){
 res}
 
 
-#'@export
-#'@title Test Specified Workflow 
-#'@description This will take a preload file for loading data and a separate preload file for a workflow and test whether it can be run.
-#'@param ds_plf Vector of preload yaml list files containing data loading
-#'@param wf_plf Vector of preload yaml list files containing workflows
-#'@return List with the following elements:
+#  #'@export
+#  #'@title Test Specified Workflow 
+#  #'@description This will take a preload file for loading data and a separate preload file for a workflow and test whether it can be run.
+#  #'@param ds_plf Vector of preload yaml list files containing data loading
+#  #'@param wf_plf Vector of preload yaml list files containing workflows
+#  #'@return List with the following elements:
+#  #' \itemize{
+#  #'   \item{isgood:}      Boolean indicating the exit status of the function.
+#  #'   \item{msgs:}        Messages to be passed back to the user.
+#  #' }
+#  #'@examples
+#  #'  ds_plf = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+#  #'             system.file(package="formods", "preload", "UD_preload.yaml"),
+#  #'             system.file(package="formods", "preload", "DM_preload_empty.yaml"))
+#  #'
+#  #'  wf_plf = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+#  #'             system.file(package="formods", "preload", "UD_preload.yaml"),
+#  #'             system.file(package="formods", "preload", "DM_preload_empty.yaml"),
+#  #'             system.file(package="formods", "preload", "DW_preload.yaml"))
+#  #'
+#  #'  res = ASM_test_workflow(ds_plf=ds_plf, wf_plf=wf_plf)
+#  ASM_test_workflow = function(ds_plf, wf_plf){
+#  
+#    isgood = TRUE
+#    msgs   = c()
+#  
+#    # Building the session with the datasets attached
+#    session = list()
+#    res_ds = FM_app_preload(session=session, sources=ds_plf)
+#  
+#  
+#    if(res_ds[["isgood"]]){
+#      # Session with the ds_plf populated
+#      session = res_ds[["session"]]
+#  
+#      # ASM state object
+#      state = res_ds[["all_sess_res"]][["ASM"]][["state"]]
+#  
+#      # turning preload files (plf) into a single preload lists (pll)
+#      wf_pll = list()
+#      for(tmp_wf_plf in wf_plf){
+#         wf_pll = c(wf_pll, formods::FM_read_yaml(tmp_wf_plf))
+#      }
+#  
+#      # Some basic testing of the workflow
+#      cwf_res = ASM_check_workflow(state=state, session=session, pll = wf_pll)
+#      if(cwf_res[["isgood"]]){
+#  
+#        # The run_workflow function takes in a yaml file so we need to write the wf_pll out to a file
+#        tmp_preload = tempfile(fileext=".yaml")
+#        yaml::write_yaml(file=tmp_preload, x=wf_pll)
+#  
+#        wfl = list(
+#          require_ds = TRUE,
+#          preload   = tmp_preload
+#        )
+#  
+#        state = ASM_run_workflow(state=state, session=session, wfl=wfl)
+#  
+#        # This tests to see if the preload failed:
+#        if(!state[["ASM"]][["rwf_res"]][["isgood"]]){
+#          isgood = FALSE 
+#          if(!is.null(state[["ASM"]][["rwf_res"]][["isgood"]])){
+#            msgs = c(msgs, 
+#              "workflow run failed (ASM_run_workflow()), see messages below for details", 
+#              state[["ASM"]][["rwf_res"]][["isgood"]])
+#          } else {
+#            msgs = c(msgs, "workflow check failed (ASM_run_workflow())")
+#          }
+#        }
+#      } else {
+#        if(!is.null(cwf_res[["msgs"]])){
+#          msgs = c(msgs, "workflow check failed (ASM_check_workflow()), see messages below for details", cwf_res[["msgs"]])
+#        } else {
+#          msgs = c(msgs, "workflow check failed (ASM_check_workflow())")
+#        }
+#      }
+#  
+#    } else {
+#      isgood = FALSE
+#      if(!is.null(res_ds[["msgs"]])){
+#        msgs = c(msgs, "ds preload failed, see messages below for details", res_ds[["msgs"]])
+#      } else {
+#        msgs = c(msgs, "ds preload failed")
+#      }
+#    }
+#  
+#    res = list(
+#      isgood    = isgood,
+#      msgs      = msgs)
+#  res}
+
+#'@export 
+#'@title Test Specified Preload Functionality
+#'@description 
+#' Loads specified preload lists to verify execution, saves the state to the
+#' specified zip file and attempts to load the saved state if
+#' \code{test_save_state} is \code{TRUE}. To test a workflow you can use
+#' \code{sources} to specify the loading of data and then \code{workflow} to
+#' specify the yaml workflow. 
+#'@param sources     Vector of at corresponds with the ID used to call the modules UI elements
+#'@param preload_files   Dataframe of files needed to run the workflow with a
+#'column called \code{src} for the local source of the file and \code{dest} for the
+#'destination. Not strictly required but almost always needed. 
+#'@param preload_dir     Directory to run out of (\code{tempdir()})
+#'@param save_state_file When testing `ASM_save_state()` this is the file name where the stat will be written (\code{tempfile(fileext=".zip")})
+#'@param test_save_state  Logical when set to \code{TRUE} (default) it will test the zip file (\code{save_state_file}) to make sure it can be loaded. 
+#'@param workflow        Yaml preload file to run a workflow (optional, \code{NULL} default).
+#'@return list with the following elements
 #' \itemize{
-#'   \item{isgood:}      Boolean indicating the exit status of the function.
-#'   \item{msgs:}        Messages to be passed back to the user.
-#' }
+#'   \item{isgood:}          Boolean indicating the exit status of the function.
+#'   \item{msgs:}            Messages to be passed back to the user.
+#'   \item{apl_res:}         Results from FM_app_preload() if run,   \code{list(isgood=FALSE, msgs="not run")} otherwise. 
+#'   \item{ss_res:}          Results from ASM_save_state() if run,   \code{list(isgood=FALSE, msgs="not run")} otherwise. 
+#'   \item{ls_res:}          Results from ASM_load_state() if run,   \code{list(isgood=FALSE, msgs="not run")} otherwise. 
+#'   \item{rwf_res:}         Results from ASM_run_workflow() if run, \code{list(isgood=FALSE, msgs="not run")} otherwise. 
+#'   \item{save_state_file:} If ss_res$isgood is TRUE this is the path to the zip file generated when saving the app state after loading. 
+#'}
 #'@examples
-#'  ds_plf = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
-#'             system.file(package="formods", "preload", "UD_preload.yaml"),
-#'             system.file(package="formods", "preload", "DM_preload_empty.yaml"))
 #'
-#'  wf_plf = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
-#'             system.file(package="formods", "preload", "UD_preload.yaml"),
-#'             system.file(package="formods", "preload", "DM_preload_empty.yaml"),
-#'             system.file(package="formods", "preload", "DW_preload.yaml"))
+#'sources = c(
+#'  system.file(package="formods", "preload", "UD_preload.yaml"),
+#'  system.file(package="formods", "preload", "ASM_preload.yaml"))
+#' 
+#'res = ASM_test_preload(sources=sources, test_save_state = FALSE)
 #'
-#'  res = ASM_test_workflow(ds_plf=ds_plf, wf_plf=wf_plf)
-ASM_test_workflow = function(ds_plf, wf_plf){
+#'res$isgood
+ASM_test_preload = function(
+  sources         = NULL, 
+  preload_files   = NULL, 
+  preload_dir     = tempfile(pattern="preload_"),
+  save_state_file = tempfile(fileext=".zip"),
+  test_save_state = TRUE,
+  workflow        = NULL){
 
-  isgood = TRUE
-  msgs   = c()
 
-  # Building the session with the datasets attached
-  session = list()
-  res_ds = FM_app_preload(session=session, sources=ds_plf)
+  isgood          = TRUE
+  msgs            = c()
+
+  # The yaml files in sources will be read in and put here:
+  preload_yaml_fn = file.path(preload_dir, "preload.yaml")
+
+  # This is a placeholder for the FM_app_preload() function 
+  # results. By  default its isgood state is FALSE in case we 
+  # cannot run it for some reason below
+  apl_res         = list(isgood=FALSE, msgs=c("not run"))
+
+  # This is a placeholder for the ASM_save_state() function 
+  # results. By  default its isgood state is FALSE in case we 
+  # cannot run it for some reason below
+  ss_res         = list(isgood=FALSE, msgs=c("not run"))
+
+  # This is a placeholder for the ASM_load_state() function 
+  # results. By  default its isgood state is FALSE in case we 
+  # cannot run it for some reason below
+  ls_res         = list(isgood=FALSE, msgs=c("not run"))
+
+  # This is a placeholder for the results from the 
+  # ASM_run_workflow() function. By  default its isgood 
+  # state is FALSE in case we cannot run it for 
+  # some reason below
+  rwf_res         = list(isgood=FALSE, msgs=c("not run"))
 
 
-  if(res_ds[["isgood"]]){
-    # Session with the ds_plf populated
-    session = res_ds[["session"]]
+  # Creating preload directory tree:
+  if(dir.exists(preload_dir)){
+    unlink(preload_dir, recursive = TRUE)
+  }
+  dir.create(preload_dir)
 
-    # ASM state object
-    state = res_ds[["all_sess_res"]][["ASM"]][["state"]]
+  # Here we're going to start working out of preload_dir
+  old_wd=getwd()
+  setwd(preload_dir)
+  on.exit( setwd(old_wd))
+  
+  dir.create(file.path(preload_dir, "config"), recursive=TRUE)
+  dir.create(file.path(preload_dir, "data", "DM"), recursive=TRUE)
 
-    # turning preload files (plf) into a single preload lists (pll)
-    wf_pll = list()
-    for(tmp_wf_plf in wf_plf){
-       wf_pll = c(wf_pll, formods::FM_read_yaml(tmp_wf_plf))
+  yaml_list = list()
+
+  # processing sources
+  if(!is.null(sources)>0){
+    for(yaml_src in sources){
+      if(file.exists(yaml_src)){
+        yaml_list = c(yaml_list, FM_read_yaml(yaml_src))
+      } else {
+        isgood = FALSE
+        msgs = c(msgs, paste0("yaml source not found: ", yaml_src))
+      }
     }
 
-    # Some basic testing of the workflow
-    cwf_res = ASM_check_workflow(state=state, session=session, pll = wf_pll)
-    if(cwf_res[["isgood"]]){
+    if(isgood){
+      # Saving the sources to a single preload file:
+      yaml::write_yaml(yaml_list, preload_yaml_fn)
+    }
+  } else {
+    isgood = FALSE
+    msgs   = c(msgs, "sources was not specified")
+  }
 
-      # The run_workflow function takes in a yaml file so we need to write the wf_pll out to a file
-      tmp_preload = tempfile(fileext=".yaml")
-      yaml::write_yaml(file=tmp_preload, x=wf_pll)
-
-      wfl = list(
-        require_ds = TRUE,
-        preload   = tmp_preload
-      )
-
-      state = ASM_run_workflow(state=state, session=session, wfl=wfl)
-
-      # This tests to see if the preload failed:
-      if(!state[["ASM"]][["rwf_res"]][["isgood"]]){
-        isgood = FALSE 
-        if(!is.null(state[["ASM"]][["rwf_res"]][["isgood"]])){
-          msgs = c(msgs, 
-            "workflow run failed (ASM_run_workflow()), see messages below for details", 
-            state[["ASM"]][["rwf_res"]][["isgood"]])
+  # Copying the files locally
+  if(!is.null(preload_files)>0){
+    if(all(c("src", "dest") %in% names(preload_files))){
+      for(ridx in 1:nrow(preload_files)){
+        tmp_src  = preload_files[["src"]][ridx] 
+        tmp_dest = preload_files[["dest"]][ridx]
+        if(file.exists(tmp_src)){
+          if(!file.copy(from=tmp_src, to=tmp_dest, overwrite=TRUE)){
+            isgood=FALSE
+            msgs = c(msgs, paste0("unable to copy file:"))
+            msgs = c(msgs, paste0(" -> src:  ", tmp_src))
+            msgs = c(msgs, paste0(" -> dest: ", tmp_dest))
+          }
         } else {
-          msgs = c(msgs, "workflow check failed (ASM_run_workflow())")
+          isgood = FALSE
+          msgs = c(msgs, paste0("preload_files src not found: ", tmp_src))
         }
       }
     } else {
-      if(!is.null(cwf_res[["msgs"]])){
-        msgs = c(msgs, "workflow check failed (ASM_check_workflow()), see messages below for details", cwf_res[["msgs"]])
-      } else {
-        msgs = c(msgs, "workflow check failed (ASM_check_workflow())")
+      isgood = FALSE
+      msgs = c(msgs, "preload_files must have both src and dest columns")
+    }
+  }
+
+  # Preloading the app:
+  if(isgood){
+    apl_res = FM_app_preload(session=list(), sources=preload_yaml_fn)
+    if(!apl_res[["isgood"]]){
+      isgood = FALSE
+      msgs = c(msgs, "FM_app_preload() failed")
+      if(!is.null(apl_res[["msgs"]]) ){
+        msgs = c(msgs, paste0("  ", apl_res[["msgs"]]))
       }
     }
+  }
 
-  } else {
-    isgood = FALSE
-    if(!is.null(res_ds[["msgs"]])){
-      msgs = c(msgs, "ds preload failed, see messages below for details", res_ds[["msgs"]])
-    } else {
-      msgs = c(msgs, "ds preload failed")
+  # If the preload was good then we will save the app state
+  if(apl_res[["isgood"]] & isgood){
+    tmp_state   = apl_res[["all_sess_res"]][["ASM"]][["state"]]
+    tmp_session = apl_res[["session"]]
+
+    ss_res = ASM_save_state(
+      state    = tmp_state, 
+      session  = tmp_session, 
+      file_path = save_state_file)
+
+    if(!ss_res[["isgood"]]){
+      isgood = FALSE
+      msgs = c(msgs, "ASM_save_state() failed")
+      if(!is.null(ss_res[["msgs"]]) ){
+        msgs = c(msgs, paste0("  ", ss_res[["msgs"]]))
+      }
+    }
+  }
+
+
+  # If we are testing the save state then we give that a shot
+  if(test_save_state & ss_res[["isgood"]] & isgood){
+    tmp_state   = apl_res[["all_sess_res"]][["ASM"]][["state"]]
+    tmp_session = apl_res[["session"]]
+
+    ls_res =
+      ASM_load_state(state     = tmp_state,
+                     session   = tmp_session,
+                     file_path = save_state_file)
+    if(!ls_res[["isgood"]]){
+      isgood = FALSE
+      msgs = c(msgs, "ASM_save_state() failed")
+      if(!is.null(ls_res[["msgs"]]) ){
+        msgs = c(msgs, paste0("  ", ls_res[["msgs"]]))
+      }
+    }
+  }
+
+
+  # JMH add workflow portion here
+  if(!is.null(workflow)){
+    tmp_state   = apl_res[["all_sess_res"]][["ASM"]][["state"]]
+    tmp_session = apl_res[["session"]]
+    wfl = list(require_ds = TRUE, preload=workflow) 
+    tmp_state = ASM_run_workflow(
+      state   = tmp_state, 
+      session = tmp_session, 
+      wfl     = wfl)
+
+    # This will be passed back to the user
+    rwf_res = tmp_state[["ASM"]][["rwf_res"]]
+
+    # Notifying the user if there were any issues with rwf
+    if(!rwf_res[["isgood"]]){
+      isgood = FALSE
+      msgs = c(msgs, "ASM_save_state() failed")
+      if(!is.null(rwf_res[["msgs"]]) ){
+        msgs = c(msgs, paste0("  ", rwf_res[["msgs"]]))
+      }
+    }
+  }
+
+  setwd(old_wd)
+
+  if(!isgood){
+    msgs = paste0("  ", msgs)
+    msgs = c("FM_test_preload()", msgs)
+    for(msg in msgs){
+      FM_message(line=msg, entry_type="warning")
     }
   }
 
   res = list(
-    isgood    = isgood,
-    msgs      = msgs)
+    isgood          = isgood, 
+    msgs            = msgs,
+    apl_res         = apl_res,
+    ss_res          = ss_res,
+    ls_res          = ls_res,
+    rwf_res         = rwf_res,
+    save_state_file = save_state_file)
+
 res}

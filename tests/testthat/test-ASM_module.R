@@ -36,8 +36,6 @@ load_res = suppressMessages(ASM_load_state(state = state, session = session, fil
 expect_true(load_res[["isgood"]])
 })
 
-
-
 test_that("ASM -- Checking workflows ", {
  sess_res = suppressMessages(FG_test_mksession(session=list()))
  session = sess_res[["session"]]
@@ -52,36 +50,5 @@ test_that("ASM -- Checking workflows ", {
  pll = formods::FM_read_yaml(system.file(package="formods", "preload", "workflow_DW_merge.yaml"))
  cwf_res = ASM_check_workflow(state=state, session=session, pll=pll)
  expect_false(all(cwf_res[["dep_table"]][["res_found"]]))
-
-})
-
-
-test_that("ASM -- Testing workflows ", {
-
-ds_plf = c(system.file(package="formods", "preload", "ASM_preload_empty.yaml"),
-           system.file(package="formods", "preload", "UD_preload.yaml"),
-           system.file(package="formods", "preload", "DW_preload_empty.yaml"),
-           system.file(package="formods", "preload", "FG_preload_empty.yaml"),
-           system.file(package="formods", "preload", "DM_preload_empty.yaml"))
-
-wf_plf = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
-           system.file(package="formods", "preload", "UD_preload.yaml"),
-           system.file(package="formods", "preload", "DM_preload_empty.yaml"),
-           system.file(package="formods", "preload", "DW_preload.yaml"),
-           system.file(package="formods", "preload", "FG_preload.yaml"))
-
-res = suppressMessages(ASM_test_workflow(ds_plf=ds_plf, wf_plf=wf_plf))
-expect_true(res[["isgood"]])
-
-ds_plf = c(system.file(package="formods", "preload", "ASM_preload_empty.yaml"),
-           system.file(package="formods", "preload", "UD_preload.yaml"),
-           system.file(package="formods", "preload", "DW_preload_empty.yaml"),
-           system.file(package="formods", "preload", "FG_preload_empty.yaml"),
-           system.file(package="formods", "preload", "DM_preload.yaml"))
-
-wf_plf = c(system.file(package="formods", "preload", "workflow_DW_merge.yaml"))
-
-res = suppressMessages(ASM_test_workflow(ds_plf=ds_plf, wf_plf=wf_plf))
-expect_true(res[["isgood"]])
 
 })
