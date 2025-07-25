@@ -41,7 +41,7 @@ session = sess_res[["session"]]
 state = FM_fetch_mod_state(id="ASM", session=session)
 
 # The DW test merge should require resource labels that are not currently present
-pll = formods::FM_read_yaml(system.file(package="formods", "preload", "DW_test_merge.yaml"))
+pll = formods::FM_read_yaml(system.file(package="formods", "preload", "workflow_DW_merge.yaml"))
 
 cwf_res = ASM_check_workflow(state=state, session=session, pll=pll)
 
