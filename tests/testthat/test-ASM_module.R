@@ -42,13 +42,14 @@ test_that("ASM -- Checking workflows ", {
  state = FM_fetch_mod_state(id="ASM", session=session)
  pll = formods::FM_read_yaml(system.file(package="formods", "preload", "workflow_DW_merge.yaml"))
  cwf_res = ASM_check_workflow(state=state, session=session, pll=pll)
- expect_true(all(cwf_res[["dep_table"]][["res_found"]]))
+ expect_true(cwf_res[["deps_found"]])
+
 
  sess_res = suppressMessages(ASM_test_mksession(session=list()))
  session = sess_res[["session"]]
  state = FM_fetch_mod_state(id="ASM", session=session)
  pll = formods::FM_read_yaml(system.file(package="formods", "preload", "workflow_DW_merge.yaml"))
  cwf_res = ASM_check_workflow(state=state, session=session, pll=pll)
- expect_false(all(cwf_res[["dep_table"]][["res_found"]]))
+ expect_false(cwf_res[["deps_found"]])
 
 })

@@ -1679,6 +1679,7 @@ state}
 #'   \item{isgood:}      Boolean indicating the exit status of the function.
 #'   \item{msgs:}        Messages to be passed back to the user.
 #'   \item{chk_msgs:}    Results of check, this can contain \code{"tags()"}
+#'   \item{deps_found:}  Boolean indicating if all resoures were found.
 #'   \item{dep_table:}   Table of dependency information with the following columns:
 #'   \itemize{
 #'     \item{mod_ID:}      The formods module ID of the module that needs the resource.
@@ -1695,14 +1696,15 @@ state}
 #' state = FM_fetch_mod_state(id="ASM", session=session)
 #' 
 #' # The DW test merge should require resource labels that are not currently present
-#' pll = formods::FM_read_yaml(system.file(package="formods", "preload", "DW_test_merge.yaml"))
+#' pll = formods::FM_read_yaml(system.file(package="formods", "preload", "workflow_DW_merge.yaml"))
 #' 
 #' cwf_res = ASM_check_workflow(state=state, session=session, pll=pll)
 #' 
 #' cwf_res
 ASM_check_workflow = function(state, session, pll){
-  isgood = TRUE
-  msgs   = c()
+  isgood     = TRUE
+  msgs       = c()
+  deps_found = TRUE
 
   # Defaulting to no resources
   chk_msgs = state[["MC"]][["formatting"]][["workflow"]][["chk_msgs"]][["no_res"]]
@@ -1743,6 +1745,8 @@ ASM_check_workflow = function(state, session, pll){
         # If the resource exists we flag it as found
         if(fr_res[["isgood"]]){
           res_deps[ridx, ][["res_found"]] = TRUE
+        } else {
+          deps_found = FALSE
         }
       }
     }
@@ -1762,10 +1766,11 @@ ASM_check_workflow = function(state, session, pll){
   chk_msgs = formods::render_str(chk_msgs)
 
   res = list(
-    isgood    = isgood,
-    msgs      = msgs,
-    chk_msgs  = chk_msgs,
-    dep_table = res_deps)
+    isgood     = isgood,
+    msgs       = msgs,
+    chk_msgs   = chk_msgs,
+    deps_found = deps_found,
+    dep_table  = res_deps)
 res}
 
 
