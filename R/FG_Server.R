@@ -301,9 +301,9 @@ FG_Server <- function(id,
               cmd = "fbuild <- ggplot2::ggplot_build(fobj); suppressMessages(ggsave(tempfile(fileext='.png'), fobj))",
               capture = c("fbuild"))
 
-      if(tcres[["isgood"]]){
-        fobj = tcres[["capture"]][["fbuild"]]
-      } else {
+      if(!tcres[["isgood"]]){
+    #   fobj = tcres[["capture"]][["fbuild"]]
+    # } else {
         # capturing the errors and returning those in the figure
         fobj = FM_mk_error_fig(tcres[["msgs"]])
 

@@ -20,6 +20,7 @@ following elements:
   \item{isgood:}      Boolean indicating the exit status of the function.
   \item{msgs:}        Messages to be passed back to the user.
   \item{chk_msgs:}    Results of check, this can contain \code{"tags()"}
+  \item{deps_found:}  Boolean indicating if all resoures were found.
   \item{dep_table:}   Table of dependency information with the following columns:
   \itemize{
     \item{mod_ID:}      The formods module ID of the module that needs the resource.

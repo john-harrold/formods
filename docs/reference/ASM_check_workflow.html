@@ -72,6 +72,7 @@ those currently avialble in the state to determine if the workflow can be run.</
 following elements:</p><ul><li><p>isgood:      Boolean indicating the exit status of the function.</p></li>
 <li><p>msgs:        Messages to be passed back to the user.</p></li>
 <li><p>chk_msgs:    Results of check, this can contain <code>"tags()"</code></p></li>
+<li><p>deps_found:  Boolean indicating if all resoures were found.</p></li>
 <li><p>dep_table:   Table of dependency information with the following columns:</p><ul><li><p>mod_ID:      The formods module ID of the module that needs the resource.</p></li>
 <li><p>dep_type :   Type of resource dependency currently only <code>"ds"</code> for data source.</p></li>
 <li><p>id       :   The formods module ID supplying the resource.</p></li>
@@ -117,6 +118,9 @@ following elements:</p><ul><li><p>isgood:      Boolean indicating the exit statu
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $chk_msgs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Workflow issues: The folloiwng resource labels were not found: tags$b(PC), tags$b(EX)"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $deps_found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $dep_table</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   mod_ID dep_type id res_label res_found</span>
