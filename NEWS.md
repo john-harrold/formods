@@ -12,6 +12,7 @@
 * Added DM module to handle multpile files 
 * Added merging to DW Module and the ability to use previously defined data views in the current data view.
 * Added empty preload files for testing purposes 
+* Fixed issue with ggplot2 version 4+ that prevented figures from being rendered properly in the UI
 
 # formods 0.2.1
 
