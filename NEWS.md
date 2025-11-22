@@ -12,6 +12,10 @@
 * Added DM module to handle multpile files 
 * Added merging to DW Module and the ability to use previously defined data views in the current data view.
 * Added empty preload files for testing purposes 
+* Modified `FM_tc()` to capture all objects generated when no capture is specified.
+
+# formods 0.2.2
+
 * Fixed issue with ggplot2 version 4+ that prevented figures from being rendered properly in the UI
 
 # formods 0.2.1
