@@ -145,7 +145,7 @@ DW_Server <- function(id,
                              MOD_yaml_file  = MOD_yaml_file,
                              react_state    = react_state)
 
-      message("create picker input")
+      #message("create picker input")
       choicesOpt = NULL
       uiele =
         shinyWidgets::pickerInput(
