@@ -145,7 +145,6 @@ DW_Server <- function(id,
                              MOD_yaml_file  = MOD_yaml_file,
                              react_state    = react_state)
 
-      #message("create picker input")
       choicesOpt = NULL
       uiele =
         shinyWidgets::pickerInput(
@@ -1879,7 +1878,7 @@ DW_Server <- function(id,
     # Creates the ui for the compact view of the module
     output$DW_ui_compact  =  renderUI({
       # Forcing a reaction to changes in other modules
-      #force_mod_update[["triggered"]]
+      force_mod_update[["triggered"]]
       state = DW_fetch_state(id              = id,
                              input           = input,
                              session         = session,
@@ -2217,9 +2216,8 @@ DW_fetch_state = function(id,                    input,     session,
                             session         = session)
     }
 
-    # JMH TODO: compare checksums to new checksums and update accordingly
     # Walking through each view and detecting changes in data sources
-    state = DW_rectify(state=state, session=session)
+    state = DW_rectify(state=state, session=session, id=id, id_UD=id_UD, id_DM=id_DM)
     FM_le(state, FM_build_comment(level = 1, comment_str="updating data sources: done"))
   }
   #---------------------------------------------
@@ -2286,7 +2284,7 @@ DW_fetch_state = function(id,                    input,     session,
               # updated and force the rebuild:
               current_view[["elements_table"]]  = NEW_ET
               state = DW_set_current_view(state=state, session=session, dw_view=current_view)
-              state = DW_rectify(state=state, session=session, view_ids = current_view[["id"]])
+              state = DW_rectify(state=state, session=session, view_ids = current_view[["id"]], id=id, id_UD=id_UD, id_DM=id_DM)
               msgs = c(msgs, state[["DW"]][["res"]][["rebuild_current_view"]][["msgs"]])
               state = DW_update_checksum(state)
               FM_le(state, "wrangling element deleted")
@@ -2383,7 +2381,7 @@ DW_fetch_state = function(id,                    input,     session,
           # If there are any views that depend on the current view we rectify those
           if(length(view_deps[["dep_catalog_ex"]][["view_id"]])>0){
             FM_le(state, paste0("triggering update of dependent data views: ", paste0(view_deps[["dep_catalog_ex"]][["view_id"]], collapse=", ")))
-            state = DW_rectify(state=state, session=session, view_ids = view_deps[["dep_catalog_ex"]][["view_id"]])
+            state = DW_rectify(state=state, session=session, view_ids = view_deps[["dep_catalog_ex"]][["view_id"]], id=id, id_UD=id_UD, id_DM=id_DM)
           }
         }
       } else {
@@ -2560,7 +2558,7 @@ DW_fetch_state = function(id,                    input,     session,
     # If there are any views that depend on the view we just deleted, we rectify those
     if(length(view_deps[["dep_catalog_ex"]][["view_id"]])>0){
       FM_le(state, paste0("triggering update of dependent data views: ", paste0(view_deps[["dep_catalog_ex"]][["view_id"]], collapse=", ")))
-      state = DW_rectify(state=state, session=session, view_ids = view_deps[["dep_catalog_ex"]][["view_id"]])
+      state = DW_rectify(state=state, session=session, view_ids = view_deps[["dep_catalog_ex"]][["view_id"]], id=id, id_UD=id_UD, id_DM=id_DM)
     }
 
     # Setting hold for views select
@@ -4459,6 +4457,9 @@ res}
 #'@param state DW state object
 #'@param session Shiny session variable
 #'@param view_ids List of view ids to mend or NULL to attempt to mend all
+#'@param id Shiny id of the DW module
+#'@param id_UD Shiny id of the UD module
+#'@param id_DM Shiny id of the DM module
 #'@return State with dataviews rebuilt if dataset changes were detected
 #'@examples
 #' sess_res = DW_test_mksession()
@@ -4468,8 +4469,9 @@ res}
 #' state = DW_rectify(
 #'   state    = state, 
 #'   session  = session, 
-#'   view_ids = view_ids)
-DW_rectify = function(state, session, view_ids = NULL){
+#'   view_ids = view_ids,
+#'   id = "DW", id_UD="UD", id_DM="DM")
+DW_rectify = function(state, session, view_ids = NULL, id=NULL, id_UD = NULL, id_DM=NULL){
 
   # View IDs to rectify:
   if(is.null(view_ids)){
@@ -4484,6 +4486,12 @@ DW_rectify = function(state, session, view_ids = NULL){
   view_ids_rectify = view_deps[["dep_catalog"]][["view_id"]]
 
   for(tmp_view_id in view_ids_rectify){
+     # Updating the DSV because an upstream data view can break one downstream of it
+     state[["DW"]][["DSV"]] = FM_fetch_ds(state, session, c(id_UD, id_DM))
+
+     # Saving the state so that it will be in sync with the session
+     FM_set_mod_state(session, id, state)
+
 
     # Flag to indicate if we need to rebuild the
     REBUILD_VIEW = FALSE
@@ -4493,10 +4501,8 @@ DW_rectify = function(state, session, view_ids = NULL){
     state[["DW"]][["current_view"]] = tmp_view_id
     tmp_cv = DW_fetch_current_view(state)
 
-
     if( tmp_cv[["ds_source_id"]] %in% names(state[["DW"]][["DSV"]][["ds"]])){
       if(tmp_cv[["ds_source_checksum"]] != state[["DW"]][["DSV"]][["ds"]][[  tmp_cv[["ds_source_id"]] ]][["DSchecksum"]]){
-
         RBLD_MSG = c(RBLD_MSG, paste0("initial data source changed: ", tmp_cv[["ds_source_id"]]))
         REBUILD_VIEW = TRUE
       }
@@ -4511,7 +4517,9 @@ DW_rectify = function(state, session, view_ids = NULL){
       avail_ds = DW_fetch_available_sources (state, session, dw_view=tmp_cv)
       # JMH check all of the sources in res_obj_DSchecksum to see if any have changed
       # if they have then we trigger a rebuild
-      # This is all of the resources used in the current data view
+
+      # This is all of the resources used in the current data view. So all of
+      # the data sources both external (from UD or DM) and internal (from DW)
       tmp_res_all = tmp_cv[["elements_table"]][ tmp_cv[["elements_table"]][["res_obj"]]!="", ]
       for(tmp_res_obj in tmp_res_all[["res_obj"]]){
         if( tmp_res_obj %in% avail_ds[["catalog"]][["object"]]){
@@ -4532,7 +4540,7 @@ DW_rectify = function(state, session, view_ids = NULL){
         }
       }
     }
-
+ 
     if(REBUILD_VIEW){
       FM_le(state, RBLD_MSG)
       state = DW_rebuild_current_view(state=state, session=session)
@@ -4673,24 +4681,24 @@ DW_rebuild_current_view = function(state, session){
   view_isgood = TRUE
 
   # Messages to pass back to the user
-
   msgs = c()
   FM_le(state, FM_build_comment(level = 1, comment_str=paste0('rebuilding "', current_view[["key"]], '" (',current_view[["id"]], ')')))
 
+  # Pulling the current elements list:
+  NEW_EL = current_view[["elements_list"]]
+
+  # Resetting the element aspects of the data view. These should essentially
+  # match the values in DW_new_view. We're resetting these:
+  current_view[["dwe_cntr"]]       = 1
+  current_view[["elements_list"]]  = list()
+  current_view[["elements_table"]] = NULL
+  current_view[["WDS"]]            = NULL
+  current_view[["checksum"]]       = NULL
+  current_view[["code"]]           = NULL
+  current_view[["code_dw_only"]]   = NULL
+
   # Making sure the data source still exists:
   if(current_source_id %in% names(state[["DW"]][["DSV"]][["ds"]])){
-    # Pulling the current elements list:
-    NEW_EL = current_view[["elements_list"]]
-
-    # Resetting the element aspects of the data view. These should essentially
-    # match the values in DW_new_view. We're resetting these:
-    current_view[["dwe_cntr"]]       = 1
-    current_view[["elements_list"]]  = list()
-    current_view[["elements_table"]] = NULL
-    current_view[["WDS"]]            = NULL
-    current_view[["checksum"]]       = NULL
-    current_view[["code"]]           = NULL
-    current_view[["code_dw_only"]]   = NULL
 
     # Now we reattach the data source so we start adding components to the
     # original data view:
@@ -4723,6 +4731,9 @@ DW_rebuild_current_view = function(state, session){
     notify_text = stringr::str_replace_all(notify_text, "===DVID===",   current_view[["id"]])
     notify_text = stringr::str_replace_all(notify_text, "===VIEW===",   current_view[["key"]])
     state = FM_set_notification(state, notify_text, "DW data source missing", "failure")
+
+    # Now we save these as the current view as initialized above
+    state = DW_set_current_view(state=state, session=session, dw_view=current_view)
   }
 
   # Pulling out the current view again
@@ -4740,7 +4751,7 @@ DW_rebuild_current_view = function(state, session){
   current_view[["isgood"]] = view_isgood
   state = DW_set_current_view(state=state, session=session, dw_view=current_view)
   state = DW_update_checksum(state)
-state}
+  state}
 
 #'@export
 #'@title Fetch Available Source

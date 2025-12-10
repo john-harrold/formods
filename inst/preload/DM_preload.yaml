@@ -26,7 +26,7 @@ DM:
    - element:
        idx:          1
        ui: 
-         element_name: "Excel (from file)"
+         element_name: "Excel (file)"
          res_label:     ""
          source_id:    1
          ds_sheet:     "DATA"

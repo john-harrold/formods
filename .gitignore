@@ -13,3 +13,4 @@ R/NM_Server.R
 inst/templates/NM*
 _pkgdown_backup.yml
 .vscode
+tests/testing/*
