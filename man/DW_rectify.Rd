@@ -4,7 +4,14 @@
 \alias{DW_rectify}
 \title{Rebuilds Data Views After Source Changes}
 \usage{
-DW_rectify(state, session, view_ids = NULL)
+DW_rectify(
+  state,
+  session,
+  view_ids = NULL,
+  id = NULL,
+  id_UD = NULL,
+  id_DM = NULL
+)
 }
 \arguments{
 \item{state}{DW state object}
@@ -12,6 +19,12 @@ DW_rectify(state, session, view_ids = NULL)
 \item{session}{Shiny session variable}
 
 \item{view_ids}{List of view ids to mend or NULL to attempt to mend all}
+
+\item{id}{Shiny id of the DW module}
+
+\item{id_UD}{Shiny id of the UD module}
+
+\item{id_DM}{Shiny id of the DM module}
 }
 \value{
 State with dataviews rebuilt if dataset changes were detected
@@ -27,5 +40,6 @@ view_ids = names(state[["DW"]][["views"]])[1]
 state = DW_rectify(
   state    = state, 
   session  = session, 
-  view_ids = view_ids)
+  view_ids = view_ids,
+  id = "DW", id_UD="UD", id_DM="DM")
 }
