@@ -71,6 +71,7 @@ value if that is null</p>
     <p>The ASM state object with the results stored as a list in the field <code>rwf_res</code>
 following elements:</p><ul><li><p>isgood:      Boolean indicating the exit status of the function.</p></li>
 <li><p>msgs:        Messages to be passed back to the user.</p></li>
+<li><p>react_state: Reaction state initilized after loading</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -149,7 +150,7 @@ following elements:</p><ul><li><p>isgood:      Boolean indicating the exit statu
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → UD: mk_preload isgood: TRUE</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → DM: mk_preload isgood: TRUE</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: writing app state to file on server: </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   /var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T//Rtmp2CtIqP/file14575bd2ee55.zip</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   /var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T//RtmpzwBx2r/file1187a24eb560a.zip</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM: Generating reports (code only)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:   Generating report: xlsx</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → ASM:     appending report for module:DM id:DM priority:1</span>
@@ -225,6 +226,45 @@ following elements:</p><ul><li><p>isgood:      Boolean indicating the exit statu
 <span class="r-in"><span><span class="va">state</span><span class="op">$</span><span class="va">ASM</span><span class="op">$</span><span class="va">rwf_res</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $isgood</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$ASM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$ASM$ASM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$ASM$ASM$checksum</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "f9e884084b84794d762a535f3facec85"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$DM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$DM$DM</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$DM$DM$checksum</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "78099100dae67cc0fee50517ea72a920"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$DM$DM$hasds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$UD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$UD$UD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$UD$UD$hasds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$UD$UD$checksum</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "897d952fecbc804999396a96f9df4b20"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$DW</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$DW$DW</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$DW$DW$checksum</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a9496b622f92f683cc8c69f65ac1ece4"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $react_state$DW$DW$hasds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $msgs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>

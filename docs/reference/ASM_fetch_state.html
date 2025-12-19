@@ -44,7 +44,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ASM_fetch_state</span><span class="op">(</span><span class="va">id</span>, <span class="va">input</span>, <span class="va">session</span>, <span class="va">FM_yaml_file</span>, <span class="va">MOD_yaml_file</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ASM_fetch_state</span><span class="op">(</span><span class="va">id</span>, <span class="va">input</span>, <span class="va">session</span>, <span class="va">FM_yaml_file</span>, <span class="va">MOD_yaml_file</span>, <span class="va">react_state</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -69,6 +69,10 @@
 
 <dt id="arg-mod-yaml-file">MOD_yaml_file<a class="anchor" aria-label="anchor" href="#arg-mod-yaml-file"></a></dt>
 <dd><p>Module configuration file with MC as main section.</p></dd>
+
+
+<dt id="arg-react-state">react_state<a class="anchor" aria-label="anchor" href="#arg-react-state"></a></dt>
+<dd><p>Variable passed to server to allow reaction outside of</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -120,6 +124,7 @@ has the following structure:</p><ul><li><p>yaml: Full contents of the supplied y
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="fu">ASM_fetch_state</span><span class="op">(</span>id           <span class="op">=</span> <span class="va">id</span>,</span></span>
 <span class="r-in"><span>                        input        <span class="op">=</span> <span class="va">input</span>,</span></span>
 <span class="r-in"><span>                        session      <span class="op">=</span> <span class="va">session</span>,</span></span>
+<span class="r-in"><span>                        react_state  <span class="op">=</span> <span class="va">react_state</span>, </span></span>
 <span class="r-in"><span>                        FM_yaml_file <span class="op">=</span> <span class="va">FM_yaml_file</span>,</span></span>
 <span class="r-in"><span>                        MOD_yaml_file <span class="op">=</span> <span class="va">MOD_yaml_file</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -798,10 +803,10 @@ has the following structure:</p><ul><li><p>yaml: Full contents of the supplied y
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ASM"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpdrB2c1/temp_libpath18a62a764952/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpML9lv3/temp_libpath105582c93f3ee/formods/templates/formods.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpdrB2c1/temp_libpath18a62a764952/formods/templates/ASM.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpML9lv3/temp_libpath105582c93f3ee/formods/templates/ASM.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $shiny_token</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "non_shiny"</span>
