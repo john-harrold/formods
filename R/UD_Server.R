@@ -13,7 +13,6 @@
 #'@title Data Upload Server
 #'@description Server function for the Data Uplaod Shiny Module
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
-#'@param id_ASM ID string for the app state management module used to save and load app states
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
 #'@param deployed Boolean variable indicating whether the app is deployed or not.
@@ -21,7 +20,6 @@
 #'@return UD Server object
 #'@example inst/test_apps/FM_compact.R
 UD_Server <- function(id,
-                      id_ASM       = "XYZ",  # JMH depreciate this
                       FM_yaml_file  = system.file(package = "formods",
                                                   "templates",
                                                   "formods.yaml"),
@@ -31,8 +29,6 @@ UD_Server <- function(id,
                       deployed     = FALSE,
                       react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
-
-  FM_message(paste0("depreciating id_ASM (", id_ASM, ")"))
 
    MOD_yaml_cont = FM_read_yaml(MOD_yaml_file)
    id_ASM = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_ASM"]]

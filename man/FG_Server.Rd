@@ -8,9 +8,6 @@ FG_Server(
   id,
   FM_yaml_file = system.file(package = "formods", "templates", "formods.yaml"),
   MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml"),
-  id_ASM = "XYZ",
-  id_UD = "XYZ",
-  id_DW = "XYZ",
   deployed = FALSE,
   react_state = NULL
 )
@@ -21,12 +18,6 @@ FG_Server(
 \item{FM_yaml_file}{App configuration file with FM as main section.}
 
 \item{MOD_yaml_file}{Module configuration file with MC as main section.}
-
-\item{id_ASM}{ID string for the app state management module used to save and load app states}
-
-\item{id_UD}{ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.}
-
-\item{id_DW}{ID string for the data wrangling module to process any uploaded data}
 
 \item{deployed}{Boolean variable indicating whether the app is deployed or not.}
 

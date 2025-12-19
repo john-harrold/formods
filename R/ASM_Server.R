@@ -36,6 +36,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -52,6 +53,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -69,6 +71,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -118,6 +121,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
       wf = state[["yaml"]][["FM"]][["workflows"]]
@@ -217,6 +221,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -248,6 +253,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -265,6 +271,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -287,6 +294,7 @@ ASM_Server <- function(id,
         state = ASM_fetch_state(id           = id,
                                 input        = input,
                                 session      = session,
+                                react_state  = react_state, 
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
         dlfn = ASM_fetch_dlfn(state)
@@ -296,6 +304,7 @@ ASM_Server <- function(id,
         state = ASM_fetch_state(id           = id,
                                 input        = input,
                                 session      = session,
+                                react_state  = react_state, 
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
 
@@ -356,6 +365,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -373,6 +383,7 @@ ASM_Server <- function(id,
         state = ASM_fetch_state(id           = id,
                                 input        = input,
                                 session      = session,
+                                react_state  = react_state, 
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
        dlfn = ASM_fetch_dlfn(state, ".pptx")
@@ -382,6 +393,7 @@ ASM_Server <- function(id,
         state = ASM_fetch_state(id           = id,
                                 input        = input,
                                 session      = session,
+                                react_state  = react_state, 
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
         FM_pause_screen(state   = state,
@@ -404,6 +416,7 @@ ASM_Server <- function(id,
         state = ASM_fetch_state(id           = id,
                                 input        = input,
                                 session      = session,
+                                react_state  = react_state, 
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
        dlfn = ASM_fetch_dlfn(state, ".docx")
@@ -413,6 +426,7 @@ ASM_Server <- function(id,
         state = ASM_fetch_state(id           = id,
                                 input        = input,
                                 session      = session,
+                                react_state  = react_state, 
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
         FM_pause_screen(state   = state,
@@ -448,6 +462,7 @@ ASM_Server <- function(id,
         state = ASM_fetch_state(id           = id,
                                 input        = input,
                                 session      = session,
+                                react_state  = react_state, 
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
        dlfn = ASM_fetch_dlfn(state, ".xlsx")
@@ -457,6 +472,7 @@ ASM_Server <- function(id,
         state = ASM_fetch_state(id           = id,
                                 input        = input,
                                 session      = session,
+                                react_state  = react_state, 
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
         FM_pause_screen(state   = state,
@@ -480,6 +496,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -493,6 +510,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -517,6 +535,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -541,6 +560,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -565,6 +585,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -603,6 +624,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
       app_info = FM_fetch_app_info(session)
@@ -615,6 +637,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
       app_info = FM_fetch_app_info(session)
@@ -627,6 +650,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
       app_info = FM_fetch_app_info(session)
@@ -641,6 +665,7 @@ ASM_Server <- function(id,
     state = ASM_fetch_state(id           = id,
                             input        = input,
                             session      = session,
+                            react_state  = react_state, 
                             FM_yaml_file = FM_yaml_file,
                             MOD_yaml_file = MOD_yaml_file)
     log_file = FM_fetch_log_path(state)
@@ -650,6 +675,7 @@ ASM_Server <- function(id,
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
+                              react_state  = react_state, 
                               FM_yaml_file = FM_yaml_file,
                               MOD_yaml_file = MOD_yaml_file)
 
@@ -690,6 +716,7 @@ ASM_Server <- function(id,
         state = ASM_fetch_state(id           = id,
                                 input        = input,
                                 session      = session,
+                                react_state  = react_state, 
                                 FM_yaml_file = FM_yaml_file,
                                 MOD_yaml_file = MOD_yaml_file)
 
@@ -707,6 +734,7 @@ ASM_Server <- function(id,
     state = ASM_fetch_state(id           = id,
                             input        = input,
                             session      = session,
+                            react_state  = react_state, 
                             FM_yaml_file = FM_yaml_file,
                             MOD_yaml_file = MOD_yaml_file)
     # Triggering optional notifications
@@ -726,6 +754,7 @@ ASM_Server <- function(id,
 #'@param session Shiny session variable
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
+#'@param react_state Variable passed to server to allow reaction outside of
 #'@return list containing the current state of the app including default
 #'values from the yaml file as well as any changes made by the user. The list
 #'has the following structure:
@@ -759,13 +788,15 @@ ASM_Server <- function(id,
 #' state = ASM_fetch_state(id           = id,
 #'                         input        = input,
 #'                         session      = session,
+#'                         react_state  = react_state, 
 #'                         FM_yaml_file = FM_yaml_file,
 #'                         MOD_yaml_file = MOD_yaml_file)
 #'
 #' state
-ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
+ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file, react_state){
 
-  # Template for an empty dataset
+  # Poupulated below whenever the app loads a save state or runs a workflow
+  init_react_state = list()
   #---------------------------------------------
   # Getting the current state
   state = FM_fetch_mod_state(session, id)
@@ -817,6 +848,9 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
           ASM_load_state(state     = state,
                          session   = session,
                          file_path = file_path)
+
+        # Pulling out the initilized reaction state to return it below
+        init_react_state = ls_res[["react_state"]]
 
         # Pulling the state out of the load results:
         state = ls_res[["state"]]
@@ -871,6 +905,9 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
 
     state = ASM_run_workflow(state=state, session=session, wfl=wfl)
 
+    # Pulling out the initilized reaction state to return it below
+    init_react_state = state[["ASM"]][["rwf_res"]][["react_state"]]
+
     FM_resume_screen(state   = state,
                      session = session)
 
@@ -894,6 +931,16 @@ ASM_fetch_state = function(id, input, session, FM_yaml_file, MOD_yaml_file){
   #---------------------------------------------
   # Saving the state
   FM_set_mod_state(session, id, state)
+
+  # If we've loaded a saved state or run a workflow then we need to syncroize
+  # the react_state for the app with the values populated by running the preload
+  # functions.
+  if(length(names(init_react_state))>0){
+    FM_le(state, "initializing react_state")
+    for(tmp_mod_id in names(init_react_state)){
+      react_state[[tmp_mod_id]] = init_react_state[[tmp_mod_id]]
+    }
+  }
 
   # Returning the state
   state}
@@ -1095,6 +1142,7 @@ ASM_preload  = function(session, src_list, yaml_res=NULL, mod_ID=NULL, react_sta
   state = ASM_fetch_state(id            = mod_ID,
                           input         = input,
                           session       = session,
+                          react_state   = react_state, 
                           FM_yaml_file  = FM_yaml_file,
                           MOD_yaml_file = MOD_yaml_file)
 
@@ -1408,6 +1456,7 @@ ASM_save_state = function(state, session, file_path, pll = NULL, update_modal=TR
 #'   \item{msgs:}        Messages to be passed back to the user.
 #'   \item{state:}       AMS state
 #'   \item{session:}     Session object
+#'   \item{react_state:} Reaction state initilized after loading
 #' }
 #'@examples
 #' # Within shiny the session variable will exist
@@ -1468,6 +1517,14 @@ ASM_load_state = function(state, session, file_path){
   # Next we run the preload yaml
   res = FM_app_preload(session=session, sources="preload.yaml")
 
+  # Pulling out the react_state variables from each module
+  react_state = list()
+  for(tmp_id in names(res[["all_sess_res"]])){
+    for(tmp_id_2 in names(res[["all_sess_res"]][[tmp_id]][["react_state"]])){
+      react_state[[tmp_id_2]] = res[["all_sess_res"]][[tmp_id]][["react_state"]][[tmp_id_2]]
+    }
+  }
+
   if(res[["isgood"]]){
     if(!("ShinySession" %in% class(session))){
       session = res[["session"]]
@@ -1521,10 +1578,11 @@ ASM_load_state = function(state, session, file_path){
 
   # Passing any messages back to the user
   state = FM_set_ui_msg(state, msgs)
-  res = list(isgood   = isgood,
-             state    = state,
-             session  = session,
-             msgs     = msgs)
+  res = list(isgood      = isgood,
+             state       = state,
+             session     = session,
+             react_state = react_state,
+             msgs        = msgs)
   res}
 
 #'@export
@@ -1539,6 +1597,7 @@ ASM_load_state = function(state, session, file_path){
 #' \itemize{
 #'   \item{isgood:}      Boolean indicating the exit status of the function.
 #'   \item{msgs:}        Messages to be passed back to the user.
+#'   \item{react_state:} Reaction state initilized after loading
 #' }
 #'@examples
 #' # Populating the session with data
@@ -1572,18 +1631,18 @@ ASM_load_state = function(state, session, file_path){
 #' 
 #' state$ASM$rwf_res
 ASM_run_workflow = function(state, session, wfl){
-  isgood     = TRUE
-  msgs       = c()
+  isgood      = TRUE
+  msgs        = c()
+  react_state = list()
 
     fds_res = FM_fetch_ds(state=state, session=session, meta_only=TRUE)
 
     # JMH add checks for DW and resource labels
     if(wfl[["require_ds"]] & !fds_res[["hasds"]]){
-#     # To run this workflow a dataset is required but one has not been
-#     # uploaded.
+      # To run this workflow a dataset is required but one has not been
+      # uploaded.
       msgs  = c(msgs, state[["MC"]][["errors"]][["no_ds_for_workflow"]])
       isgood = FALSE
-#     FM_set_mod_state(session, id, state)
     } else {
       FM_le(state, paste0("Running workflow: ", wfl[["desc"]]))
       # Preload file
@@ -1646,7 +1705,9 @@ ASM_run_workflow = function(state, session, wfl){
               ASM_load_state(state, session,
                              file_path = ssf)
 
-          state = ls_res[["state"]]
+          state       = ls_res[["state"]]
+          # Here we're pulling any react_state values out from the load
+          react_state = ls_res[["react_state"]]
   
           if(!ls_res[["isgood"]]){
             msgs =  c(msgs, state[["MC"]][["errors"]][["ls_failed"]], ls_res[["msgs"]])
@@ -1661,8 +1722,9 @@ ASM_run_workflow = function(state, session, wfl){
     }
 
   state[["ASM"]][["rwf_res"]] = list(
-    isgood = isgood,
-    msgs   = msgs
+    isgood      = isgood,
+    react_state = react_state,
+    msgs        = msgs
   )
 state}
 

@@ -4,7 +4,7 @@
 \alias{ASM_fetch_state}
 \title{Fetch State Manager State}
 \usage{
-ASM_fetch_state(id, input, session, FM_yaml_file, MOD_yaml_file)
+ASM_fetch_state(id, input, session, FM_yaml_file, MOD_yaml_file, react_state)
 }
 \arguments{
 \item{id}{Shiny module ID}
@@ -16,6 +16,8 @@ ASM_fetch_state(id, input, session, FM_yaml_file, MOD_yaml_file)
 \item{FM_yaml_file}{App configuration file with FM as main section.}
 
 \item{MOD_yaml_file}{Module configuration file with MC as main section.}
+
+\item{react_state}{Variable passed to server to allow reaction outside of}
 }
 \value{
 list containing the current state of the app including default
@@ -55,6 +57,7 @@ id = "ASM"
 state = ASM_fetch_state(id           = id,
                         input        = input,
                         session      = session,
+                        react_state  = react_state, 
                         FM_yaml_file = FM_yaml_file,
                         MOD_yaml_file = MOD_yaml_file)
 

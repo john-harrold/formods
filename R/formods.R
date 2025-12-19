@@ -721,6 +721,7 @@ FM_has_ds_changed = function(state, fdres, ids, react_state){
         #    generated but there are now
         if(rs[[tmpid]][["hasds"]]){
           if(!any(fdres[["catalog"]][["id"]] == tmpid)){
+            #browser()
             ds_has_changed = TRUE
             FM_le(state, paste0("Data source change detected: fdres is is missing ", tmpid))
           }
@@ -730,7 +731,7 @@ FM_has_ds_changed = function(state, fdres, ids, react_state){
         #  - this means that there were datasets when fdres was
         #    generated but have since been deleted
         if(!rs[[tmpid]][["hasds"]]){
-          if(any(fdres[["catalog"]][["id"]] == tmpid)){
+          if(any((fdres[["catalog"]][["id"]] == tmpid))){
             ds_has_changed = TRUE
             FM_le(state, paste0("Data source change detected: source dataset from ", tmpid, " is missing"))
           }

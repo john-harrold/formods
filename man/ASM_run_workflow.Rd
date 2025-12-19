@@ -19,6 +19,7 @@ following elements:
 \itemize{
   \item{isgood:}      Boolean indicating the exit status of the function.
   \item{msgs:}        Messages to be passed back to the user.
+  \item{react_state:} Reaction state initilized after loading
 }
 }
 \description{

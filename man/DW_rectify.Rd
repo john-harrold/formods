@@ -10,7 +10,8 @@ DW_rectify(
   view_ids = NULL,
   id = NULL,
   id_UD = NULL,
-  id_DM = NULL
+  id_DM = NULL,
+  force = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ DW_rectify(
 \item{id_UD}{Shiny id of the UD module}
 
 \item{id_DM}{Shiny id of the DM module}
+
+\item{force}{Boolean to force rebuild}
 }
 \value{
 State with dataviews rebuilt if dataset changes were detected

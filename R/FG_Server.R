@@ -12,9 +12,6 @@
 #'@param id An ID string that corresponds with the ID used to call the module's UI function
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with MC as main section.
-#'@param id_ASM ID string for the app state management module used to save and load app states
-#'@param id_UD  ID string for the upload data module used to handle uploads or the name of the list element in react_state where the data set is stored.
-#'@param id_DW  ID string for the data wrangling module to process any uploaded data
 #'@param deployed Boolean variable indicating whether the app is deployed or not.
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return FG Server object
@@ -22,9 +19,6 @@
 FG_Server <- function(id,
                 FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
                 MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml"),
-                id_ASM        = "XYZ",
-                id_UD         = "XYZ",
-                id_DW         = "XYZ",
                 deployed      = FALSE,
                 react_state   = NULL) {
   moduleServer(id, function(input, output, session) {
@@ -3186,7 +3180,6 @@ FG_preload  = function(session, src_list, yaml_res, mod_ID=NULL, react_state = l
                 add_component = FALSE
                 comp_err_msg = c(comp_err_msg, current_fig[["msgs"]])
               }
-              #browser()
             } else {
               isgood         = FALSE
               add_component = FALSE

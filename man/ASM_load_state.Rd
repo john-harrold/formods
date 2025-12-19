@@ -21,6 +21,7 @@ following elements:
   \item{msgs:}        Messages to be passed back to the user.
   \item{state:}       AMS state
   \item{session:}     Session object
+  \item{react_state:} Reaction state initilized after loading
 }
 }
 \description{

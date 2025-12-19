@@ -12,9 +12,6 @@
 #'@title Data Wrangling Server
 #'@description Server function for the data wrangling module
 #'@param id An ID string that corresponds with the ID used to call the modules UI elements
-#'@param id_ASM ID string for the app state managment module used to save and load app states
-#'@param id_UD  ID string for the upload data module used to handle uploads or
-#'the name of the list element in react_state where the data set is stored.
 #'@param FM_yaml_file App configuration file with FM as main section.
 #'@param MOD_yaml_file  Module configuration file with DW as main section.
 #'@param deployed Boolean variable indicating whether the app is deployed or not.
@@ -23,8 +20,6 @@
 #'@return DW Server object
 #'@example inst/test_apps/FM_compact.R
 DW_Server <- function(id,
-                      id_ASM       = "DEP",
-                      id_UD        = "DEP",
                       FM_yaml_file  = system.file(package = "formods",
                                                   "templates",
                                                   "formods.yaml"),
@@ -34,9 +29,6 @@ DW_Server <- function(id,
                       deployed     = FALSE,
                       react_state  = NULL) {
   moduleServer(id, function(input, output, session) {
-
-  FM_message(paste0("depreciating id_ASM (", id_ASM, ")"))
-  FM_message(paste0("depreciating id_UD (", id_UD, ")"))
 
   MOD_yaml_cont = FM_read_yaml(MOD_yaml_file)
   id_ASM = MOD_yaml_cont[["MC"]][["module"]][["depends"]][["id_ASM"]]
@@ -2284,7 +2276,10 @@ DW_fetch_state = function(id,                    input,     session,
               # updated and force the rebuild:
               current_view[["elements_table"]]  = NEW_ET
               state = DW_set_current_view(state=state, session=session, dw_view=current_view)
-              state = DW_rectify(state=state, session=session, view_ids = current_view[["id"]], id=id, id_UD=id_UD, id_DM=id_DM)
+              #browser()
+              state = DW_rectify(state=state, session=session, view_ids = current_view[["id"]], 
+                                 id=id, id_UD=id_UD, id_DM=id_DM, 
+                                 force=TRUE)
               msgs = c(msgs, state[["DW"]][["res"]][["rebuild_current_view"]][["msgs"]])
               state = DW_update_checksum(state)
               FM_le(state, "wrangling element deleted")
@@ -4460,6 +4455,7 @@ res}
 #'@param id Shiny id of the DW module
 #'@param id_UD Shiny id of the UD module
 #'@param id_DM Shiny id of the DM module
+#'@param force Boolean to force rebuild
 #'@return State with dataviews rebuilt if dataset changes were detected
 #'@examples
 #' sess_res = DW_test_mksession()
@@ -4471,7 +4467,7 @@ res}
 #'   session  = session, 
 #'   view_ids = view_ids,
 #'   id = "DW", id_UD="UD", id_DM="DM")
-DW_rectify = function(state, session, view_ids = NULL, id=NULL, id_UD = NULL, id_DM=NULL){
+DW_rectify = function(state, session, view_ids = NULL, id=NULL, id_UD = NULL, id_DM=NULL, force=FALSE){
 
   # View IDs to rectify:
   if(is.null(view_ids)){
@@ -4496,6 +4492,12 @@ DW_rectify = function(state, session, view_ids = NULL, id=NULL, id_UD = NULL, id
     # Flag to indicate if we need to rebuild the
     REBUILD_VIEW = FALSE
     RBLD_MSG = c()
+
+    if(force){
+      REBUILD_VIEW = TRUE
+      RBLD_MSG = c(RBLD_MSG, "forcing rebuild")
+    }
+
 
     # Setting the current view and pulling it out:
     state[["DW"]][["current_view"]] = tmp_view_id
@@ -4687,18 +4689,20 @@ DW_rebuild_current_view = function(state, session){
   # Pulling the current elements list:
   NEW_EL = current_view[["elements_list"]]
 
-  # Resetting the element aspects of the data view. These should essentially
-  # match the values in DW_new_view. We're resetting these:
-  current_view[["dwe_cntr"]]       = 1
-  current_view[["elements_list"]]  = list()
-  current_view[["elements_table"]] = NULL
-  current_view[["WDS"]]            = NULL
-  current_view[["checksum"]]       = NULL
-  current_view[["code"]]           = NULL
-  current_view[["code_dw_only"]]   = NULL
 
   # Making sure the data source still exists:
   if(current_source_id %in% names(state[["DW"]][["DSV"]][["ds"]])){
+
+    # Resetting the element aspects of the data view. These should essentially
+    # match the values in DW_new_view. We're resetting these:
+    current_view[["dwe_cntr"]]       = 1
+    current_view[["elements_list"]]  = list()
+    current_view[["elements_table"]] = NULL
+    current_view[["WDS"]]            = NULL
+    current_view[["checksum"]]       = NULL
+    current_view[["code"]]           = NULL
+    current_view[["code_dw_only"]]   = NULL
+
 
     # Now we reattach the data source so we start adding components to the
     # original data view:
@@ -4724,6 +4728,17 @@ DW_rebuild_current_view = function(state, session){
       }
     }
   } else {
+    current_view[["WDS"]]            = NULL
+    current_view[["code"]]           = NULL
+    current_view[["code_dw_only"]]   = NULL
+    if(length(current_view[["elements_table"]][["Status"]])>0){
+      current_view[["elements_table"]][["Status"]][1] = "Failure"
+      if(length(current_view[["elements_table"]][["Status"]])>1){
+        current_view[["elements_table"]][["Status"]][ 
+          2:length(current_view[["elements_table"]][["Status"]]) ] = "Not Run"
+      }
+    }
+
     ERROR_FOUND = TRUE
     view_isgood = FALSE
     notify_text = state[["MC"]][["notifications"]][["dw_source_missing"]]
