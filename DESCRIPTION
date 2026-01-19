@@ -21,7 +21,7 @@ Imports:
   dplyr,
   ggforce,
   ggplot2,
-  onbrand (>= 1.0.3),
+  onbrand (>= 1.0.8),
   readxl,
   rhandsontable,
   rlang,

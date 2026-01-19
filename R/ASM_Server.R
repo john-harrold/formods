@@ -112,7 +112,8 @@ ASM_Server <- function(id,
       uiele = tagList(
         htmlOutput(NS(id, "ui_asm_select_workflow")),
         htmlOutput(NS(id, "ui_asm_workflow_check_res")),
-        htmlOutput(NS(id, "ui_asm_workflow_run_res")))
+        htmlOutput(NS(id, "ui_asm_workflow_run_res")),
+        verbatimTextOutput(NS(id, "ui_asm_msg_wf")))
 
       uiele})
     #------------------------------------
@@ -218,6 +219,8 @@ ASM_Server <- function(id,
     output$ui_asm_workflow_check_res     =  renderUI({
       req(input$workflow)
       input$btn_run_wf_sys
+      input$btn_chk_wf_sys
+
       state = ASM_fetch_state(id           = id,
                               input        = input,
                               session      = session,
@@ -236,12 +239,26 @@ ASM_Server <- function(id,
         plf = render_str(wfl[["preload"]])
         pll = FM_read_yaml(plf)
 
+        uiele_chk_btn =
+          shinyWidgets::actionBttn(
+                  inputId = NS(id, "btn_chk_wf_sys"),
+                  label   = state[["MC"]][["labels"]][["chk_wf_sys"]],
+                  style   = state[["yaml"]][["FM"]][["ui"]][["button_style"]],
+                  size    = state[["MC"]][["formatting"]][["btn_chk_wf_sys"]][["size"]],
+                  block   = state[["MC"]][["formatting"]][["btn_chk_wf_sys"]][["block"]],
+                  color   = "success",
+                  icon    = icon("circle-check"))
+
+
         wfc_res = ASM_check_workflow(state=state, session=session, pll=pll)
 
         uiele = tagList(tags$br(),
          tags$b(state[["MC"]][["formatting"]][["workflow"]][["check_label"]]),
          tags$br(),
-         wfc_res[["chk_msgs"]])
+         wfc_res[["chk_msgs"]],
+         tags$br(),
+         uiele_chk_btn
+        )
 
       }
     uiele})
@@ -260,10 +277,11 @@ ASM_Server <- function(id,
 
       uiele = NULL
       if(!is.null(state[["ASM"]][["rwf_res"]][["msgs"]])){
-        uiele = tagList(tags$br(),
-        tags$b(state[["MC"]][["formatting"]][["workflow"]][["run_label"]]),
-         tags$br(),
-        state[["ASM"]][["rwf_res"]][["msgs"]])
+        #message("a")
+        uiele = 
+          tagList(tags$br(),
+                  tags$b(state[["MC"]][["formatting"]][["workflow"]][["run_label"]]),
+                  tags$br())
       }
     uiele})
     #------------------------------------
@@ -492,6 +510,22 @@ ASM_Server <- function(id,
     output$ui_asm_msg = renderText({
       input[["button_state_save"]]
       input[["input_load_state"]]
+      input[["btn_run_wf_sys"]]
+      toMessage$message
+      state = ASM_fetch_state(id           = id,
+                              input        = input,
+                              session      = session,
+                              react_state  = react_state,
+                              FM_yaml_file = FM_yaml_file,
+                              MOD_yaml_file = MOD_yaml_file)
+
+      uiele = state[["ASM"]][["ui_msg"]]
+
+      uiele})
+    output$ui_asm_msg_wf = renderText({
+      input[["button_state_save"]]
+      input[["input_load_state"]]
+      input[["btn_run_wf_sys"]]
       toMessage$message
       state = ASM_fetch_state(id           = id,
                               input        = input,
