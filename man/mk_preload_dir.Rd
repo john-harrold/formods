@@ -19,7 +19,11 @@ mk_preload_dir(
 )
 }
 \arguments{
-\item{preload}{One or more preload yaml files to include Multiple files will be combined into a single preload.yaml file.}
+\item{directory}{Target directory to contain the preload file structure.}
+
+\item{preload}{One or more preload yaml files to include. Multiple files will be combined into a single preload.yaml file.}
+
+\item{rpt_templates}{Vector containing PowerPoint, Word and the onbrand yaml mapping file.}
 
 \item{mod_yaml}{Vector of module yaml files to include}
 

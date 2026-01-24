@@ -3408,7 +3408,9 @@ res}
 #'@export
 #'@title Construct Preload Directory
 #'@description Given module configuration files, datasets, etc. this will construct a preload directory generally used for testing purposes.
-#'@param preload  One or more preload yaml files to include Multiple files will be combined into a single preload.yaml file. 
+#'@param preload  One or more preload yaml files to include. Multiple files will be combined into a single preload.yaml file. 
+#'@param rpt_templates Vector containing PowerPoint, Word and the onbrand yaml mapping file.
+#'@param directory     Target directory to contain the preload file structure. 
 #'@param mod_yaml Vector of module yaml files to include
 #'@param include  List of files to include each element of the list should include a 'from' option with the abosolute 
 #'     path to the source file and a 'to' with the name of the file in the preload directory. If you want to place the 
