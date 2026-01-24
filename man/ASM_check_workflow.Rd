@@ -14,7 +14,7 @@ ASM_check_workflow(state, session, pll)
 \item{pll}{Workflow preload list.}
 }
 \value{
-A list with the following attributes 
+A list with the following attributes
 following elements:
 \itemize{
   \item{isgood:}      Boolean indicating the exit status of the function.

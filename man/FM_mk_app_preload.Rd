@@ -2,7 +2,7 @@
 % Please edit documentation in R/formods.R
 \name{FM_mk_app_preload}
 \alias{FM_mk_app_preload}
-\title{Preload Data Into App}
+\title{Create Preload List from App}
 \usage{
 FM_mk_app_preload(session)
 }
@@ -19,8 +19,7 @@ list with the following elements
 }
 }
 \description{
-Populates session data for testing or to load a specific
-analysis.
+Creates the preload list from the current app state
 }
 \examples{
 sources=system.file(package="formods", "preload", "UD.yaml")

@@ -22,6 +22,7 @@ reference:
     - is_installed
     - is_shiny
     - linspace
+    - mk_preload_dir
     - new_module_template
     - remove_hold
     - render_str

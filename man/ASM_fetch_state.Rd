@@ -57,7 +57,7 @@ id = "ASM"
 state = ASM_fetch_state(id           = id,
                         input        = input,
                         session      = session,
-                        react_state  = react_state, 
+                        react_state  = react_state,
                         FM_yaml_file = FM_yaml_file,
                         MOD_yaml_file = MOD_yaml_file)
 

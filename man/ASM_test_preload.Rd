@@ -33,11 +33,11 @@ list with the following elements
 \itemize{
   \item{isgood:}          Boolean indicating the exit status of the function.
   \item{msgs:}            Messages to be passed back to the user.
-  \item{apl_res:}         Results from FM_app_preload() if run,   \code{list(isgood=FALSE, msgs="not run")} otherwise. 
-  \item{ss_res:}          Results from ASM_save_state() if run,   \code{list(isgood=FALSE, msgs="not run")} otherwise. 
-  \item{ls_res:}          Results from ASM_load_state() if run,   \code{list(isgood=FALSE, msgs="not run")} otherwise. 
-  \item{rwf_res:}         Results from ASM_run_workflow() if run, \code{list(isgood=FALSE, msgs="not run")} otherwise. 
-  \item{save_state_file:} If ss_res$isgood is TRUE this is the path to the zip file generated when saving the app state after loading. 
+  \item{apl_res:}         Results from FM_app_preload() if run,   \code{list(isgood=FALSE, msgs="not run")} otherwise.
+  \item{ss_res:}          Results from ASM_save_state() if run,   \code{list(isgood=FALSE, msgs="not run")} otherwise.
+  \item{ls_res:}          Results from ASM_load_state() if run,   \code{list(isgood=FALSE, msgs="not run")} otherwise.
+  \item{rwf_res:}         Results from ASM_run_workflow() if run, \code{list(isgood=FALSE, msgs="not run")} otherwise.
+  \item{save_state_file:} If ss_res$isgood is TRUE this is the path to the zip file generated when saving the app state after loading.
 }
 }
 \description{

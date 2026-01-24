@@ -154,6 +154,7 @@ DM_Server <- function(id,
            !is.null(current_ele[["res"]][["run_code"]][["isgood"]])){
            if(current_ele[["res"]][["run_code"]][["isgood"]]){
              df = current_ele[["res"]][["run_code"]][["ds"]]
+             browser()
              hfmt = FM_fetch_data_format(df, state)
              uiele = rhandsontable::rhandsontable(
                df,

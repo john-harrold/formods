@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">formods</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -124,7 +124,7 @@ has the following structure:</p><ul><li><p>yaml: Full contents of the supplied y
 <span class="r-in"><span><span class="va">state</span> <span class="op">=</span> <span class="fu">ASM_fetch_state</span><span class="op">(</span>id           <span class="op">=</span> <span class="va">id</span>,</span></span>
 <span class="r-in"><span>                        input        <span class="op">=</span> <span class="va">input</span>,</span></span>
 <span class="r-in"><span>                        session      <span class="op">=</span> <span class="va">session</span>,</span></span>
-<span class="r-in"><span>                        react_state  <span class="op">=</span> <span class="va">react_state</span>, </span></span>
+<span class="r-in"><span>                        react_state  <span class="op">=</span> <span class="va">react_state</span>,</span></span>
 <span class="r-in"><span>                        FM_yaml_file <span class="op">=</span> <span class="va">FM_yaml_file</span>,</span></span>
 <span class="r-in"><span>                        MOD_yaml_file <span class="op">=</span> <span class="va">MOD_yaml_file</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -519,6 +519,23 @@ has the following structure:</p><ul><li><p>yaml: Full contents of the supplied y
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "right"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$btn_chk_wf_sys</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$btn_chk_wf_sys$size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sm"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$btn_chk_wf_sys$width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "200px"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$btn_chk_wf_sys$block</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$btn_chk_wf_sys$tooltip</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Check Workflow"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$btn_chk_wf_sys$tooltip_position</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "right"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$switch_gen_reports</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MC$formatting$switch_gen_reports$default</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
@@ -571,6 +588,9 @@ has the following structure:</p><ul><li><p>yaml: Full contents of the supplied y
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$run_wf_sys</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Run Workflow"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$chk_wf_sys</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Check Workflow"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MC$labels$ui_asm_save_name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Save Analysis"</span>
@@ -803,10 +823,10 @@ has the following structure:</p><ul><li><p>yaml: Full contents of the supplied y
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "ASM"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $FM_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpML9lv3/temp_libpath105582c93f3ee/formods/templates/formods.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpEiUt7v/temp_libpath6ced26648094/formods/templates/formods.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $MOD_yaml_file</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpML9lv3/temp_libpath105582c93f3ee/formods/templates/ASM.yaml"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/private/var/folders/pq/7srbf_fx3rd3k706hgxkg61r0000gp/T/RtmpEiUt7v/temp_libpath6ced26648094/formods/templates/ASM.yaml"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $shiny_token</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "non_shiny"</span>

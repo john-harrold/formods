@@ -2425,8 +2425,19 @@ FM_pretty_sort = function(unsrt_data){
   use_normal_sort = TRUE
   if(system.file(package="gtools") != ""){
     if(is.character(res)){
-      res = gtools::mixedsort(res)
-      use_normal_sort = FALSE
+      #res = gtools::mixedsort(res)
+      # Some things break mixed sort when that happens we fail to using normal sort
+      tcres = FM_tc(
+        cmd     = "res = gtools::mixedsort(res)",
+        tc_env  = list(res = res),
+        capture = c("res"))
+
+      if(tcres$isgood){
+        use_normal_sort = FALSE
+        res = tcres[["capture"]][["res"]]
+      } else {
+        use_normal_sort = TRUE
+      }
     }
   }
 
@@ -3113,9 +3124,8 @@ FM_app_preload = function(session, sources=NULL, react_state = list(), quickload
 res}
 
 #'@export
-#'@title Preload Data Into App
-#'@description Populates session data for testing or to load a specific
-#'analysis.
+#'@title Create Preload List from App
+#'@description Creates the preload list from the current app state
 #'@param session     Shiny session variable (in app) or a list (outside of app)
 #'@return list with the following elements
 #' \itemize{
@@ -3393,4 +3403,104 @@ fetch_resource = function(catalog = NULL, id = NULL, idx = NULL, res_label = NUL
     res_obj = res_obj
   )
 
+res}
+
+#'@export
+#'@title Construct Preload Directory
+#'@description Given module configuration files, datasets, etc. this will construct a preload directory generally used for testing purposes.
+#'@param preload  One or more preload yaml files to include Multiple files will be combined into a single preload.yaml file. 
+#'@param mod_yaml Vector of module yaml files to include
+#'@param include  List of files to include each element of the list should include a 'from' option with the abosolute 
+#'     path to the source file and a 'to' with the name of the file in the preload directory. If you want to place the 
+#'     in a subdirectory of the preload directory include the optional path option.
+#'    (e.g. \code{list(UD = list(from="/full/path/to/source/file.csv", path="data/stuff", to="newfile.csv"))})
+#'@return List with the following elements:
+#' \itemize{
+#'  \item{isgood:}     Return status of the function.
+#'  \item{msgs:}       Error or warning messages if any issues were encountered.
+#'}
+#'@examples
+#'
+#'  pldir = file.path(tempdir(), "preload_test")
+#'
+#'  mpd_res = mk_preload_dir(
+#'    directory = pldir,
+#'    preload  = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+#'                 system.file(package="formods", "preload", "UD_preload.yaml")),
+#'    mod_yaml  = c( 
+#'      system.file(package="formods",  "templates", "formods.yaml"),
+#'      system.file(package="formods",  "templates", "ASM.yaml"),
+#'      system.file(package="formods",  "templates", "UD.yaml"),
+#'      system.file(package="formods",  "templates", "DM.yaml"),
+#'      system.file(package="formods",  "templates", "DW.yaml"),
+#'      system.file(package="formods",  "templates", "FG.yaml")),
+#'  )
+#'
+#' dir(pldir)
+mk_preload_dir = function(
+  directory =  tempfile(pattern="preload_"),
+  preload   = NULL,
+  rpt_templates = c(
+    system.file(package="onbrand", "templates", "report.docx"),
+    system.file(package="onbrand", "templates", "report.pptx"),
+    system.file(package="onbrand", "templates", "report.docx")),
+  mod_yaml  = c( 
+    system.file(package="formods",  "templates", "formods.yaml"),
+    system.file(package="formods",  "templates", "ASM.yaml"),
+    system.file(package="formods",  "templates", "UD.yaml"),
+    system.file(package="formods",  "templates", "DM.yaml"),
+    system.file(package="formods",  "templates", "DW.yaml"),
+    system.file(package="formods",  "templates", "FG.yaml")),
+  include   = NULL){
+
+  isgood = TRUE
+  msgs = c()
+
+  if(dir.exists(directory)){
+    unlink(directory, recursive=TRUE)
+  }
+  dir.create(directory)
+
+  old_dir = getwd()
+  setwd(directory)
+  on.exit(setwd(old_dir))
+
+  dir.create("config")
+  #dir.create(file.path("data", "DM"), recursive = TRUE)
+  dir.create("reports")
+
+  # Copying config files and report templates
+  # mod_yamls
+  for(fname in c(mod_yaml, rpt_templates)){
+    file.copy(from=fname, to="config")
+  }
+
+  # Copying preload
+  if(!is.null(preload)){
+    combined <- lapply(preload, readLines) |> 
+    lapply(function(x) c(x, "")) |>  # Add blank line after each file
+    unlist()
+
+    writeLines(combined, "preload.yaml")
+  }
+
+  # Copying other included files like datasets
+  if(!is.null(include)){
+    for(iname in names(include)){
+
+      tmp_from =   include[[iname]][["from"]]
+      tmp_to   =   include[[iname]][["to"]]
+
+      if( !is.null(include[[iname]][["path"]])){
+        if( !dir.exists(include[[iname]][["path"]])){
+          dir.create(include[[iname]][["path"]], recursive = TRUE)
+        }
+        tmp_to = file.path(include[[iname]][["path"]], tmp_to)
+      }
+      file.copy( from = tmp_from, to = tmp_to)
+    }
+  }
+  setwd(old_dir)
+
+  res = list(isgood = isgood, msgs = msgs)
 res}
