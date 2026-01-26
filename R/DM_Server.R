@@ -1967,10 +1967,36 @@ state}
 #' sess_res = DM_test_mksession(session=session)
 DM_test_mksession = function(session = list()){
 
-  sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
-              system.file(package="formods", "preload", "DM_preload.yaml"))
-  res = FM_app_preload(session=session, sources=sources)
+# sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+#             system.file(package="formods", "preload", "DM_preload.yaml"))
+# res = FM_app_preload(session=session, sources=sources)
+# res = res[["all_sess_res"]][["DM"]]
+
+  pldir = tempfile(pattern="preload_")
+  mpd_res = mk_preload_dir(
+    directory = pldir,
+    preload   = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+                  system.file(package="formods", "preload", "DM_preload.yaml")),
+    mod_yaml  = c( 
+      system.file(package="formods",  "templates", "formods.yaml"),
+      system.file(package="formods",  "templates", "ASM.yaml"),
+      system.file(package="formods",  "templates", "DM.yaml")),
+    include = list(
+      DM = list(
+        path = file.path("data", "DM"),
+        from = system.file(package="formods", "test_data", "TEST_DATA.xlsx"),
+        to   = "TEST_DATA.xlsx" )
+    )
+  )
+  
+  old_dir = getwd()
+  setwd(pldir)
+  on.exit(setwd(old_dir))
+  res = FM_app_preload(session=list(), sources="preload.yaml")
   res = res[["all_sess_res"]][["DM"]]
+
+  setwd(old_dir)
+  unlink(pldir, recursive = TRUE)
 
 res}
 

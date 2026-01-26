@@ -49,14 +49,7 @@ id = "UD"
 # Within shiny both session and input variables will exist,
 # this creates examples here for testing purposes:
 sess_res = UD_test_mksession(session=list())
-session = sess_res$session
-input   = sess_res$input
-state = UD_fetch_state(
-           id            = id,
-           input         = input,
-           session       = session,
-           FM_yaml_file  = FM_yaml_file,
-           MOD_yaml_file = MOD_yaml_file )
+state   = sess_res$state
 
- ds_res = UD_fetch_ds(state)
+ds_res = UD_fetch_ds(state)
 }

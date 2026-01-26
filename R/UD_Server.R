@@ -875,16 +875,9 @@ code}
 #' # Within shiny both session and input variables will exist,
 #' # this creates examples here for testing purposes:
 #' sess_res = UD_test_mksession(session=list())
-#' session = sess_res$session
-#' input   = sess_res$input
-#' state = UD_fetch_state(
-#'            id            = id,
-#'            input         = input,
-#'            session       = session,
-#'            FM_yaml_file  = FM_yaml_file,
-#'            MOD_yaml_file = MOD_yaml_file )
+#' state   = sess_res$state
 #'
-#'  ds_res = UD_fetch_ds(state)
+#' ds_res = UD_fetch_ds(state)
 UD_fetch_ds = function(state, meta_only = FALSE){
   hasds  = FALSE
   isgood = TRUE
@@ -937,10 +930,36 @@ res}
 #'@seealso \code{\link{FM_app_preload}}
 UD_test_mksession = function(session=list()){
 
-  sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
-              system.file(package="formods", "preload", "UD_preload.yaml"))
-  res = FM_app_preload(session=session, sources=sources)
+  # sources = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+  #             system.file(package="formods", "preload", "UD_preload.yaml"))
+  # res = FM_app_preload(session=session, sources=sources)
+  # res = res[["all_sess_res"]][["UD"]]
+
+  pldir = tempfile(pattern="preload_")
+  mpd_res = mk_preload_dir(
+    directory = pldir,
+    preload   = c(system.file(package="formods", "preload", "ASM_preload.yaml"),
+                  system.file(package="formods", "preload", "UD_preload.yaml")),
+    mod_yaml  = c( 
+      system.file(package="formods",  "templates", "formods.yaml"),
+      system.file(package="formods",  "templates", "ASM.yaml"),
+      system.file(package="formods",  "templates", "UD.yaml")),
+    include = list(
+      UD = list(
+        from = system.file(package="formods", "test_data", "TEST_DATA.xlsx"),
+        to   = "TEST_DATA.xlsx" )
+    )
+  )
+  
+  old_dir = getwd()
+  setwd(pldir)
+  on.exit(setwd(old_dir))
+  res = FM_app_preload(session=list(), sources="preload.yaml")
   res = res[["all_sess_res"]][["UD"]]
+
+  setwd(old_dir)
+  # This directory is needed for examples to run corretly (specifically the UD_fetch_state() example
+  #unlink(pldir, recursive = TRUE)
 
 res}
 

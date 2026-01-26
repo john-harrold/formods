@@ -1,13 +1,13 @@
 DM:
-  fm_yaml:   'system.file(package="formods", "templates", "formods.yaml")'
-  mod_yaml:  'system.file(package="formods", "templates", "DM.yaml")'
+  fm_yaml:   'config/formods.yaml'
+  mod_yaml:  'config/DM.yaml'
   ui:
     element_selection: "element_5"
     source_url:        ""
   sources: 
    - source:
       file_name:    "TEST_DATA.xlsx"
-      source_str:   'system.file(package="formods", "test_data", "TEST_DATA.xlsx")'
+      source_str:   'data/DM/TEST_DATA.xlsx'
       source_type:  "file"
       source_id:    1
    - source:

@@ -2874,8 +2874,37 @@ FG_test_mksession = function(session=list(), full=FALSE){
                 system.file(package="formods", "preload", "DW_preload.yaml"),
                 system.file(package="formods", "preload", "FG_preload_minimal.yaml"))
   }
-  res = FM_app_preload(session=session, sources=sources)
+
+  pldir = tempfile(pattern="preload_")
+  mpd_res = mk_preload_dir(
+    directory = pldir,
+    preload   = sources, 
+    mod_yaml  = c( 
+      system.file(package="formods",  "templates", "formods.yaml"),
+      system.file(package="formods",  "templates", "ASM.yaml"),
+      system.file(package="formods",  "templates", "DW.yaml"),
+      system.file(package="formods",  "templates", "FG.yaml"),
+      system.file(package="formods",  "templates", "DM.yaml"),
+      system.file(package="formods",  "templates", "UD.yaml")),
+    include = list(
+      UD = list(
+        from = system.file(package="formods", "test_data", "TEST_DATA.xlsx"),
+        to   = "TEST_DATA.xlsx" ),
+      DM = list(
+        path = file.path("data", "DM"),
+        from = system.file(package="formods", "test_data", "TEST_DATA.xlsx"),
+        to   = "TEST_DATA.xlsx" )
+    )
+  )
+  
+  old_dir = getwd()
+  setwd(pldir)
+  on.exit(setwd(old_dir))
+  res = FM_app_preload(session=list(), sources="preload.yaml")
   res = res[["all_sess_res"]][["FG"]]
+
+  setwd(old_dir)
+  unlink(pldir, recursive = TRUE)
 
 res}
 

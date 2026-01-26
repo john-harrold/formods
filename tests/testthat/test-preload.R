@@ -7,7 +7,20 @@ test_that("ASM -- formods test preloads ", {
   system.file(package="formods", "preload", "UD_preload.yaml"),
   system.file(package="formods", "preload", "ASM_preload.yaml"))
 
-  res = suppressMessages( ASM_test_preload(sources=sources))
+  preload_files = dplyr::tribble(
+   ~src,                                                           ~dest,
+   system.file(package="formods", "templates", "formods.yaml"),    "config",
+   system.file(package="formods", "templates", "ASM.yaml"),        "config",
+   system.file(package="formods", "templates", "UD.yaml"),         "config",
+   system.file(package="formods", "test_data", "TEST_DATA.xlsx"),  "."
+  )
+
+  res = suppressMessages( 
+    ASM_test_preload(
+      sources       = sources, 
+      preload_files = preload_files
+    )
+  )
 
   expect_true(res[["isgood"]])
 
