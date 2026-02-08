@@ -37,11 +37,13 @@ following information:
 The following modules are currently available:
 
 -   ASM - [App State Management](https://formods.ubiquity.tools)
+-   CTS - [Clinical Trial Simuilations](https://ruminate.ubiquity.tools)
 -   DM - [Data Management](https://formods.ubiquity.tools)
 -   DW - [Data Wrangling](https://formods.ubiquity.tools)
 -   FG - [Figure Generation](https://formods.ubiquity.tools)
 -   FM - [Formods](https://formods.ubiquity.tools)
--   NCA - [Non-Compartmental Analysis](https://github.com/john-harrold/ruminate)
+-   MB - [Model Builder](https://ruminate.ubiquity.tools)
+-   NCA - [Non-Compartmental Analysis](https://ruminate.ubiquity.tools)
 -   UD - [Upload Data](https://formods.ubiquity.tools)
 
 Other short names in use:
@@ -50,8 +52,8 @@ Other short names in use:
 
 Currently in development:
 
--   MB - [Model Builder](https://github.com/john-harrold/ruminate)
--   CTS - [Clinical Trial Simuilations](https://github.com/john-harrold/ruminate)
+-   FIT - [Parameter Estimation](https://ruminate.ubiquity.tools)
+
 
 # formods framework
 

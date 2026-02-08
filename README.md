@@ -14,25 +14,26 @@
 [![Lifecycle:
 Experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![R-CMD-check](https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/john-harrold/formods/graph/badge.svg)](https://codecov.io/gh/john-harrold/formods)
 <!-- badges: end -->
 
 Shiny apps can often make use of the same key elements,
 [formods](https://formods.ubiquity.tools) provides modules for common
 tasks (data upload, wrangling data, figure generation and saving the app
 state). These modules can react and interact as well as generate code to
-create reproducible analyses. {formods} also defines a framework for
+create reproducible analyses. `formods` also defines a framework for
 creating reactive modules. The vignettes outline how to use these
 modules as well as how to create other modules within this framework.
 
 # Installation
 
+<!---
 You can install the released version of ``formods`` from [CRAN](https://cran.r-project.org/package=formods) with:
-
-``` r
-install.packages("formods", dependencies=TRUE)
+&#10;``` r
+install.packages("formods")
 ```
-
-Make sure to set depenendencies to `TRUE` to get all of the suggested packages. 
+--->
 
 You can install the development version from
 [GitHub](https://github.com/john-harrold/formods) with:
