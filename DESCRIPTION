@@ -50,6 +50,7 @@ Suggests:
   rmarkdown,
   shinybusy,
   shinydashboard,
+  shinytest2,
   testthat (>= 3.0.0),
   utils,
   zoo
