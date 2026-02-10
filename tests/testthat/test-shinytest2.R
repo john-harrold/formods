@@ -7,6 +7,8 @@ skip_if_not_installed("plotly")
 skip_if_not_installed("shinybusy")
 skip_if_not_installed("prompter")
 skip_if_not_installed("clipr")
+skip_if_not_installed("janitor")
+skip_if_not_installed("zoo")
 library(shinytest2)
 
 # Build a temporary app directory from inst/ sources.
@@ -235,4 +237,86 @@ test_that("FG -- shinytest2 figure with line and facet", {
               info = "Expected non-empty FG code output")
   expect_true(grepl("ggplot", fg_code),
               info = paste("Expected ggplot in FG code, got:", fg_code))
+})
+
+
+# ---------------------------------------------------------------------------
+# Helper: build an app directory with pre-loaded module state from YAML
+# ---------------------------------------------------------------------------
+build_preloaded_app_dir <- function(preload_yaml) {
+  app_dir <- file.path(tempdir(), paste0("formods_preload_", format(Sys.time(), "%H%M%S")))
+
+  mk_preload_dir(
+    directory = app_dir,
+    preload   = preload_yaml,
+    mod_yaml  = c(
+      system.file(package = "formods", "templates", "formods.yaml"),
+      system.file(package = "formods", "templates", "ASM.yaml"),
+      system.file(package = "formods", "templates", "UD.yaml"),
+      system.file(package = "formods", "templates", "DM.yaml"),
+      system.file(package = "formods", "templates", "DW.yaml"),
+      system.file(package = "formods", "templates", "FG.yaml"))
+  )
+
+  # Copy app.R template (strip the if(interactive()) guard)
+  src   <- system.file("templates", "FM_compact.R", package = "formods")
+  lines <- readLines(src)
+  lines <- lines[lines != "if(interactive()){"]
+  if (lines[length(lines)] == "}") lines <- lines[-length(lines)]
+  writeLines(lines, file.path(app_dir, "app.R"))
+
+  app_dir
+}
+
+
+test_that("DW -- shinytest2 merge workflow via preloaded DM URL sources", {
+  skip_if_offline()
+
+  # Ensure the default test-data preload trigger doesn't interfere
+  unlink(file.path(tempdir(), "formods.test"))
+
+  preload_yaml <- system.file("preload", "workflow_DW_merge.yaml",
+                               package = "formods")
+  app_dir <- build_preloaded_app_dir(preload_yaml)
+  app <- AppDriver$new(app_dir = app_dir, name = "formods_merge",
+                       height = 800, width = 1200,
+                       timeout = 60000, load_timeout = 300000)
+  on.exit(app$stop(), add = TRUE)
+
+  # Navigate to wrangle tab so DW UI renders
+  goto_tab(app, "wrangle")
+  Sys.sleep(2)
+  app$wait_for_idle(timeout = 30000)
+
+  # Select View 3 (ARD) which contains merge operations.
+  # View IDs are "view_1", "view_2", "view_3".
+  app$set_inputs(`DW-select_dw_views_open` = TRUE,
+                 allow_no_input_binding_ = TRUE)
+  app$set_inputs(`DW-select_dw_views` = "view_3")
+  app$set_inputs(`DW-select_dw_views_open` = FALSE,
+                 allow_no_input_binding_ = TRUE)
+  app$wait_for_idle(timeout = 30000)
+  Sys.sleep(2)
+  app$wait_for_idle(timeout = 30000)
+
+  # -----------------------------------------------------------------------
+  # Verify the DW code output for View 3 contains key markers
+  # -----------------------------------------------------------------------
+  code_val <- app$get_value(input = "DW-ui_dw_code")
+  expect_true(!is.null(code_val) && nchar(code_val) > 0,
+              info = "Expected non-empty DW code output")
+  expect_true(grepl("dplyr::rename",    code_val),
+              info = paste("Expected dplyr::rename in DW code, got:", code_val))
+  expect_true(grepl("dplyr::select",    code_val),
+              info = paste("Expected dplyr::select in DW code, got:", code_val))
+  expect_true(grepl("rbind",            code_val),
+              info = paste("Expected rbind in DW code, got:", code_val))
+  expect_true(grepl("dplyr::left_join", code_val),
+              info = paste("Expected dplyr::left_join in DW code, got:", code_val))
+  expect_true(grepl("dplyr::arrange",   code_val),
+              info = paste("Expected dplyr::arrange in DW code, got:", code_val))
+  expect_true(grepl("dplyr::group_by",  code_val),
+              info = paste("Expected dplyr::group_by in DW code, got:", code_val))
+  expect_true(grepl("dplyr::ungroup",   code_val),
+              info = paste("Expected dplyr::ungroup in DW code, got:", code_val))
 })
