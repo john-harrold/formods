@@ -15,7 +15,7 @@
 Experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![R-CMD-check](https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/john-harrold/formods/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/john-harrold/formods/graph/badge.svg)](https://codecov.io/gh/john-harrold/formods)
+coverage](https://codecov.io/gh/john-harrold/formods/graph/badge.svg)](https://app.codecov.io/gh/john-harrold/formods)
 <!-- badges: end -->
 
 Shiny apps can often make use of the same key elements,
