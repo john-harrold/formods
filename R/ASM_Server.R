@@ -15,7 +15,7 @@
 #'@param mod_ids Vector of module IDs and order they are needed (used for code generation).
 #'@return UD Server object
 #'@example inst/test_apps/FM_compact.R
-ASM_Server <- function(id,
+ASM_Server <- function(id,                          # nocov start
                       FM_yaml_file  = system.file(package = "formods",
                                                   "templates",
                                                   "formods.yaml"),
@@ -778,7 +778,7 @@ ASM_Server <- function(id,
   })
   })
 
-}
+}                                                     # nocov end
 
 #'@export
 #'@title Fetch State Manager State

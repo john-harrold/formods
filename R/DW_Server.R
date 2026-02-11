@@ -19,7 +19,7 @@
 #'module (\code{NULL})
 #'@return DW Server object
 #'@example inst/test_apps/FM_compact.R
-DW_Server <- function(id,
+DW_Server <- function(id,                            # nocov start
                       FM_yaml_file  = system.file(package = "formods",
                                                   "templates",
                                                   "formods.yaml"),
@@ -2093,7 +2093,7 @@ DW_Server <- function(id,
     }, priority = -100)
 
   })
-}
+}                                                     # nocov end
 
 
 #'@export

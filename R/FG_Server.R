@@ -16,7 +16,7 @@
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return FG Server object
 #'@example inst/test_apps/FM_compact.R
-FG_Server <- function(id,
+FG_Server <- function(id,                            # nocov start
                 FM_yaml_file  = system.file(package = "formods", "templates", "formods.yaml"),
                 MOD_yaml_file = system.file(package = "formods", "templates", "FG.yaml"),
                 deployed      = FALSE,
@@ -1238,7 +1238,7 @@ FG_Server <- function(id,
     }, priority = -100)
 
   })
-}
+}                                                     # nocov end
 
 
 #'@export

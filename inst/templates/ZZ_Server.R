@@ -1088,6 +1088,7 @@ state}
 #'@examples
 #' session = shiny::MockShinySession$new()
 #' sess_res = ===ZZ===_test_mksession(session=session)
+# nocov start
 ===ZZ===_test_mksession = function(session = list()){
 
   # This loads up the base modules in formods. You should trim down othose you
@@ -1136,6 +1137,7 @@ state}
   res = res[["all_sess_res"]][["===ZZ==="]]
 
 res}
+# nocov end
 
 #'@export
 #'@title New ===ZZ_NAME=== ===ELEMENT===

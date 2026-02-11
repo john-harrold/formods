@@ -19,7 +19,7 @@
 #'@param react_state Variable passed to server to allow reaction outside of module (\code{NULL})
 #'@return UD Server object
 #'@example inst/test_apps/FM_compact.R
-UD_Server <- function(id,
+UD_Server <- function(id,                            # nocov start
                       FM_yaml_file  = system.file(package = "formods",
                                                   "templates",
                                                   "formods.yaml"),
@@ -292,7 +292,7 @@ UD_Server <- function(id,
     })
 
   })
-}
+}                                                     # nocov end
 
 #'@export
 #'@title Fetch Upload Data State
